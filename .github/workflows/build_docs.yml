@@ -16,6 +16,9 @@ on:
         type: string
         required: false
 
+env:
+  HEXDOC: hexdoc doc/properties.toml --ci
+
 permissions:
   contents: read
 
@@ -26,10 +29,14 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     # only execute on the default branch or when invoked manually
     if: |-
       github.event_name == 'workflow_dispatch' ||
       github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    
+    outputs:
+      matrix: ${{ steps.list-langs.outputs.matrix }}
 
     steps:
       - uses: actions/checkout@v3
@@ -42,8 +49,12 @@ jobs:
       - name: Install docgen
         run: pip install . hatch
       
-      - name: Generate web book
-        run: hexdoc doc/properties.toml --ci -o out
+      - name: List languages
+        id: list-langs
+        run: echo "matrix=$($HEXDOC --list-langs)" >> "$GITHUB_OUTPUT"
+      
+      - name: Export web book
+        run: $HEXDOC --export-only
 
       - name: Bump version
         if: github.event_name == 'workflow_dispatch' && inputs.segment
@@ -65,9 +76,9 @@ jobs:
       
       - name: Copy build to Pages
         run: |
-          mkdir out/dist
-          cp dist/*.whl out/dist/latest.whl
-          cp dist/*.tar.gz out/dist/latest.tar.gz
+          mkdir -p _site/dist
+          cp dist/*.whl _site/dist/latest.whl
+          cp dist/*.tar.gz _site/dist/latest.tar.gz
 
       - name: Fix permissions
         run: |
@@ -77,12 +88,39 @@ jobs:
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v2
-        with:
-          path: out/
   
-  deploy-pages:
+  generate:
     runs-on: ubuntu-latest
     needs: build
+
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: ${{ fromJson(needs.build.outputs.matrix) }}
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install docgen
+        run: pip install . hatch
+
+      - name: Build web book
+        run: $HEXDOC --lang $lang -o _site
+      
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v2
+
+  deploy-pages:
+    runs-on: ubuntu-latest
+    needs: generate
+
+    # always deploy pages, even if some of the languages failed
+    if: success() || failure()
 
     environment:
       name: github-pages

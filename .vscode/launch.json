@@ -18,7 +18,7 @@
             "request": "launch",
             "module": "hexdoc.hexdoc",
             "args": [
-                "properties.toml",
+                "doc/properties.toml", "-o", "out"
             ],
             "console": "integratedTerminal",
             "justMyCode": false

@@ -1,23 +1,16 @@
 from __future__ import annotations
 
 import json
-from dataclasses import InitVar
+import logging
+from collections import defaultdict
 from functools import total_ordering
 from pathlib import Path
 from typing import Any, Callable, Self
 
-from pydantic import Field, ValidationInfo, model_validator
-from pydantic.dataclasses import dataclass
+from pydantic import ValidationInfo, model_validator
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
-from hexdoc.utils import (
-    DEFAULT_CONFIG,
-    HexdocModel,
-    ItemStack,
-    ModResourceLoader,
-    Properties,
-    ResourceLocation,
-)
+from hexdoc.utils import HexdocModel, ItemStack, ModResourceLoader, ResourceLocation
 from hexdoc.utils.deserialize import (
     cast_or_raise,
     decode_and_flatten_json_dict,
@@ -97,50 +90,64 @@ class LocalizedItem(LocalizedStr):
         return i18n.localize_item(key)
 
 
-@dataclass(config=DEFAULT_CONFIG)
-class I18n:
+class I18n(HexdocModel):
     """Handles localization of strings."""
 
-    props: InitVar[Properties]
-    loader: InitVar[ModResourceLoader]
-    enabled: bool
+    lookup: dict[str, LocalizedStr] | None
+    lang: str
+    allow_missing: bool
 
-    lookup: dict[str, LocalizedStr] | None = None
+    @classmethod
+    def list_all(cls, loader: ModResourceLoader):
+        return set(id.path for _, id, _ in cls._load_lang_resources(loader))
 
-    def __post_init__(self, props: Properties, loader: ModResourceLoader):
-        # skip loading the files if we don't need to
-        self.lookup = None
-        if not self.enabled:
-            return
+    @classmethod
+    def load_all(cls, loader: ModResourceLoader, *, allow_missing: bool):
+        # lang -> (key -> value)
+        lookups = defaultdict[str, dict[str, LocalizedStr]](dict)
 
-        # load and deserialize
-        # TODO: load ALL of the i18n files, return dict[str, _Lookup] | None
-        # or maybe dict[(str, str), LocalizedStr]
-        # we could also use that to ensure all i18n files have the same set of keys
-        raw_lookup: dict[str, str] = {}
-        for _, _, data in loader.load_resources(
-            type="assets",
-            folder="lang",
-            namespace="*",
-            glob=[
-                f"{props.default_lang}.json",
-                f"{props.default_lang}.json5",
-                f"{props.default_lang}.flatten.json",
-                f"{props.default_lang}.flatten.json5",
-            ],
-            decode=decode_and_flatten_json_dict,
-            export=self._export,
-        ):
-            raw_lookup |= data
+        for _, lang_id, data in cls._load_lang_resources(loader):
+            lookups[lang_id.path] |= {
+                key: LocalizedStr(key=key, value=value.replace("%%", "%"))
+                for key, value in data.items()
+            }
 
-        # validate and insert
-        self.lookup = {
-            key: LocalizedStr(key=key, value=value.replace("%%", "%"))
-            for key, value in raw_lookup.items()
+        return {
+            lang: cls(lookup=lookup, lang=lang, allow_missing=allow_missing)
+            for lang, lookup in lookups.items()
         }
 
+    @classmethod
+    def load(cls, loader: ModResourceLoader, *, lang: str, allow_missing: bool):
+        lookup = dict[str, LocalizedStr]()
+
+        for _, _, data in cls._load_lang_resources(loader, lang):
+            lookup |= {
+                key: LocalizedStr(key=key, value=value.replace("%%", "%"))
+                for key, value in data.items()
+            }
+
+        return cls(lookup=lookup, lang=lang, allow_missing=allow_missing)
+
+    @classmethod
+    def _load_lang_resources(cls, loader: ModResourceLoader, lang: str = "*"):
+        return loader.load_resources(
+            "assets",
+            namespace="*",
+            folder="lang",
+            glob=[
+                f"{lang}.json",
+                f"{lang}.json5",
+                f"{lang}.flatten.json",
+                f"{lang}.flatten.json5",
+            ],
+            decode=decode_and_flatten_json_dict,
+            export=cls._export,
+        )
+
+    @classmethod
     def _export(
-        self,
+        cls,
         new: dict[str, str],
         current: dict[str, str] | None,
         path: Path,
@@ -166,10 +173,21 @@ class I18n:
 
         # for a single key, look it up
         if len(keys) == 1:
+            key = keys[0]
             if default is not None:
-                return self.lookup.get(keys[0], LocalizedStr.skip_i18n(default))
-            # raises if not found
-            return self.lookup[keys[0]]
+                return self.lookup.get(key, LocalizedStr.skip_i18n(default))
+
+            try:
+                return self.lookup[key]
+            except KeyError as e:
+                if not self.allow_missing:
+                    e.add_note(f"Lang: {self.lang}")
+                    raise
+
+                logging.getLogger(__name__).warning(
+                    f"No translation in {self.lang} for key {key}"
+                )
+                return LocalizedStr.skip_i18n(key)
 
         # for a list/tuple of keys, return the first one that matches (by recursing)
         for current_key in keys[:-1]:
@@ -211,15 +229,4 @@ class I18n:
 
 
 class I18nContext(LoaderContext):
-    i18n: I18n = Field(default=None)
-
-    @model_validator(mode="after")
-    def _init_i18n(self, info: ValidationInfo):
-        if self.i18n is None:  # pyright: ignore[reportUnnecessaryComparison]
-            context = cast_or_raise(info.context, dict)
-            self.i18n = I18n(
-                props=self.props,
-                loader=self.loader,
-                enabled=cast_or_raise(context["i18n"], bool),
-            )
-        return self
+    i18n: I18n

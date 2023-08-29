@@ -1,4 +1,5 @@
 import io
+import json
 import logging
 import os
 import shutil
@@ -12,11 +13,12 @@ from jinja2 import ChoiceLoader, FileSystemLoader, PackageLoader, StrictUndefine
 from jinja2.sandbox import SandboxedEnvironment
 from pydantic import field_validator, model_validator
 
-from hexdoc.hexcasting.hex_book import HexContext
+from hexdoc.hexcasting.hex_book import load_hex_book
+from hexdoc.minecraft.i18n import I18n
 from hexdoc.patchouli.book import Book
 from hexdoc.utils import Properties
 from hexdoc.utils.cd import cd
-from hexdoc.utils.model import HexdocModel, init_context
+from hexdoc.utils.model import HexdocModel
 from hexdoc.utils.resource_loader import ModResourceLoader
 
 from .jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
@@ -31,22 +33,31 @@ class Args(HexdocModel):
     """example: main.py properties.toml -o out.html"""
 
     properties_file: Path
-    output_dir: Path | None
-    export_only: bool
+
     verbose: int
     ci: bool
+    allow_missing: bool
+    lang: str | None
+
+    output_dir: Path | None
+    export_only: bool
+    list_langs: bool
 
     @classmethod
     def parse_args(cls, args: Sequence[str] | None = None) -> Self:
         parser = ArgumentParser()
 
         parser.add_argument("properties_file", type=Path)
+
         parser.add_argument("--verbose", "-v", action="count", default=0)
         parser.add_argument("--ci", action="store_true")
+        parser.add_argument("--allow-missing", action="store_true")
+        parser.add_argument("--lang", type=str, default=None)
 
         group = parser.add_mutually_exclusive_group(required=True)
         group.add_argument("--output_dir", "-o", type=Path)
-        group.add_argument("--export-only", "-e", action="store_true")
+        group.add_argument("--export-only", action="store_true")
+        group.add_argument("--list-langs", action="store_true")
 
         return cls.model_validate(vars(parser.parse_args(args)))
 
@@ -65,7 +76,7 @@ class Args(HexdocModel):
             self.verbose = True
 
         # exactly one of these must be truthy (should be enforced by group above)
-        assert bool(self.output_dir) != self.export_only
+        assert bool(self.output_dir) + self.export_only + self.list_langs == 1
 
         return self
 
@@ -99,15 +110,52 @@ def main(args: Args | None = None) -> None:
             level=args.log_level,
         )
 
-        # load the book
         props = Properties.load(args.properties_file)
+
+        # just list the languages and exit
+        if args.list_langs:
+            with ModResourceLoader.load_all(props, export=False) as loader:
+                langs = sorted(I18n.list_all(loader))
+                print(json.dumps(langs))
+                return
+
+        # load everything
         with ModResourceLoader.clean_and_load_all(props) as loader:
+            books = dict[str, Book]()
+
+            if args.lang:
+                first_lang = args.lang
+                per_lang_i18n = {
+                    first_lang: I18n.load(
+                        loader,
+                        lang=first_lang,
+                        allow_missing=args.allow_missing,
+                    )
+                }
+            else:
+                first_lang = props.default_lang
+                per_lang_i18n = I18n.load_all(
+                    loader,
+                    allow_missing=args.allow_missing,
+                )
+
+                # if export_only, skip actually loading the other languages' books
+                if args.export_only:
+                    per_lang_i18n = {first_lang: per_lang_i18n[first_lang]}
+
             _, book_data = Book.load_book_json(loader, props.book)
 
-            with init_context(book_data):
-                context = HexContext(loader=loader)
+            # load one book with exporting enabled
+            books[first_lang] = load_hex_book(
+                book_data,
+                loader,
+                i18n=per_lang_i18n.pop(first_lang),
+            )
 
-            book = Book.model_validate(book_data, context=context)
+            # then load the rest with exporting disabled for efficiency
+            loader.export_dir = None
+            for lang, i18n in per_lang_i18n.items():
+                books[lang] = load_hex_book(book_data, loader, i18n)
 
         if args.export_only:
             return
@@ -131,22 +179,15 @@ def main(args: Args | None = None) -> None:
                 IncludeRawExtension,
             ],
         )
+
         env.filters |= {  # type: ignore
             "hexdoc_block": hexdoc_block,
             "hexdoc_wrap": hexdoc_wrap,
         }
 
-        # load and render template
         template = env.get_template(props.template.main)
-        docs = strip_empty_lines(
-            template.render(
-                **props.template.args,
-                book=book,
-                props=props,
-            )
-        )
 
-        # write docs
+        # set up the output directory
         subprocess.run(["git", "clean", "-fdX", args.output_dir])
         args.output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -154,7 +195,22 @@ def main(args: Args | None = None) -> None:
         if static_dir and static_dir.is_dir():
             shutil.copytree(static_dir, args.output_dir, dirs_exist_ok=True)
 
-        (args.output_dir / "index.html").write_text(docs, "utf-8")
+        # render each language separately
+        for lang, book in books.items():
+            docs = strip_empty_lines(
+                template.render(
+                    **props.template.args,
+                    book=book,
+                    props=props,
+                )
+            )
+
+            lang_output_dir = args.output_dir / lang
+            lang_output_dir.mkdir(parents=True, exist_ok=True)
+            (lang_output_dir / "index.html").write_text(docs, "utf-8")
+
+            if lang == props.default_lang:
+                (args.output_dir / "index.html").write_text(docs, "utf-8")
 
 
 if __name__ == "__main__":

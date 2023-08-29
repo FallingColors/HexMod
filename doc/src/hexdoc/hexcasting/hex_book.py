@@ -1,14 +1,21 @@
 import logging
 from pathlib import Path
+from typing import Any, Mapping
 
 from pydantic import Field, model_validator
 
-from hexdoc.minecraft import Tag
-from hexdoc.patchouli import BookContext
-from hexdoc.utils import HexdocModel, ResourceLocation
+from hexdoc.minecraft import I18n, Tag
+from hexdoc.patchouli import Book, BookContext
+from hexdoc.utils import HexdocModel, ModResourceLoader, ResourceLocation, init_context
 from hexdoc.utils.properties import PatternStubProps
 
 from .pattern import Direction, PatternInfo
+
+
+def load_hex_book(data: Mapping[str, Any], loader: ModResourceLoader, i18n: I18n):
+    with init_context(data):
+        context = HexContext(loader=loader, i18n=i18n)
+    return Book.model_validate(data, context=context)
 
 
 class PatternMetadata(HexdocModel):

@@ -9,7 +9,7 @@ from typing import Callable, Literal, Self, TypeVar, overload
 
 from pydantic.dataclasses import dataclass
 
-from hexdoc.utils.deserialize import JSONDict, decode_json_dict
+from hexdoc.utils.deserialize import decode_json_dict
 from hexdoc.utils.model import DEFAULT_CONFIG, HexdocModel, ValidationContext
 from hexdoc.utils.types import strip_suffixes
 
@@ -37,18 +37,35 @@ class HexdocMetadata(HexdocModel):
 @dataclass(config=DEFAULT_CONFIG, kw_only=True)
 class ModResourceLoader:
     props: Properties
+    export_dir: Path | None
     resource_dirs: list[PathResourceDir]
 
     @classmethod
-    @contextmanager
-    def clean_and_load_all(cls, props: Properties) -> Iterator[Self]:
+    def clean_and_load_all(
+        cls,
+        props: Properties,
+        *,
+        export: bool = True,
+    ):
         # clear the export dir so we start with a clean slate
-        if props.export_dir:
+        if props.export_dir and export:
             subprocess.run(["git", "clean", "-fdX", props.export_dir])
+        return cls.load_all(props, export=export)
+
+    @classmethod
+    @contextmanager
+    def load_all(
+        cls,
+        props: Properties,
+        *,
+        export: bool = True,
+    ) -> Iterator[Self]:
+        export_dir = props.export_dir if export else None
 
         with ExitStack() as stack:
             loader = cls(
                 props=props,
+                export_dir=export_dir,
                 resource_dirs=[
                     path_resource_dir
                     for resource_dir in props.resource_dirs
@@ -97,10 +114,9 @@ class ModResourceLoader:
 
         return metadata
 
-    def load_book_assets(
-        self, folder: Literal["categories", "entries", "templates"]
-    ) -> Iterator[tuple[PathResourceDir, ResourceLocation, JSONDict]]:
-        yield from self.load_resources(
+    def load_book_assets(self, folder: Literal["categories", "entries", "templates"]):
+        # TODO: maybe this should take lang as a variable?
+        return self.load_resources(
             type="assets",
             folder=Path("patchouli_books")
             / self.props.book.path
@@ -172,9 +188,9 @@ class ModResourceLoader:
     def load_resources(
         self,
         type: ResourceType,
-        folder: str | Path,
         *,
         namespace: str,
+        folder: str | Path,
         glob: str | list[str] = "**/*",
         decode: Callable[[str], _T] = decode_json_dict,
         export: ExportFn[_T] | Literal[False] | None = None,
@@ -185,9 +201,9 @@ class ModResourceLoader:
     def load_resources(
         self,
         type: ResourceType,
+        *,
         folder: str | Path,
         id: ResourceLocation,
-        *,
         decode: Callable[[str], _T] = decode_json_dict,
         export: ExportFn[_T] | Literal[False] | None = None,
     ) -> Iterator[tuple[PathResourceDir, ResourceLocation, _T]]:
@@ -196,9 +212,9 @@ class ModResourceLoader:
     def load_resources(
         self,
         type: ResourceType,
+        *,
         folder: str | Path,
         id: ResourceLocation | None = None,
-        *,
         namespace: str | None = None,
         glob: str | list[str] = "**/*",
         decode: Callable[[str], _T] = decode_json_dict,
@@ -329,9 +345,9 @@ class ModResourceLoader:
         decode: Callable[[str], _T] = decode_json_dict,
         export: ExportFn[_T] | None = None,
     ) -> None:
-        if not self.props.export_dir:
+        if not self.export_dir:
             return
-        out_path = self.props.export_dir / path
+        out_path = self.export_dir / path
 
         logging.getLogger(__name__).debug(f"Exporting {path} to {out_path}")
         if export is None:

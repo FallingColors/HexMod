@@ -33,8 +33,8 @@ class Tag(HexdocModel):
 
         for _, _, tag in context.loader.load_resources(
             "data",
-            f"tags/{registry}",
-            id,
+            folder=f"tags/{registry}",
+            id=id,
             decode=lambda s: Tag._convert(registry, s, context),
             export=cls._export,
         ):
