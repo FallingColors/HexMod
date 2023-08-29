@@ -42,6 +42,7 @@ class Args(HexdocModel):
     output_dir: Path | None
     export_only: bool
     list_langs: bool
+    check_default_lang: Path | None
 
     @classmethod
     def parse_args(cls, args: Sequence[str] | None = None) -> Self:
@@ -56,12 +57,18 @@ class Args(HexdocModel):
 
         group = parser.add_mutually_exclusive_group(required=True)
         group.add_argument("--output_dir", "-o", type=Path)
+        group.add_argument("--check-default-lang", type=Path)
         group.add_argument("--export-only", action="store_true")
         group.add_argument("--list-langs", action="store_true")
 
         return cls.model_validate(vars(parser.parse_args(args)))
 
-    @field_validator("properties_file", "output_dir", mode="after")
+    @field_validator(
+        "properties_file",
+        "output_dir",
+        "check_default_lang",
+        mode="after",
+    )
     def _resolve_path(cls, value: Path | None):
         # make paths absolute because we're cd'ing later
         match value:
@@ -76,7 +83,13 @@ class Args(HexdocModel):
             self.verbose = True
 
         # exactly one of these must be truthy (should be enforced by group above)
-        assert bool(self.output_dir) + self.export_only + self.list_langs == 1
+        assert (
+            bool(self.output_dir)
+            + self.export_only
+            + self.list_langs
+            + bool(self.check_default_lang)
+            == 1
+        )
 
         return self
 
@@ -111,6 +124,16 @@ def main(args: Args | None = None) -> None:
         )
 
         props = Properties.load(args.properties_file)
+
+        if args.check_default_lang:
+            dir_path = args.check_default_lang
+            for path in [
+                dir_path / "index.html",
+                dir_path / props.default_lang / "index.html",
+            ]:
+                if not path.is_file():
+                    raise FileNotFoundError(path)
+            return
 
         # just list the languages and exit
         if args.list_langs:

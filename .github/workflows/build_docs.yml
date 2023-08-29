@@ -126,11 +126,26 @@ jobs:
     needs: generate
 
     steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      
+      - name: Download hexdoc artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: hexdoc-build
+
       - name: Download temporary Pages artifact
         uses: actions/download-artifact@v3
         with:
           name: github-pages-tmp
           path: _site/
+
+      - name: Check default lang
+        run: $HEXDOC --check-default-lang _site
 
       - name: Fix permissions
         run: |
