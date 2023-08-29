@@ -92,14 +92,12 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     needs: build
+    continue-on-error: true
 
     strategy:
       fail-fast: false
       matrix:
         lang: ${{ fromJson(needs.build.outputs.matrix) }}
-    
-    outputs:
-      success: ${{ steps.build-web-book.outputs.success }}
 
     steps:
       - uses: actions/checkout@v3
@@ -118,8 +116,7 @@ jobs:
         run: pip install *.whl
 
       - name: Build web book
-        id: build-web-book
-        run: $HEXDOC --lang ${{ matrix.lang }} -o _site && echo "success=true" >> "$GITHUB_OUTPUT"
+        run: $HEXDOC --lang ${{ matrix.lang }} -o _site
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v2
@@ -127,9 +124,6 @@ jobs:
   deploy-pages:
     runs-on: ubuntu-latest
     needs: generate
-    
-    # deploy if at least one language succeeded
-    if: needs.generate.outputs.success
 
     environment:
       name: github-pages
