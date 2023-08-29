@@ -1,6 +1,6 @@
 {
     key: {
-        use: "Right Click,
+        use: "Right Click",
         sneak: "Left Shift",
         jump: "Space",
     },
@@ -13,4 +13,6 @@
     "block.hexcasting": {
         slate: "Blank Slate",
     },
+
+    "hexcasting.landing": "$(l:this/link/does/not/exist)",
 }
