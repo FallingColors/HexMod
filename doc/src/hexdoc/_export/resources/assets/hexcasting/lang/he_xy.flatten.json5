@@ -1009,20 +1009,15 @@
 
     
     landing: "Hexxy was here",
-      It fascinates me. I've decided to start a journal of my thoughts and findings.\
-      $(br2)$(l:https://forum.petra-k.at/index.php)Forum Link/$",
     
     category: {
       basics: {
         "": "Hexxy was here",
         desc: "Hexxy was here",
-          or craft $(l:items/hexcasting)$(item)powerful magical items/$ to do the casting for them. \
-          How might I do the same?",
       },
       casting: {
         "": "Hexxy was here",
         desc: "Hexxy was here",
-          but I'm sure I can figure it out. Let's see...",
       },
       items: {
         "": "Hexxy was here",
@@ -1032,15 +1027,12 @@
       greatwork: {
         "": "Hexxy was here",
         desc: "Hexxy was here",
-          I have seen the atoms of the world screaming as they were inverted and subverted and demoted to energy. \
-          I have seen I have seen I have s$(k)get stick bugged lmao/$",
         // alwinfy you think you're so funny
       },
 
       lore: {
         "": "Hexxy was here",
         desc: "Hexxy was here",
-          But, I think I may be able to divine some of the history of the world from these. Let me see...",
       },
 
       interop: {
@@ -1059,9 +1051,6 @@
       great_spells: {
         "": "Hexxy was here",
         desc: "Hexxy was here",
-          They seem to have been recorded only sparsely (for good reason, the texts claim). \
-          It's probably just the ramblings of extinct traditionalists, though -- a pattern's a pattern.$(br2)\
-          What could possibly go wrong?",
       },
     },
     // ^ categories
@@ -1198,48 +1187,19 @@
 
         grid: {
           "1": "Hexxy was here",
-            Pressing $(thing)$(k:use)/$ with one in my hand will cause a hexagonal grid of dots to appear in front of me. \
-            I can then click, drag from dot to dot, and release to draw patterns.$(br2)\
-            Once I submit a pattern, it is executed (see the next chapter).",
           "2": "Hexxy was here",
-            Should I wish to reset my casting state, I can do so by sneaking while opening the grid.",
         },
         "patterns&actions": {
           "1": "Hexxy was here",
-            $(thing)Actions/$, meanwhile, are what patterns $(italic)do/$.",
           "2": "Hexxy was here",
-            Any jumble of letters forms a word, but most of them (like \"xnopyt\") don't mean anything. \
-            Similarly, any squiggle yanked through the _media is technically a pattern, but most of them won't do anything.",
           "3": "Hexxy was here",
-            They tend to do one of a few things:\
-              $(li)Gather some information about the world, such as finding the position of a entity.\
-              $(li)Manipulate the info gathered, like finding the distance between two positions.\
-              $(li)Perform some magical effect on the world, like summoning lightning or an explosion.$(br)\
-            These last kinds of actions are called \"spells.\", and are generally what attract people to the art.",
           "4": "Hexxy was here",
-            Nature interprets each of these patterns one-by-one and, if it understands, changes the world to my whims. \
-            (Or, what it thinks my whims are.)",
           "5": "Hexxy was here",
-            I believe the concentrated mental energy is used as a sort of argument to Nature, convincing it that it should indeed do as I ask. \
-            Most spells require this kind of payment, but a few non-spell actions do too.$(br2)\
-            I've recorded the costs, if any, of each action on their respective pages.",
         },
         iotas: {
           "1": "Hexxy was here",
-            At its most basic level, Hexcasting is the art of manipulating iotas.$(br2)\
-            Iotas come in many different types:\
-              $(li)Numbers (which some legends called \"doubles\").\
-              $(li)Vectors, a collection of three numbers representing a position, movement, or direction.\
-              $(li)Booleans or \"bools\" for short, representing an abstract True or False.\
-              $(li)Entities, like myself, chickens, and minecarts.",
           "2": "Hexxy was here",
-              $(li)Patterns themselves, used for crafting magic items and truly mind-boggling feats like $(italic)spells that cast other spells/$.\
-              $(li)A list of several of the above, gathered into a single iota.",
           "3": "Hexxy was here",
-            For example, take $(l:patterns/spells/basic#hexcasting:explode)$(action)Explosion/$. \
-            This spell requires a number iota, to indicate the strength, and a vector iota, to indicate the location.$(br2)\
-            Or, take $(l:patterns/basic#hexcasting:get_pos)$(action)Compass Purification/$. \
-            This takes an entity iota and transforms it into a vector iota, representing the position of that entity.",
         },
       },
       
