@@ -1,6 +1,6 @@
 {
     key: {
-        use: "Right Click",
+        use: "Right Click,
         sneak: "Left Shift",
         jump: "Space",
     },
