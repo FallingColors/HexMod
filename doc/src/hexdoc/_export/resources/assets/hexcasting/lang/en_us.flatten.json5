@@ -13,6 +13,4 @@
     "block.hexcasting": {
         slate: "Blank Slate",
     },
-
-    "hexcasting.landing": "$(l:this/link/does/not/exist)",
 }
