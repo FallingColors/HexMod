@@ -110,8 +110,8 @@ jobs:
         run: pip install . hatch
 
       - name: Build web book
-        run: $HEXDOC --lang $lang -o _site
-      
+        run: $HEXDOC --lang ${{ matrix.lang }} -o _site
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v2
 
