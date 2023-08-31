@@ -46,7 +46,7 @@ def main():
     if args.release:
         # remove current latest-released book in the destination
         for path in args.dest.iterdir():
-            if path.name not in ["v", "meta", "dist", ".git"]:
+            if path.name not in ["v", "meta"]:
                 shutil.rmtree(path)
 
     new_sitemap = defaultdict[str, dict[str, str]](dict)
