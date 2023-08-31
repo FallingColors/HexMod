@@ -159,10 +159,7 @@ jobs:
 
   bundle-pages:
     runs-on: ubuntu-latest
-    needs: [build, generate, publish-pypi]
-
-    # allow publish-pypi to be skipped, but run after it
-    if: always() && !cancelled() && !failure() && needs.generate.result == 'success'
+    needs: [build, generate]
 
     steps:
       - uses: actions/checkout@v3

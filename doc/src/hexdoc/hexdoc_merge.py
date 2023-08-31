@@ -36,8 +36,10 @@ class Args(HexdocModel):
 def main():
     args = Args.parse_args()
 
-    if not (args.source / "latest" / "index.html").is_file():
-        raise FileNotFoundError(args.source / "index.html")
+    # ensure at least the default language was built successfully
+    latest_default = args.source / "v" / "latest" / "index.html"
+    if not latest_default.is_file():
+        raise FileNotFoundError(latest_default)
 
     args.dest.mkdir(parents=True, exist_ok=True)
 
