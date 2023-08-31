@@ -48,7 +48,7 @@ jobs:
           cache: pip
 
       - name: Install docgen from source
-        run: pip install . hatch
+        run: pip install .[ci] hatch
       
       - name: List book languages
         id: list-langs
@@ -73,13 +73,19 @@ jobs:
           commit_message: Build web book from ${{ github.ref }}
       
       - name: Build docgen
-        run: hatch build _site/dist
+        run: hatch build
       
       - name: Upload docgen artifact
         uses: actions/upload-artifact@v3
         with:
           name: docgen-build
-          path: _site/dist/
+          path: dist/
+
+      - name: Copy build to Pages
+        run: |
+          mkdir -p _site/dist
+          cp dist/*.whl _site/dist/latest.whl
+          cp dist/*.tar.gz _site/dist/latest.tar.gz
 
       - name: Upload temporary Pages artifact
         uses: actions/upload-artifact@v3
