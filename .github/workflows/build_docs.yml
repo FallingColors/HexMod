@@ -61,7 +61,7 @@ jobs:
           echo "release=$release" >> "$GITHUB_OUTPUT"
       
       - name: Export web book
-        run: $HEXDOC --export-only --release $release
+        run: $HEXDOC --export-only --release ${{ steps.check-release.outputs.release }}
 
       - name: Bump version
         if: github.event_name == 'workflow_dispatch' && inputs.segment
