@@ -49,14 +49,17 @@ def main():
             if path.name not in ["v", "meta"]:
                 shutil.rmtree(path)
 
-    new_sitemap = defaultdict[str, dict[str, str]]()
+    new_sitemap = defaultdict[str, dict[str, str]](dict)
     for marker_path in args.source.rglob(MARKER_NAME):
         # add new(?) version to the sitemap
         marker = SitemapMarker.model_validate_json(marker_path.read_text("utf-8"))
         new_sitemap[marker.version][marker.lang] = marker.path
 
         # delete the corresponding directory in the destination
-        shutil.rmtree(args.dest / marker_path.relative_to(args.source))
+        shutil.rmtree(
+            args.dest / marker_path.parent.relative_to(args.source),
+            ignore_errors=True,
+        )
 
     sitemap_path = args.dest / "meta" / "sitemap.json"
 
