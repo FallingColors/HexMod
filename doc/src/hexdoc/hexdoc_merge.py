@@ -46,7 +46,7 @@ def main():
     if args.release:
         # remove current latest-released book in the destination
         for path in args.dest.iterdir():
-            if path.name not in ["v", "meta"]:
+            if path.name not in ["v", "meta", "dist", ".git"]:
                 shutil.rmtree(path)
 
     new_sitemap = defaultdict[str, dict[str, str]](dict)
@@ -56,10 +56,10 @@ def main():
         new_sitemap[marker.version][marker.lang] = marker.path
 
         # delete the corresponding directory in the destination
-        shutil.rmtree(
-            args.dest / marker_path.parent.relative_to(args.source),
-            ignore_errors=True,
-        )
+        marker_dest_dir = args.dest / marker_path.parent.relative_to(args.source)
+        shutil.rmtree(marker_dest_dir, ignore_errors=True)
+
+        marker_path.unlink()
 
     sitemap_path = args.dest / "meta" / "sitemap.json"
 

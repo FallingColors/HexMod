@@ -173,7 +173,7 @@ jobs:
         continue-on-error: true
         with:
           ref: gh-pages
-          path: _site/
+          path: gh-pages/
 
       - name: Download temporary Pages artifact
         uses: actions/download-artifact@v3
@@ -182,7 +182,7 @@ jobs:
           path: _new_site/
       
       - name: Add new docs to site
-        run: hexdoc_merge --source _new_site --dest _site --release "${{ needs.build.outputs.release == true }}"
+        run: hexdoc_merge --source _new_site --dest gh-pages/docs --release "${{ needs.build.outputs.release == true }}"
 
       - name: Fix permissions
         run: |
@@ -194,7 +194,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: github-pages
-          path: _site/
+          path: gh-pages/docs
 
   deploy-pages:
     runs-on: ubuntu-latest
@@ -204,6 +204,7 @@ jobs:
       contents: write
 
     steps:
+      - uses: actions/checkout@v3
       - name: Download Pages artifact
         uses: actions/download-artifact@v3
         with:
@@ -214,3 +215,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: _site
+          target-folder: docs
