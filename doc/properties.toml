@@ -44,7 +44,6 @@ mod_name = "Hex Casting"
 author = "petrak@, Alwinfy"
 description = "The Hex Book, all in one place."
 icon_href = "logo.png"
-is_bleeding_edge = true
 show_landing_text = true
 
 

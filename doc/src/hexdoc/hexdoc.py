@@ -14,14 +14,16 @@ from jinja2.sandbox import SandboxedEnvironment
 from pydantic import field_validator, model_validator
 
 from hexdoc.hexcasting.hex_book import load_hex_book
-from hexdoc.minecraft.i18n import I18n
-from hexdoc.patchouli.book import Book
-from hexdoc.utils import Properties
+from hexdoc.minecraft import I18n
+from hexdoc.patchouli import Book
+from hexdoc.utils import HexdocModel, ModResourceLoader, Properties
 from hexdoc.utils.cd import cd
-from hexdoc.utils.model import HexdocModel
-from hexdoc.utils.resource_loader import ModResourceLoader
+from hexdoc.utils.path import write_to_path
 
+from .__version__ import GRADLE_VERSION
 from .jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
+
+MARKER_NAME = ".hexdoc-meta-sitemap-marker.json"
 
 
 def strip_empty_lines(text: str) -> str:
@@ -38,11 +40,11 @@ class Args(HexdocModel):
     ci: bool
     allow_missing: bool
     lang: str | None
+    release: bool
 
     output_dir: Path | None
     export_only: bool
     list_langs: bool
-    check_default_lang: Path | None
 
     @classmethod
     def parse_args(cls, args: Sequence[str] | None = None) -> Self:
@@ -54,10 +56,10 @@ class Args(HexdocModel):
         parser.add_argument("--ci", action="store_true")
         parser.add_argument("--allow-missing", action="store_true")
         parser.add_argument("--lang", type=str, default=None)
+        parser.add_argument("--release", default=False)
 
         group = parser.add_mutually_exclusive_group(required=True)
-        group.add_argument("--output_dir", "-o", type=Path)
-        group.add_argument("--check-default-lang", type=Path)
+        group.add_argument("--output-dir", "-o", type=Path)
         group.add_argument("--export-only", action="store_true")
         group.add_argument("--list-langs", action="store_true")
 
@@ -66,7 +68,6 @@ class Args(HexdocModel):
     @field_validator(
         "properties_file",
         "output_dir",
-        "check_default_lang",
         mode="after",
     )
     def _resolve_path(cls, value: Path | None):
@@ -83,13 +84,7 @@ class Args(HexdocModel):
             self.verbose = True
 
         # exactly one of these must be truthy (should be enforced by group above)
-        assert (
-            bool(self.output_dir)
-            + self.export_only
-            + self.list_langs
-            + bool(self.check_default_lang)
-            == 1
-        )
+        assert bool(self.output_dir) + self.export_only + self.list_langs == 1
 
         return self
 
@@ -102,6 +97,12 @@ class Args(HexdocModel):
                 return logging.INFO
             case _:
                 return logging.DEBUG
+
+
+class SitemapMarker(HexdocModel):
+    version: str
+    lang: str
+    path: str
 
 
 def main(args: Args | None = None) -> None:
@@ -122,18 +123,9 @@ def main(args: Args | None = None) -> None:
             format="\033[1m[{relativeCreated:.02f} | {levelname} | {name}]\033[0m {message}",
             level=args.log_level,
         )
+        logger = logging.getLogger(__name__)
 
         props = Properties.load(args.properties_file)
-
-        if args.check_default_lang:
-            dir_path = args.check_default_lang
-            for path in [
-                dir_path / "index.html",
-                dir_path / props.default_lang / "index.html",
-            ]:
-                if not path.is_file():
-                    raise FileNotFoundError(path)
-            return
 
         # just list the languages and exit
         if args.list_langs:
@@ -210,30 +202,54 @@ def main(args: Args | None = None) -> None:
 
         template = env.get_template(props.template.main)
 
-        # set up the output directory
-        subprocess.run(["git", "clean", "-fdX", args.output_dir])
-        args.output_dir.mkdir(parents=True, exist_ok=True)
-
         static_dir = props.template.static_dir
-        if static_dir and static_dir.is_dir():
-            shutil.copytree(static_dir, args.output_dir, dirs_exist_ok=True)
+        subprocess.run(["git", "clean", "-fdX", args.output_dir])
 
-        # render each language separately
-        for lang, book in books.items():
-            docs = strip_empty_lines(
-                template.render(
-                    **props.template.args,
-                    book=book,
-                    props=props,
+        versions = ["latest"]
+        if args.release:
+            # root should be the latest released version
+            versions += ["", GRADLE_VERSION]
+
+        # render each version and language separately
+        for version in versions:
+            for lang, book in books.items():
+                # /index.html
+                # /lang/index.html
+                # /v/version/index.html
+                # /v/version/lang/index.html
+                parts = ["v", version] if version else []
+                if lang != props.default_lang:
+                    parts.append(lang)
+
+                output_dir = args.output_dir / Path(*parts)
+                url = "/".join([props.url] + parts)
+
+                logger.info(f"Rendering {output_dir}")
+                docs = strip_empty_lines(
+                    template.render(
+                        **props.template.args,
+                        book=book,
+                        props=props,
+                        url=url,
+                        is_bleeding_edge=version != "latest",
+                    )
                 )
-            )
 
-            lang_output_dir = args.output_dir / lang
-            lang_output_dir.mkdir(parents=True, exist_ok=True)
-            (lang_output_dir / "index.html").write_text(docs, "utf-8")
+                write_to_path(output_dir / "index.html", docs)
+                if static_dir:
+                    shutil.copytree(static_dir, output_dir, dirs_exist_ok=True)
 
-            if lang == props.default_lang:
-                (args.output_dir / "index.html").write_text(docs, "utf-8")
+                # marker file for updating the sitemap later
+                # we use this because matrix doesn't have outputs
+                # this feels scuffed but it does work
+                if version:
+                    (output_dir / MARKER_NAME).write_text(
+                        SitemapMarker(
+                            version=version,
+                            lang=lang,
+                            path="/" + "/".join(parts),
+                        ).model_dump_json()
+                    )
 
 
 if __name__ == "__main__":

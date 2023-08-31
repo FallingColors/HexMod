@@ -9,9 +9,10 @@ from typing import Callable, Literal, Self, TypeVar, overload
 
 from pydantic.dataclasses import dataclass
 
+from hexdoc.__version__ import GRADLE_VERSION
 from hexdoc.utils.deserialize import decode_json_dict
 from hexdoc.utils.model import DEFAULT_CONFIG, HexdocModel, ValidationContext
-from hexdoc.utils.types import strip_suffixes
+from hexdoc.utils.path import strip_suffixes, write_to_path
 
 from .properties import Properties
 from .resource import PathResourceDir, ResourceLocation, ResourceType
@@ -77,7 +78,7 @@ class ModResourceLoader:
             loader.export(
                 path=HexdocMetadata.path(props.modid),
                 data=HexdocMetadata(
-                    book_url=props.url,
+                    book_url=f"{props.url}/v/{GRADLE_VERSION}",
                 ).model_dump_json(),
             )
 
@@ -364,8 +365,7 @@ class ModResourceLoader:
                 case (str(out_data), Path() as out_path):
                     pass
 
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_text(out_data, "utf-8")
+        write_to_path(out_path, out_data)
 
 
 class LoaderContext(ValidationContext):

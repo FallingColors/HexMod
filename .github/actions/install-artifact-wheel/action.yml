@@ -1,0 +1,32 @@
+name: Install wheel from artifact
+description: Install wheel from artifact
+
+inputs:
+  name:
+    description: Artifact name.
+    required: true
+  python-version:
+    description: Version range or exact version of Python to use.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ inputs.python-version }}
+        cache: pip
+    
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ inputs.name }}
+        path: _dist
+
+    - name: Install wheel
+      shell: bash
+      run: |
+        wheels=( _dist/*-py3-none-any.whl )
+        pip install "${wheels[0]}"
+        rm -r _dist

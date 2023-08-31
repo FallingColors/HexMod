@@ -16,8 +16,8 @@ from hexdoc.utils.deserialize import (
     decode_and_flatten_json_dict,
     isinstance_or_raise,
 )
+from hexdoc.utils.path import replace_suffixes
 from hexdoc.utils.resource_loader import LoaderContext
-from hexdoc.utils.types import replace_suffixes
 
 
 @total_ordering

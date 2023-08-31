@@ -1,7 +1,6 @@
 import string
 from abc import ABC, abstractmethod
 from enum import Enum, unique
-from pathlib import Path
 from typing import Any, Mapping, Protocol, TypeVar
 
 from pydantic import field_validator, model_validator
@@ -101,33 +100,3 @@ class TryGetEnum(Enum):
             return cls(value)
         except ValueError:
             return None
-
-
-def strip_suffixes(path: Path) -> Path:
-    """Removes all suffixes from a path. This is helpful because `path.with_suffix("")`
-    only removes the last suffix.
-
-    For example:
-    ```py
-    path = Path("lang/en_us.flatten.json5")
-    strip_suffixes(path)  # lang/en_us
-    path.with_suffix("")  # lang/en_us.flatten
-    ```
-    """
-    while path.suffix:
-        path = path.with_suffix("")
-    return path
-
-
-def replace_suffixes(path: Path, suffix: str) -> Path:
-    """Replaces all suffixes of a path. This is helpful because `path.with_suffix()`
-    only replaces the last suffix.
-
-    For example:
-    ```py
-    path = Path("lang/en_us.flatten.json5")
-    replace_suffixes(path, ".json")  # lang/en_us.json
-    path.with_suffix(".json")        # lang/en_us.flatten.json
-    ```
-    """
-    return strip_suffixes(path).with_suffix(suffix)
