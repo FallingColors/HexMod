@@ -1,0 +1,1998 @@
+// A work in progress
+{
+  key: {
+    use: "Hexxy was here",
+    sneak: "Hexxy was here",
+    jump: "Hexxy was here",
+  },
+
+  "item.minecraft": {
+    amethyst_shard: "Hexxy was here",
+    budding_amethyst: "Hexxy was here",
+  },
+
+  "block.hexcasting": {
+    slate: "Hexxy was here",
+  },
+
+  "item.hexcasting": {
+    book: "Hexxy was here",
+    
+    staff: {
+      oak: "Hexxy was here",
+      spruce: "Hexxy was here",
+      birch: "Hexxy was here",
+      jungle: "Hexxy was here",
+      acacia: "Hexxy was here",
+      dark_oak: "Hexxy was here",
+      crimson: "Hexxy was here",
+      warped: "Hexxy was here",
+      mangrove: "Hexxy was here",
+      edified: "Hexxy was here",
+      quenched: "Hexxy was here",
+      mindsplice: "Hexxy was here",
+    },
+
+    "tags.tag.item.hexcasting:": {
+      brainswept_circle_components: "Hexxy was here",
+      directrices: "Hexxy was here",
+      grants_root_advancement: "Hexxy was here",
+      impeti: "Hexxy was here",
+      seal_materials: "Hexxy was here",
+    },
+    
+    amethyst_dust: "Hexxy was here",
+    charged_amethyst: "Hexxy was here",
+    quenched_allay_shard: "Hexxy was here",
+
+    scroll_small: {
+      "": "Hexxy was here",
+      of: "Hexxy was here",
+      empty: "Hexxy was here",
+    },
+
+    scroll_medium: {
+      "": "Hexxy was here",
+      of: "Hexxy was here",
+      empty: "Hexxy was here",
+    },
+
+    scroll: {
+      "": "Hexxy was here",
+      of: "Hexxy was here",
+      empty: "Hexxy was here",
+    },
+
+    focus: {
+      "": "Hexxy was here",
+      sealed: "Hexxy was here",
+    },
+
+    thought_knot: "Hexxy was here",
+    spellbook: "Hexxy was here",
+    cypher: "Hexxy was here",
+    trinket: "Hexxy was here",
+    artifact: "Hexxy was here",
+    battery: "Hexxy was here",
+    lens: "Hexxy was here",
+    abacus: "Hexxy was here",
+    jeweler_hammer: "Hexxy was here",
+    sub_sandwich: "Hexxy was here",
+
+    dye_colorizer_: {
+      white: "Hexxy was here",
+      orange: "Hexxy was here",
+      magenta: "Hexxy was here",
+      light_blue: "Hexxy was here",
+      yellow: "Hexxy was here",
+      lime: "Hexxy was here",
+      pink: "Hexxy was here",
+      gray: "Hexxy was here",
+      light_gray: "Hexxy was here",
+      cyan: "Hexxy was here",
+      purple: "Hexxy was here",
+      blue: "Hexxy was here",
+      brown: "Hexxy was here",
+      green: "Hexxy was here",
+      red: "Hexxy was here",
+      black: "Hexxy was here",
+    },
+
+    pride_colorizer_: {
+      agender: "Hexxy was here",
+      aroace: "Hexxy was here",
+      aromantic: "Hexxy was here",
+      asexual: "Hexxy was here",
+      bisexual: "Hexxy was here",
+      demiboy: "Hexxy was here",
+      demigirl: "Hexxy was here",
+      gay: "Hexxy was here",
+      genderfluid: "Hexxy was here",
+      genderqueer: "Hexxy was here",
+      intersex: "Hexxy was here",
+      lesbian: "Hexxy was here",
+      nonbinary: "Hexxy was here",
+      pansexual: "Hexxy was here",
+      plural: "Hexxy was here",
+      transgender: "Hexxy was here",
+    },
+
+    uuid_colorizer: "Hexxy was here",
+    default_colorizer: "Hexxy was here",
+
+    creative_unlocker: {
+      "": "Hexxy was here",
+      for_emphasis: "Hexxy was here",
+      tooltip: "Hexxy was here",
+      mod_name: "Hexxy was here",
+    },
+
+    lore_fragment: {
+      "": "Hexxy was here",
+      all: "Hexxy was here",
+    },
+  },
+  
+  "entity.hexcasting": {
+    wall_scroll: "Hexxy was here",
+  },
+  
+  "block.hexcasting": {
+    conjured_light: "Hexxy was here",
+    conjured_block: "Hexxy was here",
+
+    directrix: {
+      empty: "Hexxy was here",
+      redstone: "Hexxy was here",
+      boolean: "Hexxy was here",
+    },
+
+    impetus: {
+      empty: "Hexxy was here",
+      rightclick: "Hexxy was here",
+      look: "Hexxy was here",
+      redstone: "Hexxy was here",
+    },
+
+    akashic_: {
+      record: "Hexxy was here",
+      bookshelf: "Hexxy was here",
+      connector: "Hexxy was here",
+    },
+
+    slate: {
+      "": "Hexxy was here",
+      blank: "Hexxy was here",
+      written: "Hexxy was here",
+    },
+
+    slate_: {
+      block: "Hexxy was here",
+      tiles: "Hexxy was here",
+      bricks: "Hexxy was here",
+      bricks_small: "Hexxy was here",
+      pillar: "Hexxy was here",
+    },
+
+    amethyst_: {
+      dust_block: "Hexxy was here",
+      tiles: "Hexxy was here",
+      bricks: "Hexxy was here",
+      bricks_small: "Hexxy was here",
+      pillar: "Hexxy was here",
+    },
+    
+    slate_amethyst_: {
+      tiles: "Hexxy was here",
+      bricks: "Hexxy was here",
+      bricks_small: "Hexxy was here",
+      pillar: "Hexxy was here",
+    },
+
+    scroll_paper: "Hexxy was here",
+    ancient_scroll_paper: "Hexxy was here",
+    scroll_paper_lantern: "Hexxy was here",
+    ancient_scroll_paper_lantern: "Hexxy was here",
+    amethyst_sconce: "Hexxy was here",
+
+    edified_: {
+      log: "Hexxy was here",
+      log_amethyst: "Hexxy was here",
+      log_aventurine: "Hexxy was here",
+      log_citrine: "Hexxy was here",
+      log_purple: "Hexxy was here",
+      wood: "Hexxy was here",
+      planks: "Hexxy was here",
+      panel: "Hexxy was here",
+      tile: "Hexxy was here",
+      door: "Hexxy was here",
+      trapdoor: "Hexxy was here",
+      stairs: "Hexxy was here",
+      slab: "Hexxy was here",
+      button: "Hexxy was here",
+      pressure_plate: "Hexxy was here",
+    },
+
+    stripped_edified_log: "Hexxy was here",
+    stripped_edified_wood: "Hexxy was here",
+
+    amethyst_edified_leaves: "Hexxy was here",
+    aventurine_edified_leaves: "Hexxy was here",
+    citrine_edified_leaves: "Hexxy was here",
+
+    quenched_allay: "Hexxy was here",
+    
+    quenched_allay_: {
+      tiles: "Hexxy was here",
+      bricks: "Hexxy was here",
+      bricks_small: "Hexxy was here",
+    },
+  },
+
+  "itemGroup.hexcasting": {
+    "": "Hexxy was here",
+    creative_tab: "Hexxy was here",
+  },
+
+  "gui.hexcasting": {
+    spellcasting: "Hexxy was here",
+  },
+  
+  "tag.hexcasting": {
+    staves: "Hexxy was here",
+    edified_logs: "Hexxy was here",
+    edified_planks: "Hexxy was here",
+    phial_base: "Hexxy was here",
+  },
+  
+  "emi.category.hexcasting": {
+    brainsweep: "Hexxy was here",
+    "craft.battery": "Hexxy was here",
+    edify: "Hexxy was here",
+    villager_leveling: "Hexxy was here",
+    villager_profession: "Hexxy was here",
+  },
+  
+  "text.autoconfig.hexcasting": {
+    title: "Hexxy was here",
+    
+    category: {
+      common: "Hexxy was here",
+      client: "Hexxy was here",
+      server: "Hexxy was here",
+    },
+
+    option: {
+      common: {
+        dustMediaAmount: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+        shardMediaAmount: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+        chargedCrystalMediaAmount: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+        mediaToHealthRate: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+        cypherCooldown: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+        trinketCooldown: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+        artifactCooldown: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+      },
+      
+      client: {
+        ctrlTogglesOffStrokeOrder: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+        invertSpellbookScrollDirection: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+        invertAbacusScrollDirection: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+        gridSnapThreshold: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+      },
+      
+      server: {
+        opBreakHarvestLevel: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+        maxOpCount: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+        maxSpellCircleLength: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+        actionDenyList: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+        circleActionDenyList: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+        villagersOffendedByMindMurder: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+        scrollInjectionsRaw: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+        amethystShardModification: {
+          "": "Hexxy was here",
+          "@Tooltip": "Hexxy was here",
+        },
+
+        // TODO: are these used anywhere??
+        "fewScrollTables.@Tooltip": "Hexxy was here",
+        "someScrollTables.@Tooltip": "Hexxy was here",
+        "manyScrollTables.@Tooltip": "Hexxy was here",
+      },
+    },
+  },
+
+  "advancement.hexcasting:": {
+    root: {
+      "": "Hexxy was here",
+      desc: "Hexxy was here",
+    },
+    enlightenment: {
+      "": "Hexxy was here",
+      desc: "Hexxy was here",
+    },
+    wasteful_cast: {
+      "": "Hexxy was here",
+      desc: "Hexxy was here",
+    },
+    big_cast: {
+      "": "Hexxy was here",
+      desc: "Hexxy was here",
+    },
+    y_u_no_cast_angy: {
+      "": "Hexxy was here",
+      desc: "Hexxy was here",
+    },
+    opened_eyes: {
+      "": "Hexxy was here",
+      desc: "Hexxy was here",
+    },
+    lore: {
+      "": "Hexxy was here",
+      desc: "Hexxy was here",
+    },
+    "lore/": {
+      cardamom1: {
+        "": "Hexxy was here",
+        desc: "Hexxy was here",
+      },
+      cardamom2: {
+        "": "Hexxy was here",
+        desc: "Hexxy was here",
+      },
+      cardamom3: {
+        "": "Hexxy was here",
+        desc: "Hexxy was here",
+      },
+      cardamom4: {
+        "": "Hexxy was here",
+        desc: "Hexxy was here",
+      },
+      cardamom5: {
+        "": "Hexxy was here",
+        desc: "Hexxy was here",
+      },
+      experiment1: "Hexxy was here",
+      experiment2: "Hexxy was here",
+      inventory: "Hexxy was here",
+    },
+  },
+
+  "stat.hexcasting": {
+    media_used: "Hexxy was here",
+    media_overcasted: "Hexxy was here",
+    patterns_drawn: "Hexxy was here",
+    spells_cast: "Hexxy was here",
+  },
+
+  "death.attack.hexcasting": {
+    overcast: "Hexxy was here",
+    shame: "Hexxy was here",
+  },
+
+  "command.hexcasting": {
+    recalc: "Hexxy was here",
+
+    pats: {
+      listing: "Hexxy was here",
+      all: "Hexxy was here",
+      "specific.success": "Hexxy was here",
+    },
+
+    brainsweep: {
+      "": "Hexxy was here",
+      "fail.badtype": "Hexxy was here",
+      "fail.already": "Hexxy was here",
+    },
+  },
+  
+  hexcasting: {
+    "pattern.unknown": "Hexxy was here",
+    
+    debug: {
+      media_withdrawn: "Hexxy was here",
+      "media_withdrawn.with_dust": "Hexxy was here",
+      media_inserted: "Hexxy was here",
+      "media_inserted.with_dust": "Hexxy was here",
+      all_media: "Hexxy was here",
+      infinite_media: "Hexxy was here",
+    },
+    
+    // TODO: post-eigengrau make these less anticlimactic
+    message: {
+      cant_overcast: "Hexxy was here",
+      cant_great_spell: "Hexxy was here",
+    },
+    
+    tooltip: {
+      spellbook: {
+        page: {
+          "": "Hexxy was here",
+          sealed: "Hexxy was here",
+        },
+        page_with_name: {
+          "": "Hexxy was here",
+          sealed: "Hexxy was here",
+        },
+        empty: {
+          "": "Hexxy was here",
+          sealed: "Hexxy was here",
+        },
+        sealed: "Hexxy was here",
+      },
+
+      abacus: {
+        "": "Hexxy was here",
+        reset: "Hexxy was here",
+        "reset.nice": "Hexxy was here",
+      },
+
+      circle: {
+        no_exit: "Hexxy was here",
+        many_exits: "Hexxy was here",
+        no_closure: "Hexxy was here",
+      },
+      
+      lens: {
+        "pattern.invalid": "Hexxy was here",
+        bee: {
+          "": "Hexxy was here",
+          single: "Hexxy was here",
+        },
+        "impetus.redstone.bound": {
+          "": "Hexxy was here",
+          none: "Hexxy was here",
+        },
+        akashic: {
+          "bookshelf.location": "Hexxy was here",
+          "record.count": {
+            "": "Hexxy was here",
+            single: "Hexxy was here",
+          },
+        },
+      },
+
+      brainsweep: {
+        min_level: "Hexxy was here",
+        level: "Hexxy was here",
+        product: "Hexxy was here",
+      },
+
+      media: "Hexxy was here",
+      media_amount: "Hexxy was here",
+      "media_amount.advanced": "Hexxy was here",
+
+      list_contents: "Hexxy was here",
+      null_iota: "Hexxy was here",
+      jump_iota: "Hexxy was here",
+      pattern_iota: "Hexxy was here",
+      boolean_true: "Hexxy was here",
+      boolean_false: "Hexxy was here",
+    },
+    // ^ tooltip
+    spelldata: {
+      onitem: "Hexxy was here",
+      anything: "Hexxy was here",
+      unknown: "Hexxy was here",
+      "entity.whoknows": "Hexxy was here",
+      "akashic.nopos": "Hexxy was here",
+    },
+    
+    subtitles: {
+      casting: {
+        pattern: {
+          start: "Hexxy was here",
+          add_segment: "Hexxy was here",
+        },
+        cast: {
+          normal: "Hexxy was here",
+          spell: "Hexxy was here",
+          hermes: "Hexxy was here",
+          thoth: "Hexxy was here",
+        },
+      },
+      
+      ambiance: "Hexxy was here",
+      "staff.reset": "Hexxy was here",
+      
+      abacus: {
+        "": "Hexxy was here",
+        shake: "Hexxy was here",
+      },
+      "spellcircle.add_pattern": "Hexxy was here",
+      "spellcircle.fail": "Hexxy was here",
+      "scroll.dust": "Hexxy was here",
+      "scroll.scribble": "Hexxy was here",
+      "impetus.fletcher.tick": "Hexxy was here",
+      "impetus.redstone.register": "Hexxy was here",
+      "lore_fragment.read": "Hexxy was here",
+      "flight.ambience": "Hexxy was here",
+      "flight.finish": "Hexxy was here",
+    },
+    
+    attributes: {
+      grid_zoom: "Hexxy was here",
+      // TODO: the +1 is kind of janky
+      scry_sight: "Hexxy was here",
+    },
+    
+    // Action localizations
+    
+    action: {
+      "hexcasting:": {
+        "const/": {
+          "null": "Hexxy was here",
+          "true": "Hexxy was here",
+          "false": "Hexxy was here",
+
+          "vec/": {
+            px: "Hexxy was here",
+            py: "Hexxy was here",
+            pz: "Hexxy was here",
+            nx: "Hexxy was here",
+            ny: "Hexxy was here",
+            nz: "Hexxy was here",
+            "0": "Hexxy was here",
+          },
+
+          "double/": {
+            pi: "Hexxy was here",
+            tau: "Hexxy was here",
+            "e": "Hexxy was here",
+          },
+        },
+
+        get_caster: "Hexxy was here",
+        "entity_pos/eye": "Hexxy was here",
+        "entity_pos/foot": "Hexxy was here",
+        get_entity_look: "Hexxy was here",
+        get_entity_height: "Hexxy was here",
+        get_entity_velocity: "Hexxy was here",
+        raycast: "Hexxy was here",
+        "raycast/axis": "Hexxy was here",
+        "raycast/entity": "Hexxy was here",
+
+        "circle/": {
+          impetus_pos: "Hexxy was here",
+          impetus_dir: "Hexxy was here",
+          "bounds/min": "Hexxy was here",
+          "bounds/max": "Hexxy was here",
+        },
+
+        append: "Hexxy was here",
+        unappend: "Hexxy was here",
+        index: "Hexxy was here",
+        singleton: "Hexxy was here",
+        empty_list: "Hexxy was here",
+        reverse: "Hexxy was here",
+        last_n_list: "Hexxy was here",
+        splat: "Hexxy was here",
+        index_of: "Hexxy was here",
+        remove_from: "Hexxy was here",
+        slice: "Hexxy was here",
+        replace: "Hexxy was here",
+        construct: "Hexxy was here",
+        deconstruct: "Hexxy was here",
+        
+        get_entity: "Hexxy was here",
+        "get_entity/": {
+          animal: "Hexxy was here",
+          monster: "Hexxy was here",
+          item: "Hexxy was here",
+          player: "Hexxy was here",
+          living: "Hexxy was here",
+        },
+
+        zone_entity: "Hexxy was here",
+        "zone_entity/": {
+          animal: "Hexxy was here",
+          monster: "Hexxy was here",
+          item: "Hexxy was here",
+          player: "Hexxy was here",
+          living: "Hexxy was here",
+          not_animal: "Hexxy was here",
+          not_monster: "Hexxy was here",
+          not_item: "Hexxy was here",
+          not_player: "Hexxy was here",
+          not_living: "Hexxy was here",
+        },
+
+        swap: "Hexxy was here",
+        rotate: "Hexxy was here",
+        rotate_reverse: "Hexxy was here",
+        duplicate: "Hexxy was here",
+        over: "Hexxy was here",
+        tuck: "Hexxy was here",
+        "2dup": "Hexxy was here",
+        duplicate_n: "Hexxy was here",
+        stack_len: "Hexxy was here",
+        fisherman: "Hexxy was here",
+        "fisherman/copy": "Hexxy was here",
+        swizzle: "Hexxy was here",
+        
+        unique: "Hexxy was here",
+        and: "Hexxy was here",
+        or: "Hexxy was here",
+        xor: "Hexxy was here",
+        
+        greater: "Hexxy was here",
+        less: "Hexxy was here",
+        greater_eq: "Hexxy was here",
+        less_eq: "Hexxy was here",
+        equals: "Hexxy was here",
+        not_equals: "Hexxy was here",
+        not: "Hexxy was here",
+        bool_coerce: "Hexxy was here",
+        if: "Hexxy was here",
+        
+        add: "Hexxy was here",
+        sub: "Hexxy was here",
+        mul: "Hexxy was here",
+        div: "Hexxy was here",
+        abs: "Hexxy was here",
+        pow: "Hexxy was here",
+        floor: "Hexxy was here",
+        ceil: "Hexxy was here",
+        modulo: "Hexxy was here",
+        construct_vec: "Hexxy was here",
+        deconstruct_vec: "Hexxy was here",
+        sin: "Hexxy was here",
+        cos: "Hexxy was here",
+        tan: "Hexxy was here",
+        arcsin: "Hexxy was here",
+        arccos: "Hexxy was here",
+        arctan: "Hexxy was here",
+        arctan2: "Hexxy was here",
+        random: "Hexxy was here",
+        logarithm: "Hexxy was here",
+        coerce_axial: "Hexxy was here",
+        
+        read: "Hexxy was here",
+        "read/entity": "Hexxy was here",
+        "read/local": "Hexxy was here",
+
+        write: "Hexxy was here",
+        "write/entity": "Hexxy was here",
+        "write/local": "Hexxy was here",
+
+        readable: "Hexxy was here",
+        "readable/entity": "Hexxy was here",
+        writable: "Hexxy was here",
+        "writable/entity": "Hexxy was here",
+        "akashic/read": "Hexxy was here",
+        "akashic/write": "Hexxy was here",
+
+        print: "Hexxy was here",
+        beep: "Hexxy was here",
+        explode: "Hexxy was here",
+        "explode/fire": "Hexxy was here",
+        add_motion: "Hexxy was here",
+        blink: "Hexxy was here",
+        break_block: "Hexxy was here",
+        place_block: "Hexxy was here",
+
+        "craft/cypher": "Hexxy was here",
+        "craft/trinket": "Hexxy was here",
+        "craft/artifact": "Hexxy was here",
+        "craft/battery": "Hexxy was here",
+
+        recharge: "Hexxy was here",
+        erase: "Hexxy was here",
+        create_water: "Hexxy was here",
+        destroy_water: "Hexxy was here",
+        ignite: "Hexxy was here",
+        extinguish: "Hexxy was here",
+        conjure_block: "Hexxy was here",
+        conjure_light: "Hexxy was here",
+        bonemeal: "Hexxy was here",
+        edify: "Hexxy was here",
+        colorize: "Hexxy was here",
+
+        "sentinel/": {
+          create: "Hexxy was here",
+          "create/great": "Hexxy was here",
+          destroy: "Hexxy was here",
+          get_pos: "Hexxy was here",
+          wayfind: "Hexxy was here",
+        },
+
+        "potion/": {
+          weakness: "Hexxy was here",
+          levitation: "Hexxy was here",
+          wither: "Hexxy was here",
+          poison: "Hexxy was here",
+          slowness: "Hexxy was here",
+
+          regeneration: "Hexxy was here",
+          night_vision: "Hexxy was here",
+          absorption: "Hexxy was here",
+          haste: "Hexxy was here",
+          strength: "Hexxy was here",
+        },
+
+        flight: "Hexxy was here",
+        "flight/range": "Hexxy was here",
+        "flight/time": "Hexxy was here",
+
+        lightning: "Hexxy was here",
+        summon_rain: "Hexxy was here",
+        dispel_rain: "Hexxy was here",
+        create_lava: "Hexxy was here",
+        "teleport/great": "Hexxy was here",
+        brainsweep: "Hexxy was here",
+
+        eval: "Hexxy was here",
+        "eval/cc": "Hexxy was here",
+        for_each: "Hexxy was here",
+        halt: "Hexxy was here",
+        
+        "interop/": {
+          "gravity/": {
+            get: "Hexxy was here",
+            set: "Hexxy was here",
+          },
+
+          "pehkui/": {
+            get: "Hexxy was here",
+            set: "Hexxy was here",
+          },
+        },
+      },
+      
+      // hexcasting.action.book.[resloc] override the name of that pattern in the patchi book, for abbreviations
+      "book.hexcasting:": {
+        get_entity_height: "Hexxy was here",
+
+        "get_entity/": {
+          animal: "Hexxy was here",
+          monster: "Hexxy was here",
+          item: "Hexxy was here",
+          player: "Hexxy was here",
+          living: "Hexxy was here",
+        },
+
+        zone_entity: "Hexxy was here",
+        "zone_entity/": {
+          animal: "Hexxy was here",
+          monster: "Hexxy was here",
+          item: "Hexxy was here",
+          player: "Hexxy was here",
+          living: "Hexxy was here",
+          not_animal: "Hexxy was here",
+          not_monster: "Hexxy was here",
+          not_item: "Hexxy was here",
+          not_player: "Hexxy was here",
+          not_living: "Hexxy was here",
+        },
+
+        mul: "Hexxy was here",
+        div: "Hexxy was here",
+        arcsin: "Hexxy was here",
+        arccos: "Hexxy was here",
+        arctan: "Hexxy was here",
+        arctan2: "Hexxy was here",
+
+        "const/vec/": {
+          x: "Hexxy was here",
+          y: "Hexxy was here",
+          z: "Hexxy was here",
+        },
+
+        "read/entity": "Hexxy was here",
+        bool_to_number: "Hexxy was here",
+        number: "Hexxy was here",
+        mask: "Hexxy was here",
+      },
+    },
+    // ^ action
+
+    "special.hexcasting:": {
+      number: "Hexxy was here",
+      mask: "Hexxy was here",
+    },
+
+    "rawhook.hexcasting:": {
+      open_paren: "Hexxy was here",
+      close_paren: "Hexxy was here",
+      escape: "Hexxy was here",
+      undo: "Hexxy was here",
+    },
+
+    "iota.hexcasting:": {
+      "null": "Hexxy was here",
+      double: "Hexxy was here",
+      boolean: "Hexxy was here",
+      entity: "Hexxy was here",
+      list: "Hexxy was here",
+      pattern: "Hexxy was here",
+      garbage: "Hexxy was here",
+      vec3: "Hexxy was here",
+    },
+
+    mishap: {
+      "": "Hexxy was here",
+      
+      invalid_pattern: "Hexxy was here",
+      unescaped: "Hexxy was here",
+      
+      not_enough_args: "Hexxy was here",
+      no_args: "Hexxy was here",
+      too_many_close_parens: "Hexxy was here",
+      
+      wrong_dimension: "Hexxy was here",
+      entity_too_far: "Hexxy was here",
+      immune_entity: "Hexxy was here",
+      eval_too_deep: "Hexxy was here",
+      no_item: "Hexxy was here",
+      "no_item.offhand": "Hexxy was here",
+      bad_entity: "Hexxy was here",
+      bad_brainsweep: "Hexxy was here",
+      already_brainswept: "Hexxy was here",
+      no_spell_circle: "Hexxy was here",
+      others_name: "Hexxy was here",
+      "others_name.self": "Hexxy was here",
+
+      divide_by_zero: {
+        divide: "Hexxy was here",
+        project: "Hexxy was here",
+        exponent: "Hexxy was here",
+        logarithm: "Hexxy was here",
+
+        zero: {
+          "": "Hexxy was here",
+          power: "Hexxy was here",
+          vec: "Hexxy was here",
+        },
+        power: "Hexxy was here",
+        sin: "Hexxy was here",
+        cos: "Hexxy was here",
+      },
+
+      no_akashic_record: "Hexxy was here",
+      disallowed: "Hexxy was here",
+      disallowed_circle: "Hexxy was here",
+      invalid_spell_datum_type: "Hexxy was here",
+      unknown: "Hexxy was here",
+      shame: "Hexxy was here",
+      
+      invalid_value: {
+        "": "Hexxy was here",
+
+        class: {
+          double: "Hexxy was here",
+          boolean: "Hexxy was here",
+          vector: "Hexxy was here",
+          list: "Hexxy was here",
+          widget: "Hexxy was here",
+          pattern: "Hexxy was here",
+
+          entity: {
+            "": "Hexxy was here",
+            item: "Hexxy was here",
+            player: "Hexxy was here",
+            villager: "Hexxy was here",
+            living: "Hexxy was here",
+          },
+
+          unknown: "Hexxy was here",
+        },
+
+        numvec: "Hexxy was here",
+        numlist: "Hexxy was here",
+        "list.pattern": "Hexxy was here",
+
+        double: {
+          positive: {
+            "": "Hexxy was here",
+            less: "Hexxy was here",
+            "less.equal": "Hexxy was here",
+          },
+          between: "Hexxy was here",
+        },
+
+        int: {
+          "": "Hexxy was here",
+          positive: {
+            "": "Hexxy was here",
+            less: "Hexxy was here",
+            "less.equal": "Hexxy was here",
+          },
+          between: "Hexxy was here",
+        },
+
+        evaluatable: "Hexxy was here",
+        bool_commute: "Hexxy was here",
+      },
+
+      location: {
+        too_far: "Hexxy was here",
+        out_of_world: "Hexxy was here",
+        too_close_to_out: "Hexxy was here",
+        forbidden: "Hexxy was here",
+        bad_dimension: "Hexxy was here",
+      },
+      
+      bad_item: {
+        "": "Hexxy was here",
+        offhand: "Hexxy was here",
+
+        iota: {
+          "": "Hexxy was here",
+          read: "Hexxy was here",
+          write: "Hexxy was here",
+          readonly: "Hexxy was here",
+        },
+
+        media: "Hexxy was here",
+        media_for_battery: "Hexxy was here",
+        only_one: "Hexxy was here",
+        eraseable: "Hexxy was here",
+        bottle: "Hexxy was here",
+        rechargable: "Hexxy was here",
+        colorizer: "Hexxy was here",
+        variant: "Hexxy was here",
+      },
+
+      bad_block: {
+        "": "Hexxy was here",
+        sapling: "Hexxy was here",
+        replaceable: "Hexxy was here",
+      },
+      
+      "circle.bool_directrix": {
+        no_bool: "Hexxy was here",
+        empty_stack: "Hexxy was here",
+      },
+    },
+    // ^ mishap
+    
+    circles: {
+      no_exit: "Hexxy was here",
+      many_exits: "Hexxy was here",
+    },
+    
+
+    // === Patchi stuff! ===
+
+    
+    landing: "Hexxy was here",
+    
+    category: {
+      basics: {
+        "": "Hexxy was here",
+        desc: "Hexxy was here",
+      },
+      casting: {
+        "": "Hexxy was here",
+        desc: "Hexxy was here",
+      },
+      items: {
+        "": "Hexxy was here",
+        desc: "Hexxy was here",
+      },
+      
+      greatwork: {
+        "": "Hexxy was here",
+        desc: "Hexxy was here",
+        // alwinfy you think you're so funny
+      },
+
+      lore: {
+        "": "Hexxy was here",
+        desc: "Hexxy was here",
+      },
+
+      interop: {
+        "": "Hexxy was here",
+        desc: "Hexxy was here",
+      },
+      
+      patterns: {
+        "": "Hexxy was here",
+        desc: "Hexxy was here",
+      },
+      spells: {
+        "": "Hexxy was here",
+        desc: "Hexxy was here",
+      },
+      great_spells: {
+        "": "Hexxy was here",
+        desc: "Hexxy was here",
+      },
+    },
+    // ^ categories
+    
+    entry: {
+      media: "Hexxy was here",
+      geodes: "Hexxy was here",
+      couldnt_cast: "Hexxy was here",
+      start_to_see: "Hexxy was here",
+      "101": "Hexxy was here",
+      vectors: "Hexxy was here",
+      mishaps: "Hexxy was here",
+      stack: "Hexxy was here",
+      naming: "Hexxy was here",
+      influences: "Hexxy was here",
+      mishaps2: "Hexxy was here",
+      amethyst: "Hexxy was here",
+      
+      staff: "Hexxy was here",
+      lens: "Hexxy was here",
+      jeweler_hammer: "Hexxy was here",
+      
+      thought_knot: "Hexxy was here",
+      focus: "Hexxy was here",
+      abacus: "Hexxy was here",
+      spellbook: "Hexxy was here",
+      
+      scroll: "Hexxy was here",
+      slate: "Hexxy was here",
+      
+      // why is this called "hexcasting"?
+      hexcasting: "Hexxy was here",
+      phials: "Hexxy was here",
+      pigments: "Hexxy was here",
+      
+      edified: "Hexxy was here",
+      decoration: "Hexxy was here",
+      
+      the_work: "Hexxy was here",
+      brainsweeping: "Hexxy was here",
+      spellcircles: "Hexxy was here",
+      impetus: "Hexxy was here",
+      directrix: "Hexxy was here",
+      akashiclib: "Hexxy was here",
+      quenching_allays: "Hexxy was here",
+      fanciful_staves: "Hexxy was here",
+      
+      // and the actions
+      readers_guide: "Hexxy was here",
+      // ops
+      basics_pattern: "Hexxy was here",
+      numbers: "Hexxy was here",
+      math: "Hexxy was here",
+      advanced_math: "Hexxy was here",
+      sets: "Hexxy was here",
+      consts: "Hexxy was here",
+      stackmanip: "Hexxy was here",
+      logic: "Hexxy was here",
+      entities: "Hexxy was here",
+      lists: "Hexxy was here",
+      patterns_as_iotas: "Hexxy was here",
+      readwrite: "Hexxy was here",
+      meta: "Hexxy was here",
+      circle_patterns: "Hexxy was here",
+      akashic_patterns: "Hexxy was here",
+      
+      // spells
+      itempicking: "Hexxy was here",
+      basic_spell: "Hexxy was here",
+      blockworks: "Hexxy was here",
+      nadirs: "Hexxy was here",
+      hexcasting_spell: "Hexxy was here",
+      sentinels: "Hexxy was here",
+      // internalize pigment uses the action name
+      flights: "Hexxy was here",
+      
+      // great spells usually use the action name
+      weather_manip: "Hexxy was here",
+      zeniths: "Hexxy was here",
+      
+      lore: {
+        cardamom1: "Hexxy was here",
+        cardamom2: "Hexxy was here",
+        cardamom3: "Hexxy was here",
+        cardamom4: "Hexxy was here",
+        cardamom5: "Hexxy was here",
+        experiment1: "Hexxy was here",
+        experiment2: "Hexxy was here",
+        inventory: "Hexxy was here",
+      },
+      
+      interop: {
+        "": "Hexxy was here",
+        gravity: "Hexxy was here",
+        pehkui: "Hexxy was here",
+        // TODO: add something about Switchy once that PR gets merged
+        // https://github.com/sisby-folk/switchy/pull/44
+        // i can't WAIT for all the hilarious people on the github issues about this one
+      },
+    },
+    // ^ entries
+    
+    page: {
+      media: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+      },
+
+      geodes: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+      },
+
+      couldnt_cast: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+        "4": "Hexxy was here",
+      },
+
+      start_to_see: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+        "4": "Hexxy was here",
+      },
+
+      casting: {
+        overview: {
+          "1": "Hexxy was here",
+        },
+
+        grid: {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+        },
+        "patterns&actions": {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+          "3": "Hexxy was here",
+          "4": "Hexxy was here",
+          "5": "Hexxy was here",
+        },
+        iotas: {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+          "3": "Hexxy was here",
+        },
+      },
+      
+      // Casting
+      "101": {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+        "4.header": "Hexxy was here",
+        "4": "Hexxy was here",
+        "5": "Hexxy was here",
+        "6": "Hexxy was here",
+        "7": "Hexxy was here",
+        "8": "Hexxy was here",
+        "9": "Hexxy was here",
+        "10": "Hexxy was here",
+        "11": "Hexxy was here",
+        "12": "Hexxy was here",
+        "13": "Hexxy was here",
+        "14": "Hexxy was here",
+        "14.link_text": "Hexxy was here",
+        "15": "Hexxy was here",
+      },
+
+      vectors: {
+        "1": "Hexxy was here",
+        "1.link_text": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+        "3.link_text": "Hexxy was here",
+      },
+
+      mishaps: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+
+        "invalid_pattern.title": "Hexxy was here",
+        invalid_pattern: "Hexxy was here",
+
+        "not_enough_iotas.title": "Hexxy was here",
+        not_enough_iotas: "Hexxy was here",
+
+        "incorrect_iota.title": "Hexxy was here",
+        incorrect_iota: "Hexxy was here",
+
+        "vector_out_of_range.title": "Hexxy was here",
+        vector_out_of_range: "Hexxy was here",
+
+        "entity_out_of_range.title": "Hexxy was here",
+        entity_out_of_range: "Hexxy was here",
+
+        "entity_immune.title": "Hexxy was here",
+        entity_immune: "Hexxy was here",
+
+        "math_error.title": "Hexxy was here",
+        math_error: "Hexxy was here",
+
+        "incorrect_item.title": "Hexxy was here",
+        incorrect_item: "Hexxy was here",
+
+        "incorrect_block.title": "Hexxy was here",
+        incorrect_block: "Hexxy was here",
+
+        "retrospection.title": "Hexxy was here",
+        retrospection: "Hexxy was here",
+
+        "too_deep.title": "Hexxy was here",
+        too_deep: "Hexxy was here",
+
+        "true_name.title": "Hexxy was here",
+        true_name: "Hexxy was here",
+
+        "disabled.title": "Hexxy was here",
+        disabled: "Hexxy was here",
+
+        "other.title": "Hexxy was here",
+        other: "Hexxy was here",
+      },
+
+      stack: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+        "4": "Hexxy was here",
+      },
+
+      naming: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+      },
+
+      influences: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+      },
+
+      mishaps2: {
+        "1": "Hexxy was here",
+
+        "bad_mindflay.title": "Hexxy was here",
+        bad_mindflay: "Hexxy was here",
+
+        "no_circle.title": "Hexxy was here",
+        no_circle: "Hexxy was here",
+
+        "no_record.title": "Hexxy was here",
+        no_record: "Hexxy was here",
+      },
+
+
+      // Items
+
+      amethyst: {
+        dust: "Hexxy was here",
+        shard: "Hexxy was here",
+        crystal: "Hexxy was here",
+        lore: "Hexxy was here",
+      },
+
+      staff: {
+        "1": "Hexxy was here",
+        "crafting.header": "Hexxy was here",
+        "crafting.desc": "Hexxy was here",
+      },
+
+      lens: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "crafting.desc": "Hexxy was here",
+      },
+
+      thought_knot: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+        "crafting.desc": "Hexxy was here",
+      },
+
+      focus: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+        "crafting.desc": "Hexxy was here",
+      },
+
+      abacus: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "crafting.desc": "Hexxy was here",
+      },
+
+      spellbook: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "crafting.desc": "Hexxy was here",
+      },
+
+      scroll: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "crafting.desc": "Hexxy was here",
+      },
+
+      slate: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "crafting.desc": "Hexxy was here",
+        "3": "Hexxy was here",
+      },
+
+      // roll credits
+      hexcasting: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+        "4": "Hexxy was here",
+        "5": "Hexxy was here",
+        "crafting.desc": "Hexxy was here",
+      },
+
+      phials: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+        desc: "Hexxy was here",
+      },
+
+      pigments: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+
+        "colored.crafting.header": "Hexxy was here",
+        "colored.crafting.desc": "Hexxy was here",
+
+        special: "Hexxy was here",
+      },
+
+      edified: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "crafting.desc": "Hexxy was here",
+      },
+
+      jeweler_hammer: {
+        "1": "Hexxy was here",
+        "crafting.desc": "Hexxy was here",
+      },
+
+      decoration: {
+        "1": "Hexxy was here",
+        "ancient_scroll.crafting.desc": "Hexxy was here",
+        "tiles.crafting.desc": "Hexxy was here",
+        "sconce.crafting.desc": "Hexxy was here",
+      },
+
+
+      // The Work
+      
+      the_work: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+      },
+
+      brainsweeping: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+        budding_amethyst: "Hexxy was here",
+      },
+
+      spellcircles: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+        "4": "Hexxy was here",
+        "5": "Hexxy was here",
+        "6": "Hexxy was here",
+        "7": "Hexxy was here",
+        "teleport_circle.title": "Hexxy was here",
+      },
+
+      impetus: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+        "4": "Hexxy was here",
+
+        empty_impetus: "Hexxy was here",
+        impetus_rightclick: "Hexxy was here",
+        impetus_storedplayer: {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+        },
+        impetus_look: "Hexxy was here",
+      },
+
+      directrix: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+
+        empty_directrix: "Hexxy was here",
+        directrix_redstone: "Hexxy was here",
+      },
+
+      akashiclib: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        akashic_record: "Hexxy was here",
+        "3": "Hexxy was here",
+      },
+
+      quenching_allays: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+        "4": "Hexxy was here",
+        "5": "Hexxy was here",
+      },
+
+
+      "fanciful_staves.1": "Hexxy was here",
+      
+      // Patterns
+
+      readers_guide: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+        "4": "Hexxy was here",
+      },
+
+      basics_pattern: {
+        get_caster: "Hexxy was here",
+        "entity_pos/eye": "Hexxy was here",
+        "entity_pos/foot": "Hexxy was here",
+        get_entity_look: "Hexxy was here",
+        print: "Hexxy was here",
+        raycast: {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+        },
+        "raycast/axis": {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+        },
+        "raycast/entity": "Hexxy was here",
+        get_entity_height: "Hexxy was here",
+        get_entity_velocity: "Hexxy was here",
+      },
+
+      numbers: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        example: {
+          "10.header": "Hexxy was here",
+          "10": "Hexxy was here",
+
+          "7.header": "Hexxy was here",
+          "7": "Hexxy was here",
+
+          "-32.header": "Hexxy was here",
+          "-32": "Hexxy was here",
+
+          "4.5.header": "Hexxy was here",
+          "4.5": "Hexxy was here",
+        },
+        "3": "Hexxy was here",
+      },
+
+      math: {
+        numvec: "Hexxy was here",
+
+        "add.1": "Hexxy was here",
+        "add.2": "Hexxy was here",
+
+        "sub.1": "Hexxy was here",
+        "sub.2": "Hexxy was here",
+
+        "mul.1": "Hexxy was here",
+        "mul.2": "Hexxy was here",
+
+        "div.1": "Hexxy was here",
+        "div.2": "Hexxy was here",
+
+        "abs.1": "Hexxy was here",
+        "abs.2": "Hexxy was here",
+
+        "pow.1": "Hexxy was here",
+        "pow.2": "Hexxy was here",
+
+        floor: "Hexxy was here",
+        ceil: "Hexxy was here",
+        construct_vec: "Hexxy was here",
+        deconstruct_vec: "Hexxy was here",
+        modulo: "Hexxy was here",
+        coerce_axial: "Hexxy was here",
+        random: "Hexxy was here",
+      },
+
+      advanced_math: {
+        sin: "Hexxy was here",
+        cos: "Hexxy was here",
+        tan: "Hexxy was here",
+        arcsin: "Hexxy was here",
+        arccos: "Hexxy was here",
+        arctan: "Hexxy was here",
+        arctan2: "Hexxy was here",
+        logarithm: "Hexxy was here",
+      },
+
+      sets: {
+        numlist: "Hexxy was here",
+
+        "or.1": "Hexxy was here",
+        "or.2": "Hexxy was here",
+
+        "and.1": "Hexxy was here",
+        "and.2": "Hexxy was here",
+
+        "xor.1": "Hexxy was here",
+        "xor.2": "Hexxy was here",
+
+        not: "Hexxy was here",
+        to_set: "Hexxy was here",
+      },
+
+      "consts.const/": {
+        "null": "Hexxy was here",
+        "true": "Hexxy was here",
+        "false": "Hexxy was here",
+
+        "vec/": {
+          x: "Hexxy was here",
+          y: "Hexxy was here",
+          z: "Hexxy was here",
+          "0": "Hexxy was here",
+        },
+
+        "double/": {
+          tau: "Hexxy was here",
+          pi: "Hexxy was here",
+          "e": "Hexxy was here",
+        },
+      },
+
+      stackmanip: {
+        "pseudo-novice.title": "Hexxy was here",
+        "pseudo-novice": "Hexxy was here",
+
+        swap: "Hexxy was here",
+        rotate: "Hexxy was here",
+        rotate_reverse: "Hexxy was here",
+        duplicate: "Hexxy was here",
+        over: "Hexxy was here",
+        tuck: "Hexxy was here",
+        "2dup": "Hexxy was here",
+        stack_len: "Hexxy was here",
+        duplicate_n: "Hexxy was here",
+        fisherman: "Hexxy was here",
+        "fisherman/copy": "Hexxy was here",
+
+        mask: {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+        },
+
+        swizzle: {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+          link: "Hexxy was here",
+        },
+      },
+
+      logic: {
+        bool_coerce: "Hexxy was here",
+        bool_to_number: "Hexxy was here",
+        not: "Hexxy was here",
+        or: "Hexxy was here",
+        and: "Hexxy was here",
+        xor: "Hexxy was here",
+        if: "Hexxy was here",
+        equals: "Hexxy was here",
+        not_equals: "Hexxy was here",
+        greater: "Hexxy was here",
+        less: "Hexxy was here",
+        greater_eq: "Hexxy was here",
+        less_eq: "Hexxy was here",
+      },
+
+      entities: {
+        get_entity: "Hexxy was here",
+        "get_entity/": {
+          animal: "Hexxy was here",
+          monster: "Hexxy was here",
+          item: "Hexxy was here",
+          player: "Hexxy was here",
+          living: "Hexxy was here",
+        },
+
+        zone_entity: "Hexxy was here",
+        "zone_entity/": {
+          animal: "Hexxy was here",
+          not_animal: "Hexxy was here",
+          monster: "Hexxy was here",
+          not_monster: "Hexxy was here",
+          item: "Hexxy was here",
+          not_item: "Hexxy was here",
+          player: "Hexxy was here",
+          not_player: "Hexxy was here",
+          living: "Hexxy was here",
+          not_living: "Hexxy was here",
+        },
+      },
+
+      lists: {
+        index: "Hexxy was here",
+        slice: "Hexxy was here",
+        append: "Hexxy was here",
+        unappend: "Hexxy was here",
+        add: "Hexxy was here",
+        empty_list: "Hexxy was here",
+        singleton: "Hexxy was here",
+        abs: "Hexxy was here",
+        reverse: "Hexxy was here",
+        index_of: "Hexxy was here",
+        remove_from: "Hexxy was here",
+        replace: "Hexxy was here",
+        last_n_list: "Hexxy was here",
+        splat: "Hexxy was here",
+        construct: "Hexxy was here",
+        deconstruct: "Hexxy was here",
+      },
+
+      patterns_as_iotas: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        escape: {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+        },
+        parens: {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+          "3": "Hexxy was here",
+        },
+        undo: "Hexxy was here",
+      },
+
+      readwrite: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        read: "Hexxy was here",
+        write: "Hexxy was here",
+        "read/entity": "Hexxy was here",
+        "write/entity": "Hexxy was here",
+        readable: "Hexxy was here",
+        "readable/entity": "Hexxy was here",
+        writable: "Hexxy was here",
+        "writable/entity": "Hexxy was here",
+        "local.title": "Hexxy was here",
+        local: "Hexxy was here",
+        "write/local": "Hexxy was here",
+        "read/local": "Hexxy was here",
+      },
+
+      meta: {
+        "eval.1": "Hexxy was here",
+        "eval.2": "Hexxy was here",
+
+        "for_each.1": "Hexxy was here",
+        "for_each.2": "Hexxy was here",
+
+        "halt.1": "Hexxy was here",
+        "halt.2": "Hexxy was here",
+
+        "eval/cc.1": "Hexxy was here",
+        "eval/cc.2": "Hexxy was here",
+      },
+
+      circle_patterns: {
+        disclaimer: "Hexxy was here",
+
+        "circle/impetus_pos": "Hexxy was here",
+        "circle/impetus_dir": "Hexxy was here",
+        "circle/bounds/min": "Hexxy was here",
+        "circle/bounds/max": "Hexxy was here",
+      },
+
+      akashic_patterns: {
+        "akashic/read": "Hexxy was here",
+        "akashic/write": "Hexxy was here",
+      },
+
+      // Normal Spells
+      
+      itempicking: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+      },
+
+      basic_spell: {
+        "explode.1": "Hexxy was here",
+        "explode.2": "Hexxy was here",
+
+        "explode.fire.1": "Hexxy was here",
+        "explode.fire.2": "Hexxy was here",
+
+        add_motion: "Hexxy was here",
+        blink: "Hexxy was here",
+
+        "beep.1": "Hexxy was here",
+        "beep.2": "Hexxy was here",
+      },
+
+      blockworks: {
+        place_block: "Hexxy was here",
+        break_block: "Hexxy was here",
+        create_water: "Hexxy was here",
+        destroy_water: "Hexxy was here",
+        conjure_block: "Hexxy was here",
+        conjure_light: "Hexxy was here",
+        bonemeal: "Hexxy was here",
+        edify: "Hexxy was here",
+        ignite: "Hexxy was here",
+        extinguish: "Hexxy was here",
+      },
+
+      nadirs: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+
+        "potion/weakness": "Hexxy was here",
+        "potion/levitation": "Hexxy was here",
+        "potion/wither": "Hexxy was here",
+        "potion/poison": "Hexxy was here",
+        "potion/slowness": "Hexxy was here",
+      },
+
+      hexcasting_spell: {
+        basics: "Hexxy was here",
+        "craft/cypher": "Hexxy was here",
+        "craft/trinket": "Hexxy was here",
+        "craft/artifact": "Hexxy was here",
+
+        "recharge.1": "Hexxy was here",
+        "recharge.2": "Hexxy was here",
+
+        "erase.1": "Hexxy was here",
+        "erase.2": "Hexxy was here",
+      },
+
+      sentinels: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+
+        "sentinel/create": "Hexxy was here",
+        "sentinel/destroy": "Hexxy was here",
+        "sentinel/get_pos": "Hexxy was here",
+        "sentinel/wayfind": "Hexxy was here",
+      },
+
+      colorize: "Hexxy was here",
+      
+      flights: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+
+        "range.1": "Hexxy was here",
+        "range.2": "Hexxy was here",
+
+        "time.1": "Hexxy was here",
+        "time.2": "Hexxy was here",
+      },
+
+      create_lava: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+      },
+
+      weather_manip: {
+        lightning: "Hexxy was here",
+        summon_rain: "Hexxy was here",
+        dispel_rain: "Hexxy was here",
+      },
+
+      altiora: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+      },
+
+      "teleport/great": {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+      },
+
+      zeniths: {
+        "1": "Hexxy was here",
+
+        "potion/regeneration": "Hexxy was here",
+        "potion/night_vision": "Hexxy was here",
+        "potion/absorption": "Hexxy was here",
+        "potion/haste": "Hexxy was here",
+        "potion/strength": "Hexxy was here",
+      },
+
+      greater_sentinel: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+      },
+
+      make_battery: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+      },
+
+      "brainsweep_spell.1": "Hexxy was here",
+      
+
+      lore: {
+        cardamom1: {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+          "3": "Hexxy was here",
+          "4": "Hexxy was here",
+          "5": "Hexxy was here",
+          "6": "Hexxy was here",
+          "7": "Hexxy was here",
+          "8": "Hexxy was here",
+        },
+
+        cardamom2: {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+          "3": "Hexxy was here",
+          "4": "Hexxy was here",
+          "5": "Hexxy was here",
+          "6": "Hexxy was here",
+          "7": "Hexxy was here",
+        },
+
+        cardamom3: {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+          "3": "Hexxy was here",
+          "4": "Hexxy was here",
+          "5": "Hexxy was here",
+          "6": "Hexxy was here",
+          "7": "Hexxy was here",
+          "8": "Hexxy was here",
+          "9": "Hexxy was here",
+          "10": "Hexxy was here",
+          "11": "Hexxy was here",
+          "12": "Hexxy was here",
+        },
+
+        cardamom4: {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+          "3": "Hexxy was here",
+          "4": "Hexxy was here",
+          "5": "Hexxy was here",
+          "6": "Hexxy was here",
+          "7": "Hexxy was here",
+          "8": "Hexxy was here",
+          "9": "Hexxy was here",
+          "10": "Hexxy was here",
+        },
+
+        cardamom5: {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+          "3": "Hexxy was here",
+          "4": "Hexxy was here",
+          "5": "Hexxy was here",
+        },
+
+        inventory: {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+          "3": "Hexxy was here",
+          "4": "Hexxy was here",
+          "5": "Hexxy was here",
+          "6": "Hexxy was here",
+          "7": "Hexxy was here",
+          "8": "Hexxy was here",
+          "9": "Hexxy was here",
+          "10": "Hexxy was here",
+          "11": "Hexxy was here",
+          "12": "Hexxy was here",
+          "13": "Hexxy was here",
+        },
+
+        experiment1: {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+          "3": "Hexxy was here",
+          "4": "Hexxy was here",
+          "5": "Hexxy was here",
+          "6": "Hexxy was here",
+        },
+
+        experiment2: {
+          "1": "Hexxy was here",
+          "2": "Hexxy was here",
+          "3": "Hexxy was here",
+          "4": "Hexxy was here",
+        },
+      },
+      // ^ lore
+
+      interop: {
+        "1": "Hexxy was here",
+        "2": "Hexxy was here",
+        "3": "Hexxy was here",
+
+        gravity: {
+          "1": "Hexxy was here",
+          get: "Hexxy was here",
+          set: "Hexxy was here",
+        },
+
+        pehkui: {
+          "1": "Hexxy was here",
+          get: "Hexxy was here",
+          set: "Hexxy was here",
+        },
+      },
+    },
+    // ^ page
+  },
+  // ^ hexcasting
+}
