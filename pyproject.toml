@@ -31,13 +31,6 @@ dev = [
     "pytest>=7.3.1",
     "syrupy>=4.0.2",
 ]
-ci = [
-    "typing_extensions==4.6.1",
-    "importlib_resources==6.0.1",
-    "pydantic==2.3.0",
-    "Jinja2==3.1.2",
-    "pyjson5==1.6.3",
-]
 
 [project.scripts]
 hexdoc = "hexdoc.hexdoc:main"

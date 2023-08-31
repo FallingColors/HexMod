@@ -48,7 +48,7 @@ jobs:
           cache: pip
 
       - name: Install docgen from source
-        run: pip install .[ci] hatch
+        run: pip install . hatch
       
       - name: List book languages
         id: list-langs

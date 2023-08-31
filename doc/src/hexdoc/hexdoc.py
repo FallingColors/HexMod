@@ -231,7 +231,7 @@ def main(args: Args | None = None) -> None:
                         book=book,
                         props=props,
                         url=url,
-                        is_bleeding_edge=version != "latest",
+                        is_bleeding_edge=version == "latest",
                     )
                 )
 
