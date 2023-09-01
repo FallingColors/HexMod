@@ -61,7 +61,7 @@ jobs:
           echo "release=$release" >> "$GITHUB_OUTPUT"
       
       - name: Export web book
-        run: $HEXDOC --export-only --release ${{ steps.check-release.outputs.release }}
+        run: $HEXDOC --export-only --is-release ${{ steps.check-release.outputs.release }}
 
       - name: Bump version
         if: github.event_name == 'workflow_dispatch' && inputs.segment
@@ -111,7 +111,7 @@ jobs:
           python-version: "3.11"
 
       - name: Build web book
-        run: $HEXDOC --lang "${{ matrix.lang }}" -o _site --release "${{ needs.build.outputs.release }}"
+        run: $HEXDOC --lang "${{ matrix.lang }}" -o _site --clean --is-release "${{ needs.build.outputs.release }}"
 
       - name: Upload temporary Pages artifact
         uses: actions/upload-artifact@v3
@@ -144,7 +144,7 @@ jobs:
           path: _site/src/docs
       
       - name: Add new docs to site
-        run: hexdoc_merge --src _site/src/docs --dst _site/dst/docs --release "${{ needs.build.outputs.release == true }}"
+        run: hexdoc_merge --src _site/src/docs --dst _site/dst/docs --is-release "${{ needs.build.outputs.release == true }}"
 
       - name: Upload Pages artifact
         uses: actions/upload-artifact@v3

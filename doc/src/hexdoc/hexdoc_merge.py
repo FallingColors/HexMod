@@ -20,7 +20,7 @@ class Args(HexdocModel):
 
     src: Path
     dst: Path
-    release: bool
+    is_release: bool
 
     @classmethod
     def parse_args(cls, args: Sequence[str] | None = None) -> Self:
@@ -28,7 +28,7 @@ class Args(HexdocModel):
 
         parser.add_argument("--src", type=Path, required=True)
         parser.add_argument("--dst", type=Path, required=True)
-        parser.add_argument("--release", default=False)
+        parser.add_argument("--is-release", default=False)
 
         return cls.model_validate(vars(parser.parse_args(args)))
 
@@ -44,25 +44,30 @@ def main():
     args.dst.mkdir(parents=True, exist_ok=True)
 
     # remove the book from the root of the destination since we're adding a new one now
-    if args.release:
+    if args.is_release:
         for path in args.dst.iterdir():
-            if path.name not in ["v", "meta"]:
+            if path.name in ["v", "meta"]:
+                continue
+
+            if path.is_dir():
                 shutil.rmtree(path)
+            else:
+                path.unlink()
 
     # find all the marked directories in source and delete them from dest
     for marker_path in args.src.rglob(MARKER_NAME):
         dst_marker_dir = args.dst / marker_path.parent.relative_to(args.src)
         shutil.rmtree(dst_marker_dir, ignore_errors=True)
 
-    # that should be all the possible conflicts, so merge src into dst now
-    shutil.move(args.src / "*", args.dst)
+    # that should be all the possible conflicts, so copy src into dst now
+    shutil.copytree(args.src, args.dst, dirs_exist_ok=True)
 
     # crawl the new tree to rebuild the sitemap
-    sitemap = defaultdict[str, dict[str, str]](dict)
+    sitemap = defaultdict[str, dict[str, bool]](dict)
 
     for marker_path in args.dst.rglob(MARKER_NAME):
         marker = SitemapMarker.load(marker_path)
-        sitemap[marker.version][marker.lang] = marker.path
+        sitemap[marker.version][marker.lang] = marker.lang_in_path
 
     write_to_path(args.dst / "meta" / "sitemap.json", json.dumps(sitemap))
 
