@@ -242,7 +242,7 @@ def main(args: Args | None = None) -> None:
                         book=book,
                         props=props,
                         page_url=page_url,
-                        version=version,
+                        version=version or GRADLE_VERSION,
                         lang=lang,
                         is_bleeding_edge=version == "latest",
                     )
