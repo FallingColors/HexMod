@@ -104,6 +104,10 @@ class SitemapMarker(HexdocModel):
     lang: str
     path: str
 
+    @classmethod
+    def load(cls, path: Path):
+        return cls.model_validate_json(path.read_text("utf-8"))
+
 
 def main(args: Args | None = None) -> None:
     # allow passing Args for test cases, but parse by default

@@ -79,7 +79,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: docgen-build
-          path: dist/
+          path: dist
 
       - name: Copy build to Pages
         run: |
@@ -91,52 +91,8 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: github-pages-tmp
-          path: _site/
+          path: _site
   
-  publish-pypi:
-    runs-on: ubuntu-latest
-    needs: build
-    if: needs.build.outputs.release == 'true'
-
-    environment:
-      name: pypi
-      url: https://pypi.org/p/${{ env.PYPI_PACKAGE }}
-    permissions:
-      id-token: write
-
-    steps:
-      - name: Download docgen artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: docgen-build
-          path: dist
-
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-
-  publish-testpypi:
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.event_name == 'workflow_dispatch' && inputs.publish == 'TestPyPI'
-
-    environment:
-      name: testpypi
-      url: https://test.pypi.org/p/${{ env.PYPI_PACKAGE }}
-    permissions:
-      id-token: write
-
-    steps:
-      - name: Download docgen artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: docgen-build
-          path: dist
-
-      - name: Publish to TestPyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
-
   generate:
     runs-on: ubuntu-latest
     needs: build
@@ -161,7 +117,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: github-pages-tmp
-          path: _site/
+          path: _site
 
   bundle-pages:
     runs-on: ubuntu-latest
@@ -179,28 +135,22 @@ jobs:
         continue-on-error: true
         with:
           ref: gh-pages
-          path: gh-pages/
+          path: _site/dst
 
       - name: Download temporary Pages artifact
         uses: actions/download-artifact@v3
         with:
           name: github-pages-tmp
-          path: _new_site/
+          path: _site/src/docs
       
       - name: Add new docs to site
-        run: hexdoc_merge --source _new_site --dest gh-pages/docs --release "${{ needs.build.outputs.release == true }}"
-
-      - name: Fix permissions
-        run: |
-          chmod -c -R +rX "_site/" | while read line; do
-            echo "::warning title=Invalid file permissions automatically fixed::$line"
-          done
+        run: hexdoc_merge --src _site/src/docs --dst _site/dst/docs --release "${{ needs.build.outputs.release == true }}"
 
       - name: Upload Pages artifact
         uses: actions/upload-artifact@v3
         with:
           name: github-pages
-          path: gh-pages/docs
+          path: _site/dst/docs
 
   deploy-pages:
     runs-on: ubuntu-latest
@@ -211,14 +161,62 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
       - name: Download Pages artifact
         uses: actions/download-artifact@v3
         with:
           name: github-pages
-          path: _site/
+          path: _site
 
       - name: Deploy to Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: _site
           target-folder: docs
+
+  publish-pypi:
+    runs-on: ubuntu-latest
+    needs: build
+    if: needs.build.outputs.release == 'true'
+
+    environment:
+      name: pypi
+      url: https://pypi.org/p/${{ env.PYPI_PACKAGE }}
+
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download docgen artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: docgen-build
+          path: dist
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  publish-testpypi:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'workflow_dispatch' && inputs.publish == 'TestPyPI'
+
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/${{ env.PYPI_PACKAGE }}
+
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download docgen artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: docgen-build
+          path: dist
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+        
