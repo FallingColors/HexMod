@@ -141,6 +141,12 @@ canvas.spell-viz {
 
   .dropdown-menu {
     background-color: #402a40;
+    min-width: 120px;
+  }
+
+  .dropdown-menu-ltr {
+    left: 0;
+    right: auto;
   }
 
   .dropdown-menu > li > a {

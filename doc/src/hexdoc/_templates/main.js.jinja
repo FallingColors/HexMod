@@ -292,10 +292,62 @@ function hookSpoiler(elem) {
   }
 }
 
+// these are filled by Jinja
+const ROOT_URL = "{{ props.url }}";
+const PAGE_URL = "{{ page_url }}";
+
+const VERSION = "{{ version }}";
+const LANG = "{{ lang }}";
+
+function dropdownItem(text, href) {
+  let a = document.createElement("a");
+  a.href = href;
+  a.textContent = text;
+
+  let li = document.createElement("li");
+  li.appendChild(a);
+  return li;
+}
+
+function fillDropdowns(sitemap) {
+  let versionDropdown = document.getElementById("version-dropdown");
+  let langDropdown = document.getElementById("lang-dropdown");
+
+  // versions, linking to the current lang if possible
+  for (const version of Object.keys(sitemap).sort().reverse()) {
+    let {defaultPath, langPaths} = sitemap[version];
+
+    // link to the current language if available, else link to the default language
+    let path;
+    if (langPaths.hasOwnProperty(LANG)) {
+      path = langPaths[LANG];
+    } else {
+      path = defaultPath;
+    }
+    
+    let item = dropdownItem(version, ROOT_URL + path);
+    versionDropdown.appendChild(item);
+  }
+  
+  // langs for the current version
+  let langPaths = sitemap[VERSION].langPaths;
+  for (const lang of Object.keys(langPaths).sort()) {
+    let item = dropdownItem(lang, ROOT_URL + langPaths[lang]);
+    langDropdown.appendChild(item);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  // fetch the sitemap from the root and use it to generate the navbar
+  fetch(`${ROOT_URL}/meta/sitemap.json`)
+    .then(r => r.json())
+    .then(fillDropdowns)
+    .catch(e => console.error(e))
+
   document.querySelectorAll("details.spell-collapsible").forEach(hookLoad);
   document.querySelectorAll("a.toggle-link").forEach(hookToggle);
   document.querySelectorAll(".spoilered").forEach(hookSpoiler);
+
   function tick(prevTime, time) {
     const dt = time - prevTime;
     for (const q of rfaQueue) {

@@ -105,7 +105,7 @@ class SitemapMarker(HexdocModel):
     version: str
     lang: str
     path: str
-    lang_in_path: bool
+    is_default_lang: bool
 
     @classmethod
     def load(cls, path: Path):
@@ -223,14 +223,13 @@ def main(args: Args | None = None) -> None:
         for version in versions:
             for lang, book in books.items():
                 is_default_lang = lang == props.default_lang
-                lang_in_path = not is_default_lang
 
                 # /index.html
                 # /lang/index.html
                 # /v/version/index.html
                 # /v/version/lang/index.html
                 parts = ("v", version) if version else ()
-                if lang_in_path:
+                if not is_default_lang:
                     parts += (lang,)
 
                 output_dir = args.output_dir / Path(*parts)
@@ -261,7 +260,7 @@ def main(args: Args | None = None) -> None:
                         version=version,
                         lang=lang,
                         path="/" + "/".join(parts),
-                        lang_in_path=lang_in_path,
+                        is_default_lang=is_default_lang,
                     )
                     (output_dir / MARKER_NAME).write_text(marker.model_dump_json())
 

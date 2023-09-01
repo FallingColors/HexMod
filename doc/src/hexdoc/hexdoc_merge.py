@@ -3,11 +3,16 @@ import shutil
 from argparse import ArgumentParser
 from collections import defaultdict
 from pathlib import Path
-from typing import Self, Sequence
+from typing import Self, Sequence, TypedDict
 
 from hexdoc.hexdoc import MARKER_NAME, SitemapMarker
 from hexdoc.utils import HexdocModel
 from hexdoc.utils.path import write_to_path
+
+
+class SitemapItem(TypedDict):
+    defaultPath: str
+    langPaths: dict[str, str]
 
 
 def strip_empty_lines(text: str) -> str:
@@ -63,11 +68,17 @@ def main():
     shutil.copytree(args.src, args.dst, dirs_exist_ok=True)
 
     # crawl the new tree to rebuild the sitemap
-    sitemap = defaultdict[str, dict[str, bool]](dict)
+    sitemap = defaultdict[str, SitemapItem](
+        lambda: SitemapItem(defaultPath="", langPaths={})
+    )
 
     for marker_path in args.dst.rglob(MARKER_NAME):
         marker = SitemapMarker.load(marker_path)
-        sitemap[marker.version][marker.lang] = marker.lang_in_path
+        version_item = sitemap[marker.version]
+
+        version_item["langPaths"][marker.lang] = marker.path
+        if marker.is_default_lang:
+            version_item["defaultPath"] = marker.path
 
     write_to_path(args.dst / "meta" / "sitemap.json", json.dumps(sitemap))
 
