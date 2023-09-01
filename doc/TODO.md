@@ -12,4 +12,4 @@
 - [x] Version
   - [x] Don't delete sitemap markers
   - [x] delete in dest, then copy, then traverse again to build sitemap from scratch
-- [ ] Dropdowns for ^
+- [x] Dropdowns for ^

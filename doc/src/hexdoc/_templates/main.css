@@ -101,10 +101,6 @@ canvas.spell-viz {
   --dark-mode: 0;
 }
 
-.navbar-brand {
-  pointer-events: none;
-}
-
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #201a20;
@@ -128,6 +124,8 @@ canvas.spell-viz {
     color: #aaa;
   }
 
+  .navbar-default .navbar-brand:focus,
+  .navbar-default .navbar-brand:hover,
   .navbar-default .navbar-nav > li > a:hover {
     color: #ccc;
   }
