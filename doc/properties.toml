@@ -1,6 +1,6 @@
 modid = "hexcasting"
 book = "hexcasting:thehexbook"
-url = "https://gamma-delta.github.io/HexMod"
+fallback_url = "https://gamma-delta.github.io/HexMod"
 default_lang = "en_us"
 
 resource_dirs = [  # top takes priority

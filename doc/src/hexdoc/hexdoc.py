@@ -234,7 +234,7 @@ def main(args: Args | None = None) -> None:
                     parts += (lang,)
 
                 output_dir = args.output_dir / Path(*parts)
-                url = "/".join((props.url,) + parts)
+                page_url = "/".join((props.url,) + parts)
 
                 logger.info(f"Rendering {output_dir}")
                 docs = strip_empty_lines(
@@ -242,7 +242,7 @@ def main(args: Args | None = None) -> None:
                         **props.template.args,
                         book=book,
                         props=props,
-                        url=url,
+                        page_url=page_url,
                         version=version,
                         lang=lang,
                         is_bleeding_edge=version == "latest",

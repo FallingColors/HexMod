@@ -73,6 +73,7 @@ p.todo-note {
 
 .spoilered {
   filter: blur(1ex);
+  transition: filter 0.04s linear;
   -moz-transition: filter 0.04s linear;
 }
 
@@ -100,6 +101,10 @@ canvas.spell-viz {
   --dark-mode: 0;
 }
 
+.navbar-brand {
+  pointer-events: none;
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #201a20;
@@ -108,6 +113,44 @@ canvas.spell-viz {
 
   .jumbotron {
     background-color: #323;
+  }
+
+  .navbar-default {
+    background-color: #2b1f2b;
+    border-color: #080808;
+  }
+
+  /* please help, i'm not a frontend dev, i'm shocked this works at all */
+
+  .navbar-default .navbar-brand,
+  .navbar-default .navbar-nav > li > a,
+  .navbar-default .navbar-nav > li > a:focus {
+    color: #aaa;
+  }
+
+  .navbar-default .navbar-nav > li > a:hover {
+    color: #ccc;
+  }
+
+  .navbar-default .navbar-nav > .open > a,
+  .navbar-default .navbar-nav > .open > a:focus,
+  .navbar-default .navbar-nav > .open > a:hover {
+    color: #bbb;
+    background-color: #1e131e;
+  }
+
+  .dropdown-menu {
+    background-color: #402a40;
+  }
+
+  .dropdown-menu > li > a {
+    color: #bbb;
+  }
+
+  .dropdown-menu > li > a:focus,
+  .dropdown-menu > li > a:hover {
+    color: #ccc;
+    background-color: #553455;
   }
 
   canvas.spell-viz {

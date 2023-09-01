@@ -11,8 +11,8 @@
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="{{ title }}" />
-    <meta property="og:image" content="{{ url }}/{{ icon_href }}" />
-    <meta property="og:url" content="{{ url }}" />
+    <meta property="og:image" content="{{ page_url }}/{{ icon_href }}" />
+    <meta property="og:url" content="{{ page_url }}" />
     <meta property="og:description" content="{{ description }}" />
     <meta property="og:site_name" content="{{ mod_name }}" />
 
@@ -20,9 +20,14 @@
       integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+      integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/js/bootstrap.min.js"
+      integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>
+
     <style>
       {% filter indent(6) %}
-      {%+ include "main.css.jinja" %}
+      {%+ include_raw "main.css" %}
       {% endfilter %}
     </style>
 
@@ -43,6 +48,7 @@
   </head>
 
   <body>
+    {% include "components/navbar.html.jinja" +%}
     {% include "components/welcome.html.jinja" +%}
     {% include "book.html.jinja" +%}
   </body>

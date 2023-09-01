@@ -1,12 +1,14 @@
 from __future__ import annotations
 
+import os
 import re
+from functools import cached_property
 from pathlib import Path
 from typing import Annotated, Any, Self
 
-from pydantic import AfterValidator, Field, HttpUrl, field_validator
+from pydantic import AfterValidator, Field, HttpUrl, TypeAdapter, field_validator
 
-from .model import StripHiddenModel
+from .model import DEFAULT_CONFIG, StripHiddenModel
 from .resource import ResourceDir, ResourceLocation
 from .toml_placeholders import load_toml_with_placeholders
 
@@ -43,7 +45,7 @@ class TemplateProps(StripHiddenModel):
 class Properties(StripHiddenModel):
     modid: str
     book: ResourceLocation
-    url: NoTrailingSlashHttpUrl
+    fallback_url: NoTrailingSlashHttpUrl
     default_lang: str
     is_0_black: bool = Field(default=False)
     """If true, the style `$(0)` changes the text color to black; otherwise it resets
@@ -72,3 +74,10 @@ class Properties(StripHiddenModel):
     def get_asset_url(self, id: ResourceLocation) -> str:
         base_url = self.base_asset_urls[id.namespace]
         return f"{base_url}/{id.file_path_stub('assets').as_posix()}"
+
+    @cached_property
+    def url(self):
+        github_pages_url = os.getenv("GITHUB_PAGES_URL", self.fallback_url)
+
+        ta = TypeAdapter(NoTrailingSlashHttpUrl, config=DEFAULT_CONFIG)
+        return ta.validate_python(github_pages_url)
