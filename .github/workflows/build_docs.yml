@@ -4,25 +4,28 @@ on:
   push:
   workflow_dispatch:
     inputs:
+      branch:
+        description: 'Branch to generate docs from (default: same as workflow)'
+        type: string
+        required: false
+      update-latest:
+        description: Overwrite the 'latest' version (and root, if publishing)
+        type: boolean
+        default: true
       publish:
-        description: Package index to publish the docgen to
+        description: Package index to publish to
         type: choice
         options:
           - none
           - PyPI (release)
           - TestPyPI
       segment:
-        description: Version segment to bump with Hatch
+        description: 'Version segment to bump with Hatch (default: none)'
         type: string
         required: false
-      update-latest:
-        description: Whether to use this as the 'latest' and (if publishing) root version
-        type: boolean
-        default: true
 
 env:
   PYPI_PACKAGE: hexdoc
-  HEXDOC: hexdoc 0.9.5/doc/properties.toml --ci
 
 permissions:
   contents: read
@@ -51,6 +54,7 @@ jobs:
       pages-url: ${{ steps.get-url.outputs.pages-url }}
       matrix: ${{ steps.list-langs.outputs.matrix }}
       release: ${{ steps.check-release.outputs.release }}
+      hexdoc: ${{ steps.get-hexdoc-cmd.outputs.hexdoc }}
 
     steps:
       - uses: actions/checkout@v3
@@ -79,8 +83,30 @@ jobs:
           release=${{ github.event_name == 'workflow_dispatch' && inputs.publish == 'PyPI (release)' || startsWith(github.ref, 'refs/tags') || startsWith(github.event.head_commit.message, '[Release]') }}
           echo "release=$release" >> "$GITHUB_OUTPUT"
       
+      - name: Checkout input branch
+        if: inputs.branch
+        id: checkout-input
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.branch }}
+          path: _branch_src
+
+      - name: Get hexdoc command
+        id: get-hexdoc-cmd
+        run: |
+          if ${{ steps.checkout-input.outcome != 'skipped' }}; then
+            props='doc/properties.toml'
+          else
+            props='_branch_src/doc/properties.toml'
+          fi
+
+          hexdoc="hexdoc $props --ci --is-release '${{ steps.check-release.outputs.release == true }}'"
+
+          echo "hexdoc=$hexdoc" >> "$GITHUB_OUTPUT"
+          echo "HEXDOC=$hexdoc" >> "$GITHUB_ENV"
+
       - name: Export web book
-        run: $HEXDOC --export-only --is-release ${{ steps.check-release.outputs.release }}
+        run: $HEXDOC --export-only
 
       - name: Bump version
         if: github.event_name == 'workflow_dispatch' && inputs.segment
@@ -124,7 +150,7 @@ jobs:
 
     env:
       GITHUB_PAGES_URL: ${{ needs.build.outputs.pages-url }}
-      HEXDOC_GENERATE: $HEXDOC --lang "${{ matrix.lang }}" -o _site --clean --is-release "${{ needs.build.outputs.release }}" --update-latest "${{ inputs.update-latest }}"
+      HEXDOC_GENERATE: $HEXDOC --lang '${{ matrix.lang }}' -o _site --clean --update-latest '${{ inputs.update-latest != false }}'
 
     steps:
       - uses: actions/checkout@v3
@@ -180,7 +206,7 @@ jobs:
           path: _site/src/docs
       
       - name: Add new docs to site
-        run: hexdoc_merge --src _site/src/docs --dst _site/dst/docs --is-release "${{ needs.build.outputs.release == true }}" --update-latest "${{ inputs.update-latest }}"
+        run: hexdoc_merge --src _site/src/docs --dst _site/dst/docs --update-latest '${{ inputs.update-latest != false }}'
 
       - name: Deploy to Pages
         uses: JamesIves/github-pages-deploy-action@v4
