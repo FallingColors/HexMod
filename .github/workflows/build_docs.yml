@@ -83,7 +83,7 @@ jobs:
         run: |
           release=${{ github.event_name == 'workflow_dispatch' && inputs.release || startsWith(github.ref, 'refs/tags') || startsWith(github.event.head_commit.message, '[Release]') }}
           
-          if [[ ${{ github.event_name }} == 'workflow_dispatch' && ${{ inputs.branch }} != '(same as workflow)' }} ]]; then
+          if [[ ${{ github.event_name == 'workflow_dispatch' && inputs.branch != '(same as workflow)' }} == true ]]; then
             branch='${{ inputs.branch }}'
             props=_checkout/doc/properties.toml
             echo "HATCH_GRADLE_DIR=_checkout" >> "$GITHUB_ENV"
