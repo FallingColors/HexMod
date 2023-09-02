@@ -18,7 +18,7 @@ class HexVersion(Enum):
         raise ValueError(f"Unknown mod version: {GRADLE_VERSION}")
 
     @classmethod
-    def check(cls, version: Self | Callable[[Self], bool] | bool, typ: type[Any]):
+    def check(cls, version: Self | Callable[[Self], bool] | bool, typ: type[Any] | str):
         match version:
             case HexVersion():
                 if cls.get() is version:
@@ -30,7 +30,9 @@ class HexVersion(Enum):
                 if version(cls.get()):
                     return
 
-        raise ValueError(f"{typ.__name__} is not supported in {GRADLE_VERSION}")
+        if not isinstance(typ, str):
+            typ = typ.__name__
+        raise ValueError(f"{typ} is not supported in {GRADLE_VERSION}")
 
     def __lt__(self, other: Self):
         return self.value < other.value
