@@ -100,7 +100,7 @@ jobs:
             props='_branch_src/doc/properties.toml'
           fi
 
-          hexdoc="hexdoc $props --ci --is-release '${{ steps.check-release.outputs.release == true }}'"
+          hexdoc="hexdoc $props --ci --is-release ${{ steps.check-release.outputs.release == true }}"
 
           echo "hexdoc=$hexdoc" >> "$GITHUB_OUTPUT"
           echo "HEXDOC=$hexdoc" >> "$GITHUB_ENV"
@@ -150,7 +150,7 @@ jobs:
 
     env:
       GITHUB_PAGES_URL: ${{ needs.build.outputs.pages-url }}
-      HEXDOC_GENERATE: $HEXDOC --lang '${{ matrix.lang }}' -o _site --clean --update-latest '${{ inputs.update-latest != false }}'
+      HEXDOC_GENERATE: $HEXDOC --lang ${{ matrix.lang }} -o _site --clean --update-latest ${{ inputs.update-latest != false }}
 
     steps:
       - uses: actions/checkout@v3
@@ -206,7 +206,7 @@ jobs:
           path: _site/src/docs
       
       - name: Add new docs to site
-        run: hexdoc_merge --src _site/src/docs --dst _site/dst/docs --update-latest '${{ inputs.update-latest != false }}'
+        run: hexdoc_merge --src _site/src/docs --dst _site/dst/docs --update-latest ${{ inputs.update-latest != false }}
 
       - name: Deploy to Pages
         uses: JamesIves/github-pages-deploy-action@v4
