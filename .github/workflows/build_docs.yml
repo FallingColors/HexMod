@@ -128,16 +128,13 @@ jobs:
           python-version: "3.11"
 
       - name: Build web book
-        id: build-normal
+        continue-on-error: true
         run: $HEXDOC --lang "${{ matrix.lang }}" -o _site --clean --is-release "${{ needs.build.outputs.release }}"
 
       - name: Build web book with missing translations
-        if: failure()
-        id: build-with-missing
         run: $HEXDOC --lang "${{ matrix.lang }}" -o _site --clean --is-release "${{ needs.build.outputs.release }}" --allow-missing
 
       - name: Upload temporary Pages artifact
-        if: steps.build-normal.outcome == 'success' || steps.build-with-missing.outcome == 'success'
         uses: actions/upload-artifact@v3
         with:
           name: github-pages-tmp
