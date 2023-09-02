@@ -27,7 +27,7 @@ on:
           - PyPI (release)
           - TestPyPI
       segment:
-        description: 'Version segment to bump with Hatch (default: none)'
+        description: 'Version segment to bump with Hatch'
         type: string
         required: false
 

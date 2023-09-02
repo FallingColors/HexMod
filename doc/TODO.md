@@ -1,16 +1,4 @@
-- [x] Better resource loading
-- [x] Fix model_validator type hints (before should take Any and narrow from there)
-- [x] Sandbox for Jinja
-- [x] First-class addon support
-- [x] Versioning
-- [x] GitHub Actions
-- [x] Pypi releasing
-- [x] API improvements (disable exporting, make it easier (possible?) to generate book for imported mods)
-- [x] Language
-- [x] Version
-  - [x] Don't delete sitemap markers
-  - [x] delete in dest, then copy, then traverse again to build sitemap from scratch
-- [x] Dropdowns for ^
 - [ ] Rewrite the JS code in TypeScript, because I'm going insane trying to modify this
 - [ ] Unit test for mock addon book
 - [ ] Re-add edified wood recipe to [Common/src/main/resources/assets/hexcasting/patchouli_books/thehexbook/en_us/entries/items/edified.json](items/edified) when it actually exists
+- [ ] Fix mobile styling for navbar dropdowns
