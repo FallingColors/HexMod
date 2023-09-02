@@ -40,6 +40,7 @@ class Args(HexdocModel):
     allow_missing: bool
     lang: str | None
     is_release: bool
+    update_latest: bool
     clean: bool
 
     output_dir: Path | None
@@ -59,6 +60,7 @@ class Args(HexdocModel):
         parser.add_argument("--clean", action="store_true")
         # do this instead of store_true because it's easier to use with Actions
         parser.add_argument("--is-release", default=False)
+        parser.add_argument("--update-latest", default=True)
 
         group = parser.add_mutually_exclusive_group(required=True)
         group.add_argument("--output-dir", "-o", type=Path)
@@ -214,10 +216,14 @@ def main(args: Args | None = None) -> None:
 
         static_dir = props.template.static_dir
 
-        versions = ["latest"]
+        versions = ["latest"] if args.update_latest else []
+
         if args.is_release:
             # root should be the latest released version
-            versions += ["", GRADLE_VERSION]
+            versions.append(GRADLE_VERSION)
+
+            if args.update_latest:
+                versions.append("")
 
         # render each version and language separately
         for version in versions:

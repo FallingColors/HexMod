@@ -26,6 +26,7 @@ class Args(HexdocModel):
     src: Path
     dst: Path
     is_release: bool
+    update_latest: bool
 
     @classmethod
     def parse_args(cls, args: Sequence[str] | None = None) -> Self:
@@ -34,6 +35,7 @@ class Args(HexdocModel):
         parser.add_argument("--src", type=Path, required=True)
         parser.add_argument("--dst", type=Path, required=True)
         parser.add_argument("--is-release", default=False)
+        parser.add_argument("--update-latest", default=True)
 
         return cls.model_validate(vars(parser.parse_args(args)))
 
@@ -49,7 +51,7 @@ def main():
     args.dst.mkdir(parents=True, exist_ok=True)
 
     # remove the book from the root of the destination since we're adding a new one now
-    if args.is_release:
+    if args.is_release and args.update_latest:
         for path in args.dst.iterdir():
             if path.name in ["v", "meta"]:
                 continue

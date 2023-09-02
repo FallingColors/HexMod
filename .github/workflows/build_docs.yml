@@ -15,6 +15,10 @@ on:
         description: Version segment to bump with Hatch
         type: string
         required: false
+      update-latest:
+        description: Whether to use this as the 'latest' and (if publishing) root version
+        type: boolean
+        default: true
 
 env:
   PYPI_PACKAGE: hexdoc
@@ -113,13 +117,14 @@ jobs:
     needs: build
     continue-on-error: true
 
-    env:
-      GITHUB_PAGES_URL: ${{ needs.build.outputs.pages-url }}
-
     strategy:
       fail-fast: false
       matrix:
         lang: ${{ fromJson(needs.build.outputs.matrix) }}
+
+    env:
+      GITHUB_PAGES_URL: ${{ needs.build.outputs.pages-url }}
+      HEXDOC_GENERATE: $HEXDOC --lang "${{ matrix.lang }}" -o _site --clean --is-release "${{ needs.build.outputs.release }}" --update-latest "${{ inputs.update-latest }}"
 
     steps:
       - uses: actions/checkout@v3
@@ -131,11 +136,11 @@ jobs:
       - name: Generate web book
         id: gen-normal
         continue-on-error: true
-        run: $HEXDOC --lang "${{ matrix.lang }}" -o _site --clean --is-release "${{ needs.build.outputs.release }}"
+        run: $HEXDOC_GENERATE
 
       - name: Generate web book with missing translations
         if: steps.gen-normal.outcome == 'failure'
-        run: $HEXDOC --lang "${{ matrix.lang }}" -o _site --clean --is-release "${{ needs.build.outputs.release }}" --allow-missing
+        run: $HEXDOC_GENERATE --allow-missing
 
       - name: Upload temporary Pages artifact
         uses: actions/upload-artifact@v3
@@ -175,7 +180,7 @@ jobs:
           path: _site/src/docs
       
       - name: Add new docs to site
-        run: hexdoc_merge --src _site/src/docs --dst _site/dst/docs --is-release "${{ needs.build.outputs.release == true }}"
+        run: hexdoc_merge --src _site/src/docs --dst _site/dst/docs --is-release "${{ needs.build.outputs.release == true }}" --update-latest "${{ inputs.update-latest }}"
 
       - name: Deploy to Pages
         uses: JamesIves/github-pages-deploy-action@v4
