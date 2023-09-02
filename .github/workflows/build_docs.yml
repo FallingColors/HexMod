@@ -133,7 +133,7 @@ jobs:
         run: $HEXDOC --lang "${{ matrix.lang }}" -o _site --clean --is-release "${{ needs.build.outputs.release }}"
 
       - name: Generate web book with missing translations
-        if: failure()
+        if: steps.gen-normal.outcome == 'failure'
         run: $HEXDOC --lang "${{ matrix.lang }}" -o _site --clean --is-release "${{ needs.build.outputs.release }}" --allow-missing
 
       - name: Upload temporary Pages artifact
