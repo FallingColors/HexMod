@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "hexcasting:block/impetus/right_dim",
+    "east": "hexcasting:block/impetus/storedplayer_dim",
+    "north": "hexcasting:block/impetus/left_dim",
+    "particle": "hexcasting:block/slate",
+    "south": "hexcasting:block/impetus/right_dim",
+    "up": "hexcasting:block/impetus/right_dim",
+    "west": "hexcasting:block/impetus/back_dim"
+  }
+}

@@ -1,6 +1,6 @@
 from typing import Any, Literal, Self
 
-from pydantic import Field, ValidationInfo, model_validator
+from pydantic import Field, ValidationInfo, field_validator, model_validator
 
 from hexdoc.minecraft import I18n, LocalizedStr
 from hexdoc.minecraft.i18n import I18nContext
@@ -12,6 +12,7 @@ from hexdoc.utils import (
     ResLoc,
     ResourceLocation,
 )
+from hexdoc.utils.compat import HexVersion
 from hexdoc.utils.deserialize import cast_or_raise
 
 from .book_context import BookContext
@@ -38,7 +39,10 @@ class Book(HexdocModel):
     # required
     name: LocalizedStr
     landing_text: FormatTree
-    use_resource_pack: Literal[True]
+
+    # required in 1.20 but optional in 1.19
+    # so we'll make it optional and validate later
+    use_resource_pack: bool = False
 
     # optional
     book_texture: ResourceLocation = ResLoc("patchouli", "textures/gui/book_brown.png")
@@ -97,9 +101,14 @@ class Book(HexdocModel):
             case _:
                 return data
 
+    @field_validator("use_resource_pack", mode="after")
+    def _check_use_resource_pack(cls, value: bool):
+        if HexVersion.get() >= HexVersion.v0_11 and not value:
+            raise ValueError(f"use_resource_pack must be True on this version")
+        return value
+
     @model_validator(mode="after")
-    def _post_root(self, info: ValidationInfo) -> Self:
-        """Loads categories and entries."""
+    def _load_categories_and_entries(self, info: ValidationInfo) -> Self:
         if not info.context:
             return self
         context = cast_or_raise(info.context, BookContext)
@@ -107,14 +116,16 @@ class Book(HexdocModel):
         self._link_bases: dict[tuple[ResourceLocation, str | None], str] = {}
 
         # load categories
-        self._categories: dict[ResourceLocation, Category] = Category.load_all(context)
+        self._categories = Category.load_all(context, self.use_resource_pack)
         for id, category in self._categories.items():
             self._link_bases[(id, None)] = context.loader.get_link_base(
                 category.resource_dir
             )
 
         # load entries
-        for resource_dir, id, data in context.loader.load_book_assets("entries"):
+        for resource_dir, id, data in context.loader.load_book_assets(
+            "entries", self.use_resource_pack
+        ):
             entry = Entry.load(resource_dir, id, data, context)
 
             link_base = context.loader.get_link_base(resource_dir)

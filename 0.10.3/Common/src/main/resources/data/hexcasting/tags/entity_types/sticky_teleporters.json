@@ -1,0 +1,30 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "create:contraption",
+      "required": false
+    },
+    {
+      "id": "create:stationary_contraption",
+      "required": false
+    },
+    {
+      "id": "create:gantry_contraption",
+      "required": false
+    },
+    {
+      "id": "create:carriage_contraption",
+      "required": false
+    },
+    "minecraft:pig",
+    "minecraft:strider",
+    "minecraft:horse",
+    "minecraft:skeleton_horse",
+    "minecraft:zombie_horse",
+    "minecraft:mule",
+    "minecraft:donkey",
+    "minecraft:llama",
+    "minecraft:trader_llama"
+  ]
+}

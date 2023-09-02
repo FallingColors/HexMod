@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "minecraft:paper"
+    },
+    "D": {
+      "item": "minecraft:paper"
+    },
+    "I": {
+      "item": "minecraft:amethyst_shard"
+    }
+  },
+  "pattern": [
+    "DCD",
+    "CIC",
+    "DCD"
+  ],
+  "result": {
+    "count": 8,
+    "item": "hexcasting:scroll_paper"
+  }
+}

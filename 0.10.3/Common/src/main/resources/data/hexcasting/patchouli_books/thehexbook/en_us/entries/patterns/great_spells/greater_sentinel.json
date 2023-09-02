@@ -1,0 +1,22 @@
+{
+  "name": "hexcasting.spell.hexcasting:sentinel/create/great",
+  "category": "hexcasting:patterns/great_spells",
+  "icon": "minecraft:beacon",
+  "sortnum": 5,
+  "advancement": "hexcasting:root",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:sentinel/create/great",
+      "anchor": "hexcasting:sentinel/create/great",
+      "text": "hexcasting.page.greater_sentinel.1",
+      "input": "vector",
+      "output": ""
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.greater_sentinel.2"
+    }
+  ]
+}

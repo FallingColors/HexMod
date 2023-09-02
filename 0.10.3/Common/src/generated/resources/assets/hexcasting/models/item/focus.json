@@ -1,0 +1,26 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "hexcasting:item/focus",
+      "predicate": {
+        "hexcasting:overlay_layer": 0.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_filled",
+      "predicate": {
+        "hexcasting:overlay_layer": 1.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_sealed",
+      "predicate": {
+        "hexcasting:overlay_layer": 2.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "hexcasting:item/focus_empty"
+  }
+}

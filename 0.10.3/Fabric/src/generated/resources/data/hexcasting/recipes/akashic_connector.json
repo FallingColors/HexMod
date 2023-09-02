@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "hexcasting:charged_amethyst"
+    },
+    "L": {
+      "tag": "hexcasting:edified_logs"
+    },
+    "P": {
+      "tag": "hexcasting:edified_planks"
+    }
+  },
+  "pattern": [
+    "LPL",
+    "CCC",
+    "LPL"
+  ],
+  "result": {
+    "item": "hexcasting:akashic_connector"
+  }
+}

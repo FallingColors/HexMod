@@ -1,0 +1,109 @@
+{
+  "overrides": [
+    {
+      "model": "hexcasting:item/phial_small_0",
+      "predicate": {
+        "hexcasting:max_media": 0.0,
+        "hexcasting:media": 0.0
+      }
+    },
+    {
+      "model": "hexcasting:item/phial_small_1",
+      "predicate": {
+        "hexcasting:max_media": 0.0,
+        "hexcasting:media": 0.25
+      }
+    },
+    {
+      "model": "hexcasting:item/phial_small_2",
+      "predicate": {
+        "hexcasting:max_media": 0.0,
+        "hexcasting:media": 0.5
+      }
+    },
+    {
+      "model": "hexcasting:item/phial_small_3",
+      "predicate": {
+        "hexcasting:max_media": 0.0,
+        "hexcasting:media": 0.75
+      }
+    },
+    {
+      "model": "hexcasting:item/phial_small_4",
+      "predicate": {
+        "hexcasting:max_media": 0.0,
+        "hexcasting:media": 1.0
+      }
+    },
+    {
+      "model": "hexcasting:item/phial_medium_0",
+      "predicate": {
+        "hexcasting:max_media": 1.0,
+        "hexcasting:media": 0.0
+      }
+    },
+    {
+      "model": "hexcasting:item/phial_medium_1",
+      "predicate": {
+        "hexcasting:max_media": 1.0,
+        "hexcasting:media": 0.25
+      }
+    },
+    {
+      "model": "hexcasting:item/phial_medium_2",
+      "predicate": {
+        "hexcasting:max_media": 1.0,
+        "hexcasting:media": 0.5
+      }
+    },
+    {
+      "model": "hexcasting:item/phial_medium_3",
+      "predicate": {
+        "hexcasting:max_media": 1.0,
+        "hexcasting:media": 0.75
+      }
+    },
+    {
+      "model": "hexcasting:item/phial_medium_4",
+      "predicate": {
+        "hexcasting:max_media": 1.0,
+        "hexcasting:media": 1.0
+      }
+    },
+    {
+      "model": "hexcasting:item/phial_large_0",
+      "predicate": {
+        "hexcasting:max_media": 2.0,
+        "hexcasting:media": 0.0
+      }
+    },
+    {
+      "model": "hexcasting:item/phial_large_1",
+      "predicate": {
+        "hexcasting:max_media": 2.0,
+        "hexcasting:media": 0.25
+      }
+    },
+    {
+      "model": "hexcasting:item/phial_large_2",
+      "predicate": {
+        "hexcasting:max_media": 2.0,
+        "hexcasting:media": 0.5
+      }
+    },
+    {
+      "model": "hexcasting:item/phial_large_3",
+      "predicate": {
+        "hexcasting:max_media": 2.0,
+        "hexcasting:media": 0.75
+      }
+    },
+    {
+      "model": "hexcasting:item/phial_large_4",
+      "predicate": {
+        "hexcasting:max_media": 2.0,
+        "hexcasting:media": 1.0
+      }
+    }
+  ]
+}

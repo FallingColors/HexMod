@@ -1,0 +1,26 @@
+{
+  "parent": "minecraft:item/handheld_rod",
+  "overrides": [
+    {
+      "model": "hexcasting:item/jungle_staff",
+      "predicate": {
+        "hexcasting:funny_level": 0.0
+      }
+    },
+    {
+      "model": "hexcasting:item/old_staff",
+      "predicate": {
+        "hexcasting:funny_level": 1.0
+      }
+    },
+    {
+      "model": "hexcasting:item/bosnia_staff",
+      "predicate": {
+        "hexcasting:funny_level": 2.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "hexcasting:item/staves/jungle"
+  }
+}

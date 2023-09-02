@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "hexcasting:item/spellbook_base",
+    "layer1": "hexcasting:item/spellbook_overlay"
+  }
+}

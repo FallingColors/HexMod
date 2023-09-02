@@ -32,11 +32,13 @@ class Category(HexdocIDModel, Sortable):
     secret: bool = False
 
     @classmethod
-    def load_all(cls, context: LoaderContext):
+    def load_all(cls, context: LoaderContext, use_resource_pack: bool):
         categories: dict[ResourceLocation, Self] = {}
 
         # load
-        for resource_dir, id, data in context.loader.load_book_assets("categories"):
+        for resource_dir, id, data in context.loader.load_book_assets(
+            "categories", use_resource_pack
+        ):
             category = cls.load(resource_dir, id, data, context)
             categories[id] = category
 

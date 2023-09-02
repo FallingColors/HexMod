@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "minecraft:glass"
+    },
+    "I": {
+      "item": "hexcasting:amethyst_dust"
+    }
+  },
+  "pattern": [
+    " C ",
+    "CIC",
+    " C "
+  ],
+  "result": {
+    "item": "hexcasting:lens"
+  }
+}

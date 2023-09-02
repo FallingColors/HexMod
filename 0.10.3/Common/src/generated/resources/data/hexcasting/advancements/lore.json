@@ -1,0 +1,35 @@
+{
+  "criteria": {
+    "used_item": {
+      "conditions": {
+        "item": {
+          "items": [
+            "hexcasting:lore_fragment"
+          ]
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "background": "hexcasting:textures/block/slate.png",
+    "description": {
+      "translate": "advancement.hexcasting:lore.desc"
+    },
+    "frame": "goal",
+    "hidden": false,
+    "icon": {
+      "item": "hexcasting:akashic_connector"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.hexcasting:lore"
+    }
+  },
+  "requirements": [
+    [
+      "used_item"
+    ]
+  ]
+}

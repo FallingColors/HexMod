@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "P": {
+      "item": "minecraft:paper"
+    }
+  },
+  "pattern": [
+    "  A",
+    "PP ",
+    "PP "
+  ],
+  "result": {
+    "item": "hexcasting:scroll_medium"
+  }
+}

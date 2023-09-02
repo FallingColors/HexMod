@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "hexcasting:block/directrix/empty/vert_dim",
+    "east": "hexcasting:block/directrix/empty/horiz_dim",
+    "north": "hexcasting:block/directrix/empty/end_dim",
+    "particle": "hexcasting:block/slate",
+    "south": "hexcasting:block/directrix/empty/end_dim",
+    "up": "hexcasting:block/directrix/empty/vert_dim",
+    "west": "hexcasting:block/directrix/empty/horiz_dim"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    [
+      {
+        "item": "minecraft:brown_dye"
+      },
+      {
+        "tag": "c:brown_dye"
+      },
+      {
+        "tag": "c:brown_dyes"
+      }
+    ],
+    {
+      "item": "hexcasting:scroll_paper"
+    },
+    {
+      "item": "hexcasting:scroll_paper"
+    },
+    {
+      "item": "hexcasting:scroll_paper"
+    },
+    {
+      "item": "hexcasting:scroll_paper"
+    },
+    {
+      "item": "hexcasting:scroll_paper"
+    },
+    {
+      "item": "hexcasting:scroll_paper"
+    },
+    {
+      "item": "hexcasting:scroll_paper"
+    },
+    {
+      "item": "hexcasting:scroll_paper"
+    }
+  ],
+  "result": {
+    "count": 8,
+    "item": "hexcasting:ancient_scroll_paper"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "item": "minecraft:stone_brick_wall"
+    },
+    "D": {
+      "item": "hexcasting:amethyst_dust"
+    }
+  },
+  "pattern": [
+    " D ",
+    "DCD",
+    " D "
+  ],
+  "result": {
+    "item": "hexcasting:pride_colorizer_gay"
+  }
+}

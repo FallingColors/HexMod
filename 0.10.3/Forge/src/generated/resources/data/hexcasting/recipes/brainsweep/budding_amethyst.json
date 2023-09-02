@@ -1,0 +1,13 @@
+{
+  "type": "hexcasting:brainsweep",
+  "blockIn": {
+    "type": "block",
+    "block": "minecraft:amethyst_block"
+  },
+  "result": {
+    "name": "minecraft:budding_amethyst"
+  },
+  "villagerIn": {
+    "minLevel": 3
+  }
+}

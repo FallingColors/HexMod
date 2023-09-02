@@ -1,0 +1,14 @@
+{
+  "type": "hexcasting:brainsweep",
+  "blockIn": {
+    "type": "block",
+    "block": "hexcasting:akashic_connector"
+  },
+  "result": {
+    "name": "hexcasting:akashic_record"
+  },
+  "villagerIn": {
+    "minLevel": 5,
+    "profession": "minecraft:librarian"
+  }
+}

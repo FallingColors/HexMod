@@ -10,7 +10,7 @@ from typing import Callable, Literal, Self, TypeVar, overload
 from pydantic.dataclasses import dataclass
 
 from hexdoc.__version__ import GRADLE_VERSION
-from hexdoc.utils.deserialize import decode_json_dict
+from hexdoc.utils.deserialize import JSONDict, decode_json_dict
 from hexdoc.utils.model import DEFAULT_CONFIG, HexdocModel, ValidationContext
 from hexdoc.utils.path import strip_suffixes, write_to_path
 
@@ -115,10 +115,14 @@ class ModResourceLoader:
 
         return metadata
 
-    def load_book_assets(self, folder: Literal["categories", "entries", "templates"]):
+    def load_book_assets(
+        self,
+        folder: Literal["categories", "entries", "templates"],
+        use_resource_pack: bool,
+    ) -> Iterator[tuple[PathResourceDir, ResourceLocation, JSONDict]]:
         # TODO: maybe this should take lang as a variable?
-        return self.load_resources(
-            type="assets",
+        yield from self.load_resources(
+            type="assets" if use_resource_pack else "data",
             folder=Path("patchouli_books")
             / self.props.book.path
             / self.props.default_lang

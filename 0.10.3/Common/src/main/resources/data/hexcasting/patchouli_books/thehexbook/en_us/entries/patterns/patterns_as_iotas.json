@@ -1,0 +1,56 @@
+{
+  "name": "hexcasting.entry.patterns_as_iotas",
+  "category": "hexcasting:patterns",
+  "icon": "minecraft:emerald",
+  "sortnum": 8,
+  "advancement": "hexcasting:root",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.patterns_as_iotas.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.patterns_as_iotas.2"
+    },
+    {
+      "type": "hexcasting:manual_pattern",
+      "header": "hexcasting.spell.hexcasting:escape",
+      "anchor": "hexcasting:escape",
+      "text": "hexcasting.page.patterns_as_iotas.escape.1",
+      "patterns": {
+        "startdir": "WEST",
+        "signature": "qqqaw"
+      }
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.patterns_as_iotas.escape.2"
+    },
+    {
+      "type": "hexcasting:manual_pattern",
+      "header": "hexcasting.spell.hexcasting:open_paren",
+      "anchor": "hexcasting:open_paren",
+      "text": "hexcasting.page.patterns_as_iotas.parens.1",
+      "patterns": {
+        "startdir": "WEST",
+        "signature": "qqq"
+      }
+    },
+    {
+      "type": "hexcasting:manual_pattern",
+      "header": "hexcasting.spell.hexcasting:close_paren",
+      "anchor": "hexcasting:close_paren",
+      "text": "hexcasting.page.patterns_as_iotas.parens.2",
+      "patterns": {
+        "startdir": "EAST",
+        "signature": "eee"
+      }
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.patterns_as_iotas.parens.3"
+    }
+  ]
+}

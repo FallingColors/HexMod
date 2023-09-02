@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "hexcasting:edified_staff",
+    "hexcasting:oak_staff",
+    "hexcasting:spruce_staff",
+    "hexcasting:birch_staff",
+    "hexcasting:jungle_staff",
+    "hexcasting:acacia_staff",
+    "hexcasting:dark_oak_staff",
+    "hexcasting:crimson_staff",
+    "hexcasting:warped_staff"
+  ]
+}

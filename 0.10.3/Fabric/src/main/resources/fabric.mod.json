@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "id": "hexcasting",
+  "version": "${version}",
+  "name": "Hex Casting",
+  "description": "Cast powerful Hexes on the fly by drawing patterns with a staff.",
+  "authors": [
+    "petrak@ (aka gamma-delta)"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/hexcasting",
+    "sources": "https://github.com/gamma-delta/HexMod"
+  },
+  "license": "MIT",
+  "icon": "logo.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "at.petrak.hexcasting.fabric.FabricHexInitializer"
+      }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "at.petrak.hexcasting.fabric.FabricHexClientInitializer"
+      }
+    ],
+    "fabric-datagen": [
+      "at.petrak.hexcasting.fabric.datagen.HexFabricDataGenerators"
+    ],
+    "cardinal-components": [
+      "at.petrak.hexcasting.fabric.cc.HexCardinalComponents"
+    ],
+    "emi": [
+      "at.petrak.hexcasting.fabric.interop.emi.HexEMIPlugin"
+    ],
+    "modmenu": [
+      "at.petrak.hexcasting.fabric.interop.ModMenuInterop"
+    ]
+  },
+  "mixins": [
+    "hexplat.mixins.json",
+    "fabricasting.mixins.json"
+  ],
+  "accessWidener": "fabricasting.accesswidener",
+  "depends": {
+    "minecraft": "=1.19.2",
+    "java": ">=17",
+    "fabricloader": ">=0.14",
+    "fabric": ">=0.64",
+    "fabric-language-kotlin": ">=1.7.4+kotlin.1.6.21",
+    "cardinal-components": "~5.0.0",
+    "paucal": "0.5.x",
+    "cloth-config": "8.2.x",
+    "patchouli": ">=1.19.2-77"
+  },
+  "suggests": {
+    "gravitychanger": "0.7.21+fabric",
+    "pehkui": "3.6.0+1.14.4-1.19"
+  },
+  "custom": {
+    "cardinal-components": [
+      "hexcasting:brainswept",
+      "hexcasting:favored_colorizer",
+      "hexcasting:sentinel",
+      "hexcasting:flight",
+      "hexcasting:harness",
+      "hexcasting:patterns",
+      "hexcasting:colorizer",
+      "hexcasting:iota_holder",
+      "hexcasting:media_holder",
+      "hexcasting:hex_holder"
+    ]
+  }
+}

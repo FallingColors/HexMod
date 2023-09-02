@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "W": {
+      "tag": "hexcasting:edified_planks"
+    }
+  },
+  "pattern": [
+    "WW ",
+    "W W",
+    " WW"
+  ],
+  "result": {
+    "count": 6,
+    "item": "hexcasting:edified_tile"
+  }
+}

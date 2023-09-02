@@ -1,0 +1,30 @@
+{
+  "name": "hexcasting.entry.staff",
+  "icon": "hexcasting:oak_staff",
+  "category": "hexcasting:items",
+  "priority": true,
+  "sortnum": 1,
+  "advancement": "hexcasting:root",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.staff.1"
+    },
+    {
+      "type": "hexcasting:crafting_multi",
+      "heading": "hexcasting.page.staff.crafting.header",
+      "text": "hexcasting.page.staff.crafting.desc",
+      "recipes": [
+        "hexcasting:oak_staff",
+        "hexcasting:spruce_staff",
+        "hexcasting:birch_staff",
+        "hexcasting:jungle_staff",
+        "hexcasting:acacia_staff",
+        "hexcasting:dark_oak_staff",
+        "hexcasting:crimson_staff",
+        "hexcasting:warped_staff",
+        "hexcasting:edified_staff"
+      ]
+    }
+  ]
+}

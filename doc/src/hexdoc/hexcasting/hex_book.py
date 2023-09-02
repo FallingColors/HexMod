@@ -7,6 +7,7 @@ from pydantic import Field, model_validator
 from hexdoc.minecraft import I18n, Tag
 from hexdoc.patchouli import Book, BookContext
 from hexdoc.utils import HexdocModel, ModResourceLoader, ResourceLocation, init_context
+from hexdoc.utils.compat import HexVersion
 from hexdoc.utils.properties import PatternStubProps
 
 from .pattern import Direction, PatternInfo
@@ -34,19 +35,13 @@ class HexContext(BookContext):
 
     @model_validator(mode="after")
     def _load_patterns(self):
-        # load the tag that specifies which patterns are random per world
-        per_world = Tag.load(
-            registry="action",
-            id=ResourceLocation("hexcasting", "per_world_pattern"),
-            context=self,
-        )
-
         signatures = dict[str, PatternInfo]()  # just for duplicate checking
 
-        # for each stub, load all the patterns in the file
-        for stub in self.props.pattern_stubs:
-            for pattern in self._load_stub_patterns(stub, per_world):
-                self._add_pattern(pattern, signatures)
+        match HexVersion.get():
+            case HexVersion.v0_11:
+                self._add_patterns_0_11(signatures)
+            case HexVersion.v0_10:
+                self._add_patterns_0_10(signatures)
 
         # export patterns so addons can use them
         pattern_metadata = PatternMetadata(
@@ -66,6 +61,24 @@ class HexContext(BookContext):
 
         return self
 
+    def _add_patterns_0_11(self, signatures: dict[str, PatternInfo]):
+        # load the tag that specifies which patterns are random per world
+        per_world = Tag.load(
+            registry="action",
+            id=ResourceLocation("hexcasting", "per_world_pattern"),
+            context=self,
+        )
+
+        # for each stub, load all the patterns in the file
+        for stub in self.props.pattern_stubs:
+            for pattern in self._load_stub_patterns(stub, per_world):
+                self._add_pattern(pattern, signatures)
+
+    def _add_patterns_0_10(self, signatures: dict[str, PatternInfo]):
+        for stub in self.props.pattern_stubs:
+            for pattern in self._load_stub_patterns(stub, None):
+                self._add_pattern(pattern, signatures)
+
     def _add_pattern(self, pattern: PatternInfo, signatures: dict[str, PatternInfo]):
         logging.getLogger(__name__).debug(f"Load pattern: {pattern.id}")
 
@@ -78,8 +91,9 @@ class HexContext(BookContext):
         self.patterns[pattern.id] = pattern
         signatures[pattern.signature] = pattern
 
-    def _load_stub_patterns(self, stub: PatternStubProps, per_world: Tag):
+    def _load_stub_patterns(self, stub: PatternStubProps, per_world: Tag | None):
         # TODO: add Gradle task to generate json with this data. this is dumb and fragile.
+        logging.getLogger(__name__).debug(f"Load pattern stub from {stub.path}")
         stub_text = stub.path.read_text("utf-8")
 
         for match in stub.regex.finditer(stub_text):
@@ -89,6 +103,8 @@ class HexContext(BookContext):
             yield PatternInfo(
                 startdir=Direction[groups["startdir"]],
                 signature=groups["signature"],
-                is_per_world=id in per_world.values,
+                is_per_world=(id in per_world.values)
+                if per_world
+                else groups.get("is_per_world") == "true",
                 id=id,
             )

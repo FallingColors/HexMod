@@ -1,0 +1,19 @@
+{
+  "type": "hexcasting:brainsweep",
+  "blockIn": {
+    "type": "block",
+    "block": "hexcasting:empty_directrix"
+  },
+  "result": {
+    "name": "hexcasting:directrix_redstone",
+    "properties": {
+      "energized": "false",
+      "facing": "north",
+      "powered": "false"
+    }
+  },
+  "villagerIn": {
+    "minLevel": 1,
+    "profession": "minecraft:mason"
+  }
+}

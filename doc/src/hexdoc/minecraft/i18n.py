@@ -11,6 +11,7 @@ from pydantic import ValidationInfo, model_validator
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from hexdoc.utils import HexdocModel, ItemStack, ModResourceLoader, ResourceLocation
+from hexdoc.utils.compat import HexVersion
 from hexdoc.utils.deserialize import (
     cast_or_raise,
     decode_and_flatten_json_dict,
@@ -156,7 +157,12 @@ class I18n(HexdocModel):
         path = replace_suffixes(path, ".json")
         return data, path
 
-    def localize(self, *keys: str, default: str | None = None) -> LocalizedStr:
+    def localize(
+        self,
+        *keys: str,
+        default: str | None = None,
+        allow_missing: bool | None = None,
+    ) -> LocalizedStr:
         """Looks up the given string in the lang table if i18n is enabled. Otherwise,
         returns the original key.
 
@@ -180,7 +186,11 @@ class I18n(HexdocModel):
             try:
                 return self.lookup[key]
             except KeyError as e:
-                if not self.allow_missing:
+                if allow_missing is not None:
+                    if not allow_missing:
+                        e.add_note(f"Lang: {self.lang}")
+                        raise
+                elif not self.allow_missing:
                     e.add_note(f"Lang: {self.lang}")
                     raise
 
@@ -193,7 +203,7 @@ class I18n(HexdocModel):
         for current_key in keys[:-1]:
             assert isinstance_or_raise(current_key, str)
             try:
-                return self.localize(current_key)
+                return self.localize(current_key, allow_missing=False)
             except KeyError:
                 continue
 
@@ -204,10 +214,16 @@ class I18n(HexdocModel):
 
         Raises KeyError if i18n is enabled and skip_errors is False but the key has no localization.
         """
+        match HexVersion.get():
+            case HexVersion.v0_11:
+                key_group = "action"
+            case HexVersion.v0_10:
+                key_group = "spell"
+
         # prefer the book-specific translation if it exists
         return self.localize(
-            f"hexcasting.action.book.{op_id}",
-            f"hexcasting.action.{op_id}",
+            f"hexcasting.{key_group}.book.{op_id}",
+            f"hexcasting.{key_group}.{op_id}",
         )
 
     def localize_item(self, item: ItemStack | str) -> LocalizedItem:

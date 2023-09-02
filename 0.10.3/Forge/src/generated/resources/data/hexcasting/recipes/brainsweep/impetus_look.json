@@ -1,0 +1,18 @@
+{
+  "type": "hexcasting:brainsweep",
+  "blockIn": {
+    "type": "block",
+    "block": "hexcasting:empty_impetus"
+  },
+  "result": {
+    "name": "hexcasting:impetus_look",
+    "properties": {
+      "energized": "false",
+      "facing": "north"
+    }
+  },
+  "villagerIn": {
+    "minLevel": 2,
+    "profession": "minecraft:fletcher"
+  }
+}

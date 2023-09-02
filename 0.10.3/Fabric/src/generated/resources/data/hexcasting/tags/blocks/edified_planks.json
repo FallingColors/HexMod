@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "hexcasting:edified_planks",
+    "hexcasting:edified_panel",
+    "hexcasting:edified_tile"
+  ]
+}

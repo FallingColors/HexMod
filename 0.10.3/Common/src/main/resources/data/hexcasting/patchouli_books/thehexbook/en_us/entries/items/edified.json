@@ -1,0 +1,55 @@
+{
+  "name": "hexcasting.entry.edified",
+  "icon": "hexcasting:edified_log",
+  "category": "hexcasting:items",
+  "sortnum": 9,
+  "advancement": "hexcasting:root",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.edified.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.edified.2"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:edified_planks",
+      "recipe2": "hexcasting:edified_wood"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:edified_stairs",
+      "recipe2": "hexcasting:edified_slab"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:edified_panel",
+      "recipe2": "hexcasting:edified_tile"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:edified_door",
+      "recipe2": "hexcasting:edified_trapdoor"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:edified_button",
+      "recipe2": "hexcasting:edified_pressure_plate"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.edified.crafting.desc"
+    }
+  ],
+  "extra_recipe_mappings": {
+    "hexcasting:edified_log": 0,
+    "hexcasting:stripped_edified_log": 0,
+    "hexcasting:edified_wood": 0,
+    "hexcasting:stripped_edified_wood": 0,
+    "hexcasting:amethyst_edified_leaves": 0,
+    "hexcasting:aventurine_edified_leaves": 0,
+    "hexcasting:citrine_edified_leaves": 0
+  }
+}
