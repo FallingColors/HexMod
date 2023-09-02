@@ -105,7 +105,11 @@ jobs:
 
       - name: List book languages
         id: list-langs
-        run: echo "matrix=$($HEXDOC --list-langs)" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "matrix=$($HEXDOC --list-langs)" >> "$GITHUB_OUTPUT"
+          if [[ $RUNNER_DEBUG ]]; then
+            tree -I '__pycache__|Common|Fabric|Forge|venv'
+          fi
 
       - name: Export web book
         run: $HEXDOC --export-only
