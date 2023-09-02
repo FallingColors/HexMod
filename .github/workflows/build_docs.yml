@@ -95,10 +95,10 @@ jobs:
         id: get-hexdoc-cmd
         run: |
           if [[ '${{ steps.checkout-input.outcome }}' == 'skipped' ]]; then
-            props='doc/properties.toml'
+            props=doc/properties.toml
           else
-            props='_checkout/doc/properties.toml'
-            echo "HATCH_GRADLE_DIR='_checkout'" >> "$GITHUB_ENV"
+            props=_checkout/doc/properties.toml
+            echo "HATCH_GRADLE_DIR=_checkout" >> "$GITHUB_ENV"
           fi
 
           hexdoc="hexdoc $props --ci --is-release ${{ steps.check-release.outputs.release == true }} --update-latest ${{ github.event_name != 'workflow_dispatch' || inputs.update-latest }}"
