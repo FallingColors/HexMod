@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " D ",
+    "DCD",
+    " D "
+  ],
+  "key": {
+    "D": {
+      "item": "hexcasting:amethyst_dust"
+    },
+    "C": {
+      "item": "minecraft:raw_copper"
+    }
+  },
+  "result": {
+    "item": "hexcasting:pride_colorizer_demigirl"
+  }
+}

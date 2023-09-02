@@ -1,0 +1,16 @@
+{
+  "overrides": [
+    {
+      "predicate": {
+        "hexcasting:written": 0.0
+      },
+      "model": "hexcasting:item/slate_blank"
+    },
+    {
+      "predicate": {
+        "hexcasting:written": 1.0
+      },
+      "model": "hexcasting:item/slate_written"
+    }
+  ]
+}

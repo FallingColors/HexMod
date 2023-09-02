@@ -1,0 +1,20 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "hexcasting:item/trinket"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "hexcasting:has_patterns": -0.01
+      },
+      "model": "hexcasting:item/trinket"
+    },
+    {
+      "predicate": {
+        "hexcasting:has_patterns": 0.99
+      },
+      "model": "hexcasting:item/trinket_filled"
+    }
+  ]
+}

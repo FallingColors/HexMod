@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WW"
+  ],
+  "key": {
+    "W": {
+      "tag": "hexcasting:akashic_planks"
+    }
+  },
+  "result": {
+    "item": "hexcasting:akashic_pressure_plate"
+  }
+}

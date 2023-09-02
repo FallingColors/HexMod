@@ -217,7 +217,7 @@ class I18n(HexdocModel):
         match HexVersion.get():
             case HexVersion.v0_11:
                 key_group = "action"
-            case HexVersion.v0_10:
+            case HexVersion.v0_10 | HexVersion.v0_9:
                 key_group = "spell"
 
         # prefer the book-specific translation if it exists

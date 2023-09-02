@@ -40,7 +40,7 @@ class HexContext(BookContext):
         match HexVersion.get():
             case HexVersion.v0_11:
                 self._add_patterns_0_11(signatures)
-            case HexVersion.v0_10:
+            case HexVersion.v0_10 | HexVersion.v0_9:
                 self._add_patterns_0_10(signatures)
 
         # export patterns so addons can use them
@@ -59,6 +59,7 @@ class HexContext(BookContext):
             for _, pattern in metadata.patterns.items():
                 self._add_pattern(pattern, signatures)
 
+        logging.getLogger(__name__).info(f"Loaded patterns: {self.patterns.keys()}")
         return self
 
     def _add_patterns_0_11(self, signatures: dict[str, PatternInfo]):

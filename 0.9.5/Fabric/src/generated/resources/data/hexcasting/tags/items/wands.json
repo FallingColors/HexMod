@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "hexcasting:wand_akashic",
+    "hexcasting:wand_oak",
+    "hexcasting:wand_spruce",
+    "hexcasting:wand_birch",
+    "hexcasting:wand_jungle",
+    "hexcasting:wand_acacia",
+    "hexcasting:wand_dark_oak",
+    "hexcasting:wand_crimson",
+    "hexcasting:wand_warped"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "overrides": [
+    {
+      "predicate": {
+        "hexcasting:ancient": 0.0
+      },
+      "model": "hexcasting:item/scroll_pristine_large"
+    },
+    {
+      "predicate": {
+        "hexcasting:ancient": 1.0
+      },
+      "model": "hexcasting:item/scroll_ancient_large"
+    }
+  ]
+}

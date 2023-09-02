@@ -1,0 +1,20 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "hexcasting:item/cypher"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "hexcasting:has_patterns": -0.01
+      },
+      "model": "hexcasting:item/cypher"
+    },
+    {
+      "predicate": {
+        "hexcasting:has_patterns": 0.99
+      },
+      "model": "hexcasting:item/cypher_filled"
+    }
+  ]
+}

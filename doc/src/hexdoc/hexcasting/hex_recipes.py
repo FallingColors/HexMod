@@ -103,7 +103,7 @@ class BrainsweepRecipe_0_10(Recipe, type="hexcasting:brainsweep"):
 
     @model_validator(mode="after")
     def _check_version(self):
-        HexVersion.check(HexVersion.v0_10, type(self))
+        HexVersion.check(lambda v: v <= HexVersion.v0_10, type(self))
         return self
 
 

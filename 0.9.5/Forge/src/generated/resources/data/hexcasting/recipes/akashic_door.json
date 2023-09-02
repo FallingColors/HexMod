@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WW",
+    "WW",
+    "WW"
+  ],
+  "key": {
+    "W": {
+      "tag": "hexcasting:akashic_planks"
+    }
+  },
+  "result": {
+    "item": "hexcasting:akashic_door",
+    "count": 3
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "hexcasting:akashic_planks"
+    }
+  ],
+  "result": {
+    "item": "hexcasting:akashic_button"
+  }
+}

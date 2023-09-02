@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "energized=false,facing=down": {
+      "model": "hexcasting:block/empty_impetus_dim_down"
+    },
+    "energized=true,facing=down": {
+      "model": "hexcasting:block/empty_impetus_lit_down"
+    },
+    "energized=false,facing=up": {
+      "model": "hexcasting:block/empty_impetus_dim_up"
+    },
+    "energized=true,facing=up": {
+      "model": "hexcasting:block/empty_impetus_lit_up"
+    },
+    "energized=false,facing=north": {
+      "model": "hexcasting:block/empty_impetus_dim_north"
+    },
+    "energized=true,facing=north": {
+      "model": "hexcasting:block/empty_impetus_lit_north"
+    },
+    "energized=false,facing=south": {
+      "model": "hexcasting:block/empty_impetus_dim_south"
+    },
+    "energized=true,facing=south": {
+      "model": "hexcasting:block/empty_impetus_lit_south"
+    },
+    "energized=false,facing=west": {
+      "model": "hexcasting:block/empty_impetus_dim_west"
+    },
+    "energized=true,facing=west": {
+      "model": "hexcasting:block/empty_impetus_lit_west"
+    },
+    "energized=false,facing=east": {
+      "model": "hexcasting:block/empty_impetus_dim_east"
+    },
+    "energized=true,facing=east": {
+      "model": "hexcasting:block/empty_impetus_lit_east"
+    }
+  }
+}

@@ -25,7 +25,7 @@ class CraftingShapedRecipe(Recipe, type="minecraft:crafting_shaped"):
         match HexVersion.get():
             case HexVersion.v0_11:
                 HexVersion.check(value is not None, "show_notification")
-            case HexVersion.v0_10:
+            case HexVersion.v0_10 | HexVersion.v0_9:
                 HexVersion.check(value is None, "show_notification")
         return value
 

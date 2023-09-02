@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " D ",
+    "DCD",
+    " D "
+  ],
+  "key": {
+    "D": {
+      "item": "hexcasting:amethyst_dust"
+    },
+    "C": {
+      "item": "minecraft:magenta_dye"
+    }
+  },
+  "result": {
+    "item": "hexcasting:dye_colorizer_magenta"
+  }
+}

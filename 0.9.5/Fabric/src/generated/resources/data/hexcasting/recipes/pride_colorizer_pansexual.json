@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " D ",
+    "DCD",
+    " D "
+  ],
+  "key": {
+    "D": {
+      "item": "hexcasting:amethyst_dust"
+    },
+    "C": {
+      "type": "hexcasting:mod_conditional",
+      "default": {
+        "item": "minecraft:carrot"
+      },
+      "modid": "farmersdelight",
+      "if_loaded": {
+        "item": "farmersdelight:skillet"
+      }
+    }
+  },
+  "result": {
+    "item": "hexcasting:pride_colorizer_pansexual"
+  }
+}

@@ -1,0 +1,66 @@
+modid = "hexcasting"
+book = "hexcasting:thehexbook"
+fallback_url = "https://gamma-delta.github.io/HexMod"
+default_lang = "en_us"
+
+resource_dirs = [  # top takes priority
+    { path = "../../doc/src/hexdoc/_export/resources", reexport = false },
+    "{_common.src}/main/resources",
+    "{_common.src}/generated/resources",
+    "{_fabric.src}/main/resources",
+    "{_fabric.src}/generated/resources",
+    "{_forge.src}/main/resources",
+    "{_forge.src}/generated/resources",
+]
+export_dir = "../../doc/src/hexdoc/_export/generated"
+
+# NOTE: "!Raw" means "don't apply variable interpolation to this value"
+_pattern_regex = { "!Raw" = 'HexPattern\.fromAngles\("(?P<signature>[qweasd]+)", HexDir\.(?P<startdir>\w+)\),\s*modLoc\("(?P<name>[^"]+)"\)[^;]+?(?:makeConstantOp|Op\w+|Widget\.\w+)(?:[^;]*(?P<is_per_world>true)\);)?' }
+
+
+[[pattern_stubs]]
+path = "{^_common.package}/common/casting/RegisterPatterns.java"
+regex = "{^_pattern_regex}"
+
+[[pattern_stubs]]
+path = "{^_common.package}/interop/pehkui/PehkuiInterop.java"
+regex = "{^_pattern_regex}"
+
+[[pattern_stubs]]
+path = "{^_fabric.package}/interop/gravity/GravityApiInterop.java"
+regex = "{^_pattern_regex}"
+
+
+[base_asset_urls]
+hexcasting = "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/src/main/resources"
+
+
+[template]
+main = "main.html.jinja"
+static_dir = "../../doc/static"
+packages = [
+    "hexdoc",
+]
+
+[template.args]
+title = "Hex Book"
+mod_name = "Hex Casting"
+author = "petrak@, Alwinfy"
+description = "The Hex Book, all in one place."
+icon_href = "logo.png"
+show_landing_text = true
+
+
+# platforms
+
+[_common]
+src = "../Common/src"
+package = "{src}/main/java/at/petrak/hexcasting"
+
+[_fabric]
+src = "../Fabric/src"
+package = "{src}/main/java/at/petrak/hexcasting/fabric"
+
+[_forge]
+src = "../Forge/src"
+package = "{src}/main/java/at/petrak/hexcasting/forge"

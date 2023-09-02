@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "hexcasting:block/akashic_wood_stripped_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "hexcasting:block/akashic_wood_stripped"
+    },
+    "axis=z": {
+      "model": "hexcasting:block/akashic_wood_stripped_horizontal",
+      "x": 90
+    }
+  }
+}
