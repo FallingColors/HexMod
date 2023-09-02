@@ -40,6 +40,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     permissions:
+      contents: write
       pages: read
 
     outputs:
