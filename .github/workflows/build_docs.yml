@@ -101,7 +101,8 @@ jobs:
           fi
 
           hexdoc="hexdoc $props --ci --is-release ${{ steps.check-release.outputs.release == true }}"
-
+          
+          echo "$hexdoc"
           echo "hexdoc=$hexdoc" >> "$GITHUB_OUTPUT"
           echo "HEXDOC=$hexdoc" >> "$GITHUB_ENV"
 
