@@ -9,9 +9,13 @@ on:
         type: string
         required: false
       update-latest:
-        description: Overwrite the 'latest' version (and root, if publishing)
+        description: Overwrite the latest books (and root, if releasing)
         type: boolean
         default: true
+      release:
+        description: Release
+        type: boolean
+        default: false
       publish:
         description: Package index to publish to
         type: choice
@@ -73,7 +77,7 @@ jobs:
       - name: Check if this is a release
         id: check-release
         run: |
-          release=${{ github.event_name == 'workflow_dispatch' && inputs.publish == 'PyPI (release)' || startsWith(github.ref, 'refs/tags') || startsWith(github.event.head_commit.message, '[Release]') }}
+          release=${{ github.event_name == 'workflow_dispatch' && inputs.release || startsWith(github.ref, 'refs/tags') || startsWith(github.event.head_commit.message, '[Release]') }}
           echo "release=$release" >> "$GITHUB_OUTPUT"
       
       - name: Checkout input branch
@@ -223,7 +227,9 @@ jobs:
   publish-pypi:
     runs-on: ubuntu-latest
     needs: build
-    if: needs.build.outputs.release == 'true'
+    if: |-
+      needs.build.outputs.release == 'true' &&
+      (github.event_name != 'workflow_dispatch' || inputs.publish == 'PyPI (release)')
 
     environment:
       name: pypi
