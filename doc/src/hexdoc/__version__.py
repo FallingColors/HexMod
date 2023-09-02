@@ -6,5 +6,5 @@ PY_VERSION = "1.0.dev0"
 
 # Everything below this line is completely auto-generated.
 
-GRADLE_VERSION = "0.9.5"
-FULL_VERSION = "0.9.5.1.0.dev0"
+GRADLE_VERSION = "0.11.1-7"
+FULL_VERSION = "0.11.1.1.0rc7.dev0"
