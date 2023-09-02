@@ -86,7 +86,6 @@ jobs:
           if [[ ${{ github.event_name }} == 'workflow_dispatch' && ${{ inputs.branch }} != '(same as workflow)' }} ]]; then
             branch='${{ inputs.branch }}'
             props=_checkout/doc/properties.toml
-
             echo "HATCH_GRADLE_DIR=_checkout" >> "$GITHUB_ENV"
           else
             branch=none
@@ -174,6 +173,13 @@ jobs:
         with:
           name: docgen-build
           python-version: "3.11"
+
+      - name: Checkout input branch
+        if: needs.build.outputs.branch != 'none'
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ needs.build.outputs.branch }}
+          path: _checkout
 
       - name: Generate web book
         id: gen-normal
