@@ -152,7 +152,7 @@ jobs:
 
     env:
       GITHUB_PAGES_URL: ${{ needs.build.outputs.pages-url }}
-      HEXDOC_GENERATE: $HEXDOC --lang ${{ matrix.lang }} -o _site --clean --update-latest ${{ inputs.update-latest != false }}
+      HEXDOC_GENERATE: ${{ needs.build.outputs.hexdoc }} --lang ${{ matrix.lang }} -o _site --clean --update-latest ${{ inputs.update-latest != false }}
 
     steps:
       - uses: actions/checkout@v3
