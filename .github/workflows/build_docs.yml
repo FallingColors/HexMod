@@ -6,16 +6,19 @@ on:
     inputs:
       branch:
         description: 'Branch to generate docs from (default: same as workflow)'
-        type: string
-        required: false
-      update-latest:
-        description: Overwrite the latest books (and root, if releasing)
-        type: boolean
-        default: true
+        type: choice
+        options:
+          - (same as workflow)
+          - 0.9.5-docs
+          - 0.10.3-docs
       release:
-        description: Release
+        description: Release this version
         type: boolean
         default: false
+      update-latest:
+        description: Overwrite latest (and root, if releasing)
+        type: boolean
+        default: true
       publish:
         description: Package index to publish to
         type: choice
@@ -81,7 +84,7 @@ jobs:
           echo "release=$release" >> "$GITHUB_OUTPUT"
       
       - name: Checkout input branch
-        if: inputs.branch
+        if: github.event_name == 'workflow_dispatch' && inputs.branch != '(same as workflow)'
         id: checkout-input
         uses: actions/checkout@v3
         with:
