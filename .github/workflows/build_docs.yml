@@ -130,6 +130,10 @@ jobs:
       - name: Build web book
         run: $HEXDOC --lang "${{ matrix.lang }}" -o _site --clean --is-release "${{ needs.build.outputs.release }}"
 
+      - name: Build web book with missing translations
+        if: failure()
+        run: $HEXDOC --lang "${{ matrix.lang }}" -o _site --clean --is-release "${{ needs.build.outputs.release }}" --allow-missing
+
       - name: Upload temporary Pages artifact
         uses: actions/upload-artifact@v3
         with:
