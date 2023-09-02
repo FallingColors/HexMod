@@ -31,6 +31,14 @@ class IncludeRawExtension(Extension):
 
 @pass_context
 def hexdoc_block(context: Context, value: Any) -> str:
+    try:
+        return _hexdoc_block(context, value)
+    except Exception as e:
+        e.add_note(f"Tried to convert block:\n    {value}")
+        raise
+
+
+def _hexdoc_block(context: Context, value: Any) -> str:
     match value:
         case LocalizedStr() | str():
             # use Markup to tell Jinja not to escape this string for us
@@ -42,7 +50,7 @@ def hexdoc_block(context: Context, value: Any) -> str:
             with HTMLStream() as out:
                 with value.style.element(out, book.link_bases):
                     for child in value.children:
-                        out.write(hexdoc_block(context, child))
+                        out.write(_hexdoc_block(context, child))
                 return Markup(out.getvalue())
 
         case None:
