@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch to generate docs from (default: same as workflow)'
+        description: 'Branch to generate docs from'
         type: choice
         options:
           - (same as workflow)
