@@ -370,6 +370,19 @@ function sortSitemapVersions(sitemap) {
 function addDropdowns(sitemap) {
   let [branches, versions] = sortSitemapVersions(sitemap);
 
+  // set the "old version" message if this page is a version number, but not the latest one
+  // this isn't a dropdown, but it's here since we have the data anyway
+  if (versions.slice(1).includes(VERSION)) {
+    // thanks for the idea petra
+    let oldVersionNotice = document.createElement("i");
+    oldVersionNotice.textContent = "The past is a foreign country; they do things differently there.";
+
+    document.getElementById("old-version-notice").append(
+      document.createElement("br"),
+      oldVersionNotice,
+    );
+  }
+
   // versions
   document.getElementById("version-dropdown").append(
     ...versionDropdownItems(sitemap, branches),
