@@ -86,7 +86,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ inputs.branch }}
-          path: _branch_src
+          path: _checkout
 
       - name: Get hexdoc command and set build variables
         id: get-hexdoc-cmd
@@ -94,8 +94,8 @@ jobs:
           if [[ '${{ steps.checkout-input.outcome }}' == 'skipped' ]]; then
             props='doc/properties.toml'
           else
-            props='_branch_src/doc/properties.toml'
-            echo "HATCH_GRADLE_DIR='_branch_src'" >> "$GITHUB_ENV"
+            props='_checkout/doc/properties.toml'
+            echo "HATCH_GRADLE_DIR='_checkout'" >> "$GITHUB_ENV"
           fi
 
           hexdoc="hexdoc $props --ci --is-release ${{ steps.check-release.outputs.release == true }} --update-latest ${{ github.event_name != 'workflow_dispatch' || inputs.update-latest }}"
