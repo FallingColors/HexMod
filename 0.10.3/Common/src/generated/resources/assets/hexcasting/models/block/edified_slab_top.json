@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab_top",
-  "textures": {
-    "bottom": "hexcasting:block/edified_planks",
-    "side": "hexcasting:block/edified_planks",
-    "top": "hexcasting:block/edified_planks"
-  }
-}

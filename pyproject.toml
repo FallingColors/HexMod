@@ -42,7 +42,6 @@ hexdoc_merge = "hexdoc.hexdoc_merge:main"
 scheme = "gradle"
 source = "gradle-properties"
 py-path = "doc/src/hexdoc/__version__.py"
-gradle-path = "0.10.3/gradle.properties"
 
 # directory inclusion
 

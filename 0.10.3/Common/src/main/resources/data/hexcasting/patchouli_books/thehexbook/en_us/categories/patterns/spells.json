@@ -1,7 +1,0 @@
-{
-  "name": "hexcasting.entry.spells",
-  "icon": "minecraft:textures/item/enchanted_book.png",
-  "description": "hexcasting.entry.spells.desc",
-  "parent": "hexcasting:patterns",
-  "sortnum": 0
-}
