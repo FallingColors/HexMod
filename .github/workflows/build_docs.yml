@@ -9,8 +9,8 @@ on:
         type: choice
         options:
           - (same as workflow)
-          - 0.9.5-docs
           - 0.10.3-docs
+          - 0.9.5-docs
       release:
         description: Release this version
         type: boolean
