@@ -62,6 +62,7 @@ jobs:
       matrix: ${{ steps.list-langs.outputs.matrix }}
       release: ${{ steps.parse-inputs.outputs.release }}
       branch: ${{ steps.parse-inputs.outputs.branch }}
+      hexdoc-common: ${{ steps.parse-inputs.outputs.hexdoc-common }}
       hexdoc: ${{ steps.parse-inputs.outputs.hexdoc }}
 
     steps:
@@ -82,6 +83,7 @@ jobs:
         id: parse-inputs
         run: |
           release=${{ github.event_name == 'workflow_dispatch' && inputs.release || startsWith(github.ref, 'refs/tags') || startsWith(github.event.head_commit.message, '[Release]') }}
+          update_latest=${{ github.event_name != 'workflow_dispatch' || inputs.update-latest }}
           
           if [[ ${{ github.event_name == 'workflow_dispatch' && inputs.branch != '(same as workflow)' }} == true ]]; then
             branch='${{ inputs.branch }}'
@@ -91,15 +93,17 @@ jobs:
             branch=none
             props=doc/properties.toml
           fi
-
-          hexdoc="hexdoc $props --ci --is-release $release --update-latest ${{ github.event_name != 'workflow_dispatch' || inputs.update-latest }}"
-          echo "$hexdoc"
+          
+          hexdoc_common="--is-release $release --update-latest $update_latest"
+          hexdoc="hexdoc $props --ci $hexdoc_common"
 
           echo "HEXDOC=$hexdoc" >> "$GITHUB_ENV"
           
-          echo "release=$release" >> "$GITHUB_OUTPUT"
-          echo "branch=$branch" >> "$GITHUB_OUTPUT"
-          echo "hexdoc=$hexdoc" >> "$GITHUB_OUTPUT"
+          echo "release=$release"             >> "$GITHUB_OUTPUT"
+          echo "update-latest=$update_latest" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch"               >> "$GITHUB_OUTPUT"
+          echo "hexdoc-common=$hexdoc_common" >> "$GITHUB_OUTPUT"
+          echo "hexdoc=$hexdoc"               >> "$GITHUB_OUTPUT"
       
       - name: Checkout input branch
         if: steps.parse-inputs.outputs.branch != 'none'
@@ -142,12 +146,14 @@ jobs:
           path: dist
 
       - name: Copy build to Pages
+        if: steps.parse-inputs.outputs.update-latest
         run: |
           mkdir -p _site/dist
           cp dist/*.whl _site/dist/latest.whl
           cp dist/*.tar.gz _site/dist/latest.tar.gz
 
       - name: Upload temporary Pages artifact
+        if: steps.parse-inputs.outputs.update-latest
         uses: actions/upload-artifact@v3
         with:
           name: github-pages-tmp
@@ -165,7 +171,7 @@ jobs:
 
     env:
       GITHUB_PAGES_URL: ${{ needs.build.outputs.pages-url }}
-      HEXDOC_GENERATE: ${{ needs.build.outputs.hexdoc }} --lang ${{ matrix.lang }} -o _site --clean
+      HEXDOC: ${{ needs.build.outputs.hexdoc }} --lang ${{ matrix.lang }} -o _site --clean
 
     steps:
       - uses: actions/checkout@v3
@@ -184,11 +190,11 @@ jobs:
       - name: Generate web book
         id: gen-normal
         continue-on-error: true
-        run: $HEXDOC_GENERATE
+        run: $HEXDOC
 
       - name: Generate web book with missing translations
         if: steps.gen-normal.outcome == 'failure'
-        run: $HEXDOC_GENERATE --allow-missing
+        run: $HEXDOC --allow-missing
 
       - name: Upload temporary Pages artifact
         uses: actions/upload-artifact@v3
@@ -228,7 +234,7 @@ jobs:
           path: _site/src/docs
       
       - name: Add new docs to site
-        run: hexdoc_merge --src _site/src/docs --dst _site/dst/docs
+        run: hexdoc_merge ${{ needs.build.outputs.hexdoc-common }} --src _site/src/docs --dst _site/dst/docs
 
       - name: Deploy to Pages
         uses: JamesIves/github-pages-deploy-action@v4
