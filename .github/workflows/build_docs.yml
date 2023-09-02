@@ -204,7 +204,9 @@ jobs:
 
       - name: Fail if the first generate step failed
         if: steps.gen-normal.outcome == 'failure'
-        run: exit 1
+        run: |
+          echo "::error::Missing some i18n keys."
+          exit 1
 
   deploy-pages:
     runs-on: ubuntu-latest
