@@ -16,5 +16,9 @@
       <b>Entries which are blurred are spoilers</b>. Click to reveal them, but be aware that they may spoil endgame
       progression. Alternatively, click <a href="?nospoiler">here</a> to get a version with all spoilers showing.
     </p>
+
+    {% if not is_bleeding_edge %}
+      <div id="old-version-notice"></div>
+    {% endif %}
   </blockquote>
 </div>

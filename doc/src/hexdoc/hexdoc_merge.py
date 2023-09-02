@@ -1,22 +1,28 @@
-import json
 import shutil
 from argparse import ArgumentParser
 from collections import defaultdict
 from pathlib import Path
-from typing import Self, Sequence, TypedDict
+from typing import Self, Sequence
+
+from pydantic import Field, TypeAdapter
 
 from hexdoc.hexdoc import MARKER_NAME, SitemapMarker
 from hexdoc.utils import HexdocModel
+from hexdoc.utils.model import DEFAULT_CONFIG
 from hexdoc.utils.path import write_to_path
 
 
-class SitemapItem(TypedDict):
-    defaultPath: str
-    langPaths: dict[str, str]
+class SitemapItem(HexdocModel):
+    default_path: str = Field(alias="defaultPath", default="")
+    lang_paths: dict[str, str] = Field(alias="langPaths", default_factory=dict)
+
+    def add_marker(self, marker: SitemapMarker):
+        self.lang_paths[marker.lang] = marker.path
+        if marker.is_default_lang:
+            self.default_path = marker.path
 
 
-def strip_empty_lines(text: str) -> str:
-    return "\n".join(s for s in text.splitlines() if s.strip())
+Sitemap = dict[str, SitemapItem]
 
 
 # CLI arguments
@@ -70,19 +76,17 @@ def main():
     shutil.copytree(args.src, args.dst, dirs_exist_ok=True)
 
     # crawl the new tree to rebuild the sitemap
-    sitemap = defaultdict[str, SitemapItem](
-        lambda: SitemapItem(defaultPath="", langPaths={})
-    )
-
+    sitemap: Sitemap = defaultdict(SitemapItem)
     for marker_path in args.dst.rglob(MARKER_NAME):
         marker = SitemapMarker.load(marker_path)
-        version_item = sitemap[marker.version]
+        sitemap[marker.version].add_marker(marker)
 
-        version_item["langPaths"][marker.lang] = marker.path
-        if marker.is_default_lang:
-            version_item["defaultPath"] = marker.path
-
-    write_to_path(args.dst / "meta" / "sitemap.json", json.dumps(sitemap))
+    # dump the sitemap using a TypeAdapter so it serializes the items properly
+    ta = TypeAdapter(Sitemap, config=DEFAULT_CONFIG)
+    write_to_path(
+        args.dst / "meta" / "sitemap.json",
+        ta.dump_json(sitemap, by_alias=True),
+    )
 
 
 if __name__ == "__main__":

@@ -1,5 +1,7 @@
 "use strict";
 
+import semver from 'https://cdn.jsdelivr.net/npm/semver@7.5.4/+esm';
+
 const speeds = [0, 0.25, 0.5, 1, 2, 4];
 const scrollThreshold = 100;
 const rfaQueue = [];
@@ -299,6 +301,7 @@ const PAGE_URL = "{{ page_url }}";
 const VERSION = "{{ version }}";
 const LANG = "{{ lang }}";
 
+// Creates an element in the form `<li><a href=${href}>${text}</a></li>`
 function dropdownItem(text, href) {
   let a = document.createElement("a");
   a.href = href;
@@ -309,39 +312,88 @@ function dropdownItem(text, href) {
   return li;
 }
 
-function fillDropdowns(sitemap) {
-  let versionDropdown = document.getElementById("version-dropdown");
-  let langDropdown = document.getElementById("lang-dropdown");
+function versionDropdownItem(sitemap, version) {
+  const {defaultPath, langPaths} = sitemap[version];
 
-  // versions, linking to the current lang if possible
-  for (const version of Object.keys(sitemap).sort().reverse()) {
-    let {defaultPath, langPaths} = sitemap[version];
-
-    // link to the current language if available, else link to the default language
-    let path;
-    if (langPaths.hasOwnProperty(LANG)) {
-      path = langPaths[LANG];
-    } else {
-      path = defaultPath;
-    }
-    
-    let item = dropdownItem(version, ROOT_URL + path);
-    versionDropdown.appendChild(item);
+  // link to the current language if available, else link to the default language
+  let path;
+  if (langPaths.hasOwnProperty(LANG)) {
+    path = langPaths[LANG];
+  } else {
+    path = defaultPath;
   }
   
-  // langs for the current version
-  let langPaths = sitemap[VERSION].langPaths;
-  for (const lang of Object.keys(langPaths).sort()) {
-    let item = dropdownItem(lang, ROOT_URL + langPaths[lang]);
-    langDropdown.appendChild(item);
-  }
+  return dropdownItem(version, ROOT_URL + path);
+}
+
+function versionDropdownItems(sitemap, versions) {
+  return versions.map((version) => (
+    versionDropdownItem(sitemap, version)
+  ));
+}
+
+function dropdownSeparator() {
+  let li = document.createElement("li");
+  li.className = "divider";
+  li.setAttribute("role", "separator");
+  return li;
+}
+
+// Like array.filter(predicate), but also returns the items which didn't match the filter.
+function partition(array, predicate) {
+  let matched = [];
+  let unmatched = [];
+  
+  array.forEach((value, index) => {
+    if (predicate(value, index, array)) {
+      matched.push(value);
+    } else {
+      unmatched.push(value);
+    }
+  });
+
+  return [matched, unmatched];
+}
+
+function sortSitemapVersions(sitemap) {
+  let [versions, branches] = partition(Object.keys(sitemap), (v) => semver.valid(v) != null);
+
+  // branches ascending, versions descending
+  // eg. ["dev", "main"], ["0.10.0", "0.9.0"]
+  branches.sort();
+  versions.sort(semver.rcompare);
+
+  return [branches, versions];
+}
+
+// Fills the version dropdown menus and the "old version" message.
+function addDropdowns(sitemap) {
+  let [branches, versions] = sortSitemapVersions(sitemap);
+
+  // versions
+  document.getElementById("version-dropdown").append(
+    ...versionDropdownItems(sitemap, branches),
+    dropdownSeparator(),
+    ...versionDropdownItems(sitemap, versions),
+  );
+  
+  // languages for the current version
+  const langPaths = sitemap[VERSION].langPaths;
+  const langs = Object.keys(langPaths).sort();
+
+  document.getElementById("lang-dropdown").append(
+    ...langs.map((lang) => dropdownItem(lang, ROOT_URL + langPaths[lang])),
+  );
+
+  // return sitemap for chaining, i guess
+  return sitemap
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   // fetch the sitemap from the root and use it to generate the navbar
   fetch(`${ROOT_URL}/meta/sitemap.json`)
     .then(r => r.json())
-    .then(fillDropdowns)
+    .then(addDropdowns)
     .catch(e => console.error(e))
 
   document.querySelectorAll("details.spell-collapsible").forEach(hookLoad);

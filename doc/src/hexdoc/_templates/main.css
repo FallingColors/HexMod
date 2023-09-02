@@ -101,6 +101,10 @@ canvas.spell-viz {
   --dark-mode: 0;
 }
 
+.dropdown-menu .divider {
+  margin: 4px 0;
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #201a20;
@@ -142,9 +146,8 @@ canvas.spell-viz {
     min-width: 120px;
   }
 
-  .dropdown-menu-ltr {
-    left: 0;
-    right: auto;
+  .dropdown-menu .divider {
+    background-color: #080808;
   }
 
   .dropdown-menu > li > a {

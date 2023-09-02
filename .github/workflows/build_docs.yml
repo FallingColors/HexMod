@@ -49,7 +49,7 @@ jobs:
 
     outputs:
       pages-url: ${{ steps.get-url.outputs.pages-url }}
-      matrix: ${{ steps.list-langs.outputs.matrix }}
+      matrix: ${{ fromJson(steps.list-langs.outputs.matrix) }}
       release: ${{ steps.check-release.outputs.release }}
 
     steps:
@@ -120,7 +120,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        lang: ${{ fromJson(needs.build.outputs.matrix) }}
+        lang: ${{ needs.build.outputs.matrix }}
 
     env:
       GITHUB_PAGES_URL: ${{ needs.build.outputs.pages-url }}

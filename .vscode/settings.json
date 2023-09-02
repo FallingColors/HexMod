@@ -15,4 +15,7 @@
     "[html][jinja-html]": {
         "editor.rulers": [120],
     },
+    "files.associations": {
+        "*.js.jinja": "javascript"
+    }
 }
