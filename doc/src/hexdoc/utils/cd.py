@@ -1,15 +1,19 @@
-import os
-from contextlib import contextmanager
-from typing import AnyStr
+from pathlib import Path
+from typing import Annotated
+
+from pydantic import AfterValidator, ValidationInfo
+
+from .deserialize import cast_or_raise
+from .model import ValidationContext
 
 
-# https://stackoverflow.com/a/24176022
-@contextmanager
-def cd(newdir: os.PathLike[AnyStr]):
-    """Context manager which temporarily changes the script's working directory."""
-    prevdir = os.getcwd()
-    os.chdir(os.path.expanduser(newdir))
-    try:
-        yield
-    finally:
-        os.chdir(prevdir)
+class RelativePathContext(ValidationContext):
+    root: Path
+
+
+def validate_relative_path(path: Path, info: ValidationInfo):
+    context = cast_or_raise(info.context, RelativePathContext)
+    return context.root / path
+
+
+RelativePath = Annotated[Path, AfterValidator(validate_relative_path)]

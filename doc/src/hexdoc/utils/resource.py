@@ -35,6 +35,8 @@ from pydantic import (
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
+from hexdoc.utils.cd import RelativePath
+
 from .deserialize import JSONDict
 from .model import DEFAULT_CONFIG, HexdocModel, ValidationContext
 
@@ -232,7 +234,8 @@ class BaseResourceDir(HexdocModel, ABC):
 
 
 class PathResourceDir(BaseResourceDir):
-    path: Path
+    # input is relative to the props file
+    path: RelativePath
 
     # direct paths are probably from this mod
     external: bool = False

@@ -8,6 +8,7 @@ from typing import Annotated, Any, Self
 
 from pydantic import AfterValidator, Field, HttpUrl, TypeAdapter, field_validator
 
+from .cd import RelativePath, RelativePathContext
 from .model import DEFAULT_CONFIG, StripHiddenModel
 from .resource import ResourceDir, ResourceLocation
 from .toml_placeholders import load_toml_with_placeholders
@@ -20,14 +21,14 @@ NoTrailingSlashHttpUrl = Annotated[
 
 
 class PatternStubProps(StripHiddenModel):
-    path: Path
+    path: RelativePath
     regex: re.Pattern[str]
 
 
 class TemplateProps(StripHiddenModel):
     main: str
-    static_dir: Path | None = None
-    dirs: list[Path] = Field(default_factory=list)
+    static_dir: RelativePath | None = None
+    dirs: list[RelativePath] = Field(default_factory=list)
     packages: list[tuple[str, Path]]
     args: dict[str, Any]
 
@@ -52,7 +53,7 @@ class Properties(StripHiddenModel):
     the text color to the default."""
 
     resource_dirs: list[ResourceDir]
-    export_dir: Path | None = None
+    export_dir: RelativePath | None = None
 
     pattern_stubs: list[PatternStubProps]
 
@@ -65,7 +66,10 @@ class Properties(StripHiddenModel):
 
     @classmethod
     def load(cls, path: Path) -> Self:
-        return cls.model_validate(load_toml_with_placeholders(path))
+        return cls.model_validate(
+            load_toml_with_placeholders(path),
+            context=RelativePathContext(root=path.parent),
+        )
 
     def mod_loc(self, path: str) -> ResourceLocation:
         """Returns a ResourceLocation with self.modid as the namespace."""
