@@ -60,8 +60,9 @@ jobs:
     outputs:
       pages-url: ${{ steps.get-url.outputs.pages-url }}
       matrix: ${{ steps.list-langs.outputs.matrix }}
-      release: ${{ steps.check-release.outputs.release }}
-      hexdoc: ${{ steps.get-hexdoc-cmd.outputs.hexdoc }}
+      release: ${{ steps.parse-inputs.outputs.release }}
+      branch: ${{ steps.parse-inputs.outputs.branch }}
+      hexdoc: ${{ steps.parse-inputs.outputs.hexdoc }}
 
     steps:
       - uses: actions/checkout@v3
@@ -77,35 +78,37 @@ jobs:
           echo "pages-url=$url" >> "$GITHUB_OUTPUT"
           echo "GITHUB_PAGES_URL=$url" >> "$GITHUB_ENV"
       
-      - name: Check if this is a release
-        id: check-release
+      - name: Parse inputs
+        id: parse-inputs
         run: |
           release=${{ github.event_name == 'workflow_dispatch' && inputs.release || startsWith(github.ref, 'refs/tags') || startsWith(github.event.head_commit.message, '[Release]') }}
+          
+          if [[ ${{ github.event_name }} == 'workflow_dispatch' && ${{ inputs.branch }} != '(same as workflow)' }} ]]; then
+            branch='${{ inputs.branch }}'
+            props=_checkout/doc/properties.toml
+
+            echo "HATCH_GRADLE_DIR=_checkout" >> "$GITHUB_ENV"
+          else
+            branch=none
+            props=doc/properties.toml
+          fi
+
+          hexdoc="hexdoc $props --ci --is-release $release --update-latest ${{ github.event_name != 'workflow_dispatch' || inputs.update-latest }}"
+          echo "$hexdoc"
+
+          echo "HEXDOC=$hexdoc" >> "$GITHUB_ENV"
+          
           echo "release=$release" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          echo "hexdoc=$hexdoc" >> "$GITHUB_OUTPUT"
       
       - name: Checkout input branch
-        if: github.event_name == 'workflow_dispatch' && inputs.branch != '(same as workflow)'
+        if: steps.parse-inputs.outputs.branch != 'none'
         id: checkout-input
         uses: actions/checkout@v3
         with:
-          ref: ${{ inputs.branch }}
+          ref: ${{ steps.parse-inputs.outputs.branch }}
           path: _checkout
-
-      - name: Get hexdoc command and set build variables
-        id: get-hexdoc-cmd
-        run: |
-          if [[ '${{ steps.checkout-input.outcome }}' == 'skipped' ]]; then
-            props=doc/properties.toml
-          else
-            props=_checkout/doc/properties.toml
-            echo "HATCH_GRADLE_DIR=_checkout" >> "$GITHUB_ENV"
-          fi
-
-          hexdoc="hexdoc $props --ci --is-release ${{ steps.check-release.outputs.release == true }} --update-latest ${{ github.event_name != 'workflow_dispatch' || inputs.update-latest }}"
-          
-          echo "$hexdoc"
-          echo "hexdoc=$hexdoc" >> "$GITHUB_OUTPUT"
-          echo "HEXDOC=$hexdoc" >> "$GITHUB_ENV"
 
       - name: Install docgen from source
         run: pip install . hatch
