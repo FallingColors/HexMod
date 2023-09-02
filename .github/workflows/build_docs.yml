@@ -127,11 +127,13 @@ jobs:
           name: docgen-build
           python-version: "3.11"
 
-      - name: Build web book
+      - name: Generate web book
+        id: gen-normal
         continue-on-error: true
         run: $HEXDOC --lang "${{ matrix.lang }}" -o _site --clean --is-release "${{ needs.build.outputs.release }}"
 
-      - name: Build web book with missing translations
+      - name: Generate web book with missing translations
+        if: failure()
         run: $HEXDOC --lang "${{ matrix.lang }}" -o _site --clean --is-release "${{ needs.build.outputs.release }}" --allow-missing
 
       - name: Upload temporary Pages artifact
@@ -139,6 +141,10 @@ jobs:
         with:
           name: github-pages-tmp
           path: _site
+
+      - name: Fail if the first generate step failed
+        if: steps.gen-normal.outcome == 'failure'
+        run: exit 1
 
   bundle-pages:
     runs-on: ubuntu-latest
