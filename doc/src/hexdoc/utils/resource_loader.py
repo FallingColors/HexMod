@@ -9,7 +9,7 @@ from typing import Callable, Literal, Self, TypeVar, overload
 
 from pydantic.dataclasses import dataclass
 
-from hexdoc.__version__ import GRADLE_VERSION
+from hexdoc.__gradle_version__ import GRADLE_VERSION
 from hexdoc.utils.deserialize import JSONDict, decode_json_dict
 from hexdoc.utils.model import DEFAULT_CONFIG, HexdocModel, ValidationContext
 from hexdoc.utils.path import strip_suffixes, write_to_path

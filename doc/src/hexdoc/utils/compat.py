@@ -2,7 +2,7 @@ from enum import Enum
 from functools import total_ordering
 from typing import Any, Callable, Self
 
-from hexdoc.__version__ import GRADLE_VERSION
+from hexdoc.__gradle_version__ import GRADLE_VERSION
 
 
 @total_ordering

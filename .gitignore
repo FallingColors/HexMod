@@ -1,3 +1,8 @@
+# hexdoc
+doc/**/_export/generated/
+_site/
+__gradle_version__.py
+
 # eclipse
 bin
 *.launch
@@ -29,7 +34,6 @@ plot/
 
 
 # Python
-/_site/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

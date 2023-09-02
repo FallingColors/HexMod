@@ -19,7 +19,7 @@ from hexdoc.utils import HexdocModel, ModResourceLoader, Properties
 from hexdoc.utils.cd import cd
 from hexdoc.utils.path import write_to_path
 
-from .__version__ import GRADLE_VERSION
+from .__gradle_version__ import GRADLE_VERSION
 from .utils.jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
 
 MARKER_NAME = ".sitemap-marker.json"
@@ -221,7 +221,6 @@ def main(args: Args | None = None) -> None:
         if args.is_release:
             # root should be the latest released version
             versions.append(GRADLE_VERSION)
-
             if args.update_latest:
                 versions.append("")
 
