@@ -6,6 +6,7 @@ from typing import Self, Sequence
 
 from pydantic import Field, TypeAdapter
 
+from hexdoc.__gradle_version__ import GRADLE_VERSION
 from hexdoc.hexdoc import MARKER_NAME, SitemapMarker
 from hexdoc.utils import HexdocModel
 from hexdoc.utils.model import DEFAULT_CONFIG
@@ -46,13 +47,20 @@ class Args(HexdocModel):
         return cls.model_validate(vars(parser.parse_args(args)))
 
 
+def assert_version_exists(src: Path, version: str):
+    path = src / "v" / version / "index.html"
+    if not path.is_file():
+        raise FileNotFoundError(f"Missing default language for {version}: {path}")
+
+
 def main():
     args = Args.parse_args()
 
     # ensure at least the default language was built successfully
-    latest_default = args.src / "v" / "latest" / "index.html"
-    if not latest_default.is_file():
-        raise FileNotFoundError(latest_default)
+    if args.is_release:
+        assert_version_exists(args.src, GRADLE_VERSION)
+    if args.update_latest:
+        assert_version_exists(args.src, "latest")
 
     args.dst.mkdir(parents=True, exist_ok=True)
 
