@@ -57,7 +57,9 @@ artifacts = [
 ]
 
 [tool.hatch.build.targets.wheel]
-sources = ["doc/src"]
+sources = [
+    "doc/src",
+]
 
 # hexdoc entry points
 
@@ -100,7 +102,6 @@ pythonPlatform = "All"
 
 include = [
     "doc/src/hexdoc",
-    "doc/src/hexdoc_templates",
 ]
 
 # mostly we use strict mode

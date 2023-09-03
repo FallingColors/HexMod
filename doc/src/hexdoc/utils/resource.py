@@ -35,10 +35,10 @@ from pydantic import (
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
-from hexdoc.utils.cd import RelativePath
+from hexdoc.utils.cd import RelativePath, RelativePathContext
 
 from .deserialize import JSONDict
-from .model import DEFAULT_CONFIG, HexdocModel, ValidationContext
+from .model import DEFAULT_CONFIG, HexdocModel, ValidationContext, init_context
 
 HEXDOC_EXPORTS_GROUP = "hexdoc.export"
 """Entry point group name for bundled hexdoc data."""
@@ -273,7 +273,7 @@ class EntryPointResourceDir(BaseResourceDir):
 
     @contextmanager
     def load(self):
-        with ExitStack() as stack:
+        with ExitStack() as stack, init_context(RelativePathContext(root=Path())):
             entry_point = self._entry_point()
 
             # NOT "yield from"
