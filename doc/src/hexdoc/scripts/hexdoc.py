@@ -12,14 +12,13 @@ from jinja2 import ChoiceLoader, FileSystemLoader, PackageLoader, StrictUndefine
 from jinja2.sandbox import SandboxedEnvironment
 from pydantic import model_validator
 
+from hexdoc.__gradle_version__ import GRADLE_VERSION
 from hexdoc.hexcasting.hex_book import load_hex_book
 from hexdoc.minecraft import I18n
 from hexdoc.patchouli import Book
 from hexdoc.utils import HexdocModel, ModResourceLoader, Properties
+from hexdoc.utils.jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
 from hexdoc.utils.path import write_to_path
-
-from .__gradle_version__ import GRADLE_VERSION
-from .utils.jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
 
 MARKER_NAME = ".sitemap-marker.json"
 

@@ -7,10 +7,10 @@ from typing import Self, Sequence
 from pydantic import Field, TypeAdapter
 
 from hexdoc.__gradle_version__ import GRADLE_VERSION
-from hexdoc.hexdoc import MARKER_NAME, SitemapMarker
-from hexdoc.utils import HexdocModel
-from hexdoc.utils.model import DEFAULT_CONFIG
+from hexdoc.utils import DEFAULT_CONFIG, HexdocModel
 from hexdoc.utils.path import write_to_path
+
+from .hexdoc import MARKER_NAME, SitemapMarker
 
 
 class SitemapItem(HexdocModel):

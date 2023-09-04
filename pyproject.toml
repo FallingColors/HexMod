@@ -34,8 +34,8 @@ dev = [
 ]
 
 [project.scripts]
-hexdoc = "hexdoc.hexdoc:main"
-hexdoc_merge = "hexdoc.hexdoc_merge:main"
+hexdoc = "hexdoc.scripts.hexdoc:main"
+hexdoc_merge = "hexdoc.scripts.hexdoc_merge:main"
 
 # Gradle version/deps
 
