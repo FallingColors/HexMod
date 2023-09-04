@@ -8,7 +8,13 @@ from argparse import ArgumentParser
 from pathlib import Path
 from typing import Self, Sequence
 
-from jinja2 import ChoiceLoader, FileSystemLoader, PackageLoader, StrictUndefined
+from jinja2 import (
+    ChoiceLoader,
+    FileSystemLoader,
+    PackageLoader,
+    StrictUndefined,
+    Template,
+)
 from jinja2.sandbox import SandboxedEnvironment
 from pydantic import model_validator
 
@@ -175,10 +181,6 @@ def main(args: Args | None = None) -> None:
     if args.export_only:
         return
 
-    assert args.output_dir
-    if args.clean:
-        shutil.rmtree(args.output_dir, ignore_errors=True)
-
     # set up Jinja environment
     env = SandboxedEnvironment(
         # search order: template_dirs, template_packages
@@ -202,60 +204,72 @@ def main(args: Args | None = None) -> None:
 
     template = env.get_template(props.template.main)
 
-    static_dir = props.template.static_dir
+    assert (output_dir := args.output_dir)
+    if args.clean:
+        shutil.rmtree(output_dir, ignore_errors=True)
 
-    versions = ["latest"] if args.update_latest else []
+    if args.update_latest:
+        render_books(props, books, template, output_dir, "latest")
 
     if args.is_release:
-        # root should be the latest released version
-        versions.append(GRADLE_VERSION)
-        if args.update_latest:
-            versions.append("")
+        render_books(props, books, template, output_dir, GRADLE_VERSION)
 
-    # render each version and language separately
-    for version in versions:
-        for lang, book in books.items():
-            is_default_lang = lang == props.default_lang
+    # the default book should be the latest released version
+    if args.update_latest and args.is_release:
+        render_books(props, books, template, output_dir, GRADLE_VERSION, is_root=True)
 
-            # /index.html
-            # /lang/index.html
-            # /v/version/index.html
-            # /v/version/lang/index.html
-            parts = ("v", version) if version else ()
-            if not is_default_lang:
-                parts += (lang,)
 
-            output_dir = args.output_dir / Path(*parts)
-            page_url = "/".join((props.url,) + parts)
+def render_books(
+    props: Properties,
+    books: dict[str, Book],
+    template: Template,
+    output_dir: Path,
+    version: str,
+    is_root: bool = False,
+):
+    for lang, book in books.items():
+        # /index.html
+        # /lang/index.html
+        # /v/version/index.html
+        # /v/version/lang/index.html
+        path = Path()
+        if not is_root:
+            path /= "v"
+            path /= version
+        if lang != props.default_lang:
+            path /= lang
 
-            logger.info(f"Rendering {output_dir}")
-            docs = strip_empty_lines(
-                template.render(
-                    **props.template.args,
-                    book=book,
-                    props=props,
-                    page_url=page_url,
-                    version=version or GRADLE_VERSION,
-                    lang=lang,
-                    is_bleeding_edge=version == "latest",
-                )
+        output_dir /= path
+        page_url = "/".join([props.url, *path.parts])
+
+        logging.getLogger(__name__).info(f"Rendering {output_dir}")
+        docs = strip_empty_lines(
+            template.render(
+                **props.template.args,
+                book=book,
+                props=props,
+                page_url=page_url,
+                version=version,
+                lang=lang,
+                is_bleeding_edge=version == "latest",
             )
+        )
 
-            write_to_path(output_dir / "index.html", docs)
-            if static_dir:
-                shutil.copytree(static_dir, output_dir, dirs_exist_ok=True)
+        write_to_path(output_dir / "index.html", docs)
+        if props.template.static_dir:
+            shutil.copytree(props.template.static_dir, output_dir, dirs_exist_ok=True)
 
-            # marker file for updating the sitemap later
-            # we use this because matrix doesn't have outputs
-            # this feels scuffed but it does work
-            if version:
-                marker = SitemapMarker(
-                    version=version,
-                    lang=lang,
-                    path="/" + "/".join(parts),
-                    is_default_lang=is_default_lang,
-                )
-                (output_dir / MARKER_NAME).write_text(marker.model_dump_json())
+        # marker file for updating the sitemap later
+        # we use this because matrix doesn't have outputs
+        # this feels scuffed but it does work
+        if not is_root:
+            marker = SitemapMarker(
+                version=version,
+                lang=lang,
+                path="/" + "/".join(path.parts),
+                is_default_lang=lang == props.default_lang,
+            )
+            (output_dir / MARKER_NAME).write_text(marker.model_dump_json())
 
 
 if __name__ == "__main__":
