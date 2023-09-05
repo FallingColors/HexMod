@@ -105,6 +105,24 @@ canvas.spell-viz {
   margin: 4px 0;
 }
 
+@media (min-width: 40rem) {
+  .book-body {
+    width: 70%;
+    left: 5%;
+    position: relative;
+    float: left;
+  }
+
+  #table-of-contents {
+    position: sticky;
+    top: 0;
+    width: 25%;
+    float: left;
+    max-height: 80%;
+    overflow-y: scroll;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #201a20;
