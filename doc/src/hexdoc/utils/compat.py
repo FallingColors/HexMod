@@ -2,7 +2,7 @@ from enum import Enum
 from functools import total_ordering
 from typing import Any, Callable, Self
 
-from hexdoc.__gradle_version__ import GRADLE_VERSION
+from hexdoc.__gradle_version__ import GRADLE_VERSION as HEX_VERSION
 
 
 @total_ordering
@@ -14,9 +14,9 @@ class HexVersion(Enum):
     @classmethod
     def get(cls):
         for version in cls:
-            if GRADLE_VERSION.startswith(version.value):
+            if HEX_VERSION.startswith(version.value):
                 return version
-        raise ValueError(f"Unknown mod version: {GRADLE_VERSION}")
+        raise ValueError(f"Unknown mod version: {HEX_VERSION}")
 
     @classmethod
     def check(cls, version: Self | Callable[[Self], bool] | bool, typ: type[Any] | str):
@@ -33,7 +33,7 @@ class HexVersion(Enum):
 
         if not isinstance(typ, str):
             typ = typ.__name__
-        raise ValueError(f"{typ} is not supported in {GRADLE_VERSION}")
+        raise ValueError(f"{typ} is not supported in {HEX_VERSION}")
 
     @property
     def _sort_by(self):

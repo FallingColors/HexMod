@@ -6,6 +6,7 @@ import shutil
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
+from types import NoneType
 from typing import Self, Sequence
 
 from jinja2 import (
@@ -16,13 +17,16 @@ from jinja2 import (
     Template,
 )
 from jinja2.sandbox import SandboxedEnvironment
+from pluggy import PluginManager
 from pydantic import model_validator
 
-from hexdoc.__gradle_version__ import GRADLE_VERSION
 from hexdoc.hexcasting.hex_book import load_hex_book
 from hexdoc.minecraft import I18n
 from hexdoc.patchouli import Book
+from hexdoc.plugin import hookspecs
+from hexdoc.plugin.helpers import name_hook_caller
 from hexdoc.utils import HexdocModel, ModResourceLoader, Properties
+from hexdoc.utils.deserialize import cast_or_raise, isinstance_or_raise
 from hexdoc.utils.jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
 from hexdoc.utils.path import write_to_path
 
@@ -113,14 +117,14 @@ class SitemapMarker(HexdocModel):
 
 
 def main(args: Args | None = None) -> None:
+    # set stdout to utf-8 so printing to pipe or redirect doesn't break on Windows
+    # (common windows L)
+    cast_or_raise(sys.stdout, io.TextIOWrapper).reconfigure(encoding="utf-8")
+    cast_or_raise(sys.stderr, io.TextIOWrapper).reconfigure(encoding="utf-8")
+
     # allow passing Args for test cases, but parse by default
     if args is None:
         args = Args.parse_args()
-
-    # set stdout to utf-8 so printing to pipe or redirect doesn't break on Windows
-    # (common windows L)
-    assert isinstance(sys.stdout, io.TextIOWrapper)
-    sys.stdout.reconfigure(encoding="utf-8")
 
     # set up logging
     logging.basicConfig(
@@ -130,18 +134,34 @@ def main(args: Args | None = None) -> None:
     )
     logger = logging.getLogger(__name__)
 
+    # Properties is the main config file for hexdoc
     props = Properties.load(args.properties_file)
     logger.debug(props)
 
+    # load plugins
+    # load entry points for props.modid first to make sure its version is added last
+    pm = PluginManager("hexdoc")
+    pm.add_hookspecs(hookspecs)
+    pm.load_setuptools_entrypoints("hexdoc")
+    pm.check_pending()
+
+    # get the current mod version
+    version = name_hook_caller(pm, "hexdoc_mod_version", props.modid)()
+    assert isinstance_or_raise(version, (str, NoneType))
+    if version is None:
+        raise ValueError(f"Missing hexdoc_mod_version hookimpl for {props.modid}")
+
+    print(f"Building docs for {props.modid} {version}")
+
     # just list the languages and exit
     if args.list_langs:
-        with ModResourceLoader.load_all(props, export=False) as loader:
+        with ModResourceLoader.load_all(props, version, export=False) as loader:
             langs = sorted(I18n.list_all(loader))
             print(json.dumps(langs))
             return
 
     # load everything
-    with ModResourceLoader.clean_and_load_all(props) as loader:
+    with ModResourceLoader.clean_and_load_all(props, version) as loader:
         books = dict[str, Book]()
 
         if args.lang:
@@ -181,7 +201,8 @@ def main(args: Args | None = None) -> None:
     if args.export_only:
         return
 
-    # set up Jinja environment
+    # set up Jinja
+
     env = SandboxedEnvironment(
         # search order: template_dirs, template_packages
         loader=ChoiceLoader(
@@ -204,6 +225,8 @@ def main(args: Args | None = None) -> None:
 
     template = env.get_template(props.template.main)
 
+    # render everything
+
     assert (output_dir := args.output_dir)
     if args.clean:
         shutil.rmtree(output_dir, ignore_errors=True)
@@ -212,11 +235,11 @@ def main(args: Args | None = None) -> None:
         render_books(props, books, template, output_dir, "latest")
 
     if args.is_release:
-        render_books(props, books, template, output_dir, GRADLE_VERSION)
+        render_books(props, books, template, output_dir, version)
 
     # the default book should be the latest released version
     if args.update_latest and args.is_release:
-        render_books(props, books, template, output_dir, GRADLE_VERSION, is_root=True)
+        render_books(props, books, template, output_dir, version, is_root=True)
 
 
 def render_books(

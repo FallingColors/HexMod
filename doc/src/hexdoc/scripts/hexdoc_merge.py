@@ -6,7 +6,6 @@ from typing import Self, Sequence
 
 from pydantic import Field, TypeAdapter
 
-from hexdoc.__gradle_version__ import GRADLE_VERSION
 from hexdoc.utils import DEFAULT_CONFIG, HexdocModel
 from hexdoc.utils.path import write_to_path
 
@@ -57,10 +56,11 @@ def main():
     args = Args.parse_args()
 
     # ensure at least the default language was built successfully
-    if args.is_release:
-        assert_version_exists(args.src, GRADLE_VERSION)
     if args.update_latest:
         assert_version_exists(args.src, "latest")
+    # TODO: figure out how to do this with pluggy
+    # if args.is_release:
+    #     assert_version_exists(args.src, GRADLE_VERSION)
 
     args.dst.mkdir(parents=True, exist_ok=True)
 
