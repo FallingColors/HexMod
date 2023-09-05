@@ -151,7 +151,7 @@ def main(args: Args | None = None) -> None:
     if version is None:
         raise ValueError(f"Missing hexdoc_mod_version hookimpl for {props.modid}")
 
-    print(f"Building docs for {props.modid} {version}")
+    logger.info(f"Building docs for {props.modid} {version}")
 
     # just list the languages and exit
     if args.list_langs:
