@@ -1,0 +1,5 @@
+{
+    "watch": ["doc/src/hexdoc/_templates"],
+    "ext": "jinja,html,css,js",
+    "exec": "hexdoc doc/properties.toml -o _site/src/docs --lang en_us --allow-missing && hexdoc_merge --src _site/src/docs --dst _site/dst/docs"
+}

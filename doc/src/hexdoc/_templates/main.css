@@ -105,6 +105,10 @@ canvas.spell-viz {
   margin: 4px 0;
 }
 
+.nobr {
+  white-space: nowrap;
+}
+
 @media (min-width: 40rem) {
   .book-body {
     width: 70%;
@@ -113,13 +117,18 @@ canvas.spell-viz {
     float: left;
   }
 
-  #table-of-contents {
+  .toc-container {
     position: sticky;
     top: 0;
     width: 25%;
     float: left;
     max-height: 80%;
     overflow-y: scroll;
+  }
+
+  .toc-permalink {
+    display: none;
+    visibility: hidden;
   }
 }
 

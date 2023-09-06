@@ -8,10 +8,10 @@
 {%- endmacro %}
 
 {# link icon in section headers to get a permalink to that section #}
-{% macro permalink(href) -%}
+{% macro permalink(href, class_name="") -%}
   <a
     href="#{{ href }}"
-    class="permalink small"
+    class="permalink small{{ ' '~class_name if class_name }}"
     title="Permalink"
   ><i class="bi bi-link-45deg"></i></a>
 {%- endmacro %}
