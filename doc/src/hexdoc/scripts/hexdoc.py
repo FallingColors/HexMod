@@ -132,7 +132,9 @@ def main(args: Args | None = None) -> None:
         format="\033[1m[{relativeCreated:.02f} | {levelname} | {name}]\033[0m {message}",
         level=args.log_level,
     )
+
     logger = logging.getLogger(__name__)
+    logger.info("Starting.")
 
     # Properties is the main config file for hexdoc
     props = Properties.load(args.properties_file)
@@ -240,6 +242,8 @@ def main(args: Args | None = None) -> None:
     # the default book should be the latest released version
     if args.update_latest and args.is_release:
         render_books(props, books, template, output_dir, version, is_root=True)
+
+    logger.info("Done.")
 
 
 def render_books(
