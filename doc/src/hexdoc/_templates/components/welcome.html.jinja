@@ -17,8 +17,10 @@
       progression. Alternatively, click <a href="?nospoiler">here</a> to get a version with all spoilers showing.
     </p>
 
-    {% if not is_bleeding_edge %}
-      <div id="old-version-notice"></div>
-    {% endif %}
+    {# conditionally revealed using js #}
+    <span id="old-version-notice" class="hidden">
+      <br />
+      <i>The past is a foreign country; they do things differently there.</i>
+    </span>
   </blockquote>
 </div>

@@ -109,6 +109,11 @@ canvas.spell-viz {
   white-space: nowrap;
 }
 
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
 @media (min-width: 40rem) {
   .book-body {
     width: 70%;
