@@ -127,7 +127,7 @@ canvas.spell-viz {
     top: 0;
     width: 25%;
     float: left;
-    max-height: 80%;
+    max-height: 80vh;
     overflow-y: scroll;
   }
 
