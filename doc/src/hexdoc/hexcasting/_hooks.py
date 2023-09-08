@@ -1,7 +1,5 @@
 from importlib.resources import Package
 
-import hexdoc._export.generated
-import hexdoc._export.resources
 from hexdoc.__gradle_version__ import GRADLE_VERSION
 from hexdoc.plugin import (
     LoadResourceDirsImpl,
@@ -23,6 +21,12 @@ class HexcastingPlugin(LoadResourceDirsImpl, LoadTaggedUnionsImpl, ModVersionImp
     @staticmethod
     @hookimpl
     def hexdoc_load_resource_dirs() -> Package | list[Package]:
+        # lazy import because generated may not exist when this file is loaded
+        # eg. when generating the contents of generated
+        # so we only want to import it if we actually need it
+        import hexdoc._export.generated
+        import hexdoc._export.resources
+
         return [hexdoc._export.generated, hexdoc._export.resources]
 
     @staticmethod
