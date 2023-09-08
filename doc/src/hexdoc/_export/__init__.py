@@ -1,1 +1,3 @@
-__resources__: list[str] = ["resources", "generated"]
+__all__ = ["generated", "resources"]
+
+from . import generated, resources

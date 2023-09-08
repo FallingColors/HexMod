@@ -8,7 +8,7 @@ from hexdoc.utils.deserialize import cast_or_raise
 from hexdoc.utils.resource_loader import LoaderContext
 
 
-class Recipe(TypeTaggedUnion, group="hexdoc.Recipe", type=None):
+class Recipe(TypeTaggedUnion, type=None):
     id: ResourceLocation
 
     group: str | None = None

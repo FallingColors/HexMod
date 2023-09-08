@@ -88,10 +88,6 @@ class IProperty(Protocol[_T_covariant]):
         ...
 
 
-_K = TypeVar("_K")
-_V = TypeVar("_V")
-
-
 @unique
 class TryGetEnum(Enum):
     @classmethod

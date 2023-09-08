@@ -9,7 +9,7 @@ from hexdoc.utils import ResourceLocation, TypeTaggedUnion
 from ..text import FormatTree
 
 
-class Page(TypeTaggedUnion, group="hexdoc.Page", type=None):
+class Page(TypeTaggedUnion, type=None):
     """Base class for Patchouli page types.
 
     See: https://vazkiimods.github.io/Patchouli/docs/patchouli-basics/page-types
@@ -28,7 +28,7 @@ class Page(TypeTaggedUnion, group="hexdoc.Page", type=None):
         type: str | None,
         template_type: str | None = None,
     ) -> None:
-        super().__init_subclass__(group=None, type=type)
+        super().__init_subclass__(type=type)
 
         # jinja template path
         if template_type is not None:

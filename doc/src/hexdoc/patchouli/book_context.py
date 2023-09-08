@@ -3,12 +3,13 @@ from typing import Self
 from pydantic import Field, model_validator
 
 from hexdoc.minecraft import Tag
+from hexdoc.plugin.manager import PluginManagerContext
 from hexdoc.utils import ResourceLocation
 
 from .text.formatting import FormattingContext
 
 
-class BookContext(FormattingContext):
+class BookContext(FormattingContext, PluginManagerContext):
     spoilered_advancements: set[ResourceLocation] = Field(default_factory=set)
 
     @model_validator(mode="after")

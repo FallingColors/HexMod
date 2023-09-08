@@ -1,7 +1,7 @@
 from hexdoc.utils import NoValue, ResourceLocation, TypeTaggedUnion
 
 
-class ItemIngredient(TypeTaggedUnion, group="hexdoc.ItemIngredient", type=None):
+class ItemIngredient(TypeTaggedUnion, type=None):
     pass
 
 

@@ -1,4 +1,4 @@
-# pyright: reportUnknownArgumentType=information, reportUnknownMemberType=information
+# pyright: reportUnknownArgumentType=false, reportUnknownMemberType=false
 
 # this file is used by basically everything
 # so if it's in literally any other place, everything fucking dies from circular deps
@@ -9,10 +9,8 @@ from __future__ import annotations
 import logging
 import re
 from abc import ABC, abstractmethod
-from collections.abc import Iterator
 from contextlib import ExitStack, contextmanager
 from fnmatch import fnmatch
-from importlib import metadata
 from pathlib import Path
 from typing import (
     Any,
@@ -25,7 +23,6 @@ from typing import (
 )
 
 import importlib_resources as resources
-from importlib_resources.abc import Traversable
 from pydantic import (
     FieldValidationInfo,
     field_validator,
@@ -35,13 +32,11 @@ from pydantic import (
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
+from hexdoc.plugin import PluginManager
 from hexdoc.utils.cd import RelativePath, RelativePathContext
 
 from .deserialize import JSONDict
 from .model import DEFAULT_CONFIG, HexdocModel, ValidationContext, init_context
-
-HEXDOC_EXPORTS_GROUP = "hexdoc.export"
-"""Entry point group name for bundled hexdoc data."""
 
 ResourceType = Literal["assets", "data", ""]
 
@@ -223,7 +218,10 @@ class BaseResourceDir(HexdocModel, ABC):
     """
 
     @abstractmethod
-    def load(self) -> ContextManager[Iterable[PathResourceDir]]:
+    def load(
+        self,
+        pm: PluginManager,
+    ) -> ContextManager[Iterable[PathResourceDir]]:
         ...
 
     @field_validator("reexport", mode="before")
@@ -253,7 +251,7 @@ class PathResourceDir(BaseResourceDir):
         return self
 
     @contextmanager
-    def load(self):
+    def load(self, pm: PluginManager):
         yield [self]
 
     @model_validator(mode="before")
@@ -272,53 +270,17 @@ class EntryPointResourceDir(BaseResourceDir):
     reexport: bool = False
 
     @contextmanager
-    def load(self):
+    def load(self, pm: PluginManager):
         with ExitStack() as stack, init_context(RelativePathContext(root=Path())):
-            entry_point = self._entry_point()
-
             # NOT "yield from"
             yield [
                 PathResourceDir(
-                    path=stack.enter_context(resources.as_file(traversable)),
+                    path=stack.enter_context(resources.as_file(module)),
                     external=self.external,
                     reexport=self.reexport,
                 ).set_modid(self.modid)
-                for traversable in self._load_traversables(entry_point)
+                for module in pm.load_resources(self.modid)
             ]
-
-    def _load_traversables(
-        self, entry_point: metadata.EntryPoint
-    ) -> Iterator[Traversable]:
-        base_traversable = resources.files(entry_point.module)
-        match entry_point.load():
-            case str(stub) | Path(stub):
-                yield base_traversable / stub
-
-            case [*stubs]:
-                for stub in stubs:
-                    # this will probably give some vague error if stub isn't a StrPath
-                    yield base_traversable / stub
-
-            case value:
-                raise TypeError(
-                    f"Expected a string/path or sequence of strings/paths at {entry_point}, got {type(value)}: {value}"
-                )
-
-    def _entry_point(self) -> metadata.EntryPoint:
-        match metadata.entry_points(group=HEXDOC_EXPORTS_GROUP, name=self.modid):
-            case []:
-                # too cold
-                raise ModuleNotFoundError(
-                    f"No entry points found in group {HEXDOC_EXPORTS_GROUP} with name {self.modid}"
-                )
-            case [entry_point]:
-                # just right
-                return entry_point
-            case [*entry_points]:
-                # too hot
-                raise ImportError(
-                    f"Multiple entry points found in group {HEXDOC_EXPORTS_GROUP} with name {self.modid}: {entry_points}"
-                )
 
 
 ResourceDir = PathResourceDir | EntryPointResourceDir

@@ -9,6 +9,7 @@ from typing import Callable, Literal, Self, TypeVar, overload
 
 from pydantic.dataclasses import dataclass
 
+from hexdoc.plugin.manager import PluginManager
 from hexdoc.utils.deserialize import JSONDict, decode_json_dict
 from hexdoc.utils.model import DEFAULT_CONFIG, HexdocModel, ValidationContext
 from hexdoc.utils.path import strip_suffixes, write_to_path
@@ -44,25 +45,26 @@ class ModResourceLoader:
     def clean_and_load_all(
         cls,
         props: Properties,
-        version: str,
+        pm: PluginManager,
         *,
         export: bool = True,
     ):
         # clear the export dir so we start with a clean slate
         if props.export_dir and export:
             subprocess.run(["git", "clean", "-fdX", props.export_dir])
-        return cls.load_all(props, version, export=export)
+        return cls.load_all(props, pm, export=export)
 
     @classmethod
     @contextmanager
     def load_all(
         cls,
         props: Properties,
-        version: str,
+        pm: PluginManager,
         *,
         export: bool = True,
     ) -> Iterator[Self]:
         export_dir = props.export_dir if export else None
+        version = pm.mod_version(props.modid)
 
         with ExitStack() as stack:
             loader = cls(
@@ -71,7 +73,7 @@ class ModResourceLoader:
                 resource_dirs=[
                     path_resource_dir
                     for resource_dir in props.resource_dirs
-                    for path_resource_dir in stack.enter_context(resource_dir.load())
+                    for path_resource_dir in stack.enter_context(resource_dir.load(pm))
                 ],
             )
 

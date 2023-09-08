@@ -6,6 +6,7 @@ from pydantic import Field, model_validator
 
 from hexdoc.minecraft import I18n, Tag
 from hexdoc.patchouli import Book, BookContext
+from hexdoc.plugin import PluginManager
 from hexdoc.utils import HexdocModel, ModResourceLoader, ResourceLocation, init_context
 from hexdoc.utils.compat import HexVersion
 from hexdoc.utils.properties import PatternStubProps
@@ -13,9 +14,14 @@ from hexdoc.utils.properties import PatternStubProps
 from .pattern import Direction, PatternInfo
 
 
-def load_hex_book(data: Mapping[str, Any], loader: ModResourceLoader, i18n: I18n):
+def load_hex_book(
+    data: Mapping[str, Any],
+    pm: PluginManager,
+    loader: ModResourceLoader,
+    i18n: I18n,
+):
     with init_context(data):
-        context = HexContext(loader=loader, i18n=i18n)
+        context = HexContext(pm=pm, loader=loader, i18n=i18n)
     return Book.model_validate(data, context=context)
 
 

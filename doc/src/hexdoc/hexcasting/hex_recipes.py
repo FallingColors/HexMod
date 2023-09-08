@@ -15,11 +15,7 @@ from hexdoc.utils.tagged_union import NoValue
 # ingredients
 
 
-class BrainsweepeeIngredient(
-    TypeTaggedUnion,
-    group="hexdoc.BrainsweepeeIngredient",
-    type=None,
-):
+class BrainsweepeeIngredient(TypeTaggedUnion, type=None):
     pass
 
 

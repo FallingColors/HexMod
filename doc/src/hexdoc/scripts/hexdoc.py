@@ -6,7 +6,6 @@ import shutil
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
-from types import NoneType
 from typing import Self, Sequence
 
 from jinja2 import (
@@ -17,16 +16,14 @@ from jinja2 import (
     Template,
 )
 from jinja2.sandbox import SandboxedEnvironment
-from pluggy import PluginManager
 from pydantic import model_validator
 
 from hexdoc.hexcasting.hex_book import load_hex_book
 from hexdoc.minecraft import I18n
 from hexdoc.patchouli import Book
-from hexdoc.plugin import hookspecs
-from hexdoc.plugin.helpers import name_hook_caller
+from hexdoc.plugin import PluginManager
 from hexdoc.utils import HexdocModel, ModResourceLoader, Properties
-from hexdoc.utils.deserialize import cast_or_raise, isinstance_or_raise
+from hexdoc.utils.deserialize import cast_or_raise
 from hexdoc.utils.jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
 from hexdoc.utils.path import write_to_path
 
@@ -141,29 +138,19 @@ def main(args: Args | None = None) -> None:
     logger.debug(props)
 
     # load plugins
-    # load entry points for props.modid first to make sure its version is added last
-    pm = PluginManager("hexdoc")
-    pm.add_hookspecs(hookspecs)
-    pm.load_setuptools_entrypoints("hexdoc")
-    pm.check_pending()
-
-    # get the current mod version
-    version = name_hook_caller(pm, "hexdoc_mod_version", props.modid)()
-    assert isinstance_or_raise(version, (str, NoneType))
-    if version is None:
-        raise ValueError(f"Missing hexdoc_mod_version hookimpl for {props.modid}")
-
+    pm = PluginManager()
+    version = pm.mod_version(props.modid)
     logger.info(f"Building docs for {props.modid} {version}")
 
     # just list the languages and exit
     if args.list_langs:
-        with ModResourceLoader.load_all(props, version, export=False) as loader:
+        with ModResourceLoader.load_all(props, pm, export=False) as loader:
             langs = sorted(I18n.list_all(loader))
             print(json.dumps(langs))
             return
 
     # load everything
-    with ModResourceLoader.clean_and_load_all(props, version) as loader:
+    with ModResourceLoader.clean_and_load_all(props, pm) as loader:
         books = dict[str, Book]()
 
         if args.lang:
@@ -189,16 +176,13 @@ def main(args: Args | None = None) -> None:
         _, book_data = Book.load_book_json(loader, props.book)
 
         # load one book with exporting enabled
-        books[first_lang] = load_hex_book(
-            book_data,
-            loader,
-            i18n=per_lang_i18n.pop(first_lang),
-        )
+        first_i18n = per_lang_i18n.pop(first_lang)
+        books[first_lang] = load_hex_book(book_data, pm, loader, first_i18n)
 
         # then load the rest with exporting disabled for efficiency
         loader.export_dir = None
         for lang, i18n in per_lang_i18n.items():
-            books[lang] = load_hex_book(book_data, loader, i18n)
+            books[lang] = load_hex_book(book_data, pm, loader, i18n)
 
     if args.export_only:
         return

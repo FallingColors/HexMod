@@ -1,5 +1,19 @@
-__all__ = ["hookimpl"]
+__all__ = [
+    "hookimpl",
+    "ModVersionImpl",
+    "LoadResourceDirsImpl",
+    "LoadTaggedUnionsImpl",
+    "PluginManager",
+]
 
-from pluggy import HookimplMarker
+import pluggy
 
-hookimpl = HookimplMarker("hexdoc")
+from .manager import PluginManager
+from .specs import (
+    HEXDOC_PROJECT_NAME,
+    LoadResourceDirsImpl,
+    LoadTaggedUnionsImpl,
+    ModVersionImpl,
+)
+
+hookimpl = pluggy.HookimplMarker(HEXDOC_PROJECT_NAME)

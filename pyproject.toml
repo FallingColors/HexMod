@@ -17,12 +17,13 @@ classifiers = [
 ]
 requires-python = ">=3.11"
 dependencies = [
-    "typing_extensions>=4.6.1",
-    "importlib_resources>=6.0.1",
-    "pydantic>=2.3.0",
-    "Jinja2>=3.1.2",
-    "pyjson5>=1.6.3",
-    "pluggy>=1.3.0",
+    "typing_extensions>=4.6.1,<5",
+    "importlib_resources>=6.0.1,<7",
+    "more_itertools>=10.1.0,<11",
+    "pydantic>=2.3.0,<3",
+    "Jinja2>=3.1.2,<4",
+    "pyjson5>=1.6.3,<2",
+    "pluggy>=1.3.0,<2",
 ]
 
 [project.optional-dependencies]
@@ -35,10 +36,6 @@ dev = [
     "build",
 ]
 
-[project.scripts]
-hexdoc = "hexdoc.scripts.hexdoc:main"
-hexdoc_merge = "hexdoc.scripts.hexdoc_merge:main"
-
 # Gradle version/deps
 
 [tool.hatch.version]
@@ -46,7 +43,7 @@ scheme = "gradle"
 source = "gradle-properties"
 py-path = "doc/src/hexdoc/__version__.py"
 
-# directory inclusion
+# project structure
 
 [tool.hatch.build]
 artifacts = [
@@ -65,28 +62,17 @@ packages = [
     "doc/src/hexdoc",
 ]
 
-# hexdoc entry points
+[project.scripts]
+hexdoc = "hexdoc.scripts.hexdoc:main"
+hexdoc_merge = "hexdoc.scripts.hexdoc_merge:main"
+
+# hexdoc
 
 [project.entry-points.hexdoc]
-hexcasting = "hexdoc.hexcasting.hooks"
+hexcasting = "hexdoc.hexcasting._hooks:HexcastingPlugin"
+minecraft = "hexdoc.minecraft._hooks:MinecraftPlugin"
+patchouli = "hexdoc.patchouli._hooks:PatchouliPlugin"
 
-[project.entry-points."hexdoc.export"]
-hexcasting = "hexdoc._export:__resources__"
-
-[project.entry-points."hexdoc.Page"]
-patchouli = "hexdoc.patchouli.page.pages"
-hexcasting = "hexdoc.hexcasting.page.hex_pages"
-
-[project.entry-points."hexdoc.Recipe"]
-minecraft = "hexdoc.minecraft.recipe.recipes"
-hexcasting = "hexdoc.hexcasting.hex_recipes"
-
-[project.entry-points."hexdoc.ItemIngredient"]
-minecraft = "hexdoc.minecraft.recipe.ingredients"
-hexcasting = "hexdoc.hexcasting.hex_recipes"
-
-[project.entry-points."hexdoc.BrainsweepeeIngredient"]
-hexcasting = "hexdoc.hexcasting.hex_recipes"
 
 # Pytest
 

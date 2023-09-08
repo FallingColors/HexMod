@@ -2,9 +2,12 @@ from collections import defaultdict
 from enum import Enum
 from typing import Any, ClassVar, Generator, Self
 
-from pkg_resources import iter_entry_points
+import more_itertools
 from pydantic import ValidationInfo, model_validator
 from pydantic.functional_validators import ModelWrapValidatorHandler
+
+from hexdoc.plugin.manager import PluginManagerContext
+from hexdoc.utils.deserialize import cast_or_raise
 
 from .model import HexdocModel
 from .resource import ResourceLocation
@@ -21,49 +24,27 @@ NoValue = NoValueType._token  # pyright: ignore[reportPrivateUsage]
 
 TagValue = str | NoValueType
 
-_loaded_groups: set[str] = set()
-
-
-def load_entry_points(group: str):
-    # don't load a group multiple times
-    if group in _loaded_groups:
-        return
-    _loaded_groups.add(group)
-
-    for entry_point in iter_entry_points(group):
-        try:
-            entry_point.load()
-        except ModuleNotFoundError as e:
-            e.add_note(
-                f'Note: Tried to load entry point "{entry_point}" from {entry_point.dist}'
-            )
-            raise
+# sentinel value to check if we already loaded the tagged union subtypes hook
+_is_loaded = False  # pyright: ignore[reportPrivateUsage]
 
 
 class InternallyTaggedUnion(HexdocModel):
     """Implements [internally tagged unions](https://serde.rs/enum-representations.html#internally-tagged)
     using the [Registry pattern](https://charlesreid1.github.io/python-patterns-the-registry.html).
 
-    To ensure your subtypes are loaded even if they're not imported by any file, add
-    the module as a plugin to your package's entry points. For example, to add subtypes
-    to a union with `group=foo.bar` using Hatchling, add this to your pyproject.toml:
-    ```toml
-    [project.entry-points."foo.bar"]
-    some-unique-name = "path.to.import.module"
-    ```
+    To ensure your subtypes are loaded even if they're not imported by any file, add a
+    Pluggy hook implementation for `hexdoc_load_tagged_unions() -> list[Package]`.
 
     Subclasses MUST NOT be generic unless they provide a default value for all
     `__init_subclass__` arguments. See pydantic/7171 for more info.
 
     Args:
-        group: Entry point group for this class. If None, the parent's value is used.
         key: The dict key for the internal tag. If None, the parent's value is used.
         value: The expected tag value for this class. Should be None for types which
             shouldn't be instantiated (eg. abstract classes).
     """
 
     # inherited
-    _group: ClassVar[str | None] = None
     _tag_key: ClassVar[str | None] = None
 
     # per-class
@@ -73,22 +54,15 @@ class InternallyTaggedUnion(HexdocModel):
     def __init_subclass__(
         cls,
         *,
-        group: str | None = None,
         key: str | None = None,
         value: TagValue | None,
     ) -> None:
         # inherited data, so only set if not None
-        if group is not None:
-            cls._group = group
         if key is not None:
             cls._tag_key = key
 
         # don't bother with rest of init if it's not part of a union
         if cls._tag_key is None:
-            if cls._group is not None:
-                raise ValueError(
-                    f"Expected cls._group=None for {cls} with key=None, got {cls._group}"
-                )
             if value is not None:
                 raise ValueError(
                     f"Expected value=None for {cls} with key=None, got {value}"
@@ -142,9 +116,13 @@ class InternallyTaggedUnion(HexdocModel):
         handler: ModelWrapValidatorHandler[Self],
         info: ValidationInfo,
     ) -> Self:
+        context = cast_or_raise(info.context, PluginManagerContext)
+
         # load plugins from entry points
-        if cls._group is not None:
-            load_entry_points(cls._group)
+        global _is_loaded
+        if not _is_loaded:
+            more_itertools.consume(context.pm.load_tagged_unions())
+            _is_loaded = True
 
         # do this early so we know it's part of a union before returning anything
         tag_key = cls._tag_key_or_raise()
@@ -177,10 +155,7 @@ class InternallyTaggedUnion(HexdocModel):
 
         for inner_type in tag_types:
             try:
-                matches[inner_type] = inner_type.model_validate(
-                    data,
-                    context=info.context,
-                )
+                matches[inner_type] = inner_type.model_validate(data, context=context)
             except Exception as e:
                 exceptions.append(e)
 
@@ -203,13 +178,8 @@ class InternallyTaggedUnion(HexdocModel):
 class TypeTaggedUnion(InternallyTaggedUnion, key="type", value=None):
     type: ResourceLocation | NoValueType | None
 
-    def __init_subclass__(
-        cls,
-        *,
-        group: str | None = None,
-        type: TagValue | None,
-    ) -> None:
-        super().__init_subclass__(group=group, value=type)
+    def __init_subclass__(cls, *, type: TagValue | None) -> None:
+        super().__init_subclass__(value=type)
         match type:
             case str():
                 cls.type = ResourceLocation.from_str(type)
