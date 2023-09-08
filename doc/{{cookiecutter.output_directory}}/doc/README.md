@@ -1,6 +1,6 @@
-# hexdoc
+# {{ cookiecutter.modid }}
 
-This is the Python docgen for Hex Casting.
+This is the Python docgen for {{ cookiecutter.modid }}.
 
 ## Version scheme
 

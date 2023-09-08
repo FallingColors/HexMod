@@ -1,0 +1,293 @@
+{% raw -%}
+name: Build the web book
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to generate docs from'
+        type: choice
+        options:
+          - (same as workflow)
+      release:
+        description: Release this version
+        type: boolean
+        default: false
+      update-latest:
+        description: Overwrite latest (and root, if releasing)
+        type: boolean
+        default: true
+      publish:
+        description: Package index to publish to
+        type: choice
+        options:
+          - none
+          - PyPI (release)
+          - TestPyPI
+      segment:
+        description: 'Version segment to bump with Hatch'
+        type: string
+        required: false
+
+env:
+  PYPI_PACKAGE: {% endraw %}{{ cookiecutter.__project_name }}{% raw %}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "docgen"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # only execute on the default branch or when invoked manually
+    if: |-
+      github.event_name == 'workflow_dispatch' ||
+      github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    permissions:
+      contents: write
+      pages: read
+
+    outputs:
+      pages-url: ${{ steps.get-url.outputs.pages-url }}
+      matrix: ${{ steps.list-langs.outputs.matrix }}
+      release: ${{ steps.parse-inputs.outputs.release }}
+      branch: ${{ steps.parse-inputs.outputs.branch }}
+      hexdoc-common: ${{ steps.parse-inputs.outputs.hexdoc-common }}
+      hexdoc: ${{ steps.parse-inputs.outputs.hexdoc }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: pip
+      
+      - name: Get Pages url
+        id: get-url
+        run: |
+          url=$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq '.html_url')
+          echo "pages-url=$url" >> "$GITHUB_OUTPUT"
+          echo "GITHUB_PAGES_URL=$url" >> "$GITHUB_ENV"
+      
+      - name: Parse inputs
+        id: parse-inputs
+        run: |
+          release=${{ github.event_name == 'workflow_dispatch' && inputs.release || startsWith(github.ref, 'refs/tags') || startsWith(github.event.head_commit.message, '[Release]') }}
+          update_latest=${{ github.event_name != 'workflow_dispatch' || inputs.update-latest }}
+          
+          if [[ ${{ github.event_name == 'workflow_dispatch' && inputs.branch != '(same as workflow)' }} == true ]]; then
+            branch='${{ inputs.branch }}'
+            props=_checkout/doc/properties.toml
+            echo "HATCH_GRADLE_DIR=_checkout" >> "$GITHUB_ENV"
+          else
+            branch=none
+            props=doc/properties.toml
+          fi
+          
+          hexdoc_common="--is-release $release --update-latest $update_latest"
+          hexdoc="hexdoc $props --ci $hexdoc_common"
+
+          echo "HEXDOC=$hexdoc" >> "$GITHUB_ENV"
+          
+          echo "release=$release"             >> "$GITHUB_OUTPUT"
+          echo "update-latest=$update_latest" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch"               >> "$GITHUB_OUTPUT"
+          echo "hexdoc-common=$hexdoc_common" >> "$GITHUB_OUTPUT"
+          echo "hexdoc=$hexdoc"               >> "$GITHUB_OUTPUT"
+      
+      - name: Checkout input branch
+        if: steps.parse-inputs.outputs.branch != 'none'
+        id: checkout-input
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ steps.parse-inputs.outputs.branch }}
+          path: _checkout
+
+      - name: Install docgen from source
+        run: pip install . hatch
+
+      - name: List book languages
+        id: list-langs
+        run: |
+          echo "matrix=$($HEXDOC --list-langs)" >> "$GITHUB_OUTPUT"
+          if [[ $RUNNER_DEBUG ]]; then
+            tree -I '__pycache__|Common|Fabric|Forge|venv'
+          fi
+
+      - name: Export web book
+        run: $HEXDOC --export-only
+
+      - name: Bump version
+        if: github.event_name == 'workflow_dispatch' && inputs.segment
+        run: hatch version "${{ inputs.segment }}"
+        
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Build web book from ${{ github.ref }}
+      
+      - name: Build docgen
+        run: hatch build
+      
+      - name: Upload docgen artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: docgen-build
+          path: dist
+
+      - name: Copy build to Pages
+        if: steps.parse-inputs.outputs.update-latest
+        run: |
+          mkdir -p _site/dist
+          cp dist/*.whl _site/dist/latest.whl
+          cp dist/*.tar.gz _site/dist/latest.tar.gz
+
+      - name: Upload temporary Pages artifact
+        if: steps.parse-inputs.outputs.update-latest
+        uses: actions/upload-artifact@v3
+        with:
+          name: github-pages-tmp
+          path: _site
+  
+  generate:
+    runs-on: ubuntu-latest
+    needs: build
+    continue-on-error: true
+
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: ${{ fromJson(needs.build.outputs.matrix) }}
+
+    env:
+      GITHUB_PAGES_URL: ${{ needs.build.outputs.pages-url }}
+      HEXDOC: ${{ needs.build.outputs.hexdoc }} --lang ${{ matrix.lang }} -o _site --clean
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/install-artifact-wheel
+        with:
+          name: docgen-build
+          python-version: "3.11"
+
+      - name: Checkout input branch
+        if: needs.build.outputs.branch != 'none'
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ needs.build.outputs.branch }}
+          path: _checkout
+
+      - name: Generate web book
+        id: gen-normal
+        continue-on-error: true
+        run: $HEXDOC
+
+      - name: Generate web book with missing translations
+        if: steps.gen-normal.outcome == 'failure'
+        run: $HEXDOC --allow-missing
+
+      - name: Upload temporary Pages artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: github-pages-tmp
+          path: _site
+
+      - name: Fail if the first generate step failed
+        if: steps.gen-normal.outcome == 'failure'
+        run: |
+          echo "::error::Missing some i18n keys."
+          exit 1
+
+  deploy-pages:
+    runs-on: ubuntu-latest
+    needs: [build, generate]
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/install-artifact-wheel
+        with:
+          name: docgen-build
+          python-version: "3.11"
+      
+      - name: Checkout current Pages
+        uses: actions/checkout@v3
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: _site/dst
+
+      - name: Download temporary Pages artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: github-pages-tmp
+          path: _site/src/docs
+      
+      - name: Add new docs to site
+        run: hexdoc_merge ${{ needs.build.outputs.hexdoc-common }} --src _site/src/docs --dst _site/dst/docs
+
+      - name: Deploy to Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: _site/dst/docs
+          target-folder: docs
+
+  publish-pypi:
+    runs-on: ubuntu-latest
+    needs: build
+    if: |-
+      needs.build.outputs.release == 'true' &&
+      (github.event_name != 'workflow_dispatch' || inputs.publish == 'PyPI (release)')
+
+    environment:
+      name: pypi
+      url: https://pypi.org/p/${{ env.PYPI_PACKAGE }}
+
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download docgen artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: docgen-build
+          path: dist
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  publish-testpypi:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'workflow_dispatch' && inputs.publish == 'TestPyPI'
+
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/${{ env.PYPI_PACKAGE }}
+
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download docgen artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: docgen-build
+          path: dist
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+{% endraw %}

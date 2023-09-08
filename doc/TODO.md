@@ -2,3 +2,5 @@
 - [ ] Unit test for mock addon book
 - [ ] Re-add edified wood recipe to [Common/src/main/resources/assets/hexcasting/patchouli_books/thehexbook/en_us/entries/items/edified.json](items/edified) when it actually exists
 - [ ] Fix mobile styling for navbar dropdowns
+- [ ] Remove base_asset_urls
+- [ ] Publish the CI actions/workflow

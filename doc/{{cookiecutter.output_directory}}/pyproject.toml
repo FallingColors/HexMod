@@ -1,93 +1,57 @@
 [build-system]
-requires = ["hatchling", "hatch-gradle-version>=0.6.0"]
+requires = ["hatchling", "hatch-gradle-version>=0.7.0"]
 build-backend = "hatchling.build"
 
 # project metadata
 
 [project]
-name = "hexdoc"
-dynamic = ["version"]
-authors = [
-    { name="object-Object" },
-    { name="Alwinfy" },
-]
+name = "{{ cookiecutter.__project_name }}"
 readme = "doc/README.md"
-classifiers = [
-    "Framework :: Hatch",
+authors = [
+    { name="{{ cookiecutter.author }}" },
 ]
 requires-python = ">=3.11"
-dependencies = [
-    "typing_extensions>=4.6.1,<5",
-    "importlib_resources>=6.0.1,<7",
-    "more_itertools>=10.1.0,<11",
-    "pydantic>=2.3.0,<3",
-    "Jinja2>=3.1.2,<4",
-    "pyjson5>=1.6.3,<2",
-    "pluggy>=1.3.0,<2",
-]
-
-[project.optional-dependencies]
-dev = [
-    "black==23.7.0",
-    "isort==5.12.0",
-    "pytest>=7.3.1",
-    "syrupy>=4.0.2",
-    "hatch",
-    "build",
-]
+dynamic = ["version", "dependencies", "optional-dependencies"]
 
 # Gradle version/deps
 
 [tool.hatch.version]
 scheme = "gradle"
 source = "gradle-properties"
-py-path = "doc/src/hexdoc/__version__.py"
+py-path = "doc/{{ cookiecutter.__src }}/__version__.py"
 
-# project structure
-
-[tool.hatch.build]
-artifacts = [
-    "/doc/src/hexdoc/_export/generated",
-    "/doc/src/hexdoc/__gradle_version__.py",
+[tool.hatch.metadata.hooks.gradle-properties]
+dependencies = [ # this can include normal dependency strings too
+    { package="hexdoc", op="~=", py-version="{{ cookiecutter._hexdoc_version }}", key="hexcastingVersion" },
 ]
 
-[tool.hatch.build.targets.sdist]
+[tool.hatch.metadata.hooks.gradle-properties.optional-dependencies]
+dev = [
+    "black==23.7.0",
+    "isort==5.12.0",
+]
+
+# directory inclusion
+
+[tool.hatch.build]
 only-include = [
-    "doc/src/hexdoc",
+    "doc/{{ cookiecutter.__src }}",
     "gradle.properties",
+]
+artifacts = [
+    "/doc/{{ cookiecutter.__export_root }}/generated",
+    "/doc/{{ cookiecutter.__src }}/__gradle_version__.py",
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = [
-    "doc/src/hexdoc",
-]
+sources = ["doc/src"]
 
-[project.scripts]
-hexdoc = "hexdoc.scripts.hexdoc:main"
-hexdoc_merge = "hexdoc.scripts.hexdoc_merge:main"
-
-# hexdoc
+# hexdoc entry points
 
 [project.entry-points.hexdoc]
-hexcasting = "hexdoc.hexcasting._hooks:HexcastingPlugin"
-minecraft = "hexdoc.minecraft._hooks:MinecraftPlugin"
-patchouli = "hexdoc.patchouli._hooks:PatchouliPlugin"
+{{ cookiecutter.modid }} = "{{ cookiecutter.__project_slug }}._hooks:{{ cookiecutter.plugin_classname }}"
 
-
-# Pytest
-
-[tool.pytest.ini_options]
-addopts = ["--import-mode=importlib"]
-
-[tool.coverage.report]
-include_namespace_packages = true
-
-# formatting and linting
-
-[tool.isort]
-profile = "black"
-combine_as_imports = true
-known_first_party = ["hexdoc"]
+# linting
 
 [tool.pyright]
 pythonVersion = "3.11"
@@ -95,11 +59,7 @@ pythonPlatform = "All"
 
 include = ["doc/src"]
 extraPaths = ["doc/src"]
-exclude = ["doc/{{cookiecutter.directory}}"]
 
-# mostly we use strict mode
-# but pyright doesn't allow decreasing error severity in strict mode
-# so we need to manually specify all of the strict mode overrides so we can do that :/
 typeCheckingMode = "basic"
 
 strictDictionaryInference = true

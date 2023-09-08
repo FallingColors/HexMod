@@ -1,0 +1,22 @@
+{
+    "output_directory": "",
+    "modid": "",
+    "mod_name": "{{ cookiecutter.modid|capitalize }}",
+    "plugin_classname": "{{ cookiecutter.modid|capitalize }}Plugin",
+    "author": "",
+    "fallback_book_url": "https://example.com",
+    "pattern_regex": [
+        "hex_latest",
+        "hex_0.10.3",
+        "hexal_0.3.0",
+        "hexal_0.2.18"
+    ],
+
+    "_hexdoc_version": "1.0",
+
+    "__project_name": "hexdoc-{{ cookiecutter.modid|lower }}",
+    "__project_slug": "hexdoc_{{ cookiecutter.modid|lower }}",
+
+    "__src": "src/{{ cookiecutter.__project_slug }}",
+    "__export_root": "src/{{ cookiecutter.__project_slug }}/_export"
+}
