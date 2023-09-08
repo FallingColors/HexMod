@@ -24,10 +24,9 @@ class HexcastingPlugin(LoadResourceDirsImpl, LoadTaggedUnionsImpl, ModVersionImp
         # lazy import because generated may not exist when this file is loaded
         # eg. when generating the contents of generated
         # so we only want to import it if we actually need it
-        import hexdoc._export.generated
-        import hexdoc._export.resources
+        from hexdoc._export import generated, resources
 
-        return [hexdoc._export.generated, hexdoc._export.resources]
+        return [generated, resources]
 
     @staticmethod
     @hookimpl
