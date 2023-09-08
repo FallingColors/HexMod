@@ -262,28 +262,32 @@ class PathResourceDir(BaseResourceDir):
         return value
 
 
-class EntryPointResourceDir(BaseResourceDir):
+class PluginResourceDir(BaseResourceDir):
     modid: str
 
-    # entry points are probably from other mods/packages
+    # if we're specifying a modid, it's probably from some other mod/package
     external: bool = True
     reexport: bool = False
 
     @contextmanager
     def load(self, pm: PluginManager):
-        with ExitStack() as stack, init_context(RelativePathContext(root=Path())):
-            # NOT "yield from"
-            yield [
-                PathResourceDir(
-                    path=stack.enter_context(resources.as_file(module)),
-                    external=self.external,
-                    reexport=self.reexport,
-                ).set_modid(self.modid)
-                for module in pm.load_resources(self.modid)
-            ]
+        context = RelativePathContext(root=Path())
+        with ExitStack() as stack, init_context(context):
+            yield list(self._load_all(pm, stack))  # NOT "yield from"
+
+    def _load_all(self, pm: PluginManager, stack: ExitStack):
+        for module in pm.load_resources(self.modid):
+            traversable = resources.files(module)
+            path = stack.enter_context(resources.as_file(traversable))
+
+            yield PathResourceDir(
+                path=path,
+                external=self.external,
+                reexport=self.reexport,
+            ).set_modid(self.modid)
 
 
-ResourceDir = PathResourceDir | EntryPointResourceDir
+ResourceDir = PathResourceDir | PluginResourceDir
 
 
 @dataclass_transform()
