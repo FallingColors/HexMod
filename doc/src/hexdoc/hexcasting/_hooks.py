@@ -1,7 +1,8 @@
 from importlib.resources import Package
 
+import hexdoc._export.generated
+import hexdoc._export.resources
 from hexdoc.__gradle_version__ import GRADLE_VERSION
-from hexdoc._export import generated, resources
 from hexdoc.plugin import (
     LoadResourceDirsImpl,
     LoadTaggedUnionsImpl,
@@ -22,7 +23,7 @@ class HexcastingPlugin(LoadResourceDirsImpl, LoadTaggedUnionsImpl, ModVersionImp
     @staticmethod
     @hookimpl
     def hexdoc_load_resource_dirs() -> Package | list[Package]:
-        return [generated, resources]
+        return [hexdoc._export.generated, hexdoc._export.resources]
 
     @staticmethod
     @hookimpl
