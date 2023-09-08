@@ -1,6 +1,6 @@
-# {{ cookiecutter.modid }}
+# {{ cookiecutter.__project_name }}
 
-This is the Python docgen for {{ cookiecutter.modid }}.
+This is the Python docgen for {{ cookiecutter.mod_name }}.
 
 ## Version scheme
 
@@ -24,13 +24,6 @@ source venv/bin/activate # anything other than Windows
 # run from the repo root, not doc/
 pip install -e .[dev]
 ```
-
-### CI/CD
-
-WIP.
-
-- Under Settings > Environments, create a new environment called `pypi` (and optionally `testpypi`)
-- Follow these instructions: https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/
 
 ## Usage
 

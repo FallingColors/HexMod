@@ -32,6 +32,7 @@ on:
 
 env:
   PYPI_PACKAGE: {% endraw %}{{ cookiecutter.__project_name }}{% raw %}
+  USE_TESTPYPI_INDEX: true
 
 permissions:
   contents: read
@@ -113,7 +114,12 @@ jobs:
           path: _checkout
 
       - name: Install docgen from source
-        run: pip install . hatch
+        run: |
+          if [[ $USE_TESTPYPI_INDEX ]]; then
+            pip install . hatch --extra-index-url https://test.pypi.org/simple/
+          else
+            pip install . hatch
+          fi
 
       - name: List book languages
         id: list-langs

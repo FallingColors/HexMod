@@ -13,6 +13,20 @@ For example:
 * Python package version: `1.0.dev0`
 * Full version: `0.11.1.1.0rc7.dev0`
 
+## Creating a plugin / addon
+
+WIP.
+
+- Run these commands, then follow the prompts:
+  ```sh
+  pip install cookiecutter
+  cookiecutter gh:object-Object/HexMod --directory doc
+  ```
+  - Note: if you run this from within an existing mod repo, add the flag `-f` and leave `output_directory` blank
+- On GitHub, under Settings > Environments, create two new environments called `pypi` and `testpypi`
+- Follow these instructions for PyPI and TestPyPI: https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/
+  - TestPyPI is a duplicate of PyPI which can be used for testing package publishing without affecting the real index. The CI workflow includes a manual execution option to publish to TestPyPI.
+
 ## Setup
 
 ```sh
@@ -24,13 +38,6 @@ source venv/bin/activate # anything other than Windows
 # run from the repo root, not doc/
 pip install -e .[dev]
 ```
-
-### CI/CD
-
-WIP.
-
-- Under Settings > Environments, create a new environment called `pypi` (and optionally `testpypi`)
-- Follow these instructions: https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/
 
 ## Usage
 
