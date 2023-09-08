@@ -12,7 +12,7 @@
         "hexal_0.2.18"
     ],
 
-    "_hexdoc_version": "1.0",
+    "_hexdoc_version": "1.0.dev",
 
     "__project_name": "hexdoc-{{ cookiecutter.modid|lower }}",
     "__project_slug": "hexdoc_{{ cookiecutter.modid|lower }}",
