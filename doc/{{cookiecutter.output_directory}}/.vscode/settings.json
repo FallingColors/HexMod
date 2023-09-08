@@ -1,0 +1,21 @@
+{
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true,
+        },
+        "editor.rulers": [88],
+    },
+    "isort.importStrategy": "fromEnvironment",
+    "python.languageServer": "Pylance",
+    "python.analysis.diagnosticMode": "workspace",
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "[html][jinja-html]": {
+        "editor.rulers": [120],
+    },
+    "files.associations": {
+        "*.js.jinja": "javascript"
+    }
+}
