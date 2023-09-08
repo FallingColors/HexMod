@@ -22,8 +22,13 @@ WIP.
   pip install cookiecutter
   cookiecutter gh:object-Object/HexMod --directory doc
   ```
-  - Note: if you run this from within an existing mod repo, add the flag `-f` and leave `output_directory` blank
-- On GitHub, under Settings > Environments, create two new environments called `pypi` and `testpypi`
+  - Note: if you run this from within an existing mod repo, add the flag `-f` and leave `output_directory` blank.
+- Fill in the TODOs in `doc/properties.toml` (mostly paths to files/folders in your mod so hexdoc can find the data it needs).
+- Try running the docgen locally by following the instructions in `doc/README.md`.
+- If it doesn't already exist, create an empty `gh-pages` branch and push it.
+- On GitHub, under `Settings > Pages`, set the source to `Deploy from a branch`, the branch to `gh-pages`, and the folder to `docs/`.
+- Commit and push the docgen, and see if the CI works.
+- On GitHub, under `Settings > Environments`, create two new environments called `pypi` and `testpypi`.
 - Follow these instructions for PyPI and TestPyPI: https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/
   - TestPyPI is a duplicate of PyPI which can be used for testing package publishing without affecting the real index. The CI workflow includes a manual execution option to publish to TestPyPI.
 
