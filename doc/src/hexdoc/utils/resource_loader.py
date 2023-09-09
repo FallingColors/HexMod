@@ -12,6 +12,7 @@ from pydantic.dataclasses import dataclass
 
 from hexdoc.plugin.manager import PluginManager
 from hexdoc.utils.deserialize import JSONDict, decode_json_dict
+from hexdoc.utils.iterators import must_yield
 from hexdoc.utils.model import DEFAULT_CONFIG, HexdocModel, ValidationContext
 from hexdoc.utils.path import strip_suffixes, write_to_path
 
@@ -130,19 +131,46 @@ class ModResourceLoader:
 
         return metadata
 
+    # TODO: maybe this should take lang as a variable?
+    @must_yield
     def load_book_assets(
         self,
+        book_id: ResourceLocation,
         folder: Literal["categories", "entries", "templates"],
         use_resource_pack: bool,
     ) -> Iterator[tuple[PathResourceDir, ResourceLocation, JSONDict]]:
-        # TODO: maybe this should take lang as a variable?
+        is_extension = book_id != self.props.book
+        if is_extension:
+            yield from self._load_book_assets(
+                book_id,
+                folder,
+                use_resource_pack=use_resource_pack,
+                allow_missing=True,
+            )
+
+        yield from self._load_book_assets(
+            self.props.book,
+            folder,
+            use_resource_pack=use_resource_pack,
+            allow_missing=is_extension,
+        )
+
+    def _load_book_assets(
+        self,
+        book_id: ResourceLocation,
+        folder: Literal["categories", "entries", "templates"],
+        *,
+        use_resource_pack: bool,
+        allow_missing: bool,
+    ) -> Iterator[tuple[PathResourceDir, ResourceLocation, JSONDict]]:
         yield from self.load_resources(
             type="assets" if use_resource_pack else "data",
             folder=Path("patchouli_books")
-            / self.props.book.path
+            / book_id.path
             / self.props.default_lang
             / folder,
-            namespace=self.props.book.namespace,
+            namespace=book_id.namespace,
+            allow_missing=allow_missing,
         )
 
     @overload
@@ -212,6 +240,7 @@ class ModResourceLoader:
         namespace: str,
         folder: str | Path,
         glob: str | list[str] = "**/*",
+        allow_missing: bool = False,
         decode: Callable[[str], _T] = decode_json_dict,
         export: ExportFn[_T] | Literal[False] | None = None,
     ) -> Iterator[tuple[PathResourceDir, ResourceLocation, _T]]:
@@ -224,6 +253,7 @@ class ModResourceLoader:
         *,
         folder: str | Path,
         id: ResourceLocation,
+        allow_missing: bool = False,
         decode: Callable[[str], _T] = decode_json_dict,
         export: ExportFn[_T] | Literal[False] | None = None,
     ) -> Iterator[tuple[PathResourceDir, ResourceLocation, _T]]:
@@ -237,6 +267,7 @@ class ModResourceLoader:
         id: ResourceLocation | None = None,
         namespace: str | None = None,
         glob: str | list[str] = "**/*",
+        allow_missing: bool = False,
         decode: Callable[[str], _T] = decode_json_dict,
         export: ExportFn[_T] | Literal[False] | None = None,
     ) -> Iterator[tuple[PathResourceDir, ResourceLocation, _T]]:
@@ -307,9 +338,9 @@ class ModResourceLoader:
                             continue
 
         # if we never yielded any files, raise an error
-        if not found_any:
+        if not allow_missing and not found_any:
             raise FileNotFoundError(
-                f"No files found under {base_path_stub}/{globs} in any resource dir"
+                f"No files found under {base_path_stub / repr(globs)} in any resource dir"
             )
 
     def _load_path(

@@ -7,9 +7,9 @@ from hexdoc.__gradle_version__ import GRADLE_VERSION as HEX_VERSION
 
 @total_ordering
 class HexVersion(Enum):
-    v0_11 = "0.11."
-    v0_10 = "0.10."
-    v0_9 = "0.9."
+    v0_11_x = "0.11."
+    v0_10_x = "0.10."
+    v0_9_x = "0.9."
 
     @classmethod
     def get(cls):

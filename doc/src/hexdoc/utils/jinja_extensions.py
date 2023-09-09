@@ -34,7 +34,7 @@ def hexdoc_block(context: Context, value: Any) -> str:
     try:
         return _hexdoc_block(context, value)
     except Exception as e:
-        e.add_note(f"Tried to convert block:\n    {value}")
+        e.add_note(f"Value:\n    {value}")
         raise
 
 

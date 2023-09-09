@@ -9,6 +9,7 @@ from hexdoc.patchouli import Book, BookContext
 from hexdoc.plugin import PluginManager
 from hexdoc.utils import HexdocModel, ModResourceLoader, ResourceLocation, init_context
 from hexdoc.utils.compat import HexVersion
+from hexdoc.utils.deserialize import cast_or_raise
 from hexdoc.utils.properties import PatternStubProps
 
 from .pattern import Direction, PatternInfo
@@ -21,7 +22,13 @@ def load_hex_book(
     i18n: I18n,
 ):
     with init_context(data):
-        context = HexContext(pm=pm, loader=loader, i18n=i18n)
+        context = HexContext(
+            pm=pm,
+            loader=loader,
+            i18n=i18n,
+            # this SHOULD be set (as a ResourceLocation) by Book.get_book_json
+            book_id=cast_or_raise(data["id"], ResourceLocation),
+        )
     return Book.model_validate(data, context=context)
 
 
@@ -44,9 +51,9 @@ class HexContext(BookContext):
         signatures = dict[str, PatternInfo]()  # just for duplicate checking
 
         match HexVersion.get():
-            case HexVersion.v0_11:
+            case HexVersion.v0_11_x:
                 self._add_patterns_0_11(signatures)
-            case HexVersion.v0_10 | HexVersion.v0_9:
+            case HexVersion.v0_10_x | HexVersion.v0_9_x:
                 self._add_patterns_0_10(signatures)
 
         # export patterns so addons can use them
@@ -100,7 +107,7 @@ class HexContext(BookContext):
 
     def _load_stub_patterns(self, stub: PatternStubProps, per_world: Tag | None):
         # TODO: add Gradle task to generate json with this data. this is dumb and fragile.
-        logging.getLogger(__name__).debug(f"Load pattern stub from {stub.path}")
+        logging.getLogger(__name__).info(f"Load pattern stub from {stub.path}")
         stub_text = stub.path.read_text("utf-8")
 
         for match in stub.regex.finditer(stub_text):

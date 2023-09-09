@@ -3,8 +3,9 @@ book = "hexcasting:thehexbook"
 fallback_url = "https://gamma-delta.github.io/HexMod"
 default_lang = "en_us"
 
+_export_root = "src/hexdoc/_export"
 resource_dirs = [  # top takes priority
-    { path = "src/hexdoc/_export/resources", reexport = false },
+    { path = "{^_export_root}/resources", reexport = false },
     "{_common.src}/main/resources",
     "{_common.src}/generated/resources",
     "{_fabric.src}/main/resources",
@@ -12,7 +13,7 @@ resource_dirs = [  # top takes priority
     "{_forge.src}/main/resources",
     "{_forge.src}/generated/resources",
 ]
-export_dir = "src/hexdoc/_export/generated"
+export_dir = "{_export_root}/generated"
 
 # NOTE: "!Raw" means "don't apply variable interpolation to this value"
 _pattern_regex = { "!Raw" = 'make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:ActionRegistryEntry|OperationAction)\(\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)' }

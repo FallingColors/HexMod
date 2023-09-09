@@ -17,7 +17,6 @@ from hexdoc.minecraft.i18n import I18nContext
 from hexdoc.patchouli.text.html import HTMLElement, HTMLStream
 from hexdoc.utils import DEFAULT_CONFIG, HexdocModel
 from hexdoc.utils.deserialize import cast_or_raise
-from hexdoc.utils.properties import Properties
 from hexdoc.utils.resource import ResourceLocation
 from hexdoc.utils.resource_loader import LoaderContext
 from hexdoc.utils.types import TryGetEnum
@@ -72,6 +71,7 @@ class FormattingContext(
     LoaderContext,
     arbitrary_types_allowed=True,
 ):
+    book_id: ResourceLocation
     macros: dict[str, str] = Field(default_factory=dict)
 
     @model_validator(mode="after")
@@ -98,6 +98,8 @@ class BookLink(HexdocModel):
         # id of category or entry being linked to
         if ":" in id_str:
             id = ResourceLocation.from_str(id_str)
+            # eg. link to patterns/spells/links instead of hexal:patterns/spells/links
+            raw_value = raw_value.removeprefix(f"{id.namespace}:")
         else:
             id = book_id.with_path(id_str)
 
@@ -189,7 +191,7 @@ class Style(ABC, HexdocModel, frozen=True):
 
             # links
             if name == SpecialStyleType.link.value:
-                return LinkStyle(value=_format_href(value, context.props))
+                return LinkStyle(value=_format_href(value, context.book_id))
 
             # all the other functions
             if style_type := FunctionStyleType.get(name):
@@ -221,10 +223,10 @@ def is_external_link(value: str) -> bool:
     return value.startswith(("https:", "http:"))
 
 
-def _format_href(value: str, props: Properties) -> str | BookLink:
+def _format_href(value: str, book_id: ResourceLocation) -> str | BookLink:
     if is_external_link(value):
         return value
-    return BookLink.from_str(value, props.book)
+    return BookLink.from_str(value, book_id)
 
 
 class CommandStyle(Style, frozen=True):

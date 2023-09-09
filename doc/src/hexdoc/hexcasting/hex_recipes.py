@@ -35,7 +35,7 @@ class EntityTypeIngredient(BrainsweepeeIngredient, type="entity_type"):
 
     @model_validator(mode="after")
     def _check_version(self):
-        HexVersion.check(HexVersion.v0_11, type(self))
+        HexVersion.check(HexVersion.v0_11_x, type(self))
         return self
 
 
@@ -44,7 +44,7 @@ class EntityTagIngredient(BrainsweepeeIngredient, type="entity_tag"):
 
     @model_validator(mode="after")
     def _check_version(self):
-        HexVersion.check(HexVersion.v0_11, type(self))
+        HexVersion.check(HexVersion.v0_11_x, type(self))
         return self
 
 
@@ -88,7 +88,7 @@ class BrainsweepRecipe_0_11(Recipe, type="hexcasting:brainsweep"):
 
     @model_validator(mode="after")
     def _check_version(self):
-        HexVersion.check(HexVersion.v0_11, type(self))
+        HexVersion.check(HexVersion.v0_11_x, type(self))
         return self
 
 
@@ -99,7 +99,7 @@ class BrainsweepRecipe_0_10(Recipe, type="hexcasting:brainsweep"):
 
     @model_validator(mode="after")
     def _check_version(self):
-        HexVersion.check(lambda v: v <= HexVersion.v0_10, type(self))
+        HexVersion.check(lambda v: v <= HexVersion.v0_10_x, type(self))
         return self
 
 

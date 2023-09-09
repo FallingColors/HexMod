@@ -215,9 +215,9 @@ class I18n(HexdocModel):
         Raises KeyError if i18n is enabled and skip_errors is False but the key has no localization.
         """
         match HexVersion.get():
-            case HexVersion.v0_11:
+            case HexVersion.v0_11_x:
                 key_group = "action"
-            case HexVersion.v0_10 | HexVersion.v0_9:
+            case HexVersion.v0_10_x | HexVersion.v0_9_x:
                 key_group = "spell"
 
         # prefer the book-specific translation if it exists
