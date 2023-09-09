@@ -1,0 +1,16 @@
+{
+    key: {
+        use: "右键",
+        sneak: "左Shift",
+        jump: "空格",
+    },
+
+    "item.minecraft": {
+        amethyst_shard: "紫水晶碎片",
+        budding_amethyst: "紫水晶母岩",
+    },
+
+    "block.hexcasting": {
+        slate: "空白石板",
+    },
+}
