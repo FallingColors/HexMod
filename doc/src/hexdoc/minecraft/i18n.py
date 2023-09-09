@@ -100,33 +100,52 @@ class I18n(HexdocModel):
 
     @classmethod
     def list_all(cls, loader: ModResourceLoader):
-        return set(id.path for _, id, _ in cls._load_lang_resources(loader))
+        # don't list languages which this particular mod doesn't support
+        # eg. if Hex has translations for ru_ru but an addon doesn't
+        return set(
+            id.path
+            for resource_dir, id, _ in cls._load_lang_resources(loader)
+            if not resource_dir.external
+        )
 
     @classmethod
     def load_all(cls, loader: ModResourceLoader, *, allow_missing: bool):
         # lang -> (key -> value)
         lookups = defaultdict[str, dict[str, LocalizedStr]](dict)
+        internal_langs = set[str]()
 
-        for _, lang_id, data in cls._load_lang_resources(loader):
-            lookups[lang_id.path] |= {
+        for resource_dir, lang_id, data in cls._load_lang_resources(loader):
+            lang = lang_id.path
+            lookups[lang] |= {
                 key: LocalizedStr(key=key, value=value.replace("%%", "%"))
                 for key, value in data.items()
             }
+            if not resource_dir.external:
+                internal_langs.add(lang)
 
         return {
             lang: cls(lookup=lookup, lang=lang, allow_missing=allow_missing)
             for lang, lookup in lookups.items()
+            if lang in internal_langs
         }
 
     @classmethod
     def load(cls, loader: ModResourceLoader, *, lang: str, allow_missing: bool):
         lookup = dict[str, LocalizedStr]()
+        is_internal = False
 
-        for _, _, data in cls._load_lang_resources(loader, lang):
+        for resource_dir, _, data in cls._load_lang_resources(loader, lang):
             lookup |= {
                 key: LocalizedStr(key=key, value=value.replace("%%", "%"))
                 for key, value in data.items()
             }
+            if not resource_dir.external:
+                is_internal = True
+
+        if not is_internal:
+            raise FileNotFoundError(
+                f"Lang {lang} exists, but {loader.props.modid} does not support it"
+            )
 
         return cls(lookup=lookup, lang=lang, allow_missing=allow_missing)
 
