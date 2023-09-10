@@ -124,6 +124,9 @@ class Book(HexdocModel):
             return self
         context = cast_or_raise(info.context, BookContext)
 
+        # make the macros accessible when rendering the template
+        self.macros |= context.macros
+
         self._link_bases: dict[tuple[ResourceLocation, str | None], str] = {}
 
         # load categories

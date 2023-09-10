@@ -6,11 +6,14 @@ from jinja2.parser import Parser
 from jinja2.runtime import Context
 from markupsafe import Markup
 
-from hexdoc.minecraft import LocalizedStr
-from hexdoc.patchouli import FormatTree
+from hexdoc.minecraft import I18n, LocalizedStr
+from hexdoc.patchouli import Book, FormatTree
 from hexdoc.patchouli.book import Book
 from hexdoc.patchouli.text import HTMLStream
-from hexdoc.utils.deserialize import cast_or_raise
+from hexdoc.patchouli.text.formatting import FormatTree
+
+from . import Properties
+from .deserialize import cast_or_raise
 
 
 # https://stackoverflow.com/a/64392515
@@ -30,15 +33,16 @@ class IncludeRawExtension(Extension):
 
 
 @pass_context
-def hexdoc_block(context: Context, value: Any) -> str:
+def hexdoc_block(context: Context | dict[{"book": Book}], value: Any) -> str:
     try:
-        return _hexdoc_block(context, value)
+        book = cast_or_raise(context["book"], Book)
+        return _hexdoc_block(book, value)
     except Exception as e:
         e.add_note(f"Value:\n    {value}")
         raise
 
 
-def _hexdoc_block(context: Context, value: Any) -> str:
+def _hexdoc_block(book: Book, value: Any) -> str:
     match value:
         case LocalizedStr() | str():
             # use Markup to tell Jinja not to escape this string for us
@@ -46,11 +50,10 @@ def _hexdoc_block(context: Context, value: Any) -> str:
             return Markup("<br />".join(Markup.escape(line) for line in lines))
 
         case FormatTree():
-            book = cast_or_raise(context["book"], Book)
             with HTMLStream() as out:
                 with value.style.element(out, book.link_bases):
                     for child in value.children:
-                        out.write(_hexdoc_block(context, child))
+                        out.write(_hexdoc_block(book, child))
                 return Markup(out.getvalue())
 
         case None:
@@ -66,3 +69,30 @@ def hexdoc_wrap(value: str, *args: str):
     else:
         attributes = ""
     return Markup(f"<{tag}{attributes}>{Markup.escape(value)}</{tag}>")
+
+
+# aliased as _() and _f() at render time
+def hexdoc_localize(
+    key: str,
+    *,
+    do_format: bool,
+    props: Properties,
+    book: Book,
+    i18n: I18n,
+    allow_missing: bool,
+):
+    # get the localized value from i18n
+    localized = i18n.localize(key, allow_missing=allow_missing)
+
+    if not do_format:
+        return Markup(localized.value)
+
+    # construct a FormatTree from the localized value (to allow using patchi styles)
+    formatted = FormatTree.format(
+        localized.value,
+        book_id=book.id,
+        i18n=i18n,
+        macros=book.macros,
+        is_0_black=props.is_0_black,
+    )
+    return Markup(hexdoc_block({"book": book}, formatted))

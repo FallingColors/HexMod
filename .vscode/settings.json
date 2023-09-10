@@ -16,6 +16,7 @@
         "editor.rulers": [120],
     },
     "files.associations": {
-        "*.js.jinja": "javascript"
+        "*.js.jinja": "javascript",
+        "*.css.jinja": "css",
     }
 }

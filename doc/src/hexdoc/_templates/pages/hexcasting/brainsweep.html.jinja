@@ -1,7 +1,12 @@
 {% extends "pages/patchouli/page.html.jinja" %}
-{% include "common/macros.html.jinja" %}
+{% include "common/macros.html.jinja" with context %}
 
 {% block body %}
-  {{ macros.recipe_block([page.recipe], "name", "A mind-flaying recipe producing the", "") }}
+  {{ macros.recipe_block(
+    [page.recipe],
+    "name",
+    _("hexdoc.pages.hexcasting.brainsweep.description"),
+    _("hexdoc.pages.hexcasting.brainsweep.separator"),
+  ) }}
   {{ page.text|hexdoc_block }}
 {% endblock body %}

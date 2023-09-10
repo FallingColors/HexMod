@@ -46,10 +46,8 @@ packages = [
 ]
 
 [template.args]
-title = "{{ cookiecutter.mod_name }} Book"
 mod_name = "{{ cookiecutter.mod_name }}"
 author = "{{ cookiecutter.author }}"
-description = "The {{ cookiecutter.mod_name }} Book, all in one place."
 icon_href = "icon.png"
 show_landing_text = false
 

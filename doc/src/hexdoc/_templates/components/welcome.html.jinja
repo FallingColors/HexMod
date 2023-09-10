@@ -1,26 +1,16 @@
 <div class="container" style="margin-top: 3em;">
   <blockquote>
-    <h1>This is the online version of the {{ mod_name }} documentation.</h1>
-    <p>
-      Embedded images and patterns are included, but not crafting recipes or items. There's an in-game book for those.
-    </p>
-
+    <h1>{{ _f("hexdoc.welcome.1")|format(mod_name) }}</h1>
+    <p>{{ _f("hexdoc.welcome.2") }}</p>
     {% if is_bleeding_edge %}
-      <p>
-        Additionally, this is built from the latest code on GitHub.
-        It may describe <b>newer</b> features that you may not necessarily have, even on the latest CurseForge version!
-      </p>
+      <p>{{ _f("hexdoc.welcome.3") }}</p>
     {% endif %}
-
-    <p>
-      <b>Entries which are blurred are spoilers</b>. Click to reveal them, but be aware that they may spoil endgame
-      progression. Alternatively, click <a href="?nospoiler">here</a> to get a version with all spoilers showing.
-    </p>
+    <p>{{ _f("hexdoc.welcome.4") }}</p>
 
     {# conditionally revealed using js #}
     <span id="old-version-notice" class="hidden">
       <br />
-      <i>The past is a foreign country; they do things differently there.</i>
+      {{ _f("hexdoc.welcome.old_version") }}
     </span>
   </blockquote>
 </div>

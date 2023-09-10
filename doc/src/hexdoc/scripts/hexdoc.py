@@ -1,3 +1,6 @@
+# pyright: reportUnknownMemberType=false, reportUnknownArgumentType=false
+# pyright: reportUnknownLambdaType=false
+
 import io
 import json
 import logging
@@ -24,7 +27,12 @@ from hexdoc.patchouli import Book
 from hexdoc.plugin import PluginManager
 from hexdoc.utils import HexdocModel, ModResourceLoader, Properties
 from hexdoc.utils.deserialize import cast_or_raise
-from hexdoc.utils.jinja_extensions import IncludeRawExtension, hexdoc_block, hexdoc_wrap
+from hexdoc.utils.jinja_extensions import (
+    IncludeRawExtension,
+    hexdoc_block,
+    hexdoc_localize,
+    hexdoc_wrap,
+)
 from hexdoc.utils.path import write_to_path
 
 MARKER_NAME = ".sitemap-marker.json"
@@ -151,7 +159,7 @@ def main(args: Args | None = None) -> None:
 
     # load everything
     with ModResourceLoader.clean_and_load_all(props, pm) as loader:
-        books = dict[str, Book]()
+        books = dict[str, tuple[Book, I18n]]()
 
         if args.lang:
             first_lang = args.lang
@@ -177,12 +185,15 @@ def main(args: Args | None = None) -> None:
 
         # load one book with exporting enabled
         first_i18n = per_lang_i18n.pop(first_lang)
-        books[first_lang] = load_hex_book(book_data, pm, loader, first_i18n)
+        books[first_lang] = (
+            load_hex_book(book_data, pm, loader, first_i18n),
+            first_i18n,
+        )
 
         # then load the rest with exporting disabled for efficiency
         loader.export_dir = None
         for lang, i18n in per_lang_i18n.items():
-            books[lang] = load_hex_book(book_data, pm, loader, i18n)
+            books[lang] = (load_hex_book(book_data, pm, loader, i18n), i18n)
 
     if args.export_only:
         return
@@ -203,10 +214,10 @@ def main(args: Args | None = None) -> None:
             IncludeRawExtension,
         ],
     )
-
-    env.filters |= {  # type: ignore
+    env.filters |= {  # pyright: ignore[reportGeneralTypeIssues]
         "hexdoc_block": hexdoc_block,
         "hexdoc_wrap": hexdoc_wrap,
+        "hexdoc_localize": hexdoc_localize,
     }
 
     template = env.get_template(props.template.main)
@@ -218,27 +229,53 @@ def main(args: Args | None = None) -> None:
         shutil.rmtree(output_dir, ignore_errors=True)
 
     if args.update_latest:
-        render_books(props, books, template, output_dir, "latest")
+        render_books(
+            props=props,
+            books=books,
+            template=template,
+            output_dir=output_dir,
+            allow_missing=args.allow_missing,
+            version="latest",
+            is_root=False,
+        )
 
     if args.is_release:
-        render_books(props, books, template, output_dir, version)
+        render_books(
+            props=props,
+            books=books,
+            template=template,
+            output_dir=output_dir,
+            allow_missing=args.allow_missing,
+            version=version,
+            is_root=False,
+        )
 
     # the default book should be the latest released version
     if args.update_latest and args.is_release:
-        render_books(props, books, template, output_dir, version, is_root=True)
+        render_books(
+            props=props,
+            books=books,
+            template=template,
+            output_dir=output_dir,
+            allow_missing=args.allow_missing,
+            version=version,
+            is_root=True,
+        )
 
     logger.info("Done.")
 
 
 def render_books(
+    *,
     props: Properties,
-    books: dict[str, Book],
+    books: dict[str, tuple[Book, I18n]],
     template: Template,
     output_dir: Path,
+    allow_missing: bool,
     version: str,
-    is_root: bool = False,
+    is_root: bool,
 ):
-    for lang, book in books.items():
+    for lang, (book, i18n) in books.items():
         # /index.html
         # /lang/index.html
         # /v/version/index.html
@@ -254,17 +291,35 @@ def render_books(
         page_url = "/".join([props.url, *path.parts])
 
         logging.getLogger(__name__).info(f"Rendering {output_dir}")
-        docs = strip_empty_lines(
-            template.render(
-                **props.template.args,
-                book=book,
+
+        raw_docs = template.render(
+            **props.template.args,
+            book=book,
+            props=props,
+            page_url=page_url,
+            version=version,
+            lang=lang,
+            is_bleeding_edge=version == "latest",
+            # i18n helper
+            _=lambda key: hexdoc_localize(
+                key,
+                do_format=False,
                 props=props,
-                page_url=page_url,
-                version=version,
-                lang=lang,
-                is_bleeding_edge=version == "latest",
-            )
+                book=book,
+                i18n=i18n,
+                allow_missing=allow_missing,
+            ),
+            # i18n helper, but with patchi formatting
+            _f=lambda key: hexdoc_localize(
+                key,
+                do_format=True,
+                props=props,
+                book=book,
+                i18n=i18n,
+                allow_missing=allow_missing,
+            ),
         )
+        docs = strip_empty_lines(raw_docs)
 
         write_to_path(output_dir / "index.html", docs)
         if props.template.static_dir:

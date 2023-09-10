@@ -1,16 +1,75 @@
 {
-    key: {
-        use: "Right Click",
-        sneak: "Left Shift",
-        jump: "Space",
+  hexdoc: {
+    hexcasting: {
+      title: "Hex Book",
+      description: "The Hex Book, all in one place.",
     },
 
-    "item.minecraft": {
-        amethyst_shard: "Amethyst Shard",
-        budding_amethyst: "Budding Amethyst",
+    welcome: {
+      "1": "This is the online version of the %s documentation.",
+      "2": "Embedded images and patterns are included, but not crafting recipes or items. \
+        There's an in-game book for those.",
+      "3": "Additionally, this is built from the latest code on GitHub. \
+        It may describe $(bold)newer/$ features that you may not necessarily have, \
+        even on the latest Modrinth/CurseForge version!",
+      "4": "$(bold)Entries which are blurred are spoilers/$. \
+        Click to reveal them, but be aware that they may spoil endgame progression. \
+        Alternatively, click $(l:?nospoiler)here/$ to get a version with all spoilers showing.",
+      "old_version": "$(italic)The past is a foreign country; they do things differently there./$",
     },
 
-    "block.hexcasting": {
-        slate: "Blank Slate",
+    toc: {
+      // use the span tag to make everything after it wrap with the toc button
+      // or put it at the very end to make the button wrap by itself
+      // either way, do NOT remove it entirely
+      title: "Table of {{ '<span class=\"nobr\">'|safe }}Contents",
+      toggle_all: "Toggle all",
     },
+
+    pattern: {
+      show: "Click to show spell",
+      hide: "Click to hide spell",
+
+      multiplier: "${speedScale()}x",
+      paused: "Paused",
+
+      not_supported: "Your browser does not support visualizing patterns. Pattern code: %s",
+    },
+
+    pages: {
+      patchouli: {
+        crafting: {
+          description: "Depicted in the book: The crafting recipe for the",
+          separator: " and ",
+        },
+      },
+
+      hexcasting: {
+        crafting_multi: {
+          description: "Depicted in the book: Several crafting recipes, for the",
+          separator: ", ",
+        },
+
+        brainsweep: {
+          description: "Depicted in the book: A mind-flaying recipe producing the",
+          separator: "", // this value intentionally left blank
+        },
+      },
+    },
+  },
+
+  key: {
+    use: "Right Click",
+    sneak: "Left Shift",
+    jump: "Space",
+  },
+
+  "item.minecraft": {
+    amethyst_shard: "Amethyst Shard",
+    budding_amethyst: "Budding Amethyst",
+  },
+
+  "block.hexcasting": {
+    slate: "Blank Slate",
+  },
 }

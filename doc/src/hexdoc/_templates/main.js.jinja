@@ -212,7 +212,9 @@ function initializeElem(canvas) {
       })`;
       context.font = `${pauseScale}px sans-serif`;
       context.fillText(
-        speedScale() ? speedScale() + "x" : "Paused",
+        // these variables are filled by Jinja
+        // slightly scuffed, but it works for now
+        speedScale() ? `{{ _('hexdoc.pattern.multiplier') }}` : "{{ _('hexdoc.pattern.paused') }}",
         0.2 * scale,
         canvas.height - 0.2 * scale
       );

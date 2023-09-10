@@ -13,8 +13,7 @@ from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from hexdoc.minecraft import LocalizedStr
-from hexdoc.minecraft.i18n import I18nContext
-from hexdoc.patchouli.text.html import HTMLElement, HTMLStream
+from hexdoc.minecraft.i18n import I18n, I18nContext
 from hexdoc.utils import DEFAULT_CONFIG, HexdocModel
 from hexdoc.utils.deserialize import cast_or_raise
 from hexdoc.utils.resource import ResourceLocation
@@ -156,7 +155,12 @@ class Style(ABC, HexdocModel, frozen=True):
     type: CommandStyleType | FunctionStyleType | SpecialStyleType
 
     @staticmethod
-    def parse(style_str: str, context: FormattingContext) -> Style | _CloseTag | str:
+    def parse(
+        style_str: str,
+        book_id: ResourceLocation,
+        i18n: I18n,
+        is_0_black: bool,
+    ) -> Style | _CloseTag | str:
         # direct text replacements
         if style_str in _REPLACEMENTS:
             return _REPLACEMENTS[style_str]
@@ -170,7 +174,7 @@ class Style(ABC, HexdocModel, frozen=True):
             return CommandStyle(type=style_type)
 
         # reset color, but only if 0 is considered reset instead of black
-        if not context.props.is_0_black and style_str == "0":
+        if style_str == "0" and not is_0_black:
             return _CloseTag(type=SpecialStyleType.color)
 
         # preset colors
@@ -187,11 +191,11 @@ class Style(ABC, HexdocModel, frozen=True):
 
             # keys
             if name == "k":
-                return str(context.i18n.localize_key(value))
+                return str(i18n.localize_key(value))
 
             # links
             if name == SpecialStyleType.link.value:
-                return LinkStyle(value=_format_href(value, context.book_id))
+                return LinkStyle(value=_format_href(value, book_id))
 
             # all the other functions
             if style_type := FunctionStyleType.get(name):
@@ -224,7 +228,8 @@ def is_external_link(value: str) -> bool:
 
 
 def _format_href(value: str, book_id: ResourceLocation) -> str | BookLink:
-    if is_external_link(value):
+    # TODO: kinda hacky, BookLink should *probably* support query params
+    if value.startswith("?") or is_external_link(value):
         return value
     return BookLink.from_str(value, book_id)
 
@@ -326,13 +331,21 @@ class FormatTree:
     children: list[FormatTree | str]  # this can't be Self, it breaks Pydantic
 
     @classmethod
-    def format(cls, string: str, context: FormattingContext) -> Self:
+    def format(
+        cls,
+        string: str,
+        *,
+        book_id: ResourceLocation,
+        i18n: I18n,
+        macros: dict[str, str],
+        is_0_black: bool,
+    ) -> Self:
         # resolve macros
         # this could use ahocorasick, but it works fine for now
         old_string = None
         while old_string != string:
             old_string = string
-            for macro, replace in context.macros.items():
+            for macro, replace in macros.items():
                 string = string.replace(macro, replace)
 
         # lex out parsed styles
@@ -347,7 +360,7 @@ class FormatTree:
             text_since_prev_style.append(leading_text)
             last_end = match.end()
 
-            match Style.parse(match[1], context):
+            match Style.parse(match[1], book_id, i18n, is_0_black):
                 case str(replacement):
                     # str means "use this instead of the original value"
                     text_since_prev_style.append(replacement)
@@ -404,11 +417,18 @@ class FormatTree:
     ):
         if not info.context or isinstance(value, FormatTree):
             return handler(value)
-        context = cast_or_raise(info.context, FormattingContext)
 
+        context = cast_or_raise(info.context, FormattingContext)
         if isinstance(value, str):
             value = context.i18n.localize(value)
-        return cls.format(value.value, context)
+
+        return cls.format(
+            value.value,
+            book_id=context.book_id,
+            i18n=context.i18n,
+            macros=context.macros,
+            is_0_black=context.props.is_0_black,
+        )
 
 
 FormatTree._wrap_root

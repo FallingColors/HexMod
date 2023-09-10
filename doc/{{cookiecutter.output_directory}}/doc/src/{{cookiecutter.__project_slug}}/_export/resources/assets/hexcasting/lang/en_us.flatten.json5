@@ -1,0 +1,8 @@
+{
+  hexdoc: {
+    "{{ cookiecutter.modid }}": {
+      title: "{{ cookiecutter.mod_name }} Book",
+      description: "The {{ cookiecutter.mod_name }} Book, all in one place.",
+    },
+  }
+}

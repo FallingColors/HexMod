@@ -42,7 +42,7 @@
 {# shows the names of all the recipe results in a list of recipes #}
 {% macro recipe_block(recipes, result_attribute, description, separator) -%}
   <blockquote class="crafting-info">
-    Depicted in the book: {{ description }} {{
+    {{ description }} {{
       recipes
       |map(attribute="result." ~ result_attribute)
       |map("hexdoc_wrap", "code")

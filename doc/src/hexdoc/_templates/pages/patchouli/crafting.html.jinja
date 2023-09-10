@@ -2,6 +2,11 @@
 {% include "common/macros.html.jinja" %}
 
 {% block inner_body %}
-  {{ macros.recipe_block(page.recipes, "item", "The crafting recipe for the", " and ") }}
+  {{ macros.recipe_block(
+    page.recipes,
+    "item",
+    _("hexdoc.pages.patchouli.crafting.description"),
+    _("hexdoc.pages.patchouli.crafting.separator"),
+  ) }}
   {{ super() }}
 {% endblock inner_body %}

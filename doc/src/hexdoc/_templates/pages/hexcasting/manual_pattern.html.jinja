@@ -11,7 +11,7 @@
         data-string="{{ pattern.signature }}"
         data-start="{{ pattern.startdir.name.lower() }}"
         data-per-world="{{ pattern.is_per_world }}"
-      >Your browser does not support visualizing patterns. Pattern code: {{ pattern.signature }}</canvas>
+      >{{ _("hexdoc.pattern.not_supported")|format(pattern.signature) }}</canvas>
     {% endfor %}
   </details>
   {{ super() }}

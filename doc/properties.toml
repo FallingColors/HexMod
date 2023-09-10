@@ -40,10 +40,8 @@ packages = [
 ]
 
 [template.args]
-title = "Hex Book"
 mod_name = "Hex Casting"
 author = "petrak@, Alwinfy"
-description = "The Hex Book, all in one place."
 icon_href = "logo.png"
 show_landing_text = true
 
