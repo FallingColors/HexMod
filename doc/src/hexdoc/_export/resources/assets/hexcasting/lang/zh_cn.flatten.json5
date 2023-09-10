@@ -26,6 +26,8 @@
       toggle_all: "显示或收起全部",
     },
 
+    linkout: "链接：",
+
     pattern: {
       show: "点击以显示图案",
       hide: "点击以隐藏图案",
