@@ -26,6 +26,8 @@
       toggle_all: "Toggle all",
     },
 
+    linkout: "Link: ",
+
     pattern: {
       show: "Click to show spell",
       hide: "Click to hide spell",
