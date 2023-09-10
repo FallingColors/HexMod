@@ -5,28 +5,28 @@ default_lang = "en_us"
 
 _export_root = "{{ cookiecutter.__export_root }}"
 resource_dirs = [  # top takes priority
-    { path = "{^_export_root}/resources", reexport = false },
+    { path="{^_export_root}/resources", reexport=false },
     "{_common.src}/main/resources",
     "{_common.src}/generated/resources",
     "{_fabric.src}/main/resources",
     "{_fabric.src}/generated/resources",
     "{_forge.src}/main/resources",
     "{_forge.src}/generated/resources",
-    { modid = "hexcasting" },
+    { modid="hexcasting" },
 ]
 export_dir = "{_export_root}/generated"
 
-{# beware of eldritch abombinations lurking beneath these waters #}
+{# beware of eldritch abombinations lurking beneath these waters -#}
 # NOTE: "!Raw" means "don't apply variable interpolation to this value"
 {% if cookiecutter.pattern_regex == "hex_latest" -%}
-_pattern_regex = { "!Raw" = 'make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:ActionRegistryEntry|OperationAction)\(\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)' }
+_pattern_regex = { "!Raw"='make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:ActionRegistryEntry|OperationAction)\(\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)' }
 {% elif cookiecutter.pattern_regex == "hex_0.10.3" -%}
-_pattern_regex = { "!Raw" = 'HexPattern\.fromAngles\("(?P<signature>[qweasd]+)", HexDir\.(?P<startdir>\w+)\),\s*modLoc\("(?P<name>[^"]+)"\)[^;]+?(?:makeConstantOp|Op\w+|Widget\.\w+)(?:[^;]*(?P<is_per_world>true)\);)?' }
+_pattern_regex = { "!Raw"='HexPattern\.fromAngles\("(?P<signature>[qweasd]+)", HexDir\.(?P<startdir>\w+)\),\s*modLoc\("(?P<name>[^"]+)"\)[^;]+?(?:makeConstantOp|Op\w+|Widget\.\w+)(?:[^;]*(?P<is_per_world>true)\);)?' }
 {% elif cookiecutter.pattern_regex == "hexal_0.3.0" -%}
-_pattern_regex = { "!Raw" = 'make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)' }
+_pattern_regex = { "!Raw"='make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)' }
 {% elif cookiecutter.pattern_regex == "hexal_0.2.18" -%}
 {#- :yea: -#}
-_pattern_regex = { "!Raw" = '(?s-m:HexPattern\.fromAngles\("(?P<signature>[qweasd]+)", HexDir\.(?P<startdir>\w+)\),\s*modLoc\("(?P<name>[^"]+)"\),[^,]+?(?:makeConstantOp|Op\w+).*?(?P<is_per_world>\btrue)?\)(?:[^\)]+?\bval\b|(?:(?!\bval\b)(?:.))+$))' }
+_pattern_regex = { "!Raw"='(?s-m:HexPattern\.fromAngles\("(?P<signature>[qweasd]+)", HexDir\.(?P<startdir>\w+)\),\s*modLoc\("(?P<name>[^"]+)"\),[^,]+?(?:makeConstantOp|Op\w+).*?(?P<is_per_world>\btrue)?\)(?:[^\)]+?\bval\b|(?:(?!\bval\b)(?:.))+$))' }
 {% else %}
 {# intentionally crash the template because we got an unhandled value #}
 {{ 0/0 }}

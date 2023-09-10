@@ -5,7 +5,7 @@ default_lang = "en_us"
 
 _export_root = "src/hexdoc/_export"
 resource_dirs = [  # top takes priority
-    { path = "{^_export_root}/resources", reexport = false },
+    { path="{^_export_root}/resources", reexport=false },
     "{_common.src}/main/resources",
     "{_common.src}/generated/resources",
     "{_fabric.src}/main/resources",
@@ -16,7 +16,7 @@ resource_dirs = [  # top takes priority
 export_dir = "{_export_root}/generated"
 
 # NOTE: "!Raw" means "don't apply variable interpolation to this value"
-_pattern_regex = { "!Raw" = 'make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:ActionRegistryEntry|OperationAction)\(\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)' }
+_pattern_regex = { "!Raw"='make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:ActionRegistryEntry|OperationAction)\(\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)' }
 
 
 [[pattern_stubs]]
