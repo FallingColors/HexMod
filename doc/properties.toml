@@ -4,8 +4,9 @@ fallback_url = "https://gamma-delta.github.io/HexMod"
 default_lang = "en_us"
 
 resource_dirs = [  # top takes priority
-    # this is running in a subdirectory checked out by Actions, hence the weird relative path
-    { path = "../../doc/src/hexdoc/_export/resources", reexport = false },
+    # ENABLE reexporting here, because this path is not actually within the hexdoc package
+    # we just use the same path to make it easier for translators to find the lang files
+    "doc/src/hexdoc/_export/resources",
     "{_common.src}/main/resources",
     "{_common.src}/generated/resources",
     "{_fabric.src}/main/resources",
@@ -13,10 +14,11 @@ resource_dirs = [  # top takes priority
     "{_forge.src}/main/resources",
     "{_forge.src}/generated/resources",
 ]
+# this is running in a subdirectory checked out by Actions, hence the weird relative path
 export_dir = "../../doc/src/hexdoc/_export/generated"
 
 # NOTE: "!Raw" means "don't apply variable interpolation to this value"
-_pattern_regex = { "!Raw" = 'HexPattern\.fromAngles\("(?P<signature>[qweasd]+)", HexDir\.(?P<startdir>\w+)\),\s*modLoc\("(?P<name>[^"]+)"\)[^;]+?(?:makeConstantOp|Op\w+|Widget\.\w+)(?:[^;]*(?P<is_per_world>true)\);)?' }
+_pattern_regex = { "!Raw"='HexPattern\.fromAngles\("(?P<signature>[qweasd]+)", HexDir\.(?P<startdir>\w+)\),\s*modLoc\("(?P<name>[^"]+)"\)[^;]+?(?:makeConstantOp|Op\w+|Widget\.\w+)(?:[^;]*(?P<is_per_world>true)\);)?' }
 
 
 [[pattern_stubs]]
@@ -44,10 +46,8 @@ packages = [
 ]
 
 [template.args]
-title = "Hex Book"
 mod_name = "Hex Casting"
 author = "petrak@, Alwinfy"
-description = "The Hex Book, all in one place."
 icon_href = "logo.png"
 show_landing_text = true
 
