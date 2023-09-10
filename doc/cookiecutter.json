@@ -3,6 +3,7 @@
     "modid": "",
     "mod_name": "{{ cookiecutter.modid|capitalize }}",
     "plugin_classname": "{{ cookiecutter.modid|capitalize }}Plugin",
+    "main_branch": "main",
     "author": "",
     "fallback_book_url": "https://example.com",
     "pattern_regex": [

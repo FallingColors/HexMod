@@ -2,7 +2,8 @@
 name: Build the web book
 
 on:
-  push:
+  branches:
+    - {% endraw %}{{ cookiecutter.main_branch }}{% raw %}
   workflow_dispatch:
     inputs:
       branch:
