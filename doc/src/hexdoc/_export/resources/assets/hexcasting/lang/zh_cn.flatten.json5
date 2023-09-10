@@ -1,16 +1,75 @@
 {
-    key: {
-        use: "右键",
-        sneak: "左Shift",
-        jump: "空格",
+  hexdoc: {
+    hexcasting: {
+      title: "咒术之书",
+      description: "咒术之书，辑录合一。",
     },
 
-    "item.minecraft": {
-        amethyst_shard: "紫水晶碎片",
-        budding_amethyst: "紫水晶母岩",
+    welcome: {
+      "1": "这是{}文档的在线版本。",
+      "2": "此版本会显示文档内嵌的图片和图案，合成配方和物品则不会。\
+        缺失的内容请阅读游戏内手册。",
+      "3": "此外，此版本是根据GitHub上最新代码构建而来的。\
+        其中可能包含游戏内暂未实装的$(bold)新/$特性，\
+        就连Modrinth和CurseForge上的最新版本里也找不到！",
+      "4": "$(bold)条目的模糊处理相当于剧透警告/$。\
+        点击可取消模糊，不过这么做有可能破坏游戏后期的进程与体验。\
+        也可点击$(l:?nospoiler)此处/$以取消所有模糊。",
+      "old_version": "$(italic)往事犹若异乡；他们在那里做的事情都不一样。/$",
     },
 
-    "block.hexcasting": {
-        slate: "空白石板",
+    toc: {
+      // use the span tag to make everything after it wrap with the toc button
+      // or put it at the very end to make the button wrap by itself
+      // either way, do NOT remove it entirely
+      title: "<span class=\"nobr\">目录",
+      toggle_all: "显示或收起全部",
     },
+
+    pattern: {
+      show: "点击以显示图案",
+      hide: "点击以隐藏图案",
+
+      multiplier: "${speedScale()}x",
+      paused: "暂停",
+
+      not_supported: "浏览器不支持图案的可视化。图案代码见此：{}",
+    },
+
+    pages: {
+      patchouli: {
+        crafting: {
+          description: "书中显示如下事物的合成配方：",
+          separator: "和",
+        },
+      },
+
+      hexcasting: {
+        crafting_multi: {
+          description: "书中显示如下事物的合成配方：",
+          separator: "、",
+        },
+
+        brainsweep: {
+          description: "书中显示如下事物的意识剥离配方：",
+          separator: "", // this value intentionally left blank
+        },
+      },
+    },
+  },
+
+  key: {
+    use: "右键",
+    sneak: "左Shift",
+    jump: "空格",
+  },
+
+  "item.minecraft": {
+    amethyst_shard: "紫水晶碎片",
+    budding_amethyst: "紫水晶母岩",
+  },
+
+  "block.hexcasting": {
+    slate: "空白石板",
+  },
 }
