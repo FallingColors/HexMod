@@ -6,7 +6,7 @@
     },
 
     welcome: {
-      "1": "This is the online version of the %s documentation.",
+      "1": "This is the online version of the {} documentation.",
       "2": "Embedded images and patterns are included, but not crafting recipes or items. \
         There's an in-game book for those.",
       "3": "Additionally, this is built from the latest code on GitHub. \
@@ -22,7 +22,7 @@
       // use the span tag to make everything after it wrap with the toc button
       // or put it at the very end to make the button wrap by itself
       // either way, do NOT remove it entirely
-      title: "Table of {{ '<span class=\"nobr\">'|safe }}Contents",
+      title: "Table of <span class=\"nobr\">Contents",
       toggle_all: "Toggle all",
     },
 
@@ -33,7 +33,7 @@
       multiplier: "${speedScale()}x",
       paused: "Paused",
 
-      not_supported: "Your browser does not support visualizing patterns. Pattern code: %s",
+      not_supported: "Your browser does not support visualizing patterns. Pattern code: {}",
     },
 
     pages: {
