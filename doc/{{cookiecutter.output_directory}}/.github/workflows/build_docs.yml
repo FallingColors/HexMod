@@ -161,7 +161,7 @@ jobs:
           path: _site
 
       - name: Add job summary
-        run: echo "Built \`${PYPI_PACKAGE}-$(hatch version)\` from \`$(git rev-parse --short "$GITHUB_SHA")\`." >> $GITHUB_STEP_SUMMARY
+        run: echo "Built \`${PYPI_PACKAGE}\` \`$(hatch version)\` from \`$(git rev-parse --short "$GITHUB_SHA")\`." >> $GITHUB_STEP_SUMMARY
   
   generate:
     runs-on: ubuntu-latest
