@@ -29,6 +29,10 @@ runs:
       shell: bash
       run: |
         wheels=( _dist/*-py3-none-any.whl )
-        pip install "${wheels[0]}"
+        if [[ "$USE_TESTPYPI_INDEX" == true ]]; then
+          pip install "${wheels[0]}" --extra-index-url https://test.pypi.org/simple/
+        else
+          pip install "${wheels[0]}"
+        fi
         rm -r _dist
 {% endraw %}
