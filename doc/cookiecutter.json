@@ -15,8 +15,8 @@
 
     "_hexdoc_version": "1.0.dev",
 
-    "__project_name": "hexdoc-{{ cookiecutter.modid|lower }}",
-    "__project_slug": "hexdoc_{{ cookiecutter.modid|lower }}",
+    "__project_name": "hexdoc-{{ cookiecutter.modid|replace('_', '-')|lower }}",
+    "__project_slug": "hexdoc_{{ cookiecutter.modid|replace('-', '_')|lower }}",
 
     "__src": "src/{{ cookiecutter.__project_slug }}",
     "__export_root": "src/{{ cookiecutter.__project_slug }}/_export"
