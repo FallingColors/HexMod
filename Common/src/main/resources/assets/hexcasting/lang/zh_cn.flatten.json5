@@ -18,6 +18,14 @@
       "mindsplice": "制念法杖"
     },
 
+    tags: {
+      "tag.item.hexcasting:brainswept_circle_components": "剥离意识环组件",
+      "tag.item.hexcasting:directrices": "导向石",
+      "tag.item.hexcasting:grants_root_advancement": "给予根进度",
+      "tag.item.hexcasting:impeti": "促动石",
+      "tag.item.hexcasting:seal_materials": "密封材料",
+    },
+    
     "amethyst_dust": "紫水晶粉",
     "charged_amethyst": "充能紫水晶",
     "quenched_allay_shard": "淬灵晶碎片",
@@ -217,33 +225,35 @@
   "text.autoconfig.hexcasting.option.server.scrollInjectionsRaw.@Tooltip": "将战利品表名与卷轴生成数量期望一一对应并罗列。在下列所有战利品表中生成卷轴的概率约50%，生成时会放入1到对应期望个数的卷轴。",
   "text.autoconfig.hexcasting.option.server.amethystShardModification.@Tooltip": "采掘紫水晶簇时紫水晶碎片掉落数量相较原版的改变量",
 
-  "advancement.hexcasting:root": "咒法学研究",
-  "advancement.hexcasting:root.desc": "在地底深处找到并采集不断生长着的、凝聚的媒质",
-  "advancement.hexcasting:enlightenment": "获得启迪",
-  "advancement.hexcasting:enlightenment.desc": "施放咒术至生命将尽来击碎屏障",
-  "advancement.hexcasting:wasteful_cast": "勤俭节约……",
-  "advancement.hexcasting:wasteful_cast.desc": "施放咒术时浪费巨量媒质",
-  "advancement.hexcasting:big_cast": "……吃穿不缺",
-  "advancement.hexcasting:big_cast.desc": "耗费巨量媒质以施放一个咒术",
-  "advancement.hexcasting:y_u_no_cast_angy": "盲目绘制",
-  "advancement.hexcasting:y_u_no_cast_angy.desc": "尝试根据卷轴施放法术，然后失败",
-  "advancement.hexcasting:opened_eyes": "恍然大悟",
-  "advancement.hexcasting:opened_eyes.desc": "用你的一部分意识向自然换取一个咒术。让自然再拿些又会怎样呢？",
-  "advancement.hexcasting:lore": "咒法学故事",
-  "advancement.hexcasting:lore.desc": "阅读一份故事残卷",
-  "advancement.hexcasting:lore/cardamom1": "卡达蒙·斯蒂勒斯 #1",
-  "advancement.hexcasting:lore/cardamom1.desc": "卡达蒙·斯蒂勒斯寄给她父亲的信，#1",
-  "advancement.hexcasting:lore/cardamom2": "卡达蒙·斯蒂勒斯 #2",
-  "advancement.hexcasting:lore/cardamom2.desc": "卡达蒙·斯蒂勒斯寄给她父亲的信，#2",
-  "advancement.hexcasting:lore/cardamom3": "卡达蒙·斯蒂勒斯 #3",
-  "advancement.hexcasting:lore/cardamom3.desc": "卡达蒙·斯蒂勒斯寄给她父亲的信，#3，第一部分",
-  "advancement.hexcasting:lore/cardamom4": "卡达蒙·斯蒂勒斯 #3，第二部分",
-  "advancement.hexcasting:lore/cardamom4.desc": "卡达蒙·斯蒂勒斯寄给她父亲的信，#3，第二部分",
-  "advancement.hexcasting:lore/cardamom5": "卡达蒙·斯蒂勒斯 #4",
-  "advancement.hexcasting:lore/cardamom5.desc": "卡达蒙·斯蒂勒斯寄给她父亲的信，#4",
-  "advancement.hexcasting:lore/experiment1": "“毡障”实例笔记",
-  "advancement.hexcasting:lore/experiment2": "“毡障”测试日志",
-  "advancement.hexcasting:lore/inventory": "回收日志 #72",
+  "advancement.hexcasting:" : {
+    "root": "咒法学研究",
+    "root.desc": "在地底深处找到并采集不断生长着的、凝聚的媒质",
+    "enlightenment": "获得启迪",
+    "enlightenment.desc": "施放咒术至生命将尽来击碎屏障",
+    "wasteful_cast": "勤俭节约……",
+    "wasteful_cast.desc": "施放咒术时浪费巨量媒质",
+    "big_cast": "……吃穿不缺",
+    "big_cast.desc": "耗费巨量媒质以施放一个咒术",
+    "y_u_no_cast_angy": "盲目绘制",
+    "y_u_no_cast_angy.desc": "尝试根据卷轴施放法术，然后失败",
+    "opened_eyes": "恍然大悟",
+    "opened_eyes.desc": "用你的一部分意识向自然换取一个咒术。让自然再拿些又会怎样呢？",
+    "lore": "咒法学故事",
+    "lore.desc": "阅读一份故事残卷",
+    "lore/cardamom1": "卡达蒙·斯蒂勒斯 #1",
+    "lore/cardamom1.desc": "卡达蒙·斯蒂勒斯寄给她父亲的信，#1",
+    "lore/cardamom2": "卡达蒙·斯蒂勒斯 #2",
+    "lore/cardamom2.desc": "卡达蒙·斯蒂勒斯寄给她父亲的信，#2",
+    "lore/cardamom3": "卡达蒙·斯蒂勒斯 #3",
+    "lore/cardamom3.desc": "卡达蒙·斯蒂勒斯寄给她父亲的信，#3，第一部分",
+    "lore/cardamom4": "卡达蒙·斯蒂勒斯 #3，第二部分",
+    "lore/cardamom4.desc": "卡达蒙·斯蒂勒斯寄给她父亲的信，#3，第二部分",
+    "lore/cardamom5": "卡达蒙·斯蒂勒斯 #4",
+    "lore/cardamom5.desc": "卡达蒙·斯蒂勒斯寄给她父亲的信，#4",
+    "lore/experiment1": "“毡障”实例笔记",
+    "lore/experiment2": "“毡障”测试日志",
+    "lore/inventory": "回收日志 #72",
+  },
 
   "stat.hexcasting.media_used": "消耗媒质量（以紫水晶粉计）",
   "stat.hexcasting.media_overcasted": "过度施法消耗媒质量（以紫水晶粉计）",
@@ -253,13 +263,15 @@
   "death.attack.hexcasting.overcast": "%s的意识消散为了能量",
   "death.attack.hexcasting.shame": "%s真是可耻！",
 
-  "command.hexcasting.pats.listing": "此世界特有的图案：",
-  "command.hexcasting.pats.all": "给予%s所有%d张卷轴",
-  "command.hexcasting.pats.specific.success": "给予%3$sID为%2$s的%1$s",
-  "command.hexcasting.recalc": "已重生成此世界特有图案",
-  "command.hexcasting.brainsweep": "已清除%s的意识",
-  "command.hexcasting.brainsweep.fail.badtype": "%s不是生物",
-  "command.hexcasting.brainsweep.fail.already": "%s早已没有了意识",
+  "command.hexcasting": {
+    "pats.listing": "此世界特有的图案：",
+    "pats.all": "给予%s所有%d张卷轴",
+    "pats.specific.success": "给予%3$sID为%2$s的%1$s",
+    "recalc": "已重生成此世界特有图案",
+    "brainsweep": "已清除%s的意识",
+    "brainsweep.fail.badtype": "%s不是生物",
+    "brainsweep.fail.already": "%s早已没有了意识",
+  },
 
   hexcasting: {
     "pattern.unknown": "未知图案资源 %s",
@@ -300,8 +312,6 @@
         no_closure: "%s处的媒质流无法返回促动石"
       },
       
-
-
       lens: {
         impetus: {
           "redstone.bound": "与%s绑定",
@@ -327,6 +337,8 @@
       "null_iota": "NULL",
       "jump_iota": "[Jump]",
       "pattern_iota": "HexPattern(%s)",
+      "boolean_true": "True",
+      "boolean_false": "False"
     },
     // ^ tooltip
     spelldata: {
@@ -422,7 +434,7 @@
         "index_of": "定位器之馏化",
         "remove_from": "切除器之馏化",
         "slice": "选择之提整",
-        "modify_in_place": "外科医师之提整",
+        "replace": "外科医师之提整",
         "construct": "演讲者之馏化",
         "deconstruct": "演讲者之分解",
 
@@ -734,40 +746,36 @@
       many_exits: "%s处的媒质流的可选去路过多"
     },
 
-    // Patchi stuff!
-    landing: ">>>\
-|     我似乎发现了一种全新的魔法，一种在六边形网格上画各式奇诡图案的魔法。\
-|     它深深地迷住了我。我决定着手撰写一本笔记，以此记述我的想法和研究成果。\
-|     $(br2)$(l:https://forum.petra-k.at/index.php)论坛链接/$",
+
+    // === Patchi stuff! ===
+
+
+    landing: "我似乎发现了一种全新的魔法，一种在六边形网格上画各式奇诡图案的魔法。\
+      它深深地迷住了我。我决定着手撰写一本笔记，以此记述我的想法和研究成果。\
+      $(br2)$(l:https://forum.petra-k.at/index.php)论坛链接/$",
 
     category: {
       basics: {
         "": "初入咒法",
-        "desc": ">>>\
-|         研究这种魔法的人士会用$(l:items/staff)$(item)法杖/$在空中绘制奇异的图案来施放他们口中的“$(hex)咒术/$”，\
-|         他们也会让$(l:items/hexcasting)$(item)强大的魔法物品/$替他们施法。\
-|         我应该也可以这样做？",
+        "desc": "研究这种魔法的人士会用$(l:items/staff)$(item)法杖/$在空中绘制奇异的图案来施放他们口中的“$(hex)咒术/$”，\
+          他们也会让$(l:items/hexcasting)$(item)强大的魔法物品/$替他们施法。\
+          我应该也可以这样做？",
       },
       casting: {
         "": "咒法学",
-        desc: ">>>\
-|         我好像已经开始理解以前的咒法师们是如何施放$(hex)咒术/$的了！虽然有些复杂，\
-|         但我坚信我能理清其中脉络。继续研究吧……",
+        desc: "我好像已经开始理解以前的咒法师们是如何施放$(hex)咒术/$的了！虽然有些复杂，\
+          但我坚信我能理清其中脉络。继续研究吧……",
       },
       items: {
         "": "物品",
-        desc: ">>>\
-|         这部分主要介绍我在研究过程中可能要用到的魔法物品和各类神秘物品。$(br2)\
-|         这里面的许多物品似乎在和$(l:items/staff)$(item)法杖/$一起持有的时候就会起效。\
-|         要谨慎考虑另一只手里要拿什么物品。",
+        desc: "这部分主要介绍我在研究过程中可能要用到的魔法物品和各类神秘物品。",
       },
 
       greatwork: {
         "": "卓伟之作",
-        desc: ">>>\
-|         我所见……甚多。我已……经历……湮灭与解构与重构。\
-|         我已听闻世上的原子在被翻转而后被搅乱而后消散为能量时的尖啸。\
-|         我已见我已见我已冂$(k)get stick bugged lmao/$",
+        desc: "我所见……甚多。我已……经历……湮灭与解构与重构。\
+          我已听闻世上的原子在被翻转而后被搅乱而后消散为能量时的尖啸。\
+          我已见我已见我已冂$(k)get stick bugged lmao/$",
         // alwinfy you think you're so funny
       },
 
@@ -781,7 +789,7 @@
       interop: {
         "": "模组联动",
         desc: ">>>\
-|       好像我装了某些能和咒法学联动的模组！详情如下。"
+|         好像我装了某些能和咒法学联动的模组！详情如下。"
       },
       
       patterns: {
@@ -794,12 +802,14 @@
       },
       great_spells: {
         "": "卓越法术",
-        desc: ">>>\
-|         这类法术据信极难施放，但也极为强力。\
-|         记载它们的文献极为少见（据称理由充分）。\
-|         这也许只是某些消亡的老古董口中的胡言乱语，不过——它们只是简单的图案罢了。$(br2)\
-|         试试看又能出什么错呢？",
+        desc: "这类法术据信极难施放，但也极为强力。\
+          记载它们的文献极为少见（据称理由充分）。\
+          这也许只是某些消亡的老古董口中的胡言乱语，不过——它们只是简单的图案罢了。$(br2)\
+          试试看又能出什么错呢？",
       },
+      
+      lore: "故事",
+      interop: "模组联动",
     },
     // ^ categories
 
@@ -923,9 +933,72 @@
       "start_to_see.3": "……但是。$(br2)但是在那最为神圣的一刻，我破碎的那一部分……它$(italic)看见了/$……$(l:greatwork/the_work)$(thing)一些东西/$。一个地方——也许是一件作品？（这种定义对……那种事物来说不值一提）$(p)和一张……一个薄膜-屏障-薄层-界限，将我和单纯的思维-能流-光-能量的领域隔绝开来。我记得——我看见-想到-回忆起-感受到——那个屏障的边缘变得模糊了，略微模糊了。$(p)我想要$(italic)穿过它/$。",
       "start_to_see.4": "但我不应该。我也$(italic)清楚/$我不应该。那很危险。非常非常危险。跨越屏障需要的力量……我必须仅凭$(italic)一次施法/$就让我自己濒临死亡。$(br2)但我，就是，$(italic)不甘心/$。$(p)$(italic)这/$就是我魔法的集大成之作。这就是我所追求的$(#54398a)启迪/$。$(br2)我还想知道更多。我要再看到那场景。我$(italic)必将/$再见。$(p)我脆弱的意识和永恒的荣耀相比，又算得上什么呢？",
 
+      casting: {
+        overview: {
+          "1": ">>>\
+            我坚信正确的起步方向非常重要。因此，我编写了一个能在我所看的位置产生中小型爆炸的$(hex)咒术/$。相信研究其内部机理会相当有启迪性。"
+        },
+
+        grid: {
+          "1": ">>>\
+            我通常会使用$(l:items/staff)$(item)法杖/$为自然提供图案。\
+            在手中持有时按下$(thing)$(k:use)/$就会在我面前产生一个六边形格点。\
+            之后点击并在点间拖拽，再释放就可绘制图案。$(br2)\
+            在我提交图案的同时，其就会被运行（见下一章节）。",
+          "2": ">>>\
+            按下$(thing)$(k:escape)/$会保存并关闭网格，下一次使用法杖时，原有的图案和 iota 都会保留。$(br2)\
+            如果需要重设施法状态，在潜行时打开网格即可。"
+        },
+        "patterns&actions": {
+          "1": ">>>\
+            $(thing)图案/$是沿$(media)媒质/$网格行进的路径。我相信图案的六次对称性就是这种技艺名称的由来。（译注：hex：六；咒术）$(br2)\
+            $(thing)操作/$则是图案所$(italic)做/$的事情。",
+          "2": ">>>\
+            两者的区别可类比为$(italic)词语/$和$(italic)意义/$的区别。\
+            任意的字母组合都是词语，但其中大部分（例如“xnopyt”）毫无意义。\
+            相似地，沿$(media)媒质/$随意画出的任何东西都可称作图案，但其中大部分什么都做不了。",
+          "3": ">>>\
+            操作有点类似统领宇宙的卓伟系统规则的命令。（我曾看过有些文本将这些规则拟人化为“自然”。）\
+            它们通常会执行如下其一：\
+              $(li)收集有关世界的某些信息，例如获取实体的位置。\
+              $(li)操纵收集到的信息，例如计算两位置间的距离。\
+              $(li)在世界上产生某些魔法效果，例如召唤闪电和爆炸。$(br)\
+            其中最后一种操作又称“法术”，也通常是吸引人们研习这门技艺的原因。",
+          "4": ">>>\
+            $(hex)咒术/$则是依次提供给自然的有效图案序列。\
+            自然会依次理解这些图案，如果它能够理解，则会根据我的奇想改变世界。\
+            （或者说，根据它印象中我奇想的意义。）",
+          "5": ">>>\
+            尽管某些操作可轻松执行，但某些则需要一种凝结形态的$(media)媒质/$。\
+            我相信这种浓缩的意识能量是对自然的某种论据，作为说服其应当依照我的请求做事的报偿。\
+            大部分的法术都需要这种报偿，若干非法术操作也需要。$(br2)\
+            我已在各操作的介绍页记录了其消耗（若有）。"
+        },
+        iotas: {
+          "1": ">>>\
+            自然的语言中的“名词”称作 $(thing)iota/$。\
+            从其最为基础的层面而言，咒法学便是操纵 iota 的技艺。$(br2)\
+            Iota 有许多不同类型：\
+              $(li)数（某些文献称之为“双精度浮点数”）。\
+              $(li)向量，一种可代表世界中位置、运动或方向的，由三个数组成的集合。\
+              $(li)布尔值（简称“布尔”），一种代表真和假的抽象概念的的 iota。\
+              $(li)实体，如我自己、鸡、矿车等。",
+          "2": ">>>\
+              $(li)虚指，一种代表抽象概念的奇怪的 iota。\
+              $(li)图案，用于制作魔法物品，也用在某些烧脑的咒术中，如$(italic)能施放其他法术的法术/$。\
+              $(li)由上述若干种组成的列表，相当于一个 iota。",
+          "3": ">>>\
+            通常情况下，我会给操作提供 iota。\
+            例如$(l:patterns/spells/basic#hexcasting:explode)$(action)爆炸/$。\
+            此法术需要一个表示强度的数 iota，和一个表示位置的向量 iota。$(br2)\
+            或者再看$(l:patterns/basic#hexcasting:get_pos)$(action)指南针之纯化/$。\
+            它会将一个实体 iota 转换为一个表示该实体位置的向量 iota。"
+        }
+      },
+
       // Casting
       "101.1": "施放$(hex)咒术/$难度颇高，也难怪这门学问早已遗落！我必须要仔细回看我的笔记。$(br2)我可以手持$(l:items/staff)$(item)法杖/$按下$(k:use)来施放$(hex)咒术/$，而后就会浮现一个按六边形网格排列的点阵。然后便可在点阵上单击并拖动以在网格的$(media)媒质/$中绘制图案。绘制完一个图案就会立刻执行其对应的操作（详情见后）。",
-      "101.2": "当我绘制的图案足以施法时，网格就会消失，而累积起来的$(media)媒质/$也会被释放。按住$(k:sneak)时使用$(l:items/staff)$(item)法杖/$也能清空网格，如果完全不在乎会不会出现事故的话。（似乎我累积的$(media)媒质/$越多，就越有可能导致事故）$(br2)所以图案是如何起效的呢？简而言之：$(li)$(italic)图案/$会执行……$(li)$(italic)操作/$，其会操控……$(li)$(l:casting/stack)$(italic)栈/$，也即一列表的……$(li)$(italic)Iota/$，就是以单位计的信息。",
+      "101.2": "当我绘制的图案足以施法时，网格就会消失，而累积起来的$(media)媒质/$也会被释放。按住$(k:sneak)时使用$(l:items/staff)$(item)法杖/$也能清空网格。$(br2)所以图案是如何起效的呢？简而言之：$(li)$(italic)图案/$会执行……$(li)$(italic)操作/$，其会操控……$(li)$(l:casting/stack)$(italic)栈/$，也即一列表的……$(li)$(italic)Iota/$，就是以单位计的信息。",
       "101.3": "首先，$(thing)图案/$。它们是咒术的必需物，可用它们来操控周围的$(media)媒质/$。部分图案在被绘制时，会执行$(thing)操作/$。操作是$(italic)实际产生/$魔法效果的事物。所有图案都会以某种方式影响$(media)媒质/$，而当这些影响实际有用时，我们就称其为操作。$(br2)$(media)媒质/$是易变的，如果我绘制了无效的图案，栈上某处就会出现$(l:casting/influences)$(action)垃圾/$（详情见后）。",
       "101.4.header": "示例",
       "101.4": "有意思的是，图案整体的$(italic)方向/$完全不影响图案的功用。例如，上图中的两个图案都会执行名为$(l:patterns/basics#hexcasting:get_caster)$(action)意识之精思/$的操作。",
@@ -951,7 +1024,7 @@
 
 
       "mishaps.1": "不幸的是，我（还）不是一个完美的生物。我经常会在研究中和施放$(hex)咒术/$时犯错。比如说，绘制错图案，或是对错误的 iota 进行操作。而自然一般不会宽容我的错误，从而导致$(italic)事故/$。",
-      "mishaps.2": "导致事故的图案会在网格中发红光。根据事故的类型，我能大致推断出其造成的有害后果。同时会有一簇红色与各色混合的火花四散开去，这主要是处理不当的$(media)媒质/$凝结为某种颜色的光所致。$(br2)聊天栏中则会出现一条错误信息，但某种纠缠不休的感觉告诉我这些都会在“模组更新”后发生改变，没人知道这意味着什么。我不该指望这些信息会一直出现。",
+      "mishaps.2": "导致事故的图案会在网格中发红光。根据事故的类型，我能大致推断出其造成的有害后果。同时会有一簇红色与各色混合的火花四散开去，这主要是处理不当的$(media)媒质/$凝结为某种颜色的光所致。",
       "mishaps.3": "而幸运的是，虽然所有事故导致的有害效果都$(italic)很烦人/$，但也都不会导致长期毁灭性后果。在哪里跌倒，就要在哪里站起来，然后继续前进……当然也可以换一条更好走的路。$(br2)我整理的所有事故如下所述。",
       "mishaps.invalid_pattern.title": "无效图案",
       "mishaps.invalid_pattern": "绘制的图案不对应任何操作。$(br2)产生黄色火花，并向栈顶压入一个$(l:casting/influences)$(action)垃圾/$。",
@@ -1187,7 +1260,7 @@
       "numbers.3": "某些情况下用$(l:items/abacus)$(item)算盘/$会更方便。但数字的“正确”画法也要了然于心。",
 
 
-      "math.numvec": "许多数学操作对数和向量都有效。这类参数记为“num|vec”。",
+      "math.numvec": "许多数学操作对数和向量都有效。这类参数记为“num vec”。",
       "math.add.1": "执行加法。",
       "math.add.2": "操作如下：$(li)若栈顶为两个数，返回其和。$(li)若为一个数和一个向量，移除该数并将向量的每个分量与其相加。$(li)若为两个向量，将对应分量相加（也即 [1, 2, 3] + [0, 4, -1] = [1, 6, 2]）。",
       "math.sub.1": "执行减法。",
@@ -1205,7 +1278,7 @@
       "math.construct_vec": "将三个数作为向量的 X，Y，Z 分量组合（最下方为 X 分量）。",
       "math.deconstruct_vec": "将一个向量拆分为其 X，Y，Z 分量（最下方为 X 分量）。",
       "math.modulo": "取两数除法的余数。也即执行除法后$(italic)剩余/$的数。例如，5 %% 2 得 1，5 %% 3 得 2。或对向量的每个分量执行上述操作。",
-      "math.coerce_axial": "若栈顶为向量，则返回与其夹角最小的轴向单位向量；零向量不受影响。若栈顶为数，则返回该数的符号；所给数为正则返回 1，为负责返回 -1，0 不受影响。",
+      "math.coerce_axial": "若栈顶为向量，则返回与其夹角最小的轴向单位向量；零向量不受影响。若栈顶为数，则返回该数的符号；所给数为正则返回 1，为负则返回 -1，0 不受影响。",
       "math.random": "返回一个 0 与 1 之间的随机数。",
 
 
@@ -1219,7 +1292,7 @@
       "advanced_math.logarithm": "计算以栈顶元素为底的，栈顶往下第二元素为真数的对数。与 $(l:patterns/consts#hexcasting:const/double/e)$(thing)$(italic)e/$ 的值有关。",
 
 
-      "sets.numlist": "集合操作比较奇怪，部分操作只能接受两个数或两个列表，一个数一个列表就不行。这类参数记为“(num, num)|(list, list)”。$(br2)当接受的是数时，它们将被视为所谓二进制的“位组”，也就是由 1 和 0、真和假、“开”和“关”组成的列表。",
+      "sets.numlist": "集合操作比较奇怪，部分操作只能接受两个数或两个列表，一个数一个列表就不行。这类参数记为“(num, num) (list, list)”。$(br2)当接受的是数时，它们将被视为所谓二进制的“位组”，也就是由 1 和 0、真和假、“开”和“关”组成的列表。",
       "sets.or.1": "取两集合的并集。",
       "sets.or.2": "操作如下：$(li)若栈顶为两个数，将其组合为在两个位组中有一个为 1 处为 1 的位组。$(li)若栈顶为两个列表，则创建一个由第一个列表中所有元素和第二个列表独有的元素组成的列表。和$(l:patterns/lists#hexcasting:concat)$(action)组合之馏化/$类似。",
       "sets.and.1": "取两集合的交集。",
@@ -1307,7 +1380,7 @@
       "lists.reverse": "倒置栈顶列表。",
       "lists.index_of": "移除栈顶元素，并将栈顶列表变为该元素在其中第一次出现的位置（从 0 开始）。若没有出现过则返回 -1。",
       "lists.remove_from": "移除栈顶的数，而后移除栈顶列表中下标为该数（就是被移除的那个数）的元素。",
-      "lists.modify_in_place": "移除栈顶元素和栈顶的数，而后将栈顶列表中下标为该数（就是被移除的那个数）变为该元素。若该数越界则不进行操作。",
+      "lists.replace": "移除栈顶元素和栈顶的数，而后将栈顶列表中下标为该数（就是被移除的那个数）变为该元素。若该数越界则不进行操作。",
       "lists.last_n_list": "移除$(italic)所给数/$个元素，并将这些元素加入列表并将该列表压入栈顶。",
       "lists.splat": "移除栈顶列表，而后将其中元素全部压入栈顶。",
       "lists.construct": "移除栈顶元素，将其加到栈顶列表的开头。",
@@ -1556,5 +1629,4 @@
       "interop.pehkui.set": "设置实体的大小倍数，需传入一个与其原本大小的比值。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶碎片/$。"
     }
   },
-
 }

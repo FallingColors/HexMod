@@ -1022,7 +1022,7 @@
   "hexcasting.page.math.construct_vec": "将三个数作为向量的 X，Y，Z 分量组合（最下方为 X 分量）。",
   "hexcasting.page.math.deconstruct_vec": "将一个向量拆分为其 X，Y，Z 分量（最下方为 X 分量）。",
   "hexcasting.page.math.modulo": "取两数除法的余数。也即执行除法后$(italic)剩余/$的数。例如，5 %% 2 得 1，5 %% 3 得 2。或对向量的每个分量执行上述操作。",
-  "hexcasting.page.math.coerce_axial": "若栈顶为向量，则返回与其夹角最小的轴向单位向量；零向量不受影响。若栈顶为数，则返回该数的符号；所给数为正则返回 1，为负责返回 -1，0 不受影响。",
+  "hexcasting.page.math.coerce_axial": "若栈顶为向量，则返回与其夹角最小的轴向单位向量；零向量不受影响。若栈顶为数，则返回该数的符号；所给数为正则返回 1，为负则返回 -1，0 不受影响。",
   "hexcasting.page.math.random": "返回一个 0 与 1 之间的随机数。",
 
   "hexcasting.entry.advanced_math": "高阶数学",
