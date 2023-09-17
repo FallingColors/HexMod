@@ -10,6 +10,7 @@ readme = "doc/README.md"
 authors = [
     { name="{{ cookiecutter.author }}" },
 ]
+keywords = ["hexdoc"]
 requires-python = ">=3.11"
 dynamic = ["version", "dependencies", "optional-dependencies"]
 
