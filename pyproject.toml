@@ -15,7 +15,6 @@ readme = "doc/README.md"
 license = { file = "doc/LICENSE.txt" }
 keywords = ["hexdoc"]
 classifiers = [
-    "Framework :: Hatch",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
@@ -55,6 +54,7 @@ dev = [
 ]
 
 [project.urls]
+Homepage = "https://object-object.github.io/HexMod/" # TODO: replace
 Source = "https://github.com/object-Object/HexMod/tree/docgen-2-1.20/doc" # TODO: replace
 
 # Gradle version/deps

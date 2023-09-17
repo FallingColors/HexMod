@@ -6,6 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "{{ cookiecutter.__project_name }}"
+description = "Python web book docgen and hexdoc plugin for {{ cookiecutter.mod_display_name }}."
 readme = "doc/README.md"
 authors = [
     { name="{{ cookiecutter.author }}" },
@@ -13,6 +14,10 @@ authors = [
 keywords = ["hexdoc"]
 requires-python = ">=3.11"
 dynamic = ["version", "dependencies", "optional-dependencies"]
+
+[project.urls]
+Homepage = "{{ cookiecutter.fallback_book_url }}"
+Source = "https://github.com/{{ cookiecutter.author }}/{{ cookiecutter.github_repo }}/tree/{{ cookiecutter.main_branch }}/doc"
 
 # Gradle version/deps
 

@@ -1,6 +1,6 @@
 # {{ cookiecutter.__project_name }}
 
-This is the Python docgen for {{ cookiecutter.mod_name }}.
+Python web book docgen and [hexdoc](https://pypi.org/project/hexdoc) plugin for {{ cookiecutter.mod_display_name }}.
 
 ## Version scheme
 

@@ -48,7 +48,7 @@ packages = [
 ]
 
 [template.args]
-mod_name = "{{ cookiecutter.mod_name }}"
+mod_name = "{{ cookiecutter.mod_display_name }}"
 author = "{{ cookiecutter.author }}"
 icon_href = "icon.png"
 show_landing_text = false
