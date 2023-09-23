@@ -5,34 +5,39 @@ package at.petrak.hexcasting.client.model;
 // Paste this class into your mod and generate all required imports
 
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.world.entity.EquipmentSlot;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class HexRobesModels {
+public class HexRobesModels extends ModelArmor{
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into
     // this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(modLoc("robes"), "main");
+
+    public HexRobesModels(ModelPart root, EquipmentSlot slot) {
+        super(root, slot);
+    }
 
     public static LayerDefinition variant1() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition Hood = partdefinition.addOrReplaceChild("Hood",
+        PartDefinition head = partdefinition.addOrReplaceChild("Hood",
             CubeListBuilder.create()
                 .texOffs(0, 0).addBox(-8.0F, 0.0F, 0.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 16).addBox(-8.0F, 0.0F, 0.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)),
             PartPose.offset(4.0F, -8.0F, -4.0F));
-
-        PartDefinition Horns = partdefinition.addOrReplaceChild("Horns",
+        head.addOrReplaceChild("Horns",
             CubeListBuilder.create()
                 .texOffs(24, 0).addBox(-8.0F, 0.0F, 0.0F, 8.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
                 .texOffs(24, 0).mirror().addBox(9.5F, 0.0F, 0.0F, 8.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
                 .mirror(false),
             PartPose.offset(-4.8F, -8.2F, 0.0F));
 
-        PartDefinition Torso = partdefinition.addOrReplaceChild("Torso",
+        PartDefinition torso = partdefinition.addOrReplaceChild("Torso",
             CubeListBuilder.create()
                 .texOffs(40, 0).addBox(-8.0F, 0.0F, 0.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
                 .texOffs(40, 16).addBox(-8.0F, 0.0F, 0.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)),
