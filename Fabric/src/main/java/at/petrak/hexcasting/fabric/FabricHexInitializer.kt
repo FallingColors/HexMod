@@ -191,7 +191,7 @@ object FabricHexInitializer : ModInitializer {
             HexBlocks.EDIFIED_TRAPDOOR,
             HexBlocks.EDIFIED_STAIRS,
             HexBlocks.EDIFIED_SLAB,
-            HexBlocks.EDIFIED_STAIRS,
+            HexBlocks.EDIFIED_FENCE,
             HexBlocks.EDIFIED_SLAB,
             HexBlocks.EDIFIED_BUTTON,
             HexBlocks.EDIFIED_PRESSURE_PLATE,

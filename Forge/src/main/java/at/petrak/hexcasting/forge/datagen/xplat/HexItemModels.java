@@ -195,6 +195,8 @@ public class HexItemModels extends PaucalItemModelProvider {
             new ModelFile.UncheckedModelFile(modLoc("block/stripped_edified_wood")));
         getBuilder(getPath(HexBlocks.EDIFIED_STAIRS)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_stairs")));
+        getBuilder(getPath(HexBlocks.EDIFIED_FENCE)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/edified_fence_inventory")));
         getBuilder(getPath(HexBlocks.EDIFIED_SLAB)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_slab")));
         getBuilder(getPath(HexBlocks.EDIFIED_BUTTON)).parent(
