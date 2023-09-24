@@ -5,7 +5,6 @@ import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.items.ItemStaff;
-import at.petrak.hexcasting.common.items.armor.ItemRobes;
 import at.petrak.hexcasting.common.items.magic.*;
 import at.petrak.hexcasting.common.items.pigment.ItemAmethystAndCopperPigment;
 import at.petrak.hexcasting.common.items.pigment.ItemDyePigment;
@@ -101,9 +100,6 @@ public class HexItems {
             new ItemStack(HexItems.BATTERY),
             MediaConstants.CRYSTAL_UNIT * 64,
             MediaConstants.CRYSTAL_UNIT * 64), HexCreativeTabs.HEX);
-
-    public static final ItemRobes ARMOR_HOOD_1 = make("robes_helmet_1",
-            new ItemRobes(ArmorItem.Type.HELMET, unstackable()));
     public static final Supplier<ItemStack> BATTERY_QUENCHED_SHARD_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.QUENCHED_SHARD_UNIT * 64,
