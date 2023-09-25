@@ -6,8 +6,8 @@
     "plugin_classname": "{{ cookiecutter.modid|capitalize }}Plugin",
 
     "github_repo": "{{ cookiecutter.modid|capitalize }}",
-    "main_branch": "main",
     "author": "TODO",
+    "main_branch": "main",
 
     "fallback_book_url": "https://{{ cookiecutter.author|lower }}.github.io/{{ cookiecutter.github_repo }}/",
     
