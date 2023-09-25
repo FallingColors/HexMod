@@ -134,7 +134,6 @@ reportDeprecated = "error"
 reportDuplicateImport = "error"
 reportFunctionMemberAccess = "error"
 reportIncompatibleMethodOverride = "error"
-reportIncompatibleVariableOverride = "error"
 reportIncompleteStub = "error"
 reportInconsistentConstructor = "error"
 reportInvalidStringEscapeSequence = "error"
@@ -170,3 +169,4 @@ reportUnusedImport = "warning"
 reportUnusedVariable = "warning"
 
 reportUnknownVariableType = "none"
+reportIncompatibleVariableOverride = "none" # TODO: open an issue with Pydantic/Pyright about this
