@@ -2,8 +2,9 @@
 name: Build the web book
 
 on:
-  branches:
-    - {% endraw %}{{ cookiecutter.main_branch }}{% raw %}
+  push:
+    branches:
+      - {% endraw %}{{ cookiecutter.main_branch }}{% raw %}
   workflow_dispatch:
     inputs:
       branch:
@@ -75,7 +76,6 @@ jobs:
       url: https://pypi.org/p/${{ env.PYPI_PACKAGE }}
     permissions:
       id-token: write
-      contents: write
 
     steps:
       - name: Download package artifact
@@ -109,4 +109,4 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
-{% endraw %}
+{% endraw -%}
