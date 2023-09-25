@@ -45,7 +45,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  hexdoc:
     uses: ./.github/workflows/hexdoc.yml
 
     permissions: 
@@ -69,9 +69,9 @@ jobs:
 
   publish-pypi:
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: [hexdoc]
     if: |-
-      needs.build.outputs.publish-release == 'true' &&
+      needs.hexdoc.outputs.publish-release == 'true' &&
       (github.event_name != 'workflow_dispatch' || inputs.publish == 'PyPI (release)')
 
     environment:
@@ -93,7 +93,7 @@ jobs:
 
   publish-testpypi:
     runs-on: ubuntu-latest
-    needs: [build]
+    needs: [hexdoc]
     if: github.event_name == 'workflow_dispatch' && inputs.publish == 'TestPyPI'
 
     environment:
