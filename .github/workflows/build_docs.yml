@@ -81,6 +81,8 @@ jobs:
       contents: write
 
     steps:
+      - uses: actions/checkout@v3
+
       - name: Download package artifact
         uses: actions/download-artifact@v3
         with:
