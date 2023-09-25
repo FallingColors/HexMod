@@ -53,6 +53,7 @@ jobs:
       pages: read
 
     with:
+      python-version: "3.11"
       checkout: ${{ github.event_name == 'workflow_dispatch' && inputs.branch != '(same as workflow)' }}
       branch: ${{ inputs.branch }}
       publish-latest-and-root: |-

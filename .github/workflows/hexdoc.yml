@@ -3,6 +3,10 @@ name: Build and publish a hexdoc project to GitHub Pages
 on:
   workflow_call:
     inputs:
+      python-version:
+        description: Python version to install
+        type: string
+        required: true
       checkout:
         description: Whether to check out the branch specified in `branch`
         type: boolean
@@ -54,7 +58,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: ${{ inputs.python-version }}
           cache: pip
       
       - name: Get Pages url
@@ -136,11 +140,11 @@ jobs:
           mkdir -p _site/v/latest/dist
           cp -r dist _site/v/latest/dist
 
-      - name: Upload Pages artifact
+      - name: Upload temporary Pages artifact
         if: steps.parse-inputs.outputs.update-latest
         uses: actions/upload-artifact@v3
         with:
-          name: github-pages
+          name: github-pages-tmp
           path: _site
 
       - name: Add job summary
@@ -164,8 +168,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/install-artifact-wheel
         with:
-          name: docgen-build
-          python-version: "3.11"
+          name: hexdoc-build
+          python-version: ${{ inputs.python-version }}
 
       - name: Checkout input branch
         if: needs.build.outputs.branch != 'none'
@@ -183,10 +187,10 @@ jobs:
         if: steps.gen-normal.outcome == 'failure'
         run: $HEXDOC --allow-missing
 
-      - name: Upload Pages artifact
+      - name: Upload temporary Pages artifact
         uses: actions/upload-artifact@v3
         with:
-          name: github-pages
+          name: github-pages-tmp
           path: _site
 
       - name: Fail if the first generate step failed
@@ -206,8 +210,8 @@ jobs:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/install-artifact-wheel
         with:
-          name: docgen-build
-          python-version: "3.11"
+          name: hexdoc-build
+          python-version: ${{ inputs.python-version }}
       
       - name: Checkout current Pages
         uses: actions/checkout@v3
@@ -216,10 +220,10 @@ jobs:
           ref: gh-pages
           path: _site/dst
 
-      - name: Download Pages artifact
+      - name: Download temporary Pages artifact
         uses: actions/download-artifact@v3
         with:
-          name: github-pages
+          name: github-pages-tmp
           path: _site/src/docs
       
       - name: Add new docs to site
