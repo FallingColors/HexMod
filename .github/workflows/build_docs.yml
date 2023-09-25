@@ -78,6 +78,7 @@ jobs:
       url: https://pypi.org/p/${{ env.PYPI_PACKAGE }}
     permissions:
       id-token: write
+      contents: write
 
     steps:
       - name: Download package artifact
@@ -88,6 +89,12 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+      
+      - name: Create or update tag
+        uses: EndBug/latest-tag@v1
+        with:
+          # TODO: dynamically set this from somewhere instead of being hardcoded
+          ref: hexdoc-v1
 
   publish-testpypi:
     runs-on: ubuntu-latest
