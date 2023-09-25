@@ -31,6 +31,7 @@ WIP.
 - On GitHub, under `Settings > Environments`, create two new environments called `pypi` and `testpypi`.
 - Follow these instructions for PyPI and TestPyPI: https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/
   - TestPyPI is a duplicate of PyPI which can be used for testing package publishing without affecting the real index. The CI workflow includes a manual execution option to publish to TestPyPI.
+  - If you like to live dangerously, this step is optional - you can remove the `publish-testpypi` job and the `TestPyPI` release choice from your workflow without impacting the rest of the CI.
 
 ## Setup
 
