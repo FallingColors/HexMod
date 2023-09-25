@@ -55,12 +55,12 @@ jobs:
     with:
       checkout: ${{ github.event_name == 'workflow_dispatch' && inputs.branch != '(same as workflow)' }}
       branch: ${{ inputs.branch }}
-      publish-latest-and-root: |
+      publish-latest-and-root: |-
         ${{
           github.event_name != 'workflow_dispatch'
           || inputs.update-latest
         }}
-      publish-release: |
+      publish-release: |-
         ${{
           github.event_name == 'workflow_dispatch' && inputs.release
           || startsWith(github.event.head_commit.message, '[Release]')
