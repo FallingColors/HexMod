@@ -1,4 +1,4 @@
-name: Build and publish a hexdoc project to GitHub Pages
+name: Build and publish a hexdoc project
 
 on:
   workflow_call:
@@ -148,7 +148,7 @@ jobs:
           path: _site
 
       - name: Add job summary
-        run: echo "Built \`${PYPI_PACKAGE}\` \`$(hatch version)\` from \`$(git rev-parse --short "$GITHUB_SHA")\`." >> $GITHUB_STEP_SUMMARY
+        run: echo "Built version \`$(hatch version)\` from commit \`$(git rev-parse --short "$GITHUB_SHA")\`." >> $GITHUB_STEP_SUMMARY
   
   generate:
     runs-on: ubuntu-latest

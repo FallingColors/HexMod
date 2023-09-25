@@ -47,11 +47,9 @@ concurrency:
 jobs:
   hexdoc:
     uses: ./.github/workflows/hexdoc.yml
-
     permissions: 
       contents: write
       pages: read
-
     with:
       python-version: "3.11"
       checkout: ${{ github.event_name == 'workflow_dispatch' && inputs.branch != '(same as workflow)' }}
@@ -78,7 +76,6 @@ jobs:
     environment:
       name: pypi
       url: https://pypi.org/p/${{ env.PYPI_PACKAGE }}
-
     permissions:
       id-token: write
 
@@ -100,7 +97,6 @@ jobs:
     environment:
       name: testpypi
       url: https://test.pypi.org/p/${{ env.PYPI_PACKAGE }}
-
     permissions:
       id-token: write
 
