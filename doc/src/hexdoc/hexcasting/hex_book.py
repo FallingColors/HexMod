@@ -105,7 +105,7 @@ class HexContext(BookContext):
         self.patterns[pattern.id] = pattern
         signatures[pattern.signature] = pattern
 
-    def _load_stub_patterns(self, stub: PatternStubProps, per_world: Tag | None):
+    def _load_stub_patterns(self, stub: PatternStubProps, per_world_tag: Tag | None):
         # TODO: add Gradle task to generate json with this data. this is dumb and fragile.
         logging.getLogger(__name__).info(f"Load pattern stub from {stub.path}")
         stub_text = stub.path.read_text("utf-8")
@@ -114,11 +114,14 @@ class HexContext(BookContext):
             groups = match.groupdict()
             id = self.props.mod_loc(groups["name"])
 
+            if per_world_tag is not None:
+                is_per_world = id in per_world_tag.values
+            else:
+                is_per_world = groups.get("is_per_world") == stub.per_world_value
+
             yield PatternInfo(
+                id=id,
                 startdir=Direction[groups["startdir"]],
                 signature=groups["signature"],
-                is_per_world=(id in per_world.values)
-                if per_world
-                else groups.get("is_per_world") == "true",
-                id=id,
+                is_per_world=is_per_world,
             )

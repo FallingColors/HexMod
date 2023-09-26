@@ -24,7 +24,7 @@ METADATA_SUFFIX = ".hexdoc.json"
 _T = TypeVar("_T")
 _T_Model = TypeVar("_T_Model", bound=HexdocModel)
 
-ExportFn = Callable[[_T, _T | None, Path], str | tuple[str, Path]]
+ExportFn = Callable[[_T, _T | None], str]
 
 
 class HexdocMetadata(HexdocModel):
@@ -409,11 +409,7 @@ class ModResourceLoader:
             except FileNotFoundError:
                 old_value = None
 
-            match export(value, old_value, out_path):
-                case str(out_data):
-                    pass
-                case (str(out_data), Path() as out_path):
-                    pass
+            out_data = export(value, old_value)
 
         write_to_path(out_path, out_data)
 

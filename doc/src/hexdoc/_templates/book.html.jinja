@@ -11,7 +11,7 @@
 
   {# actual book content (ie. all the categories) #}
   <main class="book-body">
-    {% for category in book.categories.values() if category.entries +%}
+    {% for category in book.categories.values() if category.entries.values() +%}
       {% include "category.html.jinja" %}
     {% endfor +%}
   </main>

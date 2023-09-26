@@ -12,14 +12,14 @@
     ><i class="bi bi-list-nested"></i></a>{{ macros.permalink("table-of-contents", "toc-permalink") }}</span>
   </h2>
 
-  {% for category in book.categories.values() if category.entries %}
+  {% for category in book.categories.values() if category.entries.values() %}
     <details class="toc-category">
       {# category #}
       <summary>{{ macros.maybe_spoilered_link(category) }}</summary>
 
       {# list of entries in the category #}
       <ul>
-        {% for entry in category.entries %}
+        {% for entry in category.entries.values() %}
           <li>{{ macros.maybe_spoilered_link(entry) }}</li>
         {% endfor %}
       </ul>

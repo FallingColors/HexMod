@@ -4,7 +4,6 @@ import json
 import logging
 from collections import defaultdict
 from functools import total_ordering
-from pathlib import Path
 from typing import Any, Callable, Self
 
 from pydantic import ValidationInfo, model_validator
@@ -17,7 +16,6 @@ from hexdoc.utils.deserialize import (
     decode_and_flatten_json_dict,
     isinstance_or_raise,
 )
-from hexdoc.utils.path import replace_suffixes
 from hexdoc.utils.resource_loader import LoaderContext
 
 
@@ -166,15 +164,8 @@ class I18n(HexdocModel):
         )
 
     @classmethod
-    def _export(
-        cls,
-        new: dict[str, str],
-        current: dict[str, str] | None,
-        path: Path,
-    ):
-        data = json.dumps((current or {}) | new)
-        path = replace_suffixes(path, ".json")
-        return data, path
+    def _export(cls, new: dict[str, str], current: dict[str, str] | None):
+        return json.dumps((current or {}) | new)
 
     def localize(
         self,

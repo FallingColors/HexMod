@@ -23,6 +23,7 @@ NoTrailingSlashHttpUrl = Annotated[
 class PatternStubProps(StripHiddenModel):
     path: RelativePath
     regex: re.Pattern[str]
+    per_world_value: str | None = "true"
 
 
 class TemplateProps(StripHiddenModel):

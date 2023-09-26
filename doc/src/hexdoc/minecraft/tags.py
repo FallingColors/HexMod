@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Iterator, Self
+from typing import Iterator, Self
 
 from pydantic import Field
 
@@ -63,7 +63,7 @@ class Tag(HexdocModel):
                 case OptionalTagValue(id=id):
                     yield id
 
-    def _export(self, current: Self | None, *_: Any):
+    def _export(self, current: Self | None):
         if self.replace or current is None:
             tag = self
         else:

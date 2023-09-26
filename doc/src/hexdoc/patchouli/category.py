@@ -17,7 +17,7 @@ class Category(HexdocIDModel, Sortable):
     See: https://vazkiimods.github.io/Patchouli/docs/reference/category-json
     """
 
-    entries: list[Entry] = Field(default_factory=list)
+    entries: dict[ResourceLocation, Entry] = Field(default_factory=dict)
 
     # required
     name: LocalizedStr
@@ -37,17 +37,16 @@ class Category(HexdocIDModel, Sortable):
         context: LoaderContext,
         book_id: ResourceLocation,
         use_resource_pack: bool,
-    ):
-        categories: dict[ResourceLocation, Self] = {}
-
+    ) -> dict[ResourceLocation, Self]:
         # load
-        for resource_dir, id, data in context.loader.load_book_assets(
-            book_id,
-            "categories",
-            use_resource_pack,
-        ):
-            category = cls.load(resource_dir, id, data, context)
-            categories[id] = category
+        categories = {
+            id: cls.load(resource_dir, id, data, context)
+            for resource_dir, id, data in context.loader.load_book_assets(
+                book_id,
+                "categories",
+                use_resource_pack,
+            )
+        }
 
         # late-init _parent_cmp_key
         # track iterations to avoid an infinite loop if for some reason there's a cycle
@@ -78,7 +77,7 @@ class Category(HexdocIDModel, Sortable):
 
     @property
     def is_spoiler(self) -> bool:
-        return all(entry.is_spoiler for entry in self.entries)
+        return all(entry.is_spoiler for entry in self.entries.values())
 
     @property
     def _is_cmp_key_ready(self) -> bool:

@@ -14,6 +14,7 @@ from hexdoc.utils import (
 )
 from hexdoc.utils.compat import HexVersion
 from hexdoc.utils.deserialize import cast_or_raise
+from hexdoc.utils.types import sorted_dict
 
 from .book_context import BookContext
 from .category import Category
@@ -142,9 +143,23 @@ class Book(HexdocModel):
                 "Ensure the paths in your properties file are correct."
             )
 
+        # load entries
+        found_internal_entries = self._load_all_entries(context)
+        if not found_internal_entries:
+            raise ValueError(
+                "No internal entries found. "
+                "Ensure the paths in your properties file are correct."
+            )
+
+        # we inserted a bunch of entries in no particular order, so sort each category
+        for category in self._categories.values():
+            category.entries = sorted_dict(category.entries)
+
+        return self
+
+    def _load_all_entries(self, context: BookContext):
         found_internal_entries = False
 
-        # load entries
         for resource_dir, id, data in context.loader.load_book_assets(
             self.id,
             "entries",
@@ -161,19 +176,9 @@ class Book(HexdocModel):
             # i used the entry to insert the entry (pretty sure thanos said that)
             if not resource_dir.external:
                 found_internal_entries = True
-                self._categories[entry.category_id].entries.append(entry)
+                self._categories[entry.category_id].entries[entry.id] = entry
 
-        if not found_internal_entries:
-            raise ValueError(
-                "No entries found for this book. "
-                "Ensure the paths in your properties file are correct."
-            )
-
-        # we inserted a bunch of entries in no particular order, so sort each category
-        for category in self._categories.values():
-            category.entries.sort()
-
-        return self
+        return found_internal_entries
 
     @property
     def categories(self):
