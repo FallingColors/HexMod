@@ -76,8 +76,8 @@ class FormattingContext(
     @model_validator(mode="after")
     def _add_macros(self, info: ValidationInfo) -> Self:
         # precedence: ctx arguments, book macros, default macros
-        context = cast_or_raise(info.context, dict)
-        self.macros = DEFAULT_MACROS | context["macros"] | self.macros
+        context: dict[str, Any] = cast_or_raise(info.context, dict)
+        self.macros = DEFAULT_MACROS | context.get("macros", {}) | self.macros
         return self
 
 

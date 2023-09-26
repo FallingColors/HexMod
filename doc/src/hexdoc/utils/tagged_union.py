@@ -164,15 +164,15 @@ class InternallyTaggedUnion(HexdocModel):
             case 1:
                 return matches.popitem()[1]
             case x if x > 1:
-                raise ExceptionGroup(
-                    f"Ambiguous union match for {cls} with {cls._tag_key}={tag_value}: {matches.keys()}: {data}",
-                    exceptions,
-                )
+                message = f"Ambiguous union match for {cls} with {cls._tag_key}={tag_value}: {matches.keys()}: {data}"
+                if exceptions:
+                    raise ExceptionGroup(message, exceptions)
+                raise RuntimeError(message)
             case _:
-                raise ExceptionGroup(
-                    f"Failed to match {cls} with {cls._tag_key}={tag_value} to any of {tag_types}: {data}",
-                    exceptions,
-                )
+                message = f"Failed to match {cls} with {cls._tag_key}={tag_value} to any of {tag_types}: {data}"
+                if exceptions:
+                    raise ExceptionGroup(message, exceptions)
+                raise RuntimeError(message)
 
 
 class TypeTaggedUnion(InternallyTaggedUnion, key="type", value=None):
