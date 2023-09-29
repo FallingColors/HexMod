@@ -1,15 +1,14 @@
 from __future__ import annotations
 
-import os
 import re
-from functools import cached_property
 from pathlib import Path
 from typing import Annotated, Any, Self
 
-from pydantic import AfterValidator, Field, HttpUrl, TypeAdapter, field_validator
+from pydantic import AfterValidator, Field, HttpUrl, field_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from .cd import RelativePath, RelativePathContext
-from .model import DEFAULT_CONFIG, StripHiddenModel
+from .model import StripHiddenModel
 from .resource import ResourceDir, ResourceLocation
 from .toml_placeholders import load_toml_with_placeholders
 
@@ -18,6 +17,34 @@ NoTrailingSlashHttpUrl = Annotated[
     HttpUrl,
     AfterValidator(lambda u: str(u).rstrip("/")),
 ]
+
+
+class EnvironmentVariableProps(BaseSettings):
+    model_config = SettingsConfigDict(env_file=".env")
+
+    # default Actions environment variables
+    github_repository: str
+    github_sha: str
+
+    # set by CI
+    github_pages_url: NoTrailingSlashHttpUrl
+
+    @classmethod
+    def model_validate_env(cls):
+        return cls.model_validate({})
+
+    @property
+    def repo_owner(self):
+        return self._github_repository_parts[0]
+
+    @property
+    def repo_name(self):
+        return self._github_repository_parts[1]
+
+    @property
+    def _github_repository_parts(self):
+        owner, repo_name = self.github_repository.split("/", maxsplit=1)
+        return owner, repo_name
 
 
 class PatternStubProps(StripHiddenModel):
@@ -45,9 +72,10 @@ class TemplateProps(StripHiddenModel):
 
 
 class Properties(StripHiddenModel):
+    env: EnvironmentVariableProps
+
     modid: str
     book: ResourceLocation
-    fallback_url: NoTrailingSlashHttpUrl
     default_lang: str
     is_0_black: bool = Field(default=False)
     """If true, the style `$(0)` changes the text color to black; otherwise it resets
@@ -60,15 +88,13 @@ class Properties(StripHiddenModel):
 
     entry_id_blacklist: set[ResourceLocation] = Field(default_factory=set)
 
-    base_asset_urls: dict[str, NoTrailingSlashHttpUrl]
-    """Mapping from modid to the url of that mod's `resources` directory on GitHub."""
-
     template: TemplateProps
 
     @classmethod
     def load(cls, path: Path) -> Self:
+        env = EnvironmentVariableProps.model_validate_env()
         return cls.model_validate(
-            load_toml_with_placeholders(path),
+            load_toml_with_placeholders(path) | {"env": env},
             context=RelativePathContext(root=path.parent),
         )
 
@@ -76,13 +102,6 @@ class Properties(StripHiddenModel):
         """Returns a ResourceLocation with self.modid as the namespace."""
         return ResourceLocation(self.modid, path)
 
-    def get_asset_url(self, id: ResourceLocation) -> str:
-        base_url = self.base_asset_urls[id.namespace]
-        return f"{base_url}/{id.file_path_stub('assets').as_posix()}"
-
-    @cached_property
+    @property
     def url(self):
-        github_pages_url = os.getenv("GITHUB_PAGES_URL", self.fallback_url)
-
-        ta = TypeAdapter(NoTrailingSlashHttpUrl, config=DEFAULT_CONFIG)
-        return ta.validate_python(github_pages_url)
+        return self.env.github_pages_url

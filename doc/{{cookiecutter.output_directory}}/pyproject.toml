@@ -16,7 +16,7 @@ requires-python = ">=3.11"
 dynamic = ["version", "dependencies", "optional-dependencies"]
 
 [project.urls]
-Homepage = "{{ cookiecutter.fallback_book_url }}"
+Homepage = "{{ cookiecutter.pages_url }}"
 Source = "https://github.com/{{ cookiecutter.author }}/{{ cookiecutter.github_repo }}/tree/{{ cookiecutter.main_branch }}/doc"
 
 # Gradle version/deps

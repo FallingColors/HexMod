@@ -23,12 +23,7 @@ from typing import (
 )
 
 import importlib_resources as resources
-from pydantic import (
-    FieldValidationInfo,
-    field_validator,
-    model_serializer,
-    model_validator,
-)
+from pydantic import ValidationInfo, field_validator, model_serializer, model_validator
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
@@ -225,7 +220,7 @@ class BaseResourceDir(HexdocModel, ABC):
         ...
 
     @field_validator("reexport", mode="before")
-    def _default_reexport(cls, value: Any, info: FieldValidationInfo):
+    def _default_reexport(cls, value: Any, info: ValidationInfo):
         if value is None and "external" in info.data:
             return not info.data["external"]
         return value

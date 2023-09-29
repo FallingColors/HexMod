@@ -9,7 +9,7 @@
     "author": "TODO",
     "main_branch": "main",
 
-    "fallback_book_url": "https://{{ cookiecutter.author|lower }}.github.io/{{ cookiecutter.github_repo }}/",
+    "pages_url": "https://{{ cookiecutter.author|lower }}.github.io/{{ cookiecutter.github_repo }}/",
     
     "pattern_regex": [
         "hex_latest",

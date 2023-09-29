@@ -1,6 +1,5 @@
 modid = "hexcasting"
 book = "hexcasting:thehexbook"
-fallback_url = "https://gamma-delta.github.io/HexMod"
 default_lang = "en_us"
 
 _export_root = "src/hexdoc/_export"
@@ -26,10 +25,6 @@ regex = "{^_pattern_regex}"
 [[pattern_stubs]]
 path = "{^_fabric.package}/FabricHexInitializer.kt"
 regex = "{^_pattern_regex}"
-
-
-[base_asset_urls]
-hexcasting = "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/src/main/resources"
 
 
 [template]

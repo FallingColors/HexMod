@@ -11,6 +11,8 @@ from hexdoc.patchouli import Book, FormatTree
 from hexdoc.patchouli.book import Book
 from hexdoc.patchouli.text import HTMLStream
 from hexdoc.patchouli.text.formatting import FormatTree
+from hexdoc.utils.resource import ResourceLocation
+from hexdoc.utils.resource_loader import HexdocMetadata
 
 from . import Properties
 from .deserialize import cast_or_raise
@@ -96,3 +98,16 @@ def hexdoc_localize(
         is_0_black=props.is_0_black,
     )
     return Markup(hexdoc_block({"book": book}, formatted))
+
+
+@pass_context
+def hexdoc_texture_url(context: Context, id: ResourceLocation) -> str:
+    try:
+        metadata = cast_or_raise(
+            context["mod_metadata"],
+            dict[str, HexdocMetadata],
+        )[id.namespace]
+        return f"{metadata.asset_url}/{metadata.textures[id].as_posix()}"
+    except Exception as e:
+        e.add_note(f"id:\n    {id}")
+        raise

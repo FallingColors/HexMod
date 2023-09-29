@@ -1,6 +1,5 @@
 modid = "{{ cookiecutter.modid }}"
 book = "hexcasting:thehexbook"
-fallback_url = "{{ cookiecutter.fallback_book_url }}"
 default_lang = "en_us"
 
 _export_root = "{{ cookiecutter.__export_root }}"
@@ -35,9 +34,6 @@ _pattern_regex = { "!Raw"='(?s-m:HexPattern\.fromAngles\("(?P<signature>[qweasd]
 [[pattern_stubs]]
 path = "{^_common.package}/TODO/TODO.java"
 regex = "{^_pattern_regex}"
-
-[base_asset_urls]
-hexcasting = "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/src/main/resources"
 
 [template]
 main = "main.html.jinja"

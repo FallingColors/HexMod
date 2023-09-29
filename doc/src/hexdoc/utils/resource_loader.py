@@ -1,13 +1,16 @@
 # pyright: reportInvalidTypeVarUse=information
 
+from __future__ import annotations
+
 import logging
 import subprocess
 from collections.abc import Iterator
 from contextlib import ExitStack, contextmanager
 from pathlib import Path
 from textwrap import dedent
-from typing import Callable, Literal, Self, TypeVar, overload
+from typing import Any, Callable, Literal, Self, TypeVar, overload
 
+from pydantic import Field
 from pydantic.dataclasses import dataclass
 
 from hexdoc.plugin.manager import PluginManager
@@ -16,7 +19,7 @@ from hexdoc.utils.iterators import must_yield
 from hexdoc.utils.model import DEFAULT_CONFIG, HexdocModel, ValidationContext
 from hexdoc.utils.path import strip_suffixes, write_to_path
 
-from .properties import Properties
+from .properties import NoTrailingSlashHttpUrl, Properties
 from .resource import PathResourceDir, ResourceLocation, ResourceType
 
 METADATA_SUFFIX = ".hexdoc.json"
@@ -30,11 +33,25 @@ ExportFn = Callable[[_T, _T | None], str]
 class HexdocMetadata(HexdocModel):
     """Automatically generated at `export_dir/modid.hexdoc.json`."""
 
-    book_url: str
+    book_url: NoTrailingSlashHttpUrl
+    """Github Pages base url."""
+    asset_url: NoTrailingSlashHttpUrl
+    """raw.githubusercontent.com base url."""
+
+    textures: dict[ResourceLocation, Path]
+    """id -> path from repo root"""
+    sounds: dict[ResourceLocation, Path]
+    """id -> path from repo root"""
 
     @classmethod
     def path(cls, modid: str) -> Path:
         return Path(f"{modid}.hexdoc.json")
+
+    def export(self, loader: ModResourceLoader):
+        loader.export(
+            self.path(loader.props.modid),
+            self.model_dump_json(by_alias=True, warnings=False),
+        )
 
 
 @dataclass(config=DEFAULT_CONFIG, kw_only=True)
@@ -42,6 +59,8 @@ class ModResourceLoader:
     props: Properties
     export_dir: Path | None
     resource_dirs: list[PathResourceDir]
+
+    mod_metadata: dict[str, HexdocMetadata] = Field(default_factory=dict)
 
     @classmethod
     def clean_and_load_all(
@@ -79,6 +98,12 @@ class ModResourceLoader:
         export_dir = props.export_dir if export else None
         version = pm.mod_version(props.modid)
 
+        repo_root = subprocess.run(
+            ["git", "rev-parse", "--show-toplevel"],
+            capture_output=True,
+            encoding="utf-8",
+        ).stdout.strip()
+
         with ExitStack() as stack:
             loader = cls(
                 props=props,
@@ -91,17 +116,34 @@ class ModResourceLoader:
             )
 
             # export this mod's metadata
-            loader.export(
-                path=HexdocMetadata.path(props.modid),
-                data=HexdocMetadata(
-                    book_url=f"{props.url}/v/{version}",
-                ).model_dump_json(),
+            loader.mod_metadata[props.modid] = metadata = HexdocMetadata(
+                book_url=f"{props.url}/v/{version}",
+                asset_url=(
+                    f"https://raw.githubusercontent.com"
+                    f"/{props.env.repo_owner}"
+                    f"/{props.env.repo_name}"
+                    f"/{props.env.github_sha}"
+                ),
+                textures=loader._map_own_assets("textures", root=repo_root),
+                sounds=loader._map_own_assets("sounds", root=repo_root),
             )
+            metadata.export(loader)
 
             yield loader
 
     def __post_init__(self):
-        self.mod_metadata = self.load_metadata("{modid}", HexdocMetadata)
+        self.mod_metadata |= self.load_metadata(model_type=HexdocMetadata)
+
+    def _map_own_assets(self, folder: str, *, root: str | Path):
+        return {
+            id: path.resolve().relative_to(root)
+            for _, id, path in self.find_resources(
+                "assets",
+                namespace=self.props.modid,
+                folder="",
+                glob=f"{folder}/**/*.*",
+            )
+        }
 
     def get_link_base(self, resource_dir: PathResourceDir) -> str:
         modid = resource_dir.modid
@@ -111,7 +153,8 @@ class ModResourceLoader:
 
     def load_metadata(
         self,
-        name_pattern: str,
+        *,
+        name_pattern: str = "{modid}",
         model_type: type[_T_Model],
     ) -> dict[str, _T_Model]:
         """eg. `"{modid}.patterns"`"""
@@ -263,14 +306,53 @@ class ModResourceLoader:
         self,
         type: ResourceType,
         *,
+        decode: Callable[[str], _T] = decode_json_dict,
+        export: ExportFn[_T] | Literal[False] | None = None,
+        **kwargs: Any,
+    ) -> Iterator[tuple[PathResourceDir, ResourceLocation, _T]]:
+        """Like `find_resources`, but also loads the file contents and reexports it."""
+        for resource_dir, value_id, path in self.find_resources(type, **kwargs):
+            value = self._load_path(
+                resource_dir,
+                path,
+                decode=decode,
+                export=export,
+            )
+            yield resource_dir, value_id, value
+
+    @overload
+    def find_resources(
+        self,
+        type: ResourceType,
+        *,
+        namespace: str,
+        folder: str | Path,
+        glob: str | list[str] = "**/*",
+        allow_missing: bool = False,
+    ) -> Iterator[tuple[PathResourceDir, ResourceLocation, Path]]:
+        ...
+
+    @overload
+    def find_resources(
+        self,
+        type: ResourceType,
+        *,
+        folder: str | Path,
+        id: ResourceLocation,
+        allow_missing: bool = False,
+    ) -> Iterator[tuple[PathResourceDir, ResourceLocation, Path]]:
+        ...
+
+    def find_resources(
+        self,
+        type: ResourceType,
+        *,
         folder: str | Path,
         id: ResourceLocation | None = None,
         namespace: str | None = None,
         glob: str | list[str] = "**/*",
         allow_missing: bool = False,
-        decode: Callable[[str], _T] = decode_json_dict,
-        export: ExportFn[_T] | Literal[False] | None = None,
-    ) -> Iterator[tuple[PathResourceDir, ResourceLocation, _T]]:
+    ) -> Iterator[tuple[PathResourceDir, ResourceLocation, Path]]:
         """Search for a glob under a given resource location in all of `resource_dirs`.
 
         Files are returned from lowest to highest priority in the load order, ie. later
@@ -319,23 +401,20 @@ class ModResourceLoader:
                 for glob_ in globs:
                     # eg. .../resources/assets/hexcasting/lang/subdir/*.flatten.json5
                     for path in base_path.glob(glob_):
+                        # only strip json/json5, not eg. png
+                        id_path = path.relative_to(base_path)
+                        if "json" in path.name:
+                            id_path = strip_suffixes(id_path)
+
                         id = ResourceLocation(
                             # eg. ["assets", "hexcasting", "lang", ...][1]
                             namespace=path.relative_to(resource_dir.path).parts[1],
-                            path=strip_suffixes(path.relative_to(base_path)).as_posix(),
+                            path=id_path.as_posix(),
                         )
 
-                        try:
-                            value = self._load_path(
-                                resource_dir,
-                                path,
-                                decode=decode,
-                                export=export,
-                            )
+                        if path.is_file():
                             found_any = True
-                            yield resource_dir, id, value
-                        except FileNotFoundError:
-                            continue
+                            yield resource_dir, id, path
 
         # if we never yielded any files, raise an error
         if not allow_missing and not found_any:

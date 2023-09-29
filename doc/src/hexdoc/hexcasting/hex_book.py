@@ -67,7 +67,8 @@ class HexContext(BookContext):
 
         # add external patterns AFTER exporting so we don't reexport them
         for metadata in self.loader.load_metadata(
-            "{modid}.patterns", PatternMetadata
+            name_pattern="{modid}.patterns",
+            model_type=PatternMetadata,
         ).values():
             for _, pattern in metadata.patterns.items():
                 self._add_pattern(pattern, signatures)

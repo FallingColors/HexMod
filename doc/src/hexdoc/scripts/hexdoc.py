@@ -31,9 +31,11 @@ from hexdoc.utils.jinja_extensions import (
     IncludeRawExtension,
     hexdoc_block,
     hexdoc_localize,
+    hexdoc_texture_url,
     hexdoc_wrap,
 )
 from hexdoc.utils.path import write_to_path
+from hexdoc.utils.resource_loader import HexdocMetadata
 
 MARKER_NAME = ".sitemap-marker.json"
 
@@ -195,6 +197,8 @@ def main(args: Args | None = None) -> None:
         for lang, i18n in per_lang_i18n.items():
             books[lang] = (load_hex_book(book_data, pm, loader, i18n), i18n)
 
+        mod_metadata = loader.mod_metadata
+
     if args.export_only:
         return
 
@@ -218,6 +222,7 @@ def main(args: Args | None = None) -> None:
         "hexdoc_block": hexdoc_block,
         "hexdoc_wrap": hexdoc_wrap,
         "hexdoc_localize": hexdoc_localize,
+        "hexdoc_texture_url": hexdoc_texture_url,
     }
 
     template = env.get_template(props.template.main)
@@ -234,6 +239,7 @@ def main(args: Args | None = None) -> None:
             books=books,
             template=template,
             output_dir=output_dir,
+            mod_metadata=mod_metadata,
             allow_missing=args.allow_missing,
             version="latest",
             is_root=False,
@@ -245,6 +251,7 @@ def main(args: Args | None = None) -> None:
             books=books,
             template=template,
             output_dir=output_dir,
+            mod_metadata=mod_metadata,
             allow_missing=args.allow_missing,
             version=version,
             is_root=False,
@@ -257,6 +264,7 @@ def main(args: Args | None = None) -> None:
             books=books,
             template=template,
             output_dir=output_dir,
+            mod_metadata=mod_metadata,
             allow_missing=args.allow_missing,
             version=version,
             is_root=True,
@@ -271,6 +279,7 @@ def render_books(
     books: dict[str, tuple[Book, I18n]],
     template: Template,
     output_dir: Path,
+    mod_metadata: dict[str, HexdocMetadata],
     allow_missing: bool,
     version: str,
     is_root: bool,
@@ -299,6 +308,7 @@ def render_books(
             page_url=page_url,
             version=version,
             lang=lang,
+            mod_metadata=mod_metadata,
             is_bleeding_edge=version == "latest",
             # i18n helper
             _=lambda key: hexdoc_localize(

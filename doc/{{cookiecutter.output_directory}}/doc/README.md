@@ -27,6 +27,14 @@ pip install -e .[dev]
 
 ## Usage
 
+For local testing, create a file called `.env` following this template:
+```sh
+GITHUB_REPOSITORY={{ cookiecutter.author }}/{{ cookiecutter.github_repo }}
+GITHUB_SHA={{ cookiecutter.main_branch }}
+GITHUB_PAGES_URL={{ cookiecutter.pages_url }}
+```
+
+Then run these commands to generate the book:
 ```sh
 # run from the repo root, not doc/
 hexdoc ./doc/properties.toml -o _site/src/docs
