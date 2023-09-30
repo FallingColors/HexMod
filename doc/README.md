@@ -57,6 +57,11 @@ GITHUB_PAGES_URL=https://gamma-delta.github.io/HexMod
 Then run these commands to generate the book:
 ```sh
 # run from the repo root, not doc/
-hexdoc ./doc/properties.toml -o _site/src/docs
-hexdoc_merge --src _site/src/docs --dst _site/dst/docs
+hexdoc render doc/properties.toml _site/src/docs
+hexdoc merge --src _site/src/docs --dst _site/dst/docs
+```
+
+Or, run this command to render the book and start a local web server:
+```sh
+hexdoc serve doc/properties.toml --src _site/src/docs --dst _site/dst/docs
 ```
