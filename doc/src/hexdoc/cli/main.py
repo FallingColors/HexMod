@@ -24,7 +24,7 @@ from .sitemap import (
 VerbosityOption = Annotated[int, typer.Option("--verbose", "-v", count=True)]
 RequiredPathOption = Annotated[Path, typer.Option()]
 UpdateLatestOption = Annotated[bool, typer.Option(envvar="UPDATE_LATEST")]
-ReleaseOption = Annotated[bool, typer.Option(envvar="UPDATE_LATEST")]
+ReleaseOption = Annotated[bool, typer.Option(envvar="RELEASE")]
 
 app = typer.Typer()
 
@@ -73,6 +73,9 @@ def render(
     props, pm, version = load_common_data(props_file, verbosity)
     books, mod_metadata = load_books(props, pm, lang, allow_missing)
 
+    logger = logging.getLogger(__name__)
+    logger.info(f"update_latest={update_latest}, release={release}")
+
     # set up Jinja
     env = create_jinja_env(props)
 
@@ -105,7 +108,7 @@ def render(
                 is_root=is_root,
             )
 
-    logging.getLogger(__name__).info("Done.")
+    logger.info("Done.")
 
 
 @app.command()

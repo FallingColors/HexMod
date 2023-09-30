@@ -130,7 +130,7 @@ jobs:
       - name: Copy build to Pages
         if: steps.parse-inputs.outputs.update-latest
         run: |
-          mkdir -p _site/v/latest/dist
+          mkdir -p _site/v/latest
           cp -r dist _site/v/latest/dist
 
       - name: Upload temporary Pages artifact
