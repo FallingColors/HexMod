@@ -52,7 +52,7 @@ jobs:
       release:       ${{ steps.parse-inputs.outputs.release }}
       branch:        ${{ steps.parse-inputs.outputs.branch }}
       hexdoc-common: ${{ steps.parse-inputs.outputs.hexdoc-common }}
-      hexdoc:        ${{ steps.parse-inputs.outputs.hexdoc }}
+      hexdoc-props:  ${{ steps.parse-inputs.outputs.hexdoc }}
 
     steps:
       - uses: actions/checkout@v3
@@ -71,7 +71,7 @@ jobs:
       - name: Parse inputs
         id: parse-inputs
         run: |
-          release=${{  inputs.publish-release }}
+          release=${{ inputs.publish-release }}
           update_latest=${{ inputs.publish-latest-and-root }}
           
           if [[ ${{ inputs.checkout }} == true ]]; then
@@ -82,17 +82,29 @@ jobs:
             branch=none
             props=doc/properties.toml
           fi
-          
-          hexdoc_common="--is-release $release --update-latest $update_latest"
-          hexdoc="hexdoc $props --ci $hexdoc_common"
 
-          echo "HEXDOC=$hexdoc" >> "$GITHUB_ENV"
+          if [[ $release == true ]]; then
+            release_flag="--release"
+          else
+            release_flag="--no-release"
+          fi
+
+          if [[ $update_latest == true ]]; then
+            update_latest_flag="--update-latest"
+          else
+            update_latest_flag="--no-update-latest"
+          fi
+          
+          hexdoc_common="$release_flag $update_latest_flag"
+
+          echo "HEXDOC_COMMON=$props"        >> "$GITHUB_ENV"
+          echo "HEXDOC_PROPS=$hexdoc_common" >> "$GITHUB_ENV"
           
           echo "release=$release"             >> "$GITHUB_OUTPUT"
           echo "update-latest=$update_latest" >> "$GITHUB_OUTPUT"
           echo "branch=$branch"               >> "$GITHUB_OUTPUT"
           echo "hexdoc-common=$hexdoc_common" >> "$GITHUB_OUTPUT"
-          echo "hexdoc=$hexdoc"               >> "$GITHUB_OUTPUT"
+          echo "hexdoc-props=$props"          >> "$GITHUB_OUTPUT"
       
       - name: Checkout input branch
         if: steps.parse-inputs.outputs.branch != 'none'
@@ -108,13 +120,13 @@ jobs:
       - name: List book languages
         id: list-langs
         run: |
-          echo "matrix=$($HEXDOC --list-langs)" >> "$GITHUB_OUTPUT"
+          echo "matrix=$(hexdoc list-langs $HEXDOC_PROPS $HEXDOC_COMMON)" >> "$GITHUB_OUTPUT"
           if [[ $RUNNER_DEBUG ]]; then
             tree -I '__pycache__|Common|Fabric|Forge|venv'
           fi
 
       - name: Export web book
-        run: $HEXDOC --export-only
+        run: hexdoc export $HEXDOC_PROPS $HEXDOC_COMMON
 
       - name: Bump version
         if: inputs.bump-version-segment
@@ -162,7 +174,7 @@ jobs:
 
     env:
       GITHUB_PAGES_URL: ${{ needs.build.outputs.pages-url }}
-      HEXDOC: ${{ needs.build.outputs.hexdoc }} --lang ${{ matrix.lang }} -o _site --clean
+      HEXDOC: hexdoc render ${{ needs.build.outputs.hexdoc-props }} _site ${{ needs.build.outputs.hexdoc-common }} --lang ${{ matrix.lang }} --clean
 
     steps:
       - uses: actions/checkout@v3
@@ -227,7 +239,7 @@ jobs:
           path: _site/src/docs
       
       - name: Add new docs to site
-        run: hexdoc_merge ${{ needs.build.outputs.hexdoc-common }} --src _site/src/docs --dst _site/dst/docs
+        run: hexdoc merge ${{ needs.build.outputs.hexdoc-common }} --src _site/src/docs --dst _site/dst/docs
 
       - name: Deploy to Pages
         uses: JamesIves/github-pages-deploy-action@v4

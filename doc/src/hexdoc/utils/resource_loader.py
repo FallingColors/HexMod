@@ -118,12 +118,7 @@ class ModResourceLoader:
             # export this mod's metadata
             loader.mod_metadata[props.modid] = metadata = HexdocMetadata(
                 book_url=f"{props.url}/v/{version}",
-                asset_url=(
-                    f"https://raw.githubusercontent.com"
-                    f"/{props.env.repo_owner}"
-                    f"/{props.env.repo_name}"
-                    f"/{props.env.github_sha}"
-                ),
+                asset_url=props.env.githubusercontent,
                 textures=loader._map_own_assets("textures", root=repo_root),
                 sounds=loader._map_own_assets("sounds", root=repo_root),
             )

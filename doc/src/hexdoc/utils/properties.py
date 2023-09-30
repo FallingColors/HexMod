@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import re
 from pathlib import Path
 from typing import Annotated, Any, Self
@@ -29,9 +30,22 @@ class EnvironmentVariableProps(BaseSettings):
     # set by CI
     github_pages_url: NoTrailingSlashHttpUrl
 
+    # optional for debugging
+    debug_githubusercontent: str | None = None
+
     @classmethod
     def model_validate_env(cls):
         return cls.model_validate({})
+
+    @property
+    def githubusercontent(self):
+        if self.debug_githubusercontent is not None:
+            return self.debug_githubusercontent
+
+        return (
+            f"https://raw.githubusercontent.com"
+            f"/{self.repo_owner}/{self.repo_name}/{self.github_sha}"
+        )
 
     @property
     def repo_owner(self):
@@ -95,10 +109,13 @@ class Properties(StripHiddenModel):
     @classmethod
     def load(cls, path: Path) -> Self:
         env = EnvironmentVariableProps.model_validate_env()
-        return cls.model_validate(
+        props = cls.model_validate(
             load_toml_with_placeholders(path) | {"env": env},
             context=RelativePathContext(root=path.parent),
         )
+
+        logging.getLogger(__name__).debug(props)
+        return props
 
     def mod_loc(self, path: str) -> ResourceLocation:
         """Returns a ResourceLocation with self.modid as the namespace."""
