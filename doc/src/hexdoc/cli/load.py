@@ -33,6 +33,8 @@ def load_book(
     allow_missing: bool,
 ):
     """lang, book, i18n"""
+    if lang is None:
+        lang = props.default_lang
 
     with ModResourceLoader.clean_and_load_all(props, pm) as loader:
         lang, i18n = _load_i18n(loader, lang, allow_missing)[0]

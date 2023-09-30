@@ -23,6 +23,8 @@ from .sitemap import (
 
 VerbosityOption = Annotated[int, typer.Option("--verbose", "-v", count=True)]
 RequiredPathOption = Annotated[Path, typer.Option()]
+UpdateLatestOption = Annotated[bool, typer.Option(envvar="UPDATE_LATEST")]
+ReleaseOption = Annotated[bool, typer.Option(envvar="UPDATE_LATEST")]
 
 app = typer.Typer()
 
@@ -58,8 +60,8 @@ def render(
     props_file: Path,
     output_dir: Path,
     *,
-    update_latest: bool = True,
-    release: bool = False,
+    update_latest: UpdateLatestOption = True,
+    release: ReleaseOption = False,
     clean: bool = False,
     lang: Union[str, None] = None,
     allow_missing: bool = False,
@@ -111,8 +113,8 @@ def merge(
     *,
     src: RequiredPathOption,
     dst: RequiredPathOption,
-    update_latest: bool = True,
-    release: bool = False,
+    update_latest: UpdateLatestOption = True,
+    release: ReleaseOption = False,
 ):
     # ensure at least the default language was built successfully
     if update_latest:
