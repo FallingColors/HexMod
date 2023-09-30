@@ -51,10 +51,10 @@ jobs:
       pages: read
 
     outputs:
-      pages-url:     ${{ steps.get-url.outputs.pages-url }}
-      matrix:        ${{ steps.list-langs.outputs.matrix }}
-      branch:        ${{ steps.parse-inputs.outputs.branch }}
-      props-path:  ${{ steps.parse-inputs.outputs.hexdoc }}
+      pages-url:  ${{ steps.get-url.outputs.pages-url }}
+      matrix:     ${{ steps.list-langs.outputs.matrix }}
+      branch:     ${{ steps.parse-inputs.outputs.branch }}
+      props-path: ${{ steps.parse-inputs.outputs.props-path }}
 
     steps:
       - uses: actions/checkout@v3
@@ -84,8 +84,8 @@ jobs:
 
           echo "PROPS_PATH=$props_path" >> "$GITHUB_ENV"
 
-          echo "branch=$branch"               >> "$GITHUB_OUTPUT"
-          echo "props-path=$props_path"       >> "$GITHUB_OUTPUT"
+          echo "branch=$branch"         >> "$GITHUB_OUTPUT"
+          echo "props-path=$props_path" >> "$GITHUB_OUTPUT"
       
       - name: Checkout input branch
         if: steps.parse-inputs.outputs.branch != 'none'
