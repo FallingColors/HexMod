@@ -38,5 +38,5 @@ def write_to_path(path: Path, data: str | bytes, encoding: str = "utf-8"):
     match data:
         case str():
             path.write_text(data, encoding)
-        case bytes():
+        case _:
             path.write_bytes(data)

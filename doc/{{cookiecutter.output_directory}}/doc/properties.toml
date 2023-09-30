@@ -36,7 +36,6 @@ path = "{^_common.package}/TODO/TODO.java"
 regex = "{^_pattern_regex}"
 
 [template]
-main = "main.html.jinja"
 static_dir = "static"
 packages = [
     "{{ cookiecutter.__project_slug }}",

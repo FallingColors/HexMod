@@ -54,7 +54,9 @@ class PatternStubProps(StripHiddenModel):
 
 
 class TemplateProps(StripHiddenModel):
-    main: str
+    main: str = "main.html.jinja"
+    style: str = "main.css.jinja"
+
     static_dir: RelativePath | None = None
     dirs: list[RelativePath] = Field(default_factory=list)
     packages: list[tuple[str, Path]]

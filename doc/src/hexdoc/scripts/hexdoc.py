@@ -225,7 +225,10 @@ def main(args: Args | None = None) -> None:
         "hexdoc_texture_url": hexdoc_texture_url,
     }
 
-    template = env.get_template(props.template.main)
+    templates = {
+        "index.html": env.get_template(props.template.main),
+        "index.css": env.get_template(props.template.style),
+    }
 
     # render everything
 
@@ -237,7 +240,7 @@ def main(args: Args | None = None) -> None:
         render_books(
             props=props,
             books=books,
-            template=template,
+            templates=templates,
             output_dir=output_dir,
             mod_metadata=mod_metadata,
             allow_missing=args.allow_missing,
@@ -249,7 +252,7 @@ def main(args: Args | None = None) -> None:
         render_books(
             props=props,
             books=books,
-            template=template,
+            templates=templates,
             output_dir=output_dir,
             mod_metadata=mod_metadata,
             allow_missing=args.allow_missing,
@@ -262,7 +265,7 @@ def main(args: Args | None = None) -> None:
         render_books(
             props=props,
             books=books,
-            template=template,
+            templates=templates,
             output_dir=output_dir,
             mod_metadata=mod_metadata,
             allow_missing=args.allow_missing,
@@ -277,7 +280,7 @@ def render_books(
     *,
     props: Properties,
     books: dict[str, tuple[Book, I18n]],
-    template: Template,
+    templates: dict[str, Template],
     output_dir: Path,
     mod_metadata: dict[str, HexdocMetadata],
     allow_missing: bool,
@@ -301,17 +304,16 @@ def render_books(
 
         logging.getLogger(__name__).info(f"Rendering {output_dir}")
 
-        raw_docs = template.render(
+        template_args = {
             **props.template.args,
-            book=book,
-            props=props,
-            page_url=page_url,
-            version=version,
-            lang=lang,
-            mod_metadata=mod_metadata,
-            is_bleeding_edge=version == "latest",
-            # i18n helper
-            _=lambda key: hexdoc_localize(
+            "book": book,
+            "props": props,
+            "page_url": page_url,
+            "version": version,
+            "lang": lang,
+            "mod_metadata": mod_metadata,
+            "is_bleeding_edge": version == "latest",
+            "_": lambda key: hexdoc_localize(  # i18n helper
                 key,
                 do_format=False,
                 props=props,
@@ -319,8 +321,7 @@ def render_books(
                 i18n=i18n,
                 allow_missing=allow_missing,
             ),
-            # i18n helper, but with patchi formatting
-            _f=lambda key: hexdoc_localize(
+            "_f": lambda key: hexdoc_localize(  # i18n helper with patchi formatting
                 key,
                 do_format=True,
                 props=props,
@@ -328,10 +329,13 @@ def render_books(
                 i18n=i18n,
                 allow_missing=allow_missing,
             ),
-        )
-        docs = strip_empty_lines(raw_docs)
+        }
 
-        write_to_path(output_dir / "index.html", docs)
+        for filename, template in templates.items():
+            file = template.render(template_args)
+            stripped_file = strip_empty_lines(file)
+            write_to_path(output_dir / filename, stripped_file)
+
         if props.template.static_dir:
             shutil.copytree(props.template.static_dir, output_dir, dirs_exist_ok=True)
 
