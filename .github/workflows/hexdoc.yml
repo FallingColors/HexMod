@@ -107,7 +107,7 @@ jobs:
           fi
 
       - name: Export web book
-        run: hexdoc export $PROPS_PATH
+        run: hexdoc export $PROPS_PATH --allow-missing # FIXME: remove this flag after adding the Minecraft i18n
 
       - name: Bump version
         if: inputs.bump-version-segment
