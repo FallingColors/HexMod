@@ -1,0 +1,38 @@
+{
+  "parent": "hexcasting:opened_eyes",
+  "criteria": {
+    "health_used": {
+      "conditions": {
+        "health_used": {
+          "min": 0.8
+        },
+        "mojang_i_am_begging_and_crying_please_add_an_entity_health_criterion": {
+          "max": 1.0,
+          "min": 2.2250738585072014E-308
+        }
+      },
+      "trigger": "hexcasting:overcast"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancement.hexcasting:enlightenment.desc"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "item": "minecraft:music_disc_11"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.hexcasting:enlightenment"
+    }
+  },
+  "requirements": [
+    [
+      "health_used"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
