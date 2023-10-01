@@ -1,8 +1,8 @@
-{% import "common/macros.html.jinja" as macros -%}
+{% import "macros/formatting.html.jinja" as formatting -%}
 
 <div id="{{ entry.id.path }}">
-  {% call macros.maybe_spoilered(entry) %}
-    {{- macros.section_header(entry, "h3", "entry-title") }}
+  {% call formatting.maybe_spoilered(entry) %}
+    {{- formatting.section_header(entry, "h3", "entry-title") }}
 
     {% for page in entry.pages +%}
       {% include page.template %}

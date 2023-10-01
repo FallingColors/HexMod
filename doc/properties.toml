@@ -26,6 +26,35 @@ regex = "{^_pattern_regex}"
 path = "{^_fabric.package}/FabricHexInitializer.kt"
 regex = "{^_pattern_regex}"
 
+[minecraft_assets]
+# https://github.com/PrismarineJS/minecraft-assets/tree/83e2169afbbce40990d69fc53e5962e4a793d467/data/1.19.1
+ref = "83e2169afbbce40990d69fc53e5962e4a793d467"
+version = "1.19.1"
+
+[textures]
+missing = [
+    "farmersdelight:skillet",
+    "hexcasting:*colorizer*",
+    "hexcasting:amethyst_sconce",
+    "hexcasting:edified_button",
+    "hexcasting:edified_pressure_plate",
+    "hexcasting:edified_slab",
+    "hexcasting:edified_stairs",
+]
+
+[textures.override]
+"hexcasting:akashic_connector" = "hexcasting:akashic_ligature"
+"hexcasting:directrix/empty" = "hexcasting:circle/directrix/empty/front_dim"
+"hexcasting:focus" = "hexcasting:focus_empty"
+"hexcasting:impetus/empty" = "hexcasting:circle/impetus/empty/front_dim"
+"hexcasting:quenched_allay_shard" = "hexcasting:quenched_shard_0"
+"hexcasting:scroll_large" = "hexcasting:scroll_pristine_large"
+"hexcasting:scroll_medium" = "hexcasting:scroll_pristine_medium"
+"hexcasting:scroll_small" = "hexcasting:scroll_pristine_small"
+"hexcasting:scroll" = "hexcasting:scroll_pristine_large"
+"hexcasting:slate_block" = "hexcasting:slate"
+"hexcasting:spellbook" = "hexcasting:spellbook_empty"
+"hexcasting:staff/quenched" = "hexcasting:staff/quenched_0"
 
 [template]
 static_dir = "static"

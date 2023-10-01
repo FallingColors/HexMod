@@ -20,7 +20,7 @@ from hexdoc.utils.resource_loader import LoaderContext
 
 
 @total_ordering
-class LocalizedStr(HexdocModel):
+class LocalizedStr(HexdocModel, frozen=True):
     """Represents a string which has been localized."""
 
     key: str
@@ -83,7 +83,7 @@ class LocalizedStr(HexdocModel):
                 return self.value < other
 
 
-class LocalizedItem(LocalizedStr):
+class LocalizedItem(LocalizedStr, frozen=True):
     @classmethod
     def _localize(cls, i18n: I18n, key: str) -> Self:
         return i18n.localize_item(key)
@@ -252,6 +252,10 @@ class I18n(HexdocModel):
 
     def localize_key(self, key: str) -> LocalizedStr:
         return self.localize(f"key.{key}")
+
+    def localize_tag(self, tag: ResourceLocation):
+        localized = self.localize(f"tag.{tag.namespace}.{tag.path}")
+        return LocalizedStr(key=localized.key, value=f"Tag: {localized.value}")
 
 
 class I18nContext(LoaderContext):

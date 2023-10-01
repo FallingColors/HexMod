@@ -10,16 +10,12 @@ __all__ = [
     "ItemResult",
 ]
 
-from .abstract_recipes import Recipe
+from .abstract_recipes import CraftingRecipe, Recipe
 from .ingredients import (
     ItemIngredient,
     ItemIngredientOrList,
+    ItemResult,
     MinecraftItemIdIngredient,
     MinecraftItemTagIngredient,
 )
-from .recipes import (
-    CraftingRecipe,
-    CraftingShapedRecipe,
-    CraftingShapelessRecipe,
-    ItemResult,
-)
+from .recipes import CraftingShapedRecipe, CraftingShapelessRecipe

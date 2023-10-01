@@ -297,8 +297,7 @@ function hookSpoiler(elem) {
 }
 
 // these are filled by Jinja
-const ROOT_URL = "{{ props.url }}";
-const PAGE_URL = "{{ page_url }}";
+const BOOK_URL = "{{ props.url }}";
 
 const VERSION = "{{ version }}";
 const LANG = "{{ lang }}";
@@ -325,7 +324,7 @@ function versionDropdownItem(sitemap, version) {
     path = defaultPath;
   }
   
-  return dropdownItem(version, ROOT_URL + path);
+  return dropdownItem(version, BOOK_URL + path);
 }
 
 function versionDropdownItems(sitemap, versions) {
@@ -390,7 +389,7 @@ function addDropdowns(sitemap) {
   const langs = Object.keys(langPaths).sort();
 
   document.getElementById("lang-dropdown").append(
-    ...langs.map((lang) => dropdownItem(lang, ROOT_URL + langPaths[lang])),
+    ...langs.map((lang) => dropdownItem(lang, BOOK_URL + langPaths[lang])),
   );
 
   // return sitemap for chaining, i guess
@@ -399,12 +398,12 @@ function addDropdowns(sitemap) {
 
 document.addEventListener("DOMContentLoaded", () => {
   // fetch the sitemap from the root and use it to generate the navbar
-  fetch(`${ROOT_URL}/meta/sitemap.json`)
+  fetch(`${BOOK_URL}/meta/sitemap.json`)
     .then(r => r.json())
     .then(addDropdowns)
     .catch(e => console.error(e))
 
-  document.querySelectorAll("details.spell-collapsible").forEach(hookLoad);
+  document.querySelectorAll(".details-collapsible").forEach(hookLoad);
   document.querySelectorAll("a.toggle-link").forEach(hookToggle);
   document.querySelectorAll(".spoilered").forEach(hookSpoiler);
 
@@ -417,3 +416,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   requestAnimationFrame((t) => tick(t, t));
 });
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})

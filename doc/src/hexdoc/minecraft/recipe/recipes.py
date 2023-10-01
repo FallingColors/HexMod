@@ -1,23 +1,33 @@
+from typing import Iterator
+
 from pydantic import field_validator
 
-from hexdoc.utils import HexdocModel
 from hexdoc.utils.compat import HexVersion
 
-from ..i18n import LocalizedItem
-from .abstract_recipes import Recipe
+from .abstract_recipes import CraftingRecipe
 from .ingredients import ItemIngredientOrList
 
 
-class ItemResult(HexdocModel):
-    item: LocalizedItem
-    count: int | None = None
+class CraftingShapelessRecipe(CraftingRecipe, type="minecraft:crafting_shapeless"):
+    ingredients: list[ItemIngredientOrList]
 
 
-class CraftingShapedRecipe(Recipe, type="minecraft:crafting_shaped"):
+class CraftingShapedRecipe(CraftingRecipe, type="minecraft:crafting_shaped"):
     key: dict[str, ItemIngredientOrList]
     pattern: list[str]
-    result: ItemResult
     show_notification: bool | None = None
+
+    @property
+    def ingredients(self) -> Iterator[ItemIngredientOrList | None]:
+        for row in self.pattern:
+            if len(row) > 3:
+                raise ValueError(f"Expected len(row) <= 3, got {len(row)}: `{row}`")
+            for item_key in row.ljust(3):
+                match item_key:
+                    case " ":
+                        yield None
+                    case _:
+                        yield self.key[item_key]
 
     @field_validator("show_notification")
     @classmethod
@@ -28,11 +38,3 @@ class CraftingShapedRecipe(Recipe, type="minecraft:crafting_shaped"):
             case HexVersion.v0_10_x | HexVersion.v0_9_x:
                 HexVersion.check(value is None, "show_notification")
         return value
-
-
-class CraftingShapelessRecipe(Recipe, type="minecraft:crafting_shapeless"):
-    ingredients: list[ItemIngredientOrList]
-    result: ItemResult
-
-
-CraftingRecipe = CraftingShapedRecipe | CraftingShapelessRecipe

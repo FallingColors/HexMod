@@ -16,9 +16,14 @@
             "name": "Python: Generate Docs",
             "type": "python",
             "request": "launch",
-            "module": "hexdoc.scripts.hexdoc",
+            "module": "hexdoc.cli.main",
             "args": [
-                "doc/properties.toml", "-o", "out", "--lang", "en_us",
+                "render",
+                "doc/properties.toml",
+                "_site/src/docs",
+                "--lang",
+                "en_us",
+                "--allow-missing",
             ],
             "console": "integratedTerminal",
             "justMyCode": false

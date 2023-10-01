@@ -5,7 +5,7 @@ _T = TypeVar("_T")
 _P = ParamSpec("_P")
 
 
-def must_yield(f: Callable[_P, Iterator[_T]]) -> Callable[_P, Iterator[_T]]:
+def must_yield_something(f: Callable[_P, Iterator[_T]]) -> Callable[_P, Iterator[_T]]:
     """Raises StopIteration if the wrapped iterator doesn't yield anything."""
 
     @functools.wraps(f)

@@ -5,6 +5,7 @@ from jinja2.ext import Extension
 from jinja2.parser import Parser
 from jinja2.runtime import Context
 from markupsafe import Markup
+from pydantic import ConfigDict, validate_call
 
 from hexdoc.minecraft import I18n, LocalizedStr
 from hexdoc.patchouli import Book, FormatTree
@@ -12,7 +13,7 @@ from hexdoc.patchouli.book import Book
 from hexdoc.patchouli.text import HTMLStream
 from hexdoc.patchouli.text.formatting import FormatTree
 from hexdoc.utils.resource import ResourceLocation
-from hexdoc.utils.resource_loader import HexdocMetadata
+from hexdoc.utils.resource_loader import HexdocMetadata, resolve_texture_from_metadata
 
 from . import Properties
 from .deserialize import cast_or_raise
@@ -101,13 +102,11 @@ def hexdoc_localize(
 
 
 @pass_context
-def hexdoc_texture_url(context: Context, id: ResourceLocation) -> str:
+@validate_call(config=ConfigDict(arbitrary_types_allowed=True))
+def hexdoc_texture(context: Context, id: ResourceLocation) -> str:
     try:
-        metadata = cast_or_raise(
-            context["mod_metadata"],
-            dict[str, HexdocMetadata],
-        )[id.namespace]
-        return f"{metadata.asset_url}/{metadata.textures[id].as_posix()}"
+        mod_metadata = cast_or_raise(context["mod_metadata"], dict[str, HexdocMetadata])
+        return resolve_texture_from_metadata(mod_metadata, id)
     except Exception as e:
         e.add_note(f"id:\n    {id}")
         raise

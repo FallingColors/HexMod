@@ -21,7 +21,7 @@ from hexdoc.utils.jinja_extensions import (
     IncludeRawExtension,
     hexdoc_block,
     hexdoc_localize,
-    hexdoc_texture_url,
+    hexdoc_texture,
     hexdoc_wrap,
 )
 from hexdoc.utils.path import write_to_path
@@ -50,7 +50,7 @@ def create_jinja_env(props: Properties):
         "hexdoc_block": hexdoc_block,
         "hexdoc_wrap": hexdoc_wrap,
         "hexdoc_localize": hexdoc_localize,
-        "hexdoc_texture_url": hexdoc_texture_url,
+        "hexdoc_texture": hexdoc_texture,
     }
 
     return env

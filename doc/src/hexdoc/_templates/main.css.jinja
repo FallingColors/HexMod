@@ -2,7 +2,7 @@ summary {
   display: list-item;
 }
 
-details.spell-collapsible {
+.details-collapsible {
   display: inline-block;
   border: 1px solid #aaa;
   border-radius: 4px;
@@ -10,31 +10,89 @@ details.spell-collapsible {
   margin-bottom: 0.5em;
 }
 
-summary.collapse-spell {
+.collapse-details {
   font-weight: bold;
   margin: -0.5em -0.5em 0;
   padding: 0.5em;
 }
 
-details.spell-collapsible[open] {
+.details-collapsible[open] {
   padding: 0.5em;
 }
 
-details[open] summary.collapse-spell {
+.details-collapsible[open] .collapse-details {
   border-bottom: 1px solid #aaa;
   margin-bottom: 0.5em;
 }
 
-details .collapse-spell::before {
+.details-collapsible .collapse-details.collapse-spell::before {
   content: "{{ _('hexdoc.pattern.show') }}";
 }
 
-details[open] .collapse-spell::before {
+.details-collapsible[open] .collapse-details.collapse-spell::before {
   content: "{{ _('hexdoc.pattern.hide') }}";
 }
 
-blockquote.crafting-info {
-  font-size: inherit;
+/* if the collapsible is closed, hide the "hide recipe" message */
+.details-collapsible:not([open]) > .collapse-details > .collapse-recipe-hide {
+  display: none;
+  visibility: hidden;
+}
+
+/* if the collapsible is open, hide the "show recipe" message */
+.details-collapsible[open] > .collapse-details > .collapse-recipe-show {
+  display: none;
+  visibility: hidden;
+}
+
+/* we do a bit of crafting (mostly stolen from https://computercraft.info/wiki) */
+
+.crafting-table {
+  position: relative;
+  width: 256px;
+  height: 132px;
+
+  background-color: #c6c6c6;
+  border-radius: 16px;
+}
+
+.crafting-table > img { /* background */
+  image-rendering: pixelated;
+  width: 100%;
+  height: 100%;
+}
+
+.crafting-table-grid {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+
+  display: grid;
+  grid: repeat(3, 32px) / repeat(3, 32px);
+  gap: 4px;
+}
+
+.crafting-table-result {
+  position: absolute;
+  top: 50px;
+  left: 202px;
+}
+
+.crafting-table-result .badge {
+  position: absolute;
+  background-color: #292929;
+  bottom: -4px;
+  right: -4px;
+}
+
+:is(.crafting-table-grid, .crafting-table-result) :is(img, span) {
+  image-rendering: pixelated;
+  width: 32px;
+  height: 32px;
+}
+
+.tooltip {
+  white-space: nowrap;
 }
 
 a.permalink {

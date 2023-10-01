@@ -1,11 +1,14 @@
 import logging
-from typing import Any
+from typing import Any, Self
 
 from pydantic import ValidationInfo, model_validator
+from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from hexdoc.utils import ResourceLocation, TypeTaggedUnion
 from hexdoc.utils.deserialize import cast_or_raise
 from hexdoc.utils.resource_loader import LoaderContext
+
+from .ingredients import ItemResult
 
 
 class Recipe(TypeTaggedUnion, type=None):
@@ -14,23 +17,34 @@ class Recipe(TypeTaggedUnion, type=None):
     group: str | None = None
     category: str | None = None
 
-    @model_validator(mode="before")
-    def _pre_root(cls, values: Any, info: ValidationInfo):
+    # use wrap validator so we load the file *before* resolving the tagged union
+    @model_validator(mode="wrap")
+    @classmethod
+    def _pre_root(
+        cls,
+        value: Any,
+        handler: ModelWrapValidatorHandler[Self],
+        info: ValidationInfo,
+    ) -> Self:
         """Loads the recipe from json if the actual value is a resource location str."""
         if not info.context:
-            return values
+            return handler(value)
         context = cast_or_raise(info.context, LoaderContext)
 
         # if necessary, convert the id to a ResourceLocation
-        match values:
+        match value:
             case str():
-                id = ResourceLocation.from_str(values)
+                id = ResourceLocation.from_str(value)
             case ResourceLocation():
-                id = values
+                id = value
             case _:
-                return values
+                return handler(value)
 
         # load the recipe
         _, data = context.loader.load_resource("data", "recipes", id)
         logging.getLogger(__name__).debug(f"Load {cls} from {id}")
-        return data | {"id": id}
+        return handler(data | {"id": id})
+
+
+class CraftingRecipe(Recipe, type=None):
+    result: ItemResult

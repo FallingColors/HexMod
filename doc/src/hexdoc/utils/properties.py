@@ -87,6 +87,16 @@ class TemplateProps(StripHiddenModel):
         return values
 
 
+class MinecraftAssetsProps(StripHiddenModel):
+    ref: str
+    version: str
+
+
+class TexturesProps(StripHiddenModel):
+    missing: list[ResourceLocation]
+    override: dict[ResourceLocation, ResourceLocation]
+
+
 class Properties(StripHiddenModel):
     env: EnvironmentVariableProps
 
@@ -103,6 +113,11 @@ class Properties(StripHiddenModel):
     pattern_stubs: list[PatternStubProps]
 
     entry_id_blacklist: set[ResourceLocation] = Field(default_factory=set)
+
+    minecraft_assets: MinecraftAssetsProps
+
+    # FIXME: remove this and get the data from the actual model files
+    textures: TexturesProps
 
     template: TemplateProps
 

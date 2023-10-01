@@ -15,7 +15,7 @@ from pydantic.dataclasses import dataclass
 
 from hexdoc.plugin.manager import PluginManager
 from hexdoc.utils.deserialize import JSONDict, decode_json_dict
-from hexdoc.utils.iterators import must_yield
+from hexdoc.utils.iterators import must_yield_something
 from hexdoc.utils.model import DEFAULT_CONFIG, HexdocModel, ValidationContext
 from hexdoc.utils.path import strip_suffixes, write_to_path
 
@@ -46,12 +46,6 @@ class HexdocMetadata(HexdocModel):
     @classmethod
     def path(cls, modid: str) -> Path:
         return Path(f"{modid}.hexdoc.json")
-
-    def export(self, loader: ModResourceLoader):
-        loader.export(
-            self.path(loader.props.modid),
-            self.model_dump_json(by_alias=True, warnings=False),
-        )
 
 
 @dataclass(config=DEFAULT_CONFIG, kw_only=True)
@@ -114,20 +108,22 @@ class ModResourceLoader:
                     for path_resource_dir in stack.enter_context(resource_dir.load(pm))
                 ],
             )
+            loader.mod_metadata |= loader.load_metadata(model_type=HexdocMetadata)
 
             # export this mod's metadata
-            loader.mod_metadata[props.modid] = metadata = HexdocMetadata(
+            metadata = HexdocMetadata(
                 book_url=f"{props.url}/v/{version}",
                 asset_url=props.env.githubusercontent,
                 textures=loader._map_own_assets("textures", root=repo_root),
                 sounds=loader._map_own_assets("sounds", root=repo_root),
             )
-            metadata.export(loader)
+            loader.mod_metadata[props.modid] = metadata
+            loader.export(
+                metadata.path(loader.props.modid),
+                metadata.model_dump_json(by_alias=True, warnings=False),
+            )
 
             yield loader
-
-    def __post_init__(self):
-        self.mod_metadata |= self.load_metadata(model_type=HexdocMetadata)
 
     def _map_own_assets(self, folder: str, *, root: str | Path):
         return {
@@ -170,7 +166,7 @@ class ModResourceLoader:
         return metadata
 
     # TODO: maybe this should take lang as a variable?
-    @must_yield
+    @must_yield_something
     def load_book_assets(
         self,
         book_id: ResourceLocation,
@@ -494,3 +490,17 @@ class LoaderContext(ValidationContext):
     @property
     def props(self):
         return self.loader.props
+
+
+def resolve_texture_from_metadata(
+    mod_metadata: dict[str, HexdocMetadata],
+    id: ResourceLocation,
+    *fallbacks: ResourceLocation,
+) -> str:
+    try:
+        metadata = mod_metadata[id.namespace]
+        return f"{metadata.asset_url}/{metadata.textures[id].as_posix()}"
+    except KeyError:
+        if not fallbacks:
+            raise
+        return resolve_texture_from_metadata(mod_metadata, fallbacks[0], *fallbacks[1:])

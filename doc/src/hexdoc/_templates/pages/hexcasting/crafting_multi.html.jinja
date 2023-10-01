@@ -1,12 +1,7 @@
 {% extends "pages/patchouli/text.html.jinja" %}
-{% include "common/macros.html.jinja" with context %}
+{% import "macros/recipes.html.jinja" as recipe_macros with context %}
 
 {% block inner_body %}
-  {{ macros.recipe_block(
-    page.recipes,
-    "item",
-    _("hexdoc.pages.hexcasting.crafting_multi.description"),
-    _("hexdoc.pages.hexcasting.crafting_multi.separator"),
-  ) }}
+  {{ recipe_macros.crafting_table(page.recipes) }}
   {{ super() }}
 {% endblock inner_body %}

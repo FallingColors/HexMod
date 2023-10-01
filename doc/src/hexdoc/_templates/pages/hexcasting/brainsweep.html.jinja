@@ -1,8 +1,8 @@
 {% extends "pages/patchouli/page.html.jinja" %}
-{% include "common/macros.html.jinja" with context %}
+{% import "macros/recipes.html.jinja" as recipe_macros with context %}
 
 {% block body %}
-  {{ macros.recipe_block(
+  {{ recipe_macros.generic(
     [page.recipe],
     "name",
     _("hexdoc.pages.hexcasting.brainsweep.description"),

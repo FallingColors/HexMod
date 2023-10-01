@@ -26,7 +26,7 @@ RequiredPathOption = Annotated[Path, typer.Option()]
 UpdateLatestOption = Annotated[bool, typer.Option(envvar="UPDATE_LATEST")]
 ReleaseOption = Annotated[bool, typer.Option(envvar="RELEASE")]
 
-app = typer.Typer()
+app = typer.Typer(pretty_exceptions_enable=False)
 
 
 @app.command()
@@ -158,11 +158,10 @@ def serve(
 ):
     book_path = dst.resolve().relative_to(Path.cwd())
 
-    base_url = f"http://localhost:{port}"
-    book_url = f"{base_url}/{book_path.as_posix()}"
+    book_url = f"/{book_path.as_posix()}"
 
     os.environ |= {
-        "DEBUG_GITHUBUSERCONTENT": base_url,
+        "DEBUG_GITHUBUSERCONTENT": "",
         "GITHUB_PAGES_URL": book_url,
     }
 
@@ -186,7 +185,9 @@ def serve(
         release=release,
     )
 
-    print(f"Serving web book at {book_url} (press ctrl+c to exit)\n")
+    print(
+        f"Serving web book at http://localhost:{port}{book_url} (press ctrl+c to exit)\n"
+    )
     with HTTPServer(("", port), SimpleHTTPRequestHandler) as httpd:
         httpd.serve_forever()
 

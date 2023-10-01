@@ -38,23 +38,16 @@
       not_supported: "Your browser does not support visualizing patterns. Pattern code: {}",
     },
 
+    recipe: {
+      show: "Click to show recipe: {}",
+      hide: "Click to hide recipe: {}",
+    },
+
     pages: {
-      patchouli: {
-        crafting: {
-          description: "Depicted in the book: The crafting recipe for the",
-          separator: " and ",
-        },
-      },
-
       hexcasting: {
-        crafting_multi: {
-          description: "Depicted in the book: Several crafting recipes, for the",
-          separator: ", ",
-        },
-
         brainsweep: {
           description: "Depicted in the book: A mind-flaying recipe producing the",
-          separator: "", // this value intentionally left blank
+          separator: "",
         },
       },
     },

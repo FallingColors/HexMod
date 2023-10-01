@@ -90,6 +90,10 @@ class BaseResourceLocation:
     def _ser_model(self) -> str:
         return str(self)
 
+    @property
+    def id(self) -> ResourceLocation:
+        return ResourceLocation(self.namespace, self.path)
+
     def __repr__(self) -> str:
         return f"{self.namespace}:{self.path}"
 
@@ -174,6 +178,9 @@ class ItemStack(BaseResourceLocation, regex=_make_regex(count=True, nbt=True)):
 
     count: int | None = None
     nbt: str | None = None
+
+    def __init_subclass__(cls, **kwargs: Any):
+        super().__init_subclass__(regex=cls._from_str_regex, **kwargs)
 
     def i18n_key(self, root: str = "item") -> str:
         # TODO: is this how i18n works????? (apparently, because it's working)

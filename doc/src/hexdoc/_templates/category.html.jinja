@@ -1,8 +1,8 @@
-{% import "common/macros.html.jinja" as macros %}
+{% import "macros/formatting.html.jinja" as formatting %}
 
 <section id="{{ category.id.path }}">
-  {% call macros.maybe_spoilered(category) %}
-    {{- macros.section_header(category, "h2", "category-title") }}
+  {% call formatting.maybe_spoilered(category) %}
+    {{- formatting.section_header(category, "h2", "category-title") }}
     {{ category.description|hexdoc_block }}
   {% endcall %}
 

@@ -1,0 +1,64 @@
+{# show the names of all the recipe results in a list of recipes #}
+{% macro generic(recipes, result_attribute, description, separator) -%}
+  <blockquote class="crafting-info">
+    {{ description }} {{
+      recipes
+      |map(attribute="result."~result_attribute)
+      |map("hexdoc_wrap", "code")
+      |join(separator)
+    }}.
+  </blockquote>
+{%- endmacro %}
+
+{# display a single item, with a badge if the count is greater than 1 #}
+{% macro render_item(item, count=1, always_show_count=false) -%}
+  <div data-toggle="tooltip" title="{{ item.name }}">
+    <img loading="lazy" alt="Image of {{ item.name }}" src="{{ item.texture }}">
+    {% if always_show_count or count > 1 %}
+      <div class="badge">{{ count }}</div>
+    {% endif %}
+  </div>
+{%- endmacro %}
+
+{% macro render_ingredient(ingredient) -%}
+  {% if ingredient is sequence %}
+    {# TODO: properly handle multi-option ingredients #}
+    {{ render_ingredient(ingredient[0]) }}
+  {% elif ingredient is none %}
+    {# air #}
+    <div></div>
+  {% elif ingredient.type|string == "hexcasting:mod_conditional" %}
+    {{ render_ingredient(ingredient.default) }}
+  {% else %}
+    {{ render_item(ingredient.item) }}
+  {% endif %}
+{%- endmacro %}
+
+{# render a crafting table for each recipe #}
+{% macro crafting_table(recipes) -%}
+  {% for recipe in recipes %}
+    {% if loop.index0 > 0 %}<br />{% endif %}
+    <details class="details-collapsible">
+      <summary class="collapse-details">
+        <span class="collapse-recipe-show">{{ _('hexdoc.recipe.show').format(recipe.result.item.name) }}</span>
+        <span class="collapse-recipe-hide">{{ _('hexdoc.recipe.hide').format(recipe.result.item.name) }}</span>
+      </summary>
+      <div class="crafting-table">
+        <img
+          alt="Crafting table"
+          src="{{ 'hexcasting:textures/gui/hexdoc/crafting_table.png'|hexdoc_texture }}"
+        >
+        
+        <div class="crafting-table-grid">
+          {% for item in recipe.ingredients %}
+            {{ render_ingredient(item) }}
+          {% endfor %}
+        </div>
+
+        <div class="crafting-table-result">
+          {{ render_item(recipe.result.item, recipe.result.count) }}
+        </div>
+      </div>
+    </details>
+  {% endfor %}
+{%- endmacro %}
