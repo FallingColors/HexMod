@@ -12,15 +12,7 @@ from abc import ABC, abstractmethod
 from contextlib import ExitStack, contextmanager
 from fnmatch import fnmatch
 from pathlib import Path
-from typing import (
-    Any,
-    ClassVar,
-    ContextManager,
-    Iterable,
-    Literal,
-    Self,
-    dataclass_transform,
-)
+from typing import Any, ClassVar, ContextManager, Iterable, Literal, Self
 
 import importlib_resources as resources
 from pydantic import ValidationInfo, field_validator, model_serializer, model_validator
@@ -30,8 +22,7 @@ from pydantic.functional_validators import ModelWrapValidatorHandler
 from hexdoc.plugin import PluginManager
 from hexdoc.utils.cd import RelativePath, RelativePathContext
 
-from .deserialize import JSONDict
-from .model import DEFAULT_CONFIG, HexdocModel, ValidationContext, init_context
+from .model import DEFAULT_CONFIG, HexdocModel, init_context
 
 ResourceType = Literal["assets", "data", ""]
 
@@ -290,23 +281,3 @@ class PluginResourceDir(BaseResourceDir):
 
 
 ResourceDir = PathResourceDir | PluginResourceDir
-
-
-@dataclass_transform()
-class HexdocIDModel(HexdocModel, ABC):
-    id: ResourceLocation
-    resource_dir: PathResourceDir
-
-    @classmethod
-    def load(
-        cls,
-        resource_dir: PathResourceDir,
-        id: ResourceLocation,
-        data: JSONDict,
-        context: ValidationContext,
-    ) -> Self:
-        logging.getLogger(__name__).debug(f"Load {cls} at {id}")
-        return cls.model_validate(
-            data | {"id": id, "resource_dir": resource_dir},
-            context=context,
-        )

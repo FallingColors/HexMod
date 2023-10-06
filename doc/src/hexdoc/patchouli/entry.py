@@ -5,14 +5,14 @@ from pydantic import Field, ValidationInfo, model_validator
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.utils import Color, ItemStack, ResourceLocation
 from hexdoc.utils.deserialize import cast_or_raise
-from hexdoc.utils.resource import HexdocIDModel
+from hexdoc.utils.resource_model import IDModel
 from hexdoc.utils.types import Sortable
 
 from .book_context import BookContext
 from .page.pages import Page
 
 
-class Entry(HexdocIDModel, Sortable):
+class Entry(IDModel, Sortable):
     """Entry json file, with pages and localizations.
 
     See: https://vazkiimods.github.io/Patchouli/docs/reference/entry-json

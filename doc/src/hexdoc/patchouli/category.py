@@ -4,14 +4,14 @@ from pydantic import Field
 
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.utils import ItemStack, LoaderContext, ResourceLocation
-from hexdoc.utils.resource import HexdocIDModel
+from hexdoc.utils.resource_model import IDModel
 from hexdoc.utils.types import Sortable, sorted_dict
 
 from .entry import Entry
 from .text import FormatTree
 
 
-class Category(HexdocIDModel, Sortable):
+class Category(IDModel, Sortable):
     """Category with pages and localizations.
 
     See: https://vazkiimods.github.io/Patchouli/docs/reference/category-json
