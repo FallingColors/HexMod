@@ -17,14 +17,6 @@
       quenched: "Quenched Shard Staff",
       mindsplice: "Mindsplice Staff",
     },
-
-    "tags.tag.item.hexcasting:": {
-      brainswept_circle_components: "Brainswept Circle Components",
-      directrices: "Directrices",
-      grants_root_advancement: "Grants Rood Advancement",
-      impeti: "Impeti",
-      seal_materials: "Seal Materials",
-    },
     
     amethyst_dust: "Amethyst Dust",
     charged_amethyst: "Charged Amethyst",
@@ -228,6 +220,14 @@
     edified_logs: "Edified Logs",
     edified_planks: "Edified Planks",
     phial_base: "Empty Phials",
+  },
+
+  "tag.item.hexcasting": {
+    brainswept_circle_components: "Brainswept Circle Components",
+    directrices: "Directrices",
+    grants_root_advancement: "Grants Rood Advancement",
+    impeti: "Impeti",
+    seal_materials: "Seal Materials",
   },
   
   "emi.category.hexcasting": {

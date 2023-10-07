@@ -240,6 +240,7 @@ class I18n(HexdocModel):
         localized = self.localize(
             f"tag.{tag.namespace}.{tag.path}",
             f"tag.item.{tag.namespace}.{tag.path}",
+            f"tag.block.{tag.namespace}.{tag.path}",
         )
         return LocalizedStr(key=localized.key, value=f"Tag: {localized.value}")
 

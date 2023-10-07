@@ -53,18 +53,13 @@
     },
   },
 
-  key: {
-    use: "Right Click",
-    sneak: "Left Shift",
-    jump: "Space",
-  },
-
-  "item.minecraft": {
-    amethyst_shard: "Amethyst Shard",
-    budding_amethyst: "Budding Amethyst",
-  },
-
   "block.hexcasting": {
     slate: "Blank Slate",
+  },
+
+  "tag.item.c": {
+    brown_dye: "Brown Dyes",
+    glowstone_dusts: "Glowstone Dusts",
+    wood_sticks: "Wood Sticks",
   },
 }
