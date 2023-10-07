@@ -1,19 +1,19 @@
+from contextvars import ContextVar
 from pathlib import Path
 from typing import Annotated
 
-from pydantic import AfterValidator, ValidationInfo
+from pydantic import AfterValidator
 
-from .deserialize import cast_or_raise
-from .model import ValidationContext
+from hexdoc.utils.contextmanagers import set_contextvar
 
-
-class RelativePathContext(ValidationContext):
-    root: Path
+_relative_path_root = ContextVar[Path]("_relative_path_root")
 
 
-def validate_relative_path(path: Path, info: ValidationInfo):
-    context = cast_or_raise(info.context, RelativePathContext)
-    return context.root / path
+def relative_path_root(path: Path):
+    return set_contextvar(_relative_path_root, path)
 
 
-RelativePath = Annotated[Path, AfterValidator(validate_relative_path)]
+RelativePath = Annotated[
+    Path,
+    AfterValidator(lambda path: _relative_path_root.get() / path),
+]

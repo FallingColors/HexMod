@@ -11,11 +11,7 @@ from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from hexdoc.utils import HexdocModel, ItemStack, ModResourceLoader, ResourceLocation
 from hexdoc.utils.compat import HexVersion
-from hexdoc.utils.deserialize import (
-    cast_or_raise,
-    decode_and_flatten_json_dict,
-    isinstance_or_raise,
-)
+from hexdoc.utils.deserialize import cast_or_raise, decode_and_flatten_json_dict
 from hexdoc.utils.resource_loader import LoaderContext
 
 
@@ -187,37 +183,24 @@ class I18n(HexdocModel):
         if self.lookup is None:
             return LocalizedStr.skip_i18n(keys[0])
 
-        # for a single key, look it up
-        if len(keys) == 1:
-            key = keys[0]
-            if default is not None:
-                return self.lookup.get(key, LocalizedStr.skip_i18n(default))
-
-            try:
+        for key in keys:
+            if key in self.lookup:
                 return self.lookup[key]
-            except KeyError as e:
-                if allow_missing is not None:
-                    if not allow_missing:
-                        e.add_note(f"Lang: {self.lang}")
-                        raise
-                elif not self.allow_missing:
-                    e.add_note(f"Lang: {self.lang}")
-                    raise
 
-                logging.getLogger(__name__).warning(
-                    f"No translation in {self.lang} for key {key}"
-                )
-                return LocalizedStr.skip_i18n(key)
+        if default is not None:
+            return LocalizedStr.skip_i18n(default)
 
-        # for a list/tuple of keys, return the first one that matches (by recursing)
-        for current_key in keys[:-1]:
-            assert isinstance_or_raise(current_key, str)
-            try:
-                return self.localize(current_key, allow_missing=False)
-            except KeyError:
-                continue
+        message = f"No translation in {self.lang} for "
+        if len(keys) == 1:
+            message += f"key {keys[0]}"
+        else:
+            message += f"keys {keys}"
 
-        return self.localize(keys[-1], default=default)
+        if allow_missing is False:
+            raise KeyError(message)
+
+        logging.getLogger(__name__).error(message)
+        return LocalizedStr.skip_i18n(keys[0])
 
     def localize_pattern(self, op_id: ResourceLocation) -> LocalizedStr:
         """Localizes the given pattern id (internal name, eg. brainsweep).
@@ -253,8 +236,11 @@ class I18n(HexdocModel):
     def localize_key(self, key: str) -> LocalizedStr:
         return self.localize(f"key.{key}")
 
-    def localize_tag(self, tag: ResourceLocation):
-        localized = self.localize(f"tag.{tag.namespace}.{tag.path}")
+    def localize_item_tag(self, tag: ResourceLocation):
+        localized = self.localize(
+            f"tag.{tag.namespace}.{tag.path}",
+            f"tag.item.{tag.namespace}.{tag.path}",
+        )
         return LocalizedStr(key=localized.key, value=f"Tag: {localized.value}")
 
 

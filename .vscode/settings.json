@@ -18,5 +18,5 @@
     "files.associations": {
         "*.js.jinja": "javascript",
         "*.css.jinja": "css",
-    }
+    },
 }

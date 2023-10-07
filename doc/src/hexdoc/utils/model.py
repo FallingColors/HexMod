@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from contextlib import contextmanager
 from contextvars import ContextVar
-from typing import TYPE_CHECKING, Any, Iterator, Self, dataclass_transform
+from typing import TYPE_CHECKING, Any, Self, dataclass_transform
 
 from pydantic import BaseModel, ConfigDict, model_validator
 from pydantic.config import ConfigDict
+
+from hexdoc.utils.contextmanagers import set_contextvar
 
 DEFAULT_CONFIG = ConfigDict(
     extra="forbid",
@@ -14,14 +15,9 @@ DEFAULT_CONFIG = ConfigDict(
 _init_context_var = ContextVar[Any]("_init_context_var", default=None)
 
 
-@contextmanager
-def init_context(value: Any) -> Iterator[None]:
+def init_context(value: Any):
     """https://docs.pydantic.dev/latest/usage/validators/#using-validation-context-with-basemodel-initialization"""
-    token = _init_context_var.set(value)
-    try:
-        yield
-    finally:
-        _init_context_var.reset(token)
+    return set_contextvar(_init_context_var, value)
 
 
 @dataclass_transform()

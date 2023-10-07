@@ -20,9 +20,9 @@ from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from hexdoc.plugin import PluginManager
-from hexdoc.utils.cd import RelativePath, RelativePathContext
+from hexdoc.utils.cd import RelativePath, relative_path_root
 
-from .model import DEFAULT_CONFIG, HexdocModel, init_context
+from .model import DEFAULT_CONFIG, HexdocModel
 
 ResourceType = Literal["assets", "data", ""]
 
@@ -264,8 +264,7 @@ class PluginResourceDir(BaseResourceDir):
 
     @contextmanager
     def load(self, pm: PluginManager):
-        context = RelativePathContext(root=Path())
-        with ExitStack() as stack, init_context(context):
+        with ExitStack() as stack, relative_path_root(Path()):
             yield list(self._load_all(pm, stack))  # NOT "yield from"
 
     def _load_all(self, pm: PluginManager, stack: ExitStack):

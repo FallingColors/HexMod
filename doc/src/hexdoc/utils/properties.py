@@ -8,7 +8,7 @@ from typing import Annotated, Any, Self
 from pydantic import AfterValidator, Field, HttpUrl, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from .cd import RelativePath, RelativePathContext
+from .cd import RelativePath, relative_path_root
 from .model import StripHiddenModel
 from .resource import ResourceDir, ResourceLocation
 from .toml_placeholders import load_toml_with_placeholders
@@ -123,11 +123,11 @@ class Properties(StripHiddenModel):
 
     @classmethod
     def load(cls, path: Path) -> Self:
-        env = EnvironmentVariableProps.model_validate_env()
-        props = cls.model_validate(
-            load_toml_with_placeholders(path) | {"env": env},
-            context=RelativePathContext(root=path.parent),
-        )
+        with relative_path_root(path.parent):
+            env = EnvironmentVariableProps.model_validate_env()
+            props = cls.model_validate(
+                load_toml_with_placeholders(path) | {"env": env},
+            )
 
         logging.getLogger(__name__).debug(props)
         return props

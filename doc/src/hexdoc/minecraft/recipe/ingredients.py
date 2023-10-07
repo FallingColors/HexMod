@@ -31,7 +31,7 @@ class MinecraftItemTagIngredient(ItemIngredient, type=NoValue):
         self.item = RenderedItemStack(
             namespace=self.tag.namespace,
             path=self.tag.path,
-            name=context.i18n.localize_tag(self.tag),
+            name=context.i18n.localize_item_tag(self.tag),
             texture=TAG_TEXTURE,
         )
 
