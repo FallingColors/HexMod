@@ -42,7 +42,7 @@ def load_all_metadata(props: Properties, pm: PluginManager, loader: ModResourceL
     # this mod's metadata
     metadata = HexdocMetadata(
         book_url=f"{props.url}/v/{version}",
-        asset_url=props.env.githubusercontent,
+        asset_url=props.env.asset_url,
         textures={
             texture.file_id: texture for texture in Texture.load_all(root, loader)
         },

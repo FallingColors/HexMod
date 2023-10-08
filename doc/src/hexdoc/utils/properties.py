@@ -38,7 +38,7 @@ class EnvironmentVariableProps(BaseSettings):
         return cls.model_validate({})
 
     @property
-    def githubusercontent(self):
+    def asset_url(self):
         if self.debug_githubusercontent is not None:
             return self.debug_githubusercontent
 

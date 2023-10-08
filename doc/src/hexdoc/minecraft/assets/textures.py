@@ -34,9 +34,10 @@ class Texture(InlineModel):
             folder="textures",
             glob=f"**/*.png",
         ):
-            texture = "/" + path.resolve().relative_to(root).as_posix()
-            meta_path = path.with_suffix(".png.mcmeta")
+            relative_path = path.resolve().relative_to(root)
+            texture = f"{loader.props.env.asset_url}/{relative_path.as_posix()}"
 
+            meta_path = path.with_suffix(".png.mcmeta")
             if meta_path.is_file():
                 yield AnimatedTexture(
                     file_id=id,
