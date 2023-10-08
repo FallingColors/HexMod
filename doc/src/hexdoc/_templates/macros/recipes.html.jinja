@@ -48,8 +48,7 @@
 {# render a crafting table for each recipe #}
 {% macro crafting_table(recipes) -%}
   {% for recipe in recipes %}
-    {% if loop.index0 > 0 %}<br />{% endif %}
-    <details class="details-collapsible">
+    <details class="details-collapsible crafting-table-details">
       <summary class="collapse-details">
         <span class="collapse-recipe-show">{{ _('hexdoc.recipe.show').format(recipe.result.item.name) }}</span>
         <span class="collapse-recipe-hide">{{ _('hexdoc.recipe.hide').format(recipe.result.item.name) }}</span>
