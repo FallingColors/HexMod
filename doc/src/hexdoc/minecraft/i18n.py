@@ -219,17 +219,22 @@ class I18n(HexdocModel):
             f"hexcasting.{key_group}.{op_id}",
         )
 
-    def localize_item(self, item: ItemStack | str) -> LocalizedItem:
+    def localize_item(self, item: str | ResourceLocation | ItemStack) -> LocalizedItem:
         """Localizes the given item resource name.
 
         Raises KeyError if i18n is enabled and skip_errors is False but the key has no localization.
         """
-        if isinstance(item, str):
-            item = ItemStack.from_str(item)
+        match item:
+            case str():
+                item = ItemStack.from_str(item)
+            case ResourceLocation(namespace=namespace, path=path):
+                item = ItemStack(namespace=namespace, path=path)
+            case _:
+                pass
 
         localized = self.localize(
-            item.i18n_key("block"),
             item.i18n_key(),
+            item.i18n_key("block"),
         )
         return LocalizedItem(key=localized.key, value=localized.value)
 

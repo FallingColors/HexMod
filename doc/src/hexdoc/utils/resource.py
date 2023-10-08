@@ -111,6 +111,11 @@ class ResourceLocation(BaseResourceLocation, regex=_make_regex()):
     def href(self) -> str:
         return f"#{self.path}"
 
+    @property
+    def class_name(self):
+        stripped_path = re.sub(r"[\*\/\.]", "-", self.path)
+        return f"texture-{self.namespace}-{stripped_path}"
+
     def with_namespace(self, namespace: str):
         """Returns a copy of this ResourceLocation with the given namespace."""
         return ResourceLocation(namespace, self.path)

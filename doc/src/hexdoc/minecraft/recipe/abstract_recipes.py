@@ -4,7 +4,7 @@ from hexdoc.utils.resource_model import InlineIDModel
 from .ingredients import ItemResult
 
 
-class Recipe(InlineIDModel, TypeTaggedUnion, type=None):
+class Recipe(TypeTaggedUnion, InlineIDModel, type=None):
     group: str | None = None
     category: str | None = None
 

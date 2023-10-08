@@ -97,14 +97,10 @@ blockquote.crafting-info {
   right: -4px;
 }
 
-:is(.crafting-table-grid, .crafting-table-result) :is(img, span) {
+:is(.crafting-table-grid, .crafting-table-result) :is(img, div) {
   image-rendering: pixelated;
   width: 32px;
   height: 32px;
-}
-
-.tooltip {
-  white-space: nowrap;
 }
 
 a.permalink {
@@ -267,3 +263,8 @@ canvas.spell-viz {
     --dark-mode: 1;
   }
 }
+
+/*{{"*"}}/
+{# ^ so this part doesn't show linter errors in vscode (scuffed, i know) #}
+{% include "components/textures.jcss.jinja" %}
+/**/

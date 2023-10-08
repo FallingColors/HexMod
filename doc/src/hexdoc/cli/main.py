@@ -9,11 +9,13 @@ from typing import Annotated, Union
 import typer
 
 from hexdoc.minecraft import I18n
+from hexdoc.minecraft.assets.textures import AnimatedTexture, Texture
 from hexdoc.utils import ModResourceLoader
+from hexdoc.utils.resource import ResourceLocation
 
-from .load import load_book, load_books, load_common_data
-from .render import create_jinja_env, render_book
-from .sitemap import (
+from .utils.load import load_book, load_books, load_common_data
+from .utils.render import create_jinja_env, render_book
+from .utils.sitemap import (
     assert_version_exists,
     delete_root_book,
     delete_updated_books,
@@ -71,7 +73,16 @@ def render(
 
     # load data
     props, pm, version = load_common_data(props_file, verbosity)
-    books, mod_metadata = load_books(props, pm, lang, allow_missing)
+    books, all_metadata = load_books(props, pm, lang, allow_missing)
+
+    textures = dict[ResourceLocation, Texture]()
+    animations = list[AnimatedTexture]()
+
+    for metadata in all_metadata.values():
+        textures |= metadata.textures
+        for texture in metadata.textures.values():
+            if isinstance(texture, AnimatedTexture):
+                animations.append(texture)
 
     logger = logging.getLogger(__name__)
     logger.info(f"update_latest={update_latest}, release={release}")
@@ -102,7 +113,9 @@ def render(
                 i18n=i18n,
                 templates=templates,
                 output_dir=output_dir,
-                mod_metadata=mod_metadata,
+                all_metadata=all_metadata,
+                textures=textures,
+                animations=animations,
                 allow_missing=allow_missing,
                 version=version_,
                 is_root=is_root,

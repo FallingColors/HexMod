@@ -64,8 +64,12 @@ JSONDict = dict[str, "JSONValue"]
 JSONValue = JSONDict | list["JSONValue"] | str | int | float | bool | None
 
 
-def decode_json_dict(data: str) -> JSONDict:
-    decoded = pyjson5.decode(data)
+def decode_json_dict(data: str | bytes) -> JSONDict:
+    match data:
+        case str():
+            decoded = pyjson5.decode(data)
+        case _:
+            decoded = pyjson5.decode_utf8(data)
     assert isinstance_or_raise(decoded, dict)
     return decoded
 

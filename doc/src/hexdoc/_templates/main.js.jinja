@@ -296,6 +296,19 @@ function hookSpoiler(elem) {
   }
 }
 
+let startTime = null;
+
+function hookSyncAnimations(elem) {
+  elem.addEventListener("animationstart", (e) => {
+    const anim = e.target.getAnimations()[0];
+    if (startTime == null) {
+      startTime = anim.startTime;
+    } else {
+      anim.startTime = startTime;
+    }
+  })
+}
+
 // these are filled by Jinja
 const BOOK_URL = "{{ props.url }}";
 
@@ -406,6 +419,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".details-collapsible").forEach(hookLoad);
   document.querySelectorAll("a.toggle-link").forEach(hookToggle);
   document.querySelectorAll(".spoilered").forEach(hookSpoiler);
+  document.querySelectorAll(".animated-texture").forEach(hookSyncAnimations)
 
   function tick(prevTime, time) {
     const dt = time - prevTime;

@@ -8,12 +8,12 @@ from markupsafe import Markup
 from pydantic import ConfigDict, validate_call
 
 from hexdoc.minecraft import I18n, LocalizedStr
+from hexdoc.minecraft.assets.textures import Texture
 from hexdoc.patchouli import Book, FormatTree
 from hexdoc.patchouli.book import Book
 from hexdoc.patchouli.text import HTMLStream
 from hexdoc.patchouli.text.formatting import FormatTree
 from hexdoc.utils.resource import ResourceLocation
-from hexdoc.utils.resource_loader import HexdocMetadata, resolve_texture_from_metadata
 
 from . import Properties
 from .deserialize import cast_or_raise
@@ -105,8 +105,12 @@ def hexdoc_localize(
 @validate_call(config=ConfigDict(arbitrary_types_allowed=True))
 def hexdoc_texture(context: Context, id: ResourceLocation) -> str:
     try:
-        mod_metadata = cast_or_raise(context["mod_metadata"], dict[str, HexdocMetadata])
-        return resolve_texture_from_metadata(mod_metadata, id)
+        props = cast_or_raise(context["props"], Properties)
+        textures = cast_or_raise(context["textures"], dict[Any, Any])
+        texture = Texture.find(id, props=props, textures=textures)
+
+        assert texture.url is not None
+        return texture.url
     except Exception as e:
         e.add_note(f"id:\n    {id}")
         raise

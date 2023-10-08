@@ -1,11 +1,14 @@
 import logging
+import subprocess
 from pathlib import Path
 
 from hexdoc.hexcasting.hex_book import load_hex_book
 from hexdoc.minecraft import I18n
+from hexdoc.minecraft.assets.textures import Texture
 from hexdoc.patchouli import Book
 from hexdoc.plugin import PluginManager
 from hexdoc.utils import ModResourceLoader, Properties
+from hexdoc.utils.metadata import HexdocMetadata
 
 from .logging import setup_logging
 
@@ -26,6 +29,33 @@ def load_version(props: Properties, pm: PluginManager):
     return version
 
 
+def load_all_metadata(props: Properties, pm: PluginManager, loader: ModResourceLoader):
+    version = pm.mod_version(props.modid)
+    root = Path(
+        subprocess.run(
+            ["git", "rev-parse", "--show-toplevel"],
+            capture_output=True,
+            encoding="utf-8",
+        ).stdout.strip()
+    )
+
+    # this mod's metadata
+    metadata = HexdocMetadata(
+        book_url=f"{props.url}/v/{version}",
+        asset_url=props.env.githubusercontent,
+        textures={
+            texture.file_id: texture for texture in Texture.load_all(root, loader)
+        },
+    )
+
+    loader.export(
+        metadata.path(props.modid),
+        metadata.model_dump_json(by_alias=True, warnings=False),
+    )
+
+    return loader.load_metadata(model_type=HexdocMetadata) | {props.modid: metadata}
+
+
 def load_book(
     props: Properties,
     pm: PluginManager,
@@ -37,10 +67,11 @@ def load_book(
         lang = props.default_lang
 
     with ModResourceLoader.clean_and_load_all(props, pm) as loader:
+        all_metadata = load_all_metadata(props, pm, loader)
         lang, i18n = _load_i18n(loader, lang, allow_missing)[0]
 
         _, data = Book.load_book_json(loader, props.book)
-        book = load_hex_book(data, pm, loader, i18n)
+        book = load_hex_book(data, pm, loader, i18n, all_metadata)
 
     return lang, book, i18n
 
@@ -51,17 +82,20 @@ def load_books(
     lang: str | None,
     allow_missing: bool,
 ):
-    """books, mod_metadata"""
+    """books, all_metadata"""
 
     with ModResourceLoader.clean_and_load_all(props, pm) as loader:
-        _, book_data = Book.load_book_json(loader, props.book)
+        all_metadata = load_all_metadata(props, pm, loader)
 
+        _, book_data = Book.load_book_json(loader, props.book)
         books = dict[str, tuple[Book, I18n]]()
+
         for lang, i18n in _load_i18n(loader, lang, allow_missing):
-            books[lang] = (load_hex_book(book_data, pm, loader, i18n), i18n)
+            book = load_hex_book(book_data, pm, loader, i18n, all_metadata)
+            books[lang] = (book, i18n)
             loader.export_dir = None  # only export the first (default) book
 
-        return books, loader.mod_metadata
+        return books, all_metadata
 
 
 def _load_i18n(

@@ -34,14 +34,10 @@ class IDModel(HexdocModel):
 
 
 @dataclass_transform()
-class InlineIDModel(IDModel, ABC):
+class InlineModel(HexdocModel, ABC):
     @classmethod
     @abstractmethod
-    def load_resource(
-        cls,
-        id: ResourceLocation,
-        loader: ModResourceLoader,
-    ) -> tuple[PathResourceDir, JSONDict]:
+    def load_id(cls, id: ResourceLocation, context: Any) -> Self:
         ...
 
     @model_validator(mode="wrap")
@@ -65,7 +61,23 @@ class InlineIDModel(IDModel, ABC):
             case _:
                 return handler(value)
 
-        # load the recipe
-        context = cast_or_raise(info.context, LoaderContext)
+        # load the data
+        context = cast_or_raise(info.context, ValidationContext)
+        return cls.load_id(id, context)
+
+
+@dataclass_transform()
+class InlineIDModel(IDModel, InlineModel, ABC):
+    @classmethod
+    def load_id(cls, id: ResourceLocation, context: LoaderContext):
         resource_dir, data = cls.load_resource(id, context.loader)
         return cls.load(resource_dir, id, data, context)
+
+    @classmethod
+    @abstractmethod
+    def load_resource(
+        cls,
+        id: ResourceLocation,
+        loader: ModResourceLoader,
+    ) -> tuple[PathResourceDir, JSONDict]:
+        ...

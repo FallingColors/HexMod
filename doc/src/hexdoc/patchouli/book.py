@@ -133,9 +133,7 @@ class Book(HexdocModel):
         # load categories
         self._categories = Category.load_all(context, self.id, self.use_resource_pack)
         for id, category in self._categories.items():
-            self._link_bases[(id, None)] = context.loader.get_link_base(
-                category.resource_dir
-            )
+            self._link_bases[(id, None)] = context.get_link_base(category.resource_dir)
 
         if not self._categories:
             raise ValueError(
@@ -167,7 +165,7 @@ class Book(HexdocModel):
         ):
             entry = Entry.load(resource_dir, id, data, context)
 
-            link_base = context.loader.get_link_base(resource_dir)
+            link_base = context.get_link_base(resource_dir)
             self._link_bases[(id, None)] = link_base
             for page in entry.pages:
                 if page.anchor is not None:

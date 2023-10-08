@@ -1,13 +1,7 @@
 __all__ = [
-    "MinecraftAssetsContext",
-    "RenderedItemStack",
+    "TextureContext",
     "TAG_TEXTURE",
     "MISSING_TEXTURE",
 ]
 
-from .assets import (
-    MISSING_TEXTURE,
-    TAG_TEXTURE,
-    MinecraftAssetsContext,
-    RenderedItemStack,
-)
+from .textures import MISSING_TEXTURE, TAG_TEXTURE, TextureContext

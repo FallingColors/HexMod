@@ -10,16 +10,15 @@ from pathlib import Path
 from textwrap import dedent
 from typing import Any, Callable, Literal, Self, TypeVar, overload
 
-from pydantic import Field
 from pydantic.dataclasses import dataclass
 
 from hexdoc.plugin.manager import PluginManager
-from hexdoc.utils.deserialize import JSONDict, decode_json_dict
-from hexdoc.utils.iterators import must_yield_something
-from hexdoc.utils.model import DEFAULT_CONFIG, HexdocModel, ValidationContext
-from hexdoc.utils.path import strip_suffixes, write_to_path
 
-from .properties import NoTrailingSlashHttpUrl, Properties
+from .deserialize import JSONDict, decode_json_dict
+from .iterators import must_yield_something
+from .model import DEFAULT_CONFIG, HexdocModel, ValidationContext
+from .path import strip_suffixes, write_to_path
+from .properties import Properties
 from .resource import PathResourceDir, ResourceLocation, ResourceType
 
 METADATA_SUFFIX = ".hexdoc.json"
@@ -30,31 +29,11 @@ _T_Model = TypeVar("_T_Model", bound=HexdocModel)
 ExportFn = Callable[[_T, _T | None], str]
 
 
-class HexdocMetadata(HexdocModel):
-    """Automatically generated at `export_dir/modid.hexdoc.json`."""
-
-    book_url: NoTrailingSlashHttpUrl
-    """Github Pages base url."""
-    asset_url: NoTrailingSlashHttpUrl
-    """raw.githubusercontent.com base url."""
-
-    textures: dict[ResourceLocation, Path]
-    """id -> path from repo root"""
-    sounds: dict[ResourceLocation, Path]
-    """id -> path from repo root"""
-
-    @classmethod
-    def path(cls, modid: str) -> Path:
-        return Path(f"{modid}.hexdoc.json")
-
-
 @dataclass(config=DEFAULT_CONFIG, kw_only=True)
 class ModResourceLoader:
     props: Properties
     export_dir: Path | None
     resource_dirs: list[PathResourceDir]
-
-    mod_metadata: dict[str, HexdocMetadata] = Field(default_factory=dict)
 
     @classmethod
     def clean_and_load_all(
@@ -90,13 +69,6 @@ class ModResourceLoader:
         export: bool = True,
     ) -> Iterator[Self]:
         export_dir = props.export_dir if export else None
-        version = pm.mod_version(props.modid)
-
-        repo_root = subprocess.run(
-            ["git", "rev-parse", "--show-toplevel"],
-            capture_output=True,
-            encoding="utf-8",
-        ).stdout.strip()
 
         with ExitStack() as stack:
             loader = cls(
@@ -107,20 +79,6 @@ class ModResourceLoader:
                     for resource_dir in props.resource_dirs
                     for path_resource_dir in stack.enter_context(resource_dir.load(pm))
                 ],
-            )
-            loader.mod_metadata |= loader.load_metadata(model_type=HexdocMetadata)
-
-            # export this mod's metadata
-            metadata = HexdocMetadata(
-                book_url=f"{props.url}/v/{version}",
-                asset_url=props.env.githubusercontent,
-                textures=loader._map_own_assets("textures", root=repo_root),
-                sounds=loader._map_own_assets("sounds", root=repo_root),
-            )
-            loader.mod_metadata[props.modid] = metadata
-            loader.export(
-                metadata.path(loader.props.modid),
-                metadata.model_dump_json(by_alias=True, warnings=False),
             )
 
             yield loader
@@ -135,12 +93,6 @@ class ModResourceLoader:
                 glob=f"{folder}/**/*.*",
             )
         }
-
-    def get_link_base(self, resource_dir: PathResourceDir) -> str:
-        modid = resource_dir.modid
-        if modid is None or modid == self.props.modid:
-            return ""
-        return self.mod_metadata[modid].book_url
 
     def load_metadata(
         self,
@@ -490,17 +442,3 @@ class LoaderContext(ValidationContext):
     @property
     def props(self):
         return self.loader.props
-
-
-def resolve_texture_from_metadata(
-    mod_metadata: dict[str, HexdocMetadata],
-    id: ResourceLocation,
-    *fallbacks: ResourceLocation,
-) -> str:
-    try:
-        metadata = mod_metadata[id.namespace]
-        return f"{metadata.asset_url}/{metadata.textures[id].as_posix()}"
-    except KeyError:
-        if not fallbacks:
-            raise
-        return resolve_texture_from_metadata(mod_metadata, fallbacks[0], *fallbacks[1:])

@@ -18,5 +18,6 @@
     "files.associations": {
         "*.js.jinja": "javascript",
         "*.css.jinja": "css",
+        "*.jcss.jinja": "jinja-css", // for files with a lot of jinja stuff, where the linting isn't useful
     },
 }

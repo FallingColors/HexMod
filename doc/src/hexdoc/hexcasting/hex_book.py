@@ -10,6 +10,7 @@ from hexdoc.plugin import PluginManager
 from hexdoc.utils import HexdocModel, ModResourceLoader, ResourceLocation, init_context
 from hexdoc.utils.compat import HexVersion
 from hexdoc.utils.deserialize import cast_or_raise
+from hexdoc.utils.metadata import HexdocMetadata
 from hexdoc.utils.properties import PatternStubProps
 
 from .pattern import Direction, PatternInfo
@@ -20,6 +21,7 @@ def load_hex_book(
     pm: PluginManager,
     loader: ModResourceLoader,
     i18n: I18n,
+    all_metadata: dict[str, HexdocMetadata],
 ):
     with init_context(data):
         context = HexContext(
@@ -28,6 +30,7 @@ def load_hex_book(
             i18n=i18n,
             # this SHOULD be set (as a ResourceLocation) by Book.get_book_json
             book_id=cast_or_raise(data["id"], ResourceLocation),
+            all_metadata=all_metadata,
         )
     return Book.model_validate(data, context=context)
 

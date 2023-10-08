@@ -15,6 +15,7 @@ from jinja2 import (
 from jinja2.sandbox import SandboxedEnvironment
 
 from hexdoc.minecraft import I18n
+from hexdoc.minecraft.assets.textures import AnimatedTexture, Texture
 from hexdoc.patchouli import Book
 from hexdoc.utils import Properties
 from hexdoc.utils.jinja_extensions import (
@@ -24,8 +25,9 @@ from hexdoc.utils.jinja_extensions import (
     hexdoc_texture,
     hexdoc_wrap,
 )
+from hexdoc.utils.metadata import HexdocMetadata
 from hexdoc.utils.path import write_to_path
-from hexdoc.utils.resource_loader import HexdocMetadata
+from hexdoc.utils.resource import ResourceLocation
 
 from .sitemap import MARKER_NAME, SitemapMarker
 
@@ -64,7 +66,9 @@ def render_book(
     i18n: I18n,
     templates: dict[str, Template],
     output_dir: Path,
-    mod_metadata: dict[str, HexdocMetadata],
+    all_metadata: dict[str, HexdocMetadata],
+    textures: dict[ResourceLocation, Texture],
+    animations: list[AnimatedTexture],
     allow_missing: bool,
     version: str,
     is_root: bool,
@@ -89,10 +93,13 @@ def render_book(
         **props.template.args,
         "book": book,
         "props": props,
+        "i18n": i18n,
         "page_url": page_url,
         "version": version,
         "lang": lang,
-        "mod_metadata": mod_metadata,
+        "all_metadata": all_metadata,
+        "textures": textures,
+        "animations": animations,
         "is_bleeding_edge": version == "latest",
         "_": lambda key: hexdoc_localize(  # i18n helper
             key,

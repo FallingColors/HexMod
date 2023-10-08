@@ -12,12 +12,25 @@
 
 {# display a single item, with a badge if the count is greater than 1 #}
 {% macro render_item(item, count=1, always_show_count=false) -%}
-  <div data-toggle="tooltip" title="{{ item.name }}">
-    <img loading="lazy" alt="Image of {{ item.name }}" src="{{ item.texture }}">
-    {% if always_show_count or count > 1 %}
-      <div class="badge">{{ count }}</div>
-    {% endif %}
-  </div>
+  {% if item.texture.meta %}
+    <div
+      role="img"
+      title="{{ item.name }}"
+      aria-label="Animated image of {{ item.name }}"
+      class="animated-texture {{ item.texture.class_name }}"
+    ></div>
+  {% else %}
+    <img
+      title="{{ item.name }}"
+      alt="Image of {{ item.name }}"
+      src="{{ item.texture.url }}"
+      loading="lazy"
+    >
+  {% endif %}
+
+  {% if always_show_count or count > 1 %}
+    <div class="badge">{{ count }}</div>
+  {% endif %}
 {%- endmacro %}
 
 {% macro render_ingredient(ingredient) -%}
