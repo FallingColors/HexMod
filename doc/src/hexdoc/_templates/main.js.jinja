@@ -242,6 +242,8 @@ function initializeElem(canvas) {
   }
 }
 
+let cycleNodes = [];
+
 function hookLoad(elem) {
   let init = false;
   const canvases = elem.querySelectorAll("canvas");
@@ -250,9 +252,11 @@ function hookLoad(elem) {
       canvases.forEach(initializeElem);
       init = true;
     }
+
+    cycleNodes = document.querySelectorAll(".details-collapsible[open] .cycle-textures");
     
     if (elem.hasAttribute("open")) {
-      for (const child of elem.querySelectorAll(".cycle-textures")) {
+      for (const child of cycleNodes) {
         doCycleTextures(child);
       }
     }
@@ -334,7 +338,7 @@ function doCycleTextures(elem) {
 function doCycleTexturesForever() {
   cycleIndex += 1;
 
-  for (const elem of document.querySelectorAll(".details-collapsible[open] .cycle-textures")) {
+  for (const elem of cycleNodes) {
     doCycleTextures(elem);
   }
 

@@ -35,17 +35,17 @@ class Texture(InlineModel):
             glob=f"**/*.png",
         ):
             relative_path = path.resolve().relative_to(root)
-            texture = f"{loader.props.env.asset_url}/{relative_path.as_posix()}"
+            url = f"{loader.props.env.asset_url}/{relative_path.as_posix()}"
 
             meta_path = path.with_suffix(".png.mcmeta")
             if meta_path.is_file():
                 yield AnimatedTexture(
                     file_id=id,
-                    url=texture,
+                    url=url,
                     meta=AnimationMeta.model_validate_json(meta_path.read_bytes()),
                 )
             else:
-                yield Texture(file_id=id, url=texture)
+                yield Texture(file_id=id, url=url)
 
     @classmethod
     def load_id(cls, id: ResourceLocation, context: TextureContext):
