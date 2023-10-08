@@ -5,20 +5,20 @@ from pydantic import field_validator
 from hexdoc.utils.compat import HexVersion
 
 from .abstract_recipes import CraftingRecipe
-from .ingredients import ItemIngredientOrList
+from .ingredients import ItemIngredientList
 
 
 class CraftingShapelessRecipe(CraftingRecipe, type="minecraft:crafting_shapeless"):
-    ingredients: list[ItemIngredientOrList]
+    ingredients: list[ItemIngredientList]
 
 
 class CraftingShapedRecipe(CraftingRecipe, type="minecraft:crafting_shaped"):
-    key: dict[str, ItemIngredientOrList]
+    key: dict[str, ItemIngredientList]
     pattern: list[str]
     show_notification: bool | None = None
 
     @property
-    def ingredients(self) -> Iterator[ItemIngredientOrList | None]:
+    def ingredients(self) -> Iterator[ItemIngredientList | None]:
         for row in self.pattern:
             if len(row) > 3:
                 raise ValueError(f"Expected len(row) <= 3, got {len(row)}: `{row}`")

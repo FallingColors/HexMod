@@ -17,7 +17,7 @@
       role="img"
       title="{{ item.name }}"
       aria-label="Animated image of {{ item.name }}"
-      class="animated-texture {{ item.texture.class_name }}"
+      class="texture animated-sync {{ item.texture.class_name }}"
     ></div>
   {% else %}
     <img
@@ -25,6 +25,7 @@
       alt="Image of {{ item.name }}"
       src="{{ item.texture.url }}"
       loading="lazy"
+      class="texture"
     >
   {% endif %}
 
@@ -33,18 +34,15 @@
   {% endif %}
 {%- endmacro %}
 
-{% macro render_ingredient(ingredient) -%}
-  {% if ingredient is sequence %}
-    {# TODO: properly handle multi-option ingredients #}
-    {{ render_ingredient(ingredient[0]) }}
-  {% elif ingredient is none %}
-    {# air #}
-    <div></div>
-  {% elif ingredient.type|string == "hexcasting:mod_conditional" %}
-    {{ render_ingredient(ingredient.default) }}
-  {% else %}
-    {{ render_item(ingredient.item) }}
-  {% endif %}
+{% macro render_ingredients(ingredients) -%}
+  {% for ingredient in ingredients %}
+    {% if ingredient.type|string == "hexcasting:mod_conditional" %}
+      {# recursion! what could possibly go wrong? #}
+      {{- render_ingredients(ingredient.default) -}}
+    {% else %}
+      {{- render_item(ingredient.item) -}}
+    {% endif %}
+  {% endfor %}
 {%- endmacro %}
 
 {# render a crafting table for each recipe #}
@@ -63,8 +61,14 @@
         >
         
         <div class="crafting-table-grid">
-          {% for item in recipe.ingredients %}
-            {{ render_ingredient(item) }}
+          {% for cell_ingredients in recipe.ingredients %}
+            {% if cell_ingredients is none %}
+              <div></div> {#- empty slot / air #}
+            {% else %}
+              <div class="cycle-textures">
+                {{ render_ingredients(cell_ingredients) }}
+              </div>
+            {% endif %}
           {% endfor %}
         </div>
 

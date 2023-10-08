@@ -3,11 +3,7 @@ from typing import Any, Literal
 from pydantic import model_validator
 
 from hexdoc.minecraft import LocalizedItem, Recipe
-from hexdoc.minecraft.recipe import (
-    ItemIngredient,
-    MinecraftItemIdIngredient,
-    MinecraftItemTagIngredient,
-)
+from hexdoc.minecraft.recipe import ItemIngredient, ItemIngredientList
 from hexdoc.utils import HexdocModel, ResourceLocation, TypeTaggedUnion
 from hexdoc.utils.compat import HexVersion
 from hexdoc.utils.tagged_union import NoValue
@@ -54,18 +50,12 @@ class BlockStateIngredient(HexdocModel):
     block: ResourceLocation
 
 
-_MinecraftItemIngredient = MinecraftItemIdIngredient | MinecraftItemTagIngredient
-_MinecraftItemIngredientOrList = (
-    _MinecraftItemIngredient | list[_MinecraftItemIngredient]
-)
-
-
 class ModConditionalIngredient(
     ItemIngredient,
     type="hexcasting:mod_conditional",
 ):
-    default: _MinecraftItemIngredientOrList
-    if_loaded: _MinecraftItemIngredientOrList
+    default: ItemIngredientList
+    if_loaded: ItemIngredientList
     modid: str
 
 

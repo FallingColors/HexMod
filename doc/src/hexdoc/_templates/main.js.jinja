@@ -250,6 +250,12 @@ function hookLoad(elem) {
       canvases.forEach(initializeElem);
       init = true;
     }
+    
+    if (elem.hasAttribute("open")) {
+      for (const child of elem.querySelectorAll(".cycle-textures")) {
+        doCycleTextures(child);
+      }
+    }
   });
 }
 
@@ -300,14 +306,50 @@ let startTime = null;
 
 function hookSyncAnimations(elem) {
   elem.addEventListener("animationstart", (e) => {
-    const anim = e.target.getAnimations()[0];
-    if (startTime == null) {
-      startTime = anim.startTime;
-    } else {
-      anim.startTime = startTime;
+    for (const anim of e.target.getAnimations()) {
+      if (startTime == null) {
+        startTime = anim.startTime;
+      } else {
+        anim.startTime = startTime;
+      }
     }
   })
 }
+
+const CYCLE_ACTIVE = "cycle-textures-active";
+
+let cycleIndex = 0;
+let cycleTimeoutID;
+
+function doCycleTextures(elem) {
+  Array.from(elem.children).forEach((child, i) => {
+    if (i === (cycleIndex % elem.children.length)) {
+      child.classList.add(CYCLE_ACTIVE);
+    } else {
+      child.classList.remove(CYCLE_ACTIVE);
+    }
+  });
+}
+
+function doCycleTexturesForever() {
+  cycleIndex += 1;
+
+  for (const elem of document.querySelectorAll(".details-collapsible[open] .cycle-textures")) {
+    doCycleTextures(elem);
+  }
+
+  cycleTimeoutID = setTimeout(doCycleTexturesForever, 3000);
+}
+
+$(".cycle-textures > .texture")
+  .on("mouseenter", () => { // start hover
+    if (cycleTimeoutID != null) {
+      clearTimeout(cycleTimeoutID);
+    }
+  })
+  .on("mouseleave", () => { // stop hover
+    cycleTimeoutID = setTimeout(doCycleTexturesForever, 1000);
+  });
 
 // these are filled by Jinja
 const BOOK_URL = "{{ props.url }}";
@@ -419,7 +461,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".details-collapsible").forEach(hookLoad);
   document.querySelectorAll("a.toggle-link").forEach(hookToggle);
   document.querySelectorAll(".spoilered").forEach(hookSpoiler);
-  document.querySelectorAll(".animated-texture").forEach(hookSyncAnimations)
+  document.querySelectorAll(".animated-sync").forEach(hookSyncAnimations);
+  doCycleTexturesForever();
 
   function tick(prevTime, time) {
     const dt = time - prevTime;
@@ -433,4 +476,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
-})
+});

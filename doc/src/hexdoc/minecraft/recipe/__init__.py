@@ -1,7 +1,7 @@
 __all__ = [
     "Recipe",
     "ItemIngredient",
-    "ItemIngredientOrList",
+    "ItemIngredientList",
     "MinecraftItemIdIngredient",
     "MinecraftItemTagIngredient",
     "CraftingRecipe",
@@ -13,7 +13,7 @@ __all__ = [
 from .abstract_recipes import CraftingRecipe, Recipe
 from .ingredients import (
     ItemIngredient,
-    ItemIngredientOrList,
+    ItemIngredientList,
     ItemResult,
     MinecraftItemIdIngredient,
     MinecraftItemTagIngredient,

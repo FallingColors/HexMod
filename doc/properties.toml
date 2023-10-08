@@ -44,9 +44,7 @@ missing = [
 
 [textures.override]
 "hexcasting:akashic_connector" = "hexcasting:akashic_ligature"
-"hexcasting:directrix/empty" = "hexcasting:circle/directrix/empty/front_dim"
 "hexcasting:focus" = "hexcasting:focus_empty"
-"hexcasting:impetus/empty" = "hexcasting:circle/impetus/empty/front_dim"
 "hexcasting:quenched_allay_shard" = "hexcasting:quenched_shard_0"
 "hexcasting:scroll_large" = "hexcasting:scroll_pristine_large"
 "hexcasting:scroll_medium" = "hexcasting:scroll_pristine_medium"
@@ -57,6 +55,23 @@ missing = [
 "hexcasting:staff/quenched" = "hexcasting:staff/quenched_0"
 
 # ugh. TODO: properly get from model files
+
+"hexcasting:edified_wood" = "hexcasting:edified_log"
+"hexcasting:stripped_edified_wood" = "hexcasting:stripped_edified_log"
+"hexcasting:edified_log_amethyst" = "hexcasting:deco/edified_log_amethyst"
+"hexcasting:edified_log_aventurine" = "hexcasting:deco/edified_log_aventurine"
+"hexcasting:edified_log_citrine" = "hexcasting:deco/edified_log_citrine"
+"hexcasting:edified_log_purple" = "hexcasting:deco/edified_log_purple"
+
+"hexcasting:directrix/boolean" = "hexcasting:circle/directrix/boolean/front_not_false"
+"hexcasting:directrix/empty" = "hexcasting:circle/directrix/empty/front_dim"
+"hexcasting:directrix/redstone" = "hexcasting:circle/directrix/redstone/front_dim_unpowered"
+
+"hexcasting:impetus/empty" = "hexcasting:circle/impetus/empty/front_dim"
+"hexcasting:impetus/look" = "hexcasting:circle/impetus/look/front_dim"
+"hexcasting:impetus/redstone" = "hexcasting:circle/impetus/redstone/front_dim"
+"hexcasting:impetus/rightclick" = "hexcasting:circle/impetus/rightclick/front_dim"
+
 "hexcasting:dye_colorizer_black" = "hexcasting:colorizer/dye_black"
 "hexcasting:dye_colorizer_blue" = "hexcasting:colorizer/dye_blue"
 "hexcasting:dye_colorizer_brown" = "hexcasting:colorizer/dye_brown"

@@ -19,7 +19,7 @@ TagValue = ResourceLocation | OptionalTagValue
 class Tag(HexdocModel):
     registry: str = Field(exclude=True)
     raw_values: set[TagValue] = Field(alias="values")
-    replace: bool
+    replace: bool = False
 
     @classmethod
     def load(

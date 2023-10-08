@@ -97,10 +97,14 @@ blockquote.crafting-info {
   right: -4px;
 }
 
-:is(.crafting-table-grid, .crafting-table-result) :is(img, div) {
+.texture {
   image-rendering: pixelated;
   width: 32px;
   height: 32px;
+}
+
+.cycle-textures .texture:not(.cycle-textures-active) {
+  display: none;
 }
 
 a.permalink {
