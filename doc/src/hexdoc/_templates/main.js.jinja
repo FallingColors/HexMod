@@ -324,6 +324,27 @@ let currentGaslight = 0;
 let intersectingGaslights = 0;
 let lastLookTimeMs = 0;
 
+function startGaslighting(timeMs) {
+  let newGaslight = Math.round(20 * (timeMs - lastLookTimeMs) / 1000);
+  if (newGaslight >= 40) {
+    currentGaslight = newGaslight - 40;
+  }
+  
+  for (const elem of gaslightNodes) {
+    setEnabledMultiTexture(elem, currentGaslight);
+  }
+}
+
+function stopGaslighting(timeMs) {
+  lastLookTimeMs = timeMs;
+
+  for (const elem of gaslightNodes) {
+    setEnabledMultiTexture(elem, null);
+  }
+}
+
+let isFirstIntersectionEvent = true;
+
 function hookIntersectionObserver(entries) {
   const wasLooking = intersectingGaslights > 0;
 
@@ -335,31 +356,28 @@ function hookIntersectionObserver(entries) {
       intersectingGaslights++;
       earliestStartMs = Math.min(earliestStartMs, entry.time);
     } else {
-      intersectingGaslights--;
+      if (!isFirstIntersectionEvent) intersectingGaslights--;
       latestStopMs = Math.max(latestStopMs, entry.time);
     }
   }
 
+  isFirstIntersectionEvent = false;
   intersectingGaslights = Math.max(intersectingGaslights, 0);
+  const isLooking = intersectingGaslights > 0;
 
-  if (!wasLooking && intersectingGaslights > 0) {
-    // wasn't looking, am now
-    let newGaslight = Math.round(20 * (earliestStartMs - lastLookTimeMs) / 1000);
+  if (!wasLooking && isLooking) {
+    startGaslighting(earliestStartMs);
+  } else if (wasLooking && !isLooking) {
+    stopGaslighting(latestStopMs);
+  }
+}
 
-    if (newGaslight >= 40) {
-      currentGaslight = newGaslight - 40;
-    }
-    
-    for (const elem of gaslightNodes) {
-      setEnabledMultiTexture(elem, currentGaslight);
-    }
-  } else if (wasLooking && intersectingGaslights === 0) {
-    // was looking, aren't now
-    lastLookTimeMs = latestStopMs;
-
-    for (const elem of gaslightNodes) {
-      setEnabledMultiTexture(elem, null);
-    }
+function hookVisibilityChange() {
+  const time = performance.now();
+  if (document.visibilityState === "visible") {
+    startGaslighting(time);
+  } else {
+    stopGaslighting(time);
   }
 }
 
@@ -533,4 +551,6 @@ document.addEventListener("DOMContentLoaded", () => {
     rootMargin: "32px 32px 32px 32px",
   });
   gaslightNodes.forEach((elem) => observer.observe(elem));
+
+  document.addEventListener("visibilitychange", hookVisibilityChange);
 });
