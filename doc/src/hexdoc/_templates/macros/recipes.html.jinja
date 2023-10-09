@@ -10,13 +10,13 @@
   </blockquote>
 {%- endmacro %}
 
-{% macro render_item_texture(name, texture) -%}
+{% macro render_item_texture(name, texture, is_first) -%}
   {% if texture.meta %}
     <div
       role="img"
       title="{{ name }}"
       aria-label="Animated image of {{ name }}"
-      class="texture animated-sync {{ texture.class_name }}"
+      class="texture animated-sync {{ texture.class_name }} {{ 'multi-texture-active' if is_first }}"
     ></div>
   {% else %}
     <img
@@ -24,21 +24,21 @@
       alt="Image of {{ name }}"
       src="{{ texture.url }}"
       loading="lazy"
-      class="texture"
+      class="texture {{ 'multi-texture-active' if is_first }}"
     >
   {% endif %}
 {%- endmacro %}
 
 {# display a single item, with a badge if the count is greater than 1 #}
-{% macro render_item(item, count=1) -%}
+{% macro render_item(item, is_first=true, count=1) -%}
   {% if item.gaslighting %}
-    <div class="multi-textures gaslight-textures">
+    <div class="multi-textures gaslight-textures {{ 'multi-texture-active' if is_first }}">
       {% for texture in item.textures %}
-        {{ render_item_texture(item.name, texture) }}
+        {{ render_item_texture(item.name, texture, is_first=loop.first) }}
       {% endfor %}
     </div>
   {% else %}
-    {{ render_item_texture(item.name, item.texture) }}
+    {{ render_item_texture(item.name, item.texture, is_first=is_first) }}
   {% endif %}
   {% if count > 1 %}
     <div class="badge">{{ count }}</div>
@@ -46,13 +46,13 @@
 {%- endmacro %}
 
 {# render a list of recipe ingredients #}
-{% macro render_ingredients(ingredients) -%}
+{% macro render_ingredients(ingredients, is_recursive=false) -%}
   {% for ingredient in ingredients %}
     {% if ingredient.type|string == "hexcasting:mod_conditional" %}
       {# recursion! what could possibly go wrong? #}
-      {{ render_ingredients(ingredient.default) }}
+      {{ render_ingredients(ingredient.default, true) }}
     {% else %}
-      {{ render_item(ingredient.item) }}
+      {{ render_item(ingredient.item, is_first=loop.first and not is_recursive) }}
     {% endif %}
   {% endfor %}
 {%- endmacro %}
@@ -87,7 +87,7 @@
             </div>
 
             <div class="crafting-table-result">
-              {{ render_item(recipe.result.item, recipe.result.count) }}
+              {{ render_item(recipe.result.item, count=recipe.result.count) }}
             </div>
           </div>
         </div>
