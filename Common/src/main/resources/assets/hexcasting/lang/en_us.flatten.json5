@@ -1367,7 +1367,7 @@
       },
 
       focus: {
-        "1": "A $(item)Focus/$ is like a $(l:items/thought_knot)$(item)Thought-Knot/$, in that iota can be written to or read from it. However, the advantage of a focus is that it is $(italic)reusable/$. If I make a mistake in the iota I write to a $(item)Focus, I can simply cast $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$ again and write over the iota inside.",
+        "1": "A $(item)Focus/$ is like a $(l:items/thought_knot)$(item)Thought-Knot/$, in that iota can be written to or read from it. However, the advantage of a focus is that it is $(italic)reusable/$. If I make a mistake in the iota I write to a $(item)Focus/$, I can simply cast $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$ again and write over the iota inside.",
         "2": "If I wish to protect a $(l:items/focus)$(item)focus/$ from accidentally being overwritten, I can seal it with wax by crafting it with a $(item)Honeycomb/$. Attempting to use $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$ on a sealed focus will fail.$(br2)$(l:patterns/spells/hexcasting#hexcasting:erase)$(action)Erase Item/$ will remove this seal along with the contents.",
         "3": "Indeed, the only advantage of my $(l:items/thought_knot)$(item)Thought-Knot/$s have over $(item)Foci/$ is that $(item)Foci/$ are more expensive to produce. My research indicates that the early practitioners of the art used exclusively $(item)Foci/$, with the $(l:items/thought_knot)$(item)Thought-Knot/$ being an original creation of mine.$(br2)Whoever those ancient people were, they must have been very prosperous.",
         "crafting.desc": "$(italic)Poison apples, poison worms./$",
