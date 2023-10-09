@@ -66,6 +66,11 @@ class CraftingMultiPage(PageWithTitle, type="hexcasting:crafting_multi"):
     heading: LocalizedStr  # TODO: should this be renamed to header?
     recipes: list[CraftingRecipe]
 
+    @model_validator(mode="after")
+    def _set_title(self):
+        self.title = self.heading
+        return self
+
 
 class BrainsweepPage(PageWithText, type="hexcasting:brainsweep"):
     recipe: BrainsweepRecipe

@@ -4,7 +4,7 @@
   {% call formatting.maybe_spoilered(entry) %}
     {{- formatting.section_header(entry, "h3", "entry-title") }}
 
-    {% for page in entry.pages +%}
+    {% for page in entry.preprocess_pages() +%}
       {% include page.template %}
     {% endfor %}
   {% endcall %}

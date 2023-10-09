@@ -1,15 +1,31 @@
-from typing import Iterable
+from typing import Iterable, Iterator
 
 from pydantic import Field, ValidationInfo, model_validator
 
 from hexdoc.minecraft import LocalizedStr
+from hexdoc.minecraft.recipe.abstract_recipes import CraftingRecipe
+from hexdoc.patchouli.page.abstract_pages import PageWithTitle
+from hexdoc.patchouli.text.formatting import FormatTree
 from hexdoc.utils import Color, ItemStack, ResourceLocation
 from hexdoc.utils.deserialize import cast_or_raise
 from hexdoc.utils.resource_model import IDModel
 from hexdoc.utils.types import Sortable
 
 from .book_context import BookContext
-from .page.pages import Page
+from .page.pages import CraftingPage, Page
+
+
+class CraftingAccumulatorPage(
+    PageWithTitle,
+    type=None,
+    template_type="patchouli:crafting",
+):
+    type: None = None
+    recipes: list[CraftingRecipe] = Field(default_factory=list)
+
+    @classmethod
+    def empty(cls):
+        return cls.model_construct()
 
 
 class Entry(IDModel, Sortable):
@@ -48,6 +64,50 @@ class Entry(IDModel, Sortable):
         for page in self.pages:
             if page.anchor is not None:
                 yield page.anchor
+
+    def preprocess_pages(self) -> Iterator[Page]:
+        """Combines adjacent CraftingPage recipes as much as possible."""
+        accumulator = CraftingAccumulatorPage.empty()
+
+        for page in self.pages:
+            match page:
+                case CraftingPage(
+                    recipes=list(recipes),
+                    text=None,
+                    title=None,
+                    anchor=None,
+                ):
+                    accumulator.recipes += recipes
+                case CraftingPage(
+                    recipes=list(recipes),
+                    title=LocalizedStr() as title,
+                    text=None,
+                    anchor=None,
+                ):
+                    if accumulator.recipes:
+                        yield accumulator
+                    accumulator = CraftingAccumulatorPage.empty()
+                    accumulator.recipes += recipes
+                    accumulator.title = title
+                case CraftingPage(
+                    recipes=list(recipes),
+                    title=None,
+                    text=FormatTree() as text,
+                    anchor=None,
+                ):
+                    accumulator.title = None
+                    accumulator.text = text
+                    accumulator.recipes += recipes
+                    yield accumulator
+                    accumulator = CraftingAccumulatorPage.empty()
+                case _:
+                    if accumulator.recipes:
+                        yield accumulator
+                        accumulator = CraftingAccumulatorPage.empty()
+                    yield page
+
+        if accumulator.recipes:
+            yield accumulator
 
     @model_validator(mode="after")
     def _check_is_spoiler(self, info: ValidationInfo):

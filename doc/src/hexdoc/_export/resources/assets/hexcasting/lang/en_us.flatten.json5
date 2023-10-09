@@ -39,8 +39,8 @@
     },
 
     recipe: {
-      show: "Click to show recipe: {}",
-      hide: "Click to hide recipe: {}",
+      show: "Click to show recipes",
+      hide: "Click to hide recipes",
     },
 
     pages: {

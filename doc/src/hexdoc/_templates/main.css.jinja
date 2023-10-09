@@ -1,3 +1,8 @@
+h5 {
+  font-weight: bold;
+  font-size: 14px;
+}
+
 .footer {
   margin: 16px;
 }
@@ -59,8 +64,31 @@ blockquote.crafting-info {
 
 /* we do a bit of crafting (mostly stolen from https://computercraft.info/wiki) */
 
-.crafting-table-details {
-  vertical-align: top;
+.crafting-tables {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 256px;
+}
+
+@media (min-width: 992px) {
+  .crafting-tables {
+    max-width: calc(2*256px + 1*4px);
+  }
+}
+
+@media (min-width: 1200px) {
+  .crafting-tables {
+    max-width: calc(3*256px + 2*4px);
+  }
+}
+
+.details-collapsible .crafting-tables {
+  margin-top: -5px;
+}
+
+.crafting-tables h5 {
+  margin-bottom: 5px;
 }
 
 .crafting-table {
@@ -212,12 +240,6 @@ canvas.spell-viz {
   .toc-permalink {
     display: none;
     visibility: hidden;
-  }
-}
-
-@media(min-width: 992px) {
-  .crafting-table-details {
-    width: calc(50% - 2px);
   }
 }
 
