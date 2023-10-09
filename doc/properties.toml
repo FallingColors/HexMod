@@ -34,7 +34,6 @@ version = "1.19.1"
 [textures]
 missing = [
     "farmersdelight:skillet",
-    "hexcasting:*colorizer*",
     "hexcasting:amethyst_sconce",
     "hexcasting:edified_button",
     "hexcasting:edified_pressure_plate",
