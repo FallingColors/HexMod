@@ -42,17 +42,23 @@ missing = [
     "hexcasting:edified_stairs",
 ]
 
+[textures.gaslighting]
+"hexcasting:quenched_allay_bricks" = { id="hexcasting:deco/quenched_allay_bricks_{}", variants=4 }
+"hexcasting:quenched_allay_bricks_small" = { id="hexcasting:deco/quenched_allay_bricks_small_{}", variants=4 }
+"hexcasting:quenched_allay_shard" = { id="hexcasting:quenched_shard_{}", variants=4 }
+"hexcasting:quenched_allay_tiles" = { id="hexcasting:deco/quenched_allay_tiles_{}", variants=4 }
+"hexcasting:quenched_allay" = { id="hexcasting:quenched_allay_{}", variants=4 }
+"hexcasting:staff/quenched" = { id="hexcasting:staff/quenched_{}", variants=4 }
+
 [textures.override]
 "hexcasting:akashic_connector" = "hexcasting:akashic_ligature"
 "hexcasting:focus" = "hexcasting:focus_empty"
-"hexcasting:quenched_allay_shard" = "hexcasting:quenched_shard_0"
 "hexcasting:scroll_large" = "hexcasting:scroll_pristine_large"
 "hexcasting:scroll_medium" = "hexcasting:scroll_pristine_medium"
 "hexcasting:scroll_small" = "hexcasting:scroll_pristine_small"
 "hexcasting:scroll" = "hexcasting:scroll_pristine_large"
 "hexcasting:slate_block" = "hexcasting:slate"
 "hexcasting:spellbook" = "hexcasting:spellbook_empty"
-"hexcasting:staff/quenched" = "hexcasting:staff/quenched_0"
 "hexcasting:battery" = "hexcasting:phial/phial_small_0"
 
 # ugh. TODO: properly get from model files

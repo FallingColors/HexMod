@@ -49,6 +49,21 @@ class Texture(HexdocModel):
                 yield Texture(file_id=id, url=url)
 
     @classmethod
+    def find_item(
+        cls,
+        id: ResourceLocation,
+        props: Properties,
+        textures: dict[ResourceLocation, Texture],
+    ):
+        return cls.find(
+            id,
+            id.with_path(f"item/{id.path}.png"),
+            id.with_path(f"block/{id.path}.png"),
+            props=props,
+            textures=textures,
+        )
+
+    @classmethod
     def find(
         cls,
         *ids: ResourceLocation,
@@ -136,8 +151,8 @@ class AnimatedTextureFrame(HexdocModel):
     def _format_time(self, time: int, *, backoff: bool = False) -> str:
         percent = 100 * time / self.animation_time
         if backoff and percent < 100:
-            percent -= 0.0001
-        return f"{percent:.4f}".rstrip("0").rstrip(".")
+            percent -= 0.01
+        return f"{percent:.2f}".rstrip("0").rstrip(".")
 
 
 class AnimationMeta(HexdocModel):
@@ -184,19 +199,46 @@ class ItemWithTexture(InlineItemModel):
     @classmethod
     def load_id(cls, item: ItemStack, context: TextureContext):
         """Implements InlineModel."""
-        texture_id = context.props.textures.override.get(item.id, item.id)
+        try:
+            return ItemWithGaslightingTexture.load_id(item, context)
+        except KeyError:
+            texture_id = context.props.textures.override.get(item.id, item.id)
+            return cls(
+                id=item,
+                name=context.i18n.localize_item(item),
+                texture=Texture.find_item(texture_id, context.props, context.textures),
+            )
 
+    @property
+    def gaslighting(self):
+        return False
+
+
+class ItemWithGaslightingTexture(InlineItemModel):
+    id: ItemStack
+    name: LocalizedStr
+    textures: list[Texture]
+
+    @classmethod
+    def load_id(cls, item: ItemStack, context: TextureContext):
+        """Implements InlineModel."""
+        gaslighting = context.props.textures.gaslighting[item.id]
         return cls(
             id=item,
             name=context.i18n.localize_item(item),
-            texture=Texture.find(
-                texture_id,
-                texture_id.with_path(f"item/{texture_id.path}.png"),
-                texture_id.with_path(f"block/{texture_id.path}.png"),
-                props=context.props,
-                textures=context.textures,
-            ),
+            textures=[
+                Texture.find_item(
+                    id=ResourceLocation.from_str(gaslighting.id.format(index)),
+                    props=context.props,
+                    textures=context.textures,
+                )
+                for index in range(gaslighting.variants)
+            ],
         )
+
+    @property
+    def gaslighting(self):
+        return True
 
 
 class TagWithTexture(InlineModel):
@@ -211,3 +253,7 @@ class TagWithTexture(InlineModel):
             name=context.i18n.localize_item_tag(id),
             texture=Texture(file_id=id, url=TAG_TEXTURE),
         )
+
+    @property
+    def gaslighting(self):
+        return False

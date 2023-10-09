@@ -10,37 +10,49 @@
   </blockquote>
 {%- endmacro %}
 
-{# display a single item, with a badge if the count is greater than 1 #}
-{% macro render_item(item, count=1, always_show_count=false) -%}
-  {% if item.texture.meta %}
+{% macro render_item_texture(name, texture) -%}
+  {% if texture.meta %}
     <div
       role="img"
-      title="{{ item.name }}"
-      aria-label="Animated image of {{ item.name }}"
-      class="texture animated-sync {{ item.texture.class_name }}"
+      title="{{ name }}"
+      aria-label="Animated image of {{ name }}"
+      class="texture animated-sync {{ texture.class_name }}"
     ></div>
   {% else %}
     <img
-      title="{{ item.name }}"
-      alt="Image of {{ item.name }}"
-      src="{{ item.texture.url }}"
+      title="{{ name }}"
+      alt="Image of {{ name }}"
+      src="{{ texture.url }}"
       loading="lazy"
       class="texture"
     >
   {% endif %}
+{%- endmacro %}
 
-  {% if always_show_count or count > 1 %}
+{# display a single item, with a badge if the count is greater than 1 #}
+{% macro render_item(item, count=1) -%}
+  {% if item.gaslighting %}
+    <div class="multi-textures gaslight-textures">
+      {% for texture in item.textures %}
+        {{ render_item_texture(item.name, texture) }}
+      {% endfor %}
+    </div>
+  {% else %}
+    {{ render_item_texture(item.name, item.texture) }}
+  {% endif %}
+  {% if count > 1 %}
     <div class="badge">{{ count }}</div>
   {% endif %}
 {%- endmacro %}
 
+{# render a list of recipe ingredients #}
 {% macro render_ingredients(ingredients) -%}
   {% for ingredient in ingredients %}
     {% if ingredient.type|string == "hexcasting:mod_conditional" %}
       {# recursion! what could possibly go wrong? #}
-      {{- render_ingredients(ingredient.default) -}}
+      {{ render_ingredients(ingredient.default) }}
     {% else %}
-      {{- render_item(ingredient.item) -}}
+      {{ render_item(ingredient.item) }}
     {% endif %}
   {% endfor %}
 {%- endmacro %}
@@ -67,7 +79,7 @@
                 {% if cell_ingredients is none %}
                   <div></div> {#- empty slot / air #}
                 {% else %}
-                  <div class="cycle-textures">
+                  <div class="multi-textures cycle-textures">
                     {{ render_ingredients(cell_ingredients) }}
                   </div>
                 {% endif %}
