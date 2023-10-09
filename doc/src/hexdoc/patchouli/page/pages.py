@@ -3,7 +3,7 @@ from typing import Any, Self
 from pydantic import model_validator
 
 from hexdoc.minecraft import LocalizedStr
-from hexdoc.minecraft.assets.textures import ItemWithTexture
+from hexdoc.minecraft.assets.textures import ItemWithTexture, Texture
 from hexdoc.minecraft.recipe import CraftingRecipe
 from hexdoc.utils import Entity, ItemStack, ResourceLocation
 
@@ -16,8 +16,16 @@ class TextPage(PageWithTitle, type="patchouli:text"):
 
 
 class ImagePage(PageWithTitle, type="patchouli:image"):
-    images: list[ResourceLocation]
+    images: list[Texture]
     border: bool = False
+
+    @property
+    def images_with_alt(self):
+        for image in self.images:
+            if self.title:
+                yield image, self.title
+            else:
+                yield image, str(image)
 
 
 class CraftingPage(PageWithTitle, type="patchouli:crafting"):

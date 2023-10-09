@@ -10,21 +10,21 @@
   </blockquote>
 {%- endmacro %}
 
-{% macro render_item_texture(name, texture, is_first) -%}
+{% macro render_texture(name, texture, class_names=[], lazy=true) -%}
   {% if texture.meta %}
     <div
       role="img"
       title="{{ name }}"
       aria-label="Animated image of {{ name }}"
-      class="texture animated-sync {{ texture.class_name }} {{ 'multi-texture-active' if is_first }}"
+      class="{{ (class_names + ['texture', 'animated-sync', texture.class_name])|join(' ') }}"
     ></div>
   {% else %}
     <img
       title="{{ name }}"
       alt="Image of {{ name }}"
       src="{{ texture.url }}"
-      loading="lazy"
-      class="texture {{ 'multi-texture-active' if is_first }}"
+      {{ 'loading="lazy"' if lazy }}
+      class="{{ (class_names + ['texture'])|join(' ') }}"
     >
   {% endif %}
 {%- endmacro %}
@@ -34,11 +34,29 @@
   {% if item.gaslighting %}
     <div class="multi-textures gaslight-textures {{ 'multi-texture-active' if is_first }}">
       {% for texture in item.textures %}
-        {{ render_item_texture(item.name, texture, is_first=loop.first) }}
+        {{
+          render_texture(
+            name=item.name,
+            texture=texture,
+            class_names=[
+              "item-texture",
+              "multi-texture-active" if is_first,
+            ],
+          )
+        }}
       {% endfor %}
     </div>
   {% else %}
-    {{ render_item_texture(item.name, item.texture, is_first=is_first) }}
+    {{
+      render_texture(
+        name=item.name,
+        texture=item.texture,
+        class_names=[
+          "item-texture",
+          "multi-texture-active" if is_first,
+        ],
+      )
+    }}
   {% endif %}
   {% if count > 1 %}
     <div class="badge">{{ count }}</div>

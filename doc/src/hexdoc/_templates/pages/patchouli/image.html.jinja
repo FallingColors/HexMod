@@ -1,9 +1,16 @@
 {% extends "pages/patchouli/text.html.jinja" %}
+{% import "macros/recipes.html.jinja" as recipe_macros with context %}
 
 {% block inner_body %}
   <p class="img-wrapper">
     {% for image in page.images %}
-      <img src="{{ image|hexdoc_texture }}"></img>
+      {{
+        recipe_macros.render_texture(
+          name=page.title or image.file_id,
+          texture=image,
+          lazy=false,
+        )
+      }}
     {% endfor %}
   </p>
   {{ super() }}

@@ -22,7 +22,7 @@ TAG_TEXTURE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9
 MISSING_TEXTURE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAACXBIWXMAAC4jAAAuIwF4pT92AAAAJElEQVQoz2NkwAF+MPzAKs7EQCIY1UAMYMQV3hwMHKOhRD8NAPogBA/DVsDEAAAAAElFTkSuQmCC"
 
 
-class Texture(HexdocModel):
+class Texture(InlineModel):
     file_id: ResourceLocation
     url: str | None
     meta: None = None
@@ -47,6 +47,10 @@ class Texture(HexdocModel):
                 )
             else:
                 yield Texture(file_id=id, url=url)
+
+    @classmethod
+    def load_id(cls, id: ResourceLocation, context: TextureContext):
+        return cls.find(id, props=context.props, textures=context.textures)
 
     @classmethod
     def find_item(
