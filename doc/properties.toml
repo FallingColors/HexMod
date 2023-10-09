@@ -53,6 +53,7 @@ missing = [
 "hexcasting:slate_block" = "hexcasting:slate"
 "hexcasting:spellbook" = "hexcasting:spellbook_empty"
 "hexcasting:staff/quenched" = "hexcasting:staff/quenched_0"
+"hexcasting:battery" = "hexcasting:phial/phial_small_0"
 
 # ugh. TODO: properly get from model files
 

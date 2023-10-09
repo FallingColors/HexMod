@@ -11,8 +11,9 @@ from hexdoc.minecraft.i18n import I18nContext, LocalizedStr
 from hexdoc.utils import HexdocModel, ResourceLocation
 from hexdoc.utils.external import fetch_minecraft_textures
 from hexdoc.utils.properties import Properties
+from hexdoc.utils.resource import ItemStack
 from hexdoc.utils.resource_loader import ModResourceLoader
-from hexdoc.utils.resource_model import InlineModel
+from hexdoc.utils.resource_model import InlineItemModel, InlineModel
 
 # 16x16 hashtag icon for tags
 TAG_TEXTURE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAC4jAAAuIwF4pT92AAAANUlEQVQ4y2NgGJRAXV39v7q6+n9cfGTARKllFBvAiOxMUjTevHmTkSouGPhAHA0DWnmBrgAANLIZgSXEQxIAAAAASUVORK5CYII="
@@ -21,7 +22,7 @@ TAG_TEXTURE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9
 MISSING_TEXTURE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAACXBIWXMAAC4jAAAuIwF4pT92AAAAJElEQVQoz2NkwAF+MPzAKs7EQCIY1UAMYMQV3hwMHKOhRD8NAPogBA/DVsDEAAAAAElFTkSuQmCC"
 
 
-class Texture(InlineModel):
+class Texture(HexdocModel):
     file_id: ResourceLocation
     url: str | None
     meta: None = None
@@ -46,11 +47,6 @@ class Texture(InlineModel):
                 )
             else:
                 yield Texture(file_id=id, url=url)
-
-    @classmethod
-    def load_id(cls, id: ResourceLocation, context: TextureContext):
-        """Implements InlineModel."""
-        return cls.find(id, props=context.props, textures=context.textures)
 
     @classmethod
     def find(
@@ -180,20 +176,19 @@ class TextureContext(I18nContext):
         return self
 
 
-class WithTexture(InlineModel):
-    id: ResourceLocation
+class ItemWithTexture(InlineItemModel):
+    id: ItemStack
     name: LocalizedStr
     texture: Texture
 
-
-class ItemWithTexture(WithTexture):
     @classmethod
-    def load_id(cls, id: ResourceLocation, context: TextureContext):
+    def load_id(cls, item: ItemStack, context: TextureContext):
         """Implements InlineModel."""
-        texture_id = context.props.textures.override.get(id, id)
+        texture_id = context.props.textures.override.get(item.id, item.id)
+
         return cls(
-            id=id,
-            name=context.i18n.localize_item(id),
+            id=item,
+            name=context.i18n.localize_item(item),
             texture=Texture.find(
                 texture_id,
                 texture_id.with_path(f"item/{texture_id.path}.png"),
@@ -204,7 +199,11 @@ class ItemWithTexture(WithTexture):
         )
 
 
-class TagWithTexture(WithTexture):
+class TagWithTexture(InlineModel):
+    id: ResourceLocation
+    name: LocalizedStr
+    texture: Texture
+
     @classmethod
     def load_id(cls, id: ResourceLocation, context: TextureContext):
         return cls(

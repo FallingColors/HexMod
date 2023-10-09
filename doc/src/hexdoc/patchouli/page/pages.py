@@ -2,7 +2,8 @@ from typing import Any, Self
 
 from pydantic import model_validator
 
-from hexdoc.minecraft import LocalizedItem, LocalizedStr
+from hexdoc.minecraft import LocalizedStr
+from hexdoc.minecraft.assets.textures import ItemWithTexture
 from hexdoc.minecraft.recipe import CraftingRecipe
 from hexdoc.utils import Entity, ItemStack, ResourceLocation
 
@@ -58,7 +59,7 @@ class EntityPage(PageWithText, type="patchouli:entity"):
 
 
 class SpotlightPage(PageWithTitle, type="patchouli:spotlight"):
-    item: LocalizedItem  # TODO: patchi says this is an ItemStack, so this might break
+    item: ItemWithTexture
     link_recipe: bool = False
 
 
