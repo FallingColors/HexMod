@@ -64,6 +64,8 @@ _COLORS = {
     "f": "fff",
 }
 
+BookLinkBases = dict[tuple[ResourceLocation, str | None], str]
+
 
 class FormattingContext(
     I18nContext,
@@ -222,7 +224,7 @@ class Style(ABC, HexdocModel, frozen=True):
     def element(
         self,
         out: HTMLStream,
-        link_bases: dict[tuple[ResourceLocation, str | None], str],
+        link_bases: BookLinkBases,
         /,
     ) -> HTMLElement | nullcontext[None]:
         ...
@@ -306,11 +308,7 @@ class LinkStyle(Style, frozen=True):
     type: Literal[SpecialStyleType.link] = SpecialStyleType.link
     value: str | BookLink
 
-    def element(
-        self,
-        out: HTMLStream,
-        link_bases: dict[tuple[ResourceLocation, str | None], str],
-    ) -> HTMLElement:
+    def element(self, out: HTMLStream, link_bases: BookLinkBases) -> HTMLElement:
         match self.value:
             case BookLink(as_tuple=key) as book_link:
                 if key not in link_bases:
@@ -349,6 +347,12 @@ class FormatTree:
         macros: dict[str, str],
         is_0_black: bool,
     ) -> Self:
+        for macro, replace in macros.items():
+            if macro in replace:
+                raise RuntimeError(
+                    f"Recursive macro: replacement `{replace}` is matched by key `{macro}`"
+                )
+
         # resolve macros
         # this could use ahocorasick, but it works fine for now
         old_string = None

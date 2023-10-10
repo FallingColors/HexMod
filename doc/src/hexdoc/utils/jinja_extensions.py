@@ -12,7 +12,7 @@ from hexdoc.minecraft.assets.textures import Texture
 from hexdoc.patchouli import Book, FormatTree
 from hexdoc.patchouli.book import Book
 from hexdoc.patchouli.text import HTMLStream
-from hexdoc.patchouli.text.formatting import FormatTree
+from hexdoc.patchouli.text.formatting import BookLinkBases, FormatTree
 from hexdoc.utils.resource import ResourceLocation
 
 from . import Properties
@@ -36,16 +36,19 @@ class IncludeRawExtension(Extension):
 
 
 @pass_context
-def hexdoc_block(context: Context | dict[{"book": Book}], value: Any) -> str:
+def hexdoc_block(context: Context | BookLinkBases, value: Any) -> str:
     try:
-        book = cast_or_raise(context["book"], Book)
-        return _hexdoc_block(book, value)
+        if isinstance(context, dict):
+            link_bases = context
+        else:
+            link_bases = cast_or_raise(context["book"], Book).link_bases
+        return _hexdoc_block(link_bases, value)
     except Exception as e:
         e.add_note(f"Value:\n    {value}")
         raise
 
 
-def _hexdoc_block(book: Book, value: Any) -> str:
+def _hexdoc_block(link_bases: BookLinkBases, value: Any) -> str:
     match value:
         case LocalizedStr() | str():
             # use Markup to tell Jinja not to escape this string for us
@@ -54,9 +57,9 @@ def _hexdoc_block(book: Book, value: Any) -> str:
 
         case FormatTree():
             with HTMLStream() as out:
-                with value.style.element(out, book.link_bases):
+                with value.style.element(out, link_bases):
                     for child in value.children:
-                        out.write(_hexdoc_block(book, child))
+                        out.write(_hexdoc_block(link_bases, child))
                 return Markup(out.getvalue())
 
         case None:
@@ -98,7 +101,7 @@ def hexdoc_localize(
         macros=book.macros,
         is_0_black=props.is_0_black,
     )
-    return Markup(hexdoc_block({"book": book}, formatted))
+    return Markup(hexdoc_block(book.link_bases, formatted))
 
 
 @pass_context

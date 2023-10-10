@@ -7,41 +7,53 @@ from hexdoc.patchouli.text import DEFAULT_MACROS, FormatTree
 from hexdoc.patchouli.text.formatting import (
     BookLink,
     CommandStyle,
-    FormattingContext,
     FunctionStyle,
     LinkStyle,
     ParagraphStyle,
     SpecialStyleType,
 )
-from hexdoc.utils.properties import Properties
+from hexdoc.utils.jinja_extensions import hexdoc_block
 from hexdoc.utils.resource import ResourceLocation
 
 
+def format_with_mocks(test_str: str, macros: dict[str, str] = {}):
+    return FormatTree.format(
+        test_str,
+        book_id=ResourceLocation("hexcasting", "thehexbook"),
+        i18n=cast(I18n, Namespace(keys={})),
+        macros=DEFAULT_MACROS | macros,
+        is_0_black=False,
+    )
+
+
+def test_link():
+    tree = format_with_mocks("$(l:http://google.com)A$(/l)", {})
+    assert hexdoc_block({}, tree) == "<p><a href='http://google.com'>A</a></p>"
+
+
+def test_colors_across_link():
+    tree = format_with_mocks(
+        "$(1)A$(l:http://google.com)B$(2)C$(1)D$(/l)E$(0)",
+        {"$(1)": "$(#111)", "$(2)": "$(#222)"},
+    )
+    assert hexdoc_block({}, tree) == (
+        "<p>"
+        "<span style='color: #111'>A</span>"
+        "<a href='http://google.com'>"
+        ""
+        "<span style='color: #222'>C</span>"
+        "<span style='color: #111'>D</span>"
+        "</a>"
+        "<span style='color: #111'>E</span>"
+        "</p>"
+    )
+
+
 def test_format_string():
-    # arrange
-    test_str = "Write the given iota to my $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$().$(br)The $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$() is a lot like a $(l:items/focus)$(#b0b)Focus$(). It's cleared when I stop casting a Hex, starts with $(l:casting/influences)$(#490)Null$() in it, and is preserved between casts of $(l:patterns/meta#hexcasting:for_each)$(#fc77be)Thoth's Gambit$(). "
-    mock_i18n = cast(I18n, Namespace(keys={}))
-    mock_props = cast(
-        Properties,
-        Namespace(
-            is_0_black=False,
-            book=ResourceLocation("hexcasting", "thehexbook"),
-        ),
-    )
-    mock_context = cast(
-        FormattingContext,
-        Namespace(
-            i18n=mock_i18n,
-            props=mock_props,
-            macros=DEFAULT_MACROS,
-            links_to_check=[],
-        ),
+    tree = format_with_mocks(
+        "Write the given iota to my $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$().$(br)The $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$() is a lot like a $(l:items/focus)$(#b0b)Focus$(). It's cleared when I stop casting a Hex, starts with $(l:casting/influences)$(#490)Null$() in it, and is preserved between casts of $(l:patterns/meta#hexcasting:for_each)$(#fc77be)Thoth's Gambit$(). "
     )
 
-    # act
-    tree = FormatTree.format(test_str, mock_context)
-
-    # assert
     assert tree == FormatTree(
         style=CommandStyle(type=SpecialStyleType.base),
         children=[

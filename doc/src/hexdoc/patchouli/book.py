@@ -4,6 +4,7 @@ from pydantic import Field, ValidationInfo, field_validator, model_validator
 
 from hexdoc.minecraft import I18n, LocalizedStr
 from hexdoc.minecraft.i18n import I18nContext
+from hexdoc.patchouli.text.formatting import BookLinkBases
 from hexdoc.utils import (
     Color,
     HexdocModel,
@@ -128,7 +129,7 @@ class Book(HexdocModel):
         # make the macros accessible when rendering the template
         self.macros |= context.macros
 
-        self._link_bases: dict[tuple[ResourceLocation, str | None], str] = {}
+        self._link_bases: BookLinkBases = {}
 
         # load categories
         self._categories = Category.load_all(context, self.id, self.use_resource_pack)
