@@ -2,7 +2,7 @@ from typing import Iterator
 
 from pydantic import field_validator
 
-from hexdoc.utils.compat import HexVersion
+from hexdoc.core.compat import HexVersion
 
 from .abstract_recipes import CraftingRecipe
 from .ingredients import ItemIngredientList

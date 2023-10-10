@@ -4,14 +4,16 @@ from typing import Any, Mapping
 
 from pydantic import Field, model_validator
 
+from hexdoc.core.compat import HexVersion
+from hexdoc.core.loader import ModResourceLoader
+from hexdoc.core.metadata import HexdocMetadata
+from hexdoc.core.properties import PatternStubProps
+from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import I18n, Tag
+from hexdoc.model import HexdocModel, init_context
 from hexdoc.patchouli import Book, BookContext
 from hexdoc.plugin import PluginManager
-from hexdoc.utils import HexdocModel, ModResourceLoader, ResourceLocation, init_context
-from hexdoc.utils.compat import HexVersion
 from hexdoc.utils.deserialize import cast_or_raise
-from hexdoc.utils.metadata import HexdocMetadata
-from hexdoc.utils.properties import PatternStubProps
 
 from .pattern import Direction, PatternInfo
 

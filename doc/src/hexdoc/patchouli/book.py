@@ -2,20 +2,15 @@ from typing import Any, Literal, Self
 
 from pydantic import Field, ValidationInfo, field_validator, model_validator
 
+from hexdoc.core.compat import HexVersion
+from hexdoc.core.loader import ModResourceLoader
+from hexdoc.core.resource import ItemStack, ResLoc, ResourceLocation
 from hexdoc.minecraft import I18n, LocalizedStr
 from hexdoc.minecraft.i18n import I18nContext
+from hexdoc.model import HexdocModel
 from hexdoc.patchouli.text.formatting import BookLinkBases
-from hexdoc.utils import (
-    Color,
-    HexdocModel,
-    ItemStack,
-    ModResourceLoader,
-    ResLoc,
-    ResourceLocation,
-)
-from hexdoc.utils.compat import HexVersion
 from hexdoc.utils.deserialize import cast_or_raise
-from hexdoc.utils.types import sorted_dict
+from hexdoc.utils.types import Color, sorted_dict
 
 from .book_context import BookContext
 from .category import Category

@@ -3,21 +3,37 @@ from __future__ import annotations
 import logging
 import re
 from pathlib import Path
-from typing import Annotated, Any, Self
+from typing import Annotated, Any, Self, dataclass_transform
 
-from pydantic import AfterValidator, Field, HttpUrl, field_validator
+from pydantic import AfterValidator, Field, HttpUrl, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from .cd import RelativePath, relative_path_root
-from .model import StripHiddenModel
-from .resource import ResourceDir, ResourceLocation
-from .toml_placeholders import load_toml_with_placeholders
+from hexdoc.core.resource import ResourceDir, ResourceLocation
+from hexdoc.model import HexdocModel
+from hexdoc.utils.cd import RelativePath, relative_path_root
+from hexdoc.utils.deserialize.toml import load_toml_with_placeholders
 
 NoTrailingSlashHttpUrl = Annotated[
     str,
     HttpUrl,
     AfterValidator(lambda u: str(u).rstrip("/")),
 ]
+
+
+@dataclass_transform()
+class StripHiddenModel(HexdocModel):
+    """Base model which removes all keys starting with _ before validation."""
+
+    @model_validator(mode="before")
+    def _pre_root_strip_hidden(cls, values: Any) -> Any:
+        if not isinstance(values, dict):
+            return values
+
+        return {
+            key: value
+            for key, value in values.items()
+            if not (isinstance(key, str) and key.startswith("_"))
+        }
 
 
 class EnvironmentVariableProps(BaseSettings):

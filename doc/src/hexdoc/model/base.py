@@ -3,7 +3,7 @@ from __future__ import annotations
 from contextvars import ContextVar
 from typing import TYPE_CHECKING, Any, Self, dataclass_transform
 
-from pydantic import BaseModel, ConfigDict, model_validator
+from pydantic import BaseModel, ConfigDict
 from pydantic.config import ConfigDict
 
 from hexdoc.utils.contextmanagers import set_contextvar
@@ -80,19 +80,3 @@ class HexdocModel(HexdocBaseModel):
             context: ValidationContext | None = None,
         ) -> Self:
             ...
-
-
-@dataclass_transform()
-class StripHiddenModel(HexdocModel):
-    """Base model which removes all keys starting with _ before validation."""
-
-    @model_validator(mode="before")
-    def _pre_root_strip_hidden(cls, values: Any) -> Any:
-        if not isinstance(values, dict):
-            return values
-
-        return {
-            key: value
-            for key, value in values.items()
-            if not (isinstance(key, str) and key.startswith("_"))
-        }

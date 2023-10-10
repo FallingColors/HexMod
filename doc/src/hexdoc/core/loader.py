@@ -12,12 +12,12 @@ from typing import Any, Callable, Literal, Self, TypeVar, overload
 
 from pydantic.dataclasses import dataclass
 
-from hexdoc.plugin.manager import PluginManager
+from hexdoc.model import DEFAULT_CONFIG, HexdocModel, ValidationContext
+from hexdoc.plugin import PluginManager
+from hexdoc.utils.deserialize.json import JSONDict, decode_json_dict
+from hexdoc.utils.iterators import must_yield_something
+from hexdoc.utils.path import strip_suffixes, write_to_path
 
-from .deserialize import JSONDict, decode_json_dict
-from .iterators import must_yield_something
-from .model import DEFAULT_CONFIG, HexdocModel, ValidationContext
-from .path import strip_suffixes, write_to_path
 from .properties import Properties
 from .resource import PathResourceDir, ResourceLocation, ResourceType
 

@@ -7,10 +7,12 @@ from typing import Any, Self, dataclass_transform
 from pydantic import ValidationInfo, model_validator
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
-from .deserialize import JSONDict, cast_or_raise
-from .model import HexdocModel, ValidationContext
-from .resource import ItemStack, PathResourceDir, ResourceLocation
-from .resource_loader import LoaderContext, ModResourceLoader
+from hexdoc.core.loader import LoaderContext, ModResourceLoader
+from hexdoc.core.resource import ItemStack, PathResourceDir, ResourceLocation
+from hexdoc.utils.deserialize import cast_or_raise
+from hexdoc.utils.deserialize.json import JSONDict
+
+from .base import HexdocModel, ValidationContext
 
 
 @dataclass_transform()

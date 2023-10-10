@@ -4,7 +4,7 @@ from typing import Annotated
 
 from pydantic import AfterValidator
 
-from hexdoc.utils.contextmanagers import set_contextvar
+from .contextmanagers import set_contextvar
 
 _relative_path_root = ContextVar[Path]("_relative_path_root")
 

@@ -3,8 +3,9 @@ from typing import Any, ClassVar, Self
 from pydantic import model_validator
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
+from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import LocalizedStr
-from hexdoc.utils import ResourceLocation, TypeTaggedUnion
+from hexdoc.model.tagged_union import TypeTaggedUnion
 
 from ..text import FormatTree
 

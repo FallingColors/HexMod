@@ -6,7 +6,7 @@ from typing import Any, Mapping, Protocol, TypeVar
 from pydantic import field_validator, model_validator
 from pydantic.dataclasses import dataclass
 
-from .model import DEFAULT_CONFIG
+from hexdoc.model import DEFAULT_CONFIG
 
 _T = TypeVar("_T")
 

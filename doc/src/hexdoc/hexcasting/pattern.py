@@ -3,7 +3,8 @@ from typing import Annotated, Any
 
 from pydantic import BeforeValidator
 
-from hexdoc.utils import HexdocModel, ResourceLocation
+from hexdoc.core.resource import ResourceLocation
+from hexdoc.model import HexdocModel
 
 
 class Direction(Enum):

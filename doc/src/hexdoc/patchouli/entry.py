@@ -2,14 +2,14 @@ from typing import Iterable, Iterator
 
 from pydantic import Field, ValidationInfo, model_validator
 
+from hexdoc.core.resource import ItemStack, ResourceLocation
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.recipe.abstract_recipes import CraftingRecipe
+from hexdoc.model.inline import IDModel
 from hexdoc.patchouli.page.abstract_pages import PageWithTitle
 from hexdoc.patchouli.text.formatting import FormatTree
-from hexdoc.utils import Color, ItemStack, ResourceLocation
 from hexdoc.utils.deserialize import cast_or_raise
-from hexdoc.utils.resource_model import IDModel
-from hexdoc.utils.types import Sortable
+from hexdoc.utils.types import Color, Sortable
 
 from .book_context import BookContext
 from .page.pages import CraftingPage, Page

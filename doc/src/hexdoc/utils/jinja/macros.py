@@ -1,38 +1,17 @@
 from typing import Any
 
-from jinja2 import nodes, pass_context
-from jinja2.ext import Extension
-from jinja2.parser import Parser
+from jinja2 import pass_context
 from jinja2.runtime import Context
 from markupsafe import Markup
 from pydantic import ConfigDict, validate_call
 
+from hexdoc.core.properties import Properties
+from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import I18n, LocalizedStr
-from hexdoc.minecraft.assets.textures import Texture
+from hexdoc.minecraft.assets import Texture
 from hexdoc.patchouli import Book, FormatTree
-from hexdoc.patchouli.book import Book
-from hexdoc.patchouli.text import HTMLStream
-from hexdoc.patchouli.text.formatting import BookLinkBases, FormatTree
-from hexdoc.utils.resource import ResourceLocation
-
-from . import Properties
-from .deserialize import cast_or_raise
-
-
-# https://stackoverflow.com/a/64392515
-class IncludeRawExtension(Extension):
-    tags = {"include_raw"}
-
-    def parse(self, parser: Parser) -> nodes.Node:
-        lineno = parser.stream.expect("name:include_raw").lineno
-        template = parser.parse_expression()
-        result = self.call_method("_render", [template], lineno=lineno)
-        return nodes.Output([result], lineno=lineno)
-
-    def _render(self, filename: str) -> Markup:
-        assert self.environment.loader is not None
-        source = self.environment.loader.get_source(self.environment, filename)
-        return Markup(source[0])
+from hexdoc.patchouli.text.formatting import BookLinkBases, HTMLStream
+from hexdoc.utils.deserialize import cast_or_raise
 
 
 @pass_context

@@ -1,5 +1,7 @@
-from hexdoc.utils import ModResourceLoader, ResourceLocation, TypeTaggedUnion
-from hexdoc.utils.resource_model import InlineIDModel
+from hexdoc.core.loader import ModResourceLoader
+from hexdoc.core.resource import ResourceLocation
+from hexdoc.model.inline import InlineIDModel
+from hexdoc.model.tagged_union import TypeTaggedUnion
 
 from .ingredients import ItemResult
 

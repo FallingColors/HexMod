@@ -2,11 +2,12 @@ from typing import Any, Literal
 
 from pydantic import model_validator
 
+from hexdoc.core.compat import HexVersion
+from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import LocalizedItem, Recipe
 from hexdoc.minecraft.recipe import ItemIngredient, ItemIngredientList
-from hexdoc.utils import HexdocModel, ResourceLocation, TypeTaggedUnion
-from hexdoc.utils.compat import HexVersion
-from hexdoc.utils.tagged_union import NoValue
+from hexdoc.model import HexdocModel
+from hexdoc.model.tagged_union import NoValue, TypeTaggedUnion
 
 # ingredients
 

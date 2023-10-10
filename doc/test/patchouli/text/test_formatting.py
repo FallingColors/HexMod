@@ -2,6 +2,7 @@
 from argparse import Namespace
 from typing import cast
 
+from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft.i18n import I18n
 from hexdoc.patchouli.text import DEFAULT_MACROS, FormatTree
 from hexdoc.patchouli.text.formatting import (
@@ -12,8 +13,7 @@ from hexdoc.patchouli.text.formatting import (
     ParagraphStyle,
     SpecialStyleType,
 )
-from hexdoc.utils.jinja_extensions import hexdoc_block
-from hexdoc.utils.resource import ResourceLocation
+from hexdoc.utils.jinja.macros import hexdoc_block
 
 
 def format_with_mocks(test_str: str, macros: dict[str, str] = {}):

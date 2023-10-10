@@ -3,9 +3,9 @@ from typing import Self
 
 from pydantic import model_validator
 
-from hexdoc.minecraft.assets.textures import Texture, TextureContext
+from hexdoc.minecraft.assets import Texture, TextureContext
+from hexdoc.model import HexdocModel
 
-from .model import HexdocModel
 from .properties import NoTrailingSlashHttpUrl
 from .resource import ResourceLocation
 

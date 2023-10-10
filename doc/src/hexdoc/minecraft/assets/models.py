@@ -1,6 +1,7 @@
 from typing import Literal
 
-from hexdoc.utils import HexdocModel, ResourceLocation
+from hexdoc.core.resource import ResourceLocation
+from hexdoc.model import HexdocModel
 
 ItemDisplayPosition = Literal[
     "thirdperson_righthand",
@@ -12,6 +13,8 @@ ItemDisplayPosition = Literal[
     "ground",
     "fixed",
 ]
+
+# TODO
 
 
 class ItemModel(HexdocModel, extra="ignore"):

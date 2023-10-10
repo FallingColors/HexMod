@@ -7,13 +7,14 @@ from typing import Literal, Self
 
 from pydantic import Field, model_validator
 
-from hexdoc.minecraft.i18n import I18nContext, LocalizedStr
-from hexdoc.utils import HexdocModel, ResourceLocation
-from hexdoc.utils.external import fetch_minecraft_textures
-from hexdoc.utils.properties import Properties
-from hexdoc.utils.resource import ItemStack
-from hexdoc.utils.resource_loader import ModResourceLoader
-from hexdoc.utils.resource_model import InlineItemModel, InlineModel
+from hexdoc.core.loader import ModResourceLoader
+from hexdoc.core.properties import Properties
+from hexdoc.core.resource import ItemStack, ResourceLocation
+from hexdoc.model import HexdocModel
+from hexdoc.model.inline import InlineItemModel, InlineModel
+
+from ..i18n import I18nContext, LocalizedStr
+from .external import fetch_minecraft_textures
 
 # 16x16 hashtag icon for tags
 TAG_TEXTURE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAC4jAAAuIwF4pT92AAAANUlEQVQ4y2NgGJRAXV39v7q6+n9cfGTARKllFBvAiOxMUjTevHmTkSouGPhAHA0DWnmBrgAANLIZgSXEQxIAAAAASUVORK5CYII="

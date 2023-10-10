@@ -12,12 +12,12 @@ from pydantic import Field, ValidationInfo, model_validator
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
+from hexdoc.core.loader import LoaderContext
+from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.i18n import I18n, I18nContext
-from hexdoc.utils import DEFAULT_CONFIG, HexdocModel
+from hexdoc.model import DEFAULT_CONFIG, HexdocModel
 from hexdoc.utils.deserialize import cast_or_raise
-from hexdoc.utils.resource import ResourceLocation
-from hexdoc.utils.resource_loader import LoaderContext
 from hexdoc.utils.types import TryGetEnum
 
 from .html import HTMLElement, HTMLStream

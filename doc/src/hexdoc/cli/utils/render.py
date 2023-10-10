@@ -14,20 +14,20 @@ from jinja2 import (
 )
 from jinja2.sandbox import SandboxedEnvironment
 
+from hexdoc.core.metadata import HexdocMetadata
+from hexdoc.core.properties import Properties
+from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import I18n
 from hexdoc.minecraft.assets.textures import AnimatedTexture, Texture
 from hexdoc.patchouli import Book
-from hexdoc.utils import Properties
-from hexdoc.utils.jinja_extensions import (
-    IncludeRawExtension,
+from hexdoc.utils.jinja.extensions import IncludeRawExtension
+from hexdoc.utils.jinja.macros import (
     hexdoc_block,
     hexdoc_localize,
     hexdoc_texture,
     hexdoc_wrap,
 )
-from hexdoc.utils.metadata import HexdocMetadata
 from hexdoc.utils.path import write_to_path
-from hexdoc.utils.resource import ResourceLocation
 
 from .sitemap import MARKER_NAME, SitemapMarker
 

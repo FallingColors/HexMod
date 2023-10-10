@@ -19,10 +19,9 @@ from pydantic import ValidationInfo, field_validator, model_serializer, model_va
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
+from hexdoc.model import DEFAULT_CONFIG, HexdocModel
 from hexdoc.plugin import PluginManager
 from hexdoc.utils.cd import RelativePath, relative_path_root
-
-from .model import DEFAULT_CONFIG, HexdocModel
 
 ResourceType = Literal["assets", "data", ""]
 

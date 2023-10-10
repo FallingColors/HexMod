@@ -3,10 +3,10 @@ from typing import Any
 
 from pydantic import ValidationInfo, model_validator
 
+from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.i18n import I18nContext
 from hexdoc.patchouli.page import PageWithText
-from hexdoc.utils import ResourceLocation
 from hexdoc.utils.deserialize import cast_or_raise
 
 from ..pattern import RawPatternInfo

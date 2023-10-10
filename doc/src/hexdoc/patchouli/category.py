@@ -2,9 +2,10 @@ from typing import Self
 
 from pydantic import Field
 
+from hexdoc.core.loader import LoaderContext
+from hexdoc.core.resource import ItemStack, ResourceLocation
 from hexdoc.minecraft import LocalizedStr
-from hexdoc.utils import ItemStack, LoaderContext, ResourceLocation
-from hexdoc.utils.resource_model import IDModel
+from hexdoc.model.inline import IDModel
 from hexdoc.utils.types import Sortable, sorted_dict
 
 from .entry import Entry

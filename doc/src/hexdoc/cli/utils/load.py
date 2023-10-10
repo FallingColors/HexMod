@@ -2,13 +2,14 @@ import logging
 import subprocess
 from pathlib import Path
 
+from hexdoc.core.loader import ModResourceLoader
+from hexdoc.core.metadata import HexdocMetadata
+from hexdoc.core.properties import Properties
 from hexdoc.hexcasting.hex_book import load_hex_book
 from hexdoc.minecraft import I18n
-from hexdoc.minecraft.assets.textures import Texture
+from hexdoc.minecraft.assets import Texture
 from hexdoc.patchouli import Book
 from hexdoc.plugin import PluginManager
-from hexdoc.utils import ModResourceLoader, Properties
-from hexdoc.utils.metadata import HexdocMetadata
 
 from .logging import setup_logging
 

@@ -8,10 +8,10 @@ from typing import Annotated, Union
 
 import typer
 
+from hexdoc.core.loader import ModResourceLoader
+from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import I18n
 from hexdoc.minecraft.assets.textures import AnimatedTexture, Texture
-from hexdoc.utils import ModResourceLoader
-from hexdoc.utils.resource import ResourceLocation
 
 from .utils.load import load_book, load_books, load_common_data
 from .utils.render import create_jinja_env, render_book

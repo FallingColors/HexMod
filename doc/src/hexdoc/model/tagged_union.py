@@ -6,11 +6,11 @@ import more_itertools
 from pydantic import ValidationInfo, model_validator
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
+from hexdoc.core.resource import ResourceLocation
 from hexdoc.plugin.manager import PluginManagerContext
 from hexdoc.utils.deserialize import cast_or_raise
 
-from .model import HexdocModel
-from .resource import ResourceLocation
+from .base import HexdocModel
 
 
 class NoValueType(Enum):

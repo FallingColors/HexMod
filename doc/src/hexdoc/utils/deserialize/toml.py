@@ -4,7 +4,7 @@ import tomllib
 from pathlib import Path
 from typing import Callable, TypeVar
 
-from .deserialize import cast_or_raise
+from .assertions import cast_or_raise
 
 # TODO: there's (figuratively) literally no comments in this file
 

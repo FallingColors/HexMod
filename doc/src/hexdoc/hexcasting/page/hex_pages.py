@@ -2,10 +2,10 @@ from typing import Any, Self
 
 from pydantic import ValidationInfo, model_validator
 
+from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.recipe import CraftingRecipe
 from hexdoc.patchouli.page import PageWithText, PageWithTitle
-from hexdoc.utils import ResourceLocation
 from hexdoc.utils.deserialize import cast_or_raise
 
 from ..hex_book import HexContext

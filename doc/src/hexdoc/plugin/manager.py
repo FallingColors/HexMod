@@ -6,7 +6,7 @@ from typing import Callable, Generic, Iterator, ParamSpec, Sequence, TypeVar
 
 import pluggy
 
-from hexdoc.utils.model import ValidationContext
+from hexdoc.model import ValidationContext
 
 from .specs import HEXDOC_PROJECT_NAME, HookPackages, PluginSpec
 
