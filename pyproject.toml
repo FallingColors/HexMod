@@ -47,11 +47,14 @@ dependencies = [
 dynamic = ["version"]
 
 [project.optional-dependencies]
-dev = [
-    "black==23.7.0",
-    "isort==5.12.0",
+test = [
     "pytest>=7.3.1",
     "syrupy>=4.0.2",
+]
+dev = [
+    "hexdoc[test]",
+    "black==23.7.0",
+    "isort==5.12.0",
     "hatch",
     "build",
 ]
@@ -115,9 +118,17 @@ known_first_party = ["hexdoc"]
 pythonVersion = "3.11"
 pythonPlatform = "All"
 
-include = ["doc/src"]
-extraPaths = ["doc/src"]
-exclude = ["doc/{{cookiecutter.directory}}"]
+include = [
+    "doc/src",
+    "doc/test",
+]
+extraPaths = [
+    "doc/src",
+    "doc/test",
+]
+exclude = [
+    "doc/{{cookiecutter.directory}}",
+]
 
 enableExperimentalFeatures = true
 

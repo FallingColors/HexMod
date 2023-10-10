@@ -66,9 +66,25 @@ jobs:
         }}
       bump-version-segment: ${{ inputs.segment }}
 
-  publish-pypi:
+  test:
     runs-on: ubuntu-latest
     needs: [hexdoc]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install packages
+        run: pip install .[test]
+      
+      - name: Run tests
+        run: pytest doc
+
+  publish-pypi:
+    runs-on: ubuntu-latest
+    needs: [hexdoc, test]
     if: |-
       needs.hexdoc.outputs.publish-release == 'true' &&
       (github.event_name != 'workflow_dispatch' || inputs.publish == 'PyPI (release)')
@@ -100,7 +116,7 @@ jobs:
 
   publish-testpypi:
     runs-on: ubuntu-latest
-    needs: [hexdoc]
+    needs: [hexdoc, test]
     if: github.event_name == 'workflow_dispatch' && inputs.publish == 'TestPyPI'
 
     environment:
