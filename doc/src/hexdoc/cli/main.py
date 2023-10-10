@@ -202,7 +202,12 @@ def serve(
         f"Serving web book at http://localhost:{port}{book_url} (press ctrl+c to exit)\n"
     )
     with HTTPServer(("", port), SimpleHTTPRequestHandler) as httpd:
-        httpd.serve_forever()
+        # ignore KeyboardInterrupt to stop Typer from printing "Aborted."
+        # because it keeps printing after nodemon exits and breaking the output
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            pass
 
 
 if __name__ == "__main__":
