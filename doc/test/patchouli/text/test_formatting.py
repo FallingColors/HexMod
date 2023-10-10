@@ -26,26 +26,59 @@ def format_with_mocks(test_str: str, macros: dict[str, str] = {}):
     )
 
 
+def flatten_html(html: str):
+    return "".join(line.lstrip() for line in html.splitlines())
+
+
 def test_link():
-    tree = format_with_mocks("$(l:http://google.com)A$(/l)", {})
+    tree = format_with_mocks("$(l:http://google.com)A$(/l)")
     assert hexdoc_block({}, tree) == "<p><a href='http://google.com'>A</a></p>"
+
+
+def test_link_in_color():
+    tree = format_with_mocks(
+        "$(1)A$(l:http://google.com)B$(/l)C/$",
+        {"$(1)": "$(#111)"},
+    )
+    html = hexdoc_block({}, tree)
+
+    assert html == flatten_html(
+        """<p>
+            <span style='color: #111'>
+                A
+                <a href='http://google.com'>
+                    B
+                </a>
+                C
+            </span>
+        </p>"""
+    )
 
 
 def test_colors_across_link():
     tree = format_with_mocks(
-        "$(1)A$(l:http://google.com)B$(2)C$(1)D$(/l)E$(0)",
+        "$(1)A$(l:http://google.com)B$(2)C$(1)D$(/l)E/$",
         {"$(1)": "$(#111)", "$(2)": "$(#222)"},
     )
-    assert hexdoc_block({}, tree) == (
-        "<p>"
-        "<span style='color: #111'>A</span>"
-        "<a href='http://google.com'>"
-        ""
-        "<span style='color: #222'>C</span>"
-        "<span style='color: #111'>D</span>"
-        "</a>"
-        "<span style='color: #111'>E</span>"
-        "</p>"
+    html = hexdoc_block({}, tree)
+
+    assert html == flatten_html(
+        """<p>
+            <span style='color: #111'>
+                A
+            </span>
+            <a href='http://google.com'>
+                <span style='color: #222'>
+                    C
+                </span>
+                <span style='color: #111'>
+                    D
+                </span>
+            </a>
+            <span style='color: #111'>
+                E
+            </span>
+        </p>"""
     )
 
 
