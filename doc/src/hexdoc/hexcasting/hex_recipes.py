@@ -51,10 +51,7 @@ class BlockStateIngredient(HexdocModel):
     block: ResourceLocation
 
 
-class ModConditionalIngredient(
-    ItemIngredient,
-    type="hexcasting:mod_conditional",
-):
+class ModConditionalIngredient(ItemIngredient, type="hexcasting:mod_conditional"):
     default: ItemIngredientList
     if_loaded: ItemIngredientList
     modid: str
@@ -71,11 +68,14 @@ class BlockState(HexdocModel):
 # recipes
 
 
-class BrainsweepRecipe_0_11(Recipe, type="hexcasting:brainsweep"):
+class BrainsweepRecipe(Recipe, type=None):
     blockIn: BlockStateIngredient
+    result: BlockState
+
+
+class BrainsweepRecipe_0_11(BrainsweepRecipe, type="hexcasting:brainsweep"):
     cost: int
     entityIn: BrainsweepeeIngredient
-    result: BlockState
 
     @model_validator(mode="after")
     def _check_version(self):
@@ -83,15 +83,10 @@ class BrainsweepRecipe_0_11(Recipe, type="hexcasting:brainsweep"):
         return self
 
 
-class BrainsweepRecipe_0_10(Recipe, type="hexcasting:brainsweep"):
-    blockIn: BlockStateIngredient
+class BrainsweepRecipe_0_10(BrainsweepRecipe, type="hexcasting:brainsweep"):
     villagerIn: VillagerIngredient_0_10
-    result: BlockState
 
     @model_validator(mode="after")
     def _check_version(self):
         HexVersion.check(lambda v: v <= HexVersion.v0_10_x, type(self))
         return self
-
-
-BrainsweepRecipe = BrainsweepRecipe_0_11 | BrainsweepRecipe_0_10

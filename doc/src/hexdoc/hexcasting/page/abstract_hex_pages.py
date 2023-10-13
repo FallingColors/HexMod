@@ -9,12 +9,9 @@ from hexdoc.minecraft.i18n import I18nContext
 from hexdoc.patchouli.page import PageWithText
 from hexdoc.utils.deserialize import cast_or_raise
 
-from ..pattern import RawPatternInfo
-
 
 class PageWithPattern(PageWithText, type=None):
     header: LocalizedStr
-    patterns: list[RawPatternInfo]
     input: str | None = None
     output: str | None = None
     hex_size: int | None = None

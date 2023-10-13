@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Annotated, Any
 
-from pydantic import BeforeValidator
+from pydantic import BeforeValidator, PlainSerializer
 
 from hexdoc.core.resource import ResourceLocation
 from hexdoc.model import HexdocModel
@@ -25,19 +25,33 @@ class Direction(Enum):
             case _:
                 return value
 
+    def serialize(self):
+        return self.name
 
-DirectionField = Annotated[Direction, BeforeValidator(Direction.validate)]
+
+DirectionField = Annotated[
+    Direction,
+    BeforeValidator(Direction.validate),
+    PlainSerializer(Direction.serialize),
+]
 
 
-class RawPatternInfo(HexdocModel):
+class BasePatternInfo(HexdocModel):
     startdir: DirectionField
     signature: str
     is_per_world: bool = False
+
+
+class RawPatternInfo(BasePatternInfo):
+    """Pattern info used in pattern pages."""
+
     q: int | None = None
     r: int | None = None
 
 
-class PatternInfo(RawPatternInfo):
+class PatternInfo(BasePatternInfo):
+    """Pattern info used and exported by hexdoc for lookups."""
+
     id: ResourceLocation
 
     @property

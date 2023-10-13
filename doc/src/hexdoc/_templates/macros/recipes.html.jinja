@@ -69,6 +69,7 @@
     {% if ingredient.type|string == "hexcasting:mod_conditional" %}
       {# recursion! what could possibly go wrong? #}
       {{ render_ingredients(ingredient.default, true) }}
+      {{ render_ingredients(ingredient.if_loaded, true) }}
     {% else %}
       {{ render_item(ingredient.item, is_first=loop.first and not is_recursive) }}
     {% endif %}

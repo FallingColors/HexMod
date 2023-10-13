@@ -1,8 +1,7 @@
-from typing import Any, Self
+from typing import Self
 
 from pydantic import ValidationInfo, model_validator
 
-from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.recipe import CraftingRecipe
 from hexdoc.patchouli.page import PageWithText, PageWithTitle
@@ -10,27 +9,20 @@ from hexdoc.utils.deserialize import cast_or_raise
 
 from ..hex_book import HexContext
 from ..hex_recipes import BrainsweepRecipe
+from ..pattern import PatternInfo, RawPatternInfo
 from .abstract_hex_pages import PageWithOpPattern, PageWithPattern
 
 
 class LookupPatternPage(PageWithOpPattern, type="hexcasting:pattern"):
-    @model_validator(mode="before")
-    def _pre_root_lookup(cls, values: Any, info: ValidationInfo):
-        if not info.context:
-            return values
-        context = cast_or_raise(info.context, HexContext)
+    @property
+    def patterns(self) -> list[PatternInfo]:
+        return self._patterns
 
-        match values:
-            case {"op_id": op_id}:
-                # look up the pattern from the op id
-                id = ResourceLocation.from_str(op_id)
-                pattern = context.patterns[id]
-                return values | {
-                    "op_id": id,
-                    "patterns": [pattern],
-                }
-            case _:
-                return values
+    @model_validator(mode="after")
+    def _post_root_lookup(self, info: ValidationInfo):
+        context = cast_or_raise(info.context, HexContext)
+        self._patterns = [context.patterns[self.op_id]]
+        return self
 
     @model_validator(mode="after")
     def _check_anchor(self) -> Self:
@@ -43,14 +35,14 @@ class ManualOpPatternPage(
     PageWithOpPattern,
     type="hexcasting:manual_pattern",
 ):
-    pass
+    patterns: list[RawPatternInfo]
 
 
 class ManualRawPatternPage(
     PageWithPattern,
     type="hexcasting:manual_pattern",
 ):
-    pass
+    patterns: list[RawPatternInfo]
 
 
 class ManualPatternNosigPage(
@@ -60,6 +52,7 @@ class ManualPatternNosigPage(
 ):
     input: None = None
     output: None = None
+    patterns: list[RawPatternInfo]
 
 
 class CraftingMultiPage(PageWithTitle, type="hexcasting:crafting_multi"):

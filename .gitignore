@@ -1,5 +1,6 @@
 # hexdoc
 doc/**/_export/generated/
+doc/**/_export/exported/
 /_site/
 /_checkout/
 __gradle_version__.py
