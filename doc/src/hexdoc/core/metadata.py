@@ -7,7 +7,6 @@ from hexdoc.minecraft.assets import Texture, TextureContext
 from hexdoc.model import HexdocModel
 
 from .properties import NoTrailingSlashHttpUrl
-from .resource import ResourceLocation
 
 
 class HexdocMetadata(HexdocModel):
@@ -17,7 +16,7 @@ class HexdocMetadata(HexdocModel):
     """Github Pages base url."""
     asset_url: NoTrailingSlashHttpUrl
     """raw.githubusercontent.com base url."""
-    textures: dict[ResourceLocation, Texture]
+    textures: list[Texture]
     """id -> path from repo root"""
 
     @classmethod
@@ -31,5 +30,6 @@ class MetadataContext(TextureContext):
     @model_validator(mode="after")
     def _add_metadata_textures(self) -> Self:
         for metadata in self.all_metadata.values():
-            self.textures |= metadata.textures
+            for texture in metadata.textures:
+                self.textures[texture.file_id] = texture
         return self

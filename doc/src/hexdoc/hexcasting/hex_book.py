@@ -40,7 +40,7 @@ def load_hex_book(
 class PatternMetadata(HexdocModel):
     """Automatically generated at `export_dir/modid.patterns.hexdoc.json`."""
 
-    patterns: dict[ResourceLocation, PatternInfo]
+    patterns: list[PatternInfo]
 
     @classmethod
     def path(cls, modid: str) -> Path:
@@ -62,12 +62,13 @@ class HexContext(BookContext):
                 self._add_patterns_0_10(signatures)
 
         # export patterns so addons can use them
-        pattern_metadata = PatternMetadata(
-            patterns=self.patterns,
-        )
+        pattern_metadata = PatternMetadata(patterns=list(self.patterns.values()))
         self.loader.export(
             path=PatternMetadata.path(self.props.modid),
-            data=pattern_metadata.model_dump_json(warnings=False),
+            data=pattern_metadata.model_dump_json(
+                warnings=False,
+                exclude_defaults=True,
+            ),
         )
 
         # add external patterns AFTER exporting so we don't reexport them
@@ -75,7 +76,7 @@ class HexContext(BookContext):
             name_pattern="{modid}.patterns",
             model_type=PatternMetadata,
         ).values():
-            for _, pattern in metadata.patterns.items():
+            for pattern in metadata.patterns:
                 self._add_pattern(pattern, signatures)
 
         logging.getLogger(__name__).info(f"Loaded patterns: {self.patterns.keys()}")

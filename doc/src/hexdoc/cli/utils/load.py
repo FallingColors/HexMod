@@ -44,14 +44,16 @@ def load_all_metadata(props: Properties, pm: PluginManager, loader: ModResourceL
     metadata = HexdocMetadata(
         book_url=f"{props.url}/v/{version}",
         asset_url=props.env.asset_url,
-        textures={
-            texture.file_id: texture for texture in Texture.load_all(root, loader)
-        },
+        textures=list(Texture.load_all(root, loader)),
     )
 
     loader.export(
         metadata.path(props.modid),
-        metadata.model_dump_json(by_alias=True, warnings=False),
+        metadata.model_dump_json(
+            by_alias=True,
+            warnings=False,
+            exclude_defaults=True,
+        ),
     )
 
     return loader.load_metadata(model_type=HexdocMetadata) | {props.modid: metadata}

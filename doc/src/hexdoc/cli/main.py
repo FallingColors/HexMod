@@ -79,8 +79,8 @@ def render(
     animations = list[AnimatedTexture]()
 
     for metadata in all_metadata.values():
-        textures |= metadata.textures
-        for texture in metadata.textures.values():
+        for texture in metadata.textures:
+            textures[texture.file_id] = texture
             if isinstance(texture, AnimatedTexture):
                 animations.append(texture)
 
