@@ -32,7 +32,7 @@ class Texture(InlineModel):
     def load_all(cls, root: Path, loader: ModResourceLoader):
         for _, id, path in loader.find_resources(
             "assets",
-            namespace=loader.props.modid,
+            namespace="*",
             folder="textures",
             glob=f"**/*.png",
         ):
