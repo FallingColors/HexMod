@@ -1,6 +1,5 @@
 modid = "hexcasting"
 book = "hexcasting:thehexbook"
-fallback_url = "https://gamma-delta.github.io/HexMod"
 default_lang = "en_us"
 
 resource_dirs = [  # top takes priority
@@ -34,16 +33,9 @@ path = "{^_fabric.package}/interop/gravity/GravityApiInterop.java"
 regex = "{^_pattern_regex}"
 
 
-[base_asset_urls]
-hexcasting = "https://raw.githubusercontent.com/gamma-delta/HexMod/main/Common/src/main/resources"
-
-
 [template]
-main = "main.html.jinja"
 static_dir = "static"
-packages = [
-    "hexdoc",
-]
+packages = ["hexdoc"]
 
 [template.args]
 mod_name = "Hex Casting"
