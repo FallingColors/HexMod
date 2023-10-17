@@ -1,5 +1,8 @@
 [build-system]
-requires = ["hatchling", "hatch-gradle-version>=0.6.0"]
+requires = [
+    "hatchling",
+    "hatch-gradle-version>=0.8.0",
+]
 build-backend = "hatchling.build"
 
 # project metadata
@@ -13,7 +16,9 @@ authors = [
 ]
 readme = "doc/README.md"
 license = { file = "doc/LICENSE.txt" }
-keywords = ["hexdoc"]
+keywords = [
+    "hexdoc",
+]
 classifiers = [
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
