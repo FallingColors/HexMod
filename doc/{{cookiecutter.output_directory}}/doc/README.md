@@ -16,10 +16,11 @@ For example:
 ## Setup
 
 ```sh
-python -m venv venv
+python3.11 -m venv venv
 
-.\venv\Scripts\activate  # Windows
-source venv/bin/activate # anything other than Windows
+.\venv\Scripts\activate   # Windows
+. venv/bin/activate.fish  # fish
+source venv/bin/activate  # everything else
 
 # run from the repo root, not doc/
 pip install -e .[dev]
@@ -27,7 +28,7 @@ pip install -e .[dev]
 
 ## Usage
 
-For local testing, create a file called `.env` following this template:
+For local testing, create a file called `.env` in the repo root following this template:
 ```sh
 GITHUB_REPOSITORY={{ cookiecutter.author }}/{{ cookiecutter.github_repo }}
 GITHUB_SHA={{ cookiecutter.main_branch }}

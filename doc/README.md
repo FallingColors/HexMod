@@ -22,7 +22,9 @@ WIP.
   pip install cookiecutter
   cookiecutter gh:object-Object/HexMod --directory doc
   ```
-  - Note: if you run this from within an existing mod repo, add the flag `-f` and leave `output_directory` blank.
+  - `--directory doc` tells Cookiecutter to look for a template in the `doc` directory of HexMod, and cannot be omitted.
+  - If you run this from within an existing mod repo, add the flag `-f`, and leave the `output_directory` option blank when prompted by Cookiecutter.
+    - Note: this currently overwrites any conflicting files, including your .gitignore, so you may need to use your Git history to re-add anything not covered by the new file.
 - Fill in the TODOs in `doc/properties.toml` (mostly paths to files/folders in your mod so hexdoc can find the data it needs).
 - Try running the docgen locally by following the instructions in `doc/README.md`.
 - If it doesn't already exist, create an empty `gh-pages` branch and push it.
@@ -36,10 +38,11 @@ WIP.
 ## Setup
 
 ```sh
-python -m venv venv
+python3.11 -m venv venv
 
-.\venv\Scripts\activate  # Windows
-source venv/bin/activate # anything other than Windows
+.\venv\Scripts\activate   # Windows
+. venv/bin/activate.fish  # fish
+source venv/bin/activate  # everything else
 
 # run from the repo root, not doc/
 pip install -e .[dev]
@@ -47,7 +50,7 @@ pip install -e .[dev]
 
 ## Usage
 
-For local testing, create a file called `.env` following this template:
+For local testing, create a file called `.env` in the repo root following this template:
 ```sh
 GITHUB_REPOSITORY=gamma-delta/HexMod
 GITHUB_SHA=main

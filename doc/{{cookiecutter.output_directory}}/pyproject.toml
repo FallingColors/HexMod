@@ -25,6 +25,9 @@ Source = "https://github.com/{{ cookiecutter.author }}/{{ cookiecutter.github_re
 scheme = "gradle"
 source = "gradle-properties"
 py-path = "doc/{{ cookiecutter.__src }}/__version__.py"
+{% if cookiecutter.gradle_mod_version_key != "modVersion" -%}
+key = "{{ cookiecutter.gradle_mod_version_key }}"
+{%- endif %}
 
 [tool.hatch.metadata.hooks.gradle-properties]
 dependencies = [ # this can include normal dependency strings too

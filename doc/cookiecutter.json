@@ -1,9 +1,11 @@
 {
+    "foo": "{{foo}}",
     "output_directory": "",
 
     "modid": "",
     "mod_display_name": "{{ cookiecutter.modid|capitalize }}",
     "plugin_classname": "{{ cookiecutter.modid|capitalize }}Plugin",
+    "gradle_mod_version_key": "modVersion",
 
     "github_repo": "{{ cookiecutter.modid|capitalize }}",
     "author": "TODO",
@@ -24,5 +26,9 @@
     "__project_slug": "hexdoc_{{ cookiecutter.modid|replace('-', '_')|lower }}",
 
     "__src": "src/{{ cookiecutter.__project_slug }}",
-    "__export_root": "src/{{ cookiecutter.__project_slug }}/_export"
+    "__export_root": "src/{{ cookiecutter.__project_slug }}/_export",
+
+    "__prompts__": {
+        "gradle_mod_version_key": "gradle.properties mod version key"
+    }
 }
