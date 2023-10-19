@@ -1,7 +1,7 @@
 {
   "name": "hexcasting.entry.directrix",
   "category": "hexcasting:greatwork",
-  "icon": "hexcasting:directrix_redstone",
+  "icon": "hexcasting:directrix/redstone",
   "advancement": "hexcasting:enlightenment",
   "entry_color": "54398a",
   "sortnum": 3,
