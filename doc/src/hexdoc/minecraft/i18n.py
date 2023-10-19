@@ -241,7 +241,9 @@ class I18n(HexdocModel):
         return LocalizedItem(key=localized.key, value=localized.value)
 
     def localize_key(self, key: str) -> LocalizedStr:
-        return self.localize(f"key.{key}")
+        if not key.startswith("key."):
+            key = "key." + key
+        return self.localize(key)
 
     def localize_item_tag(self, tag: ResourceLocation):
         localized = self.localize(
