@@ -1,14 +1,19 @@
 from importlib.resources import Package
-from typing import Protocol
+from typing import Protocol, TypeVar
 
 import pluggy
 
 HEXDOC_PROJECT_NAME = "hexdoc"
 
+
+_T = TypeVar("_T")
+
+HookReturn = _T | list[_T]
+
+HookReturns = list[HookReturn[_T]]
+
+
 hookspec = pluggy.HookspecMarker(HEXDOC_PROJECT_NAME)
-
-
-HookPackages = list[Package | list[Package]]
 
 
 class PluginSpec(Protocol):
@@ -19,12 +24,17 @@ class PluginSpec(Protocol):
 
     @staticmethod
     @hookspec
-    def hexdoc_load_resource_dirs() -> HookPackages:
+    def hexdoc_load_resource_dirs() -> HookReturns[Package]:
         ...
 
     @staticmethod
     @hookspec
-    def hexdoc_load_tagged_unions() -> HookPackages:
+    def hexdoc_load_tagged_unions() -> HookReturns[Package]:
+        ...
+
+    @staticmethod
+    @hookspec
+    def hexdoc_load_jinja_templates() -> HookReturns[tuple[Package, str]]:
         ...
 
 
@@ -52,7 +62,7 @@ class LoadResourceDirsImpl(Protocol):
     """
 
     @staticmethod
-    def hexdoc_load_resource_dirs() -> Package | list[Package]:
+    def hexdoc_load_resource_dirs() -> HookReturn[Package]:
         """Return the module(s) which contain your plugin's exported book resources."""
         ...
 
@@ -65,6 +75,18 @@ class LoadTaggedUnionsImpl(Protocol):
     """
 
     @staticmethod
-    def hexdoc_load_tagged_unions() -> Package | list[Package]:
+    def hexdoc_load_tagged_unions() -> HookReturn[Package]:
         """Return the module(s) which contain your plugin's tagged union subtypes."""
+        ...
+
+
+class LoadJinjaTemplatesImpl(Protocol):
+    """Interface for a plugin implementing `hexdoc_load_jinja_templates`.
+
+    These protocols are optional - they gives better type checking, but everything will
+    work fine with a standard pluggy hook implementation.
+    """
+
+    @staticmethod
+    def hexdoc_load_jinja_templates() -> HookReturn[tuple[Package, str]]:
         ...

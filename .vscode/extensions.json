@@ -4,5 +4,7 @@
 		"ms-python.vscode-pylance",
 		"ms-python.black-formatter",
 		"ms-python.isort",
+		"samuelcolvin.jinjahtml",
+		"noxiz.jinja-snippets",
 	],
 }

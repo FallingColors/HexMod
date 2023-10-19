@@ -3,7 +3,9 @@ __all__ = [
     "ModVersionImpl",
     "LoadResourceDirsImpl",
     "LoadTaggedUnionsImpl",
+    "LoadJinjaTemplatesImpl",
     "PluginManager",
+    "HookReturn",
 ]
 
 import pluggy
@@ -11,6 +13,8 @@ import pluggy
 from .manager import PluginManager
 from .specs import (
     HEXDOC_PROJECT_NAME,
+    HookReturn,
+    LoadJinjaTemplatesImpl,
     LoadResourceDirsImpl,
     LoadTaggedUnionsImpl,
     ModVersionImpl,

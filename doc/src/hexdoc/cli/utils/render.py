@@ -6,13 +6,7 @@ import shutil
 from pathlib import Path
 from typing import Any
 
-from jinja2 import (
-    ChoiceLoader,
-    FileSystemLoader,
-    PackageLoader,
-    StrictUndefined,
-    Template,
-)
+from jinja2 import ChoiceLoader, PrefixLoader, StrictUndefined, Template
 from jinja2.sandbox import SandboxedEnvironment
 
 from hexdoc.core.metadata import HexdocMetadata
@@ -21,6 +15,7 @@ from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import I18n
 from hexdoc.minecraft.assets.textures import AnimatedTexture, Texture
 from hexdoc.patchouli import Book
+from hexdoc.plugin import PluginManager
 from hexdoc.utils.jinja.extensions import IncludeRawExtension
 from hexdoc.utils.jinja.filters import (
     hexdoc_block,
@@ -33,12 +28,15 @@ from hexdoc.utils.path import write_to_path
 from .sitemap import MARKER_NAME, SitemapMarker
 
 
-def create_jinja_env(props: Properties):
+def create_jinja_env(props: Properties, pm: PluginManager):
+    prefix_loaders = pm.load_jinja_templates(props.template.include)
+
     env = SandboxedEnvironment(
-        # search order: template_dirs, template_packages
         loader=ChoiceLoader(
-            [FileSystemLoader(props.template.dirs)]
-            + [PackageLoader(name, str(path)) for name, path in props.template.packages]
+            [
+                PrefixLoader(prefix_loaders, ":"),
+                *prefix_loaders.values(),
+            ]
         ),
         undefined=StrictUndefined,
         lstrip_blocks=True,

@@ -5,7 +5,7 @@ import re
 from pathlib import Path
 from typing import Annotated, Any, Self
 
-from pydantic import AfterValidator, Field, HttpUrl, field_validator
+from pydantic import AfterValidator, Field, HttpUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from hexdoc.core.resource import ResourceDir, ResourceLocation
@@ -72,19 +72,8 @@ class TemplateProps(StripHiddenModel):
     style: str = "main.css.jinja"
 
     static_dir: RelativePath | None = None
-    dirs: list[RelativePath] = Field(default_factory=list)
-    packages: list[tuple[str, Path]]
+    include: list[str]
     args: dict[str, Any]
-
-    @field_validator("packages", mode="before")
-    def _check_packages(cls, values: Any | list[Any]):
-        if not isinstance(values, list):
-            return values
-
-        for i, value in enumerate(values):
-            if isinstance(value, str):
-                values[i] = (value, Path("_templates"))
-        return values
 
 
 class MinecraftAssetsProps(StripHiddenModel):

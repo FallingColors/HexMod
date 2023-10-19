@@ -37,9 +37,10 @@ regex = "{^_pattern_regex}"
 
 [template]
 static_dir = "static"
-packages = [
-    "{{ cookiecutter.__project_slug }}",
-    "hexdoc",
+include = [
+    "{{ cookiecutter.modid }}",
+    "hexcasting",
+    "patchouli",
 ]
 
 [template.args]
