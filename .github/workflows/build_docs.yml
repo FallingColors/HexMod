@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - docgen-2-1.20 # TODO: remove
+    tags: "*"
   workflow_dispatch:
     inputs:
       branch:
