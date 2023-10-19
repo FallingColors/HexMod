@@ -35,7 +35,10 @@ regex = "{^_pattern_regex}"
 
 [template]
 static_dir = "static"
-packages = ["hexdoc"]
+include = [
+    "hexcasting",
+    "patchouli",
+]
 
 [template.args]
 mod_name = "Hex Casting"
