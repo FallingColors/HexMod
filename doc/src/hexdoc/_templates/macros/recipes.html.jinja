@@ -55,9 +55,27 @@
   {% endif %} 
   <img
     class="flay-recipe-entity"
-    alt="{{ villager.profession }} villager"
+    alt="level {{ villager.minLevel }} {{ villager.profession }} villager"
     src="{{ '%s:textures/entities/villagers/%s.png'|format(modid, prof)|hexdoc_texture }}"
   >
+  <div class="flay-recipe-villager-details">
+    <img
+      class="flay-recipe-villager-detail-icon"
+      alt="level {{ villager.minLevel }} {{ villager.profession }} villager"
+      src="{{ 'minecraft:textures/mob_effect/hero_of_the_village.png'|hexdoc_texture }}"
+      style="width: 16px; height:16px"
+    >
+    {% if villager.profession != none %}
+      {{_("hexdoc.villagerrequirements.professional").format(
+        _('merchant.level.%d'|format(villager.minLevel) ),
+        _('entity.minecraft.villager.%s'|format(prof))
+      ) }}
+    {% else %}
+      {{_("hexdoc.villagerrequirements.any").format(
+        _('merchant.level.%d'|format(villager.minLevel) ),
+      ) }}
+    {% endif %}
+  </div>
 {%- endmacro %}
 
 {% macro render_other_entity(entity) -%}
