@@ -1,9 +1,11 @@
 from typing import Any, Literal
 
 from hexdoc.core import IsVersion, ResourceLocation
-from hexdoc.minecraft import LocalizedItem
+from hexdoc.core.resource import ResourceLocation
+from hexdoc.minecraft.assets.textures import ItemWithTexture
 from hexdoc.minecraft.recipe import ItemIngredient, ItemIngredientList, Recipe
 from hexdoc.model import HexdocModel, TypeTaggedUnion
+from hexdoc.model.tagged_union import TypeTaggedUnion
 from hexdoc.utils import NoValue
 
 # ingredients
@@ -37,7 +39,7 @@ class EntityTagIngredient(BrainsweepeeIngredient, type="entity_tag"):
 class BlockStateIngredient(HexdocModel):
     # TODO: tagged union
     type: Literal["block"]
-    block: ResourceLocation
+    block: ItemWithTexture
 
 
 class ModConditionalIngredient(ItemIngredient, type="hexcasting:mod_conditional"):
@@ -50,7 +52,7 @@ class ModConditionalIngredient(ItemIngredient, type="hexcasting:mod_conditional"
 
 
 class BlockState(HexdocModel):
-    name: LocalizedItem
+    name: ItemWithTexture
     properties: dict[str, Any] | None = None
 
 

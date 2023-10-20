@@ -1,0 +1,82 @@
+{% macro render_mindcipe(recipe) -%}
+  <details class="details-collapsible flay-recipe-details">
+    <summary class="collapse-details">
+      <span class="collapse-recipe-show">{{ _('hexdoc.recipe.show') }}</span>
+      <span class="collapse-recipe-hide">{{ _('hexdoc.recipe.hide') }}</span>
+    </summary>
+    {# <div class="flay-recipes">
+      {% for recipe in recipes %} #}
+        <div>
+          <h5>{{ recipe.result.name.name }}</h5>
+          <div class="flay-recipe">
+            <img
+              class="flay-recipe-background"
+              alt="Mindflay recipe gui"
+              src="{{ 'hexcasting:textures/gui/hexdoc/brainsweep.png'|hexdoc_texture }}"
+            >
+            {{ render_brainsweepee(recipe) }}
+            <div class="flay-recipe-block-ingredient">
+              {{ render_item(recipe.blockIn.block) }}
+            </div>
+
+            <div class="flay-recipe-result">
+              {{ render_item(recipe.result.name) }}
+            </div>
+          </div>
+        </div>
+      {# {% endfor %}
+    </div> #}
+  </details>
+{%- endmacro %}
+
+{% macro render_brainsweepee(recipe) -%}
+  {% if recipe.entityIn is defined %}
+    {# 0.11 any entity version #}
+    {% if recipe.entityIn.profession is defined %}
+      {# still a villager #}
+      {{ render_villager(recipe.entityIn) }}
+    {% elif recipe.entityIn.entityType is defined%}
+      {# some actual entity, probably an allay for now atleast #}
+      {{ render_other_entity(recipe.entityIn) }}
+    {% endif %}    
+  {% elif recipe.villagerIn is defined %}
+    {# 0.10 villager version #}
+    {{ render_villager(recipe.villagerIn) }}
+  {% endif %}
+{%- endmacro %}
+
+{% macro render_villager(villager) -%}
+  {% if villager.profession == none %}
+    {% set modid = "minecraft" %}
+    {% set prof = "none" %}
+  {% else %}
+    {% set modid = villager.profession.namespace %}
+    {% set prof = villager.profession.path %}
+  {% endif %} 
+  <img
+    class="flay-recipe-entity"
+    alt="{{ villager.profession }} villager"
+    src="{{ '%s:textures/entities/villagers/%s.png'|format(modid, prof)|hexdoc_texture }}"
+  >
+{%- endmacro %}
+
+{% macro render_other_entity(entity) -%}
+  {% set modid = entity.entityType.namespace %}
+  {% set entity = entity.entityType.path %}
+  <img
+    class="flay-recipe-entity"
+    alt="{{ entity }}"
+    src="{{ '%s:textures/entities/%s.png'|format(modid, entity)|hexdoc_texture }}"
+  >
+{%- endmacro %}
+
+{# TODO: figure out how to handle this. I don't think it's used in anything rn ? #}
+{% macro render_tag_entity(entity) -%}
+  
+{%- endmacro %}
+
+
+
+
+
+
