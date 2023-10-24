@@ -5,7 +5,7 @@ import re
 from pathlib import Path
 from typing import Annotated, Any, Self
 
-from pydantic import AfterValidator, Field, HttpUrl
+from pydantic import AfterValidator, Field, HttpUrl, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from hexdoc.core.resource import ResourceDir, ResourceLocation
@@ -68,12 +68,27 @@ class PatternStubProps(StripHiddenModel):
 
 
 class TemplateProps(StripHiddenModel):
-    main: str = "main.html.jinja"
-    style: str = "main.css.jinja"
-
     static_dir: RelativePath | None = None
     include: list[str]
+
+    render: dict[Path, str] = Field(
+        default_factory=lambda: {
+            "index.html": "index.html.jinja",
+            "index.css": "index.css.jinja",
+            "textures.css": "textures.jcss.jinja",
+            "index.js": "index.js.jinja",
+        },
+        validate_default=True,
+    )
+    extend_render: dict[Path, str] | None = None
+
     args: dict[str, Any]
+
+    @model_validator(mode="after")
+    def _merge_extend_render(self):
+        if self.extend_render:
+            self.render |= self.extend_render
+        return self
 
 
 class MinecraftAssetsProps(StripHiddenModel):

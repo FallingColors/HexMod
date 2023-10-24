@@ -91,8 +91,8 @@ def render(
     env = create_jinja_env(props, pm)
 
     templates = {
-        "index.html": env.get_template(props.template.main),
-        "index.css": env.get_template(props.template.style),
+        Path(path): env.get_template(template_name)
+        for path, template_name in props.template.render.items()
     }
 
     if clean:

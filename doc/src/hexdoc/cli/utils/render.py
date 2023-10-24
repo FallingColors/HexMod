@@ -64,7 +64,7 @@ def render_book(
     lang: str,
     book: Book,
     i18n: I18n,
-    templates: dict[str, Template],
+    templates: dict[Path, Template],
     output_dir: Path,
     all_metadata: dict[str, HexdocMetadata],
     textures: dict[ResourceLocation, Texture],
