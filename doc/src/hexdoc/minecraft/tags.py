@@ -8,6 +8,7 @@ from hexdoc.core.loader import LoaderContext
 from hexdoc.core.resource import ResourceLocation
 from hexdoc.model import HexdocModel
 from hexdoc.utils.deserialize.json import decode_json_dict
+from hexdoc.utils.types import PydanticOrderedSet
 
 
 class OptionalTagValue(HexdocModel, frozen=True):
@@ -20,7 +21,7 @@ TagValue = ResourceLocation | OptionalTagValue
 
 class Tag(HexdocModel):
     registry: str = Field(exclude=True)
-    raw_values: set[TagValue] = Field(alias="values")
+    values: PydanticOrderedSet[TagValue]
     replace: bool = False
 
     @classmethod
@@ -30,7 +31,7 @@ class Tag(HexdocModel):
         id: ResourceLocation,
         context: LoaderContext,
     ) -> Self:
-        values = set[TagValue]()
+        values = PydanticOrderedSet[TagValue]()
         replace = False
 
         for _, _, tag in context.loader.load_resources(
@@ -42,7 +43,8 @@ class Tag(HexdocModel):
         ):
             if tag.replace:
                 values.clear()
-            values.update(tag._load_values(context))
+            for value in tag._load_values(context):
+                values.add(value)
 
         return Tag(registry=registry, values=values, replace=replace)
 
@@ -54,11 +56,8 @@ class Tag(HexdocModel):
         )
 
     @property
-    def values(self) -> set[ResourceLocation]:
-        return set(self.iter_values())
-
-    def iter_values(self) -> Iterator[ResourceLocation]:
-        for value in self.raw_values:
+    def value_ids(self) -> Iterator[ResourceLocation]:
+        for value in self.values:
             match value:
                 case ResourceLocation():
                     yield value
@@ -70,12 +69,12 @@ class Tag(HexdocModel):
             tag = self
         else:
             tag = self.model_copy(
-                update={"raw_values": current.raw_values | self.raw_values},
+                update={"raw_values": current.values | self.values},
             )
         return tag.model_dump_json(by_alias=True)
 
     def _load_values(self, context: LoaderContext) -> Iterator[TagValue]:
-        for value in self.raw_values:
+        for value in self.values:
             match value:
                 case (
                     (ResourceLocation() as child_id) | OptionalTagValue(id=child_id)

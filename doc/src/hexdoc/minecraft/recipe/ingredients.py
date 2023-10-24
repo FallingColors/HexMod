@@ -67,7 +67,7 @@ def unwrap_tag(
     except FileNotFoundError:
         return
 
-    for id in tag.values:
+    for id in tag.value_ids:
         try:
             yield MinecraftItemIdIngredient.model_validate(
                 {"item": id},

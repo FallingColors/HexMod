@@ -25,10 +25,11 @@ class BookContext(
 
     @model_validator(mode="after")
     def _post_root_load_tags(self) -> Self:
-        self.spoilered_advancements |= Tag.load(
+        tag = Tag.load(
             registry="hexdoc",
             id=ResourceLocation("hexcasting", "spoilered_advancements"),
             context=self,
-        ).values
+        )
+        self.spoilered_advancements.update(tag.value_ids)
 
         return self
