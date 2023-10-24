@@ -5,6 +5,6 @@
         "Common/src/main/resources/assets/hexcasting/lang"
     ],
     "ignore": ["**/generated/**"],
-    "ext": "jinja,html,css,js,toml,json,json5,py",
+    "ext": "jinja,html,css,js,ts,toml,json,json5,py",
     "exec": "hexdoc serve doc/properties.toml --src _site/src/docs --dst _site/dst/docs --lang en_us --allow-missing --release"
 }
