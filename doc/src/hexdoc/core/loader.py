@@ -91,6 +91,7 @@ class ModResourceLoader:
                 namespace=self.props.modid,
                 folder="",
                 glob=f"{folder}/**/*.*",
+                allow_missing=True,
             )
         }
 
