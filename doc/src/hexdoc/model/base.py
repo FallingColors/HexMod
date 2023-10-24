@@ -6,10 +6,14 @@ from typing import TYPE_CHECKING, Any, Self, dataclass_transform
 from pydantic import BaseModel, ConfigDict
 from pydantic.config import ConfigDict
 
+from hexdoc.utils.classproperty import ClassPropertyDescriptor
 from hexdoc.utils.contextmanagers import set_contextvar
 
 DEFAULT_CONFIG = ConfigDict(
     extra="forbid",
+    ignored_types=(  # pyright: ignore[reportUnknownArgumentType]
+        ClassPropertyDescriptor,
+    ),
 )
 
 _init_context_var = ContextVar[Any]("_init_context_var", default=None)

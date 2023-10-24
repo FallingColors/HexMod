@@ -1,11 +1,13 @@
-from typing import Any, ClassVar, Self
+from typing import Any, ClassVar, Self, Unpack
 
-from pydantic import model_validator
+from pydantic import ConfigDict, model_validator
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.model.tagged_union import TypeTaggedUnion
+from hexdoc.utils.classproperty import classproperty
+from hexdoc.utils.singletons import Inherit, InheritType, NoValue
 
 from ..text import FormatTree
 
@@ -18,7 +20,6 @@ class Page(TypeTaggedUnion, type=None):
 
     __template: ClassVar[str]
 
-    type: ResourceLocation | None
     advancement: ResourceLocation | None = None
     flag: str | None = None
     anchor: str | None = None
@@ -26,19 +27,28 @@ class Page(TypeTaggedUnion, type=None):
     def __init_subclass__(
         cls,
         *,
-        type: str | None,
+        type: str | InheritType | None = Inherit,
         template_type: str | None = None,
+        **kwargs: Unpack[ConfigDict],
     ) -> None:
-        super().__init_subclass__(type=type)
+        super().__init_subclass__(type=type, **kwargs)
 
         # jinja template path
         if template_type is not None:
-            template = ResourceLocation.from_str(template_type)
+            template_id = ResourceLocation.from_str(template_type)
         else:
-            template = cls.type
+            template_id = cls.type
 
-        if template:
-            cls.__template = f"pages/{template.namespace}/{template.path}.html.jinja"
+        if template_id:
+            cls.__template = (
+                f"pages/{template_id.namespace}/{template_id.path}.html.jinja"
+            )
+
+    @classproperty
+    @classmethod
+    def type(cls) -> ResourceLocation | None:
+        assert cls._type is not NoValue
+        return cls._type
 
     @model_validator(mode="wrap")
     @classmethod
@@ -53,8 +63,18 @@ class Page(TypeTaggedUnion, type=None):
 
 
 class PageWithText(Page, type=None):
+    """Base class for a `Page` with optional text.
+
+    If text is required, do not subclass this type.
+    """
+
     text: FormatTree | None = None
 
 
 class PageWithTitle(PageWithText, type=None):
+    """Base class for a `Page` with optional title and text.
+
+    If title and/or text is required, do not subclass this type.
+    """
+
     title: LocalizedStr | None = None

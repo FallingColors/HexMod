@@ -1,6 +1,6 @@
-from typing import Self
+from typing import Any, Self
 
-from pydantic import ValidationInfo, model_validator
+from pydantic import ValidationInfo, field_validator, model_validator
 
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.recipe import CraftingRecipe
@@ -50,9 +50,11 @@ class ManualPatternNosigPage(
     type="hexcasting:manual_pattern_nosig",
     template_type="hexcasting:manual_pattern",
 ):
-    input: None = None
-    output: None = None
     patterns: list[RawPatternInfo]
+
+    @field_validator("input", "output")
+    def _forbid_arguments(cls, value: Any):
+        assert value is None
 
 
 class CraftingMultiPage(PageWithTitle, type="hexcasting:crafting_multi"):

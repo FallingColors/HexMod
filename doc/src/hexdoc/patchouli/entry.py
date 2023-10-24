@@ -15,19 +15,6 @@ from .book_context import BookContext
 from .page.pages import CraftingPage, Page
 
 
-class CraftingAccumulatorPage(
-    PageWithTitle,
-    type=None,
-    template_type="patchouli:crafting",
-):
-    type: None = None
-    recipes: list[CraftingRecipe] = Field(default_factory=list)
-
-    @classmethod
-    def empty(cls):
-        return cls.model_construct()
-
-
 class Entry(IDModel, Sortable):
     """Entry json file, with pages and localizations.
 
@@ -67,7 +54,7 @@ class Entry(IDModel, Sortable):
 
     def preprocess_pages(self) -> Iterator[Page]:
         """Combines adjacent CraftingPage recipes as much as possible."""
-        accumulator = CraftingAccumulatorPage.empty()
+        accumulator = CraftingAccumulator.empty()
 
         for page in self.pages:
             match page:
@@ -86,7 +73,7 @@ class Entry(IDModel, Sortable):
                 ):
                     if accumulator.recipes:
                         yield accumulator
-                    accumulator = CraftingAccumulatorPage.empty()
+                    accumulator = CraftingAccumulator.empty()
                     accumulator.recipes += recipes
                     accumulator.title = title
                 case CraftingPage(
@@ -99,11 +86,11 @@ class Entry(IDModel, Sortable):
                     accumulator.text = text
                     accumulator.recipes += recipes
                     yield accumulator
-                    accumulator = CraftingAccumulatorPage.empty()
+                    accumulator = CraftingAccumulator.empty()
                 case _:
                     if accumulator.recipes:
                         yield accumulator
-                        accumulator = CraftingAccumulatorPage.empty()
+                        accumulator = CraftingAccumulator.empty()
                     yield page
 
         if accumulator.recipes:
@@ -120,3 +107,11 @@ class Entry(IDModel, Sortable):
             for spoiler in context.spoilered_advancements
         )
         return self
+
+
+class CraftingAccumulator(PageWithTitle, template_type="patchouli:crafting"):
+    recipes: list[CraftingRecipe] = Field(default_factory=list)
+
+    @classmethod
+    def empty(cls):
+        return cls.model_construct()

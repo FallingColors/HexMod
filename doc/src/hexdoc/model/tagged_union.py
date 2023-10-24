@@ -1,31 +1,27 @@
+# pyright: reportPrivateUsage=false
+
 from collections import defaultdict
-from enum import Enum
-from typing import Any, ClassVar, Generator, Self
+from textwrap import dedent
+from typing import Any, ClassVar, Generator, Self, Unpack
 
 import more_itertools
-from pydantic import ValidationInfo, model_validator
+from pydantic import ConfigDict, ValidationInfo, model_validator
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
 from hexdoc.core.resource import ResourceLocation
 from hexdoc.plugin.manager import PluginManagerContext
+from hexdoc.utils.classproperty import classproperty
 from hexdoc.utils.deserialize import cast_or_raise
+from hexdoc.utils.singletons import Inherit, InheritType, NoValue, NoValueType
 
 from .base import HexdocModel
 
-
-class NoValueType(Enum):
-    """Type of NoValue, a singleton representing the value of a nonexistent dict key."""
-
-    _token = 0
-
-
-NoValue = NoValueType._token  # pyright: ignore[reportPrivateUsage]
-"""A singleton (like None) representing the value of a nonexistent dict key."""
-
 TagValue = str | NoValueType
 
+_RESOLVED = "__resolved"
+
 # sentinel value to check if we already loaded the tagged union subtypes hook
-_is_loaded = False  # pyright: ignore[reportPrivateUsage]
+_is_loaded = False
 
 
 class InternallyTaggedUnion(HexdocModel):
@@ -46,6 +42,7 @@ class InternallyTaggedUnion(HexdocModel):
 
     # inherited
     _tag_key: ClassVar[str | None] = None
+    _tag_value: ClassVar[TagValue | None] = None
 
     # per-class
     __all_subtypes: ClassVar[set[type[Self]]]
@@ -54,37 +51,41 @@ class InternallyTaggedUnion(HexdocModel):
     def __init_subclass__(
         cls,
         *,
-        key: str | None = None,
-        value: TagValue | None,
-    ) -> None:
-        # inherited data, so only set if not None
-        if key is not None:
+        key: str | InheritType | None = Inherit,
+        value: TagValue | InheritType | None = Inherit,
+        **kwargs: Unpack[ConfigDict],
+    ):
+        super().__init_subclass__(**kwargs)
+
+        # inherited data
+        if key is not Inherit:
             cls._tag_key = key
+        if value is not Inherit:
+            cls._tag_value = value
 
         # don't bother with rest of init if it's not part of a union
         if cls._tag_key is None:
-            if value is not None:
-                raise ValueError(
-                    f"Expected value=None for {cls} with key=None, got {value}"
-                )
-            return
+            if cls._tag_value is None:
+                return
+            raise ValueError(
+                f"Expected value=None for {cls} with key=None, got {value}"
+            )
 
         # per-class data and lookups
         cls.__all_subtypes = set()
         cls.__concrete_subtypes = defaultdict(set)
 
         # add to all the parents
-        is_concrete = value is not None
         for supertype in cls._supertypes():
             supertype.__all_subtypes.add(cls)
-            if is_concrete:
-                supertype.__concrete_subtypes[value].add(cls)
+            if cls._tag_value is not None:
+                supertype.__concrete_subtypes[cls._tag_value].add(cls)
 
     @classmethod
     def _tag_key_or_raise(cls) -> str:
-        if (tag_key := cls._tag_key) is None:
+        if cls._tag_key is None:
             raise NotImplementedError
-        return tag_key
+        return cls._tag_key
 
     @classmethod
     def _supertypes(cls) -> Generator[type[Self], None, None]:
@@ -99,14 +100,6 @@ class InternallyTaggedUnion(HexdocModel):
             if issubclass(base, InternallyTaggedUnion) and base._tag_key == tag_key:
                 yield base
                 yield from base._supertypes()
-
-    @classmethod
-    def _all_subtypes(cls):
-        return cls.__all_subtypes
-
-    @classmethod
-    def _concrete_subtypes(cls):
-        return cls.__concrete_subtypes
 
     @model_validator(mode="wrap")
     @classmethod
@@ -131,22 +124,18 @@ class InternallyTaggedUnion(HexdocModel):
         match value:
             case InternallyTaggedUnion():
                 return value
-            case dict():
+            case dict() if _RESOLVED not in value:
                 data: dict[str, Any] = value
+                data[_RESOLVED] = True
             case _:
                 return handler(value)
-
-        # don't infinite loop calling the same validator forever
-        if "__resolved" in data:
-            data.pop("__resolved")
-            return handler(data)
-        data["__resolved"] = True
 
         # tag value, eg. "minecraft:crafting_shaped"
         tag_value = data.get(tag_key, NoValue)
 
         # list of matching types, eg. [ShapedCraftingRecipe, ModConditionalShapedCraftingRecipe]
-        if (tag_types := cls.__concrete_subtypes.get(tag_value)) is None:
+        tag_types = cls.__concrete_subtypes.get(tag_value)
+        if tag_types is None:
             raise TypeError(f"Unhandled tag: {tag_key}={tag_value} for {cls}: {data}")
 
         # try all the types
@@ -164,24 +153,52 @@ class InternallyTaggedUnion(HexdocModel):
             case 1:
                 return matches.popitem()[1]
             case x if x > 1:
-                message = f"Ambiguous union match for {cls} with {cls._tag_key}={tag_value}: {matches.keys()}: {data}"
-                if exceptions:
-                    raise ExceptionGroup(message, exceptions)
-                raise RuntimeError(message)
+                ambiguous_types = ", ".join(str(t) for t in matches.keys())
+                reason = f"Ambiguous union match: {ambiguous_types}"
             case _:
-                message = f"Failed to match {cls} with {cls._tag_key}={tag_value} to any of {tag_types}: {data}"
-                if exceptions:
-                    raise ExceptionGroup(message, exceptions)
-                raise RuntimeError(message)
+                reason = "No match found"
+
+        # something went wrong, raise an exception
+        message = dedent(
+            f"""\
+            Failed to match tagged union {cls}: {reason}
+            Tag: {cls._tag_key}={tag_value}
+            Types: {", ".join(str(t) for t in tag_types)}
+            Data: {data}"""
+        )
+        if exceptions:
+            raise ExceptionGroup(message, exceptions)
+        raise RuntimeError(message)
+
+    @model_validator(mode="before")
+    def _pop_temporary_keys(cls, value: dict[Any, Any] | Any):
+        if isinstance(value, dict) and _RESOLVED in value:
+            # copy because this validator may be called multiple times
+            # eg. two types with the same key
+            value = value.copy()
+            value.pop(_RESOLVED)
+            assert value.pop(cls._tag_key, NoValue) == cls._tag_value
+        return value
 
 
 class TypeTaggedUnion(InternallyTaggedUnion, key="type", value=None):
-    type: ResourceLocation | NoValueType | None
+    _type: ClassVar[ResourceLocation | NoValueType | None] = None
 
-    def __init_subclass__(cls, *, type: TagValue | None) -> None:
-        super().__init_subclass__(value=type)
-        match type:
-            case str():
-                cls.type = ResourceLocation.from_str(type)
-            case _:
-                cls.type = type
+    def __init_subclass__(
+        cls,
+        *,
+        type: TagValue | InheritType | None,
+        **kwargs: Unpack[ConfigDict],
+    ):
+        super().__init_subclass__(value=type, **kwargs)
+
+        match cls._tag_value:
+            case str(raw_value):
+                cls._type = ResourceLocation.from_str(raw_value)
+            case value:
+                cls._type = value
+
+    @classproperty
+    @classmethod
+    def type(cls):
+        return cls._type

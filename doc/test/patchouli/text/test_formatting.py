@@ -15,7 +15,7 @@ from hexdoc.patchouli.text.formatting import (
     ParagraphStyle,
     SpecialStyleType,
 )
-from hexdoc.utils.jinja.macros import hexdoc_block
+from hexdoc.utils.jinja.filters import hexdoc_block
 
 
 def format_with_mocks(test_str: str, macros: dict[str, str] = {}):

@@ -10,7 +10,7 @@ class StripHiddenModel(HexdocModel):
     """Base model which removes all keys starting with _ before validation."""
 
     @model_validator(mode="before")
-    def _pre_root_strip_hidden(cls, values: Any) -> Any:
+    def _pre_root_strip_hidden(cls, values: dict[Any, Any] | Any) -> Any:
         if not isinstance(values, dict):
             return values
 

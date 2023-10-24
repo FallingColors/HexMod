@@ -11,7 +11,7 @@
 {%- endmacro %}
 
 {% macro render_texture(name, texture, class_names=[], lazy=true) -%}
-  {% if texture.meta %}
+  {% if texture.meta is defined %}
     <div
       role="img"
       title="{{ name }}"

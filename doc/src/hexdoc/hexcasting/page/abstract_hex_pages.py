@@ -1,7 +1,7 @@
 from types import NoneType
 from typing import Any
 
-from pydantic import ValidationInfo, model_validator
+from pydantic import ValidationInfo, field_validator, model_validator
 
 from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import LocalizedStr
@@ -40,7 +40,11 @@ class PageWithPattern(PageWithText, type=None):
 
 class PageWithOpPattern(PageWithPattern, type=None):
     op_id: ResourceLocation
-    anchor: str
+
+    @field_validator("anchor")
+    def _require_anchor(cls, value: str | None) -> str:
+        assert value is not None
+        return value
 
     @model_validator(mode="before")
     def _pre_root_header(cls, values: Any, info: ValidationInfo):

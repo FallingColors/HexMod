@@ -4,6 +4,7 @@
 import logging
 import shutil
 from pathlib import Path
+from typing import Any
 
 from jinja2 import (
     ChoiceLoader,
@@ -21,7 +22,7 @@ from hexdoc.minecraft import I18n
 from hexdoc.minecraft.assets.textures import AnimatedTexture, Texture
 from hexdoc.patchouli import Book
 from hexdoc.utils.jinja.extensions import IncludeRawExtension
-from hexdoc.utils.jinja.macros import (
+from hexdoc.utils.jinja.filters import (
     hexdoc_block,
     hexdoc_localize,
     hexdoc_texture,
@@ -89,7 +90,7 @@ def render_book(
 
     logging.getLogger(__name__).info(f"Rendering {output_dir}")
 
-    template_args = {
+    template_args: dict[str, Any] = {
         **props.template.args,
         "book": book,
         "props": props,

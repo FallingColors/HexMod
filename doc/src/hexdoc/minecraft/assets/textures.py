@@ -26,7 +26,6 @@ MISSING_TEXTURE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAAC
 class Texture(InlineModel):
     file_id: ResourceLocation
     url: str | None
-    meta: None = None
 
     @classmethod
     def load_all(cls, root: Path, loader: ModResourceLoader):
@@ -196,7 +195,7 @@ class TextureContext(I18nContext):
         return self
 
 
-class ItemWithTexture(InlineItemModel):
+class ItemWithNormalTexture(InlineItemModel):
     id: ItemStack
     name: LocalizedStr
     texture: Texture
@@ -204,15 +203,12 @@ class ItemWithTexture(InlineItemModel):
     @classmethod
     def load_id(cls, item: ItemStack, context: TextureContext):
         """Implements InlineModel."""
-        try:
-            return ItemWithGaslightingTexture.load_id(item, context)
-        except KeyError:
-            texture_id = context.props.textures.override.get(item.id, item.id)
-            return cls(
-                id=item,
-                name=context.i18n.localize_item(item),
-                texture=Texture.find_item(texture_id, context.props, context.textures),
-            )
+        texture_id = context.props.textures.override.get(item.id, item.id)
+        return cls(
+            id=item,
+            name=context.i18n.localize_item(item),
+            texture=Texture.find_item(texture_id, context.props, context.textures),
+        )
 
     @property
     def gaslighting(self):
@@ -227,7 +223,10 @@ class ItemWithGaslightingTexture(InlineItemModel):
     @classmethod
     def load_id(cls, item: ItemStack, context: TextureContext):
         """Implements InlineModel."""
-        gaslighting = context.props.textures.gaslighting[item.id]
+        gaslighting = context.props.textures.gaslighting.get(item.id)
+        if gaslighting is None:
+            raise ValueError("Item does not have a gaslighting texture")
+
         return cls(
             id=item,
             name=context.i18n.localize_item(item),
@@ -244,6 +243,9 @@ class ItemWithGaslightingTexture(InlineItemModel):
     @property
     def gaslighting(self):
         return True
+
+
+ItemWithTexture = ItemWithNormalTexture | ItemWithGaslightingTexture
 
 
 class TagWithTexture(InlineModel):

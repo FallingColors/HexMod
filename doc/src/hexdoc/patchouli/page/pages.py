@@ -11,7 +11,8 @@ from ..text import FormatTree
 from .abstract_pages import Page, PageWithText, PageWithTitle
 
 
-class TextPage(PageWithTitle, type="patchouli:text"):
+class TextPage(Page, type="patchouli:text"):
+    title: LocalizedStr | None = None
     text: FormatTree
 
 
@@ -76,19 +77,15 @@ class LinkPage(TextPage, type="patchouli:link"):
     link_text: LocalizedStr
 
 
-class RelationsPage(PageWithTitle, type="patchouli:relations"):
+class RelationsPage(PageWithText, type="patchouli:relations"):
     entries: list[ResourceLocation]
     title: LocalizedStr = LocalizedStr.with_value("Related Chapters")
 
 
-class QuestPage(PageWithTitle, type="patchouli:quest"):
+class QuestPage(PageWithText, type="patchouli:quest"):
     trigger: ResourceLocation | None = None
     title: LocalizedStr = LocalizedStr.with_value("Objective")
 
 
-class EmptyPage(
-    Page,
-    type="patchouli:empty",
-    template_type="patchouli:page",
-):
+class EmptyPage(Page, type="patchouli:empty", template_type="patchouli:page"):
     draw_filler: bool = True
