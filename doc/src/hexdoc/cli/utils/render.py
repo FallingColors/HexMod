@@ -60,6 +60,7 @@ def create_jinja_env(props: Properties, pm: PluginManager):
 def render_book(
     *,
     props: Properties,
+    pm: PluginManager,
     lang: str,
     book: Book,
     i18n: I18n,
@@ -89,7 +90,6 @@ def render_book(
     logging.getLogger(__name__).info(f"Rendering {output_dir}")
 
     template_args: dict[str, Any] = {
-        **props.template.args,
         "book": book,
         "props": props,
         "i18n": i18n,
@@ -116,7 +116,9 @@ def render_book(
             i18n=i18n,
             allow_missing=allow_missing,
         ),
+        **props.template.args,
     }
+    pm.update_template_args(template_args)
 
     for filename, template in templates.items():
         file = template.render(template_args)

@@ -108,6 +108,7 @@ def render(
         for lang_, (book, i18n) in books.items():
             render_book(
                 props=props,
+                pm=pm,
                 lang=lang_,
                 book=book,
                 i18n=i18n,

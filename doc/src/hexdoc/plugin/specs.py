@@ -1,5 +1,5 @@
 from importlib.resources import Package
-from typing import Protocol, TypeVar
+from typing import Any, Protocol, TypeVar
 
 import pluggy
 
@@ -20,6 +20,11 @@ class PluginSpec(Protocol):
     @staticmethod
     @hookspec(firstresult=True)
     def hexdoc_mod_version() -> str | None:
+        ...
+
+    @staticmethod
+    @hookspec
+    def hexdoc_update_template_args(*, template_args: dict[str, Any]) -> None:
         ...
 
     @staticmethod
@@ -51,6 +56,18 @@ class ModVersionImpl(Protocol):
     @staticmethod
     def hexdoc_mod_version() -> str:
         """Return your plugin's mod version (ie. `GRADLE_VERSION`)."""
+        ...
+
+
+class ExtraTemplateArgsImpl(Protocol):
+    """Interface for a plugin implementing `hexdoc_update_template_args`.
+
+    These protocols are optional - they gives better type checking, but everything will
+    work fine with a standard pluggy hook implementation.
+    """
+
+    @staticmethod
+    def hexdoc_update_template_args(template_args: dict[str, Any]) -> None:
         ...
 
 

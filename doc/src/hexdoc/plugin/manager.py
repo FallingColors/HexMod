@@ -2,7 +2,7 @@ import importlib
 from dataclasses import dataclass
 from importlib.resources import Package
 from types import ModuleType
-from typing import Callable, Generic, Iterable, Iterator, ParamSpec, TypeVar
+from typing import Any, Callable, Generic, Iterable, Iterator, ParamSpec, TypeVar
 
 import pluggy
 from jinja2 import PackageLoader
@@ -65,6 +65,11 @@ class PluginManager:
 
     def mod_version(self, modid: str):
         return self._hook_caller(modid, PluginSpec.hexdoc_mod_version)()
+
+    def update_template_args(self, template_args: dict[str, Any]):
+        self._hook_caller(None, PluginSpec.hexdoc_update_template_args).try_call(
+            template_args=template_args,
+        )
 
     def load_resources(self, modid: str) -> Iterator[ModuleType]:
         yield from self._import_from_hook(modid, PluginSpec.hexdoc_load_resource_dirs)
