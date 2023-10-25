@@ -88,7 +88,7 @@ def render(
     logger.info(f"update_latest={update_latest}, release={release}")
 
     # set up Jinja
-    env = create_jinja_env(props, pm)
+    env = create_jinja_env(pm, props.template.include)
 
     templates = {
         Path(path): env.get_template(template_name)

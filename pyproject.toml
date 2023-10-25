@@ -109,6 +109,9 @@ patchouli = "hexdoc.patchouli._hooks:PatchouliPlugin"
 
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib"]
+markers = [
+    "template",
+]
 
 [tool.coverage.report]
 include_namespace_packages = true

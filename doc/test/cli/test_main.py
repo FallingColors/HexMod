@@ -9,6 +9,8 @@ from syrupy.assertion import SnapshotAssertion
 
 from hexdoc.cli.main import render
 
+from ..conftest import longrun
+
 PROPS_FILE = Path("doc/properties.toml")
 
 RENDERED_FILENAMES = [
@@ -29,6 +31,7 @@ def subprocess_output_dir(tmp_path_factory: TempPathFactory) -> Path:
     return tmp_path_factory.mktemp("subprocess", numbered=False)
 
 
+@longrun
 def test_render_app(app_output_dir: Path):
     render(
         props_file=PROPS_FILE,
@@ -37,6 +40,7 @@ def test_render_app(app_output_dir: Path):
     )
 
 
+@longrun
 def test_render_subprocess(subprocess_output_dir: Path):
     cmd = [
         "hexdoc",
@@ -48,6 +52,7 @@ def test_render_subprocess(subprocess_output_dir: Path):
     subprocess.run(cmd)
 
 
+@longrun
 @pytest.mark.parametrize("filename", RENDERED_FILENAMES)
 def test_files(
     filename: str,

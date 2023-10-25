@@ -28,8 +28,8 @@ from hexdoc.utils.path import write_to_path
 from .sitemap import MARKER_NAME, SitemapMarker
 
 
-def create_jinja_env(props: Properties, pm: PluginManager):
-    prefix_loaders = pm.load_jinja_templates(props.template.include)
+def create_jinja_env(pm: PluginManager, include: list[str]):
+    prefix_loaders = pm.load_jinja_templates(include)
 
     env = SandboxedEnvironment(
         loader=ChoiceLoader(
@@ -54,7 +54,7 @@ def create_jinja_env(props: Properties, pm: PluginManager):
         "hexdoc_texture": hexdoc_texture,
     }
 
-    return env
+    return pm.update_jinja_env(env)
 
 
 def render_book(

@@ -7,15 +7,18 @@ from syrupy.assertion import SnapshotAssertion
 from syrupy.extensions.single_file import SingleFileSnapshotExtension, WriteMode
 from syrupy.types import SerializableData, SerializedData
 
+from hexdoc.plugin import PluginManager
+
+longrun = pytest.mark.skipif("not config.getoption('longrun')")
+
 
 # https://stackoverflow.com/a/43938191
 def pytest_addoption(parser: Parser):
     parser.addoption(
-        "--longrun",
-        action="store_true",
+        "--no-longrun",
+        action="store_false",
         dest="longrun",
-        default=False,
-        help="enable longrun-decorated tests",
+        help="disable longrun-decorated tests",
     )
 
 
@@ -38,3 +41,8 @@ class FilePathSnapshotExtension(SingleFileSnapshotExtension):
 @pytest.fixture
 def path_snapshot(snapshot: SnapshotAssertion):
     return snapshot.use_extension(FilePathSnapshotExtension)
+
+
+@pytest.fixture
+def pm():
+    return PluginManager()
