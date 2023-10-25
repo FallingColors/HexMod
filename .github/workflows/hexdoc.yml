@@ -31,6 +31,9 @@ on:
       publish-release:
         description: Value of publish-release input for convenience.
         value: ${{ inputs.publish-release }}
+      pages-url:
+        description: Current GitHub Pages url for this repo.
+        value: ${{ jobs.build.outputs.pages-url }}
 
 permissions:
   contents: read
