@@ -4,7 +4,7 @@ import subprocess
 from pathlib import Path
 
 import pytest
-from pytest import FixtureRequest, TempPathFactory
+from pytest import TempPathFactory
 from syrupy.assertion import SnapshotAssertion
 
 from hexdoc.cli.main import render
@@ -19,42 +19,44 @@ RENDERED_FILENAMES = [
 ]
 
 
-@pytest.fixture(scope="class")
-def output_dir(request: FixtureRequest, tmp_path_factory: TempPathFactory) -> Path:
-    if isinstance(request.cls, type):
-        basename = request.cls.__name__
-    else:
-        basename = "tmp"
-    return tmp_path_factory.mktemp(basename)
+@pytest.fixture(scope="session")
+def app_output_dir(tmp_path_factory: TempPathFactory) -> Path:
+    return tmp_path_factory.mktemp("app", numbered=False)
 
 
-@pytest.fixture(scope="class", params=RENDERED_FILENAMES)
-def rendered_file(request: FixtureRequest, output_dir: Path) -> Path:
-    return output_dir / request.param
+@pytest.fixture(scope="session")
+def subprocess_output_dir(tmp_path_factory: TempPathFactory) -> Path:
+    return tmp_path_factory.mktemp("subprocess", numbered=False)
 
 
-class TestApp:
-    def test_render(self, output_dir: Path):
-        render(
-            props_file=PROPS_FILE,
-            output_dir=output_dir,
-            lang="en_us",
-        )
-
-    def test_file(self, rendered_file: Path, path_snapshot: SnapshotAssertion):
-        assert rendered_file == path_snapshot
+def test_render_app(app_output_dir: Path):
+    render(
+        props_file=PROPS_FILE,
+        output_dir=app_output_dir,
+        lang="en_us",
+    )
 
 
-class TestSubprocess:
-    def test_render(self, output_dir: Path):
-        cmd = [
-            "hexdoc",
-            "render",
-            PROPS_FILE.as_posix(),
-            output_dir.as_posix(),
-            "--lang=en_us",
-        ]
-        subprocess.run(cmd)
+def test_render_subprocess(subprocess_output_dir: Path):
+    cmd = [
+        "hexdoc",
+        "render",
+        PROPS_FILE.as_posix(),
+        subprocess_output_dir.as_posix(),
+        "--lang=en_us",
+    ]
+    subprocess.run(cmd)
 
-    def test_file(self, rendered_file: Path, path_snapshot: SnapshotAssertion):
-        assert rendered_file == path_snapshot
+
+@pytest.mark.parametrize("filename", RENDERED_FILENAMES)
+def test_files(
+    filename: str,
+    app_output_dir: Path,
+    subprocess_output_dir: Path,
+    path_snapshot: SnapshotAssertion,
+):
+    app_file = app_output_dir / filename
+    subprocess_file = subprocess_output_dir / filename
+
+    assert app_file.read_bytes() == subprocess_file.read_bytes()
+    assert app_file == path_snapshot
