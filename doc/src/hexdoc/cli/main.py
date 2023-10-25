@@ -84,6 +84,9 @@ def render(
             if isinstance(texture, AnimatedTexture):
                 animations.append(texture)
 
+    # sort the animations to hopefully avoid flaky tests
+    animations.sort(key=lambda t: t.class_name)
+
     logger = logging.getLogger(__name__)
     logger.info(f"update_latest={update_latest}, release={release}")
 
