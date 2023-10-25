@@ -4,7 +4,7 @@ import subprocess
 from pathlib import Path
 
 import pytest
-from pytest import TempPathFactory
+from pytest import MonkeyPatch, TempPathFactory
 from syrupy.assertion import SnapshotAssertion
 
 from hexdoc.cli.main import render
@@ -19,6 +19,14 @@ RENDERED_FILENAMES = [
     "v/latest/textures.css",
     "v/latest/index.js",
 ]
+
+
+@pytest.fixture(autouse=True)
+def patch_env(monkeypatch: MonkeyPatch):
+    monkeypatch.setenv("GITHUB_REPOSITORY", "GITHUB_REPOSITORY")
+    monkeypatch.setenv("GITHUB_SHA", "GITHUB_SHA")
+    monkeypatch.setenv("GITHUB_PAGES_URL", "GITHUB_PAGES_URL")
+    monkeypatch.setenv("DEBUG_GITHUBUSERCONTENT", "DEBUG_GITHUBUSERCONTENT")
 
 
 @pytest.fixture(scope="session")
