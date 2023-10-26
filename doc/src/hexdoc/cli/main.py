@@ -105,6 +105,11 @@ def render(
     if clean:
         shutil.rmtree(output_dir, ignore_errors=True)
 
+    lang_names = {
+        lang_: f"{i18n.localize('language.name')} ({i18n.localize('language.region')})"
+        for lang_, (_, i18n) in books.items()
+    }
+
     for should_render, version_, is_root in [
         (update_latest, "latest", False),
         (release, version, False),
@@ -117,6 +122,7 @@ def render(
                 props=props,
                 pm=pm,
                 lang=lang_,
+                lang_names=lang_names,
                 book=book,
                 i18n=i18n,
                 templates=templates,

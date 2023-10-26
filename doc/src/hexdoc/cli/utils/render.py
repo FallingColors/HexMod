@@ -56,6 +56,7 @@ def render_book(
     props: Properties,
     pm: PluginManager,
     lang: str,
+    lang_names: dict[str, str],
     book: Book,
     i18n: I18n,
     templates: dict[Path, Template],
@@ -90,6 +91,7 @@ def render_book(
         "page_url": page_url,
         "version": version,
         "lang": lang,
+        "lang_names": lang_names,
         "all_metadata": all_metadata,
         "textures": textures,
         "animations": animations,
@@ -130,10 +132,11 @@ def render_book(
         marker = SitemapMarker(
             version=version,
             lang=lang,
+            lang_name=lang_names[lang],
             path="/" + "/".join(path.parts),
             is_default_lang=lang == props.default_lang,
         )
-        (output_dir / MARKER_NAME).write_text(marker.model_dump_json())
+        (output_dir / MARKER_NAME).write_text(marker.model_dump_json(), "utf-8")
 
 
 def strip_empty_lines(text: str) -> str:

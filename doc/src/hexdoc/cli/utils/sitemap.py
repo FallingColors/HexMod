@@ -13,6 +13,7 @@ MARKER_NAME = ".sitemap-marker.json"
 class SitemapMarker(HexdocModel):
     version: str
     lang: str
+    lang_name: str
     path: str
     is_default_lang: bool
 
@@ -23,10 +24,12 @@ class SitemapMarker(HexdocModel):
 
 class SitemapItem(HexdocModel):
     default_path: str = Field(alias="defaultPath", default="")
+    lang_names: dict[str, str] = Field(alias="langNames", default_factory=dict)
     lang_paths: dict[str, str] = Field(alias="langPaths", default_factory=dict)
 
     def add_marker(self, marker: SitemapMarker):
         self.lang_paths[marker.lang] = marker.path
+        self.lang_names[marker.lang] = marker.lang_name
         if marker.is_default_lang:
             self.default_path = marker.path
 
