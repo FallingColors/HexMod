@@ -7,44 +7,10 @@ from pydantic import ConfigDict, validate_call
 
 from hexdoc.core.properties import Properties
 from hexdoc.core.resource import ResourceLocation
-from hexdoc.minecraft import I18n, LocalizedStr
+from hexdoc.minecraft import I18n
 from hexdoc.minecraft.assets import Texture
 from hexdoc.patchouli import Book, FormatTree
-from hexdoc.patchouli.text.formatting import BookLinkBases, HTMLStream
 from hexdoc.utils.deserialize import cast_or_raise
-
-
-@pass_context
-def hexdoc_block(context: Context | BookLinkBases, value: Any) -> str:
-    try:
-        if isinstance(context, dict):
-            link_bases = context
-        else:
-            link_bases = cast_or_raise(context["book"], Book).link_bases
-        return _hexdoc_block(link_bases, value)
-    except Exception as e:
-        e.add_note(f"Value:\n    {value}")
-        raise
-
-
-def _hexdoc_block(link_bases: BookLinkBases, value: Any) -> str:
-    match value:
-        case LocalizedStr() | str():
-            # use Markup to tell Jinja not to escape this string for us
-            lines = str(value).splitlines()
-            return Markup("<br />".join(Markup.escape(line) for line in lines))
-
-        case FormatTree():
-            with HTMLStream() as out:
-                with value.style.element(out, link_bases):
-                    for child in value.children:
-                        out.write(_hexdoc_block(link_bases, child))
-                return Markup(out.getvalue())
-
-        case None:
-            return ""
-        case _:
-            raise TypeError(value)
 
 
 def hexdoc_wrap(value: str, *args: str):
@@ -80,7 +46,7 @@ def hexdoc_localize(
         macros=book.macros,
         is_0_black=props.is_0_black,
     )
-    return Markup(hexdoc_block(book.link_bases, formatted))
+    return formatted
 
 
 @pass_context

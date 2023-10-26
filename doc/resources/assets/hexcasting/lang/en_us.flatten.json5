@@ -51,6 +51,8 @@
         },
       },
     },
+
+    when_clicked: "When clicked, would execute: {}",
   },
 
   "block.hexcasting": {

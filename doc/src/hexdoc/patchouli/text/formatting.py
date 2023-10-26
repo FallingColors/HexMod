@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import re
-from abc import ABC, abstractmethod
-from contextlib import nullcontext
 from enum import Enum, auto
 from typing import Any, Literal, Self
 
+from jinja2 import pass_context
+from jinja2.runtime import Context
 from pydantic import Field, ValidationInfo, model_validator
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
@@ -17,10 +17,9 @@ from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.i18n import I18n, I18nContext
 from hexdoc.model import DEFAULT_CONFIG, HexdocModel
+from hexdoc.utils.classproperty import classproperty
 from hexdoc.utils.deserialize import cast_or_raise
 from hexdoc.utils.types import TryGetEnum
-
-from .html import HTMLElement, HTMLStream
 
 DEFAULT_MACROS = {
     "$(obf)": "$(k)",
@@ -135,12 +134,22 @@ class CommandStyleType(TryGetEnum):
     underline = "n"
     italic = "o"
 
+    @classproperty
+    @classmethod
+    def macro_group(cls) -> str:
+        return "command"
+
 
 class FunctionStyleType(TryGetEnum):
     """Function styles, like `$(type:value)`."""
 
     tooltip = "t"
     cmd_click = "c"
+
+    @classproperty
+    @classmethod
+    def macro_group(cls) -> str:
+        return "function"
 
 
 class SpecialStyleType(Enum):
@@ -152,8 +161,13 @@ class SpecialStyleType(Enum):
     color = auto()
     link = "l"
 
+    @classproperty
+    @classmethod
+    def macro_group(cls) -> str:
+        return "special"
 
-class Style(ABC, HexdocModel, frozen=True):
+
+class Style(HexdocModel, frozen=True):
     type: CommandStyleType | FunctionStyleType | SpecialStyleType
 
     @staticmethod
@@ -220,14 +234,9 @@ class Style(ABC, HexdocModel, frozen=True):
         # oopsies
         raise ValueError(f"Unhandled style: {style_str}")
 
-    @abstractmethod
-    def element(
-        self,
-        out: HTMLStream,
-        link_bases: BookLinkBases,
-        /,
-    ) -> HTMLElement | nullcontext[None]:
-        ...
+    @property
+    def macro(self) -> str:
+        return f"{self.type.macro_group}_{self.type.name}"
 
 
 def is_external_link(value: str) -> bool:
@@ -244,25 +253,15 @@ def _format_href(value: str, book_id: ResourceLocation) -> str | BookLink:
 class CommandStyle(Style, frozen=True):
     type: CommandStyleType | Literal[SpecialStyleType.base]
 
-    def element(self, out: HTMLStream, *_: Any) -> HTMLElement | nullcontext[None]:
-        match self.type:
-            case CommandStyleType.obfuscated:
-                return out.element("span", class_name="obfuscated")
-            case CommandStyleType.bold:
-                return out.element("strong")
-            case CommandStyleType.strikethrough:
-                return out.element("s")
-            case CommandStyleType.underline:
-                return out.element("span", style="text-decoration: underline")
-            case CommandStyleType.italic:
-                return out.element("i")
-            case SpecialStyleType.base:
-                return nullcontext()
+
+class ParagraphStyleSubtype(Enum):
+    paragraph = auto()
+    list_item = auto()
 
 
 class ParagraphStyle(Style, frozen=True):
     type: Literal[SpecialStyleType.paragraph] = SpecialStyleType.paragraph
-    attributes: dict[str, str]
+    subtype: ParagraphStyleSubtype
 
     @classmethod
     def try_parse(cls, style_str: str) -> Self | None:
@@ -276,47 +275,37 @@ class ParagraphStyle(Style, frozen=True):
 
     @classmethod
     def paragraph(cls) -> Self:
-        return cls(attributes={})
+        return cls(subtype=ParagraphStyleSubtype.paragraph)
 
     @classmethod
     def list_item(cls) -> Self:
-        return cls(attributes={"class_name": "fake-li"})
+        return cls(subtype=ParagraphStyleSubtype.list_item)
+        # return cls(attributes={"class_name": "fake-li"})
 
-    def element(self, out: HTMLStream, *_: Any) -> HTMLElement:
-        return out.element("p", **self.attributes)
+    @property
+    def macro(self) -> str:
+        return f"{super().macro}_{self.subtype.name}"
 
 
 class FunctionStyle(Style, frozen=True):
     type: FunctionStyleType | Literal[SpecialStyleType.color]
     value: str
 
-    def element(self, out: HTMLStream, *_: Any) -> HTMLElement:
-        match self.type:
-            case FunctionStyleType.tooltip:
-                return out.element("span", class_name="has-tooltip", title=self.value)
-            case FunctionStyleType.cmd_click:
-                return out.element(
-                    "span",
-                    class_name="has-cmd_click",
-                    title=f"When clicked, would execute: {self.value}",
-                )
-            case SpecialStyleType.color:
-                return out.element("span", style=f"color: #{self.value}")
-
 
 class LinkStyle(Style, frozen=True):
     type: Literal[SpecialStyleType.link] = SpecialStyleType.link
     value: str | BookLink
 
-    def element(self, out: HTMLStream, link_bases: BookLinkBases) -> HTMLElement:
+    @pass_context
+    def href(self, context: Context | dict[{"link_bases": BookLinkBases}]):
         match self.value:
+            case str(href):
+                return href
             case BookLink(as_tuple=key) as book_link:
+                link_bases: BookLinkBases = context["link_bases"]
                 if key not in link_bases:
                     raise ValueError(f"broken link: {book_link}")
-                href = link_bases[key] + book_link.fragment
-            case str(href):
-                pass
-        return out.element("a", href=href)
+                return link_bases[key] + book_link.fragment
 
 
 # intentionally not inheriting from Style, because this is basically an implementation

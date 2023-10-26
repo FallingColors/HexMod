@@ -1,4 +1,4 @@
-{% import "macros/formatting.html.jinja" as formatting -%}
+{% import "macros/formatting.html.jinja" as fmt -%}
 
 {# put the link target outside of toc-container so jump to top still works in sidebar mode #}
 <div id="table-of-contents"></div>
@@ -9,18 +9,18 @@
       class="permalink toggle-link small"
       data-target="toc-category"
       title="{{ _('hexdoc.toc.toggle_all') }}"
-    ><i class="bi bi-list-nested"></i></a>{{ formatting.permalink("table-of-contents", "toc-permalink") }}</span>
+    ><i class="bi bi-list-nested"></i></a>{{ fmt.permalink("table-of-contents", "toc-permalink") }}</span>
   </h2>
 
   {% for category in book.categories.values() if category.entries.values() %}
     <details class="toc-category">
       {# category #}
-      <summary>{{ formatting.maybe_spoilered_link(category) }}</summary>
+      <summary>{{ fmt.maybe_spoilered_link(category) }}</summary>
 
       {# list of entries in the category #}
       <ul>
         {% for entry in category.entries.values() %}
-          <li>{{ formatting.maybe_spoilered_link(entry) }}</li>
+          <li>{{ fmt.maybe_spoilered_link(entry) }}</li>
         {% endfor %}
       </ul>
     </details>

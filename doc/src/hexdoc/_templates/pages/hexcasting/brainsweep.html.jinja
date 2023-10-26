@@ -1,5 +1,6 @@
 {% extends "pages/patchouli/page.html.jinja" %}
 {% import "macros/recipes.html.jinja" as recipe_macros with context %}
+{% import "macros/formatting.html.jinja" as fmt with context %}
 
 {% block body %}
   {{ recipe_macros.generic(
@@ -8,5 +9,5 @@
     _("hexdoc.pages.hexcasting.brainsweep.description"),
     _("hexdoc.pages.hexcasting.brainsweep.separator"),
   ) }}
-  {{ page.text|hexdoc_block }}
+  {{ fmt.styled(page.text) }}
 {% endblock body %}

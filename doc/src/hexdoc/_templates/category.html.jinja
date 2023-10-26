@@ -1,9 +1,9 @@
-{% import "macros/formatting.html.jinja" as formatting %}
+{% import "macros/formatting.html.jinja" as fmt with context %}
 
 <section id="{{ category.id.path }}">
-  {% call formatting.maybe_spoilered(category) %}
-    {{- formatting.section_header(category, "h2", "category-title") }}
-    {{ category.description|hexdoc_block }}
+  {% call fmt.maybe_spoilered(category) %}
+    {{- fmt.section_header(category, "h2", "category-title") }}
+    {{ fmt.styled(category.description) }}
   {% endcall %}
 
   {% for entry in category.entries.values() if entry.id not in props.entry_id_blacklist +%}

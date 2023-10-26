@@ -1,0 +1,47 @@
+{% macro command_obfuscated(style) -%}
+  <span class='obfuscated'>{{ caller() }}</span>
+{%- endmacro %}
+
+{% macro command_bold(style) -%}
+  <strong>{{ caller() }}</strong>
+{%- endmacro %}
+
+{% macro command_strikethrough(style) -%}
+  <s>{{ caller() }}</s>
+{%- endmacro %}
+
+{% macro command_underline(style) -%}
+  <span style='text-decoration: underline'>{{ caller() }}</span>
+{%- endmacro %}
+
+{% macro command_italic(style) -%}
+  <i>{{ caller() }}</i>
+{%- endmacro %}
+
+{% macro special_base(style) -%}
+  {{ caller() }}
+{%- endmacro %}
+
+{% macro function_tooltip(style) -%}
+  <span class='has-tooltip' title='{{ style.value }}'>{{ caller() }}</span>
+{%- endmacro %}
+
+{% macro function_cmd_click(style) -%}
+  <span class='has-cmd-click' title='{{ _("hexdoc.when_clicked").format(style.value) }}'>{{ caller() }}</span>
+{%- endmacro %}
+
+{% macro special_color(style) -%}
+  <span style='color: #{{ style.value }}'>{{ caller() }}</span>
+{%- endmacro %}
+
+{% macro special_link(style) -%}
+  <a href='{{ style.href() }}'>{{ caller() }}</a>
+{%- endmacro %}
+
+{% macro special_paragraph_paragraph(style) -%}
+  <p>{{ caller() }}</p>
+{%- endmacro %}
+
+{% macro special_paragraph_list_item(style) -%}
+  <p class='fake-li'>{{ caller() }}</p>
+{%- endmacro %}

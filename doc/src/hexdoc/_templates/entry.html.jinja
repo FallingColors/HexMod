@@ -1,8 +1,8 @@
-{% import "macros/formatting.html.jinja" as formatting -%}
+{% import "macros/formatting.html.jinja" as fmt -%}
 
 <div id="{{ entry.id.path }}">
-  {% call formatting.maybe_spoilered(entry) %}
-    {{- formatting.section_header(entry, "h3", "entry-title") }}
+  {% call fmt.maybe_spoilered(entry) %}
+    {{- fmt.section_header(entry, "h3", "entry-title") }}
 
     {% for page in entry.preprocess_pages() +%}
       {% include page.template~".html.jinja" %}

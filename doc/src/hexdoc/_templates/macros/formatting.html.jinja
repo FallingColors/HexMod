@@ -1,3 +1,5 @@
+{% import "macros/styles.html.jinja" as styles with context -%}
+
 {# jump to top icon in section headers #}
 {% macro jump_to_top() -%}
   <a
@@ -37,4 +39,20 @@
   {% else %}
     {{ caller() }}
   {% endif %}
+{%- endmacro %}
+
+{# FormatTree handler #}
+{% macro styled(value) -%}
+  {%- if value is string -%}
+    {%- for line in value.splitlines() -%}
+      {{- line -}}
+      {%- if not loop.last -%}<br />{%- endif -%}
+    {%- endfor -%}
+  {%- elif value is not none -%}
+    {%- call styles[value.style.macro](value.style) -%}
+      {%- for child in value.children -%}
+        {{- styled(child) -}}
+      {%- endfor -%}
+    {%- endcall -%}
+  {%- endif -%}
 {%- endmacro %}

@@ -1,9 +1,11 @@
+{% import "macros/formatting.html.jinja" as fmt with context -%}
+
 <div class="container">
   {# big landing text box - this is optional so addons can disable it if they want #}
   {% if show_landing_text %}
     <header class="jumbotron">
       <h1 class="book-title">{{ book.name }}</h1>
-      {{ book.landing_text|hexdoc_block }}
+      {{ fmt.styled(book.landing_text) }}
     </header>
   {% endif %}
 
