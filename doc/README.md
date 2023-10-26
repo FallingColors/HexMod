@@ -19,8 +19,8 @@ WIP.
 
 - Run these commands, then follow the prompts:
   ```sh
-  pip install cookiecutter
-  cookiecutter gh:object-Object/HexMod --directory doc
+  pip3 install cruft
+  cruft create gh:object-Object/HexMod --directory doc
   ```
   - `--directory doc` tells Cookiecutter to look for a template in the `doc` directory of HexMod, and cannot be omitted.
   - If you run this from within an existing mod repo, add the flag `-f`, and leave the `output_directory` option blank when prompted by Cookiecutter.
@@ -34,6 +34,12 @@ WIP.
 - Follow these instructions for PyPI and TestPyPI: https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/
   - TestPyPI is a duplicate of PyPI which can be used for testing package publishing without affecting the real index. The CI workflow includes a manual execution option to publish to TestPyPI.
   - If you like to live dangerously, this step is optional - you can remove the `publish-testpypi` job and the `TestPyPI` release choice from your workflow without impacting the rest of the CI.
+
+### Updating to the latest Cookiecutter template
+
+Run this command: `cruft update`
+
+See also: https://cruft.github.io/cruft/#updating-a-project
 
 ## Setup
 
