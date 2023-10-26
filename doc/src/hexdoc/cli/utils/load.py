@@ -71,7 +71,7 @@ def load_book(
 
     with ModResourceLoader.clean_and_load_all(props, pm) as loader:
         all_metadata = load_all_metadata(props, pm, loader)
-        lang, i18n = _load_i18n(loader, lang, allow_missing)[0]
+        i18n = _load_i18n(loader, None, allow_missing)[lang]
 
         _, data = Book.load_book_json(loader, props.book)
         book = load_hex_book(data, pm, loader, i18n, all_metadata)
@@ -93,7 +93,7 @@ def load_books(
         _, book_data = Book.load_book_json(loader, props.book)
         books = dict[str, tuple[Book, I18n]]()
 
-        for lang, i18n in _load_i18n(loader, lang, allow_missing):
+        for lang, i18n in _load_i18n(loader, lang, allow_missing).items():
             book = load_hex_book(book_data, pm, loader, i18n, all_metadata)
             books[lang] = (book, i18n)
             loader.export_dir = None  # only export the first (default) book
@@ -105,7 +105,7 @@ def _load_i18n(
     loader: ModResourceLoader,
     lang: str | None,
     allow_missing: bool,
-) -> list[tuple[str, I18n]]:
+) -> dict[str, I18n]:
     # only load the specified language
     if lang is not None:
         i18n = I18n.load(
@@ -113,7 +113,7 @@ def _load_i18n(
             lang=lang,
             allow_missing=allow_missing,
         )
-        return [(lang, i18n)]
+        return {lang: i18n}
 
     # load everything
     per_lang_i18n = I18n.load_all(
@@ -125,4 +125,4 @@ def _load_i18n(
     default_lang = loader.props.default_lang
     default_i18n = per_lang_i18n.pop(default_lang)
 
-    return [(default_lang, default_i18n), *per_lang_i18n.items()]
+    return {default_lang: default_i18n} | per_lang_i18n
