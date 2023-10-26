@@ -280,7 +280,6 @@ class ParagraphStyle(Style, frozen=True):
     @classmethod
     def list_item(cls) -> Self:
         return cls(subtype=ParagraphStyleSubtype.list_item)
-        # return cls(attributes={"class_name": "fake-li"})
 
     @property
     def macro(self) -> str:
