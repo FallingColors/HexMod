@@ -284,7 +284,7 @@ class ParagraphStyle(Style, frozen=True):
 
     @property
     def macro(self) -> str:
-        return f"{super().macro}_{self.subtype.name}"
+        return f"paragraph_{self.subtype.name}"
 
 
 class FunctionStyle(Style, frozen=True):

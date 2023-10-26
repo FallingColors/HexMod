@@ -1,3 +1,5 @@
+{# CommandStyle #}
+
 {% macro command_obfuscated(style) -%}
   <span class='obfuscated'>{{ caller() }}</span>
 {%- endmacro %}
@@ -22,6 +24,8 @@
   {{ caller() }}
 {%- endmacro %}
 
+{# FunctionStyle #}
+
 {% macro function_tooltip(style) -%}
   <span class='has-tooltip' title='{{ style.value }}'>{{ caller() }}</span>
 {%- endmacro %}
@@ -34,14 +38,18 @@
   <span style='color: #{{ style.value }}'>{{ caller() }}</span>
 {%- endmacro %}
 
+{# LinkStyle #}
+
 {% macro special_link(style) -%}
   <a href='{{ style.href() }}'>{{ caller() }}</a>
 {%- endmacro %}
 
-{% macro special_paragraph_paragraph(style) -%}
+{# ParagraphStyle #}
+
+{% macro paragraph_paragraph(style) -%}
   <p>{{ caller() }}</p>
 {%- endmacro %}
 
-{% macro special_paragraph_list_item(style) -%}
+{% macro paragraph_list_item(style) -%}
   <p class='fake-li'>{{ caller() }}</p>
 {%- endmacro %}
