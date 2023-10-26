@@ -13,7 +13,8 @@ MARKER_NAME = ".sitemap-marker.json"
 class SitemapMarker(HexdocModel):
     version: str
     lang: str
-    lang_name: str
+    lang_name: str | None = None
+    """Optional for backwards compatibility."""
     path: str
     is_default_lang: bool
 
@@ -29,7 +30,7 @@ class SitemapItem(HexdocModel):
 
     def add_marker(self, marker: SitemapMarker):
         self.lang_paths[marker.lang] = marker.path
-        self.lang_names[marker.lang] = marker.lang_name
+        self.lang_names[marker.lang] = marker.lang_name or marker.lang
         if marker.is_default_lang:
             self.default_path = marker.path
 
