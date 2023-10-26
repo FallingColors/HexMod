@@ -83,9 +83,9 @@
 <div class="container" style="margin-top: 3em;">
   <blockquote>
     <h1><p>This is the online version of the Hex Casting documentation.</p></h1>
-    <p><p>Embedded images and patterns are included, but not crafting recipes or items. There&#39;s an in-game book for those.</p></p>
-      <p><p>Additionally, this is built from the latest code on GitHub. It may describe <strong>newer</strong> features that you may not necessarily have, even on the latest Modrinth/CurseForge version!</p></p>
-    <p><p><strong>Entries which are blurred are spoilers</strong>. Click to reveal them, but be aware that they may spoil endgame progression. Alternatively, click <a href='?nospoiler'>here</a> to get a version with all spoilers showing.</p></p>
+    <p>Embedded images and patterns are included, but not crafting recipes or items. There&#39;s an in-game book for those.</p>
+      <p>Additionally, this is built from the latest code on GitHub. It may describe <strong>newer</strong> features that you may not necessarily have, even on the latest Modrinth/CurseForge version!</p>
+    <p><strong>Entries which are blurred are spoilers</strong>. Click to reveal them, but be aware that they may spoil endgame progression. Alternatively, click <a href='?nospoiler'>here</a> to get a version with all spoilers showing.</p>
     <span id="old-version-notice" class="hidden">
       <br />
       <p><i>The past is a foreign country; they do things differently there.</i></p>

@@ -3,11 +3,11 @@
 <div class="container" style="margin-top: 3em;">
   <blockquote>
     <h1>{{ fmt.styled(_f("hexdoc.welcome.1")).format(mod_name) }}</h1>
-    <p>{{ fmt.styled(_f("hexdoc.welcome.2")) }}</p>
+    {{ fmt.styled(_f("hexdoc.welcome.2")) }}
     {% if is_bleeding_edge %}
-      <p>{{ fmt.styled(_f("hexdoc.welcome.3")) }}</p>
+      {{ fmt.styled(_f("hexdoc.welcome.3")) }}
     {% endif %}
-    <p>{{ fmt.styled(_f("hexdoc.welcome.4")) }}</p>
+    {{ fmt.styled(_f("hexdoc.welcome.4")) }}
 
     {# conditionally revealed using js #}
     <span id="old-version-notice" class="hidden">
