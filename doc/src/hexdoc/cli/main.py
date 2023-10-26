@@ -23,17 +23,21 @@ from .utils.sitemap import (
     load_sitemap,
 )
 
+PathArgument = Annotated[Path, typer.Argument()]
 VerbosityOption = Annotated[int, typer.Option("--verbose", "-v", count=True)]
-RequiredPathOption = Annotated[Path, typer.Option()]
 UpdateLatestOption = Annotated[bool, typer.Option(envvar="UPDATE_LATEST")]
 ReleaseOption = Annotated[bool, typer.Option(envvar="RELEASE")]
+
+DEFAULT_PROPS_FILE = Path("doc/properties.toml")
+DEFAULT_MERGE_SRC = Path("_site/src/docs")
+DEFAULT_MERGE_DST = Path("_site/dst/docs")
 
 app = typer.Typer(pretty_exceptions_enable=False)
 
 
 @app.command()
 def list_langs(
-    props_file: Path,
+    props_file: PathArgument = DEFAULT_PROPS_FILE,
     *,
     verbosity: VerbosityOption = 0,
 ):
@@ -46,7 +50,7 @@ def list_langs(
 
 @app.command()
 def export(
-    props_file: Path,
+    props_file: PathArgument = DEFAULT_PROPS_FILE,
     *,
     lang: Union[str, None] = None,
     allow_missing: bool = False,
@@ -59,8 +63,8 @@ def export(
 
 @app.command()
 def render(
-    props_file: Path,
-    output_dir: Path,
+    props_file: PathArgument = DEFAULT_PROPS_FILE,
+    output_dir: PathArgument = DEFAULT_MERGE_SRC,
     *,
     update_latest: UpdateLatestOption = True,
     release: ReleaseOption = False,
@@ -131,8 +135,8 @@ def render(
 @app.command()
 def merge(
     *,
-    src: RequiredPathOption,
-    dst: RequiredPathOption,
+    src: Path = DEFAULT_MERGE_SRC,
+    dst: Path = DEFAULT_MERGE_DST,
     update_latest: UpdateLatestOption = True,
     release: ReleaseOption = False,
 ):
@@ -161,13 +165,13 @@ def merge(
 
 @app.command()
 def serve(
-    props_file: Path,
+    props_file: PathArgument = DEFAULT_PROPS_FILE,
     *,
     port: int = 8000,
-    src: RequiredPathOption,
-    dst: RequiredPathOption,
+    src: Path = DEFAULT_MERGE_SRC,
+    dst: Path = DEFAULT_MERGE_DST,
     update_latest: bool = True,
-    release: bool = False,
+    release: bool = True,  # you'd generally want --release for development
     clean: bool = False,
     lang: Union[str, None] = None,
     allow_missing: bool = False,

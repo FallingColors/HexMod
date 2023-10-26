@@ -38,11 +38,11 @@ GITHUB_PAGES_URL={{ cookiecutter.pages_url }}
 Then run these commands to generate the book:
 ```sh
 # run from the repo root, not doc/
-hexdoc render doc/properties.toml _site/src/docs
-hexdoc merge --src _site/src/docs --dst _site/dst/docs
+hexdoc render
+hexdoc merge
 ```
 
 Or, run this command to render the book and start a local web server:
 ```sh
-hexdoc serve doc/properties.toml --src _site/src/docs --dst _site/dst/docs
+hexdoc serve --lang en_us
 ```
