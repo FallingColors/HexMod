@@ -73,7 +73,7 @@
             role="button"
             aria-haspopup="true"
             aria-expanded="false"
-          >en_us <span class="caret"></span></a>
+          >English (United States) <span class="caret"></span></a>
           <ul class="dropdown-menu dropdown-menu-left" id="lang-dropdown"></ul>
         </li>
       </ul>

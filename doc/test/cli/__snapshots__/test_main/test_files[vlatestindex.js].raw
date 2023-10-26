@@ -425,10 +425,11 @@ function addDropdowns(sitemap) {
     ...versionDropdownItems(sitemap, versions),
   );
   // languages for the current version
+  const langNames = sitemap[VERSION].langNames;
   const langPaths = sitemap[VERSION].langPaths;
   const langs = Object.keys(langPaths).sort();
   document.getElementById("lang-dropdown").append(
-    ...langs.map((lang) => dropdownItem(lang, BOOK_URL + langPaths[lang])),
+    ...langs.map((lang) => dropdownItem(langNames[lang], BOOK_URL + langPaths[lang])),
   );
   // return sitemap for chaining, i guess
   return sitemap
