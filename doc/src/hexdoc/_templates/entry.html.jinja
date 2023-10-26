@@ -5,7 +5,7 @@
     {{- formatting.section_header(entry, "h3", "entry-title") }}
 
     {% for page in entry.preprocess_pages() +%}
-      {% include page.template %}
+      {% include page.template~".html.jinja" %}
     {% endfor %}
   {% endcall %}
 </div>

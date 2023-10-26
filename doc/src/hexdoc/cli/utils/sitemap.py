@@ -56,8 +56,9 @@ def dump_sitemap(root: Path, sitemap: Sitemap):
 
 
 def assert_version_exists(*, root: Path, version: str):
-    path = root / "v" / version / "index.html"
-    if not path.is_file():
+    # ensure the directory was written and it contains files (not just directories)
+    path = root / "v" / version
+    if not path.exists() or not any(path.rglob("*.*")):
         raise FileNotFoundError(f"Missing default language for {version}: {path}")
 
 

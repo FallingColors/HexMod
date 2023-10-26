@@ -40,9 +40,7 @@ class Page(TypeTaggedUnion, type=None):
             template_id = cls.type
 
         if template_id:
-            cls.__template = (
-                f"pages/{template_id.namespace}/{template_id.path}.html.jinja"
-            )
+            cls.__template = f"pages/{template_id.namespace}/{template_id.path}"
 
     @classproperty
     @classmethod
