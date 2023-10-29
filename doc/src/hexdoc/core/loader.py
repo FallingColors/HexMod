@@ -19,7 +19,8 @@ from hexdoc.utils.iterators import must_yield_something
 from hexdoc.utils.path import strip_suffixes, write_to_path
 
 from .properties import Properties
-from .resource import PathResourceDir, ResourceLocation, ResourceType
+from .resource import ResourceLocation, ResourceType
+from .resource_dir import PathResourceDir
 
 METADATA_SUFFIX = ".hexdoc.json"
 

@@ -8,7 +8,8 @@ from typing import Annotated, Any, Self
 from pydantic import AfterValidator, Field, HttpUrl, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from hexdoc.core.resource import ResourceDir, ResourceLocation
+from hexdoc.core.resource import ResourceLocation
+from hexdoc.core.resource_dir import ResourceDir
 from hexdoc.model.strip_hidden import StripHiddenModel
 from hexdoc.utils.cd import RelativePath, relative_path_root
 from hexdoc.utils.deserialize.toml import load_toml_with_placeholders

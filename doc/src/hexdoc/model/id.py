@@ -3,7 +3,8 @@ from __future__ import annotations
 import logging
 from typing import Self, dataclass_transform
 
-from hexdoc.core.resource import PathResourceDir, ResourceLocation
+from hexdoc.core.resource import ResourceLocation
+from hexdoc.core.resource_dir import PathResourceDir
 from hexdoc.utils.deserialize.json import JSONDict
 
 from .base import HexdocModel, ValidationContext
