@@ -49,7 +49,7 @@ dependencies = [
     "typer[all]~=0.9.0",
     "requests~=2.31",
     "ordered-set~=4.1",
-    "minecraft-render~=2.0",
+    "minecraft-render~=2.0a",
 ]
 dynamic = ["version"]
 
