@@ -186,13 +186,49 @@ class ModResourceLoader:
 
     def load_resource(
         self,
+        *args: Any,
+        decode: Callable[[str], _T] = decode_json_dict,
+        export: ExportFn[_T] | Literal[False] | None = None,
+        **kwargs: Any,
+    ) -> tuple[PathResourceDir, _T]:
+        """Find the first file with this resource location in `resource_dirs`.
+
+        If no file extension is provided, `.json` is assumed.
+
+        Raises FileNotFoundError if the file does not exist.
+        """
+
+        resource_dir, path = self.find_resource(*args, **kwargs)
+        return resource_dir, self._load_path(
+            resource_dir,
+            path,
+            decode=decode,
+            export=export,
+        )
+
+    @overload
+    def find_resource(
+        self,
+        type: ResourceType,
+        folder: str | Path,
+        id: ResourceLocation,
+    ) -> tuple[PathResourceDir, Path]:
+        ...
+
+    @overload
+    def find_resource(
+        self,
+        path: Path,
+        /,
+    ) -> tuple[PathResourceDir, Path]:
+        ...
+
+    def find_resource(
+        self,
         type: ResourceType | Path,
         folder: str | Path | None = None,
         id: ResourceLocation | None = None,
-        *,
-        decode: Callable[[str], _T] = decode_json_dict,
-        export: ExportFn[_T] | Literal[False] | None = None,
-    ) -> tuple[PathResourceDir, _T]:
+    ) -> tuple[PathResourceDir, Path]:
         """Find the first file with this resource location in `resource_dirs`.
 
         If no file extension is provided, `.json` is assumed.
@@ -208,15 +244,9 @@ class ModResourceLoader:
 
         # check by descending priority, return the first that exists
         for resource_dir in self.resource_dirs:
-            try:
-                return resource_dir, self._load_path(
-                    resource_dir,
-                    resource_dir.path / path_stub,
-                    decode=decode,
-                    export=export,
-                )
-            except FileNotFoundError:
-                continue
+            path = resource_dir.path / path_stub
+            if path.is_file():
+                return resource_dir, path
 
         raise FileNotFoundError(f"Path {path_stub} not found in any resource dir")
 

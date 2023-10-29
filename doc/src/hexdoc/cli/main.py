@@ -1,3 +1,4 @@
+import base64
 import json
 import logging
 import os
@@ -7,6 +8,15 @@ from pathlib import Path
 from typing import Annotated, Union
 
 import typer
+from minecraft_render import (
+    IPythonResourceLoader,
+    MinecraftAssetsLoader,
+    PythonLoaderWrapper,
+    RenderClass,
+    ResourcePath,
+    createMultiloader,
+    resourcePathAsString,
+)
 
 from hexdoc.core.loader import ModResourceLoader
 from hexdoc.core.resource import ResourceLocation
@@ -46,6 +56,40 @@ def list_langs(
     with ModResourceLoader.load_all(props, pm, export=False) as loader:
         langs = sorted(I18n.list_all(loader))
         print(json.dumps(langs))
+
+
+@app.command()
+def render_block(
+    block: str,
+    props_file: PathArgument = DEFAULT_PROPS_FILE,
+    *,
+    verbosity: VerbosityOption = 0,
+):
+    """Render a 3D image of a block."""
+    props, pm, _ = load_common_data(props_file, verbosity)
+    with ModResourceLoader.load_all(props, pm, export=False) as loader:
+
+        class HexdocPythonResourceLoader(IPythonResourceLoader):
+            def loadJSON(self, resource_path: ResourcePath) -> str:
+                path = "assets" / Path(resourcePathAsString(resource_path))
+                return loader.load_resource(path, decode=lambda v: v)[1]
+
+            def loadTexture(self, resource_path: ResourcePath) -> str:
+                path = "assets" / Path(resourcePathAsString(resource_path))
+                _, resolved_path = loader.find_resource(path)
+                with open(resolved_path, "rb") as f:
+                    return base64.b64encode(f.read()).decode()
+
+        render_loader = createMultiloader(
+            PythonLoaderWrapper(HexdocPythonResourceLoader()),
+            MinecraftAssetsLoader.fetchAll(
+                props.minecraft_assets.ref,
+                props.minecraft_assets.version,
+            ),
+        )
+        renderer = RenderClass(render_loader, {"outDir": "out"})
+        output_path = renderer.renderToFile(block)
+        print(f"Rendered: {output_path}")
 
 
 @app.command()
