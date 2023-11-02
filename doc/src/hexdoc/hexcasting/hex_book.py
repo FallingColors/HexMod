@@ -34,7 +34,7 @@ def load_hex_book(
             book_id=cast_or_raise(data["id"], ResourceLocation),
             all_metadata=all_metadata,
         )
-    return Book.model_validate(data, context=context)
+    return Book.load_all_from_data(data, context)
 
 
 class PatternMetadata(HexdocModel):

@@ -33,6 +33,7 @@ ExportFn = Callable[[_T, _T | None], str]
 @dataclass(config=DEFAULT_CONFIG, kw_only=True)
 class ModResourceLoader:
     props: Properties
+    book_id: ResourceLocation
     export_dir: Path | None
     resource_dirs: list[PathResourceDir]
 
@@ -74,6 +75,7 @@ class ModResourceLoader:
         with ExitStack() as stack:
             loader = cls(
                 props=props,
+                book_id=props.book,
                 export_dir=export_dir,
                 resource_dirs=[
                     path_resource_dir
@@ -127,7 +129,7 @@ class ModResourceLoader:
         folder: Literal["categories", "entries", "templates"],
         use_resource_pack: bool,
     ) -> Iterator[tuple[PathResourceDir, ResourceLocation, JSONDict]]:
-        is_extension = book_id != self.props.book
+        is_extension = book_id != self.book_id
         if is_extension:
             yield from self._load_book_assets(
                 book_id,
@@ -137,7 +139,7 @@ class ModResourceLoader:
             )
 
         yield from self._load_book_assets(
-            self.props.book,
+            self.book_id,
             folder,
             use_resource_pack=use_resource_pack,
             allow_missing=is_extension,

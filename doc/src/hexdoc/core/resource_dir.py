@@ -52,6 +52,10 @@ class PathResourceDir(BaseResourceDir):
     def modid(self):
         return self._modid
 
+    @property
+    def internal(self):
+        return not self.external
+
     def set_modid(self, modid: str) -> Self:
         self._modid = modid
         return self

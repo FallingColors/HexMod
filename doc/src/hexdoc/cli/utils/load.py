@@ -73,7 +73,7 @@ def load_book(
         all_metadata = load_all_metadata(props, pm, loader)
         i18n = _load_i18n(loader, None, allow_missing)[lang]
 
-        _, data = Book.load_book_json(loader, props.book)
+        data = Book.load_book_json(loader, props.book)
         book = load_hex_book(data, pm, loader, i18n, all_metadata)
 
     return lang, book, i18n
@@ -90,7 +90,7 @@ def load_books(
     with ModResourceLoader.clean_and_load_all(props, pm) as loader:
         all_metadata = load_all_metadata(props, pm, loader)
 
-        _, book_data = Book.load_book_json(loader, props.book)
+        book_data = Book.load_book_json(loader, props.book)
         books = dict[str, tuple[Book, I18n]]()
 
         for lang, i18n in _load_i18n(loader, lang, allow_missing).items():

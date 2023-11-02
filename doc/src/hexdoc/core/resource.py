@@ -10,7 +10,7 @@ from fnmatch import fnmatch
 from pathlib import Path
 from typing import Any, ClassVar, Literal, Self
 
-from pydantic import field_validator, model_serializer, model_validator
+from pydantic import TypeAdapter, field_validator, model_serializer, model_validator
 from pydantic.dataclasses import dataclass
 from pydantic.functional_validators import ModelWrapValidatorHandler
 
@@ -45,6 +45,11 @@ class BaseResourceLocation:
             raise ValueError(f"Invalid {cls.__name__} string: {raw}")
 
         return cls(**match.groupdict())
+
+    @classmethod
+    def model_validate(cls, value: Any, *, context: Any = None):
+        ta = TypeAdapter(cls)
+        return ta.validate_python(value, context=context)
 
     @model_validator(mode="wrap")
     @classmethod

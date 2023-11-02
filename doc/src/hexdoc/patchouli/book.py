@@ -1,12 +1,18 @@
-from typing import Any, Literal, Self
+from collections import defaultdict
+from typing import Any, Literal, Mapping, Self
 
-from pydantic import Field, ValidationInfo, field_validator, model_validator
+from pydantic import (
+    Field,
+    PrivateAttr,
+    ValidationInfo,
+    field_validator,
+    model_validator,
+)
 
 from hexdoc.core.compat import HexVersion
 from hexdoc.core.loader import ModResourceLoader
 from hexdoc.core.resource import ItemStack, ResLoc, ResourceLocation
-from hexdoc.minecraft import I18n, LocalizedStr
-from hexdoc.minecraft.i18n import I18nContext
+from hexdoc.minecraft import LocalizedStr
 from hexdoc.model import HexdocModel
 from hexdoc.patchouli.text import BookLinkBases
 from hexdoc.utils.deserialize import cast_or_raise
@@ -32,7 +38,9 @@ class Book(HexdocModel):
 
     # not in book.json
     id: ResourceLocation
-    i18n_data: I18n
+
+    _link_bases: BookLinkBases = PrivateAttr(default_factory=dict)
+    _categories: dict[ResourceLocation, Category] = PrivateAttr(default_factory=dict)
 
     # required
     name: LocalizedStr
@@ -73,41 +81,82 @@ class Book(HexdocModel):
     text_overflow_mode: Literal["overflow", "resize", "truncate"] | None = None
 
     @classmethod
-    def load_all(cls, data: dict[str, Any], context: BookContext) -> Self:
-        return cls.model_validate(data, context=context)
-
-    @classmethod
     def load_book_json(cls, loader: ModResourceLoader, id: ResourceLocation):
-        resource_dir, data = cls._load_book_json(loader, id)
+        data = cls._load_book_resource(loader, id)
 
         if HexVersion.get() <= HexVersion.v0_10_x and "extend" in data:
-            id = ResourceLocation.from_str(cast_or_raise(data["extend"], str))
-            resource_dir, data = cls._load_book_json(loader, id)
+            id = loader.book_id = ResourceLocation.model_validate(data["extend"])
+            return cls._load_book_resource(loader, id)
 
-        return resource_dir, data | {"id": id}
+        return data
 
     @classmethod
-    def _load_book_json(cls, loader: ModResourceLoader, id: ResourceLocation):
-        return loader.load_resource(
-            type="data",
-            folder="patchouli_books",
-            id=id / "book",
-        )
+    def load_all_from_data(cls, data: Mapping[str, Any], context: BookContext) -> Self:
+        book = cls.model_validate(data, context=context)
+        book._load_categories(context)
+        book._load_entries(context)
+        return book
+
+    @classmethod
+    def _load_book_resource(cls, loader: ModResourceLoader, id: ResourceLocation):
+        _, data = loader.load_resource("data", "patchouli_books", id / "book")
+        return data | {"id": id}
+
+    @property
+    def categories(self):
+        return self._categories
+
+    @property
+    def link_bases(self):
+        return self._link_bases
+
+    def _load_categories(self, context: BookContext):
+        categories = Category.load_all(context, self.id, self.use_resource_pack)
+
+        if not categories:
+            raise ValueError(
+                "No categories found, are the paths in your properties file correct?"
+            )
+
+        for id, category in categories.items():
+            self._categories[id] = category
+            self.link_bases[(id, None)] = context.get_link_base(category.resource_dir)
+
+    def _load_entries(self, context: BookContext):
+        internal_entries = defaultdict[ResLoc, dict[ResLoc, Entry]](dict)
+
+        for resource_dir, id, data in context.loader.load_book_assets(
+            book_id=self.id,
+            folder="entries",
+            use_resource_pack=self.use_resource_pack,
+        ):
+            entry = Entry.load(resource_dir, id, data, context)
+
+            # i used the entry to insert the entry (pretty sure thanos said that)
+            if resource_dir.internal:
+                internal_entries[entry.category_id][entry.id] = entry
+
+            link_base = context.get_link_base(resource_dir)
+            self._link_bases[(id, None)] = link_base
+            for page in entry.pages:
+                if page.anchor is not None:
+                    self._link_bases[(id, page.anchor)] = link_base
+
+        if not internal_entries:
+            raise ValueError(
+                f"No internal entries found for book {self.id}, is this the correct id?"
+            )
+
+        for category_id, new_entries in internal_entries.items():
+            category = self._categories[category_id]
+            category.entries = sorted_dict(category.entries | new_entries)
 
     @model_validator(mode="before")
-    def _pre_root(cls, data: Any, info: ValidationInfo):
-        if not info.context:
-            return data
-        context = cast_or_raise(info.context, I18nContext)
-
-        match data:
-            case {**values}:
-                return values | {
-                    "i18n_data": context.i18n,
-                    "index_icon": values.get("index_icon") or values.get("model"),
-                }
-            case _:
-                return data
+    @classmethod
+    def _pre_root(cls, data: dict[Any, Any] | Any):
+        if isinstance(data, dict) and "index_icon" not in data:
+            data["index_icon"] = data.get("model")
+        return data
 
     @field_validator("use_resource_pack", mode="after")
     def _check_use_resource_pack(cls, value: bool):
@@ -116,7 +165,7 @@ class Book(HexdocModel):
         return value
 
     @model_validator(mode="after")
-    def _load_categories_and_entries(self, info: ValidationInfo) -> Self:
+    def _post_root(self, info: ValidationInfo):
         if not info.context:
             return self
         context = cast_or_raise(info.context, BookContext)
@@ -124,62 +173,4 @@ class Book(HexdocModel):
         # make the macros accessible when rendering the template
         self.macros |= context.macros
 
-        self._link_bases: BookLinkBases = {}
-
-        # load categories
-        self._categories = Category.load_all(context, self.id, self.use_resource_pack)
-        for id, category in self._categories.items():
-            self._link_bases[(id, None)] = context.get_link_base(category.resource_dir)
-
-        if not self._categories:
-            raise ValueError(
-                "No categories found. "
-                "Ensure the paths in your properties file are correct."
-            )
-
-        # load entries
-        found_internal_entries = self._load_all_entries(context)
-        if not found_internal_entries:
-            raise ValueError(
-                "No internal entries found. "
-                "Ensure the paths in your properties file are correct."
-            )
-
-        # we inserted a bunch of entries in no particular order, so sort each category
-        for category in self._categories.values():
-            category.entries = sorted_dict(category.entries)
-
         return self
-
-    def _load_all_entries(self, context: BookContext):
-        found_internal_entries = False
-
-        for resource_dir, id, data in context.loader.load_book_assets(
-            self.id,
-            "entries",
-            self.use_resource_pack,
-        ):
-            entry = Entry.load(resource_dir, id, data, context)
-
-            link_base = context.get_link_base(resource_dir)
-            self._link_bases[(id, None)] = link_base
-            for page in entry.pages:
-                if page.anchor is not None:
-                    self._link_bases[(id, page.anchor)] = link_base
-
-            # i used the entry to insert the entry (pretty sure thanos said that)
-            if not resource_dir.external:
-                found_internal_entries = True
-                self._categories[entry.category_id].entries[entry.id] = entry
-
-        return found_internal_entries
-
-    @property
-    def categories(self):
-        # this exists because otherwise Pydantic complains that we're assigning to a
-        # nonexistent field; it ignores underscore-prefixed fields
-        return self._categories
-
-    @property
-    def link_bases(self):
-        return self._link_bases
