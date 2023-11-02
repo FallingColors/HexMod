@@ -8,10 +8,11 @@ from jinja2 import Environment, PackageLoader
 from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import I18n
 from hexdoc.minecraft.i18n import I18n
-from hexdoc.patchouli.text import DEFAULT_MACROS, FormatTree
-from hexdoc.patchouli.text.formatting import (
+from hexdoc.patchouli.text import (
+    DEFAULT_MACROS,
     BookLink,
     CommandStyle,
+    FormatTree,
     FunctionStyle,
     LinkStyle,
     ParagraphStyle,

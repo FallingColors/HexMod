@@ -7,7 +7,7 @@ from hexdoc.core.resource import ResourceLocation
 from hexdoc.core.resource_dir import PathResourceDir
 from hexdoc.minecraft import Tag
 
-from .text.formatting import FormattingContext
+from .text import FormattingContext
 
 
 class BookContext(FormattingContext, MetadataContext):

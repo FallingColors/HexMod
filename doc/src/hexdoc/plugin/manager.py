@@ -26,7 +26,7 @@ from hexdoc.model import ValidationContext
 if TYPE_CHECKING:
     from hexdoc.core.resource import ResourceLocation
     from hexdoc.minecraft.i18n import I18n
-    from hexdoc.patchouli.text.formatting import FormatTree
+    from hexdoc.patchouli.text import FormatTree
 
 from .specs import HEXDOC_PROJECT_NAME, HookReturns, PluginSpec
 

@@ -4,7 +4,7 @@ from importlib.resources import Package
 import hexdoc
 from hexdoc.__gradle_version__ import GRADLE_VERSION
 from hexdoc.minecraft.i18n import I18n
-from hexdoc.patchouli.text.formatting import (
+from hexdoc.patchouli.text import (
     STYLE_REGEX,
     FormatTree,
     SpecialStyleType,

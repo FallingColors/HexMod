@@ -7,7 +7,7 @@ from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.recipe.abstract_recipes import CraftingRecipe
 from hexdoc.model.inline import IDModel
 from hexdoc.patchouli.page.abstract_pages import PageWithTitle
-from hexdoc.patchouli.text.formatting import FormatTree
+from hexdoc.patchouli.text import FormatTree
 from hexdoc.utils.deserialize import cast_or_raise
 from hexdoc.utils.types import Color, Sortable
 

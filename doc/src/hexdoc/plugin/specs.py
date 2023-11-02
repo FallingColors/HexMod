@@ -9,7 +9,7 @@ from jinja2.sandbox import SandboxedEnvironment
 if TYPE_CHECKING:
     from hexdoc.core.resource import ResourceLocation
     from hexdoc.minecraft import I18n
-    from hexdoc.patchouli.text.formatting import FormatTree
+    from hexdoc.patchouli.text import FormatTree
 
 HEXDOC_PROJECT_NAME = "hexdoc"
 

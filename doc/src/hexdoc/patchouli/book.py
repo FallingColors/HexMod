@@ -8,7 +8,7 @@ from hexdoc.core.resource import ItemStack, ResLoc, ResourceLocation
 from hexdoc.minecraft import I18n, LocalizedStr
 from hexdoc.minecraft.i18n import I18nContext
 from hexdoc.model import HexdocModel
-from hexdoc.patchouli.text.formatting import BookLinkBases
+from hexdoc.patchouli.text import BookLinkBases
 from hexdoc.utils.deserialize import cast_or_raise
 from hexdoc.utils.types import Color, sorted_dict
 
