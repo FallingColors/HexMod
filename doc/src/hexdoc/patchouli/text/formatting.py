@@ -17,6 +17,7 @@ from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.i18n import I18n, I18nContext
 from hexdoc.model import DEFAULT_CONFIG, HexdocModel
+from hexdoc.plugin.manager import PluginManager, PluginManagerContext
 from hexdoc.utils.classproperty import classproperty
 from hexdoc.utils.deserialize import cast_or_raise
 from hexdoc.utils.types import TryGetEnum
@@ -69,7 +70,7 @@ BookLinkBases = dict[tuple[ResourceLocation, str | None], str]
 class FormattingContext(
     I18nContext,
     LoaderContext,
-    arbitrary_types_allowed=True,
+    PluginManagerContext,
 ):
     book_id: ResourceLocation
     macros: dict[str, str] = Field(default_factory=dict)
@@ -317,7 +318,7 @@ class _CloseTag(HexdocModel, frozen=True):
     ]
 
 
-_FORMAT_RE = re.compile(r"\$\(([^)]*)\)")
+STYLE_REGEX = re.compile(r"\$\(([^)]*)\)")
 
 
 @dataclass(config=DEFAULT_CONFIG)
@@ -334,6 +335,7 @@ class FormatTree:
         i18n: I18n,
         macros: dict[str, str],
         is_0_black: bool,
+        pm: PluginManager,
     ) -> Self:
         for macro, replace in macros.items():
             if macro in replace:
@@ -341,13 +343,7 @@ class FormatTree:
                     f"Recursive macro: replacement `{replace}` is matched by key `{macro}`"
                 )
 
-        # resolve macros
-        # this could use ahocorasick, but it works fine for now
-        old_string = None
-        while old_string != string:
-            old_string = string
-            for macro, replace in macros.items():
-                string = string.replace(macro, replace)
+        string = resolve_macros(string, macros)
 
         # lex out parsed styles
         text_nodes: list[str] = []
@@ -355,7 +351,7 @@ class FormatTree:
         text_since_prev_style: list[str] = []
         last_end = 0
 
-        for match in re.finditer(_FORMAT_RE, string):
+        for match in re.finditer(STYLE_REGEX, string):
             # get the text between the previous match and here
             leading_text = string[last_end : match.start()]
             text_since_prev_style.append(leading_text)
@@ -406,7 +402,13 @@ class FormatTree:
             last_node = style_stack.pop()
             style_stack[-1].children.append(last_node)
 
-        return style_stack[0]
+        return pm.validate_format_tree(
+            tree=style_stack[0],
+            macros=macros,
+            book_id=book_id,
+            i18n=i18n,
+            is_0_black=is_0_black,
+        )
 
     @model_validator(mode="wrap")
     @classmethod
@@ -429,7 +431,15 @@ class FormatTree:
             i18n=context.i18n,
             macros=context.macros,
             is_0_black=context.props.is_0_black,
+            pm=context.pm,
         )
 
 
-FormatTree._wrap_root
+def resolve_macros(string: str, macros: dict[str, str]) -> str:
+    # this could use ahocorasick, but it works fine for now
+    old_string = None
+    while old_string != string:
+        old_string = string
+        for macro, replace in macros.items():
+            string = string.replace(macro, replace)
+    return string

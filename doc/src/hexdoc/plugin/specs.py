@@ -1,8 +1,15 @@
+from __future__ import annotations
+
 from importlib.resources import Package
-from typing import Any, Protocol, TypeVar
+from typing import TYPE_CHECKING, Any, Protocol, TypeVar
 
 import pluggy
 from jinja2.sandbox import SandboxedEnvironment
+
+if TYPE_CHECKING:
+    from hexdoc.core.resource import ResourceLocation
+    from hexdoc.minecraft import I18n
+    from hexdoc.patchouli.text.formatting import FormatTree
 
 HEXDOC_PROJECT_NAME = "hexdoc"
 
@@ -20,6 +27,17 @@ class PluginSpec(Protocol):
     @staticmethod
     @hookspec(firstresult=True)
     def hexdoc_mod_version() -> str | None:
+        ...
+
+    @staticmethod
+    @hookspec
+    def hexdoc_validate_format_tree(
+        tree: FormatTree,
+        macros: dict[str, str],
+        i18n: I18n,
+        book_id: ResourceLocation,
+        is_0_black: bool,
+    ) -> None:
         ...
 
     @staticmethod
@@ -63,6 +81,18 @@ class ModVersionImpl(PluginImpl, Protocol):
     @staticmethod
     def hexdoc_mod_version() -> str:
         """Return your plugin's mod version (ie. `GRADLE_VERSION`)."""
+        ...
+
+
+class ValidateFormatTreeImpl(PluginImpl, Protocol):
+    @staticmethod
+    def hexdoc_validate_format_tree(
+        tree: FormatTree,
+        macros: dict[str, str],
+        book_id: ResourceLocation,
+        i18n: I18n,
+        is_0_black: bool,
+    ) -> None:
         ...
 
 

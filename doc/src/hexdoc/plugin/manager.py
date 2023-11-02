@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from importlib.resources import Package
 from types import ModuleType
 from typing import (
+    TYPE_CHECKING,
     Any,
     Callable,
     Generic,
@@ -21,6 +22,11 @@ from jinja2 import PackageLoader
 from jinja2.sandbox import SandboxedEnvironment
 
 from hexdoc.model import ValidationContext
+
+if TYPE_CHECKING:
+    from hexdoc.core.resource import ResourceLocation
+    from hexdoc.minecraft.i18n import I18n
+    from hexdoc.patchouli.text.formatting import FormatTree
 
 from .specs import HEXDOC_PROJECT_NAME, HookReturns, PluginSpec
 
@@ -86,6 +92,24 @@ class PluginManager:
 
     def mod_version(self, modid: str):
         return self._hook_caller(PluginSpec.hexdoc_mod_version, modid)()
+
+    def validate_format_tree(
+        self,
+        tree: FormatTree,
+        macros: dict[str, str],
+        book_id: ResourceLocation,
+        i18n: I18n,
+        is_0_black: bool,
+    ):
+        caller = self._hook_caller(PluginSpec.hexdoc_validate_format_tree)
+        caller.try_call(
+            tree=tree,
+            macros=macros,
+            book_id=book_id,
+            i18n=i18n,
+            is_0_black=is_0_black,
+        )
+        return tree
 
     def update_jinja_env(self, env: SandboxedEnvironment):
         caller = self._hook_caller(PluginSpec.hexdoc_update_jinja_env)

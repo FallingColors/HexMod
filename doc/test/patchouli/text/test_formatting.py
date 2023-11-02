@@ -1,11 +1,12 @@
 # pyright: reportPrivateUsage=false
 from argparse import Namespace
-from typing import cast
+from typing import Any, cast
 
 import pytest
 from jinja2 import Environment, PackageLoader
 
 from hexdoc.core.resource import ResourceLocation
+from hexdoc.minecraft import I18n
 from hexdoc.minecraft.i18n import I18n
 from hexdoc.patchouli.text import DEFAULT_MACROS, FormatTree
 from hexdoc.patchouli.text.formatting import (
@@ -16,6 +17,12 @@ from hexdoc.patchouli.text.formatting import (
     ParagraphStyle,
     SpecialStyleType,
 )
+from hexdoc.plugin.manager import PluginManager
+
+
+class MockPluginManager:
+    def validate_format_tree(self, tree: FormatTree, *_: Any, **__: Any):
+        return tree
 
 
 def format_with_mocks(test_str: str, macros: dict[str, str] = {}):
@@ -25,6 +32,7 @@ def format_with_mocks(test_str: str, macros: dict[str, str] = {}):
         i18n=cast(I18n, Namespace(keys={})),
         macros=DEFAULT_MACROS | macros,
         is_0_black=False,
+        pm=cast(PluginManager, MockPluginManager()),
     )
 
 

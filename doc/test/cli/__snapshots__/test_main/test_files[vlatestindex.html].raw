@@ -9351,7 +9351,7 @@
       <p>Combines two vectors (a position and a direction) into the answer to the question: If I stood at the position and looked in the direction, what block would I be looking at? Costs a negligible amount of <span style='color: #74b3f2'>media</span>.</p>
   </div>
 <br />
-    <p>If it doesn&#39;t hit anything, the vectors will combine into <a href='#casting/influences'><span style='color: #8d6acc'>Null</span></a>.</p><p>A common sequence of patterns, the so-called &#34;raycast mantra,&#34; is <span style='color: #fc77be'>Mind&#39;s Reflection</span>, <span style='color: #fc77be'>Compass Purification</span>, <span style='color: #fc77be'>Mind&#39;s Reflection</span>, <span style='color: #fc77be'>Alidade Purification</span>, <span style='color: #fc77be'>Archer&#39;s Distillation</span>. Together, they return the vector position of the block I am looking at.</p>
+    <p>If it doesn&#39;t hit anything, the vectors will combine into <a href='#casting/influences'><span style='color: #8d6acc'>Null</span></a>.</p><p>A common sequence of patterns, the so-called &#34;raycast mantra,&#34; is <a href='#patterns/basics@hexcasting:get_caster'><span style='color: #fc77be'>Mind&#39;s Reflection</span></a>, <a href='#patterns/basics@hexcasting:entity_pos/eye'><span style='color: #fc77be'>Compass Purification</span></a>, <a href='#patterns/basics@hexcasting:get_caster'><span style='color: #fc77be'>Mind&#39;s Reflection</span></a>, <a href='#patterns/basics@hexcasting:get_entity_look'><span style='color: #fc77be'>Alidade Purification</span></a>, <a href='#patterns/basics@hexcasting:raycast'><span style='color: #fc77be'>Archer&#39;s Distillation</span></a>. Together, they return the vector position of the block I am looking at.</p>
 <br />
   <div id="patterns/basics@hexcasting:raycast/axis">
 <h4 class="pattern-title">Architect&#39;s Distillation (vector, vector → vector | null)<a
@@ -10323,7 +10323,7 @@
         data-per-world="False"
       >Your browser does not support visualizing patterns. Pattern code: aada</canvas>
   </details>
-      <p>Like <span style='color: #fc77be'>Fisherman&#39;s Gambit</span>, but instead of moving the iota, copies it.</p>
+      <p>Like <a href='#patterns/stackmanip@hexcasting:fisherman'><span style='color: #fc77be'>Fisherman&#39;s Gambit</span></a>, but instead of moving the iota, copies it.</p>
   </div>
 <br />
   <div id="patterns/stackmanip@hexcasting:mask">

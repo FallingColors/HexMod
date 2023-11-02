@@ -6,6 +6,7 @@ __all__ = [
     "LoadJinjaTemplatesImpl",
     "UpdateJinjaEnvImpl",
     "UpdateTemplateArgsImpl",
+    "ValidateFormatTreeImpl",
     "PluginManager",
     "HookReturn",
 ]
@@ -22,6 +23,7 @@ from .specs import (
     ModVersionImpl,
     UpdateJinjaEnvImpl,
     UpdateTemplateArgsImpl,
+    ValidateFormatTreeImpl,
 )
 
 hookimpl = pluggy.HookimplMarker(HEXDOC_PROJECT_NAME)

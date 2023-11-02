@@ -1527,7 +1527,7 @@
         print: "Displays the top iota of the stack to me.",
         raycast: {
           "1": "Combines two vectors (a position and a direction) into the answer to the question: If I stood at the position and looked in the direction, what block would I be looking at? Costs a negligible amount of _media.",
-          "2": "If it doesn't hit anything, the vectors will combine into $(l:casting/influences)$(thing)Null/$.$(br2)A common sequence of patterns, the so-called \"raycast mantra,\" is $(action)Mind's Reflection/$, $(action)Compass Purification/$, $(action)Mind's Reflection/$, $(action)Alidade Purification/$, $(action)Archer's Distillation/$. Together, they return the vector position of the block I am looking at.",
+          "2": "If it doesn't hit anything, the vectors will combine into $(l:casting/influences)$(thing)Null/$.$(br2)A common sequence of patterns, the so-called \"raycast mantra,\" is $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$, $(l:patterns/basics#hexcasting:entity_pos/eye)$(action)Compass Purification/$, $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$, $(l:patterns/basics#hexcasting:get_entity_look)$(action)Alidade Purification/$, $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation/$. Together, they return the vector position of the block I am looking at.",
         },
         "raycast/axis": {
           "1": "Like $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation/$, but instead returns a vector representing the answer to the question: Which $(italic)side/$ of the block am I looking at? Costs a negligible amount of _media.",
@@ -1647,7 +1647,7 @@
         stack_len: "Pushes the size of the stack as a number to the top of the stack. (For example, a stack of [0, 1] will become [0, 1, 2].)",
         duplicate_n: "Removes the number at the top of the stack, then copies the top iota of the stack that number of times. (A count of 2 results in two of the iota on the stack, not three.)",
         fisherman: "Grabs the element in the stack indexed by the number and brings it to the top. If the number is negative, instead moves the top element of the stack down that many elements.",
-        "fisherman/copy": "Like $(action)Fisherman's Gambit/$, but instead of moving the iota, copies it.",
+        "fisherman/copy": "Like $(l:patterns/stackmanip#hexcasting:fisherman)$(action)Fisherman's Gambit/$, but instead of moving the iota, copies it.",
 
         mask: {
           "1": "An infinite family of actions that keep or remove elements at the top of the stack based on the sequence of dips and lines.",

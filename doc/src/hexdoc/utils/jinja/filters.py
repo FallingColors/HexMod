@@ -10,6 +10,7 @@ from hexdoc.core.resource import ResourceLocation
 from hexdoc.minecraft import I18n
 from hexdoc.minecraft.assets import Texture
 from hexdoc.patchouli import Book, FormatTree
+from hexdoc.plugin.manager import PluginManager
 from hexdoc.utils.deserialize import cast_or_raise
 
 
@@ -31,6 +32,7 @@ def hexdoc_localize(
     book: Book,
     i18n: I18n,
     allow_missing: bool,
+    pm: PluginManager,
 ):
     # get the localized value from i18n
     localized = i18n.localize(key, allow_missing=allow_missing)
@@ -45,6 +47,7 @@ def hexdoc_localize(
         i18n=i18n,
         macros=book.macros,
         is_0_black=props.is_0_black,
+        pm=pm,
     )
     return formatted
 

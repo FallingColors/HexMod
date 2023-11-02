@@ -6,16 +6,11 @@ from hexdoc.core.metadata import MetadataContext
 from hexdoc.core.resource import ResourceLocation
 from hexdoc.core.resource_dir import PathResourceDir
 from hexdoc.minecraft import Tag
-from hexdoc.plugin.manager import PluginManagerContext
 
 from .text.formatting import FormattingContext
 
 
-class BookContext(
-    FormattingContext,
-    PluginManagerContext,
-    MetadataContext,
-):
+class BookContext(FormattingContext, MetadataContext):
     spoilered_advancements: set[ResourceLocation] = Field(default_factory=set)
 
     def get_link_base(self, resource_dir: PathResourceDir) -> str:
