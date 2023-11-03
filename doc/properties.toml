@@ -10,19 +10,16 @@ resource_dirs = [  # top takes priority
     "{_fabric.src}/generated/resources",
     "{_forge.src}/main/resources",
     "{_forge.src}/generated/resources",
+    { modid="hexdoc" },
 ]
-export_dir = "src/hexdoc/_export/generated"
+export_dir = "src/hexdoc_hexcasting/_export/generated"
 
+[extra.hexcasting]
 # NOTE: "!Raw" means "don't apply variable interpolation to this value"
 _pattern_regex = { "!Raw"='make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:ActionRegistryEntry|OperationAction)\(\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)' }
 
-
-[[pattern_stubs]]
-path = "{^_common.package}/common/lib/hex/HexActions.java"
-regex = "{^_pattern_regex}"
-
-[[pattern_stubs]]
-path = "{^_fabric.package}/FabricHexInitializer.kt"
+[[extra.hexcasting.pattern_stubs]]
+path = "{^^^_common.package}/common/lib/hex/HexActions.java"
 regex = "{^_pattern_regex}"
 
 [minecraft_assets]
@@ -110,14 +107,17 @@ static_dir = "static"
 include = [
     "hexcasting",
     "patchouli",
+    "hexdoc",
 ]
+
+[template.extend_render]
+"hexcasting.js" = "hexcasting.js.jinja"
 
 [template.args]
 mod_name = "Hex Casting"
 author = "petrak@, Alwinfy"
 icon_href = "logo.png"
 show_landing_text = true
-
 
 # platforms
 

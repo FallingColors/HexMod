@@ -8,8 +8,8 @@ build-backend = "hatchling.build"
 # project metadata
 
 [project]
-name = "hexdoc"
-description = "Python web book docgen for Patchouli and Hex Casting."
+name = "hexdoc-hexcasting"
+description = "Hex Casting web book."
 authors = [
     { name="object-Object" },
     { name="Alwinfy" },
@@ -19,99 +19,58 @@ license = { file = "doc/LICENSE.txt" }
 keywords = [
     "hexdoc",
 ]
-classifiers = [
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Java",
-    "Programming Language :: JavaScript",
-    "Programming Language :: Kotlin",
-    "Programming Language :: Python :: 3.11",
-    "Topic :: Documentation",
-    "Topic :: File Formats :: JSON",
-    "Topic :: Games/Entertainment",
-    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Software Development :: Localization",
-    "Topic :: Text Processing :: Markup :: HTML",
-    "Typing :: Typed",
-]
 requires-python = ">=3.11"
 dependencies = [
-    "typing_extensions~=4.6",
-    "importlib_resources~=6.0",
-    "more_itertools~=10.1",
-    "pydantic~=2.3,!=2.4.0",
-    "pydantic_settings~=2.0",
-    "Jinja2~=3.1",
-    "pyjson5~=1.6",
-    "pluggy~=1.3",
-    "typer[all]~=0.9.0",
-    "requests~=2.31",
-    "ordered-set~=4.1",
-    "minecraft-render~=2.0a",
+    "hexdoc>=1!0.1.0",
 ]
 dynamic = ["version"]
 
 [project.optional-dependencies]
-test = [
-    "pytest>=7.3.1",
-    "syrupy>=4.0.2",
-]
 dev = [
-    "hexdoc[test]",
     "black==23.7.0",
     "isort==5.12.0",
-    "hatch",
-    "build",
 ]
 
 [project.urls]
-Homepage = "https://object-object.github.io/HexMod/" # TODO: replace
-Source = "https://github.com/object-Object/HexMod/tree/docgen-2-1.20/doc" # TODO: replace
+Homepage = "https://gamma-delta.github.io/HexMod/"
+Source = "https://github.com/gamma-delta/HexMod/"
 
 # Gradle version/deps
 
 [tool.hatch.version]
 scheme = "gradle"
 source = "gradle-properties"
-py-path = "doc/src/hexdoc/__version__.py"
+py-path = "doc/src/hexdoc_hexcasting/__version__.py"
 
 # project structure
 
 [tool.hatch.build]
 artifacts = [
-    "/doc/src/hexdoc/_export/generated",
-    "/doc/src/hexdoc/__gradle_version__.py",
+    "/doc/src/hexdoc_hexcasting/_export/generated",
+    "/doc/src/hexdoc_hexcasting/__gradle_version__.py",
 ]
 
 [tool.hatch.build.targets.sdist]
 only-include = [
-    "doc/src/hexdoc",
+    "doc/src/hexdoc_hexcasting",
     "gradle.properties",
 ]
 
 [tool.hatch.build.targets.wheel]
 packages = [
-    "doc/src/hexdoc",
+    "doc/src/hexdoc_hexcasting",
 ]
-
-[project.scripts]
-hexdoc = "hexdoc.cli.main:app"
 
 # hexdoc
 
 [project.entry-points.hexdoc]
-hexcasting = "hexdoc.hexcasting._hooks:HexcastingPlugin"
-minecraft = "hexdoc.minecraft._hooks:MinecraftPlugin"
-patchouli = "hexdoc.patchouli._hooks:PatchouliPlugin"
+hexcasting = "hexdoc_hexcasting._hooks:HexcastingPlugin"
 
 # Pytest
 
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib"]
 markers = ["template"]
-testpaths = ["doc/test"]
 
 [tool.coverage.report]
 include_namespace_packages = true
@@ -121,7 +80,7 @@ include_namespace_packages = true
 [tool.isort]
 profile = "black"
 combine_as_imports = true
-known_first_party = ["hexdoc"]
+known_first_party = ["hexdoc_hexcasting"]
 
 [tool.pyright]
 pythonVersion = "3.11"
@@ -129,14 +88,9 @@ pythonPlatform = "All"
 
 include = [
     "doc/src",
-    "doc/test",
 ]
 extraPaths = [
     "doc/src",
-    "doc/test",
-]
-exclude = [
-    "doc/{{cookiecutter.directory}}",
 ]
 
 enableExperimentalFeatures = true

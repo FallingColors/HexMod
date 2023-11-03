@@ -1,8 +1,0 @@
-{
-	// List of extensions which should be recommended for users of this workspace.
-	"recommendations": [
-		"ms-python.vscode-pylance",
-		"ms-python.black-formatter",
-		"ms-python.isort",
-	],
-}
