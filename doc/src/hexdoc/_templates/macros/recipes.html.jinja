@@ -64,12 +64,12 @@
     >
     {% if villager.profession != none %}
       {{_("hexdoc.villager_requirements.professional").format(
-        level=_('merchant.level.%d'|format(villager.minLevel) ),
-        profession=_('entity.minecraft.villager.%s'|format(prof))
+        level=_('merchant.level.'~villager.minLevel ),
+        profession=_('entity.minecraft.villager.'~prof)
       ) }}
     {% else %}
       {{_("hexdoc.villager_requirements.any").format(
-        level=_('merchant.level.%d'|format(villager.minLevel) ),
+        level=_('merchant.level.'~villager.minLevel ),
       ) }}
     {% endif %}
   </div>
