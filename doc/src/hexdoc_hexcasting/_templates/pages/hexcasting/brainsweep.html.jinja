@@ -3,13 +3,6 @@
 {% import "macros/formatting.html.jinja" as fmt with context %}
 
 {% block body %}
-  {{ recipe_macros.render_mindcipe(page.recipe) }}
-  {# {{ recipe_macros.generic(
-    [page.recipe],
-    "name",
-    _("hexdoc.pages.hexcasting.brainsweep.description"),
-    _("hexdoc.pages.hexcasting.brainsweep.separator"),
-  ) }}
-  ) }} #}
+  {{ recipe_macros.render_mind_flay_recipe(page.recipe) }}
   {{ fmt.styled(page.text) }}
 {% endblock body %}

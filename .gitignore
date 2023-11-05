@@ -27,6 +27,9 @@ build
 eclipse
 run
 
+# MacOS moment
+.DS_Store
+
 # Files from Forge MDK
 forge*changelog.txt
 

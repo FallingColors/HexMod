@@ -16,8 +16,8 @@
     },
 
     villager_requirements: {
-      any: "Villager must be a {} or higher",
-      professional: "Villager must be a {} {} or higher",
+      any: "Villager must be a {level} or higher",
+      professional: "Villager must be a {level} {profession} or higher",
     },
 
     pages: {

@@ -1,31 +1,28 @@
-{% macro render_mindcipe(recipe) -%}
+{# rip render_mindcipe(), you will be missed :tear_emoji:  #}
+{% macro render_mind_flay_recipe(recipe) -%}
   <details class="details-collapsible flay-recipe-details">
     <summary class="collapse-details">
       <span class="collapse-recipe-show">{{ _('hexdoc.recipe.show') }}</span>
       <span class="collapse-recipe-hide">{{ _('hexdoc.recipe.hide') }}</span>
     </summary>
-    {# <div class="flay-recipes">
-      {% for recipe in recipes %} #}
-        <div>
-          <h5>{{ recipe.result.name.name }}</h5>
-          <div class="flay-recipe">
-            <img
-              class="flay-recipe-background"
-              alt="Mindflay recipe gui"
-              src="{{ 'hexcasting:textures/gui/hexdoc/brainsweep.png'|hexdoc_texture }}"
-            >
-            {{ render_brainsweepee(recipe) }}
-            <div class="flay-recipe-block-ingredient">
-              {{ render_item(recipe.blockIn.block) }}
-            </div>
-
-            <div class="flay-recipe-result">
-              {{ render_item(recipe.result.name) }}
-            </div>
-          </div>
+    <div>
+      <h5>{{ recipe.result.name.name }}</h5>
+      <div class="flay-recipe">
+        <img
+          class="flay-recipe-background"
+          alt="Flay Mind Recipe GUI"
+          src="{{ 'hexcasting:textures/gui/hexdoc/brainsweep.png'|hexdoc_texture }}"
+        >
+        {{ render_brainsweepee(recipe) }}
+        <div class="flay-recipe-block-ingredient">
+          {{ render_item(recipe.blockIn.block) }}
         </div>
-      {# {% endfor %}
-    </div> #}
+
+        <div class="flay-recipe-result">
+          {{ render_item(recipe.result.name) }}
+        </div>
+      </div>
+    </div>
   </details>
 {%- endmacro %}
 
@@ -66,13 +63,13 @@
       style="width: 16px; height:16px"
     >
     {% if villager.profession != none %}
-      {{_("hexdoc.villagerrequirements.professional").format(
-        _('merchant.level.%d'|format(villager.minLevel) ),
-        _('entity.minecraft.villager.%s'|format(prof))
+      {{_("hexdoc.villager_requirements.professional").format(
+        level=_('merchant.level.%d'|format(villager.minLevel) ),
+        profession=_('entity.minecraft.villager.%s'|format(prof))
       ) }}
     {% else %}
-      {{_("hexdoc.villagerrequirements.any").format(
-        _('merchant.level.%d'|format(villager.minLevel) ),
+      {{_("hexdoc.villager_requirements.any").format(
+        level=_('merchant.level.%d'|format(villager.minLevel) ),
       ) }}
     {% endif %}
   </div>
