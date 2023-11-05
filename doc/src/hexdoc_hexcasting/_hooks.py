@@ -1,16 +1,13 @@
 import re
 from importlib.resources import Package
 
-from hexdoc.core.resource import ResourceLocation
-from hexdoc.minecraft.i18n import I18n
-from hexdoc.patchouli import BookContext
-from hexdoc.patchouli.text import (
-    STYLE_REGEX,
-    FormatTree,
-    SpecialStyleType,
-    Style,
-    resolve_macros,
-)
+import hexdoc_hexcasting
+from hexdoc_hexcasting.metadata import HexContext, HexProperties
+
+from hexdoc.core import ResourceLocation
+from hexdoc.minecraft import I18n
+from hexdoc.patchouli import BookContext, FormatTree
+from hexdoc.patchouli.text import STYLE_REGEX, SpecialStyleType, Style, resolve_macros
 from hexdoc.plugin import (
     HookReturn,
     LoadJinjaTemplatesImpl,
@@ -19,13 +16,10 @@ from hexdoc.plugin import (
     MinecraftVersionImpl,
     ModVersionImpl,
     UpdateContextImpl,
+    ValidateFormatTreeImpl,
     hookimpl,
 )
-from hexdoc.plugin.specs import ValidateFormatTreeImpl
-from hexdoc.utils.cd import relative_path_root
-
-import hexdoc_hexcasting
-from hexdoc_hexcasting.metadata import HexContext, HexProperties
+from hexdoc.utils import relative_path_root
 
 from .__gradle_version__ import GRADLE_VERSION, MINECRAFT_VERSION
 from .book import recipes

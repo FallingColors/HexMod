@@ -1,12 +1,10 @@
 from typing import Any, Literal
 
-from hexdoc.core.compat import IsVersion
-from hexdoc.core.resource import ResourceLocation
-from hexdoc.minecraft import LocalizedItem, Recipe
-from hexdoc.minecraft.recipe import ItemIngredient, ItemIngredientList
-from hexdoc.model import HexdocModel
-from hexdoc.model.tagged_union import TypeTaggedUnion
-from hexdoc.utils.singletons import NoValue
+from hexdoc.core import IsVersion, ResourceLocation
+from hexdoc.minecraft import LocalizedItem
+from hexdoc.minecraft.recipe import ItemIngredient, ItemIngredientList, Recipe
+from hexdoc.model import HexdocModel, TypeTaggedUnion
+from hexdoc.utils import NoValue
 
 # ingredients
 

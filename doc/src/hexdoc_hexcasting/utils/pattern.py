@@ -3,7 +3,7 @@ from typing import Annotated, Any
 
 from pydantic import BeforeValidator, PlainSerializer
 
-from hexdoc.core.resource import ResourceLocation
+from hexdoc.core import ResourceLocation
 from hexdoc.model import HexdocModel
 
 
