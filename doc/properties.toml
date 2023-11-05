@@ -103,7 +103,7 @@ missing = []
 "hexcasting:default_colorizer" = "hexcasting:colorizer/uuid"
 
 [template]
-static_dir = "static"
+icon = "../art/logo.png"
 include = [
     "hexcasting",
     "patchouli",
@@ -116,7 +116,6 @@ include = [
 [template.args]
 mod_name = "Hex Casting"
 author = "petrak@, Alwinfy"
-icon_href = "logo.png"
 show_landing_text = true
 
 # platforms
