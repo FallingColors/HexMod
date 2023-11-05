@@ -1,15 +1,15 @@
 from typing import Any, Self
 
+from hexdoc_hexcasting.metadata import HexContext
+from hexdoc_hexcasting.utils.pattern import PatternInfo, RawPatternInfo
+from pydantic import ValidationInfo, field_validator, model_validator
+
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.recipe import CraftingRecipe
 from hexdoc.patchouli import BookContext
 from hexdoc.patchouli.page import PageWithText, PageWithTitle
-from hexdoc.utils.deserialize import cast_or_raise
-from pydantic import ValidationInfo, field_validator, model_validator
+from hexdoc.utils import cast_or_raise
 
-from hexdoc_hexcasting.utils.pattern import PatternInfo, RawPatternInfo
-
-from ...metadata import HexContext
 from ..recipes import BrainsweepRecipe
 from .abstract_pages import PageWithOpPattern, PageWithPattern
 

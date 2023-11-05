@@ -2,15 +2,13 @@ import logging
 import re
 from pathlib import Path
 
-from hexdoc.core.compat import IsVersion
-from hexdoc.core.properties import Properties
-from hexdoc.core.resource import ResourceLocation
-from hexdoc.minecraft import Tag
-from hexdoc.model import HexdocModel, ValidationContext
-from hexdoc.model.strip_hidden import StripHiddenModel
-from hexdoc.patchouli import BookContext
-from hexdoc.utils.cd import RelativePath
 from pydantic import Field
+
+from hexdoc.core import IsVersion, Properties, ResourceLocation
+from hexdoc.minecraft import Tag
+from hexdoc.model import HexdocModel, StripHiddenModel, ValidationContext
+from hexdoc.patchouli import BookContext
+from hexdoc.utils import RelativePath
 
 from .utils.pattern import Direction, PatternInfo
 

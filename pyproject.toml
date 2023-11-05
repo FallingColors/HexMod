@@ -21,7 +21,7 @@ keywords = [
 ]
 requires-python = ">=3.11"
 dependencies = [
-    "hexdoc>=1!0.1.0",
+    "hexdoc~=1!0.1.dev",
 ]
 dynamic = ["version"]
 
