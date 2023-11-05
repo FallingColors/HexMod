@@ -15,7 +15,7 @@
       not_supported: "Your browser does not support visualizing patterns. Pattern code: {}",
     },
 
-    villagerrequirements: {
+    villager_requirements: {
       any: "Villager must be a {} or higher",
       professional: "Villager must be a {} {} or higher",
     },
