@@ -1,4 +1,4 @@
-{% import "macros/recipes.html.jinja" as recipe_macros with context %}
+{% import "macros/textures.html.jinja" as texture_macros with context -%}
 
 {# rip render_mindcipe(), you will be missed :tear_emoji:  #}
 {% macro render_mind_flay_recipe(recipe) -%}
@@ -17,11 +17,11 @@
         >
         {{ render_brainsweepee(recipe) }}
         <div class="flay-recipe-block-ingredient">
-          {{ recipe_macros.render_item(recipe.blockIn.block) }}
+          {{ texture_macros.render_item(recipe.blockIn.block) }}
         </div>
 
         <div class="flay-recipe-result">
-          {{ recipe_macros.render_item(recipe.result.name) }}
+          {{ texture_macros.render_item(recipe.result.name) }}
         </div>
       </div>
     </div>
