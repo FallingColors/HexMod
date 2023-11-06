@@ -25,7 +25,7 @@ WIP.
   - `--directory doc` tells Cookiecutter to look for a template in the `doc` directory of HexMod, and cannot be omitted.
   - If you run this from within an existing mod repo, add the flag `-f`, and leave the `output_directory` option blank when prompted by Cookiecutter.
     - Note: this currently overwrites any conflicting files, including your .gitignore, so you may need to use your Git history to re-add anything not covered by the new file.
-- Fill in the TODOs in `doc/properties.toml` (mostly paths to files/folders in your mod so hexdoc can find the data it needs).
+- Fill in the TODOs in `doc/hexdoc.toml` (mostly paths to files/folders in your mod so hexdoc can find the data it needs).
 - Try running the docgen locally by following the instructions in `doc/README.md`.
 - If it doesn't already exist, create an empty `gh-pages` branch and push it.
 - On GitHub, under `Settings > Pages`, set the source to `Deploy from a branch`, the branch to `gh-pages`, and the folder to `docs/`.

@@ -19,7 +19,6 @@
             "module": "hexdoc.cli.main",
             "args": [
                 "render",
-                "doc/properties.toml",
                 "_site/src/docs",
                 "--lang",
                 "en_us",
