@@ -1,11 +1,10 @@
 name: Build the web book
 
 on:
-  # push:
-  #   branches:
-  #     - main
-  #     - docgen-2-1.20 # TODO: remove
-  #   tags: "*"
+  push:
+    branches:
+      - main
+      - docgen-2-1.20 # TODO: remove
   workflow_dispatch:
     inputs:
       branch:
@@ -36,7 +35,7 @@ on:
         required: false
 
 env:
-  PYPI_PACKAGE: hexdoc
+  PYPI_PACKAGE: hexdoc-hexcasting
 
 permissions:
   contents: read
@@ -47,7 +46,7 @@ concurrency:
 
 jobs:
   hexdoc:
-    uses: ./.github/workflows/hexdoc.yml
+    uses: object-Object/hexdoc/.github/workflows/hexdoc.yml@v0
     permissions: 
       contents: write
       pages: read
@@ -67,24 +66,9 @@ jobs:
         }}
       bump-version-segment: ${{ inputs.segment }}
 
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
-          cache: pip
-
-      - name: Install packages
-        run: pip install .[test]
-      
-      - name: Run tests
-        run: pytest doc
-
   publish-pypi:
     runs-on: ubuntu-latest
-    needs: [hexdoc, test]
+    needs: hexdoc
     if: |-
       needs.hexdoc.outputs.publish-release == 'true' &&
       (github.event_name != 'workflow_dispatch' || inputs.publish == 'PyPI (release)')
@@ -107,16 +91,10 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-      
-      - name: Create or update tag
-        uses: EndBug/latest-tag@v1
-        with:
-          # TODO: dynamically set this from somewhere instead of being hardcoded
-          ref: hexdoc-v1
 
   publish-testpypi:
     runs-on: ubuntu-latest
-    needs: [hexdoc, test]
+    needs: hexdoc
     if: github.event_name == 'workflow_dispatch' && inputs.publish == 'TestPyPI'
 
     environment:
