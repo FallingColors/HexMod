@@ -2,7 +2,7 @@
     "watch": [
         "doc/src",
         "doc/resources",
-        "doc/properties.toml",
+        "doc/hexdoc.toml",
         "Common/src/main/resources/assets/*/lang"
     ],
     "ignore": ["**/generated/**"],
