@@ -1,14 +1,13 @@
 import re
 from importlib.resources import Package
-
-import hexdoc_hexcasting
-from hexdoc_hexcasting.metadata import HexContext, HexProperties
+from pathlib import Path
 
 from hexdoc.core import ResourceLocation
 from hexdoc.minecraft import I18n
 from hexdoc.patchouli import BookContext, FormatTree
 from hexdoc.patchouli.text import STYLE_REGEX, SpecialStyleType, Style, resolve_macros
 from hexdoc.plugin import (
+    DefaultRenderedTemplatesImpl,
     HookReturn,
     LoadJinjaTemplatesImpl,
     LoadResourceDirsImpl,
@@ -21,9 +20,12 @@ from hexdoc.plugin import (
 )
 from hexdoc.utils import relative_path_root
 
+import hexdoc_hexcasting
+
 from .__gradle_version__ import GRADLE_VERSION, MINECRAFT_VERSION
 from .book import recipes
 from .book.page import pages
+from .metadata import HexContext, HexProperties
 
 # TODO: make this more extensible somehow
 FAKE_ACTIONS = {
@@ -55,6 +57,7 @@ class HexcastingPlugin(
     ValidateFormatTreeImpl,
     MinecraftVersionImpl,
     UpdateContextImpl,
+    DefaultRenderedTemplatesImpl,
 ):
     @staticmethod
     @hookimpl
@@ -85,6 +88,15 @@ class HexcastingPlugin(
     @hookimpl
     def hexdoc_load_jinja_templates() -> HookReturn[tuple[Package, str]]:
         return hexdoc_hexcasting, "_templates"
+
+    @staticmethod
+    @hookimpl
+    def hexdoc_default_rendered_templates(templates: dict[str | Path, str]) -> None:
+        templates.update(
+            {
+                "hexcasting.js": "hexcasting.js.jinja",
+            }
+        )
 
     @staticmethod
     @hookimpl
