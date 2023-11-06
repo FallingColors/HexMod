@@ -110,9 +110,6 @@ include = [
     "hexdoc",
 ]
 
-[template.extend_render]
-"hexcasting.js" = "hexcasting.js.jinja"
-
 [template.args]
 mod_name = "Hex Casting"
 author = "petrak@, Alwinfy"
