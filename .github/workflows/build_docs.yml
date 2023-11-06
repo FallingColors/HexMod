@@ -1,10 +1,10 @@
 name: Build the web book
 
 on:
-  push:
-    branches:
-      - main
-      - docgen-2-1.20 # TODO: remove
+  # push:
+  #   branches:
+  #     - main
+  #     - docgen-2-1.20 # TODO: remove
   workflow_dispatch:
     inputs:
       branch:
@@ -91,26 +91,3 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-
-  publish-testpypi:
-    runs-on: ubuntu-latest
-    needs: hexdoc
-    if: github.event_name == 'workflow_dispatch' && inputs.publish == 'TestPyPI'
-
-    environment:
-      name: testpypi
-      url: https://test.pypi.org/p/${{ env.PYPI_PACKAGE }}
-    permissions:
-      id-token: write
-
-    steps:
-      - name: Download package artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: hexdoc-build
-          path: dist
-
-      - name: Publish to TestPyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
