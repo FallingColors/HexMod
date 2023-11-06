@@ -1,11 +1,11 @@
 name: Build the web book
 
 on:
-  push:
-    branches:
-      - main
-      - docgen-2-1.20 # TODO: remove
-    tags: "*"
+  # push:
+  #   branches:
+  #     - main
+  #     - docgen-2-1.20 # TODO: remove
+  #   tags: "*"
   workflow_dispatch:
     inputs:
       branch:
