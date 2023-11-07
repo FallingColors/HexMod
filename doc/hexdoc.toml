@@ -106,7 +106,6 @@ missing = []
 icon = "../art/logo.png"
 include = [
     "hexcasting",
-    "patchouli",
     "hexdoc",
 ]
 
