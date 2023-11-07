@@ -86,7 +86,7 @@ class HexcastingPlugin(
 
     @staticmethod
     @hookimpl
-    def hexdoc_load_jinja_templates() -> HookReturn[tuple[Package, str]]:
+    def hexdoc_load_jinja_templates() -> tuple[Package, str]:
         return hexdoc_hexcasting, "_templates"
 
     @staticmethod
