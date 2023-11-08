@@ -58,7 +58,7 @@ public class HexLootTables extends PaucalLootTableSubProvider {
             HexBlocks.EDIFIED_LOG_CITRINE, HexBlocks.EDIFIED_LOG_PURPLE, HexBlocks.STRIPPED_EDIFIED_LOG,
             HexBlocks.EDIFIED_WOOD, HexBlocks.STRIPPED_EDIFIED_WOOD,
             HexBlocks.EDIFIED_PLANKS, HexBlocks.EDIFIED_TILE, HexBlocks.EDIFIED_PANEL,
-            HexBlocks.EDIFIED_TRAPDOOR, HexBlocks.EDIFIED_STAIRS, HexBlocks.EDIFIED_FENCE, HexBlocks.EDIFIED_PRESSURE_PLATE,
+            HexBlocks.EDIFIED_TRAPDOOR, HexBlocks.EDIFIED_STAIRS, HexBlocks.EDIFIED_FENCE, HexBlocks.EDIFIED_FENCE_GATE, HexBlocks.EDIFIED_PRESSURE_PLATE,
             HexBlocks.EDIFIED_BUTTON);
 
         makeSlabTable(blockTables, HexBlocks.EDIFIED_SLAB);

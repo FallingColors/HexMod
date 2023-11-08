@@ -355,6 +355,13 @@ public class HexplatRecipes extends PaucalRecipeProvider {
                 .pattern("WSW")
                 .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_FENCE_GATE, 1)
+                .define('W', HexTags.Items.EDIFIED_PLANKS)
+                .define('S', Items.STICK)
+                .pattern("SWS")
+                .pattern("SWS")
+                .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
+
 
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_SLAB, 6)
             .define('W', HexTags.Items.EDIFIED_PLANKS)

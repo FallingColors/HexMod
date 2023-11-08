@@ -267,6 +267,8 @@ public class HexBlocks {
 
     public static final FenceBlock EDIFIED_FENCE = blockItem("edified_fence",
             new BlockHexFence(edifiedWoody().noOcclusion()));
+    public static final FenceGateBlock EDIFIED_FENCE_GATE = blockItem("edified_fence_gate",
+            new BlockHexFenceGate(edifiedWoody().noOcclusion()));
 
     public static final SlabBlock EDIFIED_SLAB = blockItem("edified_slab",
         new BlockHexSlab(edifiedWoody().noOcclusion()));
