@@ -92,6 +92,8 @@ public class HexItemModels extends PaucalItemModelProvider {
         buildStaff(HexItems.STAFF_CRIMSON, "crimson");
         buildStaff(HexItems.STAFF_WARPED, "warped");
         buildStaff(HexItems.STAFF_MANGROVE, "mangrove");
+        buildStaff(HexItems.STAFF_CHERRY, "cherry");
+        buildStaff(HexItems.STAFF_BAMBOO, "bamboo");
         buildStaff(HexItems.STAFF_EDIFIED, "edified");
         buildStaff(HexItems.STAFF_MINDSPLICE, "mindsplice");
 

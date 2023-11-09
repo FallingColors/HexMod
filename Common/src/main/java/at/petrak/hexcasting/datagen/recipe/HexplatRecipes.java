@@ -71,6 +71,8 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         staffRecipe(recipes, HexItems.STAFF_CRIMSON, Items.CRIMSON_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_WARPED, Items.WARPED_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_MANGROVE, Items.MANGROVE_PLANKS);
+        staffRecipe(recipes, HexItems.STAFF_CHERRY, Items.CHERRY_PLANKS);
+        staffRecipe(recipes, HexItems.STAFF_BAMBOO, Items.BAMBOO_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_EDIFIED, HexBlocks.EDIFIED_PLANKS.asItem());
         staffRecipe(recipes, HexItems.STAFF_QUENCHED, HexItems.QUENCHED_SHARD);
         staffRecipe(recipes, HexItems.STAFF_MINDSPLICE, Ingredient.of(HexTags.Items.MINDFLAYED_CIRCLE_COMPONENTS));
