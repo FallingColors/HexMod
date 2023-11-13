@@ -21,7 +21,8 @@ keywords = [
 ]
 requires-python = ">=3.11"
 dependencies = [
-    "hexdoc~=1!0.1.dev",
+    # "hexdoc~=1!0.1.dev",
+    "hexdoc @ git+https://github.com/object-Object/hexdoc.git@textures", # TODO: remove
 ]
 dynamic = ["version"]
 
@@ -34,6 +35,9 @@ dev = [
 [project.urls]
 Homepage = "https://gamma-delta.github.io/HexMod/"
 Source = "https://github.com/gamma-delta/HexMod/"
+
+[tool.hatch.metadata]
+allow-direct-references = true # TODO: remove
 
 # Gradle version/deps
 
