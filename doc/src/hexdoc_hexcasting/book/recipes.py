@@ -1,11 +1,9 @@
 from typing import Any, Literal
 
 from hexdoc.core import IsVersion, ResourceLocation
-from hexdoc.core.resource import ResourceLocation
-from hexdoc.minecraft.assets.textures import ItemWithTexture
+from hexdoc.minecraft.assets import ItemWithTexture
 from hexdoc.minecraft.recipe import ItemIngredient, ItemIngredientList, Recipe
 from hexdoc.model import HexdocModel, TypeTaggedUnion
-from hexdoc.model.tagged_union import TypeTaggedUnion
 from hexdoc.utils import NoValue
 
 # ingredients

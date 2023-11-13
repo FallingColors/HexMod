@@ -28,7 +28,11 @@ ref = "83e2169afbbce40990d69fc53e5962e4a793d467"
 version = "1.19.1"
 
 [textures]
-missing = []
+missing = [
+    "minecraft:*",
+    "hexcasting:conjured_block",
+    "hexcasting:conjured_light",
+]
 
 [textures.override]
 # ugh. TODO: properly get from model files
