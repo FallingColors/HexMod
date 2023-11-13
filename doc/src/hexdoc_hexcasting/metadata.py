@@ -2,15 +2,16 @@ import logging
 import re
 from pathlib import Path
 
-from pydantic import Field
-
 from hexdoc.core import IsVersion, Properties, ResourceLocation
 from hexdoc.minecraft import Tag
 from hexdoc.model import HexdocModel, StripHiddenModel, ValidationContext
 from hexdoc.patchouli import BookContext
 from hexdoc.utils import RelativePath
+from pydantic import Field
 
 from .utils.pattern import Direction, PatternInfo
+
+logger = logging.getLogger(__name__)
 
 
 class PatternMetadata(HexdocModel):
@@ -65,7 +66,7 @@ class HexContext(ValidationContext):
             for pattern in metadata.patterns:
                 self._add_pattern(pattern, signatures)
 
-        logging.getLogger(__name__).info(f"Loaded patterns: {self.patterns.keys()}")
+        logger.info(f"Loaded patterns: {self.patterns.keys()}")
         return self
 
     def _add_patterns_0_11(
@@ -77,7 +78,7 @@ class HexContext(ValidationContext):
         per_world = Tag.load(
             registry="action",
             id=ResourceLocation("hexcasting", "per_world_pattern"),
-            context=context,
+            loader=context.loader,
         )
 
         # for each stub, load all the patterns in the file
@@ -95,7 +96,7 @@ class HexContext(ValidationContext):
                 self._add_pattern(pattern, signatures)
 
     def _add_pattern(self, pattern: PatternInfo, signatures: dict[str, PatternInfo]):
-        logging.getLogger(__name__).debug(f"Load pattern: {pattern.id}")
+        logger.debug(f"Load pattern: {pattern.id}")
 
         # check for duplicates, because why not
         if duplicate := (
@@ -113,7 +114,7 @@ class HexContext(ValidationContext):
         per_world_tag: Tag | None,
     ):
         # TODO: add Gradle task to generate json with this data. this is dumb and fragile.
-        logging.getLogger(__name__).info(f"Load pattern stub from {stub.path}")
+        logger.info(f"Load pattern stub from {stub.path}")
         stub_text = stub.path.read_text("utf-8")
 
         for match in stub.regex.finditer(stub_text):
