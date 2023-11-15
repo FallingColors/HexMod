@@ -16,7 +16,7 @@ import static at.petrak.hexcasting.common.lib.hex.HexIotaTypes.VEC3;
 
 public class OperatorUnpack extends Operator {
 	private OperatorUnpack() {
-		super(1, IotaMultiPredicate.all(IotaPredicate.ofType(HexIotaTypes.DOUBLE)));
+		super(1, IotaMultiPredicate.all(IotaPredicate.ofType(HexIotaTypes.VEC3)));
 	}
 
 	public static OperatorUnpack INSTANCE = new OperatorUnpack();
