@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.fabric.xplat;
 
-import at.petrak.hexcasting.common.network.IMessage;
+import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.fabric.client.ExtendedTexture;
 import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsApiInterop;
 import at.petrak.hexcasting.interop.HexInterop;
@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 public class FabricClientXplatImpl implements IClientXplatAbstractions {
@@ -45,7 +47,7 @@ public class FabricClientXplatImpl implements IClientXplatAbstractions {
 
     @Override
     public <T extends Entity> void registerEntityRenderer(EntityType<? extends T> type,
-                                                          EntityRendererProvider<T> renderer) {
+        EntityRendererProvider<T> renderer) {
         EntityRendererRegistry.register(type, renderer);
     }
 
@@ -53,7 +55,7 @@ public class FabricClientXplatImpl implements IClientXplatAbstractions {
     private record UnclampedClampedItemPropFunc(ItemPropertyFunction inner) implements ClampedItemPropertyFunction {
         @Override
         public float unclampedCall(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity,
-                                   int seed) {
+            int seed) {
             return inner.call(stack, level, entity, seed);
         }
 
@@ -76,5 +78,16 @@ public class FabricClientXplatImpl implements IClientXplatAbstractions {
     @Override
     public void restoreLastFilter(AbstractTexture texture) {
         ((ExtendedTexture) texture).restoreLastFilter();
+    }
+
+    // Set by FabricLevelRendererMixin
+    public static Frustum LEVEL_RENDERER_FRUSTUM = null;
+
+    @Override
+    public boolean fabricAdditionalQuenchFrustumCheck(AABB aabb) {
+        if (LEVEL_RENDERER_FRUSTUM == null) {
+            return true; // fail safe
+        }
+        return LEVEL_RENDERER_FRUSTUM.isVisible(aabb);
     }
 }

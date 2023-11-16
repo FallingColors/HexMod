@@ -7,8 +7,20 @@ A minecraft mod about casting Hexes, powerful and programmable magical effects, 
 
 [Curseforge Link](https://www.curseforge.com/minecraft/mc-mods/hexcasting)
 
-On Forge, this mod requires PAUCAL, Patchouli and Kotlin for Forge. On Fabric, it requires PAUCAL, Patchouli, and Fabric
-Language Kotlin.
+On Forge, this mod requires:
+
+- PAUCAL
+- Patchouli
+- Kotlin for Forge
+- Caelus elytra api
+
+On Fabric, it requires:
+
+- PAUCAL
+- Patchouli
+- Fabric Language Kotlin
+- Cardinal Components
+- ClothConfig and ModMenu
 
 - [Read the documentation online here!](https://gamma-delta.github.io/HexMod/)
 - [Discord link](https://discord.gg/4xxHGYteWk)

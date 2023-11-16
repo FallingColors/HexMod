@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "hexcasting:quenched_allay_shard"
+    },
+    {
+      "item": "hexcasting:charged_amethyst"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "hexcasting:charged_amethyst"
+  }
+}

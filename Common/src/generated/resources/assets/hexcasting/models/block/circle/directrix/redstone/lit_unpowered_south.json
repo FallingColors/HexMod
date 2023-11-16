@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "hexcasting:block/circle/bottom",
+    "east": "hexcasting:block/circle/directrix/redstone/left_unpowered",
+    "north": "hexcasting:block/circle/directrix/redstone/front_dim_unpowered",
+    "particle": "hexcasting:block/slate",
+    "south": "hexcasting:block/circle/directrix/redstone/back_lit_unpowered",
+    "up": "hexcasting:block/circle/directrix/redstone/top_unpowered",
+    "west": "hexcasting:block/circle/directrix/redstone/right_unpowered"
+  }
+}

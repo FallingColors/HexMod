@@ -4,26 +4,31 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.addldata.ADVariantItem;
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
+import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
+import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.pigment.ColorProvider;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.api.spell.casting.CastingHarness;
-import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
-import at.petrak.hexcasting.api.spell.casting.sideeffects.EvalSound;
-import at.petrak.hexcasting.api.spell.iota.IotaType;
-import at.petrak.hexcasting.common.network.IMessage;
+import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -69,36 +74,44 @@ public interface IXplatAbstractions {
     // Things that used to be caps
 
     /**
-     * Irregardless of whether it can actually be brainswept (you need to do the checking yourself)
+     * Doesn't actually knock out its AI or anything anymore, just sets caps/ccs
      */
-    void brainsweep(Mob mob);
-
-    void setColorizer(Player target, FrozenColorizer colorizer);
-
-    void setSentinel(Player target, Sentinel sentinel);
-
-    void setFlight(ServerPlayer target, FlightAbility flight);
-
-    void setHarness(ServerPlayer target, @Nullable CastingHarness harness);
-
-    void setPatterns(ServerPlayer target, List<ResolvedPattern> patterns);
+    // heheheheh addled data
+    void setBrainsweepAddlData(Mob mob);
 
     boolean isBrainswept(Mob mob);
 
-    FlightAbility getFlight(ServerPlayer player);
+    @Nullable FrozenPigment setPigment(Player target, @Nullable FrozenPigment colorizer);
 
-    FrozenColorizer getColorizer(Player player);
+    void setSentinel(Player target, @Nullable Sentinel sentinel);
 
-    Sentinel getSentinel(Player player);
+    void setFlight(ServerPlayer target, @Nullable FlightAbility flight);
 
-    CastingHarness getHarness(ServerPlayer player, InteractionHand hand);
+    void setAltiora(Player target, @Nullable AltioraAbility altiora);
 
-    List<ResolvedPattern> getPatterns(ServerPlayer player);
+    void setStaffcastImage(ServerPlayer target, @Nullable CastingImage image);
+
+    void setPatterns(ServerPlayer target, List<ResolvedPattern> patterns);
+
+    @Nullable FlightAbility getFlight(ServerPlayer player);
+
+    @Nullable AltioraAbility getAltiora(Player player);
+
+    FrozenPigment getPigment(Player player);
+
+    @Nullable Sentinel getSentinel(Player player);
+
+    CastingVM getStaffcastVM(ServerPlayer player, InteractionHand hand);
+
+    List<ResolvedPattern> getPatternsSavedInUi(ServerPlayer player);
 
     void clearCastingData(ServerPlayer player);
 
     @Nullable
     ADMediaHolder findMediaHolder(ItemStack stack);
+
+    @Nullable
+    ADMediaHolder findMediaHolder(ServerPlayer player);
 
     @Nullable
     ADIotaHolder findDataHolder(ItemStack stack);
@@ -109,11 +122,13 @@ public interface IXplatAbstractions {
     @Nullable
     ADHexHolder findHexHolder(ItemStack stack);
 
+    @Nullable ADVariantItem findVariantHolder(ItemStack stack);
+
     // coooollooorrrs
 
-    boolean isColorizer(ItemStack stack);
+    boolean isPigment(ItemStack stack);
 
-    int getRawColor(FrozenColorizer colorizer, float time, Vec3 position);
+    ColorProvider getColorProvider(FrozenPigment pigment);
 
     // Items
 
@@ -125,7 +140,7 @@ public interface IXplatAbstractions {
     // Blocks
 
     <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(BiFunction<BlockPos, BlockState, T> func,
-                                                                     Block... blocks);
+        Block... blocks);
 
     boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, Fluid fluid);
 
@@ -137,19 +152,6 @@ public interface IXplatAbstractions {
 
     boolean isCorrectTierForDrops(Tier tier, BlockState bs);
 
-    // These don't need to be xplat anymore, but it does save refactoring if they're still defined here
-    default ResourceLocation getID(Block block) {
-        return Registry.BLOCK.getKey(block);
-    }
-
-    default ResourceLocation getID(Item item) {
-        return Registry.ITEM.getKey(item);
-    }
-
-    default ResourceLocation getID(VillagerProfession profession) {
-        return Registry.VILLAGER_PROFESSION.getKey(profession);
-    }
-
     Ingredient getUnsealedIngredient(ItemStack stack);
 
     IXplatTags tags();
@@ -158,7 +160,19 @@ public interface IXplatAbstractions {
 
     String getModName(String namespace);
 
+    /**
+     * Registry for actions.
+     * <p>
+     * There's some internal caching (so we can directly look up signatures in a map, for example)
+     * but this registry is the source of truth.
+     */
+    Registry<ActionRegistryEntry> getActionRegistry();
+
+    Registry<SpecialHandler.Factory<?>> getSpecialHandlerRegistry();
+
     Registry<IotaType<?>> getIotaTypeRegistry();
+
+    Registry<Arithmetic> getArithmeticRegistry();
 
     Registry<EvalSound> getEvalSoundRegistry();
 

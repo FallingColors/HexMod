@@ -2,7 +2,8 @@ package at.petrak.hexcasting.fabric.cc.adimpl;
 
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.item.HexHolderItem;
-import at.petrak.hexcasting.api.spell.iota.Iota;
+import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +24,7 @@ public abstract class CCHexHolder extends ItemComponent implements ADHexHolder {
             super(owner);
             var item = owner.getItem();
             if (!(item instanceof HexHolderItem hexHolderItem)) {
-                throw new IllegalStateException("item is not a colorizer: " + owner);
+                throw new IllegalStateException("item is not a pigment: " + owner);
             }
             this.hexHolder = hexHolderItem;
         }
@@ -45,13 +46,18 @@ public abstract class CCHexHolder extends ItemComponent implements ADHexHolder {
         }
 
         @Override
-        public void writeHex(List<Iota> patterns, int media) {
-            this.hexHolder.writeHex(this.stack, patterns, media);
+        public void writeHex(List<Iota> patterns, @Nullable FrozenPigment pigment, long media) {
+            this.hexHolder.writeHex(this.stack, patterns, pigment, media);
         }
 
         @Override
         public void clearHex() {
             this.hexHolder.clearHex(this.stack);
+        }
+
+        @Override
+        public @Nullable FrozenPigment getPigment() {
+            return this.hexHolder.getPigment(this.stack);
         }
     }
 }

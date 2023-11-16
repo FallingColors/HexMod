@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.fabric.mixin.client;
 
-import at.petrak.hexcasting.client.shader.HexShaders;
+import at.petrak.hexcasting.client.render.shader.HexShaders;
 import com.mojang.blaze3d.shaders.Program;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.GameRenderer;
@@ -21,18 +21,18 @@ import java.util.function.Consumer;
 public class FabricMixinGameRenderer {
     @SuppressWarnings("InvalidInjectorMethodSignature")
     @Inject(
-            method = "reloadShaders",
-            at = @At(
-                    value = "INVOKE_ASSIGN",
-                    target = "Lcom/google/common/collect/Lists;newArrayListWithCapacity(I)Ljava/util/ArrayList;",
-                    remap = false
-            ),
-            locals = LocalCapture.CAPTURE_FAILHARD
+        method = "reloadShaders",
+        at = @At(
+            value = "INVOKE_ASSIGN",
+            target = "Lcom/google/common/collect/Lists;newArrayListWithCapacity(I)Ljava/util/ArrayList;",
+            remap = false
+        ),
+        locals = LocalCapture.CAPTURE_FAILHARD
     )
     private void loadShaders(ResourceManager resourceManager, CallbackInfo ci,
-                             List<Program> _programsToClose,
-                             List<Pair<ShaderInstance, Consumer<ShaderInstance>>> shadersToLoad)
-            throws IOException {
+        List<Program> _programsToClose,
+        List<Pair<ShaderInstance, Consumer<ShaderInstance>>> shadersToLoad)
+        throws IOException {
         HexShaders.init(resourceManager, shadersToLoad::add);
     }
 }

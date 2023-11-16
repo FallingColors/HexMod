@@ -2,8 +2,10 @@
 
 package at.petrak.hexcasting.api.utils
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.addldata.ADMediaHolder
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
 import kotlin.math.roundToInt
@@ -26,10 +28,10 @@ fun isMediaItem(stack: ItemStack): Boolean {
 @JvmOverloads
 fun extractMedia(
     stack: ItemStack,
-    cost: Int = -1,
+    cost: Long = -1,
     drainForBatteries: Boolean = false,
     simulate: Boolean = false
-): Int {
+): Long {
     val mediaHolder = IXplatAbstractions.INSTANCE.findMediaHolder(stack) ?: return 0
 
     return extractMedia(mediaHolder, cost, drainForBatteries, simulate)
@@ -45,14 +47,33 @@ fun extractMedia(
  */
 fun extractMedia(
     holder: ADMediaHolder,
-    cost: Int = -1,
+    cost: Long = -1,
     drainForBatteries: Boolean = false,
     simulate: Boolean = false
-): Int {
+): Long {
     if (drainForBatteries && !holder.canConstructBattery())
         return 0
 
     return holder.withdrawMedia(cost, simulate)
+}
+
+/**
+ * Convenience function to scan the player's inventory, curios, etc for media sources,
+ * and then sorts them
+ */
+fun scanPlayerForMediaStuff(player: ServerPlayer): List<ADMediaHolder> {
+    val sources = mutableListOf<ADMediaHolder>()
+
+    (player.inventory.items + player.inventory.armor + player.inventory.offhand).forEach {
+        val holder = HexAPI.instance().findMediaHolder(it)
+        if (holder != null) {
+            sources.add(holder)
+        }
+    }
+
+    sources.sortWith(::compareMediaItem)
+    sources.reverse()
+    return sources
 }
 
 /**
@@ -63,11 +84,12 @@ fun compareMediaItem(aMedia: ADMediaHolder, bMedia: ADMediaHolder): Int {
     if (priority != 0)
         return priority
 
-    return aMedia.withdrawMedia(-1, true) - bMedia.withdrawMedia(-1, true)
+    return (aMedia.withdrawMedia(-1, true) - bMedia.withdrawMedia(-1, true))
+            .coerceIn(Int.MIN_VALUE.toLong(), Int.MAX_VALUE.toLong()).toInt()
 }
 
-fun mediaBarColor(media: Int, maxMedia: Int): Int {
-    val amt = if (maxMedia == 0) {
+fun mediaBarColor(media: Long, maxMedia: Long): Int {
+    val amt = if (maxMedia == 0L) {
         0f
     } else {
         media.toFloat() / maxMedia.toFloat()
@@ -79,8 +101,8 @@ fun mediaBarColor(media: Int, maxMedia: Int): Int {
     return Mth.color(r / 255f, g / 255f, b / 255f)
 }
 
-fun mediaBarWidth(media: Int, maxMedia: Int): Int {
-    val amt = if (maxMedia == 0) {
+fun mediaBarWidth(media: Long, maxMedia: Long): Int {
+    val amt = if (maxMedia == 0L) {
         0f
     } else {
         media.toFloat() / maxMedia.toFloat()

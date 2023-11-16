@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.forge.cap;
 
-import at.petrak.hexcasting.forge.network.MsgColorizerUpdateAck;
+import at.petrak.hexcasting.forge.network.MsgAltioraUpdateAck;
+import at.petrak.hexcasting.forge.network.MsgPigmentUpdateAck;
 import at.petrak.hexcasting.forge.network.MsgSentinelStatusUpdateAck;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,10 +26,11 @@ public class CapSyncers {
         // Copy data from this to new player
         var x = IXplatAbstractions.INSTANCE;
         x.setFlight(player, x.getFlight(proto));
+        x.setAltiora(player, x.getAltiora(proto));
         x.setSentinel(player, x.getSentinel(proto));
-        x.setColorizer(player, x.getColorizer(proto));
-        x.setHarness(player, x.getHarness(proto, InteractionHand.MAIN_HAND));
-        x.setPatterns(player, x.getPatterns(proto));
+        x.setPigment(player, x.getPigment(proto));
+        x.setStaffcastImage(player, x.getStaffcastVM(proto, InteractionHand.MAIN_HAND).getImage());
+        x.setPatterns(player, x.getPatternsSavedInUi(proto));
     }
 
     @SubscribeEvent
@@ -38,7 +40,8 @@ public class CapSyncers {
         }
 
         syncSentinel(player);
-        syncColorizer(player);
+        syncPigment(player);
+        syncAltiora(player);
     }
 
     @SubscribeEvent
@@ -48,7 +51,8 @@ public class CapSyncers {
         }
 
         syncSentinel(player);
-        syncColorizer(player);
+        syncPigment(player);
+        syncAltiora(player);
     }
 
     public static void syncSentinel(ServerPlayer player) {
@@ -56,8 +60,13 @@ public class CapSyncers {
             new MsgSentinelStatusUpdateAck(IXplatAbstractions.INSTANCE.getSentinel(player)));
     }
 
-    public static void syncColorizer(ServerPlayer player) {
+    public static void syncPigment(ServerPlayer player) {
         IXplatAbstractions.INSTANCE.sendPacketToPlayer(player,
-            new MsgColorizerUpdateAck(IXplatAbstractions.INSTANCE.getColorizer(player)));
+            new MsgPigmentUpdateAck(IXplatAbstractions.INSTANCE.getPigment(player)));
+    }
+
+    public static void syncAltiora(ServerPlayer player) {
+        IXplatAbstractions.INSTANCE.sendPacketToPlayer(player,
+            new MsgAltioraUpdateAck(IXplatAbstractions.INSTANCE.getAltiora(player)));
     }
 }

@@ -8,19 +8,27 @@
   "pages": [
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:not",
-      "anchor": "hexcasting:not",
-      "input": "any",
-      "output": "number",
-      "text": "hexcasting.page.logic.not"
-    },
-    {
-      "type": "hexcasting:pattern",
       "op_id": "hexcasting:bool_coerce",
       "anchor": "hexcasting:bool_coerce",
       "input": "any",
       "output": "bool",
       "text": "hexcasting.page.logic.bool_coerce"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:abs",
+      "anchor": "hexcasting:abs",
+      "input": "bool",
+      "output": "number",
+      "text": "hexcasting.page.logic.bool_to_number"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:not",
+      "anchor": "hexcasting:not",
+      "input": "bool",
+      "output": "bool",
+      "text": "hexcasting.page.logic.not"
     },
     {
       "type": "hexcasting:pattern",
@@ -59,7 +67,7 @@
       "op_id": "hexcasting:equals",
       "anchor": "hexcasting:equals",
       "input": "any, any",
-      "output": "number",
+      "output": "bool",
       "text": "hexcasting.page.logic.equals"
     },
     {
@@ -67,7 +75,7 @@
       "op_id": "hexcasting:not_equals",
       "anchor": "hexcasting:not_equals",
       "input": "any, any",
-      "output": "number",
+      "output": "bool",
       "text": "hexcasting.page.logic.not_equals"
     },
     {
@@ -75,7 +83,7 @@
       "op_id": "hexcasting:greater",
       "anchor": "hexcasting:greater",
       "input": "number, number",
-      "output": "number",
+      "output": "bool",
       "text": "hexcasting.page.logic.greater"
     },
     {
@@ -83,7 +91,7 @@
       "op_id": "hexcasting:less",
       "anchor": "hexcasting:less",
       "input": "number, number",
-      "output": "number",
+      "output": "bool",
       "text": "hexcasting.page.logic.less"
     },
     {
@@ -91,7 +99,7 @@
       "op_id": "hexcasting:greater_eq",
       "anchor": "hexcasting:greater_eq",
       "input": "number, number",
-      "output": "number",
+      "output": "bool",
       "text": "hexcasting.page.logic.greater_eq"
     },
     {
@@ -99,7 +107,7 @@
       "op_id": "hexcasting:less_eq",
       "anchor": "hexcasting:less_eq",
       "input": "number, number",
-      "output": "number",
+      "output": "bool",
       "text": "hexcasting.page.logic.less_eq"
     }
   ]

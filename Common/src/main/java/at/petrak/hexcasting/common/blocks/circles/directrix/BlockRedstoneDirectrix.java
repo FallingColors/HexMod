@@ -1,10 +1,12 @@
 package at.petrak.hexcasting.common.blocks.circles.directrix;
 
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
-import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -18,10 +20,12 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
+import java.util.List;
 
+// Outputs FACING when powered; outputs backwards otherwise
+// The FACING face is the happy one, bc i guess it's happy to get the redstone power
 public class BlockRedstoneDirectrix extends BlockCircleComponent {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty REDSTONE_POWERED = BlockStateProperties.POWERED;
@@ -35,19 +39,19 @@ public class BlockRedstoneDirectrix extends BlockCircleComponent {
     }
 
     @Override
-    public boolean canEnterFromDirection(Direction enterDir, Direction normalDir, BlockPos pos, BlockState bs,
-        Level world) {
-        return enterDir != getRealFacing(bs);
+    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos,
+        BlockState bs, ServerLevel world) {
+        return new ControlFlow.Continue(imageIn, List.of(this.exitPositionFromDirection(pos, getRealFacing(bs))));
     }
 
     @Override
-    public EnumSet<Direction> exitDirections(BlockPos pos, BlockState bs, Level world) {
-        return EnumSet.of(getRealFacing(bs));
+    public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+        return true;
     }
 
     @Override
-    public @Nullable HexPattern getPattern(BlockPos pos, BlockState bs, Level world) {
-        return null;
+    public EnumSet<Direction> possibleExitDirections(BlockPos pos, BlockState bs, Level world) {
+        return EnumSet.of(bs.getValue(FACING), bs.getValue(FACING).getOpposite());
     }
 
     @Override
@@ -63,9 +67,9 @@ public class BlockRedstoneDirectrix extends BlockCircleComponent {
     protected Direction getRealFacing(BlockState bs) {
         var facing = bs.getValue(FACING);
         if (bs.getValue(REDSTONE_POWERED)) {
-            return facing.getOpposite();
-        } else {
             return facing;
+        } else {
+            return facing.getOpposite();
         }
     }
 
@@ -87,7 +91,7 @@ public class BlockRedstoneDirectrix extends BlockCircleComponent {
     public void animateTick(BlockState bs, Level pLevel, BlockPos pos, RandomSource rand) {
         if (bs.getValue(REDSTONE_POWERED)) {
             for (int i = 0; i < 2; i++) {
-                var step = bs.getValue(FACING).getOpposite().step();
+                var step = bs.getValue(FACING).step();
                 var center = Vec3.atCenterOf(pos).add(step.x() * 0.5, step.y() * 0.5, step.z() * 0.5);
                 double x = center.x + (rand.nextDouble() - 0.5) * 0.5D;
                 double y = center.y + (rand.nextDouble() - 0.5) * 0.5D;
@@ -112,7 +116,7 @@ public class BlockRedstoneDirectrix extends BlockCircleComponent {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(FACING, pContext.getNearestLookingDirection());
+        return BlockCircleComponent.placeStateDirAndSneak(this.defaultBlockState(), pContext);
     }
 
     @Override

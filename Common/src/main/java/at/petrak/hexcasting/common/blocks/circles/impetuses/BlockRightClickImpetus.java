@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
-import at.petrak.hexcasting.common.blocks.entity.BlockEntityRightClickImpetus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -31,7 +30,8 @@ public class BlockRightClickImpetus extends BlockAbstractImpetus {
             var tile = pLevel.getBlockEntity(pPos);
             if (tile instanceof BlockEntityRightClickImpetus impetus) {
                 if (pPlayer instanceof ServerPlayer serverPlayer) {
-                    impetus.activateSpellCircle(serverPlayer);
+//                    impetus.activateSpellCircle(serverPlayer);
+                    impetus.startExecution(serverPlayer);
                 }
                 return InteractionResult.SUCCESS;
             }

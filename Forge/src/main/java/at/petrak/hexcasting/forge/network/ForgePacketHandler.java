@@ -1,6 +1,6 @@
 package at.petrak.hexcasting.forge.network;
 
-import at.petrak.hexcasting.common.network.*;
+import at.petrak.hexcasting.common.msgs.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
@@ -31,39 +31,37 @@ public class ForgePacketHandler {
         int messageIdx = 0;
 
         // Client -> server
-        NETWORK.registerMessage(messageIdx++, MsgNewSpellPatternSyn.class, MsgNewSpellPatternSyn::serialize,
-            MsgNewSpellPatternSyn::deserialize, makeServerBoundHandler(MsgNewSpellPatternSyn::handle));
-        NETWORK.registerMessage(messageIdx++, MsgShiftScrollSyn.class, MsgShiftScrollSyn::serialize,
-            MsgShiftScrollSyn::deserialize, makeServerBoundHandler(MsgShiftScrollSyn::handle));
+        NETWORK.registerMessage(messageIdx++, MsgNewSpellPatternC2S.class, MsgNewSpellPatternC2S::serialize,
+            MsgNewSpellPatternC2S::deserialize, makeServerBoundHandler(MsgNewSpellPatternC2S::handle));
+        NETWORK.registerMessage(messageIdx++, MsgShiftScrollC2S.class, MsgShiftScrollC2S::serialize,
+            MsgShiftScrollC2S::deserialize, makeServerBoundHandler(MsgShiftScrollC2S::handle));
 
         // Server -> client
-        NETWORK.registerMessage(messageIdx++, MsgNewSpellPatternAck.class, MsgNewSpellPatternAck::serialize,
-            MsgNewSpellPatternAck::deserialize, makeClientBoundHandler(MsgNewSpellPatternAck::handle));
-        NETWORK.registerMessage(messageIdx++, MsgBlinkAck.class, MsgBlinkAck::serialize,
-            MsgBlinkAck::deserialize, makeClientBoundHandler(MsgBlinkAck::handle));
+        NETWORK.registerMessage(messageIdx++, MsgNewSpellPatternS2C.class, MsgNewSpellPatternS2C::serialize,
+            MsgNewSpellPatternS2C::deserialize, makeClientBoundHandler(MsgNewSpellPatternS2C::handle));
+        NETWORK.registerMessage(messageIdx++, MsgBlinkS2C.class, MsgBlinkS2C::serialize,
+            MsgBlinkS2C::deserialize, makeClientBoundHandler(MsgBlinkS2C::handle));
         NETWORK.registerMessage(messageIdx++, MsgSentinelStatusUpdateAck.class, MsgSentinelStatusUpdateAck::serialize,
             MsgSentinelStatusUpdateAck::deserialize, makeClientBoundHandler(MsgSentinelStatusUpdateAck::handle));
-        NETWORK.registerMessage(messageIdx++, MsgColorizerUpdateAck.class, MsgColorizerUpdateAck::serialize,
-            MsgColorizerUpdateAck::deserialize, makeClientBoundHandler(MsgColorizerUpdateAck::handle));
-        NETWORK.registerMessage(messageIdx++, MsgCastParticleAck.class, MsgCastParticleAck::serialize,
-            MsgCastParticleAck::deserialize, makeClientBoundHandler(MsgCastParticleAck::handle));
-        NETWORK.registerMessage(messageIdx++, MsgOpenSpellGuiAck.class, MsgOpenSpellGuiAck::serialize,
-            MsgOpenSpellGuiAck::deserialize, makeClientBoundHandler(MsgOpenSpellGuiAck::handle));
-        NETWORK.registerMessage(messageIdx++, MsgBeepAck.class, MsgBeepAck::serialize,
-            MsgBeepAck::deserialize, makeClientBoundHandler(MsgBeepAck::handle));
+        NETWORK.registerMessage(messageIdx++, MsgPigmentUpdateAck.class, MsgPigmentUpdateAck::serialize,
+            MsgPigmentUpdateAck::deserialize, makeClientBoundHandler(MsgPigmentUpdateAck::handle));
+        NETWORK.registerMessage(messageIdx++, MsgAltioraUpdateAck.class, MsgAltioraUpdateAck::serialize,
+            MsgAltioraUpdateAck::deserialize, makeClientBoundHandler(MsgAltioraUpdateAck::handle));
+        NETWORK.registerMessage(messageIdx++, MsgCastParticleS2C.class, MsgCastParticleS2C::serialize,
+            MsgCastParticleS2C::deserialize, makeClientBoundHandler(MsgCastParticleS2C::handle));
+        NETWORK.registerMessage(messageIdx++, MsgOpenSpellGuiS2C.class, MsgOpenSpellGuiS2C::serialize,
+            MsgOpenSpellGuiS2C::deserialize, makeClientBoundHandler(MsgOpenSpellGuiS2C::handle));
+        NETWORK.registerMessage(messageIdx++, MsgBeepS2C.class, MsgBeepS2C::serialize,
+            MsgBeepS2C::deserialize, makeClientBoundHandler(MsgBeepS2C::handle));
         NETWORK.registerMessage(messageIdx++, MsgBrainsweepAck.class, MsgBrainsweepAck::serialize,
             MsgBrainsweepAck::deserialize, makeClientBoundHandler(MsgBrainsweepAck::handle));
-        NETWORK.registerMessage(messageIdx++, MsgUpdateComparatorVisualsAck.class,
-            MsgUpdateComparatorVisualsAck::serialize,
-            MsgUpdateComparatorVisualsAck::deserialize,
-            makeClientBoundHandler(MsgUpdateComparatorVisualsAck::handle));
-        NETWORK.registerMessage(messageIdx++, MsgNewWallScrollAck.class,
-            MsgNewWallScrollAck::serialize,
-            MsgNewWallScrollAck::deserialize,
-            makeClientBoundHandler(MsgNewWallScrollAck::handle));
-        NETWORK.registerMessage(messageIdx++, MsgRecalcWallScrollDisplayAck.class,
-            MsgRecalcWallScrollDisplayAck::serialize,
-            MsgRecalcWallScrollDisplayAck::deserialize, makeClientBoundHandler(MsgRecalcWallScrollDisplayAck::handle));
+        NETWORK.registerMessage(messageIdx++, MsgNewWallScrollS2C.class,
+            MsgNewWallScrollS2C::serialize,
+            MsgNewWallScrollS2C::deserialize,
+            makeClientBoundHandler(MsgNewWallScrollS2C::handle));
+        NETWORK.registerMessage(messageIdx++, MsgRecalcWallScrollDisplayS2C.class,
+            MsgRecalcWallScrollDisplayS2C::serialize,
+            MsgRecalcWallScrollDisplayS2C::deserialize, makeClientBoundHandler(MsgRecalcWallScrollDisplayS2C::handle));
     }
 
     private static <T> BiConsumer<T, Supplier<NetworkEvent.Context>> makeServerBoundHandler(

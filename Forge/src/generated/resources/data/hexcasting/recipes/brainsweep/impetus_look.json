@@ -2,17 +2,19 @@
   "type": "hexcasting:brainsweep",
   "blockIn": {
     "type": "block",
-    "block": "hexcasting:empty_impetus"
+    "block": "hexcasting:impetus/empty"
+  },
+  "cost": 1000000,
+  "entityIn": {
+    "type": "villager",
+    "minLevel": 2,
+    "profession": "toolsmith"
   },
   "result": {
-    "name": "hexcasting:impetus_look",
+    "name": "hexcasting:impetus/look",
     "properties": {
       "energized": "false",
       "facing": "north"
     }
-  },
-  "villagerIn": {
-    "minLevel": 2,
-    "profession": "minecraft:fletcher"
   }
 }

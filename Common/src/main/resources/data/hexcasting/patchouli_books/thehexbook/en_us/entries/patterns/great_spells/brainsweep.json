@@ -1,5 +1,5 @@
 {
-  "name": "hexcasting.spell.hexcasting:brainsweep",
+  "name": "hexcasting.action.hexcasting:brainsweep",
   "category": "hexcasting:patterns/great_spells",
   "icon": "minecraft:skeleton_skull",
   "sortnum": 7,

@@ -1,22 +1,24 @@
 package at.petrak.hexcasting.client.gui
 
-import at.petrak.hexcasting.api.misc.DiscoveryHandlers
+import at.petrak.hexcasting.api.casting.eval.ExecutionClientView
+import at.petrak.hexcasting.api.casting.eval.ResolvedPattern
+import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
+import at.petrak.hexcasting.api.casting.iota.IotaType
+import at.petrak.hexcasting.api.casting.math.HexAngle
+import at.petrak.hexcasting.api.casting.math.HexCoord
+import at.petrak.hexcasting.api.casting.math.HexDir
+import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
-import at.petrak.hexcasting.api.spell.casting.ControllerInfo
-import at.petrak.hexcasting.api.spell.casting.ResolvedPattern
-import at.petrak.hexcasting.api.spell.casting.ResolvedPatternType
-import at.petrak.hexcasting.api.spell.math.HexAngle
-import at.petrak.hexcasting.api.spell.math.HexCoord
-import at.petrak.hexcasting.api.spell.math.HexDir
-import at.petrak.hexcasting.api.spell.math.HexPattern
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
-import at.petrak.hexcasting.client.*
+import at.petrak.hexcasting.client.ClientTickCounter
+import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.client.ktxt.accumulatedScroll
+import at.petrak.hexcasting.client.render.*
 import at.petrak.hexcasting.client.sound.GridSoundInstance
+import at.petrak.hexcasting.common.lib.HexAttributes
 import at.petrak.hexcasting.common.lib.HexSounds
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
-import at.petrak.hexcasting.common.network.MsgNewSpellPatternSyn
+import at.petrak.hexcasting.common.msgs.MsgNewSpellPatternC2S
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
@@ -33,11 +35,11 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.Vec2
 import kotlin.math.*
 
+// TODO winfy: fix this class to use ExecutionClientView
 class GuiSpellcasting constructor(
     private val handOpenedWith: InteractionHand,
     private var patterns: MutableList<ResolvedPattern>,
     private var cachedStack: List<CompoundTag>,
-    private var cachedParens: List<CompoundTag>,
     private var cachedRavenmind: CompoundTag?,
     private var parenCount: Int,
 ) : Screen("gui.hexcasting.spellcasting".asTranslatedComponent) {
@@ -59,15 +61,22 @@ class GuiSpellcasting constructor(
         this.calculateIotaDisplays()
     }
 
-    fun recvServerUpdate(info: ControllerInfo, index: Int) {
-        this.patterns.getOrNull(index)?.let {
-            it.type = info.resolutionType
+    fun recvServerUpdate(info: ExecutionClientView, index: Int) {
+        if (info.isStackClear) {
+            this.minecraft?.setScreen(null)
+            return
         }
 
-        this.cachedStack = info.stack
-        this.cachedParens = info.parenthesized
+        // TODO this is the kinda hacky bit
+        if (info.resolutionType == ResolvedPatternType.UNDONE) {
+            this.patterns.reversed().drop(1).firstOrNull { it.type == ResolvedPatternType.ESCAPED }?.let { it.type = ResolvedPatternType.UNDONE }
+            this.patterns.getOrNull(index)?.let { it.type = ResolvedPatternType.EVALUATED }
+        } else this.patterns.getOrNull(index)?.let {
+                it.type = info.resolutionType
+            }
+
+        this.cachedStack = info.stackDescs
         this.cachedRavenmind = info.ravenmind
-        this.parenCount = info.parenCount
         this.calculateIotaDisplays()
     }
 
@@ -75,7 +84,7 @@ class GuiSpellcasting constructor(
         val mc = Minecraft.getInstance()
         val width = (this.width * LHS_IOTAS_ALLOCATION).toInt()
         this.stackDescs =
-            this.cachedStack.map { HexIotaTypes.getDisplayWithMaxWidth(it, width, mc.font) }
+            this.cachedStack.map { IotaType.getDisplayWithMaxWidth(it, width, mc.font) }
                 .asReversed()
 //        this.parenDescs = if (this.cachedParens.isNotEmpty())
 //            this.cachedParens.flatMap { HexIotaTypes.getDisplayWithMaxWidth(it, width, mc.font) }
@@ -86,7 +95,7 @@ class GuiSpellcasting constructor(
         this.parenDescs = emptyList()
         this.ravenmind =
             this.cachedRavenmind?.let {
-                HexIotaTypes.getDisplayWithMaxWidth(
+                IotaType.getDisplayWithMaxWidth(
                     it,
                     (this.width * RHS_IOTAS_ALLOCATION).toInt(),
                     mc.font
@@ -113,7 +122,7 @@ class GuiSpellcasting constructor(
         if (player != null) {
             val heldItem = player.getItemInHand(handOpenedWith)
             if (heldItem.isEmpty || !heldItem.`is`(HexTags.Items.STAVES))
-                onClose()
+                closeForReal()
         }
     }
 
@@ -206,7 +215,7 @@ class GuiSpellcasting constructor(
                 if (playSound) {
                     Minecraft.getInstance().soundManager.play(
                         SimpleSoundInstance(
-                            HexSounds.ADD_LINE,
+                            HexSounds.ADD_TO_PATTERN,
                             SoundSource.PLAYERS,
                             0.25f,
                             1f + (Math.random().toFloat() - 0.5f) * 0.1f,
@@ -243,7 +252,7 @@ class GuiSpellcasting constructor(
                 this.usedSpots.addAll(pat.positions(start))
 
                 IClientXplatAbstractions.INSTANCE.sendPacketToServer(
-                    MsgNewSpellPatternSyn(
+                    MsgNewSpellPatternC2S(
                         this.handOpenedWith,
                         pat,
                         this.patterns
@@ -278,6 +287,13 @@ class GuiSpellcasting constructor(
     }
 
     override fun onClose() {
+        if (drawState == PatternDrawState.BetweenPatterns)
+            closeForReal()
+        else
+            drawState = PatternDrawState.BetweenPatterns
+    }
+
+    fun closeForReal() {
         Minecraft.getInstance().soundManager.stop(HexSounds.CASTING_AMBIANCE.location, null)
 
         super.onClose()
@@ -447,12 +463,12 @@ class GuiSpellcasting constructor(
 
     /** Distance between adjacent hex centers */
     fun hexSize(): Float {
-        val scaleModifier = DiscoveryHandlers.gridScaleModifier(Minecraft.getInstance().player)
+        val scaleModifier = Minecraft.getInstance().player!!.getAttributeValue(HexAttributes.GRID_ZOOM)
 
         // Originally, we allowed 32 dots across. Assuming a 1920x1080 screen this allowed like 500-odd area.
         // Let's be generous and give them 512.
         val baseScale = sqrt(this.width.toDouble() * this.height / 512.0)
-        return baseScale.toFloat() * scaleModifier
+        return (baseScale / scaleModifier).toFloat()
     }
 
     fun coordsOffset(): Vec2 = Vec2(this.width.toFloat() * 0.5f, this.height.toFloat() * 0.5f)

@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.forge.network;
 
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.common.network.IMessage;
+import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -11,12 +11,14 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
+import javax.annotation.Nullable;
+
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 /**
  * Sent server->client to synchronize the status of the sentinel.
  */
-public record MsgSentinelStatusUpdateAck(Sentinel update) implements IMessage {
+public record MsgSentinelStatusUpdateAck(@Nullable Sentinel update) implements IMessage {
     public static final ResourceLocation ID = modLoc("sntnl");
 
     @Override
@@ -28,16 +30,25 @@ public record MsgSentinelStatusUpdateAck(Sentinel update) implements IMessage {
         var buf = new FriendlyByteBuf(buffer);
 
         var exists = buf.readBoolean();
+        if (!exists) {
+            return new MsgSentinelStatusUpdateAck(null);
+        }
+
         var greater = buf.readBoolean();
         var origin = new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble());
         var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY, buf.readResourceLocation());
 
-        var sentinel = new Sentinel(exists, greater, origin, dimension);
+        var sentinel = new Sentinel(greater, origin, dimension);
         return new MsgSentinelStatusUpdateAck(sentinel);
     }
 
     public void serialize(FriendlyByteBuf buf) {
-        buf.writeBoolean(update.hasSentinel());
+        if (update == null) {
+            buf.writeBoolean(false);
+            return;
+        }
+
+        buf.writeBoolean(true);
         buf.writeBoolean(update.extendsRange());
         buf.writeDouble(update.position().x);
         buf.writeDouble(update.position().y);
@@ -46,6 +57,7 @@ public record MsgSentinelStatusUpdateAck(Sentinel update) implements IMessage {
     }
 
     public static void handle(MsgSentinelStatusUpdateAck self) {
+        //noinspection Convert2Lambda
         Minecraft.getInstance().execute(new Runnable() {
             @Override
             public void run() {

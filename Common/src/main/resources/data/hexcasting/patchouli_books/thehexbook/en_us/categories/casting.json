@@ -1,6 +1,6 @@
 {
-  "name": "hexcasting.entry.casting",
-  "icon": "hexcasting:oak_staff",
-  "description": "hexcasting.entry.casting.desc",
+  "name": "hexcasting.category.casting",
+  "icon": "hexcasting:staff/oak",
+  "description": "hexcasting.category.casting.desc",
   "sortnum": 1
 }

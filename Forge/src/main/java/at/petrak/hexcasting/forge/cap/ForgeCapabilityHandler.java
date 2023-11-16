@@ -1,16 +1,19 @@
 package at.petrak.hexcasting.forge.cap;
 
 import at.petrak.hexcasting.api.addldata.*;
-import at.petrak.hexcasting.api.block.circle.BlockEntityAbstractImpetus;
-import at.petrak.hexcasting.api.item.ColorizerItem;
-import at.petrak.hexcasting.api.item.HexHolderItem;
-import at.petrak.hexcasting.api.item.IotaHolderItem;
-import at.petrak.hexcasting.api.item.MediaHolderItem;
+import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.casting.iota.DoubleIota;
+import at.petrak.hexcasting.api.item.*;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.spell.iota.DoubleIota;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
+import at.petrak.hexcasting.common.items.HexBaubleItem;
+import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.forge.cap.adimpl.*;
+import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
+import at.petrak.hexcasting.interop.HexInterop;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -56,9 +59,14 @@ public class ForgeCapabilityHandler {
      */
     public static final ResourceLocation HEX_HOLDER_CAP = modLoc("hex_item");
     /**
+     * Items that have multiple visual variants.
+     */
+    public static final ResourceLocation VARIANT_ITEM_CAP = modLoc("variant_item");
+    /**
      * Items that work as pigments.
      */
     public static final ResourceLocation PIGMENT_CAP = modLoc("pigment");
+    public static final ResourceLocation CURIO_CAP = modLoc("curio");
 
     private static final ResourceLocation IMPETUS_HANDLER = modLoc("impetus_items");
 
@@ -66,7 +74,7 @@ public class ForgeCapabilityHandler {
         evt.register(ADMediaHolder.class);
         evt.register(ADIotaHolder.class);
         evt.register(ADHexHolder.class);
-        evt.register(ADColorizer.class);
+        evt.register(ADPigment.class);
     }
 
     public static void attachItemCaps(AttachCapabilitiesEvent<ItemStack> evt) {
@@ -86,6 +94,16 @@ public class ForgeCapabilityHandler {
             evt.addCapability(MEDIA_STATIC_CAP,
                 provide(stack, HexCapabilities.MEDIA, () -> new CapStaticMediaHolder(
                     HexConfig.common()::chargedCrystalMediaAmount, ADMediaHolder.CHARGED_AMETHYST_PRIORITY, stack)));
+        } else if (stack.is(HexItems.QUENCHED_SHARD)) {
+            // no one uses the config
+            evt.addCapability(MEDIA_STATIC_CAP,
+                    provide(stack, HexCapabilities.MEDIA, () -> new CapStaticMediaHolder(
+                            () -> MediaConstants.QUENCHED_SHARD_UNIT, ADMediaHolder.QUENCHED_SHARD_PRIORITY, stack)));
+        } else if (stack.is(HexBlocks.QUENCHED_ALLAY.asItem())) {
+            // no one uses the config
+            evt.addCapability(MEDIA_STATIC_CAP,
+                provide(stack, HexCapabilities.MEDIA, () -> new CapStaticMediaHolder(
+                    () -> MediaConstants.QUENCHED_BLOCK_UNIT, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, stack)));
         }
 
         if (stack.getItem() instanceof IotaHolderItem holder) {
@@ -101,10 +119,19 @@ public class ForgeCapabilityHandler {
             evt.addCapability(HEX_HOLDER_CAP,
                 provide(stack, HexCapabilities.STORED_HEX, () -> new CapItemHexHolder(holder, stack)));
         }
+        if (stack.getItem() instanceof VariantItem variantItem) {
+            evt.addCapability(VARIANT_ITEM_CAP,
+                    provide(stack, HexCapabilities.VARIANT_ITEM, () -> new CapItemVariantItem(variantItem, stack)));
+        }
 
-        if (stack.getItem() instanceof ColorizerItem colorizer) {
+        if (stack.getItem() instanceof PigmentItem pigment) {
             evt.addCapability(PIGMENT_CAP,
-                provide(stack, HexCapabilities.COLOR, () -> new CapItemColorizer(colorizer, stack)));
+                provide(stack, HexCapabilities.COLOR, () -> new CapItemPigment(pigment, stack)));
+        }
+
+        if (IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Forge.CURIOS_API_ID)
+            && stack.getItem() instanceof HexBaubleItem) {
+            evt.addCapability(CURIO_CAP, CuriosApiInterop.curioCap(stack));
         }
     }
 
@@ -146,7 +173,7 @@ public class ForgeCapabilityHandler {
         return provide(be::isRemoved, capability, supplier);
     }
 
-    private static <CAP> SimpleProvider<CAP> provide(ItemStack stack, Capability<CAP> capability,
+    public static <CAP> SimpleProvider<CAP> provide(ItemStack stack, Capability<CAP> capability,
         NonNullSupplier<CAP> supplier) {
         return provide(stack::isEmpty, capability, supplier);
     }
@@ -156,9 +183,14 @@ public class ForgeCapabilityHandler {
         return new SimpleProvider<>(invalidated, capability, LazyOptional.of(supplier));
     }
 
-    private record SimpleProvider<CAP>(BooleanSupplier invalidated,
-                                       Capability<CAP> capability,
-                                       LazyOptional<CAP> instance) implements ICapabilityProvider {
+    public static <T, U extends T> ICapabilityProvider makeProvider(Capability<T> cap, U instance) {
+        LazyOptional<T> lazyInstanceButNotReally = LazyOptional.of(() -> instance);
+        return new SimpleProvider<>(() -> false, cap, lazyInstanceButNotReally);
+    }
+
+    public record SimpleProvider<CAP>(BooleanSupplier invalidated,
+                                      Capability<CAP> capability,
+                                      LazyOptional<CAP> instance) implements ICapabilityProvider {
 
         @NotNull
         @Override

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from sys import argv, stdout
 from collections import namedtuple
+from fnmatch import fnmatch
 from html import escape
 import json # codec
 import re # parsing
@@ -66,6 +67,7 @@ types = {
 keys = {
     "use": "Right Click",
     "sneak": "Left Shift",
+    "jump": "Space",
 }
 
 bind1 = (lambda: None).__get__(0).__class__
@@ -175,8 +177,8 @@ test_root = {"i18n": {}, "macros": default_macros, "resource_dir": "Common/src/m
 test_str = "Write the given iota to my $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$().$(br)The $(l:patterns/readwrite#hexcasting:write/local)$(#490)local$() is a lot like a $(l:items/focus)$(#b0b)Focus$(). It's cleared when I stop casting a Hex, starts with $(l:casting/influences)$(#490)Null$() in it, and is preserved between casts of $(l:patterns/meta#hexcasting:for_each)$(#fc77be)Thoth's Gambit$(). "
 
 def localize_pattern(root_data, op_id):
-    return localize(root_data["i18n"], "hexcasting.spell.book." + op_id,
-                    localize(root_data["i18n"], "hexcasting.spell." + op_id))
+    return localize(root_data["i18n"], "hexcasting.action.book." + op_id,
+                    localize(root_data["i18n"], "hexcasting.action." + op_id))
 
 
 def do_localize(root_data, obj, *names):
@@ -191,18 +193,26 @@ def do_format(root_data, obj, *names):
 
 def identity(x): return x
 
-pattern_pat = re.compile(r'HexPattern\.fromAngles\("([qweasd]+)", HexDir\.(\w+)\),\s*modLoc\("([^"]+)"\)([^;]*true\);)?')
-pattern_stubs = [(None, "at/petrak/hexcasting/interop/pehkui/PehkuiInterop.java"), (None, "at/petrak/hexcasting/common/casting/RegisterPatterns.java"), ("Fabric", "at/petrak/hexcasting/fabric/interop/gravity/GravityApiInterop.java")]
+pattern_pat = re.compile(r'make\(\s*"([a-zA-Z0-9_\/]+)",\s*(?:new )?ActionRegistryEntry\(\s*HexPattern\.fromAngles\(\s*"([aqwed]+)",\s*HexDir.(\w+)\),')
+pattern_stubs = [(None, "at/petrak/hexcasting/common/lib/hex/HexActions.java"), ("Fabric", "at/petrak/hexcasting/fabric/FabricHexInitializer.kt")]
+great_world_stubs = [("Fabric", "data/hexcasting/tags/action/per_world_pattern.json")]
 def fetch_patterns(root_data):
     registry = {}
+    great_names = set()
+    for loader, stub in great_world_stubs:
+        filename = f"{root_data['resource_dir'].replace('/main/', '/generated/')}/{stub}"
+        if loader: filename = filename.replace("Common", loader)
+        tag = slurp(filename)
+        for val in tag["values"]:
+            great_names.add(val.replace("hexcasting:", ""))
     for loader, stub in pattern_stubs:
         filename = f"{root_data['resource_dir']}/../java/{stub}"
         if loader: filename = filename.replace("Common", loader)
         with open(filename, "r") as fh:
             pattern_data = fh.read()
             for mobj in re.finditer(pattern_pat, pattern_data):
-                string, start_angle, name, is_per_world = mobj.groups()
-                registry[root_data["modid"] + ":" + name] = (string, start_angle, bool(is_per_world))
+                name, string, start_angle = mobj.groups()
+                registry[root_data["modid"] + ":" + name] = (string, start_angle, name in great_names)
     return registry
 
 def resolve_pattern(root_data, page):
@@ -397,7 +407,8 @@ def get_format(out, ty, value):
     raise ValueError("Unknown format type: " + ty)
 
 def entry_spoilered(root_info, entry):
-    return entry.get("advancement", None) in root_info["spoilers"]
+    if "advancement" not in entry: return False
+    return any(fnmatch(entry["advancement"], pat) for pat in root_info["spoilers"])
 
 def category_spoilered(root_info, category):
     return all(entry_spoilered(root_info, ent) for ent in category["entries"])

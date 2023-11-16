@@ -8,7 +8,11 @@
   "item.hexcasting.dark_oak_staff": "深色橡木法杖",
   "item.hexcasting.crimson_staff": "绯红木法杖",
   "item.hexcasting.warped_staff": "诡异木法杖",
+  "item.hexcasting.mangrove_staff": "红树木法杖",
   "item.hexcasting.edified_staff": "启迪木法杖",
+  "item.hexcasting.quenched_staff": "淬灵晶法杖",
+  "item.hexcasting.mindsplice_staff": "制念法杖",
+  "item.hexcasting.thought_knot": "结念绳",
   "item.hexcasting.focus": "核心",
   "item.hexcasting.focus.sealed": "密封核心",
   "item.hexcasting.spellbook": "法术书",
@@ -18,6 +22,7 @@
   "item.hexcasting.battery": "媒质之瓶",
   "item.hexcasting.amethyst_dust": "紫水晶粉",
   "item.hexcasting.charged_amethyst": "充能紫水晶",
+  "item.hexcasting.quenched_allay_shard": "淬灵晶碎片",
   "item.hexcasting.lens": "探知透镜",
   "item.hexcasting.scroll_small": "小型卷轴",
   "item.hexcasting.scroll_small.of": "是如何拿到此%s卷轴的",
@@ -74,7 +79,8 @@
 
   "entity.hexcasting.wall_scroll": "壁挂卷轴",
 
-  "block.hexcasting.conjured": "构筑的方块",
+  "block.hexcasting.conjured": "构筑的光源",
+  "block.hexcasting.conjured_block": "构筑的方块",
   "block.hexcasting.slate.blank": "空白石板",
   "block.hexcasting.slate.written": "有图案的石板",
   "block.hexcasting.empty_directrix": "空白导向石",
@@ -111,6 +117,7 @@
   "block.hexcasting.amethyst_edified_leaves": "晶紫启迪树叶",
   "block.hexcasting.aventurine_edified_leaves": "砂蓝启迪树叶",
   "block.hexcasting.citrine_edified_leaves": "晶黄启迪树叶",
+  "block.hexcasting.quenched_allay": "淬灵晶块",
 
   "itemGroup.hexcasting": "咒法学",
   "itemGroup.hexcasting.creative_tab": "咒法学",
@@ -172,18 +179,27 @@
   "emi.category.hexcasting.villager_leveling": "职业等级",
   "emi.category.hexcasting.villager_profession": "村民职业",
 
+
   "text.autoconfig.hexcasting.title": "咒法学（Hexcasting）配置",
   "text.autoconfig.hexcasting.category.common": "Common",
   "text.autoconfig.hexcasting.category.client": "Client",
   "text.autoconfig.hexcasting.category.server": "Server",
+
   "text.autoconfig.hexcasting.option.common.dustMediaAmount": "紫水晶粉媒质含量",
   "text.autoconfig.hexcasting.option.common.shardMediaAmount": "紫水晶碎片媒质含量",
   "text.autoconfig.hexcasting.option.common.chargedCrystalMediaAmount": "充能紫水晶媒质含量",
   "text.autoconfig.hexcasting.option.common.mediaToHealthRate": "媒质与生命值交换比率",
+  "text.autoconfig.hexcasting.option.common.cypherCooldown": "杂件使用冷却",
+  "text.autoconfig.hexcasting.option.common.trinketCooldown": "缀品使用冷却",
+  "text.autoconfig.hexcasting.option.common.artifactCooldown": "造物使用冷却",
   "text.autoconfig.hexcasting.option.common.dustMediaAmount.@Tooltip": "单个紫水晶粉所含媒质量",
   "text.autoconfig.hexcasting.option.common.shardMediaAmount.@Tooltip": "单个紫水晶碎片所含媒质量",
   "text.autoconfig.hexcasting.option.common.chargedCrystalMediaAmount.@Tooltip": "单个充能紫水晶所含媒质量",
   "text.autoconfig.hexcasting.option.common.mediaToHealthRate.@Tooltip": "1点生命值可在施法时换算的媒质量",
+  "text.autoconfig.hexcasting.option.common.cypherCooldown.@Tooltip": "杂件使用冷却刻（tick）数",
+  "text.autoconfig.hexcasting.option.common.trinketCooldown.@Tooltip": "缀品使用冷却刻（tick）数",
+  "text.autoconfig.hexcasting.option.common.artifactCooldown.@Tooltip": "造物使用冷却刻（tick）数",
+
   "text.autoconfig.hexcasting.option.client.ctrlTogglesOffStrokeOrder": "Ctrl关闭笔顺显示",
   "text.autoconfig.hexcasting.option.client.invertSpellbookScrollDirection": "反转法术书滚轮方向",
   "text.autoconfig.hexcasting.option.client.invertAbacusScrollDirection": "反转算盘滚轮方向",
@@ -192,6 +208,7 @@
   "text.autoconfig.hexcasting.option.client.invertSpellbookScrollDirection.@Tooltip": "向上滚动滚轮（而非向下）增加法术书当前页页码，反之亦然",
   "text.autoconfig.hexcasting.option.client.invertAbacusScrollDirection.@Tooltip": "向上滚动滚轮（而非向下）增加算盘计数，反之亦然",
   "text.autoconfig.hexcasting.option.client.gridSnapThreshold.@Tooltip": "使用法杖时，吸附至另一点所需划过的距离，0.5意味着需划过50%（取值0.5~1）",
+
   "text.autoconfig.hexcasting.option.server.opBreakHarvestLevel": "破坏方块挖掘等级",
   "text.autoconfig.hexcasting.option.server.maxRecurseDepth": "递归最大深度",
   "text.autoconfig.hexcasting.option.server.maxSpellCircleLength": "法术环最大长度",
@@ -210,6 +227,8 @@
   "text.autoconfig.hexcasting.option.server.fewScrollTables.@Tooltip": "会额外生成较少数量卷轴的战利品表",
   "text.autoconfig.hexcasting.option.server.someScrollTables.@Tooltip": "会额外生成中等数量卷轴的战利品表",
   "text.autoconfig.hexcasting.option.server.manyScrollTables.@Tooltip": "会额外生成较大数量卷轴的战利品表",
+  "text.autoconfig.hexcasting.option.server.scrollInjectionsRaw.@Tooltip": "将战利品表名与卷轴生成数量期望一一对应并罗列。在下列所有战利品表中生成卷轴的概率约50%，生成时会放入1到对应期望个数的卷轴。",
+  "text.autoconfig.hexcasting.option.server.amethystShardModification.@Tooltip": "采掘紫水晶簇时紫水晶碎片掉落数量相较原版的改变量",
 
 
   "advancement.hexcasting:root": "咒法学研究",
@@ -280,11 +299,13 @@
   "hexcasting.subtitles.scroll.dust": "卷轴：被施粉",
   "hexcasting.subtitles.scroll.scribble": "卷轴：被涂写",
   "hexcasting.subtitles.impetus.fletcher.tick": "制箭师促动石：咔哒",
-  "hexcasting.subtitles.impetus.cleric.register": "牧师促动石：叮~",
+  "hexcasting.subtitles.impetus.redstone.register": "牧师促动石：叮~",
   "hexcasting.subtitles.lore_fragment.read": "故事残卷：被阅读",
+  "hexcasting.subtitles.flight.ambience": "玩家：飞翔",
+  "hexcasting.subtitles.flight.finish": "飞翔结束",
   
   "_comment": "hexcasting.spell.book keys override the name of a pattern in the patchouli book if present",
-
+  
   "hexcasting.spell.book.hexcasting:get_entity_height": "测高仪之纯化",
   "hexcasting.spell.book.hexcasting:get_entity/animal": "实体之纯化：动物",
   "hexcasting.spell.book.hexcasting:get_entity/monster": "实体之纯化：怪物",
@@ -506,7 +527,7 @@
 
   "hexcasting.mishap.invalid_pattern": "该图案不对应任何操作",
   "hexcasting.mishap.unescaped": "本应运行一个图案，而实际运行了%s",
-  "hexcasting.mishap.invalid_value": "%1$s本应在栈下标为%3$s处接受%2$s，而实际接受了%4$s",
+  "hexcasting.mishap.invalid_value": "本应在栈下标为%2$s处接受%1$s，而实际接受了%3$s",
   "hexcasting.mishap.invalid_value.class.double": "一个数",
   "hexcasting.mishap.invalid_value.class.boolean": "一个布尔值",
   "hexcasting.mishap.invalid_value.class.vector": "一个向量",
@@ -535,7 +556,7 @@
   "hexcasting.mishap.not_enough_args": "%s本应接受%s个或以上参数，而实际栈中元素数为%s",
   "hexcasting.mishap.no_args": "%s本应接受大于等于%s个参数，而实际为空栈",
   "hexcasting.mishap.too_many_close_parens": "在绘制反思前未先绘制内省",
-  "hexcasting.mishap.location_too_far": "%s超出了%s的影响范围",
+  "hexcasting.mishap.location_too_far": "%s超出影响范围",
   "hexcasting.mishap.location_out_of_world": "%s不在此世界内",
   "hexcasting.mishap.location_too_close_to_out": "%s离世界边界太近了",
   "hexcasting.mishap.location_bad_dimension": "无法在此维度内传送",
@@ -578,14 +599,14 @@
   "hexcasting.mishap.divide_by_zero.sin": "%s的正弦",
   "hexcasting.mishap.divide_by_zero.cos": "%s的余弦",
   "hexcasting.mishap.no_akashic_record": "%s处无阿卡夏记录",
-  "hexcasting.mishap.disallowed": "%s已被服务器管理员禁用于施法",
-  "hexcasting.mishap.disallowed_circle": "%s已被服务器管理员禁用于法术环",
+  "hexcasting.mishap.disallowed": "已被服务器管理员禁用于施法",
+  "hexcasting.mishap.disallowed_circle": "已被服务器管理员禁用于法术环",
   "hexcasting.mishap.invalid_spell_datum_type": "尝试将某无效类型的值用作SpellDatum：%s（class %s）。这是模组中的bug。",
-  "hexcasting.mishap.unknown": "%s抛出异常（%s）。这是模组中的bug。",
+  "hexcasting.mishap.unknown": "抛出异常（%s）。这是模组中的bug。",
   "hexcasting.mishap.shame": "你真是可耻！",
 
   "_comment": "Patchi stuff",
-  
+
   "hexcasting.landing": "我似乎发现了一种全新的魔法，一种在六边形网格上画各式奇诡图案的魔法。它深深地迷住了我。我决定着手撰写一本笔记，以此记述我的想法和研究成果。$(br2)$(l:https://forum.petra-k.at/index.php)论坛链接/$",
 
   "hexcasting.entry.basics": "初入咒法",
@@ -740,6 +761,12 @@
   "hexcasting.page.lens.2": "例如，看向$(item)红石粉/$会给出其信号强度。我猜测随着研究的深入，还能发现新的额外信息。$(br2)此外，用$(l:items/staff)$(item)法杖/$施法时，在另一只手持有探知透镜就能缩短点与点的间距，从而能在网格上绘制更多图案。$(br2)我还可以把它当单片眼镜戴在头上。这样做能显示额外信息，但不会缩小网格。但没关系，总有两全其美的办法……",
   "hexcasting.page.lens.crafting.desc": "$(italic)你必须学会……探知你所看到的事物。/$",
 
+  "hexcasting.entry.thought_knot": "结念绳",
+  "hexcasting.page.thought_knot.1": "健忘者常在手指上缠绕丝线以助记忆。我也坚信我的咒法技艺能活用这种做法。以特定方式绑出的绳结应该能稳定存储一个 iota，且能独立于栈存在。$(br2)我将其称为“$(item)结念绳/$”。",
+  "hexcasting.page.thought_knot.2": "在初合成时，它的存储空间内没有 iota。在另一只手持有$(item)结念绳/$时，绘制$(l:patterns/readwrite#hexcasting:write)$(action)书吏之策略/$就会将栈顶 iota 移除并存入$(item)结念绳/$。绘制$(l:patterns/readwrite#hexcasting:read)$(action)书吏之精思/$则会将$(item)结念绳/$中 iota 复制出来并压入栈顶。$(br2)一旦将 iota 写入$(item)结念绳/$，绳结本身便不再能解开。其中 iota 可被随意读取，但不可被清除或覆写。不过还好，这些绳结十分易得。",
+  "hexcasting.page.thought_knot.3": "另外，如果我在$(item)结念绳/$中写入一个实体，然后在该实体死亡或消失后尝试复制，则$(l:patterns/readwrite#hexcasting:read)$(action)书吏之精思/$会压入一个 $(l:casting/influences)$(thing)Null/$。",
+  "hexcasting.page.thought_knot.crafting.desc": "$(italic)别人要是看到你带着块牌子，上面写着“本人风度翩翩，品貌非凡”，你又会作何感想？/$",
+  
   "hexcasting.entry.focus": "核心",
   "hexcasting.page.focus.1": "$(l:items/focus)$(item)核心/$能存储一个 iota。$(br2)合成核心时，其默认存有 $(l:casting/influences)$(thing)Null/$ 这一虚指。在另一只手持有$(l:items/focus)$(item)核心/$时，可以用$(l:patterns/readwrite#hexcasting:write)$(action)书吏之策略/$将栈顶元素弹出栈并写入其中。而使用$(l:patterns/readwrite#hexcasting:read)$(action)书吏之精思/$就会将$(l:items/focus)$(item)核心/$中的 iota 复制出来并压入栈中。",
   "hexcasting.page.focus.2": "我突然想到，我可以在$(l:items/focus)$(item)核心/$中写入一个由图案组成的列表，将它们复制出来后用$(l:patterns/meta#hexcasting:eval)$(action)赫尔墨斯之策略/$运行就行了。这样就有了施放复杂法术和施放某法术其中一部分的简单方法，不用再在每次使用时全部重画一遍图案了。$(br2)它可以用作一个简易版$(l:items/hexcasting#artifact)$(item)造物/$，但我觉得将某些常用图案“组合”存到$(l:items/focus)$(item)核心/$中更方便，比如返回我在看哪里的图案组合。",
@@ -849,6 +876,16 @@
   "hexcasting.page.akashiclib.akashic_record": "存储和分配图案非常简单但太过磨人，我还有更要紧的事要做。剥离一个精于此道的意识能省很多麻烦。",
   "hexcasting.page.akashiclib.3": "图书馆的使用方法很简单，交给图书管理员一个图案，然后他把对应的 iota 交给你。共有两个相关图案，$(l:patterns/akashic_patterns)笔记在此/$。$(br2)对书架使用一张空白的$(l:items/scroll)$(item)卷轴/$就能将图案复制到$(l:items/scroll)$(item)卷轴/$上。潜行时右击书架就能清除其中数据。",
 
+  "hexcasting.entry.quenching_allays": "淬炼悦灵",
+  "hexcasting.page.quenching_allays.1": "$(l)它们就是小块媒质。/$我怎么没早点发现呢？它们——我是一堆血肉再加上一小点……是被赐予了一小点的思维，但悦灵是能维持自稳的媒质集群，再被按到一小点血肉上去。所有东西就都说得通了——它们对媒质的趋向性，它们对音乐的种种反应，$(l)我现在理解了/$，$(l)但/$为何前人$(l)没有/$？",
+  "hexcasting.page.quenching_allays.2": "理解这点后，唯一$(l)正确/$的选择就是去征服它们奇异的意识——它们奇异的自我——也是它们的全部、一个意识、一个自我、一段尾声。它们的性状似乎揭示了某些东西。我能……我能使用它们压缩$(media)媒质/$，将两束思维叠放在一起，形体与认知，多与一。$(br2)这个过程不知怎么的会自行产生$(media)媒质/$。这是怎么回事？也许——也许是$(l)我/$的缘故，是完成这项任务的过程——",
+  "hexcasting.page.quenching_allays.3": "它不重要。我不重要。它们不重要，重要的只有功用。这就是了。$(br2)这肯定相当痛苦。",
+  "hexcasting.page.quenching_allays.4": "所得的产物十分脆弱。直接破坏会将其打碎成碎片，$(thing)时运/$则能增加产量……如果需要获得方块本身，那要有精准采集才行。$(br2)产生的碎片相当于将 3 个$(l:items/amethyst)$(item)充能紫水晶/$拼在一起。方块则相当于 4 个碎片。",
+  "hexcasting.page.quenching_allays.5": "它们变幻莫测，好像会在我的手中不断变形闪烁，若是给予它们来自另一种$(media)媒质/$形态的引导，它们便会变成对应的形态，且$(media)媒质/$总量前后不变。",
+  
+  "hexcasting.entry.fanciful_staves": "华丽法杖",
+  "hexcasting.page.fanciful_staves.1": "卸去无知的外壳后，更换工具——那些我亲手打磨的法杖——更是理所应当。这些全新的设计并非拥有额外属性——但它们光彩万分，光耀夺目……它们一如我视线边缘的闪烁与光耀。",
+  
   "_comment": "Patterns",
 
   "hexcasting.entry.readers_guide": "如何阅读这一章节",
@@ -913,6 +950,7 @@
   "hexcasting.page.advanced_math.arcsin": "计算所给数（绝对值小于 1）的反正弦，也即正弦为该值的角。与 $(l:patterns/consts#hexcasting:const/double/pi)$(thing)π/$ 和 $(l:patterns/consts#hexcasting:const/double/tau)$(thing)τ/$ 的值有关。",
   "hexcasting.page.advanced_math.arccos": "计算所给数（绝对值小于 1）的反余弦，也即余弦为该值的角。与 $(l:patterns/consts#hexcasting:const/double/pi)$(thing)π/$ 和 $(l:patterns/consts#hexcasting:const/double/tau)$(thing)τ/$ 的值有关。",
   "hexcasting.page.advanced_math.arctan": "计算所给数的反正切，也即正切为该值的角。与 $(l:patterns/consts#hexcasting:const/double/pi)$(thing)π/$ 和 $(l:patterns/consts#hexcasting:const/double/tau)$(thing)τ/$ 的值有关。",
+  "hexcasting.page.advanced_math.arctan2": "计算所给纵坐标与横坐标的反正切，也即计算 X 轴正向，与原点至所给坐标的射线间的夹角。",
   "hexcasting.page.advanced_math.logarithm": "计算以栈顶元素为底的，栈顶往下第二元素为真数的对数。与 $(l:patterns/consts#hexcasting:const/double/e)$(thing)$(italic)e/$ 的值有关。",
 
   "hexcasting.entry.sets": "集合",
@@ -960,6 +998,7 @@
 
   "hexcasting.entry.logic": "逻辑运算",
   "hexcasting.page.logic.bool_coerce": "将参数变换为布尔值。数 $(thing)0/$、$(l:influences#null)$(thing)Null/$，以及空列表会变为 False。其余所有则变为 True。",
+  "hexcasting.page.logic.bool_to_number": "将布尔值变换为数。True 变为 $(thing)1/$， False 变为 $(thing)0/$。",
   "hexcasting.page.logic.not": "如果参数是 True，返回 False；如果参数是 False，返回 True。",
   "hexcasting.page.logic.or": "如果至少有一个参数是 True，返回 True。否则返回 False。",
   "hexcasting.page.logic.and": "如果两个参数都是 True，返回 True。否则返回 False。",
@@ -1071,7 +1110,7 @@
 
   "hexcasting.entry.blockworks": "方块工程",
   "hexcasting.page.blockworks.place_block": "移除一个位置向量，然后挑选一个方块并放在给定位置。$(br)消耗极少量$(media)媒质/$。",
-  "hexcasting.page.blockworks.break_block": "移除一个位置向量，然后破坏给定位置的方块。此法术能破坏几乎所有钻石镐能破坏的方块。$(br)消耗略多于 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
+  "hexcasting.page.blockworks.break_block": "移除一个位置向量，然后破坏给定位置的方块。此法术能破坏几乎所有钻石镐能破坏的方块。$(br)消耗 1/8 个$(l:items/amethyst)$(item)紫水晶粉/$。",
   "hexcasting.page.blockworks.create_water": "在给定位置生成一格水（或给流体容器注入至多一桶水）。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
   "hexcasting.page.blockworks.destroy_water": "清空给定位置的流体容器，或是清除给定位置周围的液体。消耗大约 2 个$(l:items/amethyst)$(item)充能紫水晶/$。",
   "hexcasting.page.blockworks.conjure_block": "在给定位置构筑一个空灵缥缈却坚硬可触的，闪着光的方块。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
@@ -1110,6 +1149,14 @@
 
   "hexcasting.page.colorize": "我需要在施法时在另一只手中持有$(l:items/pigments)$(item)染色剂/$。施法后，染色剂将被消耗而我意识的颜色也将永久改变（至少是在再次施法前）。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
 
+  "hexcasting.entry.flights": "飞行",
+  "hexcasting.page.flights.1": "尽管无法掌握自由飞行的力量，我还是找到了若干能将物体滞空的方法，但各种方法各有缺陷。$(br2)所有种类的飞行法术都会产生微量多余$(media)媒质/$。在法术效果将要结束时，其会产生越来越多红色和黑色的火花。",
+  "hexcasting.page.flights.2": "当然，也有其他种类的飞行法术。例如，将$(l:patterns/spells/basic#hexcasting:add_motion)$(action)驱动/$和$(l:patterns/spells/nadirs#hexcasting:potion/levitation)$(action)蓝阳西沉/$结合使用的类飞行技术自古代起就多有运用。$(br2)我还听说过一种能给予滑翔能力的，可以穿在背上的薄透翼膜。研究表明，被称为“$(l:patterns/great_spells/altiora)$(action)翱翔/$”的卓越法术也许能模仿这种翼膜的功用。",
+  "hexcasting.page.flights.range.1": "受范围限制的飞行法术。",
+  "hexcasting.page.flights.range.2": "第二参数代表水平方向上的半径（以米计），在此范围内，法术能保持稳定。走出该范围就会结束该法术，滞空的物体会直接坠向地面。但只要一直呆在这个范围内，法术的效果便会无限持续。此法术还会额外产生微量$(media)媒质/$用以标记安全区域中心点。$(br2)每米安全范围消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
+  "hexcasting.page.flights.time.1": "受时间限制的飞行法术。",
+  "hexcasting.page.flights.time.2": "第二参数代表持续时间（以秒计），在此限制内，法术能保持稳定。持续时间超过限制就会结束该法术，滞空的物体会直接坠向地面。$(br2)此法术相对较昂贵，每秒持续时间消耗大约 1 个$(l:items/amethyst)$(item)充能紫水晶/$。我觉得它极其适合长途旅行。",
+
   "hexcasting.page.create_lava.1": "在给定位置生成一格熔岩（或给流体容器注入至多一桶熔岩）。消耗大约 1 个$(l:items/amethyst)$(item)充能紫水晶/$。",
   "hexcasting.page.create_lava.2": "建议不要声张自己知道这个法术。某些植物学家对此……比较敏感，至少我听说是这样。$(br2)也罢，确实没人说过探究宇宙最深层的秘密是什么好干的活。",
 
@@ -1118,8 +1165,8 @@
   "hexcasting.page.weather_manip.summon_rain": "我能控制云彩！此法术会在我所处世界各处召来雨水。消耗大约 1 个$(l:items/amethyst)$(item)充能紫水晶/$。若已在下雨就无效。",
   "hexcasting.page.weather_manip.dispel_rain": "召雨的反面。此法术会将我所处世界的雨水驱离。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶碎片/$。若未在下雨就无效。",
 
-  "hexcasting.page.flight.1": "飞行的力量！我已使自然屈膝臣服。但自然懂得复仇，它无时无刻不在盼望着我打破与它的条约，这样它就能打折我的腿。",
-  "hexcasting.page.flight.2": "实体（必须是玩家）将被给予飞行的力量。第一个数字是飞行能持续的时间，第二个数字则是允许飞行区域的半径。如果该玩家飞出了那个区域，或是在空中时时间耗尽，他们所藐视的引力就会出手。极尽其能。$(br2)每米半径、每秒持续时间消耗 1/4 个$(l:items/amethyst)$(item)紫水晶粉/$。",
+  "hexcasting.page.altiora.1": "此法术会将一束$(media)媒质/$在我身旁塑成翅膀状，并赋予其足够物质性，从而允许施法者滑翔。",
+  "hexcasting.page.altiora.2": "这对翅膀的操作方式与$(item)鞘翅/$完全一致。目标（必须是玩家）会被弹起而升空，此时按下$(k:jump)就能张开翅膀。这些翅膀十分脆弱，会在触碰到任意表面时破碎消失。长距飞行则可能需要$(l:patterns/spells/basic#hexcasting:add_motion)$(action)驱动/$或者$(item)烟花火箭/$（可能稍显鲁莽）的协助。$(br2)消耗大约 1 个$(l:items/amethyst)$(item)充能紫水晶/$。",
 
   "hexcasting.page.teleport.1": "比$(l:patterns/spells/basic#hexcasting:blink)$(action)闪现/$更为强大，此法术能让我传送到世界上几乎任何一处！当然它也有极限，但可比我熟悉的施法距离要远得$(italic)多/$。",
   "hexcasting.page.teleport.2": "实体会按所给向量偏移出其原有位置。它似乎一直会消耗大约 10 个$(l:items/amethyst)$(item)充能紫水晶/$，不论传送距离。$(br2)当然这种传送也不是尽善尽美的，在传送如玩家般复杂的实体时，实体身上的物品就不会$(italic)非常/$安稳了，它们可能会散落在目的地周围。还有，传送的实体将会被强制从其所乘坐的无生命载具中卸下……但我曾读到过动物可以一起被传送，大概吧。",

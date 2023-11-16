@@ -20,12 +20,16 @@ public class AmethystReducerFunc extends LootItemConditionalFunction {
         this.delta = delta;
     }
 
-    @Override
-    protected ItemStack run(ItemStack stack, LootContext ctx) {
+    public static ItemStack doStatic(ItemStack stack, LootContext ctx, double amount) {
         if (stack.is(Items.AMETHYST_SHARD)) {
-            stack.setCount((int) (stack.getCount() * (1 + delta)));
+            stack.setCount((int) (stack.getCount() * (1 + amount)));
         }
         return stack;
+    }
+
+    @Override
+    protected ItemStack run(ItemStack stack, LootContext ctx) {
+        return doStatic(stack, ctx, this.delta);
     }
 
     @Override

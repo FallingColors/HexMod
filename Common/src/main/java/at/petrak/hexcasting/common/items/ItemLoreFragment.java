@@ -23,11 +23,11 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class ItemLoreFragment extends Item {
     public static final List<ResourceLocation> NAMES = List.of(new ResourceLocation[]{
-        modLoc("lore/terabithia1"),
-        modLoc("lore/terabithia2"),
-        modLoc("lore/terabithia3"),
-        modLoc("lore/terabithia4"),
-        modLoc("lore/terabithia5"),
+        modLoc("lore/cardamom1"),
+        modLoc("lore/cardamom2"),
+        modLoc("lore/cardamom3"),
+        modLoc("lore/cardamom4"),
+        modLoc("lore/cardamom5"),
         modLoc("lore/experiment1"),
         modLoc("lore/experiment2"),
         modLoc("lore/inventory"),

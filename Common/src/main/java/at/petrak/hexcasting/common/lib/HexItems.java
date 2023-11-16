@@ -1,10 +1,15 @@
 package at.petrak.hexcasting.common.lib;
 
-import at.petrak.hexcasting.common.items.*;
-import at.petrak.hexcasting.common.items.colorizer.ItemDyeColorizer;
-import at.petrak.hexcasting.common.items.colorizer.ItemPrideColorizer;
-import at.petrak.hexcasting.common.items.colorizer.ItemUUIDColorizer;
+import at.petrak.hexcasting.common.items.ItemJewelerHammer;
+import at.petrak.hexcasting.common.items.ItemLens;
+import at.petrak.hexcasting.common.items.ItemLoreFragment;
+import at.petrak.hexcasting.common.items.ItemStaff;
+import at.petrak.hexcasting.common.items.pigment.ItemAmethystAndCopperPigment;
+import at.petrak.hexcasting.common.items.pigment.ItemDyePigment;
+import at.petrak.hexcasting.common.items.pigment.ItemPridePigment;
+import at.petrak.hexcasting.common.items.pigment.ItemUUIDPigment;
 import at.petrak.hexcasting.common.items.magic.*;
+import at.petrak.hexcasting.common.items.storage.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
@@ -32,15 +37,21 @@ public class HexItems {
     public static final Item AMETHYST_DUST = make("amethyst_dust", new Item(props()));
     public static final Item CHARGED_AMETHYST = make("charged_amethyst", new Item(props()));
 
-    public static final ItemStaff STAFF_OAK = make("oak_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_SPRUCE = make("spruce_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_BIRCH = make("birch_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_JUNGLE = make("jungle_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_ACACIA = make("acacia_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_DARK_OAK = make("dark_oak_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_CRIMSON = make("crimson_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_WARPED = make("warped_staff", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_EDIFIED = make("edified_staff", new ItemStaff(unstackable()));
+    public static final Item QUENCHED_SHARD = make("quenched_allay_shard", new Item(props()));
+
+    public static final ItemStaff STAFF_OAK = make("staff/oak", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_SPRUCE = make("staff/spruce", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_BIRCH = make("staff/birch", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_JUNGLE = make("staff/jungle", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_ACACIA = make("staff/acacia", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_DARK_OAK = make("staff/dark_oak", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_CRIMSON = make("staff/crimson", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_WARPED = make("staff/warped", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_MANGROVE = make("staff/mangrove", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_EDIFIED = make("staff/edified", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_QUENCHED = make("staff/quenched", new ItemStaff(unstackable()));
+    // mindsplice staffaratus
+    public static final ItemStaff STAFF_MINDSPLICE = make("staff/mindsplice", new ItemStaff(unstackable()));
 
     public static final ItemLens SCRYING_LENS = make("lens", new ItemLens(
         IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
@@ -48,6 +59,7 @@ public class HexItems {
             .tab(IXplatAbstractions.INSTANCE.getTab())));
 
     public static final ItemAbacus ABACUS = make("abacus", new ItemAbacus(unstackable()));
+    public static final ItemThoughtKnot THOUGHT_KNOT = make("thought_knot", new ItemThoughtKnot(unstackable()));
     public static final ItemFocus FOCUS = make("focus", new ItemFocus(unstackable()));
     public static final ItemSpellbook SPELLBOOK = make("spellbook", new ItemSpellbook(unstackable()));
 
@@ -67,23 +79,25 @@ public class HexItems {
     public static final ItemMediaBattery BATTERY = make("battery",
         new ItemMediaBattery(unstackable()));
 
-    public static final EnumMap<DyeColor, ItemDyeColorizer> DYE_COLORIZERS = Util.make(() -> {
-        var out = new EnumMap<DyeColor, ItemDyeColorizer>(DyeColor.class);
+    public static final EnumMap<DyeColor, ItemDyePigment> DYE_PIGMENTS = Util.make(() -> {
+        var out = new EnumMap<DyeColor, ItemDyePigment>(DyeColor.class);
         for (var dye : DyeColor.values()) {
-            out.put(dye, make("dye_colorizer_" + dye.getName(), new ItemDyeColorizer(dye, unstackable())));
+            out.put(dye, make("dye_colorizer_" + dye.getName(), new ItemDyePigment(dye, unstackable())));
         }
         return out;
     });
-    public static final EnumMap<ItemPrideColorizer.Type, ItemPrideColorizer> PRIDE_COLORIZERS = Util.make(() -> {
-        var out = new EnumMap<ItemPrideColorizer.Type, ItemPrideColorizer>(ItemPrideColorizer.Type.class);
-        for (var politicsInMyVidya : ItemPrideColorizer.Type.values()) {
+    public static final EnumMap<ItemPridePigment.Type, ItemPridePigment> PRIDE_PIGMENTS = Util.make(() -> {
+        var out = new EnumMap<ItemPridePigment.Type, ItemPridePigment>(ItemPridePigment.Type.class);
+        for (var politicsInMyVidya : ItemPridePigment.Type.values()) {
             out.put(politicsInMyVidya, make("pride_colorizer_" + politicsInMyVidya.getName(),
-                new ItemPrideColorizer(politicsInMyVidya, unstackable())));
+                new ItemPridePigment(politicsInMyVidya, unstackable())));
         }
         return out;
     });
 
-    public static final Item UUID_COLORIZER = make("uuid_colorizer", new ItemUUIDColorizer(unstackable()));
+    public static final Item UUID_PIGMENT = make("uuid_colorizer", new ItemUUIDPigment(unstackable()));
+    public static final Item DEFAULT_PIGMENT = make("default_colorizer",
+        new ItemAmethystAndCopperPigment(unstackable()));
 
     // BUFF SANDVICH
     public static final Item SUBMARINE_SANDWICH = make("sub_sandwich",

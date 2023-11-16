@@ -1,29 +1,30 @@
 package at.petrak.hexcasting.forge;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.PatternRegistry;
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting;
 import at.petrak.hexcasting.common.blocks.behavior.HexStrippables;
-import at.petrak.hexcasting.common.casting.RegisterPatterns;
-import at.petrak.hexcasting.common.casting.operators.spells.great.OpFlight;
+import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
+import at.petrak.hexcasting.common.casting.actions.spells.OpFlight;
+import at.petrak.hexcasting.common.casting.actions.spells.great.OpAltiora;
 import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
-import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.common.lib.*;
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
-import at.petrak.hexcasting.common.loot.HexLootHandler;
+import at.petrak.hexcasting.common.lib.hex.*;
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower;
-import at.petrak.hexcasting.common.misc.Brainsweeping;
+import at.petrak.hexcasting.common.misc.BrainsweepingEvents;
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder;
+import at.petrak.hexcasting.common.misc.RegisterMisc;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.ForgeCapabilityHandler;
-import at.petrak.hexcasting.forge.datagen.HexForgeDataGenerators;
+import at.petrak.hexcasting.forge.datagen.ForgeHexDataGenerators;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.forge.interop.curios.CuriosRenderers;
+import at.petrak.hexcasting.forge.lib.ForgeHexArgumentTypeRegistry;
+import at.petrak.hexcasting.forge.lib.ForgeHexLootMods;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
@@ -36,6 +37,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -45,14 +47,15 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.event.entity.living.LivingConversionEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
@@ -60,7 +63,6 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.RegisterEvent;
 import thedarkcolour.kotlinforforge.KotlinModLoadingContext;
@@ -100,19 +102,30 @@ public class ForgeHexInitializer {
         bind(Registry.RECIPE_TYPE_REGISTRY, HexRecipeStuffRegistry::registerTypes);
 
         bind(Registry.ENTITY_TYPE_REGISTRY, HexEntities::registerEntities);
+        bind(Registry.ATTRIBUTE_REGISTRY, HexAttributes::register);
+        bind(Registry.MOB_EFFECT_REGISTRY, HexMobEffects::register);
+        bind(Registry.POTION_REGISTRY, HexPotions::register);
+        HexPotions.addRecipes();
 
         bind(Registry.PARTICLE_TYPE_REGISTRY, HexParticles::registerParticles);
 
-        ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
+        bind(IXplatAbstractions.INSTANCE.getIotaTypeRegistry().key(), HexIotaTypes::registerTypes);
+        bind(IXplatAbstractions.INSTANCE.getActionRegistry().key(), HexActions::register);
+        bind(IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry().key(), HexSpecialHandlers::register);
+        bind(IXplatAbstractions.INSTANCE.getArithmeticRegistry().key(), HexArithmetics::register);
+        bind(IXplatAbstractions.INSTANCE.getEvalSoundRegistry().key(), HexEvalSounds::register);
 
-        HexIotaTypes.registerTypes();
+        ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
+        ForgeHexLootMods.REGISTRY.register(getModEventBus());
 
         HexAdvancementTriggers.registerTriggers();
+
+        RegisterMisc.register();
     }
 
     // https://github.com/VazkiiMods/Botania/blob/1.18.x/Forge/src/main/java/vazkii/botania/forge/ForgeCommonInitializer.java
-    private static <T> void bind(ResourceKey<Registry<T>> registry,
-                                 Consumer<BiConsumer<T, ResourceLocation>> source) {
+    private static <T> void bind(ResourceKey<? extends Registry<T>> registry,
+        Consumer<BiConsumer<T, ResourceLocation>> source) {
         getModEventBus().addListener((RegisterEvent event) -> {
             if (registry.equals(event.getRegistryKey())) {
                 source.accept((t, rl) -> event.register(registry, rl, () -> t));
@@ -131,7 +144,6 @@ public class ForgeHexInitializer {
                 ForgePacketHandler.init();
                 HexComposting.setup();
                 HexStrippables.init();
-                RegisterPatterns.registerPatterns();
                 // Forge does not strictly require TreeGrowers to initialize during early game stages, unlike Fabric
                 // and Quilt.
                 // However, all launcher panic if the same resource is registered twice.  But do need blocks and
@@ -142,6 +154,7 @@ public class ForgeHexInitializer {
 
                 HexInterop.init();
             }));
+
 
         // We have to do these at some point when the registries are still open
         modBus.addListener((RegisterEvent evt) -> {
@@ -155,11 +168,8 @@ public class ForgeHexInitializer {
             }
         });
 
-        modBus.addListener((FMLLoadCompleteEvent evt) ->
-            HexAPI.LOGGER.info(PatternRegistry.getPatternCountInfo()));
-
         evBus.addListener((PlayerInteractEvent.EntityInteract evt) -> {
-            var res = Brainsweeping.tradeWithVillager(
+            var res = BrainsweepingEvents.interactWithBrainswept(
                 evt.getEntity(), evt.getLevel(), evt.getHand(), evt.getTarget(), null);
             if (res.consumesAction()) {
                 evt.setCanceled(true);
@@ -167,11 +177,13 @@ public class ForgeHexInitializer {
             }
         });
         evBus.addListener((LivingConversionEvent.Post evt) ->
-            Brainsweeping.copyBrainsweepFromVillager(evt.getEntity(), evt.getOutcome()));
+            BrainsweepingEvents.copyBrainsweepPostTransformation(evt.getEntity(), evt.getOutcome()));
 
         evBus.addListener((LivingEvent.LivingTickEvent evt) -> {
-            OpFlight.INSTANCE.tickDownFlight(evt.getEntity());
-            ItemLens.tickLens(evt.getEntity());
+            if (evt.getEntity() instanceof ServerPlayer splayer) {
+                OpFlight.tickDownFlight(splayer);
+                OpAltiora.checkPlayerCollision(splayer);
+            }
         });
 
         evBus.addListener((TickEvent.LevelTickEvent evt) -> {
@@ -179,6 +191,9 @@ public class ForgeHexInitializer {
                 PlayerPositionRecorder.updateAllPlayers(world);
             }
         });
+
+        evBus.addListener((ServerStartedEvent evt) ->
+            PatternRegistryManifest.processRegistry(evt.getServer().overworld()));
 
         evBus.addListener((RegisterCommandsEvent evt) -> HexCommands.register(evt.getDispatcher()));
 
@@ -192,10 +207,6 @@ public class ForgeHexInitializer {
             }
             evt.setCanceled(ItemJewelerHammer.shouldFailToBreak(evt.getEntity(), evt.getState(), pos.get()));
         });
-
-        evBus.addListener((LootTableLoadEvent evt) -> HexLootHandler.lootLoad(
-            evt.getName(),
-            builder -> evt.getTable().addPool(builder.build())));
 
         // === Events implemented in other ways on Fabric
 
@@ -226,14 +237,20 @@ public class ForgeHexInitializer {
         evBus.addGenericListener(BlockEntity.class, ForgeCapabilityHandler::attachBlockEntityCaps);
         evBus.addGenericListener(Entity.class, ForgeCapabilityHandler::attachEntityCaps);
 
-        modBus.register(HexForgeDataGenerators.class);
+        modBus.register(ForgeHexDataGenerators.class);
         modBus.register(ForgeCapabilityHandler.class);
         evBus.register(CapSyncers.class);
+
+        modBus.addListener((EntityAttributeModificationEvent e) -> {
+            e.add(EntityType.PLAYER, HexAttributes.GRID_ZOOM);
+            e.add(EntityType.PLAYER, HexAttributes.SCRY_SIGHT);
+        });
 
         if (ModList.get().isLoaded(HexInterop.Forge.CURIOS_API_ID)) {
             modBus.addListener(CuriosApiInterop::onInterModEnqueue);
             modBus.addListener(CuriosApiInterop::onClientSetup);
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> modBus.addListener(CuriosRenderers::onLayerRegister));
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+                () -> () -> modBus.addListener(CuriosRenderers::onLayerRegister));
         }
     }
 

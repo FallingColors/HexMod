@@ -2,13 +2,12 @@ package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.addldata.ItemDelegatingEntityIotaHolder;
-import at.petrak.hexcasting.api.item.ColorizerItem;
-import at.petrak.hexcasting.api.item.HexHolderItem;
-import at.petrak.hexcasting.api.item.IotaHolderItem;
-import at.petrak.hexcasting.api.item.MediaHolderItem;
+import at.petrak.hexcasting.api.casting.iota.DoubleIota;
+import at.petrak.hexcasting.api.item.*;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.spell.iota.DoubleIota;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
+import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.fabric.cc.adimpl.*;
 import dev.onyxstudios.cca.api.v3.component.ComponentFactory;
@@ -34,19 +33,23 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
     // entities
     public static final ComponentKey<CCBrainswept> BRAINSWEPT = ComponentRegistry.getOrCreate(modLoc("brainswept"),
         CCBrainswept.class);
-    public static final ComponentKey<CCFavoredColorizer> FAVORED_COLORIZER = ComponentRegistry.getOrCreate(
-        modLoc("favored_colorizer"), CCFavoredColorizer.class);
+    public static final ComponentKey<CCFavoredPigment> FAVORED_PIGMENT = ComponentRegistry.getOrCreate(
+        modLoc("favored_pigment"), CCFavoredPigment.class);
     public static final ComponentKey<CCSentinel> SENTINEL = ComponentRegistry.getOrCreate(modLoc("sentinel"),
         CCSentinel.class);
     public static final ComponentKey<CCFlight> FLIGHT = ComponentRegistry.getOrCreate(modLoc("flight"),
         CCFlight.class);
-    public static final ComponentKey<CCHarness> HARNESS = ComponentRegistry.getOrCreate(modLoc("harness"),
-        CCHarness.class);
+
+    public static final ComponentKey<CCAltiora> ALTIORA = ComponentRegistry.getOrCreate(modLoc("altiora"),
+        CCAltiora.class);
+    public static final ComponentKey<CCStaffcastImage> STAFFCAST_IMAGE = ComponentRegistry.getOrCreate(modLoc(
+        "harness"),
+        CCStaffcastImage.class);
     public static final ComponentKey<CCPatterns> PATTERNS = ComponentRegistry.getOrCreate(modLoc("patterns"),
         CCPatterns.class);
 
-    public static final ComponentKey<CCColorizer> COLORIZER = ComponentRegistry.getOrCreate(modLoc("colorizer"),
-        CCColorizer.class);
+    public static final ComponentKey<CCPigment> PIGMENT = ComponentRegistry.getOrCreate(modLoc("pigment"),
+        CCPigment.class);
     public static final ComponentKey<CCIotaHolder> IOTA_HOLDER = ComponentRegistry.getOrCreate(modLoc("iota_holder"),
         CCIotaHolder.class);
     public static final ComponentKey<CCMediaHolder> MEDIA_HOLDER = ComponentRegistry.getOrCreate(modLoc("media_holder"),
@@ -54,15 +57,20 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
     public static final ComponentKey<CCHexHolder> HEX_HOLDER = ComponentRegistry.getOrCreate(modLoc("hex_holder"),
         CCHexHolder.class);
 
+    public static final ComponentKey<CCVariantItem> VARIANT_ITEM = ComponentRegistry.getOrCreate(modLoc("variant_item"),
+        CCVariantItem.class);
+
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
         registry.registerFor(Mob.class, BRAINSWEPT, CCBrainswept::new);
-        registry.registerForPlayers(FAVORED_COLORIZER, CCFavoredColorizer::new, RespawnCopyStrategy.ALWAYS_COPY);
+        registry.registerForPlayers(FAVORED_PIGMENT, CCFavoredPigment::new, RespawnCopyStrategy.ALWAYS_COPY);
         registry.registerForPlayers(SENTINEL, CCSentinel::new, RespawnCopyStrategy.ALWAYS_COPY);
+        registry.registerForPlayers(ALTIORA, CCAltiora::new, RespawnCopyStrategy.LOSSLESS_ONLY);
         // Fortunately these are all both only needed on the server and don't want to be copied across death
         registry.registerFor(ServerPlayer.class, FLIGHT, CCFlight::new);
-        registry.registerFor(ServerPlayer.class, HARNESS, CCHarness::new);
+        registry.registerFor(ServerPlayer.class, STAFFCAST_IMAGE, CCStaffcastImage::new);
         registry.registerFor(ServerPlayer.class, PATTERNS, CCPatterns::new);
+
 
         registry.registerFor(ItemEntity.class, IOTA_HOLDER, wrapItemEntityDelegate(
             ItemDelegatingEntityIotaHolder.ToItemEntity::new));
@@ -74,7 +82,7 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
 
     @Override
     public void registerItemComponentFactories(ItemComponentFactoryRegistry registry) {
-        registry.register(i -> i instanceof ColorizerItem, COLORIZER, CCColorizer.ItemBased::new);
+        registry.register(i -> i instanceof PigmentItem, PIGMENT, CCPigment.ItemBased::new);
 
         registry.register(i -> i instanceof IotaHolderItem, IOTA_HOLDER, CCItemIotaHolder.ItemBased::new);
         // oh havoc, you think you're so funny
@@ -92,8 +100,16 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         registry.register(HexItems.CHARGED_AMETHYST, MEDIA_HOLDER, s -> new CCMediaHolder.Static(
             () -> HexConfig.common().chargedCrystalMediaAmount(), ADMediaHolder.CHARGED_AMETHYST_PRIORITY, s
         ));
+        registry.register(HexItems.QUENCHED_SHARD.asItem(), MEDIA_HOLDER, s -> new CCMediaHolder.Static(
+                () -> MediaConstants.QUENCHED_SHARD_UNIT, ADMediaHolder.QUENCHED_SHARD_PRIORITY, s
+        ));
+        registry.register(HexBlocks.QUENCHED_ALLAY.asItem(), MEDIA_HOLDER, s -> new CCMediaHolder.Static(
+            () -> MediaConstants.QUENCHED_BLOCK_UNIT, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, s
+        ));
 
         registry.register(i -> i instanceof HexHolderItem, HEX_HOLDER, CCHexHolder.ItemBased::new);
+
+        registry.register(i -> i instanceof VariantItem, VARIANT_ITEM, CCVariantItem.ItemBased::new);
     }
 
     private <E extends Entity> ComponentFactory<E, CCEntityIotaHolder.Wrapper> wrapItemEntityDelegate(Function<E,

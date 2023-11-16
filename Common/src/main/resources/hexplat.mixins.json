@@ -8,22 +8,25 @@
     "MixinAbstractVillager",
     "MixinMob",
     "MixinRaider",
-    "MixinReloadableServerResources",
     "MixinVillager",
     "MixinWitch",
+    "accessor.AccessorAbstractArrow",
     "accessor.AccessorEntity",
     "accessor.AccessorLivingEntity",
     "accessor.AccessorLootTable",
+    "accessor.AccessorPotionBrewing",
     "accessor.AccessorUseOnContext",
     "accessor.AccessorVillager",
     "accessor.CriteriaTriggersAccessor"
   ],
   "client": [
+    "accessor.client.AccessorBlockEntityRenderDispatcher",
     "accessor.client.AccessorCompositeRenderType",
     "accessor.client.AccessorEmptyTextureStateShard",
     "accessor.client.AccessorMouseHandler",
     "accessor.client.AccessorRenderStateShard",
     "accessor.client.AccessorRenderType",
-    "client.MixinClientLevel"
+    "client.MixinClientLevel",
+    "client.MixinPlayerRenderer"
   ]
 }

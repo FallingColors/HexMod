@@ -19,81 +19,81 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 public class StateIngredientTag extends StateIngredientBlocks {
-    private final TagKey<Block> tag;
+	private final TagKey<Block> tag;
 
-    public StateIngredientTag(ResourceLocation tag) {
-        super(ImmutableSet.of());
-        this.tag = TagKey.create(Registry.BLOCK_REGISTRY, tag);
-    }
+	public StateIngredientTag(ResourceLocation tag) {
+		super(ImmutableSet.of());
+		this.tag = TagKey.create(Registry.BLOCK_REGISTRY, tag);
+	}
 
-    public Stream<Block> resolve() {
-        return StreamSupport.stream(Registry.BLOCK.getTagOrEmpty(tag).spliterator(), false)
-            .map(Holder::value);
-    }
+	public Stream<Block> resolve() {
+		return StreamSupport.stream(Registry.BLOCK.getTagOrEmpty(tag).spliterator(), false)
+			.map(Holder::value);
+	}
 
-    @Override
-    public boolean test(BlockState state) {
-        return state.is(tag);
-    }
+	@Override
+	public boolean test(BlockState state) {
+		return state.is(tag);
+	}
 
-    @Override
-    public BlockState pick(Random random) {
-        var values = resolve().toList();
-        if (values.isEmpty()) {
-            return null;
-        }
-        return values.get(random.nextInt(values.size())).defaultBlockState();
-    }
+	@Override
+	public BlockState pick(Random random) {
+		var values = resolve().toList();
+		if (values.isEmpty()) {
+			return null;
+		}
+		return values.get(random.nextInt(values.size())).defaultBlockState();
+	}
 
-    @Override
-    public JsonObject serialize() {
-        JsonObject object = new JsonObject();
-        object.addProperty("type", "tag");
-        object.addProperty("tag", tag.toString());
-        return object;
-    }
+	@Override
+	public JsonObject serialize() {
+		JsonObject object = new JsonObject();
+		object.addProperty("type", "tag");
+		object.addProperty("tag", tag.location().toString());
+		return object;
+	}
 
-    @Override
-    public List<ItemStack> getDisplayedStacks() {
-        return resolve()
-            .filter(b -> b.asItem() != Items.AIR)
-            .map(ItemStack::new)
-            .collect(Collectors.toList());
-    }
+	@Override
+	public List<ItemStack> getDisplayedStacks() {
+		return resolve()
+			.filter(b -> b.asItem() != Items.AIR)
+			.map(ItemStack::new)
+			.collect(Collectors.toList());
+	}
 
-    @Nonnull
-    @Override
-    protected List<Block> getBlocks() {
-        return resolve().toList();
-    }
+	@Nonnull
+	@Override
+	protected List<Block> getBlocks() {
+		return resolve().toList();
+	}
 
-    @Override
-    public List<BlockState> getDisplayed() {
-        return resolve().map(Block::defaultBlockState).collect(Collectors.toList());
-    }
+	@Override
+	public List<BlockState> getDisplayed() {
+		return resolve().map(Block::defaultBlockState).collect(Collectors.toList());
+	}
 
-    public ResourceLocation getTagId() {
-        return tag.location();
-    }
+	public ResourceLocation getTagId() {
+		return tag.location();
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        return tag.equals(((StateIngredientTag) o).tag);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		return tag.equals(((StateIngredientTag) o).tag);
+	}
 
-    @Override
-    public int hashCode() {
-        return tag.hashCode();
-    }
+	@Override
+	public int hashCode() {
+		return tag.hashCode();
+	}
 
-    @Override
-    public String toString() {
-        return "StateIngredientTag{" + tag + "}";
-    }
+	@Override
+	public String toString() {
+		return "StateIngredientTag{" + tag + "}";
+	}
 }

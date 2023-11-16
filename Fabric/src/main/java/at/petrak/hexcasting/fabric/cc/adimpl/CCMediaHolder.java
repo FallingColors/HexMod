@@ -25,17 +25,17 @@ public abstract class CCMediaHolder extends ItemComponent implements ADMediaHold
         }
 
         @Override
-        public int getMedia() {
+        public long getMedia() {
             return this.mediaHolder.getMedia(this.stack);
         }
 
         @Override
-        public int getMaxMedia() {
+        public long getMaxMedia() {
             return this.mediaHolder.getMaxMedia(this.stack);
         }
 
         @Override
-        public void setMedia(int media) {
+        public void setMedia(long media) {
             this.mediaHolder.setMedia(this.stack, media);
         }
 
@@ -60,12 +60,12 @@ public abstract class CCMediaHolder extends ItemComponent implements ADMediaHold
         }
 
         @Override
-        public int withdrawMedia(int cost, boolean simulate) {
+        public long withdrawMedia(long cost, boolean simulate) {
             return this.mediaHolder.withdrawMedia(this.stack, cost, simulate);
         }
 
         @Override
-        public int insertMedia(int amount, boolean simulate) {
+        public long insertMedia(long amount, boolean simulate) {
             return this.mediaHolder.insertMedia(this.stack, amount, simulate);
         }
     }
@@ -81,17 +81,17 @@ public abstract class CCMediaHolder extends ItemComponent implements ADMediaHold
         }
 
         @Override
-        public int getMedia() {
-            return baseWorth.get() * stack.getCount();
+        public long getMedia() {
+            return (long) baseWorth.get() * stack.getCount();
         }
 
         @Override
-        public int getMaxMedia() {
+        public long getMaxMedia() {
             return getMedia();
         }
 
         @Override
-        public void setMedia(int media) {
+        public void setMedia(long media) {
             // NO-OP
         }
 
@@ -116,8 +116,8 @@ public abstract class CCMediaHolder extends ItemComponent implements ADMediaHold
         }
 
         @Override
-        public int withdrawMedia(int cost, boolean simulate) {
-            int worth = baseWorth.get();
+        public long withdrawMedia(long cost, boolean simulate) {
+            long worth = baseWorth.get();
             if (cost < 0) {
                 cost = worth * stack.getCount();
             }

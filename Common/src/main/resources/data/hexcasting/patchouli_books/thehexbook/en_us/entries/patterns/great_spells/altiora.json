@@ -1,0 +1,22 @@
+{
+  "name": "hexcasting.action.hexcasting:flight",
+  "category": "hexcasting:patterns/great_spells",
+  "icon": "minecraft:elytra",
+  "sortnum": 2,
+  "advancement": "hexcasting:root",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:flight",
+      "anchor": "hexcasting:flight",
+      "input": "player",
+      "output": "",
+      "text": "hexcasting.page.altiora.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.altiora.2"
+    }
+  ]
+}

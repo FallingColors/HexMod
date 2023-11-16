@@ -1,13 +1,16 @@
 {
   "values": [
-    "hexcasting:edified_staff",
-    "hexcasting:oak_staff",
-    "hexcasting:spruce_staff",
-    "hexcasting:birch_staff",
-    "hexcasting:jungle_staff",
-    "hexcasting:acacia_staff",
-    "hexcasting:dark_oak_staff",
-    "hexcasting:crimson_staff",
-    "hexcasting:warped_staff"
+    "hexcasting:staff/edified",
+    "hexcasting:staff/oak",
+    "hexcasting:staff/spruce",
+    "hexcasting:staff/birch",
+    "hexcasting:staff/jungle",
+    "hexcasting:staff/acacia",
+    "hexcasting:staff/dark_oak",
+    "hexcasting:staff/crimson",
+    "hexcasting:staff/warped",
+    "hexcasting:staff/mangrove",
+    "hexcasting:staff/quenched",
+    "hexcasting:staff/mindsplice"
   ]
 }

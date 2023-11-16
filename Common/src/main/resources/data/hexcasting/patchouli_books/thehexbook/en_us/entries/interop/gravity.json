@@ -3,7 +3,7 @@
   "icon": "minecraft:anvil",
   "category": "hexcasting:interop",
   "advancement": "hexcasting:root",
-  "flag": "mod:gravitychanger",
+  "flag": "mod:gravity_api",
   "pages": [
     "hexcasting.page.interop.gravity.1",
     {

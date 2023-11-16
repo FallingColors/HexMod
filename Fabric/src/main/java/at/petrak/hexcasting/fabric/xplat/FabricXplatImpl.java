@@ -4,24 +4,30 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
-import at.petrak.hexcasting.api.misc.FrozenColorizer;
+import at.petrak.hexcasting.api.addldata.ADVariantItem;
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
+import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
+import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
+import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.api.pigment.ColorProvider;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.api.spell.casting.CastingHarness;
-import at.petrak.hexcasting.api.spell.casting.ResolvedPattern;
-import at.petrak.hexcasting.api.spell.casting.sideeffects.EvalSound;
-import at.petrak.hexcasting.api.spell.iota.IotaType;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.network.IMessage;
+import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.fabric.interop.gravity.GravityApiInterop;
 import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsApiInterop;
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
-import at.petrak.hexcasting.mixin.accessor.AccessorVillager;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
@@ -45,10 +51,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.DefaultedRegistry;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
+import net.minecraft.core.*;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -60,8 +63,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -137,25 +138,22 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void brainsweep(Mob mob) {
+    public void setBrainsweepAddlData(Mob mob) {
         var cc = HexCardinalComponents.BRAINSWEPT.get(mob);
         cc.setBrainswept(true);
         // CC API does the syncing for us
-
-        mob.removeFreeWill();
-        if (mob instanceof Villager villager) {
-            ((AccessorVillager) villager).hex$releaseAllPois();
-        }
     }
 
     @Override
-    public void setColorizer(Player target, FrozenColorizer colorizer) {
-        var cc = HexCardinalComponents.FAVORED_COLORIZER.get(target);
-        cc.setColorizer(colorizer);
+    public @Nullable FrozenPigment setPigment(Player target, @Nullable FrozenPigment pigment) {
+        var cc = HexCardinalComponents.FAVORED_PIGMENT.get(target);
+        var old = cc.getPigment();
+        cc.setPigment(pigment);
+        return old;
     }
 
     @Override
-    public void setSentinel(Player target, Sentinel sentinel) {
+    public void setSentinel(Player target, @Nullable Sentinel sentinel) {
         var cc = HexCardinalComponents.SENTINEL.get(target);
         cc.setSentinel(sentinel);
     }
@@ -166,10 +164,14 @@ public class FabricXplatImpl implements IXplatAbstractions {
         cc.setFlight(flight);
     }
 
-    @Override
-    public void setHarness(ServerPlayer target, CastingHarness harness) {
-        var cc = HexCardinalComponents.HARNESS.get(target);
-        cc.setHarness(harness);
+    public void setAltiora(Player target, @Nullable AltioraAbility altiora) {
+        var cc = HexCardinalComponents.ALTIORA.get(target);
+        cc.setAltiora(altiora);
+    }
+
+    public void setStaffcastImage(ServerPlayer target, CastingImage image) {
+        var cc = HexCardinalComponents.STAFFCAST_IMAGE.get(target);
+        cc.setImage(image);
     }
 
     @Override
@@ -185,15 +187,21 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public FlightAbility getFlight(ServerPlayer player) {
+    public @Nullable FlightAbility getFlight(ServerPlayer player) {
         var cc = HexCardinalComponents.FLIGHT.get(player);
         return cc.getFlight();
     }
 
     @Override
-    public FrozenColorizer getColorizer(Player player) {
-        var cc = HexCardinalComponents.FAVORED_COLORIZER.get(player);
-        return cc.getColorizer();
+    public @Nullable AltioraAbility getAltiora(Player player) {
+        var cc = HexCardinalComponents.ALTIORA.get(player);
+        return cc.getAltiora();
+    }
+
+    @Override
+    public FrozenPigment getPigment(Player player) {
+        var cc = HexCardinalComponents.FAVORED_PIGMENT.get(player);
+        return cc.getPigment();
     }
 
     @Override
@@ -203,20 +211,20 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public CastingHarness getHarness(ServerPlayer player, InteractionHand hand) {
-        var cc = HexCardinalComponents.HARNESS.get(player);
-        return cc.getHarness(hand);
+    public CastingVM getStaffcastVM(ServerPlayer player, InteractionHand hand) {
+        var cc = HexCardinalComponents.STAFFCAST_IMAGE.get(player);
+        return cc.getVM(hand);
     }
 
     @Override
-    public List<ResolvedPattern> getPatterns(ServerPlayer player) {
+    public List<ResolvedPattern> getPatternsSavedInUi(ServerPlayer player) {
         var cc = HexCardinalComponents.PATTERNS.get(player);
         return cc.getPatterns();
     }
 
     @Override
     public void clearCastingData(ServerPlayer player) {
-        this.setHarness(player, null);
+        this.setStaffcastImage(player, null);
         this.setPatterns(player, List.of());
     }
 
@@ -224,6 +232,12 @@ public class FabricXplatImpl implements IXplatAbstractions {
     public @Nullable
     ADMediaHolder findMediaHolder(ItemStack stack) {
         var cc = HexCardinalComponents.MEDIA_HOLDER.maybeGet(stack);
+        return cc.orElse(null);
+    }
+
+    @Override
+    public @Nullable ADMediaHolder findMediaHolder(ServerPlayer player) {
+        var cc = HexCardinalComponents.MEDIA_HOLDER.maybeGet(player);
         return cc.orElse(null);
     }
 
@@ -249,14 +263,20 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public boolean isColorizer(ItemStack stack) {
-        return HexCardinalComponents.COLORIZER.isProvidedBy(stack);
+    public @Nullable ADVariantItem findVariantHolder(ItemStack stack) {
+        var cc = HexCardinalComponents.VARIANT_ITEM.maybeGet(stack);
+        return cc.orElse(null);
     }
 
     @Override
-    public int getRawColor(FrozenColorizer colorizer, float time, Vec3 position) {
-        var cc = HexCardinalComponents.COLORIZER.maybeGet(colorizer.item());
-        return cc.map(col -> col.color(colorizer.owner(), time, position)).orElse(0xff_ff00dc);
+    public boolean isPigment(ItemStack stack) {
+        return HexCardinalComponents.PIGMENT.isProvidedBy(stack);
+    }
+
+    @Override
+    public ColorProvider getColorProvider(FrozenPigment pigment) {
+        var cc = HexCardinalComponents.PIGMENT.maybeGet(pigment.item());
+        return cc.map(col -> col.provideColor(pigment.owner())).orElse(ColorProvider.MISSING);
     }
 
     @Override
@@ -307,36 +327,18 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public ResourceLocation getID(Block block) {
-        return Registry.BLOCK.getKey(block);
-    }
-
-    @Override
-    public ResourceLocation getID(Item item) {
-        return Registry.ITEM.getKey(item);
-    }
-
-    @Override
-    public ResourceLocation getID(VillagerProfession profession) {
-        return Registry.VILLAGER_PROFESSION.getKey(profession);
-    }
-
-    @Override
     public Ingredient getUnsealedIngredient(ItemStack stack) {
         return FabricUnsealedIngredient.of(stack);
     }
 
-    private static CreativeModeTab TAB = null;
+    private static final Supplier<CreativeModeTab> TAB = Suppliers.memoize(() -> FabricItemGroupBuilder.create(
+            modLoc("creative_tab"))
+        .icon(HexItems::tabIcon)
+        .build());
 
     @Override
     public CreativeModeTab getTab() {
-        if (TAB == null) {
-            TAB = FabricItemGroupBuilder.create(modLoc("creative_tab"))
-                .icon(HexItems::tabIcon)
-                .build();
-        }
-
-        return TAB;
+        return TAB.get();
     }
 
     // do a stupid hack from botania
@@ -412,11 +414,31 @@ public class FabricXplatImpl implements IXplatAbstractions {
         return namespace;
     }
 
+    private static final Supplier<Registry<ActionRegistryEntry>> ACTION_REGISTRY = Suppliers.memoize(() ->
+        FabricRegistryBuilder.from(new MappedRegistry<ActionRegistryEntry>(
+                ResourceKey.createRegistryKey(modLoc("action")),
+                Lifecycle.stable(), null))
+            .buildAndRegister()
+    );
+    private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
+        Suppliers.memoize(() ->
+            FabricRegistryBuilder.from(new MappedRegistry<SpecialHandler.Factory<?>>(
+                    ResourceKey.createRegistryKey(modLoc("special_handler")),
+                    Lifecycle.stable(), null))
+                .buildAndRegister()
+        );
     private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
         FabricRegistryBuilder.from(new DefaultedRegistry<IotaType<?>>(
                 HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("iota_type")),
                 Lifecycle.stable(), null))
             .buildAndRegister()
+    );
+
+    private static final Supplier<Registry<Arithmetic>> ARITHMETIC_REGISTRY = Suppliers.memoize(() ->
+            FabricRegistryBuilder.from(new DefaultedRegistry<Arithmetic>(
+                            HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("arithmetic")),
+                            Lifecycle.stable(), null))
+                    .buildAndRegister()
     );
     private static final Supplier<Registry<EvalSound>> EVAL_SOUNDS_REGISTRY = Suppliers.memoize(() ->
         FabricRegistryBuilder.from(new DefaultedRegistry<EvalSound>(
@@ -426,8 +448,23 @@ public class FabricXplatImpl implements IXplatAbstractions {
     );
 
     @Override
+    public Registry<ActionRegistryEntry> getActionRegistry() {
+        return ACTION_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<SpecialHandler.Factory<?>> getSpecialHandlerRegistry() {
+        return SPECIAL_HANDLER_REGISTRY.get();
+    }
+
+    @Override
     public Registry<IotaType<?>> getIotaTypeRegistry() {
         return IOTA_TYPE_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<Arithmetic> getArithmeticRegistry() {
+        return ARITHMETIC_REGISTRY.get();
     }
 
     @Override

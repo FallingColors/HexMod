@@ -1,10 +1,11 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
 import at.petrak.hexcasting.api.block.HexBlockEntity;
-import at.petrak.hexcasting.api.spell.iota.Iota;
-import at.petrak.hexcasting.api.spell.math.HexPattern;
+import at.petrak.hexcasting.client.render.HexPatternPoints;
+import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 public class BlockEntityAkashicBookshelf extends HexBlockEntity {
     public static final String TAG_PATTERN = "pattern";
     public static final String TAG_IOTA = "iota";
+    public static final String TAG_DUMMY = "dummy";
 
     // This is only not null if this stores any data.
     private HexPattern pattern = null;
@@ -20,6 +22,8 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
     // We also need a way to display the iota to the client.
     // For both these cases we save just the tag of the iota.
     private CompoundTag iotaTag = null;
+
+    public HexPatternPoints points;
 
     public BlockEntityAkashicBookshelf(BlockPos pWorldPosition, BlockState pBlockState) {
         super(HexBlockEntities.AKASHIC_BOOKSHELF_TILE, pWorldPosition, pBlockState);
@@ -38,7 +42,7 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
     public void setNewMapping(HexPattern pattern, Iota iota) {
         var previouslyEmpty = this.pattern == null;
         this.pattern = pattern;
-        this.iotaTag = HexIotaTypes.serialize(iota);
+        this.iotaTag = IotaType.serialize(iota);
 
         if (previouslyEmpty) {
             var oldBs = this.getBlockState();
@@ -55,8 +59,6 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
         this.pattern = null;
         this.iotaTag = null;
 
-        this.setChanged();
-
         if (!previouslyEmpty) {
             var oldBs = this.getBlockState();
             var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, false);
@@ -72,6 +74,8 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
         if (this.pattern != null && this.iotaTag != null) {
             compoundTag.put(TAG_PATTERN, this.pattern.serializeToNBT());
             compoundTag.put(TAG_IOTA, this.iotaTag);
+        } else {
+            compoundTag.putBoolean(TAG_DUMMY, false);
         }
     }
 
@@ -80,6 +84,9 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
         if (tag.contains(TAG_PATTERN) && tag.contains(TAG_IOTA)) {
             this.pattern = HexPattern.fromNBT(tag.getCompound(TAG_PATTERN));
             this.iotaTag = tag.getCompound(TAG_IOTA);
+        } else if (tag.contains(TAG_DUMMY)) {
+            this.pattern = null;
+            this.iotaTag = null;
         }
     }
 }

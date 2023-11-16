@@ -23,6 +23,16 @@ import net.minecraft.world.item.Items;
 import java.util.function.Consumer;
 
 public class HexAdvancements extends PaucalAdvancementProvider {
+    public static final OvercastTrigger.Instance ENLIGHTEN =
+        new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
+            MinMaxBounds.Ints.ANY,
+            // add a little bit of slop here. use 80% or more health ...
+            MinMaxBounds.Doubles.atLeast(0.8),
+            // and be left with under 1 healthpoint (half a heart)
+            // TODO this means if 80% of your health is less than half a heart, so if you have 2.5 hearts or
+            //  less, you can't become enlightened.
+            MinMaxBounds.Doubles.between(Double.MIN_NORMAL, 1.0));
+
     public HexAdvancements(DataGenerator generatorIn) {
         super(generatorIn, HexAPI.MOD_ID);
     }
@@ -83,15 +93,7 @@ public class HexAdvancements extends PaucalAdvancementProvider {
                 null,
                 FrameType.CHALLENGE, true, true, true))
             .parent(opened_eyes)
-            .addCriterion("health_used",
-                new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
-                    MinMaxBounds.Ints.ANY,
-                    // add a little bit of slop here. use 80% or more health ...
-                    MinMaxBounds.Doubles.atLeast(0.8),
-                    // and be left with under 1 healthpoint (half a heart)
-                    // TODO this means if 80% of your health is less than half a heart, so if you have 2.5 hearts or
-                    //  less, you can't become enlightened.
-                    MinMaxBounds.Doubles.between(Double.MIN_NORMAL, 1.0)))
+            .addCriterion("health_used", ENLIGHTEN)
             .save(consumer, prefix("enlightenment"));
 
         var loreRoot = Advancement.Builder.advancement()

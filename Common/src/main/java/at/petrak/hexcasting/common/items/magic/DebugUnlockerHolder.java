@@ -5,17 +5,17 @@ import net.minecraft.world.item.ItemStack;
 
 public record DebugUnlockerHolder(ItemStack creativeUnlocker) implements ADMediaHolder {
     @Override
-    public int getMedia() {
+    public long getMedia() {
         return Integer.MAX_VALUE;
     }
 
     @Override
-    public int getMaxMedia() {
+    public long getMaxMedia() {
         return Integer.MAX_VALUE - 1;
     }
 
     @Override
-    public void setMedia(int media) {
+    public void setMedia(long media) {
         // NO-OP
     }
 
@@ -40,15 +40,15 @@ public record DebugUnlockerHolder(ItemStack creativeUnlocker) implements ADMedia
     }
 
     @Override
-    public int withdrawMedia(int cost, boolean simulate) {
-        ItemCreativeUnlocker.addToIntArray(creativeUnlocker, ItemCreativeUnlocker.TAG_EXTRACTIONS, cost);
+    public long withdrawMedia(long cost, boolean simulate) {
+        ItemCreativeUnlocker.addToLongArray(creativeUnlocker, ItemCreativeUnlocker.TAG_EXTRACTIONS, cost);
 
         return cost < 0 ? getMedia() : cost;
     }
 
     @Override
-    public int insertMedia(int amount, boolean simulate) {
-        ItemCreativeUnlocker.addToIntArray(creativeUnlocker, ItemCreativeUnlocker.TAG_INSERTIONS, amount);
+    public long insertMedia(long amount, boolean simulate) {
+        ItemCreativeUnlocker.addToLongArray(creativeUnlocker, ItemCreativeUnlocker.TAG_INSERTIONS, amount);
 
         return amount;
     }

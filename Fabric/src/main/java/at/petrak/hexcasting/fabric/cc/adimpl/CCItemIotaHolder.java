@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.fabric.cc.adimpl;
 
+import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
-import at.petrak.hexcasting.api.spell.iota.Iota;
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
 import net.minecraft.nbt.CompoundTag;
@@ -56,7 +56,7 @@ public abstract class CCItemIotaHolder extends ItemComponent implements CCIotaHo
         @Override
         public @Nullable CompoundTag readIotaTag() {
             var iota = this.provider.apply(this.stack);
-            return iota == null ? null : HexIotaTypes.serialize(iota);
+            return iota == null ? null : IotaType.serialize(iota);
         }
 
         @Override

@@ -13,15 +13,76 @@ buildscript {
     }
 }
 
+plugins {
+    id "java"
+    id "maven-publish"
+
+    id "at.petra-k.PKSubprojPlugin"
+}
+
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
-
-archivesBaseName = getArtifactID("forge")
 
 // Adds KFF as dependency and Kotlin libs to the runtime classpath
 // If you already know how to add the Kotlin plugin to Gradle, this is the only line you need for KFF
 apply from: "https://raw.githubusercontent.com/thedarkcolour/KotlinForForge/site/thedarkcolour/kotlinforforge/gradle/kff-" +
         "${kotlinForForgeVersion}.gradle"
+
+pkSubproj {
+    platform "forge"
+    curseforgeJar jar.archiveFile
+    curseforgeDependencies[]
+    modrinthJar jar.archiveFile
+    modrinthDependencies[]
+}
+
+repositories {
+    mavenCentral()
+
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
+    // caelus elytra
+    maven { url = "https://maven.theillusivec4.top" }
+    // pehkui
+    maven { url = "https://jitpack.io" }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
+    compileOnly project(":Common")
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+
+    compileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
+    runtimeOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
+    compileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
+    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
+
+    // aughh
+    testCompileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
+    testCompileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
+
+    implementation fg.deobf("top.theillusivec4.caelus:caelus-forge:$caelusVersion")
+
+    // Optional interop
+
+    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-common-api:$jeiVersion")
+    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge-api:$jeiVersion")
+    runtimeOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge:$jeiVersion")
+
+    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:$minecraftVersion-$curiosVersion:api")
+    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:$minecraftVersion-$curiosVersion")
+
+    api fg.deobf("com.github.Virtuoel:Pehkui:${pehkuiVersion}-${minecraftVersion}-forge")
+}
 
 minecraft {
     mappings channel: 'official', version: minecraftVersion
@@ -100,57 +161,6 @@ minecraft {
     }
 }
 
-repositories {
-    mavenCentral()
-    // Put repositories for dependencies here
-    // ForgeGradle automatically adds the Forge maven and Maven Central for you
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
-
-    maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.dev"
-    }
-}
-
-dependencies {
-    // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
-    compileOnly project(":Common")
-
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-
-    compileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
-    runtimeOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
-
-    // aughh
-    testCompileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
-    testCompileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion")
-
-    // Optional interop
-
-    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-common-api:$jeiVersion")
-    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge-api:$jeiVersion")
-    runtimeOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge:$jeiVersion")
-
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:$minecraftVersion-$curiosVersion:api")
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:$minecraftVersion-$curiosVersion")
-
-    api fg.deobf("com.github.Virtuoel:Pehkui:${pehkuiVersion}-${minecraftVersion}-forge")
-}
 
 mixin {
     add sourceSets.main, "hexcasting.mixins.refmap.json"
@@ -211,4 +221,3 @@ processResources {
 }
 
 jar.finalizedBy('reobfJar')
-setupJar(this)

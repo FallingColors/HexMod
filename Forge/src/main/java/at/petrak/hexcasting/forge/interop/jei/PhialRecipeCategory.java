@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.forge.interop.jei;
 
 import at.petrak.hexcasting.api.mod.HexTags;
-import at.petrak.hexcasting.common.casting.operators.spells.OpMakeBattery;
+import at.petrak.hexcasting.common.casting.actions.spells.OpMakeBattery;
 import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -31,7 +31,7 @@ public class PhialRecipeCategory implements IRecipeCategory<OpMakeBattery> {
         ResourceLocation location = modLoc("textures/gui/phial_jei.png");
         background = guiHelper.drawableBuilder(location, 0, 0, 113, 40).setTextureSize(128, 128).build();
         var craftPhial = modLoc("craft/battery");
-        localizedName = Component.translatable("hexcasting.spell." + craftPhial);
+        localizedName = Component.translatable("hexcasting.action." + craftPhial);
         icon = new PatternDrawable(craftPhial, 12, 12);
     }
 

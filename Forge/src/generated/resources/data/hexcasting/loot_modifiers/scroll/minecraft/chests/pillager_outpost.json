@@ -1,0 +1,10 @@
+{
+  "type": "hexcasting:inject_scrolls",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/pillager_outpost"
+    }
+  ],
+  "countRange": 4
+}

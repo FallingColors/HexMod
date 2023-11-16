@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.item;
 
-import at.petrak.hexcasting.api.spell.iota.Iota;
+import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
@@ -24,7 +25,9 @@ public interface HexHolderItem extends MediaHolderItem {
     @Nullable
     List<Iota> getHex(ItemStack stack, ServerLevel level);
 
-    void writeHex(ItemStack stack, List<Iota> program, int media);
+    void writeHex(ItemStack stack, List<Iota> program, @Nullable FrozenPigment pigment, long media);
 
     void clearHex(ItemStack stack);
+
+    @Nullable FrozenPigment getPigment(ItemStack stack);
 }

@@ -2,15 +2,19 @@
 
 package at.petrak.hexcasting.api.utils
 
-import at.petrak.hexcasting.api.spell.iota.Iota
-import at.petrak.hexcasting.api.spell.iota.ListIota
-import at.petrak.hexcasting.api.spell.math.HexCoord
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
+import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.iota.IotaType
+import at.petrak.hexcasting.api.casting.iota.ListIota
+import at.petrak.hexcasting.api.casting.math.HexCoord
 import net.minecraft.ChatFormatting
+import net.minecraft.core.Registry
 import net.minecraft.nbt.*
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
+import net.minecraft.resources.ResourceKey
+import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.TagKey
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec2
@@ -26,8 +30,13 @@ import kotlin.reflect.KProperty
 const val TAU = Math.PI * 2.0
 const val SQRT_3 = 1.7320508f
 
-fun Vec3.serializeToNBT(): LongArrayTag =
-    LongArrayTag(longArrayOf(this.x.toRawBits(), this.y.toRawBits(), this.z.toRawBits()))
+fun Vec3.serializeToNBT(): CompoundTag {
+    val tag = CompoundTag()
+    tag.putDouble("x", this.x)
+    tag.putDouble("y", this.y)
+    tag.putDouble("z", this.z)
+    return tag
+}
 
 fun vecFromNBT(tag: LongArray): Vec3 = if (tag.size != 3) Vec3.ZERO else
     Vec3(
@@ -35,6 +44,12 @@ fun vecFromNBT(tag: LongArray): Vec3 = if (tag.size != 3) Vec3.ZERO else
         Double.fromBits(tag[1]),
         Double.fromBits(tag[2])
     )
+fun vecFromNBT(tag: CompoundTag): Vec3 {
+    return if (!tag.contains("x") || !tag.contains("y") || !tag.contains("z"))
+        Vec3.ZERO
+    else
+        Vec3(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z"))
+}
 
 fun Vec2.serializeToNBT(): LongArrayTag =
     LongArrayTag(longArrayOf(this.x.toDouble().toRawBits(), this.y.toDouble().toRawBits()))
@@ -247,10 +262,26 @@ inline operator fun <T> WeakValue<T>.setValue(thisRef: Any?, property: KProperty
  * Returns an empty list if it's too complicated.
  */
 fun Iterable<Iota>.serializeToNBT() =
-    if (HexIotaTypes.isTooLargeToSerialize(this))
+    if (IotaType.isTooLargeToSerialize(this))
         ListTag()
     else
         ListIota(this.toList()).serialize()
+
+fun Iterable<Boolean>.serializeToNBT(): ByteArrayTag {
+    val out = ByteArray(if (this is Collection<*>) this.size else 10)
+    for ((i, b) in this.withIndex()) {
+        out[i] = if (b) 1 else 0
+    }
+    return ByteArrayTag(out)
+}
+
+fun <A> List<A>.zipWithDefault(array: ByteArray, default: (idx: Int) -> Byte): List<Pair<A, Byte>> {
+    val list = ArrayList<Pair<A, Byte>>(this.size)
+    var i = 0
+    for (element in this) list.add(element to array.getOrElse(i++, default))
+
+    return list
+}
 
 // Copy the impl from forge
 fun ItemStack.serializeToNBT(): CompoundTag {
@@ -272,3 +303,13 @@ fun <T : Tag> Tag.downcast(type: TagType<T>): T {
 }
 
 const val ERROR_COLOR = 0xff_f800f8.toInt()
+fun <T> isOfTag(registry: Registry<T>, key: ResourceKey<T>, tag: TagKey<T>): Boolean {
+    val maybeHolder = registry.getHolder(key)
+    val holder = if (maybeHolder.isPresent) maybeHolder.get() else return false
+    return holder.`is`(tag)
+}
+
+fun <T> isOfTag(registry: Registry<T>, loc: ResourceLocation, tag: TagKey<T>): Boolean {
+    val key = ResourceKey.create(registry.key(), loc);
+    return isOfTag(registry, key, tag)
+}
