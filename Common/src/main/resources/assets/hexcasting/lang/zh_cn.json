@@ -520,7 +520,7 @@
   "hexcasting.mishap.invalid_value.class.entity": "一个实体",
   "hexcasting.mishap.invalid_value.class.unknown": "（未知，这是个bug）",
   "hexcasting.mishap.invalid_value.numvec": "一个数或向量",
-  "hexcasting.mishap.invalid_value.numlist": "一个数或列表",
+  "hexcasting.mishap.invalid_value.numlist": "一个整数或列表",
   "hexcasting.mishap.invalid_value.list.pattern": "一个由图案组成的列表",
   "hexcasting.mishap.invalid_value.double.positive": "一个正数",
   "hexcasting.mishap.invalid_value.double.positive.less": "一个小于%d的正数",
@@ -578,8 +578,8 @@
   "hexcasting.mishap.divide_by_zero.sin": "%s的正弦",
   "hexcasting.mishap.divide_by_zero.cos": "%s的余弦",
   "hexcasting.mishap.no_akashic_record": "%s处无阿卡夏记录",
-  "hexcasting.mishap.disallowed": "%s已被服务器管理员禁止施法",
-  "hexcasting.mishap.disallowed_circle": "%s已被服务器管理员禁止使用法术环",
+  "hexcasting.mishap.disallowed": "%s已被服务器管理员禁用于施法",
+  "hexcasting.mishap.disallowed_circle": "%s已被服务器管理员禁用于法术环",
   "hexcasting.mishap.invalid_spell_datum_type": "尝试将某无效类型的值用作SpellDatum：%s（class %s）。这是模组中的bug。",
   "hexcasting.mishap.unknown": "%s抛出异常（%s）。这是模组中的bug。",
   "hexcasting.mishap.shame": "你真是可耻！",
@@ -607,7 +607,7 @@
   "hexcasting.entry.spells.desc": "能以魔法影响到世界的图案和操作。",
 
   "hexcasting.entry.great_spells": "卓越法术",
-  "hexcasting.entry.great_spells.desc": "这类法术据信极难施放，但也极为强力。记载它们的文献极为少见（据称理由充分）。这也许只是某些消亡的老古董口中的胡言乱语，不过——它们只是简单的图案罢了。$(br2)试试看又能出什么错呢？",
+  "hexcasting.entry.great_spells.desc": "这类法术据信极难施放，但也极为强力。记载它们的文献极为少见（据称理由充分）。这也许只是某些消亡的老古董口中的胡言乱语，不过——它们只是简单的图案罢了。试试看又能出什么错呢？",
 
 
   "_comment": "Basics",
@@ -644,7 +644,7 @@
   "hexcasting.page.101.4.header": "示例",
   "hexcasting.page.101.4": "有意思的是，图案整体的$(italic)方向/$完全不影响图案的功用。例如，上图中的两个图案都会执行名为$(l:patterns/basics#hexcasting:get_caster)$(action)意识之精思/$的操作。",
   "hexcasting.page.101.5": "$(hex)咒术/$是通过按顺序绘制（有效的）图案施放的。每个操作都能完成如下几件事中的一件：$(li)获取有关环境的信息，然后将其置于栈顶。$(li)操控获取到的信息（例如加和两个数）。或者$(li)产生魔法效果，例如召唤闪电或产生爆炸。（这些操作被称为“法术”。）$(p)在开始施放$(hex)咒术/$时会自动创建一个空栈。操作会影响栈顶的若干元素。",
-  "hexcasting.page.101.6": "例如，$(l:patterns/basics#hexcasting:get_caster)$(action)意识之精思/$会创建一个代表$(italic)我/$，即施法者的 iota，并将其置于栈顶。$(l:patterns/basics#hexcasting:entity_pos/eye)$(action)指南针之纯化/$会接受栈顶的 iota（前提是该 iota 代表一个实体），并将其转换为代表该实体位置的 iota。$(br2)所以，依序绘制上述图案就会在栈顶创建一个代表我的位置的 iota。",
+  "hexcasting.page.101.6": "例如，$(l:patterns/basics#hexcasting:get_caster)$(action)意识之精思/$会创建一个代表$(italic)我/$，即施法者的 iota，并将其置于栈顶。$(l:patterns/basics#hexcasting:get_entity_pos)$(action)指南针之纯化/$会接受栈顶的 iota（前提是该 iota 代表一个实体），并将其转换为代表该实体位置的 iota。$(br2)所以，依序绘制上述图案就会在栈顶创建一个代表我的位置的 iota。",
   "hexcasting.page.101.7": "$(thing)Iota/$ 可以代表诸如我、我的位置等具体事物，也可以代表其他几种能用$(thing)操作/$进行操控的事物。如下是一份全面介绍：$(li)数（某些文献称之为“双精度浮点数”）。$(li)向量，一种可代表世界中位置、运动或方向的，由三个数组成的集合。$(li)布尔值（简称“布尔”），一种代表真和假的抽象概念的的 iota。",
   "hexcasting.page.101.8": "$(li)实体，如我自己、鸡、矿车等。$(li)虚指，一种代表抽象概念的奇怪的 iota。$(li)图案，用于制作魔法物品，也用在某些烧脑的咒术中，如$(italic)能施放其他法术的法术/$。还有$(li)列表，可由上述任意类型的 iota 构成的列表，其本身相当于一个 iota。",
   "hexcasting.page.101.9": "当然，天上不会掉馅饼。所有法术和一些操作会消耗$(media)媒质/$。$(br2)我个人认为，$(hex)咒术/$有点像呈现在自然面前的一个对各类操作的规划。要这么类比的话，$(media)媒质/$便是用来为这个规划提供各式参数和运行支持的能源，而自然会接受你的规划并付诸实践。",
@@ -709,7 +709,7 @@
 
   "hexcasting.entry.influences": "虚指",
   "hexcasting.page.influences.1": "虚指非常……奇怪，至少能这么说。大部分 iota 都代表着世界中的某个实际事物，而虚指则代表着某些更为……抽象或无形的事物。$(br2)例如，我将一种虚指命名为 $(l:casting/influences)$(thing)Null/$，它似乎代表着“无”这种状态。当一个问题没有确切的答案时就会出现一个 Null，比如对着天空执行$(l:patterns/basics#hexcasting:raycast)$(action)弓箭手之馏化/$。",
-  "hexcasting.page.influences.2": "此外，我还发现了一组三个奇特的虚指，命名为$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)考察/$、$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$、$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$和and $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)消解/$。它们似乎同时有着图案和虚指的性质，但实际作用却和这两者都不一样。我能用它们将图案作为 iota 加到栈中，而非执行图案对应的操作。$(l:patterns/patterns_as_iotas)相关笔记在此/$。",
+  "hexcasting.page.influences.2": "此外，我还发现了一组三个奇特的虚指，命名为$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)考察/$、$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$和$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$。它们似乎同时有着图案和虚指的性质，但实际作用却和这两者都不一样。我能用它们将图案作为 iota 加到栈中，而非执行图案对应的操作。$(l:patterns/patterns_as_iotas)相关笔记在此/$。",
   "hexcasting.page.influences.3": "最后，似乎还有一组无限个虚指，它们都代表着一团紊乱的$(media)媒质/$。我称其为$(l:casting/influences)$(action)垃圾/$，因为它们毫无用处。它们似乎会因$(l:casting/mishaps)$(thing)事故/$而在栈中任意位置出现，呈现出来的则是一团乱麻。",
 
   "hexcasting.entry.mishaps2": "启迪后事故",
@@ -885,7 +885,7 @@
   "hexcasting.page.numbers.3": "某些情况下用$(l:items/abacus)$(item)算盘/$会更方便。但数字的“正确”画法也要了然于心。",
 
   "hexcasting.entry.math": "数学",
-  "hexcasting.page.math.numvec": "许多数学操作对数和向量都有效。这类参数记为“num|vec”。",
+  "hexcasting.page.math.numvec": "许多数学操作对数和向量都有效。这类参数记为“num/vec”。",
   "hexcasting.page.math.add.1": "执行加法。",
   "hexcasting.page.math.add.2": "操作如下：$(li)若栈顶为两个数，返回其和。$(li)若为一个数和一个向量，移除该数并将向量的每个分量与其相加。$(li)若为两个向量，将对应分量相加（也即 [1, 2, 3] + [0, 4, -1] = [1, 6, 2]）。",
   "hexcasting.page.math.sub.1": "执行减法。",
@@ -898,11 +898,11 @@
   "hexcasting.page.math.abs_len.2": "将一个数变为其绝对值，将一个向量变为其模长。",
   "hexcasting.page.math.pow_proj.1": "执行乘方或向量射影。",
   "hexcasting.page.math.pow_proj.2": "若栈顶为两个数，返回两数的乘方。$(li)若为一个数和一个向量，移除该数并计算向量的每个分量与该数的乘方。$(li)若为两个向量，计算栈顶向量对栈顶往下第二向量的$(l:https://en.wikipedia.org/wiki/Vector_projection)向量射影/$。$(br2)第一第二种情况下，栈顶元素或其分量为指数, 栈顶往下第二元素或其分量为底数。",
-  "hexcasting.page.math.floor": "对一个数取底，也即去掉小数部分取整。或对向量的每个分量取底。",
-  "hexcasting.page.math.ceil": "对一个数取顶，也即将小数部分不为零的数换为大于其的最小整数。或对向量的每个分量取顶。",
+  "hexcasting.page.math.floor": "对一个数取底，也即去掉小数部分取整。",
+  "hexcasting.page.math.ceil": "对一个数取顶，也即将小数部分不为零的数换为大于其的最小整数。",
   "hexcasting.page.math.construct_vec": "将三个数作为向量的 X，Y，Z 分量组合（最下方为 X 分量）。",
   "hexcasting.page.math.deconstruct_vec": "将一个向量拆分为其 X，Y，Z 分量（最下方为 X 分量）。",
-  "hexcasting.page.math.modulo": "取两数除法的余数。也即执行除法后$(italic)剩余/$的数。例如，5 %% 2 得 1，5 %% 3 得 2。或对向量的每个分量执行上述操作。",
+  "hexcasting.page.math.modulo": "取两数除法的余数。也即执行除法后$(italic)剩余/$的数。例如，5 %% 2 得 1，5 %% 3 得 2。",
   "hexcasting.page.math.coerce_axial": "若栈顶为向量，则返回与其夹角最小的轴向单位向量；零向量不受影响。若栈顶为数，则返回该数的符号；所给数为正则返回 1，为负则返回 -1，0 不受影响。",
   "hexcasting.page.math.random": "返回一个 0 与 1 之间的随机数。",
 
@@ -916,7 +916,7 @@
   "hexcasting.page.advanced_math.logarithm": "计算以栈顶元素为底的，栈顶往下第二元素为真数的对数。与 $(l:patterns/consts#hexcasting:const/double/e)$(thing)$(italic)e/$ 的值有关。",
 
   "hexcasting.entry.sets": "集合",
-  "hexcasting.page.sets.numlist": "集合操作比较奇怪，部分操作只能接受两个数或两个列表，一个数一个列表就不行。这类参数记为“(num, num)|(list, list)”。$(br2)当接受的是数时，它们将被视为所谓二进制的“位组”，也就是由 1 和 0、真和假、“开”和“关”组成的列表。",
+  "hexcasting.page.sets.numlist": "集合操作比较奇怪，部分操作只能接受两个数或两个列表，一个数一个列表就不行。这类参数记为“num, num/list, list”。$(br2)当接受的是数时，它们将被视为所谓二进制的“位组”，也就是由 1 和 0、真和假、“开”和“关”组成的列表。",
   "hexcasting.page.sets.or.1": "取两集合的并集。",
   "hexcasting.page.sets.or.2": "操作如下：$(li)若栈顶为两个数，将其组合为在两个位组中有一个为 1 处为 1 的位组。$(li)若栈顶为两个列表，则创建一个由第一个列表中所有元素和第二个列表独有的元素组成的列表。和$(l:patterns/lists#hexcasting:concat)$(action)组合之馏化/$类似。",
   "hexcasting.page.sets.and.1": "取两集合的交集。",
@@ -1070,8 +1070,8 @@
   "hexcasting.page.basic_spell.beep.2": "共有 16 种$(thing)乐器/$和 25 种$(thing)音高/$。两者的下标均从 0 开始。$(br2)这些乐器似乎就是$(item)音符盒/$对应的各种乐器，尽管其具体对应关系不得而知。$(br2)不管怎么说，用$(l:items/lens)$(item)探知透镜/$观察$(item)音符盒/$就能得知其乐器对应的数字。",
 
   "hexcasting.entry.blockworks": "方块工程",
-  "hexcasting.page.blockworks.place_block": "移除一个位置向量，然后挑选一个方块并放在给定位置。$(br)消耗大约 1/8 个$(l:items/amethyst)$(item)紫水晶粉/$。",
-  "hexcasting.page.blockworks.break_block": "移除一个位置向量，然后破坏给定位置的方块。此法术能破坏几乎所有钻石镐能破坏的方块。$(br)消耗大约 1/8 个$(l:items/amethyst)$(item)紫水晶粉/$。",
+  "hexcasting.page.blockworks.place_block": "移除一个位置向量，然后挑选一个方块并放在给定位置。$(br)消耗极少量$(l:items/amethyst)$(item)紫水晶粉/$。",
+  "hexcasting.page.blockworks.break_block": "移除一个位置向量，然后破坏给定位置的方块。此法术能破坏几乎所有钻石镐能破坏的方块。$(br)消耗略多于 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
   "hexcasting.page.blockworks.create_water": "在给定位置生成一格水（或给流体容器注入至多一桶水）。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
   "hexcasting.page.blockworks.destroy_water": "清空给定位置的流体容器，或是清除给定位置周围的液体。消耗大约 2 个$(l:items/amethyst)$(item)充能紫水晶/$。",
   "hexcasting.page.blockworks.conjure_block": "在给定位置构筑一个空灵缥缈却坚硬可触的，闪着光的方块。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
