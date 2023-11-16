@@ -21,7 +21,7 @@ public class OperatorUnary extends Operator {
 	}
 
 	@Override
-	public @NotNull Iterable<Iota> apply(Iterable<? extends Iota> iotas, CastingEnvironment env) {
+	public @NotNull Iterable<Iota> apply(Iterable<? extends Iota> iotas, @NotNull CastingEnvironment env) {
 		return List.of(inner.apply(iotas.iterator().next()));
 	}
 }

@@ -33,7 +33,7 @@ public class OperatorVec3Delegating extends Operator {
 	}
 
 	@Override
-	public @NotNull Iterable<Iota> apply(Iterable<? extends Iota> iotas, CastingEnvironment env) throws Mishap {
+	public @NotNull Iterable<Iota> apply(Iterable<? extends Iota> iotas, @NotNull CastingEnvironment env) throws Mishap {
 		var it = iotas.iterator();
 		var left = it.next();
 		var right = it.next();

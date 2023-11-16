@@ -21,7 +21,7 @@ public class OperatorBinary extends Operator {
 	}
 
 	@Override
-	public @NotNull Iterable<Iota> apply(Iterable<? extends Iota> iotas, CastingEnvironment env) {
+	public @NotNull Iterable<Iota> apply(Iterable<? extends Iota> iotas, @NotNull CastingEnvironment env) {
 		var it = iotas.iterator();
 		return List.of(inner.apply(it.next(), it.next()));
 	}

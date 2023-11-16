@@ -5,13 +5,9 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
-import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidOperatorArgs
 import at.petrak.hexcasting.common.lib.hex.HexArithmetics
-import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
-import java.util.*
-import java.util.function.Consumer
 
 /**
  * Represents an Operator with the give pattern as its identifier, a special type of Action that calls a different function depending on the type of its arguments.

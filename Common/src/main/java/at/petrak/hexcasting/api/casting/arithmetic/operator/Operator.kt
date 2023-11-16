@@ -9,7 +9,6 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.mishaps.Mishap
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
-import java.awt.Image
 import java.util.function.Consumer
 
 abstract class Operator

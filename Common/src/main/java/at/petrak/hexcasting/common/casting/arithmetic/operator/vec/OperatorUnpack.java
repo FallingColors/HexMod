@@ -22,7 +22,7 @@ public class OperatorUnpack extends Operator {
 	public static OperatorUnpack INSTANCE = new OperatorUnpack();
 
 	@Override
-	public @NotNull Iterable<Iota> apply(Iterable<? extends Iota> iotas, CastingEnvironment env) {
+	public @NotNull Iterable<Iota> apply(Iterable<? extends Iota> iotas, @NotNull CastingEnvironment env) {
 		var it = iotas.iterator();
 		var vec = downcast(it.next(), VEC3).getVec3();
 		return List.of(new DoubleIota(vec.x), new DoubleIota(vec.y), new DoubleIota(vec.z));
