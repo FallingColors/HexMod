@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.common.casting.arithmetic.operator.vec;
 
+import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate;
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate;
 import at.petrak.hexcasting.api.casting.arithmetic.IterPair;
 import at.petrak.hexcasting.api.casting.arithmetic.TripleIterable;
-import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDivideByZero;
@@ -33,7 +33,7 @@ public class OperatorVec3Delegating extends Operator {
 	}
 
 	@Override
-	public @NotNull Iterable<Iota> apply(@NotNull Iterable<Iota> iotas, @NotNull CastingEnvironment env) throws Mishap {
+	public @NotNull Iterable<Iota> apply(Iterable<? extends Iota> iotas, CastingEnvironment env) throws Mishap {
 		var it = iotas.iterator();
 		var left = it.next();
 		var right = it.next();
