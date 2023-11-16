@@ -19,15 +19,8 @@ import java.util.function.Consumer
  */
 data class OperationAction(val pattern: HexPattern) : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stackList = image.stack
-        val stack = Stack<Iota>()
-        stack.addAll(stackList)
-        val startingLength = stackList.size
         return try {
-            val ret: Iterable<Iota> = HexArithmetics.getEngine().run(pattern, stack, startingLength, env)
-            ret.forEach(Consumer { e: Iota -> stack.add(e) })
-            val image2 = image.copy(stack = stack, opsConsumed = image.opsConsumed + 1) // TODO: maybe let operators figure out how many ops to consume?
-            OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
+            HexArithmetics.getEngine().run(pattern, env, image, continuation)
         } catch (e: NoOperatorCandidatesException) {
             throw MishapInvalidOperatorArgs(e.args, e.pattern)
         }
