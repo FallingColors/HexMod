@@ -204,7 +204,7 @@
   "text.autoconfig.hexcasting.option.server.opBreakHarvestLevel.@Tooltip": "破坏方块法术的挖掘等级\n0 = 木，1 = 石，2 = 铁，3 = 钻石，4 = 下界合金",
   "text.autoconfig.hexcasting.option.server.maxRecurseDepth.@Tooltip": "一个操作能执行其他操作的最大次数",
   "text.autoconfig.hexcasting.option.server.maxSpellCircleLength.@Tooltip": "法术环所允许含有石板的最大个数",
-  "text.autoconfig.hexcasting.option.server.actionDenyList.@Tooltip": "被禁用操作的资源位置；试图执行此类操作会导致事故。例如，“hexcasting:get_caster”会禁用意识之精思。",
+  "text.autoconfig.hexcasting.option.server.actionDenyList.@Tooltip": "被禁用操作的资源位置；试图执行此类操作会导致事故。",
   "text.autoconfig.hexcasting.option.server.circleActionDenyList.@Tooltip": "法术环中被禁用操作的资源位置；试图执行此类操作会导致事故",
   "text.autoconfig.hexcasting.option.server.villagersOffendedByMindMurder.@Tooltip": "村民是否会在其他村民被剥离意识时感到气愤",
   "text.autoconfig.hexcasting.option.server.fewScrollTables.@Tooltip": "会额外生成较少数量卷轴的战利品表",
@@ -903,7 +903,7 @@
   "hexcasting.page.math.construct_vec": "将三个数作为向量的 X，Y，Z 分量组合（最下方为 X 分量）。",
   "hexcasting.page.math.deconstruct_vec": "将一个向量拆分为其 X，Y，Z 分量（最下方为 X 分量）。",
   "hexcasting.page.math.modulo": "取两数除法的余数。也即执行除法后$(italic)剩余/$的数。例如，5 %% 2 得 1，5 %% 3 得 2。",
-  "hexcasting.page.math.coerce_axial": "若栈顶为向量，则返回与其夹角最小的轴向单位向量；零向量不受影响。若栈顶为数，则返回该数的符号；所给数为正则返回 1，为负则返回 -1，0 不受影响。",
+  "hexcasting.page.math.coerce_axial": "返回与所给向量夹角最小的轴向单位向量；零向量不受影响。",
   "hexcasting.page.math.random": "返回一个 0 与 1 之间的随机数。",
 
   "hexcasting.entry.advanced_math": "高阶数学",
@@ -1070,7 +1070,7 @@
   "hexcasting.page.basic_spell.beep.2": "共有 16 种$(thing)乐器/$和 25 种$(thing)音高/$。两者的下标均从 0 开始。$(br2)这些乐器似乎就是$(item)音符盒/$对应的各种乐器，尽管其具体对应关系不得而知。$(br2)不管怎么说，用$(l:items/lens)$(item)探知透镜/$观察$(item)音符盒/$就能得知其乐器对应的数字。",
 
   "hexcasting.entry.blockworks": "方块工程",
-  "hexcasting.page.blockworks.place_block": "移除一个位置向量，然后挑选一个方块并放在给定位置。$(br)消耗极少量$(l:items/amethyst)$(item)紫水晶粉/$。",
+  "hexcasting.page.blockworks.place_block": "移除一个位置向量，然后挑选一个方块并放在给定位置。$(br)消耗极少量$(media)媒质/$。",
   "hexcasting.page.blockworks.break_block": "移除一个位置向量，然后破坏给定位置的方块。此法术能破坏几乎所有钻石镐能破坏的方块。$(br)消耗略多于 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
   "hexcasting.page.blockworks.create_water": "在给定位置生成一格水（或给流体容器注入至多一桶水）。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
   "hexcasting.page.blockworks.destroy_water": "清空给定位置的流体容器，或是清除给定位置周围的液体。消耗大约 2 个$(l:items/amethyst)$(item)充能紫水晶/$。",
