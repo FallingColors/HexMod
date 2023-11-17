@@ -37,7 +37,7 @@ public record CapItemMediaHolder(MediaHolderItem holder,
 
     @Override
     public int getConsumptionPriority() {
-        return 40;
+        return ADMediaHolder.BATTERY_PRIORITY;
     }
 
     @Override
