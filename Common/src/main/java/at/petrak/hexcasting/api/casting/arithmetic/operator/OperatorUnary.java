@@ -12,7 +12,7 @@ import java.util.function.UnaryOperator;
 /**
  * A helper class for defining {@link Operator}s of one iota.
  */
-public class OperatorUnary extends Operator {
+public class OperatorUnary extends OperatorBasic {
 	public UnaryOperator<Iota> inner;
 
 	public OperatorUnary(IotaMultiPredicate accepts, UnaryOperator<Iota> inner) {
