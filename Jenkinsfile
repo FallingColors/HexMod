@@ -24,6 +24,17 @@ pipeline {
                 sh './gradlew build'
             }
         }
+        stage('Check Datagen') {
+            steps {
+                echo 'Running datagen tasks'
+                sh './gradlew runAllDatagen'
+                script {
+                    if (currentBuild.changeSets.size() > 0) {
+                        error('Build contains changes after finishing the runAllDatagen task. Please run the datagen locally and commit/push the updated files.')
+                    }
+                }
+            }
+        }
         stage('Publish') {
             when {
                 anyOf {
