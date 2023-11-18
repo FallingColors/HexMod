@@ -7,22 +7,22 @@ from hexdoc.minecraft import I18n
 from hexdoc.patchouli import BookContext, FormatTree
 from hexdoc.patchouli.text import STYLE_REGEX, SpecialStyleType, Style, resolve_macros
 from hexdoc.plugin import (
-    DefaultRenderedTemplatesImpl,
     HookReturn,
-    LoadJinjaTemplatesImpl,
-    LoadResourceDirsImpl,
     LoadTaggedUnionsImpl,
-    MinecraftVersionImpl,
-    ModVersionImpl,
+    ModPlugin,
+    ModPluginImpl,
+    ModPluginWithBook,
     UpdateContextImpl,
     ValidateFormatTreeImpl,
     hookimpl,
 )
 from hexdoc.utils import relative_path_root
+from typing_extensions import override
 
 import hexdoc_hexcasting
 
-from .__gradle_version__ import GRADLE_VERSION, MINECRAFT_VERSION
+from .__gradle_version__ import FULL_VERSION, GRADLE_VERSION, MINECRAFT_VERSION
+from .__version__ import PY_VERSION
 from .book import recipes
 from .book.page import pages
 from .metadata import HexContext, HexProperties
@@ -50,53 +50,20 @@ def check_action_links(tree: FormatTree, in_link: bool, action_style: Style):
 
 
 class HexcastingPlugin(
-    LoadResourceDirsImpl,
     LoadTaggedUnionsImpl,
-    LoadJinjaTemplatesImpl,
-    ModVersionImpl,
     ValidateFormatTreeImpl,
-    MinecraftVersionImpl,
     UpdateContextImpl,
-    DefaultRenderedTemplatesImpl,
+    ModPluginImpl,
 ):
     @staticmethod
     @hookimpl
-    def hexdoc_mod_version() -> str:
-        return GRADLE_VERSION
-
-    @staticmethod
-    @hookimpl
-    def hexdoc_minecraft_version() -> str:
-        return MINECRAFT_VERSION
-
-    @staticmethod
-    @hookimpl
-    def hexdoc_load_resource_dirs() -> HookReturn[Package]:
-        # lazy import because generated may not exist when this file is loaded
-        # eg. when generating the contents of generated
-        # so we only want to import it if we actually need it
-        from hexdoc_hexcasting._export import generated
-
-        return generated
+    def hexdoc_mod_plugin(branch: str) -> ModPlugin:
+        return HexcastingModPlugin(branch=branch)
 
     @staticmethod
     @hookimpl
     def hexdoc_load_tagged_unions() -> HookReturn[Package]:
         return [recipes, pages]
-
-    @staticmethod
-    @hookimpl
-    def hexdoc_load_jinja_templates() -> tuple[Package, str]:
-        return hexdoc_hexcasting, "_templates"
-
-    @staticmethod
-    @hookimpl
-    def hexdoc_default_rendered_templates(templates: dict[str | Path, str]) -> None:
-        templates.update(
-            {
-                "hexcasting.js": "hexcasting.js.jinja",
-            }
-        )
 
     @staticmethod
     @hookimpl
@@ -128,3 +95,49 @@ class HexcastingPlugin(
         action_style = Style.parse(match[1], book_id, i18n, is_0_black)
         if isinstance(action_style, Style):
             check_action_links(tree, False, action_style)
+
+
+class HexcastingModPlugin(ModPluginWithBook):
+    @property
+    @override
+    def modid(self) -> str:
+        return "hexcasting"
+
+    @property
+    @override
+    def full_version(self) -> str:
+        return FULL_VERSION
+
+    @property
+    @override
+    def mod_version(self) -> str:
+        return GRADLE_VERSION
+
+    @property
+    @override
+    def plugin_version(self) -> str:
+        return PY_VERSION
+
+    @property
+    @override
+    def compat_minecraft_version(self) -> str:
+        return MINECRAFT_VERSION
+
+    @override
+    def resource_dirs(self) -> HookReturn[Package]:
+        # lazy import because generated may not exist when this file is loaded
+        # eg. when generating the contents of generated
+        # so we only want to import it if we actually need it
+        from hexdoc_hexcasting._export import generated
+
+        return generated
+
+    @override
+    def jinja_template_root(self) -> tuple[Package, str]:
+        return hexdoc_hexcasting, "_templates"
+
+    @override
+    def default_rendered_templates(self) -> dict[str | Path, str]:
+        return {
+            "hexcasting.js": "hexcasting.js.jinja",
+        }
