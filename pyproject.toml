@@ -16,21 +16,9 @@ authors = [
 ]
 readme = "doc/README.md"
 license = { file = "doc/LICENSE.txt" }
-keywords = [
-    "hexdoc",
-]
+keywords = ["hexdoc"]
 requires-python = ">=3.11"
-dependencies = [
-    # "hexdoc~=1!0.1.dev",
-    "hexdoc @ git+https://github.com/object-Object/hexdoc.git@textures", # TODO: remove
-]
-dynamic = ["version"]
-
-[project.optional-dependencies]
-dev = [
-    "black==23.7.0",
-    "isort==5.12.0",
-]
+dynamic = ["version", "dependencies", "optional-dependencies"]
 
 [project.urls]
 Homepage = "https://gamma-delta.github.io/HexMod/"
@@ -45,6 +33,17 @@ allow-direct-references = true # TODO: remove
 scheme = "gradle"
 source = "gradle-properties"
 py-path = "doc/src/hexdoc_hexcasting/__version__.py"
+
+[tool.hatch.metadata.hooks.gradle-properties]
+dependencies = [
+    # "hexdoc~=1!0.1.dev",
+    "hexdoc @ git+https://github.com/object-Object/hexdoc.git@textures", # TODO: remove
+]
+
+[tool.hatch.metadata.hooks.gradle-properties.optional-dependencies]
+dev = [
+    "ruff~=0.1.4",
+]
 
 # project structure
 

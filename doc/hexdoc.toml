@@ -22,14 +22,8 @@ _pattern_regex = { "!Raw"='make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:A
 path = "{^^^_common.package}/common/lib/hex/HexActions.java"
 regex = "{^_pattern_regex}"
 
-[minecraft_assets]
-# https://github.com/PrismarineJS/minecraft-assets/tree/83e2169afbbce40990d69fc53e5962e4a793d467/data/1.19.1
-ref = "83e2169afbbce40990d69fc53e5962e4a793d467"
-version = "1.19.1"
-
 [textures]
 missing = [
-    "minecraft:*",
     "hexcasting:conjured_block",
     "hexcasting:conjured_light",
 ]
