@@ -10,6 +10,7 @@ resource_dirs = [  # top takes priority
     "{_fabric.src}/generated/resources",
     "{_forge.src}/main/resources",
     "{_forge.src}/generated/resources",
+    { modid="minecraft" },
     { modid="hexdoc" },
 ]
 export_dir = "src/hexdoc_hexcasting/_export/generated"

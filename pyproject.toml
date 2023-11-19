@@ -37,7 +37,9 @@ py-path = "doc/src/hexdoc_hexcasting/__version__.py"
 [tool.hatch.metadata.hooks.gradle-properties]
 dependencies = [
     # "hexdoc~=1!0.1.dev",
+    # { package="hexdoc-minecraft", op="~=", py-version="1.0.dev", key="minecraftVersion" },
     "hexdoc @ git+https://github.com/object-Object/hexdoc.git@textures", # TODO: remove
+    "hexdoc-minecraft @ git+https://github.com/object-Object/hexdoc-minecraft.git@main"
 ]
 
 [tool.hatch.metadata.hooks.gradle-properties.optional-dependencies]
