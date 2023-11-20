@@ -85,7 +85,10 @@ class HexcastingPlugin(
         i18n: I18n,
         is_0_black: bool,
     ):
-        if "$(action)" not in macros:
+        # the values in FAKE_ACTIONS are from the default language, ie. en_us
+        # so just skip this validation for other languages
+        # (TODO: hack)
+        if "$(action)" not in macros or not i18n.is_default:
             return
 
         match = re.search(STYLE_REGEX, resolve_macros("$(action)", macros))
