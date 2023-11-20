@@ -39,7 +39,7 @@ dependencies = [
     # "hexdoc~=1!0.1.dev",
     # { package="hexdoc-minecraft", op="~=", py-version="1.0.dev", key="minecraftVersion" },
     "hexdoc @ git+https://github.com/object-Object/hexdoc.git@textures", # TODO: remove
-    "hexdoc-minecraft @ git+https://github.com/object-Object/hexdoc-minecraft.git@main"
+    "hexdoc-minecraft @ https://github.com/object-Object/hexdoc-minecraft/raw/3f123fac2c4114726144721b5af6a00a8d2ebb9a/docs/v/latest/main/dist/hexdoc_minecraft-1.20.1.1.0.dev0-py3-none-any.whl"
 ]
 
 [tool.hatch.metadata.hooks.gradle-properties.optional-dependencies]
