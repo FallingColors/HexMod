@@ -28,10 +28,6 @@ env:
 permissions:
   contents: read
 
-concurrency:
-  group: hexdoc
-  cancel-in-progress: false
-
 jobs:
   hexdoc:
     uses: object-Object/hexdoc/.github/workflows/hexdoc.yml@textures
@@ -53,6 +49,9 @@ jobs:
   publish-pypi:
     runs-on: ubuntu-latest
     needs: hexdoc
+    concurrency:
+      group: pypi
+      cancel-in-progress: false
     if: |-
       needs.hexdoc.outputs.release == 'true' &&
       (github.event_name != 'workflow_dispatch' || inputs.publish == 'PyPI (release)')
