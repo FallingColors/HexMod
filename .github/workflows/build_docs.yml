@@ -1,29 +1,78 @@
-name: Build the Python doc-gen
+name: Build the web book
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - '1.20'
+      - '1.19'
+      - '1.18'
+  workflow_dispatch:
+    inputs:
+      release:
+        description: Release this version
+        type: boolean
+        default: false
+      publish:
+        description: Package index to publish to
+        type: choice
+        options:
+          - none
+          - PyPI (release)
+      segment:
+        description: Version segment to bump with Hatch
+        type: string
+        required: false
+
+env:
+  PYPI_PACKAGE: hexdoc-hexcasting
+
+permissions:
+  contents: read
 
 jobs:
-  build_docs:
-    runs-on: ubuntu-latest
+  hexdoc:
+    uses: object-Object/hexdoc/.github/workflows/hexdoc.yml@v1!0.dev
     permissions:
       contents: write
+      pages: read
+    secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    with:
+      python-version: "3.11"
+      release: |-
+        ${{
+          github.event_name == 'workflow_dispatch' && inputs.release
+          || startsWith(github.event.head_commit.message, '[Release]')
+          || startsWith(github.ref, 'refs/tags')
+        }}
+      bump-version-segment: ${{ inputs.segment }}
+
+  publish-pypi:
+    runs-on: ubuntu-latest
+    needs: hexdoc
+    concurrency:
+      group: pypi
+      cancel-in-progress: false
+    if: |-
+      needs.hexdoc.outputs.release == 'true' &&
+      (github.event_name != 'workflow_dispatch' || inputs.publish == 'PyPI (release)')
+
+    environment:
+      name: pypi
+      url: https://pypi.org/p/${{ env.PYPI_PACKAGE }}
+    permissions:
+      id-token: write
+      contents: write
+
     steps:
-    - uses: actions/checkout@v3
-    - name: Generate file
-      run: doc/collate_data.py Common/src/main/resources hexcasting thehexbook doc/template.html index.html.uncommitted
-    - name: Check out gh-pages
-      uses: actions/checkout@v3
-      with:
-        clean: false
-        ref: gh-pages
-    - name: Overwrite file and commmit
-      run: |
-          mv index.html.uncommitted index.html
-          git config user.name "Documentation Generation Bot"
-          git config user.email "noreply@github.com"
-          git add index.html
-          git diff-index --quiet HEAD || git commit -m "Update docs at index.html from $GITHUB_REF"
-    - name: Upload changes
-      run: git push
+      - uses: actions/checkout@v3
+
+      - name: Download package artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: hexdoc-build
+          path: dist
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
