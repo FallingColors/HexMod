@@ -1,0 +1,34 @@
+{
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports.ruff": true,
+        },
+        "editor.rulers": [88],
+    },
+    "[yaml][html][css][javascript][jinja-html][jinja-css][jinja-js]": {
+        "editor.tabSize": 2,
+    },
+    "[html][jinja-html]": {
+        "editor.rulers": [120],
+    },
+    "ruff.organizeImports": true,
+    "ruff.lint.args": [
+        "--extend-ignore=I", // format on save is enabled, so don't show the squiggles
+    ],
+    "python.languageServer": "Pylance",
+    "python.analysis.diagnosticMode": "workspace",
+    "python.analysis.packageIndexDepths": [
+        {"name": "hexdoc", "depth": 3},
+        {"name": "pydantic", "depth": 2},
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "files.associations": {
+        "*.js.jinja": "javascript",
+        "*.css.jinja": "css",
+        "*.jcss.jinja": "jinja-css", // for files with a lot of jinja stuff, where the linting isn't useful
+        "*.json5.jinja": "json5",
+    },
+}

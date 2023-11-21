@@ -15,8 +15,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:edified_planks",
-      "recipe2": "hexcasting:edified_wood"
+      "recipe": "hexcasting:edified_planks"
     },
     {
       "type": "patchouli:crafting",

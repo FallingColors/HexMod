@@ -1,7 +1,7 @@
 {
   "name": "hexcasting.entry.fanciful_staves",
   "category": "hexcasting:greatwork",
-  "icon": "hexcasting:mindsplice_staff",
+  "icon": "hexcasting:staff/mindsplice",
   "sortnum": 6,
   "advancement": "hexcasting:enlightenment",
   "entry_color": "54398a",
@@ -12,8 +12,8 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:quenched_staff",
-      "recipe2": "hexcasting:mindsplice_staff"
+      "recipe": "hexcasting:staff/quenched",
+      "recipe2": "hexcasting:staff/mindsplice"
     }
   ]
 }

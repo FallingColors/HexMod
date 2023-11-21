@@ -1,0 +1,25 @@
+// 1.20.1	2023-08-06T13:31:21.8548194	Tags for minecraft:item mod id vanilla
+2f5c5bd21580004c998765215166adaa72e0d96b data/forge/tags/items/dusts/amethyst.json
+873bab891e0827973ebfe9fedd352c95778d7fbe data/forge/tags/items/gems.json
+c5aac196bf97183b43d794c6aac8e206f4b71e37 data/hexcasting/tags/items/brainswept_circle_components.json
+abaec2d0102fef5865ac638cf7c528a4d5b2a69b data/hexcasting/tags/items/directrices.json
+7e27f819889d2f0bca863b1cdb6d7d640ea21986 data/hexcasting/tags/items/edified_logs.json
+86828f8056bfdfdd2aff10d7a9dbc6c269c25b8a data/hexcasting/tags/items/edified_planks.json
+03bd3a58ae7367d6a21eb3acbbd70fe65a41b8f6 data/hexcasting/tags/items/grants_root_advancement.json
+7f71f33b0bc9fde24deef080ab64707df38adfd6 data/hexcasting/tags/items/impeti.json
+7f7d5f6cc9b5cfb39d240fc901c4ae2d2037ec14 data/hexcasting/tags/items/phial_base.json
+d878c230cd5cb1b54fbe6e53f3ef71379d080c6f data/hexcasting/tags/items/seal_materials.json
+5cc8bac77dddad65de1a1cc9c07b46bb1eab01b9 data/hexcasting/tags/items/staves.json
+841dfbe4970e9167b205e5aa2b0f0936c6b9af60 data/minecraft/tags/items/buttons.json
+cba96d2ff28087e7fd9807e5e80104f3befc2512 data/minecraft/tags/items/doors.json
+6312e44ef31d2401dddbd46c4d3eda03da6e2db3 data/minecraft/tags/items/leaves.json
+7e27f819889d2f0bca863b1cdb6d7d640ea21986 data/minecraft/tags/items/logs.json
+7e27f819889d2f0bca863b1cdb6d7d640ea21986 data/minecraft/tags/items/logs_that_burn.json
+86828f8056bfdfdd2aff10d7a9dbc6c269c25b8a data/minecraft/tags/items/planks.json
+087e6cf0dce47d3a4918566058019139b32e1dfa data/minecraft/tags/items/slabs.json
+5c3c820c9b6e18b7916d8a862828707f28ce1f59 data/minecraft/tags/items/trapdoors.json
+841dfbe4970e9167b205e5aa2b0f0936c6b9af60 data/minecraft/tags/items/wooden_buttons.json
+cba96d2ff28087e7fd9807e5e80104f3befc2512 data/minecraft/tags/items/wooden_doors.json
+ee24953b8f5d4742f03c57842a3588618bbc5a0a data/minecraft/tags/items/wooden_pressure_plates.json
+087e6cf0dce47d3a4918566058019139b32e1dfa data/minecraft/tags/items/wooden_slabs.json
+5c3c820c9b6e18b7916d8a862828707f28ce1f59 data/minecraft/tags/items/wooden_trapdoors.json

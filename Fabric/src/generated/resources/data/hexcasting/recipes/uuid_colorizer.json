@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "hexcasting:amethyst_dust"
+    },
+    "D": {
+      "item": "hexcasting:amethyst_dust"
+    },
+    "I": {
+      "item": "minecraft:amethyst_shard"
+    }
+  },
+  "pattern": [
+    "DCD",
+    "CIC",
+    "DCD"
+  ],
+  "result": {
+    "item": "hexcasting:uuid_colorizer"
+  },
+  "show_notification": true
+}

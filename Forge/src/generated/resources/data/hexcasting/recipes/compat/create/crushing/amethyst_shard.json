@@ -1,0 +1,32 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "forge:mod_loaded",
+          "modid": "create"
+        }
+      ],
+      "recipe": {
+        "type": "create:crushing",
+        "ingredients": [
+          {
+            "item": "minecraft:amethyst_shard"
+          }
+        ],
+        "processingTime": 150,
+        "results": [
+          {
+            "count": 4,
+            "item": "hexcasting:amethyst_dust"
+          },
+          {
+            "chance": 0.5,
+            "item": "hexcasting:amethyst_dust"
+          }
+        ]
+      }
+    }
+  ]
+}

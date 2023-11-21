@@ -1,0 +1,4 @@
+// 1.20.1	2023-08-06T13:31:21.8517993	Tags for hexcasting:action mod id vanilla
+d758936ae8fc37c8533ef5fe0c20d8f2add1b0b9 data/hexcasting/tags/hexcasting/action/can_start_enlighten.json
+d758936ae8fc37c8533ef5fe0c20d8f2add1b0b9 data/hexcasting/tags/hexcasting/action/per_world_pattern.json
+d758936ae8fc37c8533ef5fe0c20d8f2add1b0b9 data/hexcasting/tags/hexcasting/action/requires_enlightenment.json
