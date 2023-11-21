@@ -1,0 +1,134 @@
+modid = "hexcasting"
+book = "hexcasting:thehexbook"
+default_lang = "en_us"
+
+resource_dirs = [  # top takes priority
+    "resources",
+    "{_common.src}/main/resources",
+    "{_common.src}/generated/resources",
+    "{_fabric.src}/main/resources",
+    "{_fabric.src}/generated/resources",
+    "{_forge.src}/main/resources",
+    "{_forge.src}/generated/resources",
+    { modid="hexdoc" },
+]
+export_dir = "src/hexdoc_hexcasting/_export/generated"
+
+[extra.hexcasting]
+# NOTE: "!Raw" means "don't apply variable interpolation to this value"
+_pattern_regex = { "!Raw"='make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:ActionRegistryEntry|OperationAction)\(\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)' }
+
+[[extra.hexcasting.pattern_stubs]]
+path = "{^^^_common.package}/common/lib/hex/HexActions.java"
+regex = "{^_pattern_regex}"
+
+[minecraft_assets]
+# https://github.com/PrismarineJS/minecraft-assets/tree/83e2169afbbce40990d69fc53e5962e4a793d467/data/1.19.1
+ref = "83e2169afbbce40990d69fc53e5962e4a793d467"
+version = "1.19.1"
+
+[textures]
+missing = []
+
+[textures.gaslighting]
+"hexcasting:quenched_allay_bricks" = { id="hexcasting:deco/quenched_allay_bricks_{}", variants=4 }
+"hexcasting:quenched_allay_bricks_small" = { id="hexcasting:deco/quenched_allay_bricks_small_{}", variants=4 }
+"hexcasting:quenched_allay_shard" = { id="hexcasting:quenched_shard_{}", variants=4 }
+"hexcasting:quenched_allay_tiles" = { id="hexcasting:deco/quenched_allay_tiles_{}", variants=4 }
+"hexcasting:quenched_allay" = { id="hexcasting:quenched_allay_{}", variants=4 }
+"hexcasting:staff/quenched" = { id="hexcasting:staff/quenched_{}", variants=4 }
+
+[textures.override]
+"hexcasting:akashic_connector" = "hexcasting:akashic_ligature"
+"hexcasting:focus" = "hexcasting:focus_empty"
+"hexcasting:scroll_large" = "hexcasting:scroll_pristine_large"
+"hexcasting:scroll_medium" = "hexcasting:scroll_pristine_medium"
+"hexcasting:scroll_small" = "hexcasting:scroll_pristine_small"
+"hexcasting:scroll" = "hexcasting:scroll_pristine_large"
+"hexcasting:slate_block" = "hexcasting:slate"
+"hexcasting:spellbook" = "hexcasting:spellbook_empty"
+"hexcasting:battery" = "hexcasting:phial/phial_small_0"
+
+# ugh. TODO: properly get from model files
+
+"hexcasting:edified_wood" = "hexcasting:edified_log"
+"hexcasting:stripped_edified_wood" = "hexcasting:stripped_edified_log"
+"hexcasting:edified_log_amethyst" = "hexcasting:deco/edified_log_amethyst"
+"hexcasting:edified_log_aventurine" = "hexcasting:deco/edified_log_aventurine"
+"hexcasting:edified_log_citrine" = "hexcasting:deco/edified_log_citrine"
+"hexcasting:edified_log_purple" = "hexcasting:deco/edified_log_purple"
+
+"hexcasting:directrix/boolean" = "hexcasting:circle/directrix/boolean/front_not_false"
+"hexcasting:directrix/empty" = "hexcasting:circle/directrix/empty/front_dim"
+"hexcasting:directrix/redstone" = "hexcasting:circle/directrix/redstone/front_dim_unpowered"
+
+"hexcasting:impetus/empty" = "hexcasting:circle/impetus/empty/front_dim"
+"hexcasting:impetus/look" = "hexcasting:circle/impetus/look/front_dim"
+"hexcasting:impetus/redstone" = "hexcasting:circle/impetus/redstone/front_dim"
+"hexcasting:impetus/rightclick" = "hexcasting:circle/impetus/rightclick/front_dim"
+
+"hexcasting:dye_colorizer_black" = "hexcasting:colorizer/dye_black"
+"hexcasting:dye_colorizer_blue" = "hexcasting:colorizer/dye_blue"
+"hexcasting:dye_colorizer_brown" = "hexcasting:colorizer/dye_brown"
+"hexcasting:dye_colorizer_cyan" = "hexcasting:colorizer/dye_cyan"
+"hexcasting:dye_colorizer_gray" = "hexcasting:colorizer/dye_gray"
+"hexcasting:dye_colorizer_green" = "hexcasting:colorizer/dye_green"
+"hexcasting:dye_colorizer_light_blue" = "hexcasting:colorizer/dye_light_blue"
+"hexcasting:dye_colorizer_light_gray" = "hexcasting:colorizer/dye_light_gray"
+"hexcasting:dye_colorizer_lime" = "hexcasting:colorizer/dye_lime"
+"hexcasting:dye_colorizer_magenta" = "hexcasting:colorizer/dye_magenta"
+"hexcasting:dye_colorizer_orange" = "hexcasting:colorizer/dye_orange"
+"hexcasting:dye_colorizer_pink" = "hexcasting:colorizer/dye_pink"
+"hexcasting:dye_colorizer_purple" = "hexcasting:colorizer/dye_purple"
+"hexcasting:dye_colorizer_red" = "hexcasting:colorizer/dye_red"
+"hexcasting:dye_colorizer_white" = "hexcasting:colorizer/dye_white"
+"hexcasting:dye_colorizer_yellow" = "hexcasting:colorizer/dye_yellow"
+"hexcasting:pride_colorizer_agender" = "hexcasting:colorizer/pride_agender"
+"hexcasting:pride_colorizer_aroace" = "hexcasting:colorizer/pride_aroace"
+"hexcasting:pride_colorizer_aromantic" = "hexcasting:colorizer/pride_aromantic"
+"hexcasting:pride_colorizer_asexual" = "hexcasting:colorizer/pride_asexual"
+"hexcasting:pride_colorizer_bisexual" = "hexcasting:colorizer/pride_bisexual"
+"hexcasting:pride_colorizer_demiboy" = "hexcasting:colorizer/pride_demiboy"
+"hexcasting:pride_colorizer_demigirl" = "hexcasting:colorizer/pride_demigirl"
+"hexcasting:pride_colorizer_gay" = "hexcasting:colorizer/pride_gay"
+"hexcasting:pride_colorizer_genderfluid" = "hexcasting:colorizer/pride_genderfluid"
+"hexcasting:pride_colorizer_genderqueer" = "hexcasting:colorizer/pride_genderqueer"
+"hexcasting:pride_colorizer_intersex" = "hexcasting:colorizer/pride_intersex"
+"hexcasting:pride_colorizer_lesbian" = "hexcasting:colorizer/pride_lesbian"
+"hexcasting:pride_colorizer_nonbinary" = "hexcasting:colorizer/pride_nonbinary"
+"hexcasting:pride_colorizer_pansexual" = "hexcasting:colorizer/pride_pansexual"
+"hexcasting:pride_colorizer_plural" = "hexcasting:colorizer/pride_plural"
+"hexcasting:pride_colorizer_transgender" = "hexcasting:colorizer/pride_transgender"
+"hexcasting:uuid_colorizer" = "hexcasting:colorizer/uuid"
+"hexcasting:default_colorizer" = "hexcasting:colorizer/uuid"
+
+[template]
+static_dir = "static"
+include = [
+    "hexcasting",
+    "patchouli",
+    "hexdoc",
+]
+
+[template.extend_render]
+"hexcasting.js" = "hexcasting.js.jinja"
+
+[template.args]
+mod_name = "Hex Casting"
+author = "petrak@, Alwinfy"
+icon_href = "logo.png"
+show_landing_text = true
+
+# platforms
+
+[_common]
+src = "../Common/src"
+package = "{src}/main/java/at/petrak/hexcasting"
+
+[_fabric]
+src = "../Fabric/src"
+package = "{src}/main/java/at/petrak/hexcasting/fabric"
+
+[_forge]
+src = "../Forge/src"
+package = "{src}/main/java/at/petrak/hexcasting/forge"

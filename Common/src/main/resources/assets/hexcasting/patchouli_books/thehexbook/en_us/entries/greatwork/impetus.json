@@ -24,7 +24,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:empty_impetus",
+      "recipe": "hexcasting:impetus/empty",
       "text": "hexcasting.page.impetus.empty_impetus"
     },
     {

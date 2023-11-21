@@ -1,0 +1,28 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_nbt",
+              "ops": [
+                {
+                  "op": "replace",
+                  "source": "pattern",
+                  "target": "BlockEntityTag.pattern"
+                }
+              ],
+              "source": "block_entity"
+            }
+          ],
+          "name": "hexcasting:slate"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "hexcasting:blocks/slate"
+}

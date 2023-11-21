@@ -173,7 +173,7 @@
 	"hexcasting.subtitles.redstone.cleric.register": "Cleric Impetus dings",
 
 	"hexcasting.spell.hexcasting:get_caster": "Зеркало нарцисса",
-	"hexcasting.spell.hexcasting:get_entity_pos": "Положение сущности",
+	"hexcasting.spell.hexcasting:entity_pos/eye": "Положение сущности",
 	"hexcasting.spell.hexcasting:get_entity_look": "Взгляд алидады",
 	"hexcasting.spell.hexcasting:get_entity_height": "Высота сущности",
   "hexcasting.spell.hexcasting:get_entity_velocity": "Скорость сущности",
@@ -449,7 +449,7 @@
 	"hexcasting.page.101.4.header": "Пример",
 	"hexcasting.page.101.4": "Следует заметить что $(italic)направление/$ этих рун не важно. Обе этих руны исполняют действие $(l:patterns/basics#hexcasting:get_caster)$(action)Зеркало нарцисса/$",
 	"hexcasting.page.101.5": "Заклинания исполняются написанием (верных) рун по очереди. Each action might do one of a few things:$(li)Gather some information about the environment, leaving it on the top of the stack;$(li)manipulate the info gathered (e.g. adding two numbers); or$(li)perform some magical effect, like summoning lightning or an explosion. (These actions are called \"spells.\")$(p)When I start casting a _Hex, it creates an empty stack. Actions manipulate the top of that stack.",
-	"hexcasting.page.101.6": "$(l:patterns/basics#hexcasting:get_caster)$(action)Зеркало нарцисса/$ поместит на верх стэка информацию об игроке, который исполняет заклинание. $(l:patterns/basics#hexcasting:get_entity_pos)$(action)Положение сущности/$ возьмёт информацию о сущности с верха стэка и вернёт её положение на верх стэка. $(br2)Так что написание рун в этом порядке положит на верх стэка моё положение.",
+	"hexcasting.page.101.6": "$(l:patterns/basics#hexcasting:get_caster)$(action)Зеркало нарцисса/$ поместит на верх стэка информацию об игроке, который исполняет заклинание. $(l:patterns/basics#hexcasting:entity_pos/eye)$(action)Положение сущности/$ возьмёт информацию о сущности с верха стэка и вернёт её положение на верх стэка. $(br2)Так что написание рун в этом порядке положит на верх стэка моё положение.",
 	"hexcasting.page.101.7": "$(thing)Информация/$ может представлять такие вещи как я или моя позиция, но есть другие типы которыми я могу управлять с помощью $(thing)Действий$(0). Список типов информации:$(li)Числа (\"doubles\");$(li)Вектора (\"vector\") 3 числа представляющие позицию или направление",
 	"hexcasting.page.101.8": "$(li)Сущности, как я, куры, вагонетки, валяющиеся предметы;$(li)Абстракции;$(li)Очередь из рун, использующаяся для создания магических предметов и мозговыносящих заклинаний как $(italic)заклинания, которые вызывают другие/$; И$(li)Очередь с любыми типами информации",
 	"hexcasting.page.101.9": "Естественно все заклинания тратят Мысли в качестве оплаты.$(br2)Как я понимаю заклинания это план действий, представленный Природе - в этой аналогии Мысли используются для соединения с Природой, передачи ей информации.",

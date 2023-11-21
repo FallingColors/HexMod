@@ -16,7 +16,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:empty_directrix",
+      "recipe": "hexcasting:directrix/empty",
       "text": "hexcasting.page.directrix.empty_directrix"
     },
     {
