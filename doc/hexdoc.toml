@@ -1,52 +1,58 @@
 modid = "hexcasting"
 book = "hexcasting:thehexbook"
 default_lang = "en_us"
+default_branch = "1.20" # TODO: switch back to main
 
 resource_dirs = [  # top takes priority
-    # ENABLE reexporting here, because this path is not actually within the hexdoc package
-    # we just use the same path to make it easier for translators to find the lang files
-    "src/hexdoc/_export/resources",
-
+    "resources",
     "{_common.src}/main/resources",
     "{_common.src}/generated/resources",
     "{_fabric.src}/main/resources",
     "{_fabric.src}/generated/resources",
     "{_forge.src}/main/resources",
     "{_forge.src}/generated/resources",
+    { modid="minecraft" },
+    { modid="hexdoc" },
 ]
-# this is running in a subdirectory checked out by Actions, hence the weird relative path
-export_dir = "../../doc/src/hexdoc/_export/generated"
+export_dir = "src/hexdoc_hexcasting/_export/generated"
 
+[extra.hexcasting]
 # NOTE: "!Raw" means "don't apply variable interpolation to this value"
 _pattern_regex = { "!Raw"='HexPattern\.fromAngles\("(?P<signature>[qweasd]+)", HexDir\.(?P<startdir>\w+)\),\s*modLoc\("(?P<name>[^"]+)"\)[^;]+?(?:makeConstantOp|Op\w+|Widget\.\w+)(?:[^;]*(?P<is_per_world>true)\);)?' }
 
-
-[[pattern_stubs]]
-path = "{^_common.package}/common/casting/RegisterPatterns.java"
+[[extra.hexcasting.pattern_stubs]]
+path = "{^^^_common.package}/common/casting/RegisterPatterns.java"
 regex = "{^_pattern_regex}"
 
-[[pattern_stubs]]
-path = "{^_common.package}/interop/pehkui/PehkuiInterop.java"
+[[extra.hexcasting.pattern_stubs]]
+path = "{^^^_common.package}/interop/pehkui/PehkuiInterop.java"
 regex = "{^_pattern_regex}"
 
-[[pattern_stubs]]
-path = "{^_fabric.package}/interop/gravity/GravityApiInterop.java"
+[[extra.hexcasting.pattern_stubs]]
+path = "{^^^_fabric.package}/interop/gravity/GravityApiInterop.java"
 regex = "{^_pattern_regex}"
 
+[textures]
+missing = [
+    "hexcasting:conjured_block",
+    "hexcasting:conjured_light",
+    "emi:tag/hexcasting/akashic_planks",
+    "emi:tag/hexcasting/wands",
+    "emi:tag/hexcasting/akashic_logs",
+    "emi:tag/hexcasting/phial_base",
+]
 
 [template]
-static_dir = "static"
+icon = "../art/logo.png"
 include = [
     "hexcasting",
-    "patchouli",
+    "hexdoc",
 ]
 
 [template.args]
 mod_name = "Hex Casting"
 author = "petrak@, Alwinfy"
-icon_href = "logo.png"
 show_landing_text = true
-
 
 # platforms
 
