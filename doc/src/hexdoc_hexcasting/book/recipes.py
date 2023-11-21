@@ -68,6 +68,6 @@ class BrainsweepRecipe_0_11(BrainsweepRecipe, type="hexcasting:brainsweep"):
     entityIn: BrainsweepeeIngredient
 
 
-@IsVersion("<=1.19")
+@IsVersion("<1.20")
 class BrainsweepRecipe_0_10(BrainsweepRecipe, type="hexcasting:brainsweep"):
     villagerIn: VillagerIngredient_0_10
