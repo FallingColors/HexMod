@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - main
-      - docgen-2-1.20 # TODO: remove
+      - '1.20'
+      - '1.19'
+      - '1.18'
   workflow_dispatch:
     inputs:
       release:
