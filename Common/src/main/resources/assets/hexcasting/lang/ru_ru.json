@@ -696,7 +696,7 @@
 	"hexcasting.entry.sets": "Множество",
 	"hexcasting.page.sets.numlist": "Set operations are odd, in that some of them can accept two numbers or two lists, but not a combination thereof. Such arguments will be written as \"num, num/list, list\".$(br2)When numbers are used in those operations, they are being used as so-called binary \"bitsets\", lists of 1 and 0, true and false, \"on\" and \"off\".",
 	"hexcasting.page.sets.or.1": "Unifies two sets.",
-	"hexcasting.page.sets.or.2": "As such:$(li)With two numbers at the top of the stack, combines them into a bitset containing every \"on\" bit in either bitset.$(li)With two lists, this creates a list of every element from the first list, plus every element from the second list that is not in the first list. This is similar to $(l:patterns/lists#hexcasting:concat)$(action)Combination Distillation/$.",
+	"hexcasting.page.sets.or.2": "As such:$(li)With two numbers at the top of the stack, combines them into a bitset containing every \"on\" bit in either bitset.$(li)With two lists, this creates a list of every element from the first list, plus every element from the second list that is not in the first list. This is similar to $(l:patterns/lists#hexcasting:add)$(action)Combination Distillation/$.",
 	"hexcasting.page.sets.and.1": "Takes the intersection of two sets.",
 	"hexcasting.page.sets.and.2": "As such:$(li)With two numbers at the top of the stack, combines them into a bitset containing every \"on\" bit present in $(italics)both/$ bitsets.$(li)With two lists, this creates a list of every element from the first list that is also in the second list.",
 	"hexcasting.page.sets.xor.1": "Takes the exclusive disjunction of two sets.",
@@ -802,7 +802,7 @@
 	"_comment": "Продвинутые руны",
 
 	"hexcasting.entry.itempicking": "Работа с предметами",
-	"hexcasting.page.itempicking.1": "Некоторые руны, такие как $(l:hexcasting:patterns/spells/blockworks#OpPlaceBlock)$(action)Поставить блок/$, потребляют дополнительные предметы из инвентаря. Руна ищёт предмет для использования.",
+	"hexcasting.page.itempicking.1": "Некоторые руны, такие как $(l:hexcasting:patterns/spells/blockworks#hexcasting:place_block)$(action)Поставить блок/$, потребляют дополнительные предметы из инвентаря. Руна ищёт предмет для использования.",
 	"hexcasting.page.itempicking.2": "$(li)Сначала, руна ищёт первый подходящий предмет в хотбаре около $(italic)Посоха/$.$(li)Во вторых, руна использует $(italic)самый далёкий предмет из инвентаря/$.",
 	"hexcasting.page.itempicking.3": "Так можно выбрать какой предмет какое заклинание будет использовать.",
 
@@ -878,7 +878,7 @@
 	"hexcasting.page.zeniths.5": "Bestows haste. Base cost is one $(item)Amethyst Dust/$ per 3 seconds.",
 	"hexcasting.page.zeniths.6": "Bestows strength. Base cost is one $(item)Amethyst Dust/$ per 3 seconds.",
 
-	"hexcasting.page.greater_sentinel.1": "Summon a greater version of my $(l:patterns/sentinels)$(thing)Sentinel/$. Costs about 2 $(item)Amethyst Dust/$s.",
+	"hexcasting.page.greater_sentinel.1": "Summon a greater version of my $(l:patterns/spells/sentinels)$(thing)Sentinel/$. Costs about 2 $(item)Amethyst Dust/$s.",
 	"hexcasting.page.greater_sentinel.2": "The stronger sentinel acts like the normal one I can summon without the use of a Great Spell, if a little more visually interesting. However, the range in which my spells can work is extended to a small region around my greater sentinel, about 16 blocks. In other words, no matter where in the world I am, I can interact with things around my sentinel (the mysterious forces of chunkloading notwithstanding).",
 
 	"hexcasting.page.make_battery.1": "Infuse a bottle with _media to form a $(item)Phial./$",
