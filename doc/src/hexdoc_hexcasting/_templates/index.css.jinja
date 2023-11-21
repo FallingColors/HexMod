@@ -1,0 +1,57 @@
+{% include "hexdoc:index.css.jinja" %}
+
+.flay-recipe{
+  image-rendering: pixelated; /* put it up here so it's inherited */
+  position: relative;
+}
+
+.flay-recipe-background{
+  position: relative;
+  top:0;
+  left: 0;
+}
+
+.flay-recipe-block-ingredient{
+  position: absolute;
+  top: 70px;
+  left: 24px;
+}
+
+/* entity chamber starts at top: 38px & left: 74px. it is 52px wide & 96px tall  */
+.flay-recipe-entity{
+  position: absolute;
+  top: 86px;
+  left: 100px;
+  transform: translate(-50%, -50%);
+  max-height: 94px;
+  max-width: 50px;
+}
+
+.flay-recipe-result{
+  position: absolute;
+  top: 70px;
+  left: 176px;
+}
+
+canvas.spell-viz {
+  --dot-color: #777f;
+  --dot-color: #777f;
+  --start-dot-color: #f009;
+  --moving-dot-color: #0fa9;
+
+  --path-color: darkgray;
+  --visited-path-color: #0c8;
+
+  --dot-scale: 0.0625;
+  --moving-dot-scale: 0.125;
+  --line-scale: 0.08333;
+  --pausetext-scale: 0.5;
+  --dark-mode: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  canvas.spell-viz {
+    /* hack */
+    --dark-mode: 1;
+  }
+}
