@@ -30,7 +30,7 @@ permissions:
 
 jobs:
   hexdoc:
-    uses: object-Object/hexdoc/.github/workflows/hexdoc.yml@textures
+    uses: object-Object/hexdoc/.github/workflows/hexdoc.yml@v1!0.dev
     permissions:
       contents: write
       pages: read
