@@ -24,9 +24,6 @@ dynamic = ["version", "dependencies", "optional-dependencies"]
 Homepage = "https://gamma-delta.github.io/HexMod/"
 Source = "https://github.com/gamma-delta/HexMod/"
 
-[tool.hatch.metadata]
-allow-direct-references = true # TODO: remove
-
 # Gradle version/deps
 
 [tool.hatch.version]
