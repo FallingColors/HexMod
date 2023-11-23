@@ -6,7 +6,7 @@ from hexdoc.core import IsVersion, Properties, ResourceLocation
 from hexdoc.minecraft import Tag
 from hexdoc.model import HexdocModel, StripHiddenModel, ValidationContext
 from hexdoc.patchouli import BookContext
-from hexdoc.utils import RelativePath
+from hexdoc.utils import TRACE, RelativePath
 from pydantic import Field
 
 from .utils.pattern import Direction, PatternInfo
@@ -66,7 +66,7 @@ class HexContext(ValidationContext):
             for pattern in metadata.patterns:
                 self._add_pattern(pattern, signatures)
 
-        logger.info(f"Loaded patterns: {self.patterns.keys()}")
+        logger.debug(f"Loaded patterns: {self.patterns.keys()}")
         return self
 
     def _add_patterns_0_11(
@@ -96,7 +96,7 @@ class HexContext(ValidationContext):
                 self._add_pattern(pattern, signatures)
 
     def _add_pattern(self, pattern: PatternInfo, signatures: dict[str, PatternInfo]):
-        logger.debug(f"Load pattern: {pattern.id}")
+        logger.log(TRACE, f"Load pattern: {pattern.id}")
 
         # check for duplicates, because why not
         if duplicate := (
@@ -114,7 +114,7 @@ class HexContext(ValidationContext):
         per_world_tag: Tag | None,
     ):
         # TODO: add Gradle task to generate json with this data. this is dumb and fragile.
-        logger.info(f"Load pattern stub from {stub.path}")
+        logger.debug(f"Load pattern stub from {stub.path}")
         stub_text = stub.path.read_text("utf-8")
 
         for match in stub.regex.finditer(stub_text):
