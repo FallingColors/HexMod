@@ -324,12 +324,6 @@ public class HexplatRecipes extends PaucalRecipeProvider {
                     .unlockedBy("has_item", hasItem(log)).save(recipes);
         }
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.STRIPPED_EDIFIED_WOOD, 3)
-            .define('W', HexBlocks.STRIPPED_EDIFIED_LOG)
-            .pattern("WW")
-            .pattern("WW")
-            .unlockedBy("has_item", hasItem(HexBlocks.STRIPPED_EDIFIED_LOG)).save(recipes);
-
         ring(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_PANEL, 8,
             HexTags.Items.EDIFIED_PLANKS, null)
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
