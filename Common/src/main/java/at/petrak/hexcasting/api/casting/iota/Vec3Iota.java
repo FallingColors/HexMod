@@ -29,7 +29,7 @@ public class Vec3Iota extends Iota {
     @Override
     public boolean isTruthy() {
         var v = this.getVec3();
-        return v.x != 0.0 && v.y != 0.0 && v.z != 0.0;
+        return !(v.x == 0.0 && v.y == 0.0 && v.z == 0.0);
     }
 
     @Override
