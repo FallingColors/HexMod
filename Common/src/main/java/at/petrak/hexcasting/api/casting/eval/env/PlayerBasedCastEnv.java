@@ -194,7 +194,7 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         var startCost = costLeft;
 
         for (var source : sources) {
-            var found = MediaHelper.extractMedia(source, (int) costLeft, true, false);
+            var found = MediaHelper.extractMedia(source, costLeft, false, false);
             costLeft -= found;
             if (costLeft <= 0) {
                 break;
