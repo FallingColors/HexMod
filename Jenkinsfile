@@ -24,15 +24,20 @@ pipeline {
                 sh './gradlew build'
             }
         }
-        stage('Check Datagen') {
+        stage('Run Datagen') {
             steps {
                 echo 'Running datagen tasks'
                 sh './gradlew runAllDatagen'
-                script {
-                    if (currentBuild.changeSets.size() > 0) {
-                        error('Build contains changes after finishing the runAllDatagen task. Please run the datagen locally and commit/push the updated files.')
-                    }
-                }
+            }
+        }
+        stage('Check Datagen') {
+            when {
+                // cache isn't reproducible, so ignore modifications to it
+                // https://stackoverflow.com/a/71878316
+                changeset pattern: '^(?!.*generated/resources/.cache).*', comparator: 'REGEXP'
+            }
+            steps {
+                error('Build contains changes after finishing the runAllDatagen task. Run the datagen locally and commit/push the updated files.')
             }
         }
         stage('Publish') {
