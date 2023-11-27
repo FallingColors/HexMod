@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.entities;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.client.render.HexPatternPoints;
 import at.petrak.hexcasting.client.render.RenderLib;
 import at.petrak.hexcasting.common.items.storage.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -43,11 +44,13 @@ public class EntityWallScroll extends HangingEntity {
         EntityDataSerializers.BOOLEAN);
 
     public ItemStack scroll;
+    @Nullable
     public HexPattern pattern;
     public boolean isAncient;
     public int blockSize;
     // Client-side only!
-    public List<Vec2> zappyPoints;
+    @Nullable
+    public HexPatternPoints points;
 
     public EntityWallScroll(EntityType<? extends EntityWallScroll> type, Level world) {
         super(type, world);
@@ -75,14 +78,15 @@ public class EntityWallScroll extends HangingEntity {
                 var dots = pair.getSecond();
                 var readOffset = this.getShowsStrokeOrder() ? RenderLib.DEFAULT_READABILITY_OFFSET : 0f;
                 var lastProp = this.getShowsStrokeOrder() ? RenderLib.DEFAULT_LAST_SEGMENT_LEN_PROP : 1f;
-                this.zappyPoints = RenderLib.makeZappy(dots, RenderLib.findDupIndices(pattern.positions()), 10, 0.4f,
+                var zappyPoints = RenderLib.makeZappy(dots, RenderLib.findDupIndices(pattern.positions()), 10, 0.4f,
                     0f, 0f, readOffset, lastProp, this.getId());
+                this.points = new HexPatternPoints(zappyPoints);
             }
 
             this.isAncient = NBTHelper.hasString(scroll, ItemScroll.TAG_OP_ID);
         } else {
             this.pattern = null;
-            this.zappyPoints = null;
+            this.points = null;
             this.isAncient = false;
         }
     }
