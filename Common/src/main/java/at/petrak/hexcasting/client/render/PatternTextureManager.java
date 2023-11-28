@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.client.render;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
@@ -37,10 +38,10 @@ public class PatternTextureManager {
     public static boolean useTextures = true;
     public static int repaintIndex = 0;
 
-    public static int resolutionByBlockSize = 512;
-    public static int paddingByBlockSize = 50;
-    public static int circleRadiusByBlockSize = 8;
-    public static int scaleLimit = 16;
+    public static int resolutionByBlockSize = 512*2;
+    public static int paddingByBlockSize = 64*2;
+    public static int circleRadiusByBlockSize = 8*2;
+    public static int scaleLimit = 16*2;
 
     private static HashMap<String, ResourceLocation> patternTextures = new HashMap<>();
 
@@ -178,14 +179,14 @@ public class PatternTextureManager {
             nz = -1;
         }
 
-        int lineWidth = 16;
-        int outerColor = 0xB4B4BE;//0xff_c8c8d2;
-        int innerColor = 0x2A2A2A;//0xc8_322b33;
+        int lineWidth = 20*2;
+        int outerColor = 0xff_c8c8d2;
+        int innerColor = 0xc8_322b33;
         if(isScroll)
         {
-            lineWidth = 20;
-            outerColor = 0xDEDEDE;//0xff_d2c8c8;
-            innerColor = 0x343434;//0xc8_322b33;
+            lineWidth = 20*2;
+            outerColor = 0xff_d2c8c8;
+            innerColor = 0xc8_322b33;
         }
 
         ResourceLocation texture = getTexture(zappyPoints, pointsKey, blockSize, showStrokeOrder, lineWidth, useFullSize, new Color(innerColor), new Color(outerColor));
@@ -232,6 +233,8 @@ public class PatternTextureManager {
         double rangeY = maxY - minY;
 
         double scale = Math.min((resolution - 2 * padding) / rangeX, (resolution - 2 * padding) / rangeY);
+
+        HexAPI.LOGGER.warn(scale);
 
         double limit = blockSize * scaleLimit;
         if (!useFullSize && scale > limit)
