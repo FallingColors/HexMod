@@ -264,6 +264,12 @@ public class HexBlocks {
         new BlockHexTrapdoor(edifiedWoody().noOcclusion()));
     public static final StairBlock EDIFIED_STAIRS = blockItem("edified_stairs",
         new BlockHexStairs(EDIFIED_PLANKS.defaultBlockState(), edifiedWoody().noOcclusion()));
+
+    public static final FenceBlock EDIFIED_FENCE = blockItem("edified_fence",
+            new BlockHexFence(edifiedWoody().noOcclusion()));
+    public static final FenceGateBlock EDIFIED_FENCE_GATE = blockItem("edified_fence_gate",
+            new BlockHexFenceGate(edifiedWoody().noOcclusion()));
+
     public static final SlabBlock EDIFIED_SLAB = blockItem("edified_slab",
         new BlockHexSlab(edifiedWoody().noOcclusion()));
     public static final ButtonBlock EDIFIED_BUTTON = blockItem("edified_button",

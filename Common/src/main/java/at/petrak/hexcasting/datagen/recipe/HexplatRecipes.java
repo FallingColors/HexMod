@@ -82,6 +82,8 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         staffRecipe(recipes, HexItems.STAFF_CRIMSON, Items.CRIMSON_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_WARPED, Items.WARPED_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_MANGROVE, Items.MANGROVE_PLANKS);
+        staffRecipe(recipes, HexItems.STAFF_CHERRY, Items.CHERRY_PLANKS);
+        staffRecipe(recipes, HexItems.STAFF_BAMBOO, Items.BAMBOO_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_EDIFIED, HexBlocks.EDIFIED_PLANKS.asItem());
         staffRecipe(recipes, HexItems.STAFF_QUENCHED, HexItems.QUENCHED_SHARD);
         staffRecipe(recipes, HexItems.STAFF_MINDSPLICE, Ingredient.of(HexTags.Items.MINDFLAYED_CIRCLE_COMPONENTS));
@@ -354,6 +356,21 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern("WW ")
             .pattern("WWW")
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_FENCE, 3)
+                .define('W', HexTags.Items.EDIFIED_PLANKS)
+                .define('S', Items.STICK)
+                .pattern("WSW")
+                .pattern("WSW")
+                .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_FENCE_GATE, 1)
+                .define('W', HexTags.Items.EDIFIED_PLANKS)
+                .define('S', Items.STICK)
+                .pattern("SWS")
+                .pattern("SWS")
+                .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
+
 
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_SLAB, 6)
             .define('W', HexTags.Items.EDIFIED_PLANKS)

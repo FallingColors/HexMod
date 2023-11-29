@@ -13,6 +13,8 @@
       "crimson": "Crimson Staff",
       "warped": "Warped Staff",
       "mangrove": "Mangrove Staff",
+      "cherry": "Cherry Staff",
+      "bamboo": "Bamboo Staff",
       "edified": "Edified Staff",
       "quenched": "Quenched Shard Staff",
       "mindsplice": "Mindsplice Staff"
@@ -149,6 +151,8 @@
     "edified_door": "Edified Door",
     "edified_trapdoor": "Edified Trapdoor",
     "edified_stairs": "Edified Stairs",
+    "edified_fence": "Edified Fence",
+    "edified_fence_gate": "Edified Fence Gate",
     "edified_slab": "Edified Slab",
     "edified_button": "Edified Button",
     "edified_pressure_plate": "Edified Pressure Plate",

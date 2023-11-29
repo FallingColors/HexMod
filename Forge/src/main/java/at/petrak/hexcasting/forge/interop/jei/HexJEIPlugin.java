@@ -79,6 +79,8 @@ public class HexJEIPlugin implements IModPlugin {
             HexItems.STAFF_CRIMSON,
             HexItems.STAFF_WARPED,
             HexItems.STAFF_MANGROVE,
+            HexItems.STAFF_CHERRY,
+            HexItems.STAFF_BAMBOO,
             HexItems.STAFF_EDIFIED,
         }) {
             registration.addRecipeCatalyst(new ItemStack(staff), BRAINSWEEPING, PHIAL, EDIFY);
