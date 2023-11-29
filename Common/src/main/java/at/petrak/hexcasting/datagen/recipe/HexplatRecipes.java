@@ -343,7 +343,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern("WWW")
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_STAIRS, 3)
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_STAIRS, 4)
             .define('W', HexTags.Items.EDIFIED_PLANKS)
             .pattern("W  ")
             .pattern("WW ")
