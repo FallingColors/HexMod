@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.client.render;
 
-import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
@@ -38,12 +37,12 @@ public class PatternTextureManager {
     public static boolean useTextures = true;
     public static int repaintIndex = 0;
 
-    public static int resolutionByBlockSize = 512*2;
-    public static int paddingByBlockSize = 64*2;
-    public static int circleRadiusByBlockSize = 8*2;
-    public static int scaleLimit = 16*2;
+    public static int resolutionByBlockSize = 1024;
+    public static int paddingByBlockSize = 128;
+    public static int circleRadiusByBlockSize = 16;
+    public static int scaleLimit = 32;
 
-    private static HashMap<String, ResourceLocation> patternTextures = new HashMap<>();
+    private static final HashMap<String, ResourceLocation> patternTextures = new HashMap<>();
 
     public static String getPointsKey(List<Vec2> zappyPoints)
     {
@@ -179,15 +178,11 @@ public class PatternTextureManager {
             nz = -1;
         }
 
-        int lineWidth = 20*2;
-        int outerColor = 0xff_c8c8d2;
+        int lineWidth = 40;
+        int outerColor = 0xff_d2c8c8;
         int innerColor = 0xc8_322b33;
         if(isScroll)
-        {
-            lineWidth = 20*2;
-            outerColor = 0xff_d2c8c8;
-            innerColor = 0xc8_322b33;
-        }
+            lineWidth = 30;
 
         ResourceLocation texture = getTexture(zappyPoints, pointsKey, blockSize, showStrokeOrder, lineWidth, useFullSize, new Color(innerColor), new Color(outerColor));
         VertexConsumer verts = bufSource.getBuffer(RenderType.entityCutout(texture));
@@ -233,8 +228,6 @@ public class PatternTextureManager {
         double rangeY = maxY - minY;
 
         double scale = Math.min((resolution - 2 * padding) / rangeX, (resolution - 2 * padding) / rangeY);
-
-        HexAPI.LOGGER.warn(scale);
 
         double limit = blockSize * scaleLimit;
         if (!useFullSize && scale > limit)
@@ -286,7 +279,7 @@ public class PatternTextureManager {
     private static Tuple<Integer, Integer> getTextureCoordinates(Vec2 point, double minX, double minY, double scale, double offsetX, double offsetY, int padding) {
         int x = (int) ((point.x - minX) * scale + offsetX) + padding;
         int y = (int) ((point.y - minY) * scale + offsetY) + padding;
-        return new Tuple(x, y);
+        return new Tuple<>(x, y);
     }
 
     private static void drawHexagon(Graphics2D g2d, int x, int y, int radius) {
