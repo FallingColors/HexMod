@@ -1,37 +1,66 @@
-from typing import Any, Literal
+from typing import Any, Literal, Self
 
-from hexdoc.core import IsVersion, ResourceLocation
-from hexdoc.minecraft.assets import ItemWithTexture
+from hexdoc.core import ResourceLocation
+from hexdoc.minecraft.assets import ItemWithTexture, PNGTexture, TextureI18nContext
+from hexdoc.minecraft.i18n import LocalizedStr
 from hexdoc.minecraft.recipe import ItemIngredient, ItemIngredientList, Recipe
-from hexdoc.model import HexdocModel, TypeTaggedUnion
-from hexdoc.utils import NoValue
+from hexdoc.model import HexdocModel, TypeTaggedTemplate
+from hexdoc.utils import NoValue, cast_or_raise, classproperty
+from pydantic import Field, PrivateAttr, ValidationInfo, model_validator
 
 # ingredients
 
 
-class BrainsweepeeIngredient(TypeTaggedUnion, type=None):
-    pass
+class BrainsweepeeIngredient(TypeTaggedTemplate, type=None):
+    @classproperty
+    @classmethod
+    def template(cls):
+        # template_id is actually supposed to just be a string
+        # but pydantic generics are hard :(
+        return f"ingredients/hexcasting/brainsweepee/{cls.template_id.path}"
 
 
 # lol, lmao
-class VillagerIngredient(BrainsweepeeIngredient, type="villager"):
-    minLevel: int
-    profession: ResourceLocation | None = None
+class VillagerIngredient(
+    BrainsweepeeIngredient,
+    type=NoValue,
+    template_type="villager",
+):
+    min_level: int = Field(alias="minLevel")
+    profession: ResourceLocation = ResourceLocation("minecraft", "none")
     biome: ResourceLocation | None = None
 
+    _level_name: LocalizedStr = PrivateAttr()
+    _profession_name: LocalizedStr = PrivateAttr()
+    _texture: PNGTexture = PrivateAttr()
 
-class VillagerIngredient_0_10(VillagerIngredient, type=NoValue):
-    pass
+    @property
+    def level_name(self):
+        return self._level_name
 
+    @property
+    def profession_name(self):
+        return self._profession_name
 
-@IsVersion(">=1.20")
-class EntityTypeIngredient(BrainsweepeeIngredient, type="entity_type"):
-    entityType: ResourceLocation
+    @property
+    def texture(self):
+        return self._texture
 
+    @model_validator(mode="after")
+    def _get_texture(self, info: ValidationInfo) -> Self:
+        context: TextureI18nContext = cast_or_raise(info.context, TextureI18nContext)
+        i18n = context.i18n
 
-@IsVersion(">=1.20")
-class EntityTagIngredient(BrainsweepeeIngredient, type="entity_tag"):
-    tag: ResourceLocation
+        self._level_name = i18n.localize(f"merchant.level.{self.min_level}")
+
+        self._profession_name = i18n.localize_entity(self.profession, "villager")
+
+        self._texture = PNGTexture.load_id(
+            id="textures/entities/villagers" / self.profession + ".png",
+            context=context,
+        )
+
+        return self
 
 
 class BlockStateIngredient(HexdocModel):
@@ -57,17 +86,11 @@ class BlockState(HexdocModel):
 # recipes
 
 
-class BrainsweepRecipe(Recipe, type=None):
+class BrainsweepRecipe(Recipe, type="hexcasting:brainsweep"):
     blockIn: BlockStateIngredient
+    villagerIn: VillagerIngredient
     result: BlockState
 
-
-@IsVersion(">=1.20")
-class BrainsweepRecipe_0_11(BrainsweepRecipe, type="hexcasting:brainsweep"):
-    cost: int
-    entityIn: BrainsweepeeIngredient
-
-
-@IsVersion("<=1.19")
-class BrainsweepRecipe_0_10(BrainsweepRecipe, type="hexcasting:brainsweep"):
-    villagerIn: VillagerIngredient_0_10
+    @property
+    def brainsweepee(self):
+        return self.villagerIn
