@@ -30,6 +30,9 @@ on:
       segment:
         type: string
         required: false
+      build-group-id:
+        type: string
+        required: false
 
 env:
   PYPI_PACKAGE: hexdoc-hexcasting
@@ -53,6 +56,7 @@ jobs:
           || github.event_name == 'push' && startsWith(github.event.head_commit.message, '[Release]')
         }}
       bump-version-segment: ${{ inputs.segment }}
+      build-group-id: ${{ github.event_name == 'workflow_call' && inputs.build-group-id || github.sha }}
 
   publish-pypi:
     runs-on: ubuntu-latest
