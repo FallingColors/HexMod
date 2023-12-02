@@ -38,6 +38,7 @@ jobs:
       release: ${{ inputs.release }}
       publish: ${{ inputs.publish }}
       segment: ${{ inputs.segment }}
+      build-group-id: '1_20'
 
   build_1_19:
     uses: object-Object/HexMod/.github/workflows/build_docs.yml@1.19
@@ -46,6 +47,7 @@ jobs:
       release: ${{ inputs.release }}
       publish: ${{ inputs.publish }}
       segment: ${{ inputs.segment }}
+      build-group-id: '1_19'
 
   build_1_18:
     # avoid cancellations from more than 2 jobs running in the same concurrency group at once
@@ -56,3 +58,4 @@ jobs:
       release: ${{ inputs.release }}
       publish: ${{ inputs.publish }}
       segment: ${{ inputs.segment }}
+      build-group-id: '1_18'
