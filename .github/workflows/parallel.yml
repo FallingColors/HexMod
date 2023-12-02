@@ -1,0 +1,44 @@
+name: Build the web book for all release branches
+
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: Release this version
+        type: boolean
+        default: false
+      publish:
+        description: Package index to publish to
+        type: choice
+        options:
+          - none
+          - PyPI
+      segment:
+        description: Version segment to bump with Hatch
+        type: string
+        required: false
+
+jobs:
+  build_docs_1_20:
+    uses: object-Object/HexMod/.github/workflows/build_docs.yml@1.20
+    with:
+      release: ${{ inputs.release }}
+      publish: ${{ inputs.publish }}
+      segment: ${{ inputs.segment }}
+
+  build_docs_1_19:
+    uses: object-Object/HexMod/.github/workflows/build_docs.yml@1.19
+    with:
+      release: ${{ inputs.release }}
+      publish: ${{ inputs.publish }}
+      segment: ${{ inputs.segment }}
+
+  build_docs_1_18:
+    # avoid cancellations from more than 2 jobs running in the same concurrency group at once
+    needs: [build_docs_1_20, build_docs_1_19]
+    if: success() || failure()
+    uses: object-Object/HexMod/.github/workflows/build_docs.yml@1.18
+    with:
+      release: ${{ inputs.release }}
+      publish: ${{ inputs.publish }}
+      segment: ${{ inputs.segment }}
