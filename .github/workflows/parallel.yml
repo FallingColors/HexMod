@@ -17,26 +17,40 @@ on:
         description: Version segment to bump with Hatch
         type: string
         required: false
+      build_1_20:
+        description: Build 1.20
+        type: boolean
+        default: true
+      build_1_19:
+        description: Build 1.19
+        type: boolean
+        default: true
+      build_1_18:
+        description: Build 1.18
+        type: boolean
+        default: true
 
 jobs:
-  build_docs_1_20:
+  build_1_20:
     uses: object-Object/HexMod/.github/workflows/build_docs.yml@1.20
+    if: inputs.build_1_20
     with:
       release: ${{ inputs.release }}
       publish: ${{ inputs.publish }}
       segment: ${{ inputs.segment }}
 
-  build_docs_1_19:
+  build_1_19:
     uses: object-Object/HexMod/.github/workflows/build_docs.yml@1.19
+    if: inputs.build_1_19
     with:
       release: ${{ inputs.release }}
       publish: ${{ inputs.publish }}
       segment: ${{ inputs.segment }}
 
-  build_docs_1_18:
+  build_1_18:
     # avoid cancellations from more than 2 jobs running in the same concurrency group at once
-    needs: [build_docs_1_20, build_docs_1_19]
-    if: success() || failure()
+    needs: [build_1_20, build_1_19]
+    if: inputs.build_1_18 && !cancelled()
     uses: object-Object/HexMod/.github/workflows/build_docs.yml@1.18
     with:
       release: ${{ inputs.release }}
