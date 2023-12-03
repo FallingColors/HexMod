@@ -28,6 +28,8 @@ jobs:
     permissions:
       contents: write
       pages: read
+    secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     with:
       python-version: "3.11"
       release: |-
