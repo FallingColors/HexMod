@@ -36,11 +36,24 @@ public class PatternTextureManager {
     //TODO: remove if not needed anymore for comparison
     public static boolean useTextures = true;
     public static int repaintIndex = 0;
+    public static int resolutionScaler = 4;
 
-    public static int resolutionByBlockSize = 1024;
-    public static int paddingByBlockSize = 128;
-    public static int circleRadiusByBlockSize = 16;
-    public static int scaleLimit = 32;
+    public static int resolutionByBlockSize = 128 * resolutionScaler;
+    public static int paddingByBlockSize = 16 * resolutionScaler;
+    public static int circleRadiusByBlockSize = 2 * resolutionScaler;
+    public static int scaleLimit = 4 * resolutionScaler;
+    public static int scrollLineWidth = 6 * resolutionScaler;
+    public static int otherLineWidth = 5 * resolutionScaler;
+
+    public static void setResolutionScaler(int resolutionScaler) {
+        PatternTextureManager.resolutionScaler = resolutionScaler;
+        resolutionByBlockSize = 256 * resolutionScaler;
+        paddingByBlockSize = 32 * resolutionScaler;
+        circleRadiusByBlockSize = 4 * resolutionScaler;
+        scaleLimit = 8 * resolutionScaler;
+        scrollLineWidth = 7 * resolutionScaler;
+        otherLineWidth = 10 * resolutionScaler;
+    }
 
     private static final HashMap<String, ResourceLocation> patternTextures = new HashMap<>();
 
@@ -178,11 +191,11 @@ public class PatternTextureManager {
             nz = -1;
         }
 
-        int lineWidth = 40;
+        int lineWidth = otherLineWidth;
         int outerColor = 0xff_d2c8c8;
         int innerColor = 0xc8_322b33;
         if(isScroll)
-            lineWidth = 30;
+            lineWidth = scrollLineWidth;
 
         ResourceLocation texture = getTexture(zappyPoints, pointsKey, blockSize, showStrokeOrder, lineWidth, useFullSize, new Color(innerColor), new Color(outerColor));
         VertexConsumer verts = bufSource.getBuffer(RenderType.entityCutout(texture));
