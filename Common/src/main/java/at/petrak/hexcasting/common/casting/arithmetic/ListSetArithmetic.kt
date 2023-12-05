@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic
 import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic.*
 import at.petrak.hexcasting.api.casting.arithmetic.engine.InvalidOperatorException
 import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator
-import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator.*
+import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator.Companion.downcast
 import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorBinary
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate.*
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate
