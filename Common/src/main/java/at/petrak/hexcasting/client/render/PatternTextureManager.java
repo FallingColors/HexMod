@@ -27,8 +27,8 @@ import org.joml.Matrix4f;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 public class PatternTextureManager {
@@ -40,9 +40,13 @@ public class PatternTextureManager {
     public static int resolutionByBlockSize = 1024;
     public static int paddingByBlockSize = 128;
     public static int circleRadiusByBlockSize = 16;
+    public static int fastRenderScaleFactor = 8; // e.g. this is 8, resolution is 1024, so render at 1024/8 = 128
     public static int scaleLimit = 32;
 
-    private static final HashMap<String, ResourceLocation> patternTextures = new HashMap<>();
+    private static final ConcurrentMap<String, ResourceLocation> patternTextures = new ConcurrentHashMap<>();
+
+    // basically newCachedThreadPool, but with a max pool size
+    private static final ExecutorService executor = new ThreadPoolExecutor(0, 16, 60L, TimeUnit.SECONDS, new SynchronousQueue<>());
 
     public static String getPointsKey(List<Vec2> zappyPoints)
     {
@@ -178,7 +182,7 @@ public class PatternTextureManager {
             nz = -1;
         }
 
-        int lineWidth = 40;
+        float lineWidth = 40;
         int outerColor = 0xff_d2c8c8;
         int innerColor = 0xc8_322b33;
         if(isScroll)
@@ -204,16 +208,33 @@ public class PatternTextureManager {
                 .endVertex();
     }
 
-    public static ResourceLocation getTexture(List<Vec2> points, String pointsKey, int blockSize, boolean showsStrokeOrder, int lineWidth, boolean useFullSize, Color innerColor, Color outerColor) {
+    public static ResourceLocation getTexture(List<Vec2> points, String pointsKey, int blockSize, boolean showsStrokeOrder, float lineWidth, boolean useFullSize, Color innerColor, Color outerColor) {
         if (patternTextures.containsKey(pointsKey))
             return patternTextures.get(pointsKey);
-        return createTexture(points, pointsKey, blockSize, showsStrokeOrder, lineWidth, useFullSize, innerColor, outerColor);
+
+        // render a higher-resolution texture in a background thread so it eventually becomes all nice nice and pretty
+        executor.submit(() -> {
+            var slowTexture = createTexture(points, blockSize, showsStrokeOrder, lineWidth, useFullSize, innerColor, outerColor, false);
+
+            // TextureManager#register doesn't look very thread-safe, so move back to the main thread after the slow part is done
+            Minecraft.getInstance().execute(() -> registerTexture(points, pointsKey, slowTexture));
+        });
+
+        // quickly create and cache a low-resolution texture so the client has something to look at
+        var fastTexture = createTexture(points, blockSize, showsStrokeOrder, lineWidth, useFullSize, innerColor, outerColor, true);
+        return registerTexture(points, pointsKey, fastTexture);
     }
 
-    public static ResourceLocation createTexture(List<Vec2> points, String pointsKey, int blockSize, boolean showsStrokeOrder, int lineWidth, boolean useFullSize, Color innerColor, Color outerColor)
+    private static DynamicTexture createTexture(List<Vec2> points, int blockSize, boolean showsStrokeOrder, float lineWidth, boolean useFullSize, Color innerColor, Color outerColor, boolean fastRender)
     {
         int resolution = resolutionByBlockSize * blockSize;
         int padding = paddingByBlockSize * blockSize;
+
+        if (fastRender) {
+            resolution /= fastRenderScaleFactor;
+            padding /= fastRenderScaleFactor;
+            lineWidth /= (float)fastRenderScaleFactor;
+        }
 
         double minX = Double.MAX_VALUE, maxX = Double.MIN_VALUE, minY = Double.MAX_VALUE, maxY = Double.MIN_VALUE;
         for (Vec2 point : points)
@@ -238,6 +259,7 @@ public class PatternTextureManager {
 
         BufferedImage img = new BufferedImage(resolution, resolution, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = img.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2d.setColor(outerColor);
         g2d.setStroke(new BasicStroke((blockSize * 5f / 3f) * lineWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
@@ -262,8 +284,12 @@ public class PatternTextureManager {
             for (int x = 0; x < img.getWidth(); x++)
                 nativeImage.setPixelRGBA(x, y, img.getRGB(x, y));
 
-        DynamicTexture dynamicTexture = new DynamicTexture(nativeImage);
-        ResourceLocation resourceLocation = Minecraft.getInstance().getTextureManager().register("hex_pattern_texture_" + points.hashCode() + "_" + repaintIndex + ".png", dynamicTexture);
+        return new DynamicTexture(nativeImage);
+    }
+
+    private static ResourceLocation registerTexture(List<Vec2> points, String pointsKey, DynamicTexture dynamicTexture) {
+        String name = "hex_pattern_texture_" + points.hashCode() + "_" + repaintIndex + ".png";
+        ResourceLocation resourceLocation = Minecraft.getInstance().getTextureManager().register(name, dynamicTexture);
         patternTextures.put(pointsKey, resourceLocation);
         return resourceLocation;
     }
