@@ -219,6 +219,8 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         simpleBlockItem(HexBlocks.EDIFIED_PLANKS, planksModel);
 
         stairsBlock(HexBlocks.EDIFIED_STAIRS, planks1);
+        fenceBlock(HexBlocks.EDIFIED_FENCE, planks1);
+        fenceGateBlock(HexBlocks.EDIFIED_FENCE_GATE, planks1);
         slabBlock(HexBlocks.EDIFIED_SLAB, planks1, planks1);
         buttonBlock(HexBlocks.EDIFIED_BUTTON, planks1);
         pressurePlateBlock(HexBlocks.EDIFIED_PRESSURE_PLATE, planks1);

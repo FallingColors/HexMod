@@ -37,6 +37,7 @@ import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -49,6 +50,16 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         HexBlocks.EDIFIED_LOG, HexBlocks.EDIFIED_LOG_AMETHYST,
         HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.EDIFIED_LOG_CITRINE,
         HexBlocks.EDIFIED_LOG_PURPLE);
+
+    private final Map<BlockAkashicLog, BlockAkashicLog> EDIFIED_LOG_TO_WOOD = Map.ofEntries(
+        Map.entry(HexBlocks.EDIFIED_LOG, HexBlocks.EDIFIED_WOOD),
+//      These don't exist, idk if they should
+//        Map.entry(HexBlocks.EDIFIED_LOG_AMETHYST, HexBlocks.EDIFIED_WOOD_AMETHYST),
+//        Map.entry(HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.EDIFIED_WOOD_AVENTURINE),
+//        Map.entry(HexBlocks.EDIFIED_LOG_CITRINE, HexBlocks.EDIFIED_WOOD_CITRINE),
+//        Map.entry(HexBlocks.EDIFIED_LOG_PURPLE, HexBlocks.EDIFIED_WOOD_PURPLE),
+        Map.entry(HexBlocks.STRIPPED_EDIFIED_LOG, HexBlocks.STRIPPED_EDIFIED_WOOD)
+    );
 
     public HexplatRecipes(PackOutput output, IXplatIngredients ingredients,
                           Function<RecipeBuilder, IXplatConditionsBuilder> conditions) {
@@ -71,6 +82,8 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         staffRecipe(recipes, HexItems.STAFF_CRIMSON, Items.CRIMSON_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_WARPED, Items.WARPED_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_MANGROVE, Items.MANGROVE_PLANKS);
+        staffRecipe(recipes, HexItems.STAFF_CHERRY, Items.CHERRY_PLANKS);
+        staffRecipe(recipes, HexItems.STAFF_BAMBOO, Items.BAMBOO_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_EDIFIED, HexBlocks.EDIFIED_PLANKS.asItem());
         staffRecipe(recipes, HexItems.STAFF_QUENCHED, HexItems.QUENCHED_SHARD);
         staffRecipe(recipes, HexItems.STAFF_MINDSPLICE, Ingredient.of(HexTags.Items.MINDFLAYED_CIRCLE_COMPONENTS));
@@ -303,19 +316,15 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .requires(HexTags.Items.EDIFIED_LOGS)
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_LOGS)).save(recipes);
 
-        for (var log : EDIFIED_LOGS) {
-            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, log, 3)
+        for (var entry : EDIFIED_LOG_TO_WOOD.entrySet()) {
+            var log = entry.getKey();
+            var wood = entry.getValue();
+            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, wood, 3)
                     .define('W', log)
                     .pattern("WW")
                     .pattern("WW")
                     .unlockedBy("has_item", hasItem(log)).save(recipes);
         }
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.STRIPPED_EDIFIED_WOOD, 3)
-            .define('W', HexBlocks.STRIPPED_EDIFIED_LOG)
-            .pattern("WW")
-            .pattern("WW")
-            .unlockedBy("has_item", hasItem(HexBlocks.STRIPPED_EDIFIED_LOG)).save(recipes);
 
         ring(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_PANEL, 8,
             HexTags.Items.EDIFIED_PLANKS, null)
@@ -347,6 +356,21 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern("WW ")
             .pattern("WWW")
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_FENCE, 3)
+                .define('W', HexTags.Items.EDIFIED_PLANKS)
+                .define('S', Items.STICK)
+                .pattern("WSW")
+                .pattern("WSW")
+                .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_FENCE_GATE, 1)
+                .define('W', HexTags.Items.EDIFIED_PLANKS)
+                .define('S', Items.STICK)
+                .pattern("SWS")
+                .pattern("SWS")
+                .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
+
 
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_SLAB, 6)
             .define('W', HexTags.Items.EDIFIED_PLANKS)

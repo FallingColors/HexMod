@@ -1,10 +1,11 @@
 package at.petrak.hexcasting.common.casting.arithmetic.operator.vec;
 
+import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
+import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorBasic;
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate;
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate;
 import at.petrak.hexcasting.api.casting.arithmetic.IterPair;
 import at.petrak.hexcasting.api.casting.arithmetic.TripleIterable;
-import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDivideByZero;
@@ -23,17 +24,17 @@ import java.util.function.BiFunction;
 import static at.petrak.hexcasting.common.lib.hex.HexIotaTypes.DOUBLE;
 import static at.petrak.hexcasting.common.lib.hex.HexIotaTypes.VEC3;
 
-public class OperatorVec3Delegating extends Operator {
+public class OperatorVec3Delegating extends OperatorBasic {
 	private final BiFunction<Vec3, Vec3, Iota> op;
-	private final Operator fb;
+	private final OperatorBasic fb;
 	public OperatorVec3Delegating(BiFunction<Vec3, Vec3, Iota> core, HexPattern fallback) {
 		super(2, IotaMultiPredicate.any(IotaPredicate.ofType(VEC3), IotaPredicate.ofType(DOUBLE)));
 		op = core;
-		fb = Objects.requireNonNull(DoubleArithmetic.INSTANCE.getOperator(fallback));
+		fb = (OperatorBasic) Objects.requireNonNull(DoubleArithmetic.INSTANCE.getOperator(fallback));
 	}
 
 	@Override
-	public @NotNull Iterable<Iota> apply(@NotNull Iterable<Iota> iotas, @NotNull CastingEnvironment env) throws Mishap {
+	public @NotNull Iterable<Iota> apply(Iterable<? extends Iota> iotas, @NotNull CastingEnvironment env) throws Mishap {
 		var it = iotas.iterator();
 		var left = it.next();
 		var right = it.next();
