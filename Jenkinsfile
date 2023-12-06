@@ -24,14 +24,19 @@ pipeline {
                 sh './gradlew build'
             }
         }
-        stage('Check Datagen') {
+        stage('Run Datagen') {
             steps {
                 echo 'Running datagen tasks'
                 sh './gradlew runAllDatagen'
-
+            }
+        }
+        stage('Check Datagen') {
+            steps {
+                echo 'Checking for modified files'
+                // also fail if there are new untracked files
+                sh 'git add --intent-to-add .'
                 // cache isn't reproducible, so ignore modifications to it
                 // https://stackoverflow.com/a/71878316
-                echo 'Checking for modified files'
                 sh 'git diff --name-only --exit-code -- ":!:*/src/generated/resources/.cache/*"'
             }
         }
