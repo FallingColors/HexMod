@@ -24,7 +24,7 @@ permissions:
 
 jobs:
   hexdoc:
-    uses: hexdoc-dev/hexdoc/.github/workflows/hexdoc.yml@main
+    uses: hexdoc-dev/hexdoc/.github/workflows/hexdoc.yml@v1!0.1.dev
     permissions:
       contents: write
       pages: read
