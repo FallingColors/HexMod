@@ -72,8 +72,13 @@ public class BlockEntitySlateRenderer implements BlockEntityRenderer<BlockEntity
 
         var lines1 = tile.pattern.toLines(1, Vec2.ZERO);
         var stupidHash = tile.getBlockPos().hashCode();
-        var zappyPatternSpace = RenderLib.makeZappy(lines1, RenderLib.findDupIndices(tile.pattern.positions()),
+        var zappyPattern = RenderLib.makeZappy(lines1, RenderLib.findDupIndices(tile.pattern.positions()),
                 10, variance, speed, 0.2f, 0f, 1f, stupidHash);
+
+        // always do space calculations with the static version of the pattern
+        // so that it doesn't jump around resizing itself.
+        var zappyPatternSpace = RenderLib.makeZappy(lines1, RenderLib.findDupIndices(tile.pattern.positions()),
+                10, 0.5f, 0f, 0.2f, 0f, 1f, stupidHash);
 
         double minX = Double.MAX_VALUE, maxX = Double.MIN_VALUE, minY = Double.MAX_VALUE, maxY = Double.MIN_VALUE;
         for (Vec2 point : zappyPatternSpace)
@@ -94,7 +99,7 @@ public class BlockEntitySlateRenderer implements BlockEntityRenderer<BlockEntity
 
         var zappyRenderSpace = new ArrayList<Vec2>();
 
-        for (Vec2 point : zappyPatternSpace) {
+        for (Vec2 point : zappyPattern) {
             zappyRenderSpace.add(new Vec2(
                 (float) (((point.x - minX) * scale + offsetX) + padding),
                 (float) (((point.y - minY) * scale + offsetY) + padding)

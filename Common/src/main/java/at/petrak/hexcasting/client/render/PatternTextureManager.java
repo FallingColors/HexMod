@@ -44,22 +44,22 @@ public class PatternTextureManager {
     public static int paddingByBlockSize = 16 * resolutionScaler;
     public static int circleRadiusByBlockSize = 2 * resolutionScaler;
     public static int scaleLimit = 4 * resolutionScaler;
-    public static int scrollLineWidth = 6 * resolutionScaler;
-    public static int otherLineWidth = 5 * resolutionScaler;
+    public static int scrollLineWidth = 3 * resolutionScaler;
+    public static int otherLineWidth = 4 * resolutionScaler;
 
     public static void setResolutionScaler(int resolutionScaler) {
         PatternTextureManager.resolutionScaler = resolutionScaler;
-        resolutionByBlockSize = 256 * resolutionScaler;
-        paddingByBlockSize = 32 * resolutionScaler;
-        circleRadiusByBlockSize = 4 * resolutionScaler;
-        scaleLimit = 8 * resolutionScaler;
-        scrollLineWidth = 7 * resolutionScaler;
-        otherLineWidth = 10 * resolutionScaler;
+        resolutionByBlockSize = 128 * resolutionScaler;
+        paddingByBlockSize = 16 * resolutionScaler;
+        circleRadiusByBlockSize = 2 * resolutionScaler;
+        scaleLimit = 4 * resolutionScaler;
+        scrollLineWidth = 3 * resolutionScaler;
+        otherLineWidth = 4 * resolutionScaler;
     }
 
     private static final ConcurrentMap<String, ResourceLocation> patternTexturesToAdd = new ConcurrentHashMap<>();
     // basically newCachedThreadPool, but with a max pool size
-    private static final ExecutorService executor = new ThreadPoolExecutor(0, 16, 60L, TimeUnit.SECONDS, new SynchronousQueue<>());
+    private static final ExecutorService executor = new ThreadPoolExecutor(0, 16, 60L, TimeUnit.SECONDS, new LinkedBlockingDeque<>());
 
 
     private static final HashMap<String, ResourceLocation> patternTextures = new HashMap<>();
@@ -225,20 +225,28 @@ public class PatternTextureManager {
     }
 
     public static ResourceLocation getTexture(List<Vec2> points, String pointsKey, int blockSize, boolean showsStrokeOrder, float lineWidth, boolean useFullSize, Color innerColor, Color outerColor) {
-        if (patternTexturesToAdd.containsKey(pointsKey))
-            return patternTexturesToAdd.get(pointsKey);
+        if (patternTexturesToAdd.containsKey(pointsKey)) {
+            var patternTexture = patternTexturesToAdd.remove(pointsKey);
+            var oldPatternTexture = patternTextures.put(pointsKey, patternTexture);
+            if (oldPatternTexture != null)
+                Minecraft.getInstance().getTextureManager().getTexture(oldPatternTexture).close();
+
+            return patternTexture;
+        }
+        if (patternTextures.containsKey(pointsKey))
+            return patternTextures.get(pointsKey);
 
         // render a higher-resolution texture in a background thread so it eventually becomes all nice nice and pretty
         executor.submit(() -> {
             var slowTexture = createTexture(points, blockSize, showsStrokeOrder, lineWidth, useFullSize, innerColor, outerColor, false);
 
             // TextureManager#register doesn't look very thread-safe, so move back to the main thread after the slow part is done
-            Minecraft.getInstance().execute(() -> registerTexture(points, pointsKey, slowTexture));
+            Minecraft.getInstance().execute(() -> registerTexture(points, pointsKey, slowTexture, true));
         });
 
         // quickly create and cache a low-resolution texture so the client has something to look at
         var fastTexture = createTexture(points, blockSize, showsStrokeOrder, lineWidth, useFullSize, innerColor, outerColor, true);
-        return registerTexture(points, pointsKey, fastTexture);
+        return registerTexture(points, pointsKey, fastTexture, false);
     }
 
     private static DynamicTexture createTexture(List<Vec2> points, int blockSize, boolean showsStrokeOrder, float lineWidth, boolean useFullSize, Color innerColor, Color outerColor, boolean fastRender)
@@ -303,8 +311,11 @@ public class PatternTextureManager {
         return new DynamicTexture(nativeImage);
     }
 
-    private static ResourceLocation registerTexture(List<Vec2> points, String pointsKey, DynamicTexture dynamicTexture) {
-        String name = "hex_pattern_texture_" + points.hashCode() + "_" + repaintIndex + ".png";
+    private static ResourceLocation registerTexture(List<Vec2> points, String pointsKey, DynamicTexture dynamicTexture, boolean isSlow) {
+        // isSlow used to register different textures for the low-resolution, fastly rendered version of each texture
+        // and the high-resolution, slowly rendered version (this means the slow doesn't replace the fast in the texture manager,
+        // which causes occasional visual stuttering for a frame).
+        String name = "hex_pattern_texture_" + points.hashCode() + "_" + repaintIndex + "_" + (isSlow ? "slow" : "fast") + ".png";
         ResourceLocation resourceLocation = Minecraft.getInstance().getTextureManager().register(name, dynamicTexture);
         patternTexturesToAdd.put(pointsKey, resourceLocation);
         return resourceLocation;
@@ -341,5 +352,6 @@ public class PatternTextureManager {
     public static void repaint() {
         repaintIndex++;
         patternTexturesToAdd.clear();
+        patternTextures.clear();
     }
 }
