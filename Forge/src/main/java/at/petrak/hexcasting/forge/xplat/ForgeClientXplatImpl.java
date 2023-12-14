@@ -50,6 +50,8 @@ public class ForgeClientXplatImpl implements IClientXplatAbstractions {
     @Override
     public ClientCastingStack getClientCastingStack(Player player) {
         var maybeCap = player.getCapability(HexCapabilities.CLIENT_CASTING_STACK).resolve();
+        if (maybeCap.isEmpty())
+            return new ClientCastingStack(); // lie
         return maybeCap.get().get();
     }
 
