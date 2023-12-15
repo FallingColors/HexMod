@@ -86,3 +86,9 @@ compileTestKotlin {
         jvmTarget = "17"
     }
 }
+
+tasks.register("runAllDatagen") {
+    dependsOn ":Forge:runXplatDatagen"
+    dependsOn ":Forge:runForgeDatagen"
+    dependsOn ":Fabric:runDatagen"
+}
