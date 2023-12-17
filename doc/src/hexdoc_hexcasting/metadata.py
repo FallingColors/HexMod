@@ -2,10 +2,9 @@ import logging
 import re
 from pathlib import Path
 
-from hexdoc.core import IsVersion, Properties, ResourceLocation
+from hexdoc.core import IsVersion, ModResourceLoader, Properties, ResourceLocation
 from hexdoc.minecraft import Tag
-from hexdoc.model import HexdocModel, StripHiddenModel, ValidationContext
-from hexdoc.patchouli import BookContext
+from hexdoc.model import HexdocModel, StripHiddenModel, ValidationContextModel
 from hexdoc.utils import TRACE, RelativePath
 from pydantic import Field
 
@@ -35,22 +34,22 @@ class HexProperties(StripHiddenModel):
 
 
 # conthext, perhaps
-class HexContext(ValidationContext):
+class HexContext(ValidationContextModel):
     hex_props: HexProperties
     patterns: dict[ResourceLocation, PatternInfo] = Field(default_factory=dict)
 
-    def load_patterns(self, context: BookContext):
+    def load_patterns(self, loader: ModResourceLoader):
         signatures = dict[str, PatternInfo]()  # just for duplicate checking
 
         if IsVersion(">=1.20"):
-            self._add_patterns_0_11(signatures, context)
+            self._add_patterns_0_11(signatures, loader)
         else:
-            self._add_patterns_0_10(signatures, context.props)
+            self._add_patterns_0_10(signatures, loader.props)
 
         # export patterns so addons can use them
         pattern_metadata = PatternMetadata(patterns=list(self.patterns.values()))
-        context.loader.export(
-            path=PatternMetadata.path(context.props.modid),
+        loader.export(
+            path=PatternMetadata.path(loader.props.modid),
             data=pattern_metadata.model_dump_json(
                 warnings=False,
                 exclude_defaults=True,
@@ -58,7 +57,7 @@ class HexContext(ValidationContext):
         )
 
         # add external patterns AFTER exporting so we don't reexport them
-        for metadata in context.loader.load_metadata(
+        for metadata in loader.load_metadata(
             name_pattern="{modid}.patterns",
             model_type=PatternMetadata,
             allow_missing=True,
@@ -72,18 +71,18 @@ class HexContext(ValidationContext):
     def _add_patterns_0_11(
         self,
         signatures: dict[str, PatternInfo],
-        context: BookContext,
+        loader: ModResourceLoader,
     ):
         # load the tag that specifies which patterns are random per world
         per_world = Tag.load(
             registry="action",
             id=ResourceLocation("hexcasting", "per_world_pattern"),
-            loader=context.loader,
+            loader=loader,
         )
 
         # for each stub, load all the patterns in the file
         for stub in self.hex_props.pattern_stubs:
-            for pattern in self._load_stub_patterns(context.props, stub, per_world):
+            for pattern in self._load_stub_patterns(loader.props, stub, per_world):
                 self._add_pattern(pattern, signatures)
 
     def _add_patterns_0_10(
