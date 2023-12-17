@@ -1,11 +1,11 @@
 from typing import Any, Literal, Self
 
 from hexdoc.core import ResourceLocation
-from hexdoc.minecraft.assets import ItemWithTexture, PNGTexture, TextureI18nContext
-from hexdoc.minecraft.i18n import LocalizedStr
+from hexdoc.minecraft import I18n, LocalizedStr
+from hexdoc.minecraft.assets import ItemWithTexture, PNGTexture
 from hexdoc.minecraft.recipe import ItemIngredient, ItemIngredientList, Recipe
 from hexdoc.model import HexdocModel, TypeTaggedTemplate
-from hexdoc.utils import NoValue, cast_or_raise, classproperty
+from hexdoc.utils import NoValue, classproperty
 from pydantic import Field, PrivateAttr, ValidationInfo, model_validator
 
 # ingredients
@@ -48,8 +48,8 @@ class VillagerIngredient(
 
     @model_validator(mode="after")
     def _get_texture(self, info: ValidationInfo) -> Self:
-        context: TextureI18nContext = cast_or_raise(info.context, TextureI18nContext)
-        i18n = context.i18n
+        assert info.context is not None
+        i18n = I18n.of(info)
 
         self._level_name = i18n.localize(f"merchant.level.{self.min_level}")
 
@@ -57,7 +57,7 @@ class VillagerIngredient(
 
         self._texture = PNGTexture.load_id(
             id="textures/entities/villagers" / self.profession + ".png",
-            context=context,
+            context=info.context,
         )
 
         return self
