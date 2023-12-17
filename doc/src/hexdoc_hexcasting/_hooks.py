@@ -87,6 +87,7 @@ class HexcastingPlugin(
         book_id: ResourceLocation,
         i18n: I18n,
         is_0_black: bool,
+        link_overrides: dict[str, str],
     ):
         # the values in FAKE_ACTIONS are from the default language, ie. en_us
         # so just skip this validation for other languages
@@ -98,7 +99,7 @@ class HexcastingPlugin(
         if not match:
             return
 
-        action_style = Style.parse(match[1], book_id, i18n, is_0_black)
+        action_style = Style.parse(match[1], book_id, i18n, is_0_black, link_overrides)
         if isinstance(action_style, Style):
             check_action_links(tree, False, action_style)
 

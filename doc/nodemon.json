@@ -7,5 +7,5 @@
     ],
     "ignore": ["**/generated/**"],
     "ext": "jinja,html,css,js,ts,toml,json,json5,py",
-    "exec": "hexdoc serve --lang en_us"
+    "exec": "hexdoc serve"
 }
