@@ -1,8 +1,11 @@
 import re
 from importlib.resources import Package
 from pathlib import Path
+from typing import Any
 
 from hexdoc.core import ResourceLocation
+from hexdoc.core.loader import ModResourceLoader
+from hexdoc.core.properties import Properties
 from hexdoc.minecraft import I18n
 from hexdoc.patchouli import BookContext, FormatTree
 from hexdoc.patchouli.text import STYLE_REGEX, SpecialStyleType, Style, resolve_macros
@@ -16,7 +19,7 @@ from hexdoc.plugin import (
     ValidateFormatTreeImpl,
     hookimpl,
 )
-from hexdoc.utils import relative_path_root
+from hexdoc.utils import ValidationContext, relative_path_root
 from typing_extensions import override
 
 import hexdoc_hexcasting
@@ -67,14 +70,14 @@ class HexcastingPlugin(
 
     @staticmethod
     @hookimpl
-    def hexdoc_update_context(context: BookContext) -> None:
-        with relative_path_root(context.props.props_dir):
-            hex_props = HexProperties.model_validate(context.props.extra["hexcasting"])
+    def hexdoc_update_context(context: dict[str, Any]) -> HookReturn[ValidationContext]:
+        props = Properties.of(context)
+        loader = ModResourceLoader.of(context)
 
-        hex_context = HexContext(hex_props=hex_props)
-        hex_context.load_patterns(context)
+        with relative_path_root(props.props_dir):
+            hex_props = HexProperties.model_validate(props.extra["hexcasting"])
 
-        context.extra["hexcasting"] = hex_context
+        return HexContext(hex_props=hex_props).load_patterns(loader)
 
     @staticmethod
     @hookimpl
