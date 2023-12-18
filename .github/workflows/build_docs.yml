@@ -15,24 +15,6 @@ on:
         options:
           - none
           - PyPI
-      segment:
-        description: Version segment to bump with Hatch
-        type: string
-        required: false
-  workflow_call:
-    inputs:
-      release:
-        type: boolean
-        default: false
-      publish:
-        type: string
-        default: none
-      segment:
-        type: string
-        required: false
-      build-group-id:
-        type: string
-        required: false
 
 env:
   PYPI_PACKAGE: hexdoc-hexcasting
@@ -42,7 +24,7 @@ permissions:
 
 jobs:
   hexdoc:
-    uses: hexdoc-dev/hexdoc/.github/workflows/hexdoc.yml@v1!0.1.dev
+    uses: hexdoc-dev/hexdoc/.github/workflows/hexdoc.yml@main
     permissions:
       contents: write
       pages: read
@@ -55,8 +37,6 @@ jobs:
           github.event_name != 'push' && inputs.release
           || github.event_name == 'push' && startsWith(github.event.head_commit.message, '[Release]')
         }}
-      bump-version-segment: ${{ inputs.segment }}
-      build-group-id: ${{ inputs.build-group-id }}
 
   publish-pypi:
     runs-on: ubuntu-latest
@@ -70,8 +50,6 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v3
-
       - name: Download package artifact
         uses: actions/download-artifact@v3
         with:
