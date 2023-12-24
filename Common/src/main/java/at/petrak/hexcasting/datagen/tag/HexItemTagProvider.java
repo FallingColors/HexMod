@@ -40,6 +40,7 @@ public class HexItemTagProvider extends PaucalItemTagProvider {
             HexItems.STAFF_OAK, HexItems.STAFF_SPRUCE, HexItems.STAFF_BIRCH,
             HexItems.STAFF_JUNGLE, HexItems.STAFF_ACACIA, HexItems.STAFF_DARK_OAK,
             HexItems.STAFF_CRIMSON, HexItems.STAFF_WARPED, HexItems.STAFF_MANGROVE,
+            HexItems.STAFF_CHERRY,HexItems.STAFF_BAMBOO,
             HexItems.STAFF_QUENCHED, HexItems.STAFF_MINDSPLICE);
 
         add(tag(HexTags.Items.PHIAL_BASE),

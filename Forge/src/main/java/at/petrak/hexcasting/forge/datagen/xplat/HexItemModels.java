@@ -92,6 +92,8 @@ public class HexItemModels extends PaucalItemModelProvider {
         buildStaff(HexItems.STAFF_CRIMSON, "crimson");
         buildStaff(HexItems.STAFF_WARPED, "warped");
         buildStaff(HexItems.STAFF_MANGROVE, "mangrove");
+        buildStaff(HexItems.STAFF_CHERRY, "cherry");
+        buildStaff(HexItems.STAFF_BAMBOO, "bamboo");
         buildStaff(HexItems.STAFF_EDIFIED, "edified");
         buildStaff(HexItems.STAFF_MINDSPLICE, "mindsplice");
 
@@ -195,6 +197,10 @@ public class HexItemModels extends PaucalItemModelProvider {
             new ModelFile.UncheckedModelFile(modLoc("block/stripped_edified_wood")));
         getBuilder(getPath(HexBlocks.EDIFIED_STAIRS)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_stairs")));
+        getBuilder(getPath(HexBlocks.EDIFIED_FENCE)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/edified_fence_inventory")));
+        getBuilder(getPath(HexBlocks.EDIFIED_FENCE_GATE)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/edified_fence_gate")));
         getBuilder(getPath(HexBlocks.EDIFIED_SLAB)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_slab")));
         getBuilder(getPath(HexBlocks.EDIFIED_BUTTON)).parent(

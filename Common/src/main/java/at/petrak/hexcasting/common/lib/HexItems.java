@@ -58,6 +58,8 @@ public class HexItems {
     public static final ItemStaff STAFF_CRIMSON = make("staff/crimson", new ItemStaff(unstackable()));
     public static final ItemStaff STAFF_WARPED = make("staff/warped", new ItemStaff(unstackable()));
     public static final ItemStaff STAFF_MANGROVE = make("staff/mangrove", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_CHERRY = make("staff/cherry", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_BAMBOO = make("staff/bamboo", new ItemStaff(unstackable()));
     public static final ItemStaff STAFF_EDIFIED = make("staff/edified", new ItemStaff(unstackable()));
     public static final ItemStaff STAFF_QUENCHED = make("staff/quenched", new ItemStaff(unstackable()));
     // mindsplice staffaratus
