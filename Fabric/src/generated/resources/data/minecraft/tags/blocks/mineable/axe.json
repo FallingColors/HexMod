@@ -1,0 +1,26 @@
+{
+  "replace": false,
+  "values": [
+    "hexcasting:akashic_record",
+    "hexcasting:akashic_bookshelf",
+    "hexcasting:akashic_connector",
+    "hexcasting:edified_log",
+    "hexcasting:edified_log_amethyst",
+    "hexcasting:edified_log_aventurine",
+    "hexcasting:edified_log_citrine",
+    "hexcasting:edified_log_purple",
+    "hexcasting:stripped_edified_log",
+    "hexcasting:edified_wood",
+    "hexcasting:stripped_edified_wood",
+    "hexcasting:edified_planks",
+    "hexcasting:edified_panel",
+    "hexcasting:edified_tile",
+    "hexcasting:edified_door",
+    "hexcasting:edified_trapdoor",
+    "hexcasting:edified_slab",
+    "hexcasting:edified_button",
+    "hexcasting:edified_stairs",
+    "hexcasting:edified_fence",
+    "hexcasting:edified_fence_gate"
+  ]
+}

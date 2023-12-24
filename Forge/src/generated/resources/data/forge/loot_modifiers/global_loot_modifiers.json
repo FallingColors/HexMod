@@ -1,0 +1,30 @@
+{
+  "entries": [
+    "hexcasting:scroll/minecraft/chests/nether_bridge",
+    "hexcasting:scroll/minecraft/chests/village/village_cartographer",
+    "hexcasting:lore/minecraft/chests/village/village_taiga_house",
+    "hexcasting:scroll/minecraft/chests/shipwreck_map",
+    "hexcasting:lore/minecraft/chests/village/village_snowy_house",
+    "hexcasting:scroll/minecraft/chests/abandoned_mineshaft",
+    "hexcasting:amethyst_cluster",
+    "hexcasting:lore/minecraft/chests/village/village_plains_house",
+    "hexcasting:lore/minecraft/chests/stronghold_library",
+    "hexcasting:scroll/minecraft/chests/bastion_other",
+    "hexcasting:lore/minecraft/chests/woodland_mansion",
+    "hexcasting:lore/minecraft/chests/village/village_desert_house",
+    "hexcasting:scroll/minecraft/chests/end_city_treasure",
+    "hexcasting:scroll/minecraft/chests/jungle_temple",
+    "hexcasting:scroll/minecraft/chests/bastion_treasure",
+    "hexcasting:lore/minecraft/chests/village/village_savanna_house",
+    "hexcasting:scroll/minecraft/chests/pillager_outpost",
+    "hexcasting:scroll/minecraft/chests/desert_pyramid",
+    "hexcasting:lore/minecraft/chests/abandoned_mineshaft",
+    "hexcasting:lore/minecraft/chests/pillager_outpost",
+    "hexcasting:scroll/minecraft/chests/ancient_city",
+    "hexcasting:scroll/minecraft/chests/stronghold_library",
+    "hexcasting:lore/minecraft/chests/simple_dungeon",
+    "hexcasting:scroll/minecraft/chests/woodland_mansion",
+    "hexcasting:scroll/minecraft/chests/simple_dungeon"
+  ],
+  "replace": false
+}

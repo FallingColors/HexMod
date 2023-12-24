@@ -1,0 +1,31 @@
+{
+  "replace": false,
+  "values": [
+    "hexcasting:slate_block",
+    "hexcasting:slate_tiles",
+    "hexcasting:slate_bricks",
+    "hexcasting:slate_bricks_small",
+    "hexcasting:slate_pillar",
+    "hexcasting:slate",
+    "hexcasting:directrix/empty",
+    "hexcasting:directrix/redstone",
+    "hexcasting:directrix/boolean",
+    "hexcasting:impetus/empty",
+    "hexcasting:impetus/rightclick",
+    "hexcasting:impetus/look",
+    "hexcasting:impetus/redstone",
+    "hexcasting:amethyst_tiles",
+    "hexcasting:amethyst_bricks",
+    "hexcasting:amethyst_bricks_small",
+    "hexcasting:amethyst_pillar",
+    "hexcasting:slate_amethyst_tiles",
+    "hexcasting:slate_amethyst_bricks",
+    "hexcasting:slate_amethyst_bricks_small",
+    "hexcasting:slate_amethyst_pillar",
+    "hexcasting:amethyst_sconce",
+    "hexcasting:quenched_allay",
+    "hexcasting:quenched_allay_tiles",
+    "hexcasting:quenched_allay_bricks",
+    "hexcasting:quenched_allay_bricks_small"
+  ]
+}

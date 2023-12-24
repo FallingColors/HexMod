@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+    "hexcasting:staff/edified",
+    "hexcasting:staff/oak",
+    "hexcasting:staff/spruce",
+    "hexcasting:staff/birch",
+    "hexcasting:staff/jungle",
+    "hexcasting:staff/acacia",
+    "hexcasting:staff/dark_oak",
+    "hexcasting:staff/crimson",
+    "hexcasting:staff/warped",
+    "hexcasting:staff/mangrove",
+    "hexcasting:staff/cherry",
+    "hexcasting:staff/bamboo",
+    "hexcasting:staff/quenched",
+    "hexcasting:staff/mindsplice"
+  ]
+}
