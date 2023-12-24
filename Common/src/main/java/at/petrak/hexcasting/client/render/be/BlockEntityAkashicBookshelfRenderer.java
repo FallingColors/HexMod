@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.client.render.be;
 
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.client.render.PatternTextureManager;
 import at.petrak.hexcasting.client.render.RenderLib;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
@@ -30,6 +31,13 @@ public class BlockEntityAkashicBookshelfRenderer implements BlockEntityRenderer<
         }
 
         var bs = tile.getBlockState();
+
+        if(PatternTextureManager.useTextures) {
+            PatternTextureManager.renderPatternForAkashicBookshelf(tile, pattern, ps, buffer, light, bs);
+            return;
+        }
+
+        //TODO: remove old rendering if not needed anymore for comparison
 
         var oldShader = RenderSystem.getShader();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
