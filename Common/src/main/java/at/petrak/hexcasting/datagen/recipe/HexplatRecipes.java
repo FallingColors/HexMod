@@ -20,8 +20,8 @@ import at.petrak.hexcasting.datagen.recipe.builders.CompatIngredientValue;
 import at.petrak.hexcasting.datagen.recipe.builders.CreateCrushingRecipeBuilder;
 import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightCuttingRecipeBuilder;
 import at.petrak.paucal.api.datagen.PaucalRecipeProvider;
-import net.minecraft.core.Registry;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -33,16 +33,16 @@ import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 // TODO: need to do a big refactor of this class cause it's giant and unwieldy, probably as part of #360
 public class HexplatRecipes extends PaucalRecipeProvider {
-    private final DataGenerator generator;
     private final IXplatIngredients ingredients;
     private final Function<RecipeBuilder, IXplatConditionsBuilder> conditions;
 
@@ -51,16 +51,25 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.EDIFIED_LOG_CITRINE,
         HexBlocks.EDIFIED_LOG_PURPLE);
 
-    public HexplatRecipes(DataGenerator generator, IXplatIngredients ingredients,
-        Function<RecipeBuilder, IXplatConditionsBuilder> conditions) {
-        super(generator, HexAPI.MOD_ID);
-        this.generator = generator;
+    private final Map<BlockAkashicLog, BlockAkashicLog> EDIFIED_LOG_TO_WOOD = Map.ofEntries(
+        Map.entry(HexBlocks.EDIFIED_LOG, HexBlocks.EDIFIED_WOOD),
+//      These don't exist, idk if they should
+//        Map.entry(HexBlocks.EDIFIED_LOG_AMETHYST, HexBlocks.EDIFIED_WOOD_AMETHYST),
+//        Map.entry(HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.EDIFIED_WOOD_AVENTURINE),
+//        Map.entry(HexBlocks.EDIFIED_LOG_CITRINE, HexBlocks.EDIFIED_WOOD_CITRINE),
+//        Map.entry(HexBlocks.EDIFIED_LOG_PURPLE, HexBlocks.EDIFIED_WOOD_PURPLE),
+        Map.entry(HexBlocks.STRIPPED_EDIFIED_LOG, HexBlocks.STRIPPED_EDIFIED_WOOD)
+    );
+
+    public HexplatRecipes(PackOutput output, IXplatIngredients ingredients,
+                          Function<RecipeBuilder, IXplatConditionsBuilder> conditions) {
+        super(output, HexAPI.MOD_ID);
         this.ingredients = ingredients;
         this.conditions = conditions;
     }
 
     @Override
-    protected void makeRecipes(Consumer<FinishedRecipe> recipes) {
+    public void buildRecipes(Consumer<FinishedRecipe> recipes) {
         specialRecipe(recipes, SealThingsRecipe.FOCUS_SERIALIZER);
         specialRecipe(recipes, SealThingsRecipe.SPELLBOOK_SERIALIZER);
 
@@ -73,16 +82,18 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         staffRecipe(recipes, HexItems.STAFF_CRIMSON, Items.CRIMSON_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_WARPED, Items.WARPED_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_MANGROVE, Items.MANGROVE_PLANKS);
+        staffRecipe(recipes, HexItems.STAFF_CHERRY, Items.CHERRY_PLANKS);
+        staffRecipe(recipes, HexItems.STAFF_BAMBOO, Items.BAMBOO_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_EDIFIED, HexBlocks.EDIFIED_PLANKS.asItem());
         staffRecipe(recipes, HexItems.STAFF_QUENCHED, HexItems.QUENCHED_SHARD);
         staffRecipe(recipes, HexItems.STAFF_MINDSPLICE, Ingredient.of(HexTags.Items.MINDFLAYED_CIRCLE_COMPONENTS));
 
-        ShapelessRecipeBuilder.shapeless(HexItems.THOUGHT_KNOT)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, HexItems.THOUGHT_KNOT)
             .requires(HexItems.AMETHYST_DUST)
             .requires(Items.STRING)
             .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
             .save(recipes);
-        ShapedRecipeBuilder.shaped(HexItems.FOCUS)
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, HexItems.FOCUS)
             .define('G', ingredients.glowstoneDust())
             .define('L', ingredients.leather())
             .define('P', Items.PAPER)
@@ -92,7 +103,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern("GLG")
             .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
             .save(recipes);
-        ShapedRecipeBuilder.shaped(HexItems.FOCUS)
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, HexItems.FOCUS)
             .define('G', ingredients.glowstoneDust())
             .define('L', ingredients.leather())
             .define('P', Items.PAPER)
@@ -103,7 +114,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
             .save(recipes, modLoc("focus_rotated"));
 
-        ShapedRecipeBuilder.shaped(HexItems.SPELLBOOK)
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, HexItems.SPELLBOOK)
             .define('N', ingredients.goldNugget())
             .define('B', Items.WRITABLE_BOOK)
             .define('A', HexItems.CHARGED_AMETHYST)
@@ -115,19 +126,19 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .unlockedBy("has_focus", hasItem(HexItems.FOCUS))
             .unlockedBy("has_chorus", hasItem(Items.CHORUS_FRUIT)).save(recipes);
 
-        ringCornerless(
+        ringCornerless(RecipeCategory.TOOLS,
             HexItems.CYPHER, 1,
             ingredients.copperIngot(),
             Ingredient.of(HexItems.AMETHYST_DUST))
             .unlockedBy("has_item", hasItem(HexTags.Items.STAVES)).save(recipes);
 
-        ringCornerless(
+        ringCornerless(RecipeCategory.TOOLS,
             HexItems.TRINKET, 1,
             ingredients.ironIngot(),
             Ingredient.of(Items.AMETHYST_SHARD))
             .unlockedBy("has_item", hasItem(HexTags.Items.STAVES)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexItems.ARTIFACT)
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, HexItems.ARTIFACT)
             .define('F', ingredients.goldIngot())
             .define('A', HexItems.CHARGED_AMETHYST)
             // why in god's name does minecraft have two different places for item tags
@@ -137,10 +148,10 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern(" D ")
             .unlockedBy("has_item", hasItem(HexTags.Items.STAVES)).save(recipes);
 
-        ringCornerless(HexItems.SCRYING_LENS, 1, Items.GLASS, HexItems.AMETHYST_DUST)
+        ringCornerless(RecipeCategory.TOOLS, HexItems.SCRYING_LENS, 1, Items.GLASS, HexItems.AMETHYST_DUST)
             .unlockedBy("has_item", hasItem(HexTags.Items.STAVES)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexItems.ABACUS)
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, HexItems.ABACUS)
             .define('S', Items.STICK)
             .define('A', Items.AMETHYST_SHARD)
             .define('W', ItemTags.PLANKS)
@@ -150,7 +161,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .unlockedBy("has_item", hasItem(HexTags.Items.STAVES)).save(recipes);
 
         // Why am I like this
-        ShapedRecipeBuilder.shaped(HexItems.SUBMARINE_SANDWICH)
+        ShapedRecipeBuilder.shaped(RecipeCategory.FOOD, HexItems.SUBMARINE_SANDWICH)
             .define('S', Items.STICK)
             .define('A', Items.AMETHYST_SHARD)
             .define('C', Items.COOKED_BEEF)
@@ -162,7 +173,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
 
         for (var dye : DyeColor.values()) {
             var item = HexItems.DYE_PIGMENTS.get(dye);
-            ShapedRecipeBuilder.shaped(item)
+            ShapedRecipeBuilder.shaped(RecipeCategory.MISC, item)
                 .define('D', HexItems.AMETHYST_DUST)
                 .define('C', DyeItem.byColor(dye))
                 .pattern(" D ")
@@ -192,19 +203,19 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         gayRecipe(recipes, ItemPridePigment.Type.PLURAL, Ingredient.of(Items.REPEATER));
         gayRecipe(recipes, ItemPridePigment.Type.TRANSGENDER, Ingredient.of(Items.EGG));
 
-        ring(HexItems.UUID_PIGMENT, 1, HexItems.AMETHYST_DUST, Items.AMETHYST_SHARD)
+        ring(RecipeCategory.MISC, HexItems.UUID_PIGMENT, 1, HexItems.AMETHYST_DUST, Items.AMETHYST_SHARD)
             .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
-        ring(HexItems.DEFAULT_PIGMENT, 1, HexItems.AMETHYST_DUST, Items.COPPER_INGOT)
+        ring(RecipeCategory.MISC, HexItems.DEFAULT_PIGMENT, 1, HexItems.AMETHYST_DUST, Items.COPPER_INGOT)
             .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexItems.SCROLL_SMOL)
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, HexItems.SCROLL_SMOL)
             .define('P', Items.PAPER)
             .define('A', HexItems.AMETHYST_DUST)
             .pattern(" A")
             .pattern("P ")
             .unlockedBy("has_item", hasItem(HexTags.Items.STAVES)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexItems.SCROLL_MEDIUM)
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, HexItems.SCROLL_MEDIUM)
             .define('P', Items.PAPER)
             .define('A', HexItems.AMETHYST_DUST)
             .pattern("  A")
@@ -212,7 +223,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern("PP ")
             .unlockedBy("has_item", hasItem(HexTags.Items.STAVES)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexItems.SCROLL_LARGE)
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, HexItems.SCROLL_LARGE)
             .define('P', Items.PAPER)
             .define('A', HexItems.AMETHYST_DUST)
             .pattern("PPA")
@@ -220,14 +231,14 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern("PPP")
             .unlockedBy("has_item", hasItem(HexTags.Items.STAVES)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexItems.SLATE, 6)
+        ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, HexItems.SLATE, 6)
             .define('S', Items.DEEPSLATE)
             .define('A', HexItems.AMETHYST_DUST)
             .pattern(" A ")
             .pattern("SSS")
             .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexItems.JEWELER_HAMMER)
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, HexItems.JEWELER_HAMMER)
             .define('I', ingredients.ironIngot())
             .define('N', ingredients.ironNugget())
             .define('A', Items.AMETHYST_SHARD)
@@ -237,135 +248,146 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern(" S ")
             .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
 
-        ShapelessRecipeBuilder.shapeless(HexItems.AMETHYST_DUST,
-                (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.DUST_UNIT) + 1)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, HexItems.AMETHYST_DUST,
+                (int) (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.DUST_UNIT) + 1)
             .requires(HexItems.QUENCHED_SHARD)
             .requires(HexItems.AMETHYST_DUST)
             .unlockedBy("has_item", hasItem(HexItems.QUENCHED_SHARD))
             .save(recipes, modLoc("decompose_quenched_shard/dust"));
-        ShapelessRecipeBuilder.shapeless(Items.AMETHYST_SHARD,
-                (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.SHARD_UNIT) + 1)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, Items.AMETHYST_SHARD,
+                (int) (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.SHARD_UNIT) + 1)
             .requires(HexItems.QUENCHED_SHARD)
             .requires(Items.AMETHYST_SHARD)
             .unlockedBy("has_item", hasItem(HexItems.QUENCHED_SHARD))
             .save(recipes, modLoc("decompose_quenched_shard/shard"));
-        ShapelessRecipeBuilder.shapeless(HexItems.CHARGED_AMETHYST,
-                (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.CRYSTAL_UNIT) + 1)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, HexItems.CHARGED_AMETHYST,
+                (int) (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.CRYSTAL_UNIT) + 1)
             .requires(HexItems.QUENCHED_SHARD)
             .requires(HexItems.CHARGED_AMETHYST)
             .unlockedBy("has_item", hasItem(HexItems.QUENCHED_SHARD))
             .save(recipes, modLoc("decompose_quenched_shard/charged"));
 
-        ShapedRecipeBuilder.shaped(HexBlocks.SLATE_BLOCK)
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.SLATE_BLOCK)
             .define('S', HexItems.SLATE)
             .pattern("S")
             .pattern("S")
             .unlockedBy("has_item", hasItem(HexItems.SLATE))
             .save(recipes, modLoc("slate_block_from_slates"));
 
-        ringAll(HexBlocks.SLATE_BLOCK, 8, Blocks.DEEPSLATE, HexItems.AMETHYST_DUST)
+        ringAll(RecipeCategory.BUILDING_BLOCKS, HexBlocks.SLATE_BLOCK, 8, Blocks.DEEPSLATE, HexItems.AMETHYST_DUST)
             .unlockedBy("has_item", hasItem(HexItems.SLATE)).save(recipes);
 
-        packing(HexItems.AMETHYST_DUST, HexBlocks.AMETHYST_DUST_BLOCK.asItem(), "amethyst_dust",
+        packing(RecipeCategory.BUILDING_BLOCKS, HexItems.AMETHYST_DUST, HexBlocks.AMETHYST_DUST_BLOCK.asItem(), "amethyst_dust",
             false, recipes);
 
-        ringAll(HexBlocks.AMETHYST_TILES, 8, Blocks.AMETHYST_BLOCK, HexItems.AMETHYST_DUST)
+        ringAll(RecipeCategory.BUILDING_BLOCKS, HexBlocks.AMETHYST_TILES, 8, Blocks.AMETHYST_BLOCK, HexItems.AMETHYST_DUST)
             .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
 
-        SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.AMETHYST_BLOCK), HexBlocks.AMETHYST_TILES)
+        SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.AMETHYST_BLOCK), RecipeCategory.BUILDING_BLOCKS, HexBlocks.AMETHYST_TILES)
             .unlockedBy("has_item", hasItem(Blocks.AMETHYST_BLOCK))
             .save(recipes, modLoc("stonecutting/amethyst_tiles"));
 
-        ringAll(HexBlocks.SCROLL_PAPER, 8, Items.PAPER, Items.AMETHYST_SHARD)
+        ringAll(RecipeCategory.BUILDING_BLOCKS, HexBlocks.SCROLL_PAPER, 8, Items.PAPER, Items.AMETHYST_SHARD)
             .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
 
-        ShapelessRecipeBuilder.shapeless(HexBlocks.ANCIENT_SCROLL_PAPER, 8)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, HexBlocks.ANCIENT_SCROLL_PAPER, 8)
             .requires(ingredients.dyes().get(DyeColor.BROWN))
             .requires(HexBlocks.SCROLL_PAPER, 8)
             .unlockedBy("has_item", hasItem(HexBlocks.SCROLL_PAPER)).save(recipes);
 
-        stack(HexBlocks.SCROLL_PAPER_LANTERN, 1, HexBlocks.SCROLL_PAPER, Items.TORCH)
+        stack(RecipeCategory.DECORATIONS, HexBlocks.SCROLL_PAPER_LANTERN, 1, HexBlocks.SCROLL_PAPER, Items.TORCH)
             .unlockedBy("has_item", hasItem(HexBlocks.SCROLL_PAPER)).save(recipes);
 
-        stack(HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN, 1, HexBlocks.ANCIENT_SCROLL_PAPER, Items.TORCH)
+        stack(RecipeCategory.DECORATIONS, HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN, 1, HexBlocks.ANCIENT_SCROLL_PAPER, Items.TORCH)
             .unlockedBy("has_item", hasItem(HexBlocks.ANCIENT_SCROLL_PAPER)).save(recipes);
 
-        ShapelessRecipeBuilder.shapeless(HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN, 8)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.DECORATIONS, HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN, 8)
             .requires(ingredients.dyes().get(DyeColor.BROWN))
             .requires(HexBlocks.SCROLL_PAPER_LANTERN, 8)
             .unlockedBy("has_item", hasItem(HexBlocks.SCROLL_PAPER_LANTERN))
             .save(recipes, modLoc("ageing_scroll_paper_lantern"));
 
-        stack(HexBlocks.SCONCE, 4,
+        stack(RecipeCategory.DECORATIONS, HexBlocks.SCONCE, 4,
             Ingredient.of(HexItems.CHARGED_AMETHYST),
             ingredients.copperIngot())
             .unlockedBy("has_item", hasItem(HexItems.CHARGED_AMETHYST)).save(recipes);
 
-        ShapelessRecipeBuilder.shapeless(HexBlocks.EDIFIED_PLANKS, 4)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_PLANKS, 4)
             .requires(HexTags.Items.EDIFIED_LOGS)
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_LOGS)).save(recipes);
 
-        for (var log : EDIFIED_LOGS) {
-            ShapedRecipeBuilder.shaped(log, 3)
-                .define('W', log)
-                .pattern("WW")
-                .pattern("WW")
-                .unlockedBy("has_item", hasItem(log)).save(recipes);
+        for (var entry : EDIFIED_LOG_TO_WOOD.entrySet()) {
+            var log = entry.getKey();
+            var wood = entry.getValue();
+            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, wood, 3)
+                    .define('W', log)
+                    .pattern("WW")
+                    .pattern("WW")
+                    .unlockedBy("has_item", hasItem(log)).save(recipes);
         }
 
-        ShapedRecipeBuilder.shaped(HexBlocks.STRIPPED_EDIFIED_WOOD, 3)
-            .define('W', HexBlocks.STRIPPED_EDIFIED_LOG)
-            .pattern("WW")
-            .pattern("WW")
-            .unlockedBy("has_item", hasItem(HexBlocks.STRIPPED_EDIFIED_LOG)).save(recipes);
-
-        ring(HexBlocks.EDIFIED_PANEL, 8,
+        ring(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_PANEL, 8,
             HexTags.Items.EDIFIED_PLANKS, null)
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_TILE, 6)
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_TILE, 6)
             .define('W', HexTags.Items.EDIFIED_PLANKS)
             .pattern("WW ")
             .pattern("W W")
             .pattern(" WW")
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_DOOR, 3)
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, HexBlocks.EDIFIED_DOOR, 3)
             .define('W', HexTags.Items.EDIFIED_PLANKS)
             .pattern("WW")
             .pattern("WW")
             .pattern("WW")
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_TRAPDOOR, 2)
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, HexBlocks.EDIFIED_TRAPDOOR, 2)
             .define('W', HexTags.Items.EDIFIED_PLANKS)
             .pattern("WWW")
             .pattern("WWW")
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_STAIRS, 4)
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_STAIRS, 4)
             .define('W', HexTags.Items.EDIFIED_PLANKS)
             .pattern("W  ")
             .pattern("WW ")
             .pattern("WWW")
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_SLAB, 6)
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_FENCE, 3)
+                .define('W', HexTags.Items.EDIFIED_PLANKS)
+                .define('S', Items.STICK)
+                .pattern("WSW")
+                .pattern("WSW")
+                .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_FENCE_GATE, 1)
+                .define('W', HexTags.Items.EDIFIED_PLANKS)
+                .define('S', Items.STICK)
+                .pattern("SWS")
+                .pattern("SWS")
+                .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
+
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_SLAB, 6)
             .define('W', HexTags.Items.EDIFIED_PLANKS)
             .pattern("WWW")
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexBlocks.EDIFIED_PRESSURE_PLATE, 1)
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, HexBlocks.EDIFIED_PRESSURE_PLATE, 1)
             .define('W', HexTags.Items.EDIFIED_PLANKS)
             .pattern("WW")
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
 
-        ShapelessRecipeBuilder.shapeless(HexBlocks.EDIFIED_BUTTON)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, HexBlocks.EDIFIED_BUTTON)
             .requires(HexTags.Items.EDIFIED_PLANKS)
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
 
         var enlightenment = HexAdvancements.ENLIGHTEN;
-        ShapedRecipeBuilder.shaped(HexBlocks.IMPETUS_EMPTY)
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, HexBlocks.IMPETUS_EMPTY)
             .define('B', Items.IRON_BARS)
             .define('A', HexItems.CHARGED_AMETHYST)
             .define('S', HexBlocks.SLATE_BLOCK)
@@ -375,7 +397,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern("SSP")
             .unlockedBy("enlightenment", enlightenment).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexBlocks.EMPTY_DIRECTRIX)
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, HexBlocks.EMPTY_DIRECTRIX)
             .define('C', Items.COMPARATOR)
             .define('O', Items.OBSERVER)
             .define('A', HexItems.CHARGED_AMETHYST)
@@ -385,7 +407,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern("SSC")
             .unlockedBy("enlightenment", enlightenment).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_BOOKSHELF)
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, HexBlocks.AKASHIC_BOOKSHELF)
             .define('L', HexTags.Items.EDIFIED_LOGS)
             .define('P', HexTags.Items.EDIFIED_PLANKS)
             .define('C', Items.BOOK)
@@ -394,7 +416,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern("LPL")
             .unlockedBy("enlightenment", enlightenment).save(recipes);
 
-        ShapedRecipeBuilder.shaped(HexBlocks.AKASHIC_LIGATURE, 4)
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, HexBlocks.AKASHIC_LIGATURE, 4)
             .define('L', HexTags.Items.EDIFIED_LOGS)
             .define('P', HexTags.Items.EDIFIED_PLANKS)
             .define('1', HexItems.AMETHYST_DUST)
@@ -483,7 +505,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
                     .withOutput("farmersdelight:tree_bark")
                     .withSound(SoundEvents.AXE_STRIP))
                 .whenModLoaded("farmersdelight")
-                .save(recipes, modLoc("compat/farmersdelight/cutting/" + Registry.BLOCK.getKey(log).getPath()));
+                .save(recipes, modLoc("compat/farmersdelight/cutting/" + BuiltInRegistries.BLOCK.getKey(log).getPath()));
         }
 
         this.conditions.apply(new FarmersDelightCuttingRecipeBuilder()
@@ -515,7 +537,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
     }
 
     private void staffRecipe(Consumer<FinishedRecipe> recipes, ItemStaff staff, Ingredient plank) {
-        ShapedRecipeBuilder.shaped(staff)
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, staff)
             .define('W', plank)
             .define('S', Items.STICK)
             .define('A', HexItems.CHARGED_AMETHYST)
@@ -528,7 +550,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
 
     private void gayRecipe(Consumer<FinishedRecipe> recipes, ItemPridePigment.Type type, Ingredient material) {
         var colorizer = HexItems.PRIDE_PIGMENTS.get(type);
-        ShapedRecipeBuilder.shaped(colorizer)
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, colorizer)
             .define('D', HexItems.AMETHYST_DUST)
             .define('C', material)
             .pattern(" D ")
@@ -538,8 +560,8 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .save(recipes);
     }
 
-    private void specialRecipe(Consumer<FinishedRecipe> consumer, SimpleRecipeSerializer<?> serializer) {
-        var name = Registry.RECIPE_SERIALIZER.getKey(serializer);
+    private void specialRecipe(Consumer<FinishedRecipe> consumer, SimpleCraftingRecipeSerializer<?> serializer) {
+        var name = BuiltInRegistries.RECIPE_SERIALIZER.getKey(serializer);
         SpecialRecipeBuilder.special(serializer).save(consumer, HexAPI.MOD_ID + ":dynamic" + name.getPath());
     }
 }

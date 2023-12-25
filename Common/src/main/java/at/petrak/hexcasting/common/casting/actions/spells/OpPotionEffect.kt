@@ -10,7 +10,7 @@ import net.minecraft.world.entity.LivingEntity
 
 class OpPotionEffect(
     val effect: MobEffect,
-    val baseCost: Int,
+    val baseCost: Long,
     val allowPotency: Boolean,
     val potencyCubic: Boolean,
 ) : SpellAction {
@@ -18,15 +18,15 @@ class OpPotionEffect(
         get() = if (this.allowPotency) 3 else 2
 
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val target = args.getLivingEntityButNotArmorStand(0, argc)
         val duration = args.getPositiveDouble(1, argc)
         val potency = if (this.allowPotency)
             args.getPositiveDoubleUnderInclusive(2, 127.0, argc)
         else 1.0
-        ctx.assertEntityInRange(target)
+        env.assertEntityInRange(target)
 
 
         val cost = this.baseCost * duration * if (potencyCubic) {
@@ -36,14 +36,14 @@ class OpPotionEffect(
         }
         return SpellAction.Result(
             Spell(effect, target, duration, potency),
-            cost.toInt(),
+            cost.toLong(),
             listOf(ParticleSpray.cloud(target.position().add(0.0, target.eyeHeight / 2.0, 0.0), 1.0))
         )
     }
 
     private class Spell(val effect: MobEffect, val target: LivingEntity, val duration: Double, val potency: Double) :
         RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             if (duration > 1.0 / 20.0) {
                 val effectInst = MobEffectInstance(effect, (duration * 20).toInt(), potency.toInt() - 1)
                 target.addEffect(effectInst)

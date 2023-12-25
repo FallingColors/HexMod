@@ -6,8 +6,13 @@ import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.utils.NBTBuilder
+import at.petrak.hexcasting.api.utils.getList
+import at.petrak.hexcasting.api.utils.hasList
 import at.petrak.hexcasting.api.utils.serializeToNBT
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 
 /**
@@ -52,8 +57,6 @@ data class FrameForEach(
 
         // If we still have data to process...
         val (stackTop, newImage, newCont) = if (data.nonEmpty) {
-            // Increment the evaluation depth,
-
             // push the next datum to the top of the stack,
             val cont2 = continuation
                 // put the next Thoth object back on the stack for the next Thoth cycle,
@@ -68,6 +71,7 @@ data class FrameForEach(
         val tStack = stack.toMutableList()
         tStack.add(stackTop)
         return CastResult(
+            ListIota(code),
             newCont,
             newImage.copy(stack = tStack),
             listOf(),
@@ -77,7 +81,6 @@ data class FrameForEach(
     }
 
     override fun serializeToNBT() = NBTBuilder {
-        "type" %= "foreach"
         "data" %= data.serializeToNBT()
         "code" %= code.serializeToNBT()
         if (baseStack != null)
@@ -86,4 +89,27 @@ data class FrameForEach(
     }
 
     override fun size() = data.size() + code.size() + acc.size + (baseStack?.size ?: 0)
+
+    override val type: ContinuationFrame.Type<*> = TYPE
+
+    companion object {
+        @JvmField
+        val TYPE: ContinuationFrame.Type<FrameForEach> = object : ContinuationFrame.Type<FrameForEach> {
+            override fun deserializeFromNBT(tag: CompoundTag, world: ServerLevel): FrameForEach {
+                return FrameForEach(
+                    HexIotaTypes.LIST.deserialize(tag.getList("data", Tag.TAG_COMPOUND), world)!!.list,
+                    HexIotaTypes.LIST.deserialize(tag.getList("code", Tag.TAG_COMPOUND), world)!!.list,
+                    if (tag.hasList("base", Tag.TAG_COMPOUND))
+                        HexIotaTypes.LIST.deserialize(tag.getList("base", Tag.TAG_COMPOUND), world)!!.list.toList()
+                    else
+                        null,
+                    HexIotaTypes.LIST.deserialize(
+                        tag.getList("accumulator", Tag.TAG_COMPOUND),
+                        world
+                    )!!.list.toMutableList()
+                )
+            }
+
+        }
+    }
 }

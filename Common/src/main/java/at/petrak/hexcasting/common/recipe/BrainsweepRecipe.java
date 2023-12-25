@@ -4,6 +4,7 @@ import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
 import com.google.gson.JsonObject;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -25,7 +26,7 @@ public record BrainsweepRecipe(
 	ResourceLocation id,
 	StateIngredient blockIn,
 	BrainsweepeeIngredient entityIn,
-	int mediaCost,
+	long mediaCost,
 	BlockState result
 ) implements Recipe<Container> {
 	public boolean matches(BlockState blockIn, Entity victim, ServerLevel level) {
@@ -55,7 +56,7 @@ public record BrainsweepRecipe(
 	}
 
 	@Override
-	public ItemStack assemble(Container pContainer) {
+	public ItemStack assemble(Container pContainer, RegistryAccess access) {
 		return ItemStack.EMPTY;
 	}
 
@@ -65,7 +66,7 @@ public record BrainsweepRecipe(
 	}
 
 	@Override
-	public ItemStack getResultItem() {
+	public ItemStack getResultItem(RegistryAccess registryAccess) {
 		return ItemStack.EMPTY.copy();
 	}
 
@@ -96,7 +97,7 @@ public record BrainsweepRecipe(
 		public void toNetwork(FriendlyByteBuf buf, BrainsweepRecipe recipe) {
 			recipe.blockIn.write(buf);
 			recipe.entityIn.wrapWrite(buf);
-			buf.writeVarInt(recipe.mediaCost);
+			buf.writeVarLong(recipe.mediaCost);
 			buf.writeVarInt(Block.getId(recipe.result));
 		}
 
@@ -104,7 +105,7 @@ public record BrainsweepRecipe(
 		public @NotNull BrainsweepRecipe fromNetwork(ResourceLocation recipeID, FriendlyByteBuf buf) {
 			var blockIn = StateIngredientHelper.read(buf);
 			var brainsweepeeIn = BrainsweepeeIngredient.read(buf);
-			var cost = buf.readVarInt();
+			var cost = buf.readVarLong();
 			var result = Block.stateById(buf.readVarInt());
 			return new BrainsweepRecipe(recipeID, blockIn, brainsweepeeIn, cost, result);
 		}

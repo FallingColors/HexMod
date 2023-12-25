@@ -7,6 +7,7 @@
   "mixins": [
     "FabricAxeItemMixin",
     "FabricBlockBehaviorMixin",
+    "FabricClipContextMixin",
     "FabricEnchantmentTableBlockMixin",
     "FabricItemEntityMixin",
     "FabricLivingEntityMixin",

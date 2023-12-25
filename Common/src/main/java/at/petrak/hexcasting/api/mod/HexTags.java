@@ -3,6 +3,8 @@ package at.petrak.hexcasting.api.mod;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -29,7 +31,7 @@ public class HexTags {
         }
 
         public static TagKey<Item> create(ResourceLocation id) {
-            return TagKey.create(Registry.ITEM_REGISTRY, id);
+            return TagKey.create(Registries.ITEM, id);
         }
     }
 
@@ -42,8 +44,11 @@ public class HexTags {
         public static final TagKey<Block> DIRECTRICES = create("directrices");
         public static final TagKey<Block> MINDFLAYED_CIRCLE_COMPONENTS = create("brainswept_circle_components");
 
+        // Used to determine what blocks should be replaced with air by OpDestroyFluid
+        public static final TagKey<Block> WATER_PLANTS = create("water_plants");
+
         public static TagKey<Block> create(String name) {
-            return TagKey.create(Registry.BLOCK_REGISTRY, modLoc(name));
+            return TagKey.create(Registries.BLOCK, modLoc(name));
         }
     }
 
@@ -54,7 +59,7 @@ public class HexTags {
         public static final TagKey<EntityType<?>> NO_BRAINSWEEPING = create("cannot_brainsweep");
 
         public static TagKey<EntityType<?>> create(String name) {
-            return TagKey.create(Registry.ENTITY_TYPE_REGISTRY, modLoc(name));
+            return TagKey.create(Registries.ENTITY_TYPE, modLoc(name));
         }
     }
 

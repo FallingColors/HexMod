@@ -6,6 +6,7 @@ import com.google.gson.JsonParseException;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.NbtUtils;
@@ -53,13 +54,13 @@ public class StateIngredientHelper {
                 return new StateIngredientTag(new ResourceLocation(GsonHelper.getAsString(object, "tag")));
             case "block":
                 return new StateIngredientBlock(
-                    Registry.BLOCK.get(new ResourceLocation(GsonHelper.getAsString(object, "block"))));
+                        BuiltInRegistries.BLOCK.get(new ResourceLocation(GsonHelper.getAsString(object, "block"))));
             case "state":
                 return new StateIngredientBlockState(readBlockState(object));
             case "blocks":
                 List<Block> blocks = new ArrayList<>();
                 for (JsonElement element : GsonHelper.getAsJsonArray(object, "blocks")) {
-                    blocks.add(Registry.BLOCK.get(new ResourceLocation(element.getAsString())));
+                    blocks.add(BuiltInRegistries.BLOCK.get(new ResourceLocation(element.getAsString())));
                 }
                 return new StateIngredientBlocks(blocks);
             case "tag_excluding":
@@ -111,12 +112,12 @@ public class StateIngredientHelper {
                 Set<Block> set = new HashSet<>();
                 for (int i = 0; i < count; i++) {
                     int id = buffer.readVarInt();
-                    Block block = Registry.BLOCK.byId(id);
+                    Block block = BuiltInRegistries.BLOCK.byId(id);
                     set.add(block);
                 }
                 return new StateIngredientBlocks(set);
             case 1:
-                return new StateIngredientBlock(Registry.BLOCK.byId(buffer.readVarInt()));
+                return new StateIngredientBlock(BuiltInRegistries.BLOCK.byId(buffer.readVarInt()));
             case 2:
                 return new StateIngredientBlockState(Block.stateById(buffer.readVarInt()));
             default:
@@ -144,10 +145,10 @@ public class StateIngredientHelper {
         renameTag(nbt, "properties", "Properties");
         String name = nbt.getString("Name");
         ResourceLocation id = ResourceLocation.tryParse(name);
-        if (id == null || !Registry.BLOCK.getOptional(id).isPresent()) {
+        if (id == null || !BuiltInRegistries.BLOCK.getOptional(id).isPresent()) {
             throw new IllegalArgumentException("Invalid or unknown block ID: " + name);
         }
-        return NbtUtils.readBlockState(nbt);
+        return NbtUtils.readBlockState(BuiltInRegistries.BLOCK.asLookup(), nbt);
     }
 
     @Deprecated

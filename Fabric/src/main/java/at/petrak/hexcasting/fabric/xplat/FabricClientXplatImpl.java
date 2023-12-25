@@ -1,6 +1,8 @@
 package at.petrak.hexcasting.fabric.xplat;
 
+import at.petrak.hexcasting.api.client.ClientCastingStack;
 import at.petrak.hexcasting.common.msgs.IMessage;
+import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.fabric.client.ExtendedTexture;
 import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsApiInterop;
 import at.petrak.hexcasting.interop.HexInterop;
@@ -21,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -68,6 +71,11 @@ public class FabricClientXplatImpl implements IClientXplatAbstractions {
     @Override
     public void registerItemProperty(Item item, ResourceLocation id, ItemPropertyFunction func) {
         ItemProperties.register(item, id, new UnclampedClampedItemPropFunc(func));
+    }
+
+    @Override
+    public ClientCastingStack getClientCastingStack(Player player) {
+        return HexCardinalComponents.CLIENT_CASTING_STACK.get(player).getClientCastingStack();
     }
 
     @Override

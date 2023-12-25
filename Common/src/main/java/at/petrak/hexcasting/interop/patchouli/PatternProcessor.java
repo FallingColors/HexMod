@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.interop.patchouli;
 
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.world.level.Level;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
@@ -9,7 +10,7 @@ public class PatternProcessor implements IComponentProcessor {
     private String translationKey;
 
     @Override
-    public void setup(IVariableProvider vars) {
+    public void setup(Level level, IVariableProvider vars) {
         if (vars.has("header"))
             translationKey = vars.get("header").asString();
         else {
@@ -23,7 +24,7 @@ public class PatternProcessor implements IComponentProcessor {
     }
 
     @Override
-    public IVariable process(String key) {
+    public IVariable process(Level level, String key) {
         if (key.equals("translation_key")) {
             return IVariable.wrap(translationKey);
         }

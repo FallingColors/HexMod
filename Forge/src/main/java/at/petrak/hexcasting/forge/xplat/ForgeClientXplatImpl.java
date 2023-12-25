@@ -1,6 +1,8 @@
 package at.petrak.hexcasting.forge.xplat;
 
+import at.petrak.hexcasting.api.client.ClientCastingStack;
 import at.petrak.hexcasting.common.msgs.IMessage;
+import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import net.minecraft.client.renderer.RenderType;
@@ -12,6 +14,7 @@ import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
@@ -42,6 +45,14 @@ public class ForgeClientXplatImpl implements IClientXplatAbstractions {
     @Override
     public void registerItemProperty(Item item, ResourceLocation id, ItemPropertyFunction func) {
         ItemProperties.register(item, id, func);
+    }
+
+    @Override
+    public ClientCastingStack getClientCastingStack(Player player) {
+        var maybeCap = player.getCapability(HexCapabilities.CLIENT_CASTING_STACK).resolve();
+        if (maybeCap.isEmpty())
+            return new ClientCastingStack(); // lie
+        return maybeCap.get().get();
     }
 
     @Override

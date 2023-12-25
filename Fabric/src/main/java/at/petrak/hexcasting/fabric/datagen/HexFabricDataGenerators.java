@@ -13,13 +13,17 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonObject;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 import java.util.EnumMap;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
@@ -27,16 +31,27 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
     public void onInitializeDataGenerator(FabricDataGenerator gen) {
         HexAPI.LOGGER.info("Starting Fabric-specific datagen");
 
-        gen.addProvider(new HexplatRecipes(gen, INGREDIENTS, HexFabricConditionsBuilder::new));
-
+        var pack = gen.createPack();
         var xtags = IXplatAbstractions.INSTANCE.tags();
-        var blockTagProvider = new HexBlockTagProvider(gen, xtags);
-        gen.addProvider(blockTagProvider);
-        gen.addProvider(new HexItemTagProvider(gen, blockTagProvider, xtags));
 
-        gen.addProvider(new HexActionTagProvider(gen));
+        pack.addProvider((FabricDataGenerator.Pack.Factory<HexplatRecipes>) x -> new HexplatRecipes(x, INGREDIENTS, HexFabricConditionsBuilder::new));
 
-        gen.addProvider(new HexLootTables(gen));
+        var btagProviderWrapper = new BlockTagProviderWrapper(); // CURSED
+        pack.addProvider((output, lookup) -> {
+            btagProviderWrapper.provider = new HexBlockTagProvider(output, lookup, xtags);
+            return btagProviderWrapper.provider;
+        });
+        pack.addProvider((output, lookup) -> new HexItemTagProvider(output, lookup, btagProviderWrapper.provider, xtags));
+
+        pack.addProvider(HexActionTagProvider::new);
+
+        pack.addProvider((FabricDataGenerator.Pack.Factory<LootTableProvider>) (output) -> new LootTableProvider(
+                output, Set.of(), List.of(new LootTableProvider.SubProviderEntry(HexLootTables::new, LootContextParamSets.ALL_PARAMS))
+        ));
+    }
+
+    private static class BlockTagProviderWrapper {
+        HexBlockTagProvider provider;
     }
 
     private static final IXplatIngredients INGREDIENTS = new IXplatIngredients() {
@@ -101,10 +116,10 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
                 out.put(col, new Ingredient(Stream.of(
                     new Ingredient.ItemValue(new ItemStack(DyeItem.byColor(col))),
                     new Ingredient.TagValue(
-                        TagKey.create(Registry.ITEM_REGISTRY,
+                        TagKey.create(Registries.ITEM,
                             new ResourceLocation("c", col.getSerializedName() + "_dye"))),
                     new Ingredient.TagValue(
-                        TagKey.create(Registry.ITEM_REGISTRY,
+                        TagKey.create(Registries.ITEM,
                             new ResourceLocation("c", col.getSerializedName() + "_dyes"))
                     ))));
             }
@@ -147,6 +162,6 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
     }
 
     private static TagKey<Item> tag(String namespace, String s) {
-        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(namespace, s));
+        return TagKey.create(Registries.ITEM, new ResourceLocation(namespace, s));
     }
 }

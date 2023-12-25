@@ -24,7 +24,7 @@ class SpecialHandlerMask(val mask: BooleanList) : SpecialHandler {
     }
 
     override fun getName(): Component {
-        val key = IXplatAbstractions.INSTANCE.specialHandlerRegistry.getResourceKey(HexSpecialHandlers.NUMBER).get()
+        val key = IXplatAbstractions.INSTANCE.specialHandlerRegistry.getResourceKey(HexSpecialHandlers.MASK).get()
         val fingerprint = mask.map { if (it) '-' else 'v' }.joinToString("")
         return HexAPI.instance().getSpecialHandlerI18nKey(key)
             .asTranslatedComponent(fingerprint)

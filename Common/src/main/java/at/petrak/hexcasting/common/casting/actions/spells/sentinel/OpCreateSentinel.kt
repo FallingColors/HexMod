@@ -15,11 +15,11 @@ class OpCreateSentinel(val extendsRange: Boolean) : SpellAction {
     override val argc = 1
 
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val target = args.getVec3(0, argc)
-        ctx.assertVecInRange(target)
+        env.assertVecInRange(target)
 
         return SpellAction.Result(
             Spell(target, this.extendsRange),
@@ -29,13 +29,13 @@ class OpCreateSentinel(val extendsRange: Boolean) : SpellAction {
     }
 
     private data class Spell(val target: Vec3, val extendsRange: Boolean) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             IXplatAbstractions.INSTANCE.setSentinel(
-                ctx.caster,
+                env.caster,
                 Sentinel(
                     extendsRange,
                     target,
-                    ctx.world.dimension()
+                    env.world.dimension()
                 )
             )
         }

@@ -2,6 +2,7 @@ package at.petrak.hexcasting.client.render;
 
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.api.player.Sentinel;
+import at.petrak.hexcasting.api.utils.QuaternionfUtils;
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.lib.HexAttributes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -13,9 +14,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.datafixers.util.Pair;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
@@ -27,6 +27,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -36,14 +37,14 @@ public class HexAdditionalRenderers {
         var player = Minecraft.getInstance().player;
         if (player != null) {
             var sentinel = IXplatAbstractions.INSTANCE.getSentinel(player);
-            if (sentinel != null && player.getLevel().dimension().equals(sentinel.dimension())) {
+            if (sentinel != null && player.level().dimension().equals(sentinel.dimension())) {
                 renderSentinel(sentinel, player, ps, partialTick);
             }
         }
     }
 
-    public static void overlayGui(PoseStack ps, float partialTicks) {
-        tryRenderScryingLensOverlay(ps, partialTicks);
+    public static void overlayGui(GuiGraphics graphics, float partialTicks) {
+        tryRenderScryingLensOverlay(graphics, partialTicks);
     }
 
     private static void renderSentinel(Sentinel sentinel, LocalPlayer owner,
@@ -64,9 +65,9 @@ public class HexAdditionalRenderers {
         var magnitude = 0.1f;
         ps.translate(0, Mth.sin(bobSpeed * time) * magnitude, 0);
         var spinSpeed = 1f / 30;
-        ps.mulPose(Quaternion.fromXYZ(new Vector3f(0, spinSpeed * time, 0)));
+        ps.mulPose(QuaternionfUtils.fromXYZ(new Vector3f(0, spinSpeed * time, 0)));
         if (sentinel.extendsRange()) {
-            ps.mulPose(Quaternion.fromXYZ(new Vector3f(spinSpeed * time / 8f, 0, 0)));
+            ps.mulPose(QuaternionfUtils.fromXYZ(new Vector3f(spinSpeed * time / 8f, 0, 0)));
         }
 
         float scale = 0.5f;
@@ -83,8 +84,8 @@ public class HexAdditionalRenderers {
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.lineWidth(5f);
 
-        var colorizer = IXplatAbstractions.INSTANCE.getPigment(owner);
-        var colProvider = colorizer.getColorProvider();
+        var pigment = IXplatAbstractions.INSTANCE.getPigment(owner);
+        var colProvider = pigment.getColorProvider();
         BiConsumer<float[], float[]> v = (l, r) -> {
             int lcolor = colProvider.getColor(time, new Vec3(l[0], l[1], l[2])),
                 rcolor = colProvider.getColor(time, new Vec3(r[0], r[1], r[2]));
@@ -148,8 +149,9 @@ public class HexAdditionalRenderers {
         }
     }
 
-    private static void tryRenderScryingLensOverlay(PoseStack ps, float partialTicks) {
+    private static void tryRenderScryingLensOverlay(GuiGraphics graphics, float partialTicks) {
         var mc = Minecraft.getInstance();
+        var ps = graphics.pose();
 
         LocalPlayer player = mc.player;
         ClientLevel level = mc.level;
@@ -196,16 +198,16 @@ public class HexAdditionalRenderers {
                     var stack = pair.getFirst();
                     if (!stack.isEmpty()) {
                         // this draws centered in the Y ...
-                        RenderLib.renderItemStackInGui(ps, pair.getFirst(), 0, 0);
+                        graphics.renderItem(pair.getFirst(), 0, 0);
                     }
-                    float tx = stack.isEmpty() ? 0 : 18;
-                    float ty = 5;
+                    int tx = stack.isEmpty() ? 0 : 18;
+                    int ty = 5;
                     // but this draws where y=0 is the baseline
                     var text = pair.getSecond();
 
                     for (var line : text) {
                         var actualLine = Language.getInstance().getVisualOrder(line);
-                        mc.font.drawShadow(ps, actualLine, tx, ty, 0xffffffff);
+                        graphics.drawString(mc.font, actualLine, tx, ty, 0xffffffff);
                         ps.translate(0, mc.font.lineHeight, 0);
                     }
                     if (text.isEmpty()) {

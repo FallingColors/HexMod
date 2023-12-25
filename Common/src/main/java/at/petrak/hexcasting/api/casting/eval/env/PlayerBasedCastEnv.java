@@ -9,12 +9,12 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
-import at.petrak.hexcasting.api.misc.HexDamageSources;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
+import at.petrak.hexcasting.common.lib.HexDamageTypes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -29,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -40,18 +41,20 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     protected final InteractionHand castingHand;
 
     protected PlayerBasedCastEnv(ServerPlayer caster, InteractionHand castingHand) {
-        super(caster.getLevel());
+        super(caster.serverLevel());
         this.caster = caster;
         this.castingHand = castingHand;
     }
 
     @Override
-    public @Nullable ServerPlayer getCaster() {
+    public ServerPlayer getCaster() {
         return this.caster;
     }
 
     @Override
     public void postExecution(CastResult result) {
+        super.postExecution(result);
+
         for (var sideEffect : result.getSideEffects()) {
             if (sideEffect instanceof OperatorSideEffect.DoMishap doMishap) {
                 this.sendMishapMsgToPlayer(doMishap);
@@ -121,27 +124,7 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
             this.castingHand));
     }
 
-    @Override
-    public boolean isVecInRange(Vec3 vec) {
-        var sentinel = HexAPI.instance().getSentinel(this.caster);
-        if (sentinel != null
-            && sentinel.extendsRange()
-            && this.caster.getLevel().dimension() == sentinel.dimension()
-            && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS
-        ) {
-            return true;
-        }
-
-        return vec.distanceToSqr(this.caster.position()) <= AMBIT_RADIUS * AMBIT_RADIUS;
-    }
-
-    @Override
-    public boolean hasEditPermissionsAt(BlockPos vec) {
-        return this.caster.gameMode.getGameModeForPlayer() != GameType.ADVENTURE && this.world.mayInteract(this.caster, vec);
-    }
-
-    @Override
-    public ItemStack getAlternateItem() {
+    ItemStack getAlternateItem() {
         var otherHand = HexUtils.otherHand(this.castingHand);
         var stack = this.caster.getItemInHand(otherHand);
         if (stack.isEmpty()) {
@@ -151,14 +134,67 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         }
     }
 
+    @Override
+    public boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand) {
+        if (caster == null)
+            return false;
+
+        if (hand != null && stackOk.test(caster.getItemInHand(hand))) {
+            caster.setItemInHand(hand, replaceWith);
+            return true;
+        }
+
+        Inventory inv = this.caster.getInventory();
+        for (int i = inv.items.size() - 1; i >= 0; i--) {
+            if (i != inv.selected) {
+                if (stackOk.test(inv.items.get(i))) {
+                    inv.setItem(i, replaceWith);
+                    return true;
+                }
+            }
+        }
+
+        if (stackOk.test(caster.getItemInHand(getOtherHand()))) {
+            caster.setItemInHand(getOtherHand(), replaceWith);
+            return true;
+        }
+        if (stackOk.test(caster.getItemInHand(getCastingHand()))) {
+            caster.setItemInHand(getCastingHand(), replaceWith);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isVecInRangeEnvironment(Vec3 vec) {
+        var sentinel = HexAPI.instance().getSentinel(this.caster);
+        if (sentinel != null
+            && sentinel.extendsRange()
+            && this.caster.level().dimension() == sentinel.dimension()
+            && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS
+        ) {
+            return true;
+        }
+
+        return vec.distanceToSqr(this.caster.position()) <= AMBIT_RADIUS * AMBIT_RADIUS;
+    }
+
+    @Override
+    public boolean hasEditPermissionsAtEnvironment(BlockPos pos) {
+        return this.caster.gameMode.getGameModeForPlayer() != GameType.ADVENTURE && this.world.mayInteract(this.caster, pos);
+    }
+
     /**
      * Search the player's inventory for media ADs and use them.
      */
     protected long extractMediaFromInventory(long costLeft, boolean allowOvercast) {
         List<ADMediaHolder> sources = MediaHelper.scanPlayerForMediaStuff(this.caster);
 
+        var startCost = costLeft;
+
         for (var source : sources) {
-            var found = MediaHelper.extractMedia(source, (int) costLeft, true, false);
+            var found = MediaHelper.extractMedia(source, costLeft, false, false);
             costLeft -= found;
             if (costLeft <= 0) {
                 break;
@@ -170,7 +206,7 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
             double healthToRemove = Math.max(costLeft / mediaToHealth, 0.5);
             var mediaAbleToCastFromHP = this.caster.getHealth() * mediaToHealth;
 
-            Mishap.trulyHurt(this.caster, HexDamageSources.OVERCAST, (float) healthToRemove);
+            Mishap.trulyHurt(this.caster, this.caster.damageSources().source(HexDamageTypes.OVERCAST), (float) healthToRemove);
 
             var actuallyTaken = Mth.ceil(mediaAbleToCastFromHP - (this.caster.getHealth() * mediaToHealth));
 
@@ -179,6 +215,8 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
 
             costLeft -= actuallyTaken;
         }
+
+        this.caster.awardStat(HexStatistics.MEDIA_USED, (int) (startCost - costLeft));
 
         return costLeft;
     }
@@ -195,8 +233,8 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public void produceParticles(ParticleSpray particles, FrozenPigment colorizer) {
-        particles.sprayParticles(this.world, colorizer);
+    public void produceParticles(ParticleSpray particles, FrozenPigment pigment) {
+        particles.sprayParticles(this.world, pigment);
     }
 
     @Override

@@ -14,8 +14,7 @@ public class FailToCastGreatSpellTrigger extends SimpleCriterionTrigger<FailToCa
     }
 
     @Override
-    public Instance createInstance(JsonObject json, EntityPredicate.Composite predicate,
-        DeserializationContext pContext) {
+    protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate, DeserializationContext context) {
         return new Instance(predicate);
     }
 
@@ -24,8 +23,8 @@ public class FailToCastGreatSpellTrigger extends SimpleCriterionTrigger<FailToCa
     }
 
     public static class Instance extends AbstractCriterionTriggerInstance {
-        public Instance(EntityPredicate.Composite pPlayer) {
-            super(ID, pPlayer);
+        public Instance(ContextAwarePredicate predicate) {
+            super(ID, predicate);
         }
 
         @Override

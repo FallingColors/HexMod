@@ -18,8 +18,6 @@ public class HexInterop {
     }
 
     public static final class Fabric {
-        public static final String GRAVITY_CHANGER_API_ID = "gravity_api";
-        public static final String GRAVITY_CHANGER_API_ID_POST_119_OR_SOMETHING = "gravitychanger";
         public static final String TRINKETS_API_ID = "trinkets";
     }
 
@@ -56,9 +54,7 @@ public class HexInterop {
             if (platform == Platform.FORGE) {
                 platformSpecificIntegrations = List.of();
             } else if (platform == Platform.FABRIC) {
-                platformSpecificIntegrations = List.of(
-                    Fabric.GRAVITY_CHANGER_API_ID
-                );
+                platformSpecificIntegrations = List.of();
             } else {
                 throw new UnsupportedOperationException();
             }
@@ -71,6 +67,8 @@ public class HexInterop {
             }
         }
 
-        PatchouliAPI.get().setConfigFlag(PATCHOULI_ANY_INTEROP_FLAG, anyInterop);
+        if (anyInterop) {
+            PatchouliAPI.get().setConfigFlag(PATCHOULI_ANY_INTEROP_FLAG, true);
+        }
     }
 }

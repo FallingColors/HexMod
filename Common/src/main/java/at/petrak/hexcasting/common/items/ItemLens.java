@@ -6,22 +6,20 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Wearable;
+//import net.minecraft.world.item.Wearable;
 import net.minecraft.world.level.block.DispenserBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class ItemLens extends Item implements Wearable, HexBaubleItem {
+public class ItemLens extends Item implements HexBaubleItem { // Wearable,
 
     // The 0.1 is *additive*
 
@@ -69,10 +67,10 @@ public class ItemLens extends Item implements Wearable, HexBaubleItem {
         return EquipmentSlot.HEAD;
     }
 
-    @Nullable
-    @Override
-    public SoundEvent getEquipSound() {
-        return SoundEvents.AMETHYST_BLOCK_CHIME;
-    }
+//    @Nullable
+//    @Override
+//    public SoundEvent getEquipSound() {
+//        return SoundEvents.AMETHYST_BLOCK_CHIME;
+//    }
 
 }

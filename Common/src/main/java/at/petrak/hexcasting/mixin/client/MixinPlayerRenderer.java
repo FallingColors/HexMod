@@ -1,31 +1,20 @@
 package at.petrak.hexcasting.mixin.client;
 
-import at.petrak.hexcasting.client.model.AltioraLayer;
-import net.minecraft.client.model.PlayerModel;
+import at.petrak.hexcasting.api.client.ClientRenderHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-// Mixin is the approach Ears uses
-// granted, Ears isn't exactly the paragon of "how to make your average minecraft mod" but still
-// IDK another way to do it
 @Mixin(PlayerRenderer.class)
-public abstract class MixinPlayerRenderer extends LivingEntityRenderer<AbstractClientPlayer,
-    PlayerModel<AbstractClientPlayer>> {
-    public MixinPlayerRenderer(EntityRendererProvider.Context $$0, PlayerModel<AbstractClientPlayer> $$1, float $$2) {
-        super($$0, $$1, $$2);
-    }
-
-    @Inject(
-        method = "<init>",
-        at = @At("TAIL")
-    )
-    private void hex$init(EntityRendererProvider.Context erp, boolean slimModel, CallbackInfo ci) {
-        this.addLayer(new AltioraLayer<>(this, erp.getModelSet()));
+public abstract class MixinPlayerRenderer {
+    @Inject(method = "render(Lnet/minecraft/client/player/AbstractClientPlayer;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V",
+            at = @At("HEAD"))
+    public void hex$onRender(AbstractClientPlayer player, float $$1, float pticks, PoseStack ps, MultiBufferSource bufferSource, int $$5, CallbackInfo ci) {
+        ClientRenderHelper.renderCastingStack(ps, player, pticks);
     }
 }

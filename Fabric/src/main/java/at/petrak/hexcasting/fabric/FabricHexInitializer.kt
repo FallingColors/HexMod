@@ -2,9 +2,6 @@ package at.petrak.hexcasting.fabric
 
 import at.petrak.hexcasting.api.HexAPI.modLoc
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
-import at.petrak.hexcasting.api.casting.ActionRegistryEntry
-import at.petrak.hexcasting.api.casting.math.HexDir
-import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting
 import at.petrak.hexcasting.common.blocks.behavior.HexStrippables
@@ -15,20 +12,13 @@ import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
 import at.petrak.hexcasting.common.lib.*
-import at.petrak.hexcasting.common.lib.hex.HexActions
-import at.petrak.hexcasting.common.lib.hex.HexArithmetics
-import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
-import at.petrak.hexcasting.common.lib.hex.HexSpecialHandlers
+import at.petrak.hexcasting.common.lib.hex.*
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower
 import at.petrak.hexcasting.common.misc.BrainsweepingEvents
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
 import at.petrak.hexcasting.common.misc.RegisterMisc
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
-import at.petrak.hexcasting.fabric.interop.gravity.GravityApiInterop
-import at.petrak.hexcasting.fabric.interop.gravity.OpChangeGravity
-import at.petrak.hexcasting.fabric.interop.gravity.OpGetGravity
 import at.petrak.hexcasting.fabric.loot.FabricHexLootModJankery
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import at.petrak.hexcasting.fabric.recipe.FabricModConditionalIngredient
@@ -44,13 +34,16 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.level.block.state.properties.BlockSetType
 import java.util.function.BiConsumer
 
 object FabricHexInitializer : ModInitializer {
@@ -114,36 +107,45 @@ object FabricHexInitializer : ModInitializer {
                 false
             }
         }
+
+        ItemGroupEvents.MODIFY_ENTRIES_ALL.register { tab, entries ->
+            HexBlocks.registerBlockCreativeTab(entries::accept, tab)
+            HexItems.registerItemCreativeTab(entries, tab)
+        }
     }
 
     private fun initRegistries() {
         fabricOnlyRegistration()
 
-        HexSounds.registerSounds(bind(Registry.SOUND_EVENT))
-        HexBlocks.registerBlocks(bind(Registry.BLOCK))
-        HexBlocks.registerBlockItems(bind(Registry.ITEM))
-        HexBlockEntities.registerTiles(bind(Registry.BLOCK_ENTITY_TYPE))
-        HexItems.registerItems(bind(Registry.ITEM))
-//        Registry.register(IngredientDeserializer.REGISTRY, FabricUnsealedIngredient.ID, FabricUnsealedIngredient.Deserializer.INSTANCE)
+        HexBlockSetTypes.registerBlocks(BlockSetType::register)
+
+        HexCreativeTabs.registerCreativeTabs(bind(BuiltInRegistries.CREATIVE_MODE_TAB))
+
+        HexSounds.registerSounds(bind(BuiltInRegistries.SOUND_EVENT))
+        HexBlocks.registerBlocks(bind(BuiltInRegistries.BLOCK))
+        HexBlocks.registerBlockItems(bind(BuiltInRegistries.ITEM))
+        HexBlockEntities.registerTiles(bind(BuiltInRegistries.BLOCK_ENTITY_TYPE))
+        HexItems.registerItems(bind(BuiltInRegistries.ITEM))
         Registry.register(IngredientDeserializer.REGISTRY, FabricModConditionalIngredient.ID, FabricModConditionalIngredient.Deserializer.INSTANCE)
 
-        HexEntities.registerEntities(bind(Registry.ENTITY_TYPE))
-        HexAttributes.register(bind(Registry.ATTRIBUTE))
-        HexMobEffects.register(bind(Registry.MOB_EFFECT))
-        HexPotions.register(bind(Registry.POTION))
+        HexEntities.registerEntities(bind(BuiltInRegistries.ENTITY_TYPE))
+        HexAttributes.register(bind(BuiltInRegistries.ATTRIBUTE))
+        HexMobEffects.register(bind(BuiltInRegistries.MOB_EFFECT))
+        HexPotions.register(bind(BuiltInRegistries.POTION))
         HexPotions.addRecipes()
 
-        HexRecipeStuffRegistry.registerSerializers(bind(Registry.RECIPE_SERIALIZER))
-        HexRecipeStuffRegistry.registerTypes(bind(Registry.RECIPE_TYPE))
+        HexRecipeStuffRegistry.registerSerializers(bind(BuiltInRegistries.RECIPE_SERIALIZER))
+        HexRecipeStuffRegistry.registerTypes(bind(BuiltInRegistries.RECIPE_TYPE))
 
-        HexParticles.registerParticles(bind(Registry.PARTICLE_TYPE))
+        HexParticles.registerParticles(bind(BuiltInRegistries.PARTICLE_TYPE))
 
-        HexLootFunctions.registerSerializers(bind(Registry.LOOT_FUNCTION_TYPE))
+        HexLootFunctions.registerSerializers(bind(BuiltInRegistries.LOOT_FUNCTION_TYPE))
 
         HexIotaTypes.registerTypes(bind(IXplatAbstractions.INSTANCE.iotaTypeRegistry))
         HexActions.register(bind(IXplatAbstractions.INSTANCE.actionRegistry))
         HexSpecialHandlers.register(bind(IXplatAbstractions.INSTANCE.specialHandlerRegistry))
         HexArithmetics.register(bind(IXplatAbstractions.INSTANCE.arithmeticRegistry))
+        HexContinuationTypes.registerContinuations(bind(IXplatAbstractions.INSTANCE.continuationTypeRegistry))
         HexEvalSounds.register(bind(IXplatAbstractions.INSTANCE.evalSoundRegistry))
 
         // Because of Java's lazy-loading of classes, can't use Kotlin static initialization for
@@ -159,12 +161,12 @@ object FabricHexInitializer : ModInitializer {
 
     // sorry lex (not sorry)
     private fun fabricOnlyRegistration() {
-        if (GravityApiInterop.isActive()) {
-            HexActions.make("interop/gravity/get",
-                ActionRegistryEntry(HexPattern.fromAngles("wawawddew", HexDir.NORTH_EAST), OpGetGravity))
-            HexActions.make("interop/gravity/set",
-                ActionRegistryEntry(HexPattern.fromAngles("wdwdwaaqw", HexDir.NORTH_WEST), OpChangeGravity))
-        }
+//        if (GravityApiInterop.isActive()) {
+//            HexActions.make("interop/gravity/get",
+//                ActionRegistryEntry(HexPattern.fromAngles("wawawddew", HexDir.NORTH_EAST), OpGetGravity))
+//            HexActions.make("interop/gravity/set",
+//                ActionRegistryEntry(HexPattern.fromAngles("wdwdwaaqw", HexDir.NORTH_WEST), OpChangeGravity))
+//        }
     }
 
     private fun butYouCouldBeFire() {
@@ -189,7 +191,8 @@ object FabricHexInitializer : ModInitializer {
             HexBlocks.EDIFIED_TRAPDOOR,
             HexBlocks.EDIFIED_STAIRS,
             HexBlocks.EDIFIED_SLAB,
-            HexBlocks.EDIFIED_STAIRS,
+            HexBlocks.EDIFIED_FENCE,
+            HexBlocks.EDIFIED_FENCE_GATE,
             HexBlocks.EDIFIED_SLAB,
             HexBlocks.EDIFIED_BUTTON,
             HexBlocks.EDIFIED_PRESSURE_PLATE,

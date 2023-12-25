@@ -5,9 +5,12 @@ import at.petrak.hexcasting.api.casting.eval.env.PackagedItemCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.msgs.MsgNewSpiralPatternsS2C;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -126,7 +129,15 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         var sPlayer = (ServerPlayer) player;
         var ctx = new PackagedItemCastEnv(sPlayer, usedHand);
         var harness = CastingVM.empty(ctx);
-        var clientView = harness.queueExecuteAndWrapIotas(instrs, sPlayer.getLevel());
+        var clientView = harness.queueExecuteAndWrapIotas(instrs, sPlayer.serverLevel());
+
+        var patterns = instrs.stream()
+                .filter(i -> i instanceof PatternIota)
+                .map(i -> ((PatternIota) i).getPattern())
+                .toList();
+        var packet = new MsgNewSpiralPatternsS2C(sPlayer.getUUID(), patterns, 140);
+        IXplatAbstractions.INSTANCE.sendPacketToPlayer(sPlayer, packet);
+        IXplatAbstractions.INSTANCE.sendPacketTracking(sPlayer, packet);
 
         boolean broken = breakAfterDepletion() && getMedia(stack) == 0;
 
@@ -144,13 +155,13 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
             // Somehow we lost spraying particles on each new pattern, so do it here
             // this also nicely prevents particle spam on trinkets
             new ParticleSpray(player.position(), new Vec3(0.0, 1.5, 0.0), 0.4, Math.PI / 3, 30)
-                    .sprayParticles(sPlayer.getLevel(), ctx.getPigment());
+                    .sprayParticles(sPlayer.serverLevel(), ctx.getPigment());
         }
 
         var sound = ctx.getSound().sound();
         if (sound != null) {
             var soundPos = sPlayer.position();
-            sPlayer.level.playSound(null, soundPos.x, soundPos.y, soundPos.z,
+            sPlayer.level().playSound(null, soundPos.x, soundPos.y, soundPos.z,
                     sound, SoundSource.PLAYERS, 1f, 1f);
         }
 

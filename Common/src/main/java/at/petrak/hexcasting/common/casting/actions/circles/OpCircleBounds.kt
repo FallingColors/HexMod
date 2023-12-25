@@ -11,10 +11,10 @@ import net.minecraft.world.phys.Vec3
 class OpCircleBounds(val max: Boolean) : ConstMediaAction {
     override val argc = 0
 
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
-        if (ctx !is CircleCastEnv)
+    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+        if (env !is CircleCastEnv)
             throw MishapNoSpellCircle()
-        val circle = ctx.impetus ?: throw MishapNoSpellCircle()
+        val circle = env.impetus ?: throw MishapNoSpellCircle()
 
         val aabb = circle.executionState!!.bounds // the circle should have an execution state since it's executing this.
 

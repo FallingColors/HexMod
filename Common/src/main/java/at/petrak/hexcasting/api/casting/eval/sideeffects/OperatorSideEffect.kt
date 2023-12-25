@@ -36,7 +36,7 @@ sealed class OperatorSideEffect {
     ) :
         OperatorSideEffect() {
         override fun performEffect(harness: CastingVM): Boolean {
-            this.spell.cast(harness.env)
+            this.spell.cast(harness.env, harness.image)?.let { harness.image = it }
             if (awardStat)
                 harness.env.caster?.awardStat(HexStatistics.SPELLS_CAST)
 
@@ -44,9 +44,9 @@ sealed class OperatorSideEffect {
         }
     }
 
-    data class ConsumeMedia(val amount: Int) : OperatorSideEffect() {
+    data class ConsumeMedia(val amount: Long) : OperatorSideEffect() {
         override fun performEffect(harness: CastingVM): Boolean {
-            val leftoverMedia = harness.env.extractMedia(this.amount.toLong())
+            val leftoverMedia = harness.env.extractMedia(this.amount)
             return leftoverMedia > 0
         }
     }

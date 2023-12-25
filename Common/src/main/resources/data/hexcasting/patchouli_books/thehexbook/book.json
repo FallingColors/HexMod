@@ -21,5 +21,6 @@
     "_Hexcasting": "$(#b38ef3)Hexcasting/$",
     "_Hexes": "$(#b38ef3)Hexes/$",
     "_Hex": "$(#b38ef3)Hex/$"
-  }
+  },
+  "use_resource_pack": true
 }

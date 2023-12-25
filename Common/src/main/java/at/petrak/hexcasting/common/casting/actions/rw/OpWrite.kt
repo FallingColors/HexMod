@@ -14,12 +14,12 @@ import net.minecraft.world.item.ItemStack
 object OpWrite : SpellAction {
     override val argc = 1
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val datum = args[0]
 
-        val (handStack, hand) = ctx.getHeldItemToOperateOn {
+        val (handStack, hand) = env.getHeldItemToOperateOn {
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
             datumHolder != null && datumHolder.writeIota(datum, true)
@@ -31,7 +31,7 @@ object OpWrite : SpellAction {
         if (!datumHolder.writeIota(datum, true))
             throw MishapBadOffhandItem.of(handStack, hand, "iota.readonly", datum.display())
 
-        val trueName = MishapOthersName.getTrueNameFromDatum(datum, ctx.caster)
+        val trueName = MishapOthersName.getTrueNameFromDatum(datum, env.caster)
         if (trueName != null)
             throw MishapOthersName(trueName)
 
@@ -43,7 +43,7 @@ object OpWrite : SpellAction {
     }
 
     private data class Spell(val datum: Iota, val datumHolder: ADIotaHolder) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             datumHolder.writeIota(datum, false)
         }
     }

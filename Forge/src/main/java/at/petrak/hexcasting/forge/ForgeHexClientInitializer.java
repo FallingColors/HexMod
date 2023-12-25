@@ -4,6 +4,7 @@ import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.RegisterClientStuff;
 import at.petrak.hexcasting.client.ShiftScrollListener;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
+import at.petrak.hexcasting.client.model.AltioraLayer;
 import at.petrak.hexcasting.client.model.HexModelLayers;
 import at.petrak.hexcasting.client.render.HexAdditionalRenderers;
 import at.petrak.hexcasting.client.render.shader.HexShaders;
@@ -14,8 +15,12 @@ import at.petrak.hexcasting.interop.HexInterop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraftforge.client.event.*;
@@ -55,7 +60,7 @@ public class ForgeHexClientInitializer {
         });
 
         evBus.addListener((RenderGuiEvent.Post e) -> {
-            HexAdditionalRenderers.overlayGui(e.getPoseStack(), e.getPartialTick());
+            HexAdditionalRenderers.overlayGui(e.getGuiGraphics(), e.getPartialTick());
         });
 
 
@@ -82,7 +87,7 @@ public class ForgeHexClientInitializer {
 
     @SubscribeEvent
     public static void registerShaders(RegisterShadersEvent evt) throws IOException {
-        HexShaders.init(evt.getResourceManager(), p -> evt.registerShader(p.getFirst(), p.getSecond()));
+        HexShaders.init(evt.getResourceProvider(), p -> evt.registerShader(p.getFirst(), p.getSecond()));
     }
 
     // https://github.com/VazkiiMods/Botania/blob/1.19.x/Forge/src/main/java/vazkii/botania/forge/client/ForgeClientInitializer.java#L225
@@ -92,7 +97,7 @@ public class ForgeHexClientInitializer {
             @Override
             public <T extends ParticleOptions> void register(ParticleType<T> type, Function<SpriteSet,
                 ParticleProvider<T>> constructor) {
-                evt.register(type, constructor::apply);
+                evt.registerSpriteSet(type, constructor::apply);
             }
         });
     }
@@ -121,5 +126,14 @@ public class ForgeHexClientInitializer {
     @SubscribeEvent
     public static void registerEntityLayers(EntityRenderersEvent.RegisterLayerDefinitions evt) {
         HexModelLayers.init(evt::registerLayerDefinition);
+    }
+
+    @SubscribeEvent
+    public static void addPlayerLayers(EntityRenderersEvent.AddLayers evt) {
+        evt.getSkins().forEach(skinName -> {
+            var skin = (LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>>) evt.getSkin(skinName);
+
+            skin.addLayer(new AltioraLayer<>(skin, evt.getEntityModels()));
+        });
     }
 }

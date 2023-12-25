@@ -18,6 +18,8 @@
     "hexcasting:edified_trapdoor",
     "hexcasting:edified_slab",
     "hexcasting:edified_button",
-    "hexcasting:edified_stairs"
+    "hexcasting:edified_stairs",
+    "hexcasting:edified_fence",
+    "hexcasting:edified_fence_gate"
   ]
 }

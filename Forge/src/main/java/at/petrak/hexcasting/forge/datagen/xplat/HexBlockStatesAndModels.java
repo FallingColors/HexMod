@@ -4,11 +4,13 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
+import at.petrak.hexcasting.common.blocks.circles.directrix.BlockBooleanDirectrix;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockRedstoneDirectrix;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.paucal.api.forge.datagen.PaucalBlockStateAndModelProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -20,8 +22,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
 
 public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
-    public HexBlockStatesAndModels(DataGenerator gen, ExistingFileHelper exFileHelper) {
-        super(gen, HexAPI.MOD_ID, exFileHelper);
+    public HexBlockStatesAndModels(PackOutput output, ExistingFileHelper exFileHelper) {
+        super(output, HexAPI.MOD_ID, exFileHelper);
     }
 
     @Override
@@ -217,6 +219,8 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         simpleBlockItem(HexBlocks.EDIFIED_PLANKS, planksModel);
 
         stairsBlock(HexBlocks.EDIFIED_STAIRS, planks1);
+        fenceBlock(HexBlocks.EDIFIED_FENCE, planks1);
+        fenceGateBlock(HexBlocks.EDIFIED_FENCE_GATE, planks1);
         slabBlock(HexBlocks.EDIFIED_SLAB, planks1, planks1);
         buttonBlock(HexBlocks.EDIFIED_BUTTON, planks1);
         pressurePlateBlock(HexBlocks.EDIFIED_PRESSURE_PLATE, planks1);
@@ -353,6 +357,63 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                     ? ((dir.get2DDataValue() + 2) % 4) * 90
                     : 0)
                 .build();
+        });
+
+        getVariantBuilder(HexBlocks.DIRECTRIX_BOOLEAN).forAllStates(bs -> {
+            var isLit = bs.getValue(BlockCircleComponent.ENERGIZED);
+            var litness = isLit ? "lit" : "dim";
+            var boolState = bs.getValue(BlockBooleanDirectrix.STATE);
+            var boolStateString = boolState.toString().toLowerCase();
+            var dir = bs.getValue(BlockStateProperties.FACING);
+
+            var top = "block/circle/directrix/boolean/top_" + boolStateString;
+            var left = "block/circle/directrix/boolean/left_" + boolStateString;
+            var right = "block/circle/directrix/boolean/right_" + boolStateString;
+
+            // The front face can never be both lit and unpowered (b/c otherwise it would exit the other way)
+            String frontEnding = null, backEnding = null;
+            switch (boolState) {
+                case NEITHER -> {
+                    frontEnding = "not_false";
+                    backEnding = "not_true";
+                }
+                case TRUE -> {
+                    frontEnding = "not_false";
+                    backEnding = litness + "_true";
+                }
+                case FALSE -> {
+                    frontEnding = litness + "_false";
+                    backEnding = "not_true";
+                }
+            }
+
+            var front = "block/circle/directrix/boolean/front_" + frontEnding;
+            var back = "block/circle/directrix/boolean/back_" + backEnding;
+            // and always the same
+            var bottom = "block/circle/bottom";
+
+
+            var modelName = "block/circle/directrix/boolean/" + litness + "_" + boolStateString + "_" + dir.getName();
+            var model = models().cube(modelName, modLoc(bottom), modLoc(top), modLoc(front), modLoc(back),
+                            modLoc(left), modLoc(right))
+                    .texture("particle", modLoc("block/slate"));
+
+            if (isLit && boolState == BlockBooleanDirectrix.State.FALSE && dir == Direction.EAST) {
+                // getBuilder does not add the block/etc to the front if the path contains any slashes
+                // this is a problem because the block IDs have slashes in them
+                itemModels().getBuilder("item/directrix/boolean").parent(model);
+            }
+
+            return ConfiguredModel.builder()
+                    .modelFile(model)
+                    // this code has been stolen from myself several times
+                    .rotationX(dir.getAxis() == Direction.Axis.Y
+                            ? dir.getAxisDirection().getStep() * -90
+                            : 0)
+                    .rotationY(dir.getAxis() != Direction.Axis.Y
+                            ? ((dir.get2DDataValue() + 2) % 4) * 90
+                            : 0)
+                    .build();
         });
 
     }

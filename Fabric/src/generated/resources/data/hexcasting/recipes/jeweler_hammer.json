@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "equipment",
   "key": {
     "A": {
       "item": "minecraft:amethyst_shard"
@@ -36,5 +37,6 @@
   ],
   "result": {
     "item": "hexcasting:jeweler_hammer"
-  }
+  },
+  "show_notification": true
 }

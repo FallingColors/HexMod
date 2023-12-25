@@ -1,11 +1,10 @@
 {
-  "type": "minecraft:block",
   "pools": [
     {
       "bonus_rolls": 0.0,
       "conditions": [
         {
-          "condition": "minecraft:alternative",
+          "condition": "minecraft:any_of",
           "terms": [
             {
               "action": "shears_dig",
@@ -35,5 +34,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "hexcasting:blocks/aventurine_edified_leaves"
 }

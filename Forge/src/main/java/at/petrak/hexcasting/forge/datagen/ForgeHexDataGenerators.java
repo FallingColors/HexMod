@@ -13,15 +13,17 @@ import at.petrak.hexcasting.forge.datagen.xplat.HexBlockStatesAndModels;
 import at.petrak.hexcasting.forge.datagen.xplat.HexItemModels;
 import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.paucal.api.forge.datagen.PaucalForgeDatagenWrappers;
 import com.google.gson.JsonObject;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.advancements.AdvancementProvider;
+import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -29,6 +31,8 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.EnumMap;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class ForgeHexDataGenerators {
@@ -46,32 +50,41 @@ public class ForgeHexDataGenerators {
         HexAPI.LOGGER.info("Starting cross-platform datagen");
 
         DataGenerator gen = ev.getGenerator();
+        var output = gen.getPackOutput();
+        var lookup = ev.getLookupProvider();
         ExistingFileHelper efh = ev.getExistingFileHelper();
-        gen.addProvider(ev.includeClient(), new HexItemModels(gen, efh));
-        gen.addProvider(ev.includeClient(), new HexBlockStatesAndModels(gen, efh));
-        gen.addProvider(ev.includeServer(),
-            PaucalForgeDatagenWrappers.addEFHToAdvancements(new HexAdvancements(gen), efh));
+        gen.addProvider(ev.includeClient(), new HexItemModels(output, efh));
+        gen.addProvider(ev.includeClient(), new HexBlockStatesAndModels(output, efh));
+        gen.addProvider(ev.includeServer(), new AdvancementProvider(
+            output, lookup, List.of(new HexAdvancements())
+        ));
     }
 
+    @SuppressWarnings("DataFlowIssue")
     private static void configureForgeDatagen(GatherDataEvent ev) {
         HexAPI.LOGGER.info("Starting Forge-specific datagen");
 
         DataGenerator gen = ev.getGenerator();
+        var output = gen.getPackOutput();
+        var lookup = ev.getLookupProvider();
         ExistingFileHelper efh = ev.getExistingFileHelper();
-        gen.addProvider(ev.includeServer(), new HexLootTables(gen));
-        gen.addProvider(ev.includeServer(), new HexplatRecipes(gen, INGREDIENTS, ForgeHexConditionsBuilder::new));
+        gen.addProvider(ev.includeServer(), new LootTableProvider(
+            output, Set.of(), List.of(new LootTableProvider.SubProviderEntry(HexLootTables::new, LootContextParamSets.ALL_PARAMS))
+        ));
+        gen.addProvider(ev.includeServer(), new HexplatRecipes(output, INGREDIENTS, ForgeHexConditionsBuilder::new));
 
         var xtags = IXplatAbstractions.INSTANCE.tags();
-        var blockTagProvider = PaucalForgeDatagenWrappers.addEFHToTagProvider(
-            new HexBlockTagProvider(gen, xtags), efh);
+        var blockTagProvider = new HexBlockTagProvider(output, lookup, xtags);
+        ((TagsProviderEFHSetter) blockTagProvider).setEFH(efh);
         gen.addProvider(ev.includeServer(), blockTagProvider);
-        var itemTagProvider = PaucalForgeDatagenWrappers.addEFHToTagProvider(
-            new HexItemTagProvider(gen, blockTagProvider, IXplatAbstractions.INSTANCE.tags()), efh);
+        var itemTagProvider = new HexItemTagProvider(output, lookup, blockTagProvider, IXplatAbstractions.INSTANCE.tags());
+        ((TagsProviderEFHSetter) itemTagProvider).setEFH(efh);
         gen.addProvider(ev.includeServer(), itemTagProvider);
-        gen.addProvider(ev.includeServer(),
-            PaucalForgeDatagenWrappers.addEFHToTagProvider(new HexActionTagProvider(gen), efh));
+        var hexTagProvider = new HexActionTagProvider(output, lookup);
+        ((TagsProviderEFHSetter) hexTagProvider).setEFH(efh);
+        gen.addProvider(ev.includeServer(), hexTagProvider);
 
-        gen.addProvider(ev.includeServer(), new ForgeHexLootModGen(gen));
+        gen.addProvider(ev.includeServer(), new ForgeHexLootModGen(output));
     }
 
     private static final IXplatIngredients INGREDIENTS = new IXplatIngredients() {

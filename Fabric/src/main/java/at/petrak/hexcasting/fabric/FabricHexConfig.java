@@ -62,11 +62,11 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
     @Config(name = "common")
     public static final class Common implements HexConfig.CommonConfigAccess, ConfigData {
         @ConfigEntry.Gui.Tooltip
-        private int dustMediaAmount = DEFAULT_DUST_MEDIA_AMOUNT;
+        private long dustMediaAmount = DEFAULT_DUST_MEDIA_AMOUNT;
         @ConfigEntry.Gui.Tooltip
-        private int shardMediaAmount = DEFAULT_SHARD_MEDIA_AMOUNT;
+        private long shardMediaAmount = DEFAULT_SHARD_MEDIA_AMOUNT;
         @ConfigEntry.Gui.Tooltip
-        private int chargedCrystalMediaAmount = DEFAULT_CHARGED_MEDIA_AMOUNT;
+        private long chargedCrystalMediaAmount = DEFAULT_CHARGED_MEDIA_AMOUNT;
         @ConfigEntry.Gui.Tooltip
         private double mediaToHealthRate = DEFAULT_MEDIA_TO_HEALTH_RATE;
 
@@ -87,17 +87,17 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         }
 
         @Override
-        public int dustMediaAmount() {
+        public long dustMediaAmount() {
             return dustMediaAmount;
         }
 
         @Override
-        public int shardMediaAmount() {
+        public long shardMediaAmount() {
             return shardMediaAmount;
         }
 
         @Override
-        public int chargedCrystalMediaAmount() {
+        public long chargedCrystalMediaAmount() {
             return chargedCrystalMediaAmount;
         }
 

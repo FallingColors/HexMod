@@ -7,7 +7,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -33,6 +33,7 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
     public static final ResourceLocation SLATE_BG = modLoc("textures/gui/slate.png");
 
     private static final float RENDER_SIZE = 128f;
+    private static final int TEXTURE_SIZE = 48;
 
     private final HexPattern pattern;
     private final List<Vec2> zappyPoints;
@@ -63,16 +64,17 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
     }
 
     @Override
-    public void renderImage(Font font, int mouseX, int mouseY, PoseStack ps, ItemRenderer pItemRenderer,
-        int pBlitOffset) {
+    public void renderImage(Font font, int mouseX, int mouseY, GuiGraphics graphics) {
         var width = this.getWidth(font);
         var height = this.getHeight();
+
+        var ps = graphics.pose();
 
         // far as i can tell "mouseX" and "mouseY" are actually the positions of the corner of the tooltip
         ps.pushPose();
         ps.translate(mouseX, mouseY, 500);
         RenderSystem.enableBlend();
-        renderBG(ps, this.background, pBlitOffset);
+        renderBG(graphics, this.background);
 
         // renderText happens *before* renderImage for some asinine reason
 //                RenderSystem.disableBlend();
@@ -101,13 +103,14 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
         ps.popPose();
     }
 
-    private static void renderBG(PoseStack ps, ResourceLocation background, int blitOffset) {
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-        RenderSystem.setShaderTexture(0, background);
-        // x y blitoffset sw sh w h ... ?
-        // parchment doesn't have this mapped
-        GuiComponent.blit(ps, 0, 0, blitOffset, 0f, 0f, (int) RENDER_SIZE, (int) RENDER_SIZE, (int) RENDER_SIZE,
-            (int) RENDER_SIZE);
+    private static void renderBG(GuiGraphics graphics, ResourceLocation background) {
+        graphics.blit(
+            background, // texture
+            0, 0, // x, y
+            (int) RENDER_SIZE, (int) RENDER_SIZE, // renderWidth, renderHeight
+            0f, 0f, // u, v (textureCoords)
+            TEXTURE_SIZE, TEXTURE_SIZE, // regionWidth, regionHeight (texture sample dimensions)
+            TEXTURE_SIZE, TEXTURE_SIZE); // textureWidth, textureHeight (total dimensions of texture)
     }
 
     @Override

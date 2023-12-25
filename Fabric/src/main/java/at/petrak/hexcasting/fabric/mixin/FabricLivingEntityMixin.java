@@ -26,7 +26,7 @@ public class FabricLivingEntityMixin {
             float dist = (float) Mth.ceil(entity.fallDistance - 3.0F);
             double e = Math.min(0.2F + dist / 15.0F, 2.5D);
             int i = (int)(150.0D * e);
-            if (forgeLike.addLandingEffects(state, (ServerLevel) entity.level, pos, entity, i)) {
+            if (forgeLike.addLandingEffects(state, (ServerLevel) entity.level(), pos, entity, i)) {
                 hex$cachedParticleState = state;
                 return Blocks.AIR.defaultBlockState();
             }

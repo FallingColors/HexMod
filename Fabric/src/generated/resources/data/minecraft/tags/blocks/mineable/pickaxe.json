@@ -9,6 +9,7 @@
     "hexcasting:slate",
     "hexcasting:directrix/empty",
     "hexcasting:directrix/redstone",
+    "hexcasting:directrix/boolean",
     "hexcasting:impetus/empty",
     "hexcasting:impetus/rightclick",
     "hexcasting:impetus/look",

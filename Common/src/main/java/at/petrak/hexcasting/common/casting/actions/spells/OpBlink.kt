@@ -15,17 +15,17 @@ import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.common.casting.actions.spells.great.OpTeleport
 import net.minecraft.world.entity.Entity
 import kotlin.math.absoluteValue
-import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 object OpBlink : SpellAction {
     override val argc = 2
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val target = args.getEntity(0, argc)
         val delta = args.getDouble(1, argc)
-        ctx.assertEntityInRange(target)
+        env.assertEntityInRange(target)
 
         if (!target.canChangeDimensions() || target.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
             throw MishapImmuneEntity(target)
@@ -33,12 +33,12 @@ object OpBlink : SpellAction {
         val dvec = target.lookAngle.scale(delta)
         val endPos = target.position().add(dvec)
 
-        if (!HexConfig.server().canTeleportInThisDimension(ctx.world.dimension()))
+        if (!HexConfig.server().canTeleportInThisDimension(env.world.dimension()))
             throw MishapBadLocation(endPos, "bad_dimension")
 
-        ctx.assertVecInRange(target.position())
-        ctx.assertVecInRange(endPos)
-        if (!ctx.isVecInWorld(endPos.subtract(0.0, 1.0, 0.0)))
+        env.assertVecInRange(target.position())
+        env.assertVecInRange(endPos)
+        if (!env.isVecInWorld(endPos.subtract(0.0, 1.0, 0.0)))
             throw MishapBadLocation(endPos, "too_close_to_out")
 
 
@@ -46,7 +46,7 @@ object OpBlink : SpellAction {
 
         return SpellAction.Result(
             Spell(target, delta),
-            (MediaConstants.SHARD_UNIT * delta.absoluteValue * 0.5).roundToInt(),
+            (MediaConstants.SHARD_UNIT * delta.absoluteValue * 0.5).roundToLong(),
             listOf(
                 ParticleSpray.cloud(targetMiddlePos, 2.0, 50),
                 ParticleSpray.burst(targetMiddlePos.add(dvec), 2.0, 100)
@@ -55,12 +55,12 @@ object OpBlink : SpellAction {
     }
 
     private data class Spell(val target: Entity, val delta: Double) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
-            if (!HexConfig.server().canTeleportInThisDimension(ctx.world.dimension()))
+        override fun cast(env: CastingEnvironment) {
+            if (!HexConfig.server().canTeleportInThisDimension(env.world.dimension()))
                 return
 
             val delta = target.lookAngle.scale(delta)
-            OpTeleport.teleportRespectSticky(target, delta, ctx.world)
+            OpTeleport.teleportRespectSticky(target, delta, env.world)
         }
     }
 }

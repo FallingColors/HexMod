@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "building",
   "key": {
     "C": {
       "item": "minecraft:amethyst_block"
@@ -19,5 +20,6 @@
   "result": {
     "count": 8,
     "item": "hexcasting:amethyst_tiles"
-  }
+  },
+  "show_notification": true
 }

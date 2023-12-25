@@ -23,22 +23,23 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
 import kotlin.math.max
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 class OpFlight(val type: Type) : SpellAction {
     override val argc = 2
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val target = args.getPlayer(0, argc)
         val theArg = args.getPositiveDouble(1, argc)
-        ctx.assertEntityInRange(target)
+        env.assertEntityInRange(target)
 
         val cost = when (this.type) {
             Type.LimitRange -> theArg * MediaConstants.DUST_UNIT
             // A second of flight should cost 1 shard
             Type.LimitTime -> theArg * MediaConstants.SHARD_UNIT
-        }.roundToInt()
+        }.roundToLong()
 
         // Convert to ticks
         return SpellAction.Result(
@@ -55,14 +56,14 @@ class OpFlight(val type: Type) : SpellAction {
     }
 
     data class Spell(val type: Type, val target: ServerPlayer, val theArg: Double) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             if (target.abilities.mayfly) {
                 // Don't accidentally clobber someone else's flight
                 // TODO make this a mishap?
                 return
             }
 
-            val dim = target.level.dimension()
+            val dim = target.level().dimension()
             val origin = target.position()
 
             val flight = when (this.type) {
@@ -108,10 +109,10 @@ class OpFlight(val type: Type) : SpellAction {
                         abilities.mayfly = false
                         player.onUpdateAbilities()
                     }
-                    player.level.playSound(null, player.x, player.y, player.z, HexSounds.FLIGHT_FINISH, SoundSource.PLAYERS, 2f, 1f)
+                    player.level().playSound(null, player.x, player.y, player.z, HexSounds.FLIGHT_FINISH, SoundSource.PLAYERS, 2f, 1f)
                     val superDangerSpray = ParticleSpray(player.position(), Vec3(0.0, 1.0, 0.0), Math.PI, 0.4, count = 20)
-                    superDangerSpray.sprayParticles(player.getLevel(), FrozenPigment(ItemStack(HexItems.DYE_PIGMENTS[DyeColor.RED]!!), Util.NIL_UUID))
-                    superDangerSpray.sprayParticles(player.getLevel(), FrozenPigment(ItemStack(HexItems.DYE_PIGMENTS[DyeColor.BLACK]!!), Util.NIL_UUID))
+                    superDangerSpray.sprayParticles(player.serverLevel(), FrozenPigment(ItemStack(HexItems.DYE_PIGMENTS[DyeColor.RED]!!), Util.NIL_UUID))
+                    superDangerSpray.sprayParticles(player.serverLevel(), FrozenPigment(ItemStack(HexItems.DYE_PIGMENTS[DyeColor.BLACK]!!), Util.NIL_UUID))
                 } else {
                     if (!player.abilities.mayfly) {
                         player.abilities.mayfly = true
@@ -140,23 +141,23 @@ class OpFlight(val type: Type) : SpellAction {
 
                     // TODO: have the particles go in the opposite direction of the velocity?
                     ParticleSpray(player.position(), Vec3(0.0, -0.6, 0.0), 0.6, Math.PI * 0.3, count = okParticleCount)
-                        .sprayParticles(player.getLevel(), color)
+                        .sprayParticles(player.serverLevel(), color)
                     val dangerSpray = ParticleSpray(player.position(), Vec3(0.0, 1.0, 0.0), 0.3, Math.PI * 0.75, count = 0)
                     dangerSpray.copy(count = oneDangerParticleCount)
-                        .sprayParticles(player.getLevel(), FrozenPigment(ItemStack(HexItems.DYE_PIGMENTS[DyeColor.BLACK]!!), Util.NIL_UUID))
+                        .sprayParticles(player.serverLevel(), FrozenPigment(ItemStack(HexItems.DYE_PIGMENTS[DyeColor.BLACK]!!), Util.NIL_UUID))
                     dangerSpray.copy(count = oneDangerParticleCount)
-                        .sprayParticles(player.getLevel(), FrozenPigment(ItemStack(HexItems.DYE_PIGMENTS[DyeColor.RED]!!), Util.NIL_UUID))
+                        .sprayParticles(player.serverLevel(), FrozenPigment(ItemStack(HexItems.DYE_PIGMENTS[DyeColor.RED]!!), Util.NIL_UUID))
 
-                    if (player.level.random.nextFloat() < 0.02)
-                        player.level.playSound(null, player.x, player.y, player.z, HexSounds.FLIGHT_AMBIENCE, SoundSource.PLAYERS, 0.2f, 1f)
+                    if (player.level().random.nextFloat() < 0.02)
+                        player.level().playSound(null, player.x, player.y, player.z, HexSounds.FLIGHT_AMBIENCE, SoundSource.PLAYERS, 0.2f, 1f)
 
                     if (flight.radius >= 0.0) {
                         // Show the origin
                         val spoofedOrigin = flight.origin.add(0.0, 1.0, 0.0)
                         ParticleSpray(spoofedOrigin, Vec3(0.0, 1.0, 0.0), 0.5, Math.PI * 0.1, count = 5)
-                            .sprayParticles(player.getLevel(), color)
+                            .sprayParticles(player.serverLevel(), color)
                         ParticleSpray(spoofedOrigin, Vec3(0.0, -1.0, 0.0), 1.5, Math.PI * 0.25, count = 5)
-                            .sprayParticles(player.getLevel(), color)
+                            .sprayParticles(player.serverLevel(), color)
                     }
                 }
             }
@@ -166,7 +167,7 @@ class OpFlight(val type: Type) : SpellAction {
         // it's a double for particle reason
         private fun getDanger(player: ServerPlayer, flight: FlightAbility): Double {
             val radiusDanger = if (flight.radius >= 0.0) {
-                if (player.level.dimension() != flight.dimension) {
+                if (player.level().dimension() != flight.dimension) {
                     1.0
                 } else {
                     // Limit it only in X/Z

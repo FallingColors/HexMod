@@ -2,26 +2,31 @@ package at.petrak.hexcasting.api.casting.eval.env;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
+import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.casting.circles.CircleExecutionState;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
+import at.petrak.hexcasting.api.casting.mishaps.Mishap;
+import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
+import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv.SENTINEL_RADIUS;
 
@@ -56,7 +61,20 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
+    public void precheckAction(PatternShapeMatch match) throws Mishap {
+        super.precheckAction(match);
+
+        ResourceLocation key = actionKey(match);
+
+        if (!HexConfig.server().isActionAllowedInCircles(key)) {
+            throw new MishapDisallowedSpell("disallowed_circle");
+        }
+    }
+
+    @Override
     public void postExecution(CastResult result) {
+        super.postExecution(result);
+
         // we always want to play this sound one at a time
         var sound = result.getSound().sound();
         if (sound != null) {
@@ -87,7 +105,7 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public long extractMedia(long cost) {
+    public long extractMediaEnvironment(long cost) {
         var entity = this.getImpetus();
         if (entity == null)
             return cost;
@@ -104,13 +122,13 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public boolean isVecInRange(Vec3 vec) {
+    public boolean isVecInRangeEnvironment(Vec3 vec) {
         var caster = this.execState.getCaster(this.world);
         if (caster != null) {
             var sentinel = HexAPI.instance().getSentinel(caster);
             if (sentinel != null
                 && sentinel.extendsRange()
-                && caster.getLevel().dimension() == sentinel.dimension()
+                && caster.level().dimension() == sentinel.dimension()
                 && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS
             ) {
                 return true;
@@ -121,18 +139,13 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public boolean hasEditPermissionsAt(BlockPos vec) {
+    public boolean hasEditPermissionsAtEnvironment(BlockPos pos) {
         return true;
     }
 
     @Override
     public InteractionHand getCastingHand() {
         return InteractionHand.MAIN_HAND;
-    }
-
-    @Override
-    public ItemStack getAlternateItem() {
-        return ItemStack.EMPTY.copy(); // TODO: adjacent inventory/item frame?
     }
 
     @Override
@@ -143,6 +156,11 @@ public class CircleCastEnv extends CastingEnvironment {
     @Override
     protected List<HeldItemInfo> getPrimaryStacks() {
         return List.of(); // TODO: Adjacent inv!
+    }
+
+    @Override
+    public boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand) {
+        return false; // TODO: Adjacent inv!
     }
 
     @Override

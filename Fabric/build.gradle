@@ -46,7 +46,7 @@ repositories {
     maven { url = 'https://maven.blamejared.com' }
     // modmenu and clothconfig
     maven { url "https://maven.shedaniel.me/" }
-    maven { url 'https://ladysnake.jfrog.io/artifactory/mods' }
+    maven { url 'https://maven.ladysnake.org/releases' }
     // Entity reach
     maven { url "https://maven.jamieswhiteshirt.com/libs-release/" }
     maven { url "https://mvn.devos.one/snapshots/" }
@@ -59,12 +59,17 @@ repositories {
     }
     // pehkui
     maven { url = "https://jitpack.io" }
+
+    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
+    flatDir {
+        dir 'libs'
+    }
 }
 
 dependencies {
     minecraft "com.mojang:minecraft:${minecraftVersion}"
     mappings loom.officialMojangMappings()
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.7.4+kotlin.1.6.21")
+    modImplementation("net.fabricmc:fabric-language-kotlin:${fabricLanguageKotlinVersion}")
     modImplementation "net.fabricmc:fabric-loader:${fabricLoaderVersion}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricVersion}"
 
@@ -76,17 +81,22 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     compileOnly project(":Common")
 
-    modImplementation "at.petra-k.paucal:paucal-fabric-$minecraftVersion:$paucalVersion"
-    modImplementation "vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FABRIC"
+    modImplementation "${modID}:paucal-fabric-$minecraftVersion:$paucalVersion"
+    modImplementation "vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FABRIC-SNAPSHOT"
 
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-api:$cardinalComponentsVersion"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:$cardinalComponentsVersion"
+//    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-util:$cardinalComponentsVersion"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:$cardinalComponentsVersion"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-item:$cardinalComponentsVersion"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-block:$cardinalComponentsVersion"
 
-    modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${entityReachVersion}"
-    include "com.jamieswhiteshirt:reach-entity-attributes:${entityReachVersion}"
+//    modImplementation "com.jamieswhiteshirt:reach-entity-attributes:${entityReachVersion}"
+//    include "com.jamieswhiteshirt:reach-entity-attributes:${entityReachVersion}"
 
     // apparently the 1.18 version Just Works on 1.19
-    modImplementation "io.github.tropheusj:serialization-hooks:$serializationHooksVersion"
-    include "io.github.tropheusj:serialization-hooks:$serializationHooksVersion"
+    modImplementation "${modID}:serialization-hooks:$serializationHooksVersion"
+    include "${modID}:serialization-hooks:$serializationHooksVersion"
+    implementation(include("com.github.LlamaLad7:MixinExtras:0.1.1"))
 
     // Optional integrations
 
@@ -95,9 +105,9 @@ dependencies {
     }
 
     modImplementation "dev.emi:trinkets:$trinketsVersion"
-    modImplementation "dev.emi:emi:${emiVersion}"
+    modImplementation "dev.emi:emi-fabric:${emiVersion}"
 
-    modImplementation "maven.modrinth:gravity-api:$gravityApiVersion"
+//    modImplementation "maven.modrinth:gravity-api:$gravityApiVersion"
     modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {
         exclude group: "net.fabricmc.fabric-api"
     })
@@ -111,7 +121,7 @@ dependencies {
     // sodium is causing frustum mixin errors so don't use it
 //    modImplementation "maven.modrinth:sodium:${sodiumVersion}"
     modImplementation "maven.modrinth:lithium:${lithiumVersion}"
-    modImplementation "maven.modrinth:phosphor:${phosphorVersion}"
+//    modImplementation "maven.modrinth:phosphor:${phosphorVersion}"
 }
 
 tasks.withType(JavaCompile) {

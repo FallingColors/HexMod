@@ -9,12 +9,12 @@ import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.paucal.api.datagen.PaucalAdvancementProvider;
+import at.petrak.paucal.api.datagen.PaucalAdvancementSubProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.critereon.*;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -22,9 +22,9 @@ import net.minecraft.world.item.Items;
 
 import java.util.function.Consumer;
 
-public class HexAdvancements extends PaucalAdvancementProvider {
+public class HexAdvancements extends PaucalAdvancementSubProvider {
     public static final OvercastTrigger.Instance ENLIGHTEN =
-        new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
+        new OvercastTrigger.Instance(ContextAwarePredicate.ANY,
             MinMaxBounds.Ints.ANY,
             // add a little bit of slop here. use 80% or more health ...
             MinMaxBounds.Doubles.atLeast(0.8),
@@ -33,12 +33,12 @@ public class HexAdvancements extends PaucalAdvancementProvider {
             //  less, you can't become enlightened.
             MinMaxBounds.Doubles.between(Double.MIN_NORMAL, 1.0));
 
-    public HexAdvancements(DataGenerator generatorIn) {
-        super(generatorIn, HexAPI.MOD_ID);
+    public HexAdvancements() {
+        super(HexAPI.MOD_ID);
     }
 
     @Override
-    protected void makeAdvancements(Consumer<Advancement> consumer) {
+    public void generate(HolderLookup.Provider provider, Consumer<Advancement> consumer) {
         var root = Advancement.Builder.advancement()
             // what an ergonomic design decision
             // i am so happy that data generators are the future
@@ -56,15 +56,15 @@ public class HexAdvancements extends PaucalAdvancementProvider {
         Advancement.Builder.advancement()
             .display(simpleDisplay(Items.GLISTERING_MELON_SLICE, "wasteful_cast", FrameType.TASK))
             .parent(root)
-            .addCriterion("waste_amt", new SpendMediaTrigger.Instance(EntityPredicate.Composite.ANY,
+            .addCriterion("waste_amt", new SpendMediaTrigger.Instance(ContextAwarePredicate.ANY,
                 MinMaxBounds.Ints.ANY,
-                MinMaxBounds.Ints.atLeast(89 * MediaConstants.DUST_UNIT / 10)))
+                MinMaxBounds.Ints.atLeast((int) (89 * MediaConstants.DUST_UNIT / 10))))
             .save(consumer, prefix("aaa_wasteful_cast"));
         Advancement.Builder.advancement()
             .display(simpleDisplay(HexItems.CHARGED_AMETHYST, "big_cast", FrameType.TASK))
             .parent(root)
-            .addCriterion("cast_amt", new SpendMediaTrigger.Instance(EntityPredicate.Composite.ANY,
-                MinMaxBounds.Ints.atLeast(64 * MediaConstants.CRYSTAL_UNIT),
+            .addCriterion("cast_amt", new SpendMediaTrigger.Instance(ContextAwarePredicate.ANY,
+                MinMaxBounds.Ints.atLeast((int) (64 * MediaConstants.CRYSTAL_UNIT)),
                 MinMaxBounds.Ints.ANY))
             .save(consumer, prefix("aab_big_cast"));
 
@@ -72,14 +72,14 @@ public class HexAdvancements extends PaucalAdvancementProvider {
             .display(simpleDisplay(Items.BLAZE_POWDER, "y_u_no_cast_angy", FrameType.TASK))
             .parent(root)
             .addCriterion("did_the_thing",
-                new FailToCastGreatSpellTrigger.Instance(EntityPredicate.Composite.ANY))
+                new FailToCastGreatSpellTrigger.Instance(ContextAwarePredicate.ANY))
             .save(consumer, prefix("y_u_no_cast_angy"));
 
         var opened_eyes = Advancement.Builder.advancement()
             .display(simpleDisplay(Items.ENDER_EYE, "opened_eyes", FrameType.TASK))
             .parent(impotence)
             .addCriterion("health_used",
-                new OvercastTrigger.Instance(EntityPredicate.Composite.ANY,
+                new OvercastTrigger.Instance(ContextAwarePredicate.ANY,
                     MinMaxBounds.Ints.ANY,
                     MinMaxBounds.Doubles.ANY,
                     // you can't just kill yourself
@@ -99,7 +99,7 @@ public class HexAdvancements extends PaucalAdvancementProvider {
         var loreRoot = Advancement.Builder.advancement()
             .display(simpleDisplayWithBackground(HexBlocks.AKASHIC_LIGATURE, "lore", FrameType.GOAL,
                 modLoc("textures/block/slate.png")))
-            .addCriterion("used_item", new ConsumeItemTrigger.TriggerInstance(EntityPredicate.Composite.ANY,
+            .addCriterion("used_item", new ConsumeItemTrigger.TriggerInstance(ContextAwarePredicate.ANY,
                 ItemPredicate.Builder.item().of(HexItems.LORE_FRAGMENT).build()))
             .save(consumer, prefix("lore"));
 

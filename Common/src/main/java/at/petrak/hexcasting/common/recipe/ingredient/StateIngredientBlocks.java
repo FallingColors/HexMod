@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -40,7 +41,7 @@ public class StateIngredientBlocks implements StateIngredient {
         object.addProperty("type", "blocks");
         JsonArray array = new JsonArray();
         for (Block block : blocks) {
-            array.add(Registry.BLOCK.getKey(block).toString());
+            array.add(BuiltInRegistries.BLOCK.getKey(block).toString());
         }
         object.add("blocks", array);
         return object;
@@ -52,7 +53,7 @@ public class StateIngredientBlocks implements StateIngredient {
         buffer.writeVarInt(0);
         buffer.writeVarInt(blocks.size());
         for (Block block : blocks) {
-            buffer.writeVarInt(Registry.BLOCK.getId(block));
+            buffer.writeVarInt(BuiltInRegistries.BLOCK.getId(block));
         }
     }
 

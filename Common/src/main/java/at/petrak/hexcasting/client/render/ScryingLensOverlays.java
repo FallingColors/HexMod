@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.ComparatorMode;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.block.state.properties.RailShape;
-import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.MapColor;
 
 import java.util.function.UnaryOperator;
 
@@ -228,19 +228,19 @@ public class ScryingLensOverlays {
 
     private static int instrumentColor(NoteBlockInstrument instrument) {
         return switch (instrument) {
-            case BASEDRUM -> MaterialColor.STONE.col;
-            case SNARE, XYLOPHONE, PLING -> MaterialColor.SAND.col;
-            case HAT -> MaterialColor.QUARTZ.col;
-            case BASS -> MaterialColor.WOOD.col;
-            case FLUTE -> MaterialColor.CLAY.col;
-            case BELL -> MaterialColor.GOLD.col;
-            case GUITAR -> MaterialColor.WOOL.col;
-            case CHIME -> MaterialColor.ICE.col;
-            case IRON_XYLOPHONE -> MaterialColor.METAL.col;
-            case COW_BELL -> MaterialColor.COLOR_BROWN.col;
-            case DIDGERIDOO -> MaterialColor.COLOR_ORANGE.col;
-            case BIT -> MaterialColor.EMERALD.col;
-            case BANJO -> MaterialColor.COLOR_YELLOW.col;
+            case BASEDRUM -> MapColor.STONE.col;
+            case SNARE, XYLOPHONE, PLING -> MapColor.SAND.col;
+            case HAT -> MapColor.QUARTZ.col;
+            case BASS -> MapColor.WOOD.col;
+            case FLUTE -> MapColor.CLAY.col;
+            case BELL -> MapColor.GOLD.col;
+            case GUITAR -> MapColor.WOOL.col;
+            case CHIME -> MapColor.ICE.col;
+            case IRON_XYLOPHONE -> MapColor.METAL.col;
+            case COW_BELL -> MapColor.COLOR_BROWN.col;
+            case DIDGERIDOO -> MapColor.COLOR_ORANGE.col;
+            case BIT -> MapColor.EMERALD.col;
+            case BANJO -> MapColor.COLOR_YELLOW.col;
             default -> -1;
         };
     }

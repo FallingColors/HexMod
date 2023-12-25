@@ -3,6 +3,8 @@ package at.petrak.hexcasting.api.casting.arithmetic.predicates;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 
+import java.util.List;
+
 /**
  * Used to determine whether a given iota is an acceptable type for the operator that is storing this. It must be strictly a function
  * of the passed Iota's IotaType, or the caching done by ArithmeticEngine will be invalid.
@@ -18,6 +20,14 @@ public interface IotaPredicate {
 		return new Or(left, right);
 	}
 
+	static IotaPredicate any(IotaPredicate... any) {
+		return new Any(any);
+	}
+
+	static IotaPredicate any(List<IotaPredicate> any) {
+		return new Any(any.toArray(IotaPredicate[]::new));
+	}
+
 	/**
 	 * The resulting IotaPredicate returns true if the given iota's type is type.
 	 */
@@ -29,6 +39,18 @@ public interface IotaPredicate {
 		@Override
 		public boolean test(Iota iota) {
 			return left.test(iota) || right.test(iota);
+		}
+	}
+
+	record Any(IotaPredicate[] any) implements IotaPredicate {
+
+		@Override
+		public boolean test(Iota iota) {
+			for (var i : any) {
+				if (i.test(iota))
+					return true;
+			}
+			return false;
 		}
 	}
 

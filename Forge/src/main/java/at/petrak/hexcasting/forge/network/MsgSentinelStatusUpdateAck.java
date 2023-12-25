@@ -5,7 +5,7 @@ import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -36,7 +36,7 @@ public record MsgSentinelStatusUpdateAck(@Nullable Sentinel update) implements I
 
         var greater = buf.readBoolean();
         var origin = new Vec3(buf.readDouble(), buf.readDouble(), buf.readDouble());
-        var dimension = ResourceKey.create(Registry.DIMENSION_REGISTRY, buf.readResourceLocation());
+        var dimension = ResourceKey.create(Registries.DIMENSION, buf.readResourceLocation());
 
         var sentinel = new Sentinel(greater, origin, dimension);
         return new MsgSentinelStatusUpdateAck(sentinel);

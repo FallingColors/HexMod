@@ -16,9 +16,11 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.paucal.api.forge.datagen.PaucalItemModelProvider;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -28,8 +30,8 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 
 public class HexItemModels extends PaucalItemModelProvider {
-    public HexItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, HexAPI.MOD_ID, existingFileHelper);
+    public HexItemModels(PackOutput output, ExistingFileHelper existingFileHelper) {
+        super(output, HexAPI.MOD_ID, existingFileHelper);
     }
 
     private static final String[] PHIAL_SIZES = {"small", "medium", "large", "larger", "largest"};
@@ -71,7 +73,7 @@ public class HexItemModels extends PaucalItemModelProvider {
         simpleItem(HexItems.SCRYING_LENS);
         getBuilder(getPath(HexItems.SCRYING_LENS))
             .transforms()
-            .transform(ItemTransforms.TransformType.HEAD)
+            .transform(ItemDisplayContext.HEAD)
             .rotation(0f, 0f, 0f)
             .translation(-2.5f, 0f, -8f)
             .scale(0.4f);
@@ -90,6 +92,8 @@ public class HexItemModels extends PaucalItemModelProvider {
         buildStaff(HexItems.STAFF_CRIMSON, "crimson");
         buildStaff(HexItems.STAFF_WARPED, "warped");
         buildStaff(HexItems.STAFF_MANGROVE, "mangrove");
+        buildStaff(HexItems.STAFF_CHERRY, "cherry");
+        buildStaff(HexItems.STAFF_BAMBOO, "bamboo");
         buildStaff(HexItems.STAFF_EDIFIED, "edified");
         buildStaff(HexItems.STAFF_MINDSPLICE, "mindsplice");
 
@@ -193,6 +197,10 @@ public class HexItemModels extends PaucalItemModelProvider {
             new ModelFile.UncheckedModelFile(modLoc("block/stripped_edified_wood")));
         getBuilder(getPath(HexBlocks.EDIFIED_STAIRS)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_stairs")));
+        getBuilder(getPath(HexBlocks.EDIFIED_FENCE)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/edified_fence_inventory")));
+        getBuilder(getPath(HexBlocks.EDIFIED_FENCE_GATE)).parent(
+                new ModelFile.UncheckedModelFile(modLoc("block/edified_fence_gate")));
         getBuilder(getPath(HexBlocks.EDIFIED_SLAB)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_slab")));
         getBuilder(getPath(HexBlocks.EDIFIED_BUTTON)).parent(

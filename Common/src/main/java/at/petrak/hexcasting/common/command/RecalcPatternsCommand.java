@@ -16,7 +16,7 @@ public class RecalcPatternsCommand {
                 ds.set(ScrungledPatternsSave.TAG_SAVED_DATA,
                     ScrungledPatternsSave.createFromScratch(world.getSeed()));
 
-                ctx.getSource().sendSuccess(
+                ctx.getSource().sendSuccess(() ->
                     Component.translatable("command.hexcasting.recalc"), true);
                 return 1;
             }));

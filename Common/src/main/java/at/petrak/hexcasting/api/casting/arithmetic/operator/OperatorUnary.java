@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.casting.arithmetic.operator;
 
 
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +12,7 @@ import java.util.function.UnaryOperator;
 /**
  * A helper class for defining {@link Operator}s of one iota.
  */
-public class OperatorUnary extends Operator {
+public class OperatorUnary extends OperatorBasic {
 	public UnaryOperator<Iota> inner;
 
 	public OperatorUnary(IotaMultiPredicate accepts, UnaryOperator<Iota> inner) {
@@ -20,7 +21,7 @@ public class OperatorUnary extends Operator {
 	}
 
 	@Override
-	public @NotNull Iterable<Iota> apply(@NotNull Iterable<Iota> iotas) {
+	public @NotNull Iterable<Iota> apply(Iterable<? extends Iota> iotas, @NotNull CastingEnvironment env) {
 		return List.of(inner.apply(iotas.iterator().next()));
 	}
 }

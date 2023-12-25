@@ -5,15 +5,15 @@ import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.forge.loot.ForgeHexAmethystLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexLoreLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexScrollLootMod;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
 import net.minecraftforge.common.loot.LootTableIdCondition;
 
 public class ForgeHexLootModGen extends GlobalLootModifierProvider {
-    public ForgeHexLootModGen(DataGenerator gen) {
-        super(gen, HexAPI.MOD_ID);
+    public ForgeHexLootModGen(PackOutput output) {
+        super(output, HexAPI.MOD_ID);
     }
 
     @Override

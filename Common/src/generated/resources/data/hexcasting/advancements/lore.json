@@ -31,5 +31,6 @@
     [
       "used_item"
     ]
-  ]
+  ],
+  "sends_telemetry_event": true
 }

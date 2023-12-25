@@ -11,9 +11,9 @@ import java.util.List;
 import static at.petrak.hexcasting.api.mod.HexConfig.noneMatch;
 
 public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
-    private static ForgeConfigSpec.IntValue dustMediaAmount;
-    private static ForgeConfigSpec.IntValue shardMediaAmount;
-    private static ForgeConfigSpec.IntValue chargedCrystalMediaAmount;
+    private static ForgeConfigSpec.LongValue dustMediaAmount;
+    private static ForgeConfigSpec.LongValue shardMediaAmount;
+    private static ForgeConfigSpec.LongValue chargedCrystalMediaAmount;
     private static ForgeConfigSpec.DoubleValue mediaToHealthRate;
 
     private static ForgeConfigSpec.IntValue cypherCooldown;
@@ -43,17 +43,17 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     }
 
     @Override
-    public int dustMediaAmount() {
+    public long dustMediaAmount() {
         return dustMediaAmount.get();
     }
 
     @Override
-    public int shardMediaAmount() {
+    public long shardMediaAmount() {
         return shardMediaAmount.get();
     }
 
     @Override
-    public int chargedCrystalMediaAmount() {
+    public long chargedCrystalMediaAmount() {
         return chargedCrystalMediaAmount.get();
     }
 

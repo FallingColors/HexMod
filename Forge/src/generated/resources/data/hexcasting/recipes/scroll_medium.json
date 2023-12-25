@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "A": {
       "item": "hexcasting:amethyst_dust"
@@ -15,5 +16,6 @@
   ],
   "result": {
     "item": "hexcasting:scroll_medium"
-  }
+  },
+  "show_notification": true
 }

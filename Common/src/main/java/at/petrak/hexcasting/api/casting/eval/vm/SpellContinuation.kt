@@ -23,7 +23,7 @@ sealed interface SpellContinuation {
         var self = this
         val frames = mutableListOf<CompoundTag>()
         while (self is NotDone) {
-            frames.add(self.frame.serializeToNBT())
+            frames.add(ContinuationFrame.toNBT(self.frame))
             self = self.next
         }
         return frames

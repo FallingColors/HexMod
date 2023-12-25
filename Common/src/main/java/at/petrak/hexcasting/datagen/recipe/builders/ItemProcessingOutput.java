@@ -3,6 +3,7 @@ package at.petrak.hexcasting.datagen.recipe.builders;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
@@ -10,7 +11,7 @@ public record ItemProcessingOutput(ItemStack stack, float chance) implements Pro
     @Override
     public JsonObject serialize() {
         JsonObject json = new JsonObject();
-        ResourceLocation resourceLocation = Registry.ITEM.getKey(stack.getItem());
+        ResourceLocation resourceLocation = BuiltInRegistries.ITEM.getKey(stack.getItem());
         json.addProperty("item", resourceLocation.toString());
         int count = stack.getCount();
         if (count != 1) {

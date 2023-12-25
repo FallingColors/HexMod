@@ -532,7 +532,7 @@ public class HexActions {
         new OperationAction(HexPattern.fromAngles("edqdewaqa", HexDir.SOUTH_WEST)));
     public static final ActionRegistryEntry SLICE = make("slice",
         new OperationAction(HexPattern.fromAngles("qaeaqwded", HexDir.NORTH_WEST)));
-    public static final ActionRegistryEntry MODIFY_IN_PLACE = make("modify_in_place",
+    public static final ActionRegistryEntry REPLACE = make("replace",
         new OperationAction(HexPattern.fromAngles("wqaeaqw", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry CONSTRUCT = make("construct",
         new OperationAction(HexPattern.fromAngles("ddewedd", HexDir.SOUTH_EAST)));

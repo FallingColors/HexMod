@@ -1,0 +1,13 @@
+{
+	"only_if_present": "hexcasting",
+	"name": "small_amethyst_brick",
+	"base_block": "hexcasting:small_amethyst_bricks",
+	"textures": "hexcasting:block/small_amethyst_bricks",
+	"recipes": "stonecutting",
+	"map_color": "pink",
+	"types_to_generate": [
+		"arch", "wall_column", "roof", "wall_post",
+		"facade", "round_fence_post", "round_arch",
+		"octagonal_column"
+	]
+}

@@ -23,6 +23,7 @@ import at.petrak.hexcasting.xplat.IClientXplatAbstractions
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
+import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
@@ -300,11 +301,13 @@ class GuiSpellcasting constructor(
     }
 
 
-    override fun render(ps: PoseStack, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
-        super.render(ps, pMouseX, pMouseY, pPartialTick)
+    override fun render(graphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
+        super.render(graphics, pMouseX, pMouseY, pPartialTick)
 
         this.ambianceSoundInstance?.mousePosX = pMouseX / this.width.toDouble()
         this.ambianceSoundInstance?.mousePosY = pMouseX / this.width.toDouble()
+
+        val ps = graphics.pose() // TODO: Determine if this is still necessary.
 
         val mat = ps.last().pose()
         val prevShader = RenderSystem.getShader()
@@ -425,7 +428,7 @@ class GuiSpellcasting constructor(
             ps.translate(0.0, 0.0, 1.0)
             RenderSystem.setShader { prevShader }
             for (desc in this.stackDescs) {
-                font.draw(ps, desc, 5f, 7f, -1)
+                graphics.drawString(font, desc, 5, 7, -1) // TODO: Confirm this works
                 ps.translate(0.0, 10.0, 0.0)
             }
         }
@@ -451,7 +454,7 @@ class GuiSpellcasting constructor(
             val color = 0x00_ffffff or (opacity shl 24)
 
             RenderSystem.setShader { prevShader }
-            font.draw(ps, kotlinBad, 0f, 0f, color)
+            graphics.drawString(font, kotlinBad, 0, 0, color) // TODO: Confirm this works
             ps.popPose()
         }
 

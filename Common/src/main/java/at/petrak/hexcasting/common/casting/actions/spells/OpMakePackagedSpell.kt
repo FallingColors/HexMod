@@ -18,16 +18,16 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 
 // TODO: How to handle in circles
-class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) : SpellAction {
+class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Long) : SpellAction {
     override val argc = 2
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val entity = args.getItemEntity(0, argc)
         val patterns = args.getList(1, argc).toList()
 
-        val (handStack, hand) = ctx.getHeldItemToOperateOn {
+        val (handStack, hand) = env.getHeldItemToOperateOn {
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)
             it.`is`(itemType) && hexHolder != null && !hexHolder.hasHex()
         }
@@ -40,7 +40,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
             throw MishapBadOffhandItem.of(handStack, hand, "iota.write")
         }
 
-        ctx.assertEntityInRange(entity)
+        env.assertEntityInRange(entity)
         if (!isMediaItem(entity.item) || extractMedia(
                 entity.item,
                 drainForBatteries = true,
@@ -53,7 +53,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
             )
         }
 
-        val trueName = MishapOthersName.getTrueNameFromArgs(patterns, ctx.caster)
+        val trueName = MishapOthersName.getTrueNameFromArgs(patterns, env.caster)
         if (trueName != null)
             throw MishapOthersName(trueName)
 
@@ -65,7 +65,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
     }
 
     private inner class Spell(val itemEntity: ItemEntity, val patterns: List<Iota>, val stack: ItemStack) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(stack)
             if (hexHolder != null
                 && !hexHolder.hasHex()
@@ -74,7 +74,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Int) :
                 val entityStack = itemEntity.item.copy()
                 val mediamount = extractMedia(entityStack, drainForBatteries = true)
                 if (mediamount > 0) {
-                    hexHolder.writeHex(patterns, ctx.pigment, mediamount)
+                    hexHolder.writeHex(patterns, env.pigment, mediamount)
                 }
 
                 itemEntity.item = entityStack

@@ -21,11 +21,11 @@ import net.minecraft.world.phys.Vec3
 object OpIgnite : SpellAction {
     override val argc = 1
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val target = args.getBlockPos(0, argc)
-        ctx.assertPosInRangeForEditing(target)
+        env.assertPosInRangeForEditing(target)
 
         return SpellAction.Result(
             Spell(target),
@@ -35,10 +35,10 @@ object OpIgnite : SpellAction {
     }
 
     private data class Spell(val pos: BlockPos) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
+        override fun cast(env: CastingEnvironment) {
             // help
-            if (!tryToClick(ctx, pos, Items.FIRE_CHARGE)) {
-                tryToClick(ctx, pos, Items.FLINT_AND_STEEL)
+            if (!tryToClick(env, pos, Items.FIRE_CHARGE)) {
+                tryToClick(env, pos, Items.FLINT_AND_STEEL)
             }
         }
 

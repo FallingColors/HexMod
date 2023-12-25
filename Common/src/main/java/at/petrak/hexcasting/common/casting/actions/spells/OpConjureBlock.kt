@@ -20,16 +20,16 @@ import net.minecraft.world.phys.Vec3
 class OpConjureBlock(val light: Boolean) : SpellAction {
     override val argc = 1
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val vecPos = args.getVec3(0, argc)
-        val pos = BlockPos(vecPos)
-        ctx.assertPosInRangeForEditing(pos)
+        val pos = BlockPos.containing(vecPos)
+        env.assertPosInRangeForEditing(pos)
 
-        val placeContext = DirectionalPlaceContext(ctx.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
+        val placeContext = DirectionalPlaceContext(env.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
 
-        val worldState = ctx.world.getBlockState(pos)
+        val worldState = env.world.getBlockState(pos)
         if (!worldState.canBeReplaced(placeContext))
             throw MishapBadBlock.of(pos, "replaceable")
 
@@ -41,27 +41,27 @@ class OpConjureBlock(val light: Boolean) : SpellAction {
     }
 
     private data class Spell(val pos: BlockPos, val light: Boolean) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
-            if (!ctx.canEditBlockAt(pos))
+        override fun cast(env: CastingEnvironment) {
+            if (!env.canEditBlockAt(pos))
                 return
 
-            val placeContext = DirectionalPlaceContext(ctx.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
+            val placeContext = DirectionalPlaceContext(env.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
 
-            val worldState = ctx.world.getBlockState(pos)
+            val worldState = env.world.getBlockState(pos)
             if (worldState.canBeReplaced(placeContext)) {
                 val block = if (this.light) HexBlocks.CONJURED_LIGHT else HexBlocks.CONJURED_BLOCK
 
-                if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(block), ctx.caster))
+                if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(env.world, pos, ItemStack(block), env.caster))
                     return
 
                 val state = block.getStateForPlacement(placeContext)
                 if (state != null) {
-                    ctx.world.setBlock(pos, state, 5)
+                    env.world.setBlock(pos, state, 5)
 
-                    val pigment = ctx.pigment
+                    val pigment = env.pigment
 
-                    if (ctx.world.getBlockState(pos).block is BlockConjured) {
-                        BlockConjured.setColor(ctx.world, pos, pigment)
+                    if (env.world.getBlockState(pos).block is BlockConjured) {
+                        BlockConjured.setColor(env.world, pos, pigment)
                     }
                 }
             }

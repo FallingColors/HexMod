@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
   "key": {
     "B": {
       "item": "minecraft:torch"
@@ -14,5 +15,6 @@
   ],
   "result": {
     "item": "hexcasting:ancient_scroll_paper_lantern"
-  }
+  },
+  "show_notification": true
 }

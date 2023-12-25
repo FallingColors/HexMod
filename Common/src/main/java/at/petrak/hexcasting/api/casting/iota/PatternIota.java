@@ -115,21 +115,21 @@ public class PatternIota extends Iota {
             var sideEffects = result.getSideEffects();
 
             return new CastResult(
+                this,
                 cont2,
                 result.getNewImage(),
                 sideEffects,
                 ResolvedPatternType.EVALUATED,
-                result.getSound()
-            );
+                result.getSound());
 
         } catch (Mishap mishap) {
             return new CastResult(
+                this,
                 continuation,
                 null,
                 List.of(new OperatorSideEffect.DoMishap(mishap, new Mishap.Context(this.getPattern(), castedName))),
                 mishap.resolutionType(vm.getEnv()),
-                HexEvalSounds.MISHAP
-            );
+                HexEvalSounds.MISHAP);
         }
     }
 

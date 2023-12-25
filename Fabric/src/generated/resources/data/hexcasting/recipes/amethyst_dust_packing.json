@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "building",
   "key": {
     "X": {
       "item": "hexcasting:amethyst_dust"
@@ -11,5 +12,6 @@
   ],
   "result": {
     "item": "hexcasting:amethyst_dust_block"
-  }
+  },
+  "show_notification": true
 }

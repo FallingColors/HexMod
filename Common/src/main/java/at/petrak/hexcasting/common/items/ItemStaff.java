@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.lib.HexSounds;
+import at.petrak.hexcasting.common.msgs.MsgClearSpiralPatternsS2C;
 import at.petrak.hexcasting.common.msgs.MsgOpenSpellGuiS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.resources.ResourceLocation;
@@ -29,6 +30,9 @@ public class ItemStaff extends Item {
                 player.playSound(HexSounds.STAFF_RESET, 1f, 1f);
             } else if (player instanceof ServerPlayer serverPlayer) {
                 IXplatAbstractions.INSTANCE.clearCastingData(serverPlayer);
+                var packet = new MsgClearSpiralPatternsS2C(player.getUUID());
+                IXplatAbstractions.INSTANCE.sendPacketToPlayer(serverPlayer, packet);
+                IXplatAbstractions.INSTANCE.sendPacketTracking(serverPlayer, packet);
             }
         }
 

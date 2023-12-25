@@ -9,8 +9,7 @@ import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
-import at.petrak.hexcasting.common.msgs.MsgNewSpellPatternC2S;
-import at.petrak.hexcasting.common.msgs.MsgNewSpellPatternS2C;
+import at.petrak.hexcasting.common.msgs.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -35,6 +34,14 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
     public void postExecution(CastResult result) {
         super.postExecution(result);
 
+        if (result.component1() instanceof PatternIota patternIota) {
+            var packet = new MsgNewSpiralPatternsS2C(
+                this.caster.getUUID(), List.of(patternIota.getPattern()), Integer.MAX_VALUE
+            );
+            IXplatAbstractions.INSTANCE.sendPacketToPlayer(this.caster, packet);
+            IXplatAbstractions.INSTANCE.sendPacketTracking(this.caster, packet);
+        }
+
         // we always want to play this sound one at a time
         var sound = result.getSound().sound();
         if (sound != null) {
@@ -45,7 +52,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
     }
 
     @Override
-    public long extractMedia(long cost) {
+    public long extractMediaEnvironment(long cost) {
         if (this.caster.isCreative())
             return 0;
 
@@ -95,7 +102,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
 
         // TODO: do we reset the number of evals run via the staff? because each new pat is a new tick.
 
-        ExecutionClientView clientInfo = vm.queueExecuteAndWrapIota(new PatternIota(msg.pattern()), sender.getLevel());
+        ExecutionClientView clientInfo = vm.queueExecuteAndWrapIota(new PatternIota(msg.pattern()), sender.serverLevel());
 
         if (clientInfo.isStackClear()) {
             IXplatAbstractions.INSTANCE.setStaffcastImage(sender, null);
@@ -111,11 +118,20 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
         IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender,
             new MsgNewSpellPatternS2C(clientInfo, resolvedPatterns.size() - 1));
 
+        IMessage packet;
+        if (clientInfo.isStackClear()) {
+            packet = new MsgClearSpiralPatternsS2C(sender.getUUID());
+        } else {
+            packet = new MsgNewSpiralPatternsS2C(sender.getUUID(), List.of(msg.pattern()), Integer.MAX_VALUE);
+        }
+        IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender, packet);
+        IXplatAbstractions.INSTANCE.sendPacketTracking(sender, packet);
+
         if (clientInfo.getResolutionType().getSuccess()) {
             // Somehow we lost spraying particles on each new pattern, so do it here
             // this also nicely prevents particle spam on trinkets
             new ParticleSpray(sender.position(), new Vec3(0.0, 1.5, 0.0), 0.4, Math.PI / 3, 30)
-                .sprayParticles(sender.getLevel(), IXplatAbstractions.INSTANCE.getPigment(sender));
+                .sprayParticles(sender.serverLevel(), IXplatAbstractions.INSTANCE.getPigment(sender));
         }
     }
 }

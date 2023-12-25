@@ -33,7 +33,7 @@ public class ForgeHexAmethystLootMod extends LootModifier {
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot,
         LootContext context) {
-        var injectPool = context.getLootTable(HexLootHandler.TABLE_INJECT_AMETHYST_CLUSTER);
+        var injectPool = context.getResolver().getLootTable(HexLootHandler.TABLE_INJECT_AMETHYST_CLUSTER);
         injectPool.getRandomItemsRaw(context, generatedLoot::add);
 
         for (var stack : generatedLoot) {

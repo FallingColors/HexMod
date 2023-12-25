@@ -1,16 +1,17 @@
 package at.petrak.hexcasting.datagen;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.paucal.api.datagen.PaucalLootTableProvider;
+import at.petrak.paucal.api.datagen.PaucalLootTableSubProvider;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DataProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -34,9 +35,9 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.util.Map;
 
-public class HexLootTables extends PaucalLootTableProvider {
-    public HexLootTables(DataGenerator pGenerator) {
-        super(pGenerator);
+public class HexLootTables extends PaucalLootTableSubProvider {
+    public HexLootTables() {
+        super(HexAPI.MOD_ID);
     }
 
     @Override
@@ -44,7 +45,7 @@ public class HexLootTables extends PaucalLootTableProvider {
         Map<ResourceLocation, LootTable.Builder> lootTables) {
         dropSelf(blockTables, HexBlocks.IMPETUS_EMPTY,
             HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_REDSTONE,
-            HexBlocks.DIRECTRIX_REDSTONE, HexBlocks.EMPTY_DIRECTRIX,
+            HexBlocks.EMPTY_DIRECTRIX, HexBlocks.DIRECTRIX_REDSTONE, HexBlocks.DIRECTRIX_BOOLEAN,
             HexBlocks.AKASHIC_RECORD, HexBlocks.AKASHIC_BOOKSHELF, HexBlocks.AKASHIC_LIGATURE,
             HexBlocks.SLATE_BLOCK, HexBlocks.SLATE_TILES, HexBlocks.SLATE_BRICKS, HexBlocks.SLATE_BRICKS_SMALL,
             HexBlocks.SLATE_PILLAR, HexBlocks.AMETHYST_DUST_BLOCK, HexBlocks.AMETHYST_TILES, HexBlocks.AMETHYST_BRICKS,
@@ -57,7 +58,7 @@ public class HexLootTables extends PaucalLootTableProvider {
             HexBlocks.EDIFIED_LOG_CITRINE, HexBlocks.EDIFIED_LOG_PURPLE, HexBlocks.STRIPPED_EDIFIED_LOG,
             HexBlocks.EDIFIED_WOOD, HexBlocks.STRIPPED_EDIFIED_WOOD,
             HexBlocks.EDIFIED_PLANKS, HexBlocks.EDIFIED_TILE, HexBlocks.EDIFIED_PANEL,
-            HexBlocks.EDIFIED_TRAPDOOR, HexBlocks.EDIFIED_STAIRS, HexBlocks.EDIFIED_PRESSURE_PLATE,
+            HexBlocks.EDIFIED_TRAPDOOR, HexBlocks.EDIFIED_STAIRS, HexBlocks.EDIFIED_FENCE, HexBlocks.EDIFIED_FENCE_GATE, HexBlocks.EDIFIED_PRESSURE_PLATE,
             HexBlocks.EDIFIED_BUTTON);
 
         makeSlabTable(blockTables, HexBlocks.EDIFIED_SLAB);
@@ -133,7 +134,7 @@ public class HexLootTables extends PaucalLootTableProvider {
 
     private void makeLeafTable(Map<Block, LootTable.Builder> lootTables, Block block) {
         var leafPool = dropThisPool(block, 1)
-            .when(new AlternativeLootItemCondition.Builder(
+            .when(AnyOfCondition.anyOf(
                 IXplatAbstractions.INSTANCE.isShearsCondition(),
                 MatchTool.toolMatches(ItemPredicate.Builder.item()
                     .hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))))

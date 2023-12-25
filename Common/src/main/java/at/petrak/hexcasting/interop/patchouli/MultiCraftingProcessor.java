@@ -15,6 +15,7 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.level.Level;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
@@ -30,8 +31,8 @@ public class MultiCraftingProcessor implements IComponentProcessor {
     private boolean hasCustomHeading;
 
     @Override
-    public void setup(IVariableProvider variables) {
-        List<String> names = variables.get("recipes").asStream().map(IVariable::asString).collect(Collectors.toList());
+    public void setup(Level level, IVariableProvider vars) {
+        List<String> names = vars.get("recipes").asStream().map(IVariable::asString).collect(Collectors.toList());
         this.recipes = new ArrayList<>();
         for (String name : names) {
             CraftingRecipe recipe = PatchouliUtils.getRecipe(RecipeType.CRAFTING, new ResourceLocation(name));
@@ -50,17 +51,17 @@ public class MultiCraftingProcessor implements IComponentProcessor {
                 HexAPI.LOGGER.warn("Missing crafting recipe " + name);
             }
         }
-        this.hasCustomHeading = variables.has("heading");
+        this.hasCustomHeading = vars.has("heading");
     }
 
     @Override
-    public IVariable process(String key) {
+    public IVariable process(Level level, String key) {
         if (recipes.isEmpty()) {
             return null;
         }
         if (key.equals("heading")) {
             if (!hasCustomHeading) {
-                return IVariable.from(recipes.get(0).getResultItem().getHoverName());
+                return IVariable.from(recipes.get(0).getResultItem(level.registryAccess()).getHoverName());
             }
             return null;
         }
@@ -88,7 +89,7 @@ public class MultiCraftingProcessor implements IComponentProcessor {
         }
         if (key.equals("output")) {
             return IVariable.wrapList(
-                recipes.stream().map(CraftingRecipe::getResultItem).map(IVariable::from).collect(Collectors.toList()));
+                recipes.stream().map(recipe -> recipe.getResultItem(level.registryAccess())).map(IVariable::from).collect(Collectors.toList()));
         }
         if (key.equals("shapeless")) {
             return IVariable.wrap(shapeless);

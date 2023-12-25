@@ -186,5 +186,6 @@
       ],
       "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "hexcasting:inject/amethyst_cluster"
 }

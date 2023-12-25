@@ -3,6 +3,7 @@ package at.petrak.hexcasting.forge.cap;
 import at.petrak.hexcasting.api.addldata.*;
 import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
+import at.petrak.hexcasting.api.client.ClientCastingStack;
 import at.petrak.hexcasting.api.item.*;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexConfig;
@@ -19,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -68,7 +70,12 @@ public class ForgeCapabilityHandler {
     public static final ResourceLocation PIGMENT_CAP = modLoc("pigment");
     public static final ResourceLocation CURIO_CAP = modLoc("curio");
 
-    private static final ResourceLocation IMPETUS_HANDLER = modLoc("impetus_items");
+    public static final ResourceLocation IMPETUS_HANDLER = modLoc("impetus_items");
+
+    /**
+     * Used to render the pattern spiral around players while casting.
+     */
+    public static final ResourceLocation PATTERN_SPIRAL = modLoc("pattern_spiral");
 
     public static void registerCaps(RegisterCapabilitiesEvent evt) {
         evt.register(ADMediaHolder.class);
@@ -146,6 +153,9 @@ public class ForgeCapabilityHandler {
         } else if (entity instanceof EntityWallScroll scroll) {
             evt.addCapability(IOTA_STORAGE_CAP, wrapItemEntityDelegate(scroll,
                 ItemDelegatingEntityIotaHolder.ToWallScroll::new));
+        } else if (entity instanceof Player player) {
+            evt.addCapability(PATTERN_SPIRAL, provide(player, HexCapabilities.CLIENT_CASTING_STACK,
+            () -> new CapClientCastingStack(player, new ClientCastingStack())));
         }
     }
 

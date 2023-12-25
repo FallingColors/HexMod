@@ -10,8 +10,8 @@ class OpWeather(val rain: Boolean) : SpellAction {
     override val argc = 0
 
     override fun execute(
-        args: List<Iota>,
-        ctx: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         return SpellAction.Result(
             Spell(rain),
@@ -21,8 +21,8 @@ class OpWeather(val rain: Boolean) : SpellAction {
     }
 
     private data class Spell(val rain: Boolean) : RenderedSpell {
-        override fun cast(ctx: CastingEnvironment) {
-            val w = ctx.world
+        override fun cast(env: CastingEnvironment) {
+            val w = env.world
             if (w.isRaining != rain) {
                 w.levelData.isRaining = rain // i hex the rains down in minecraftia
 

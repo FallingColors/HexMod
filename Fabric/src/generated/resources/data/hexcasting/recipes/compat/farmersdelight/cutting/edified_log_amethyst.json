@@ -1,5 +1,4 @@
 {
-  "type": "farmersdelight:cutting",
   "fabric:load_conditions": [
     {
       "condition": "fabric:all_mods_loaded",
@@ -8,6 +7,7 @@
       ]
     }
   ],
+  "type": "farmersdelight:cutting",
   "ingredients": [
     {
       "item": "hexcasting:edified_log_amethyst"

@@ -12,6 +12,7 @@ import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexTags;
@@ -20,10 +21,9 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
-import at.petrak.hexcasting.fabric.interop.gravity.GravityApiInterop;
 import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsApiInterop;
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
@@ -32,10 +32,9 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
 import com.google.common.base.Suppliers;
-import com.jamieswhiteshirt.reachentityattributes.ReachEntityAttributes;
 import com.mojang.serialization.Lifecycle;
 import net.fabricmc.api.EnvType;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
@@ -53,7 +52,7 @@ import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.*;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -64,7 +63,10 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -72,20 +74,19 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.storage.loot.predicates.AlternativeLootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import virtuoel.pehkui.api.ScaleTypes;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class FabricXplatImpl implements IXplatAbstractions {
     @Override
@@ -105,18 +106,15 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public void initPlatformSpecific() {
-        if (this.isModPresent(HexInterop.Fabric.GRAVITY_CHANGER_API_ID)) {
-            GravityApiInterop.init();
-        }
         if (this.isModPresent(HexInterop.Fabric.TRINKETS_API_ID)) {
             TrinketsApiInterop.init();
         }
     }
 
-    @Override
-    public double getReachDistance(Player player) {
-        return ReachEntityAttributes.getReachDistance(player, 5.0);
-    }
+//    @Override
+//    public double getReachDistance(Player player) {
+//        return ReachEntityAttributes.getReachDistance(player, 5.0);
+//    }
 
     @Override
     public void sendPacketToPlayer(ServerPlayer target, IMessage packet) {
@@ -125,15 +123,23 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, IMessage packet) {
+        sendPacketToPlayers(PlayerLookup.around(dimension, pos, radius), packet);
+    }
+
+    @Override
+    public void sendPacketTracking(Entity entity, IMessage packet) {
+        sendPacketToPlayers(PlayerLookup.tracking(entity), packet);
+    }
+
+    private void sendPacketToPlayers(Collection<ServerPlayer> players, IMessage packet) {
         var pkt = ServerPlayNetworking.createS2CPacket(packet.getFabricId(), packet.toBuf());
-        var nears = PlayerLookup.around(dimension, pos, radius);
-        for (var p : nears) {
+        for (var p : players) {
             p.connection.send(pkt);
         }
     }
 
     @Override
-    public Packet<?> toVanillaClientboundPacket(IMessage message) {
+    public Packet<ClientGamePacketListener> toVanillaClientboundPacket(IMessage message) {
         return ServerPlayNetworking.createS2CPacket(message.getFabricId(), message.toBuf());
     }
 
@@ -331,16 +337,6 @@ public class FabricXplatImpl implements IXplatAbstractions {
         return FabricUnsealedIngredient.of(stack);
     }
 
-    private static final Supplier<CreativeModeTab> TAB = Suppliers.memoize(() -> FabricItemGroupBuilder.create(
-            modLoc("creative_tab"))
-        .icon(HexItems::tabIcon)
-        .build());
-
-    @Override
-    public CreativeModeTab getTab() {
-        return TAB.get();
-    }
-
     // do a stupid hack from botania
     private static List<ItemStack> stacks(Item... items) {
         return Stream.of(items).map(ItemStack::new).toList();
@@ -395,7 +391,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public LootItemCondition.Builder isShearsCondition() {
-        return AlternativeLootItemCondition.alternative(
+        return AnyOfCondition.anyOf(
             MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.SHEARS)),
             MatchTool.toolMatches(ItemPredicate.Builder.item().of(
                 HexTags.Items.create(new ResourceLocation("c", "shears"))))
@@ -415,35 +411,43 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     private static final Supplier<Registry<ActionRegistryEntry>> ACTION_REGISTRY = Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new MappedRegistry<ActionRegistryEntry>(
-                ResourceKey.createRegistryKey(modLoc("action")),
-                Lifecycle.stable(), null))
+        FabricRegistryBuilder.from(new MappedRegistry<>(
+                HexRegistries.ACTION,
+                Lifecycle.stable()))
             .buildAndRegister()
     );
     private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
         Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new MappedRegistry<SpecialHandler.Factory<?>>(
-                    ResourceKey.createRegistryKey(modLoc("special_handler")),
-                    Lifecycle.stable(), null))
+            FabricRegistryBuilder.from(new MappedRegistry<>(
+                    HexRegistries.SPECIAL_HANDLER,
+                    Lifecycle.stable()))
                 .buildAndRegister()
         );
     private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new DefaultedRegistry<IotaType<?>>(
-                HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("iota_type")),
-                Lifecycle.stable(), null))
+        FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+                HexAPI.MOD_ID + ":null", HexRegistries.IOTA_TYPE,
+                Lifecycle.stable(), false))
             .buildAndRegister()
     );
 
     private static final Supplier<Registry<Arithmetic>> ARITHMETIC_REGISTRY = Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new DefaultedRegistry<Arithmetic>(
-                            HexAPI.MOD_ID + ":null", ResourceKey.createRegistryKey(modLoc("arithmetic")),
-                            Lifecycle.stable(), null))
+            FabricRegistryBuilder.from(new MappedRegistry<>(
+                    HexRegistries.ARITHMETIC,
+                    Lifecycle.stable()))
+                .buildAndRegister()
+    );
+
+    private static final Supplier<Registry<ContinuationFrame.Type<?>>> CONTINUATION_TYPE_REGISTRY = Suppliers.memoize(() ->
+            FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+                            HexAPI.MOD_ID + ":end", HexRegistries.CONTINUATION_TYPE,
+                            Lifecycle.stable(), false))
                     .buildAndRegister()
     );
+
     private static final Supplier<Registry<EvalSound>> EVAL_SOUNDS_REGISTRY = Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new DefaultedRegistry<EvalSound>(
-                HexAPI.MOD_ID + ":nothing", ResourceKey.createRegistryKey(modLoc("eval_sound")),
-                Lifecycle.stable(), null))
+        FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+                HexAPI.MOD_ID + ":nothing", HexRegistries.EVAL_SOUND,
+                Lifecycle.stable(), false))
             .buildAndRegister()
     );
 
@@ -468,18 +472,27 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public Registry<ContinuationFrame.Type<?>> getContinuationTypeRegistry() {
+        return CONTINUATION_TYPE_REGISTRY.get();
+    }
+
+    @Override
     public Registry<EvalSound> getEvalSoundRegistry() {
         return EVAL_SOUNDS_REGISTRY.get();
     }
 
     @Override
-    public boolean isBreakingAllowed(Level world, BlockPos pos, BlockState state, Player player) {
+    public boolean isBreakingAllowed(ServerLevel world, BlockPos pos, BlockState state, @Nullable Player player) {
+        if (player == null)
+            player = FakePlayer.get(world, HEXCASTING);
         return PlayerBlockBreakEvents.BEFORE.invoker()
             .beforeBlockBreak(world, player, pos, state, world.getBlockEntity(pos));
     }
 
     @Override
-    public boolean isPlacingAllowed(Level world, BlockPos pos, ItemStack blockStack, Player player) {
+    public boolean isPlacingAllowed(ServerLevel world, BlockPos pos, ItemStack blockStack, @Nullable Player player) {
+        if (player == null)
+            player = FakePlayer.get(world, HEXCASTING);
         ItemStack cached = player.getMainHandItem();
         player.setItemInHand(InteractionHand.MAIN_HAND, blockStack.copy());
         var success = UseItemCallback.EVENT.invoker().interact(player, world, InteractionHand.MAIN_HAND);

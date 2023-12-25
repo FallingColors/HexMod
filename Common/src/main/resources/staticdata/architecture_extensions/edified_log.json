@@ -1,0 +1,14 @@
+{
+	"only_if_present": "hexcasting",
+	"name": "edified",
+	"base_block": "hexcasting:edified_log",
+	"textures": "wood_with_log",
+	"recipes": "sawing",
+	"map_color": "purple",
+	"types_to_generate": [
+		"facade", "round_fence_post", "round_arch",
+		"octagonal_column", "beam", "fence_post", "joist",
+		"crown_molding", "post_cap", "post_lantern", "lattice", 
+		"transom"
+	]
+}

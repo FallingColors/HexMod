@@ -12,6 +12,7 @@ import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
@@ -20,9 +21,11 @@ import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -30,7 +33,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
@@ -47,6 +49,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -66,10 +69,12 @@ public interface IXplatAbstractions {
 
     void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, IMessage packet);
 
-    // https://github.com/VazkiiMods/Botania/blob/13b7bcd9cbb6b1a418b0afe455662d29b46f1a7f/Xplat/src/main/java/vazkii/botania/xplat/IXplatAbstractions.java#L157
-    Packet<?> toVanillaClientboundPacket(IMessage message);
+    void sendPacketTracking(Entity entity, IMessage packet);
 
-    double getReachDistance(Player player);
+    // https://github.com/VazkiiMods/Botania/blob/13b7bcd9cbb6b1a418b0afe455662d29b46f1a7f/Xplat/src/main/java/vazkii/botania/xplat/IXplatAbstractions.java#L157
+    Packet<ClientGamePacketListener> toVanillaClientboundPacket(IMessage message);
+
+//    double getReachDistance(Player player);
 
     // Things that used to be caps
 
@@ -148,8 +153,6 @@ public interface IXplatAbstractions {
 
     // misc
 
-    CreativeModeTab getTab();
-
     boolean isCorrectTierForDrops(Tier tier, BlockState bs);
 
     Ingredient getUnsealedIngredient(ItemStack stack);
@@ -173,12 +176,15 @@ public interface IXplatAbstractions {
     Registry<IotaType<?>> getIotaTypeRegistry();
 
     Registry<Arithmetic> getArithmeticRegistry();
+    Registry<ContinuationFrame.Type<?>> getContinuationTypeRegistry();
 
     Registry<EvalSound> getEvalSoundRegistry();
 
-    boolean isBreakingAllowed(Level world, BlockPos pos, BlockState state, Player player);
+    GameProfile HEXCASTING = new GameProfile(UUID.fromString("8BE7E9DA-1667-11EE-BE56-0242AC120002"), "[HexCasting]");
 
-    boolean isPlacingAllowed(Level world, BlockPos pos, ItemStack blockStack, Player player);
+    boolean isBreakingAllowed(ServerLevel world, BlockPos pos, BlockState state, @Nullable Player player);
+
+    boolean isPlacingAllowed(ServerLevel world, BlockPos pos, ItemStack blockStack, @Nullable Player player);
 
     // interop
 

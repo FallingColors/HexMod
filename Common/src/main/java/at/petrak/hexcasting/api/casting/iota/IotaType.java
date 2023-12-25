@@ -17,6 +17,7 @@ import net.minecraft.util.FormattedCharSequence;
 import javax.annotation.Nullable;
 import java.util.ArrayDeque;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 // Take notes from ForgeRegistryEntry
@@ -64,7 +65,7 @@ public abstract class IotaType<T extends Iota> {
         }
 
         // We check if it's too big on serialization; if it is we just return a garbage.
-        if (iota instanceof ListIota listIota && isTooLargeToSerialize(listIota.getList())) {
+        if (isTooLargeToSerialize(List.of(iota), 0)) {
             // Garbage will never be too large so we just recurse
             return serialize(new GarbageIota());
         }
@@ -76,12 +77,16 @@ public abstract class IotaType<T extends Iota> {
     }
 
     public static boolean isTooLargeToSerialize(Iterable<Iota> examinee) {
+        return isTooLargeToSerialize(examinee, 1);
+    }
+
+    private static boolean isTooLargeToSerialize(Iterable<Iota> examinee, int startingCount) {
         // We don't recurse here, just a work queue (or work stack, if we liked.)
         // Each element is a found sub-iota, and how deep it is.
         //
         // TODO: is it worth trying to cache the depth and size statically on a SpellList.
         var listsToExamine = new ArrayDeque<>(Collections.singleton(new Pair<>(examinee, 0)));
-        int totalEltsFound = 1; // count the first list
+        int totalEltsFound = startingCount; // count the first list
         while (!listsToExamine.isEmpty()) {
             var iotaPair = listsToExamine.removeFirst();
             var sublist = iotaPair.getFirst();
