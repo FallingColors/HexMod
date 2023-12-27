@@ -36,7 +36,7 @@ repositories {
     mavenCentral()
     maven { url "https://maven.shedaniel.me/" }
     maven {
-        url 'https://ladysnake.jfrog.io/artifactory/mods'
+        url 'https://maven.ladysnake.org/releases'
     }
     maven {
         name "entity reach"
