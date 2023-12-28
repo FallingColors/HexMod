@@ -27,6 +27,8 @@ class PatternStubProps(StripHiddenModel):
     path: RelativePath
     regex: re.Pattern[str]
     per_world_value: str | None = "true"
+    required: bool = True
+    """If `True` (the default), raise an error if no patterns were loaded from here."""
 
 
 class HexProperties(StripHiddenModel):
@@ -116,6 +118,8 @@ class HexContext(ValidationContextModel):
         logger.debug(f"Load pattern stub from {stub.path}")
         stub_text = stub.path.read_text("utf-8")
 
+        patterns = list[PatternInfo]()
+
         for match in stub.regex.finditer(stub_text):
             groups = match.groupdict()
             id = props.mod_loc(groups["name"])
@@ -125,9 +129,21 @@ class HexContext(ValidationContextModel):
             else:
                 is_per_world = groups.get("is_per_world") == stub.per_world_value
 
-            yield PatternInfo(
-                id=id,
-                startdir=Direction[groups["startdir"]],
-                signature=groups["signature"],
-                is_per_world=is_per_world,
+            patterns.append(
+                PatternInfo(
+                    id=id,
+                    startdir=Direction[groups["startdir"]],
+                    signature=groups["signature"],
+                    is_per_world=is_per_world,
+                )
             )
+
+        pretty_path = stub.path.resolve().relative_to(Path.cwd())
+
+        if stub.required and not patterns:
+            raise ValueError(
+                f"No patterns found in {pretty_path} (check the pattern regex)"
+            )
+
+        logger.info(f"Loaded {len(patterns)} patterns from {pretty_path}")
+        return patterns
