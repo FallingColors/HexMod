@@ -54,7 +54,7 @@ function offsetAngle(str) {
   }
 }
 
-function initializeElem(canvas) {
+export function initializeElem(canvas) {
   const str = canvas.dataset.string;
   let angle = startAngle(canvas.dataset.start);
   const perWorld = canvas.dataset.perWorld === "True";
@@ -241,15 +241,15 @@ function initializeElem(canvas) {
 }
 
 
-function hookLoad(elem) {
+export function hookLoad(elem) {
   let init = false;
   const canvases = elem.querySelectorAll("canvas");
-  elem.addEventListener("toggle", () => {
+  elem.addEventListener("toggle", (a) => {
     if (!init) {
       canvases.forEach(initializeElem);
       init = true;
     }
-  });
+  }, {once: true});
 }
 
 document.addEventListener("DOMContentLoaded", () => {

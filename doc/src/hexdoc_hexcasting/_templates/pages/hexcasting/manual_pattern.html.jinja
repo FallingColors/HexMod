@@ -3,6 +3,29 @@
 {% block inner_body %}
   <details class="details-collapsible">
     <summary class="collapse-details collapse-spell"></summary>
+    <li class="dropdown">
+      <a
+        href=""
+        class="dropdown-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >Renders <span class="caret"></span></a>
+      <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+    </li>
+
+    <li class="dropdown">
+      <a
+        href=""
+        class="dropdown-toggle"
+        data-toggle="dropdown"
+        role="button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >Palettes <span class="caret"></span></a>
+      <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+    </li>
     {% for pattern in page.patterns %}
       <canvas
         class="spell-viz"
