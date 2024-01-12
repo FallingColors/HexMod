@@ -1,4 +1,4 @@
-// //@ts-check
+// @ts-check
 // "uncomment" above to get typechecking to work, will error unless hex_renderer_javascript (npm) is installed
 
 
@@ -237,8 +237,7 @@ const segment = {
         }
       },
       collisions: {
-        type: "Dashes",
-        color: [221, 0, 0, 255],
+        type: "ParallelLines"
       }
     }
   },
@@ -251,6 +250,7 @@ let selected = "animated";
 //it doesn't make sense in this context (as it's rendering single patterns)
 //and it would take more complex color palettes to work properly
 let options = {
+  "animated": -1,
   "monocolor": monocolor,
   "gradient": gradient,
   "segment": segment,
