@@ -1,4 +1,4 @@
-// 1.20.1	2023-08-06T13:31:21.8578203	Loot Tables
+// 1.20.1	2023-12-24T17:58:56.8940231	Loot Tables
 b19ac49146149555038e6d2e06200d514df1ef43 data/hexcasting/loot_tables/blocks/akashic_bookshelf.json
 92528799c8ee13ff26c3c505e4dfb286c30f97c7 data/hexcasting/loot_tables/blocks/akashic_connector.json
 49940d1cb2599212e2837d7ed66c6c66e54f80f8 data/hexcasting/loot_tables/blocks/akashic_record.json
@@ -18,6 +18,8 @@ df5496da8e48b61a171bc7a3936495c016cc002e data/hexcasting/loot_tables/blocks/dire
 4efd95d408d050c36ff21b18f3c37116491fef92 data/hexcasting/loot_tables/blocks/directrix/redstone.json
 55f265961463a89c243ec8ac1970c70185f064a6 data/hexcasting/loot_tables/blocks/edified_button.json
 30f06db8c1ea74c9f4d95474e412336d065ac888 data/hexcasting/loot_tables/blocks/edified_door.json
+65fe724d4c4ba8b0ab7d7a11bf37687413d9119d data/hexcasting/loot_tables/blocks/edified_fence.json
+a62ffbcec2aa40172e05cd9fcd8e70e295d008e9 data/hexcasting/loot_tables/blocks/edified_fence_gate.json
 2902c4dae60875a1b2daf0a948a49a3419d8ec9d data/hexcasting/loot_tables/blocks/edified_log.json
 6920654f50532b5e557646e34edc4872339eb79f data/hexcasting/loot_tables/blocks/edified_log_amethyst.json
 8c6c0486170537d73b923a2b9f83722107fc8716 data/hexcasting/loot_tables/blocks/edified_log_aventurine.json

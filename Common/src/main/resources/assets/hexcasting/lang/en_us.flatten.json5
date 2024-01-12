@@ -13,6 +13,8 @@
       crimson: "Crimson Staff",
       warped: "Warped Staff",
       mangrove: "Mangrove Staff",
+      cherry: "Cherry Staff",
+      bamboo: "Bamboo Staff",
       edified: "Edified Staff",
       quenched: "Quenched Shard Staff",
       mindsplice: "Mindsplice Staff",
@@ -188,6 +190,8 @@
       slab: "Edified Slab",
       button: "Edified Button",
       pressure_plate: "Edified Pressure Plate",
+      fence: "Edified Fence",
+      fence_gate: "Edified Fence Gate",
     },
 
     stripped_edified_log: "Stripped Edified Log",

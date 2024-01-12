@@ -27,6 +27,7 @@ build
 # other
 eclipse
 run
+.DS_Store
 
 # MacOS moment
 .DS_Store

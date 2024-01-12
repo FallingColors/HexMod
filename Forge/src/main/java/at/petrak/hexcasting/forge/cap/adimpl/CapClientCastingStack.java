@@ -17,7 +17,7 @@ public record CapClientCastingStack(Player player, ClientCastingStack clientCast
 
     @SubscribeEvent
     public static void tickClientPlayer(TickEvent.PlayerTickEvent evt) {
-        if (evt.side == LogicalSide.CLIENT)
+        if (evt.side == LogicalSide.CLIENT && !evt.player.isDeadOrDying())
             evt.player.getCapability(HexCapabilities.CLIENT_CASTING_STACK).resolve()
                 .get().get().tick();
     }

@@ -3,6 +3,9 @@ package at.petrak.hexcasting.api.casting.arithmetic.engine;
 import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.eval.OperationResult;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
@@ -64,29 +67,34 @@ public class ArithmeticEngine {
     /**
      * Runs one of the contained Operators assigned to the given pattern, modifying the passed stack of iotas.
      * @param pattern The pattern that was drawn, used to determine which operators are candidates.
-     * @param iotas The current stack.
-     * @param startingLength The length of the stack before the operator executes (used for errors).
      * @param env The casting environment.
+     * @param image The casting image.
+     * @param continuation The current continuation.
      * @return The iotas to be added to the stack.
      * @throws Mishap mishaps if invalid input to the operators is given by the caster.
      */
-    public Iterable<Iota> run(HexPattern pattern, Stack<Iota> iotas, int startingLength, CastingEnvironment env) throws Mishap {
+    public OperationResult run(HexPattern pattern, CastingEnvironment env, CastingImage image, SpellContinuation continuation) throws Mishap {
+        var stackList = image.getStack();
+        var stack = new Stack<Iota>();
+        stack.addAll(stackList);
+        var startingLength = stackList.size();
+
         var candidates = operators.get(pattern);
         if (candidates == null)
             throw new InvalidOperatorException("the pattern " + pattern + " is not an operator."); //
         HashCons hash = new HashCons.Pattern(pattern);
         var args = new ArrayList<Iota>(candidates.arity());
         for (var i = 0; i < candidates.arity(); i++) {
-            if (iotas.isEmpty()) {
+            if (stack.isEmpty()) {
                 throw new MishapNotEnoughArgs(candidates.arity, startingLength);
             }
-            var iota = iotas.pop();
+            var iota = stack.pop();
             hash = new HashCons.Pair(iota.getType(), hash);
             args.add(iota);
         }
         Collections.reverse(args);
         var op = resolveCandidates(args, hash, candidates);
-        return op.apply(args, env);
+        return op.operate(env, image, continuation);
     }
 
     private Operator resolveCandidates(List<Iota> args, HashCons hash, OpCandidates candidates) {

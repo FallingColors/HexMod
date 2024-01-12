@@ -142,6 +142,11 @@ minecraft {
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             property 'hexcasting.xplat_datagen', 'true'
+            
+            // disable the System.exit(0) at the end of the ForgeGradle datagen so Gradle stops thinking it failed
+            // see: https://github.com/MinecraftForge/ForgeGradle/pull/686
+            forceExit false
+            
             mods {
                 create(modID) {
                     source sourceSets.main
@@ -159,6 +164,7 @@ minecraft {
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             property 'hexcasting.forge_datagen', 'true'
+            forceExit false
             mods {
                 create(modID) {
                     source sourceSets.main

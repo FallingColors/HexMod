@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.client.entity;
 
+import at.petrak.hexcasting.client.render.PatternTextureManager;
 import at.petrak.hexcasting.client.render.RenderLib;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -97,10 +98,14 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
             vertex(mat, norm, light, verts, dx, dy, dz, 1, 1 - margin, 0, 1, 0);
 
             ps.popPose();
+
+            if (PatternTextureManager.useTextures && wallScroll.points != null)
+                PatternTextureManager.renderPatternForScroll(wallScroll.points.pointsKey, ps, bufSource, light, wallScroll.points.zappyPoints, wallScroll.blockSize, wallScroll.getShowsStrokeOrder());
         }
 
-        if (wallScroll.zappyPoints != null) {
-            var points = wallScroll.zappyPoints;
+        //TODO: remove old rendering if not needed anymore for comparison
+        if (!PatternTextureManager.useTextures && wallScroll.points != null) {
+            var points = wallScroll.points.zappyPoints;
             ps.pushPose();
 
             ps.mulPose(Axis.YP.rotationDegrees(180f));
