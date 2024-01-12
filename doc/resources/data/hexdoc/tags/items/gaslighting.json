@@ -1,0 +1,11 @@
+{
+    "replace": false,
+    "values": [
+        "hexcasting:quenched_allay_bricks",
+        "hexcasting:quenched_allay_bricks_small",
+        "hexcasting:quenched_allay_shard",
+        "hexcasting:quenched_allay_tiles",
+        "hexcasting:quenched_allay",
+        "hexcasting:staff/quenched"
+    ]
+}

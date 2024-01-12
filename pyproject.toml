@@ -1,0 +1,150 @@
+[build-system]
+requires = [
+    "hatchling",
+    "hatch-gradle-version>=0.9.5",
+]
+build-backend = "hatchling.build"
+
+# project metadata
+
+[project]
+name = "hexdoc-hexcasting"
+description = "Hex Casting web book."
+authors = [
+    { name="object-Object" },
+    { name="Alwinfy" },
+]
+readme = "doc/README.md"
+license = { file = "doc/LICENSE.txt" }
+keywords = ["hexdoc"]
+requires-python = ">=3.11"
+dynamic = ["version", "dependencies", "optional-dependencies"]
+
+[project.urls]
+Homepage = "https://gamma-delta.github.io/HexMod/"
+Source = "https://github.com/gamma-delta/HexMod/"
+
+[tool.hatch.metadata]
+allow-direct-references = true # TODO: remove
+
+# Gradle version/deps
+
+[tool.hatch.version]
+scheme = "gradle"
+source = "gradle-properties"
+py-path = "doc/src/hexdoc_hexcasting/__version__.py"
+
+[tool.hatch.metadata.hooks.gradle-properties]
+dependencies = [
+    "hexdoc~=1!0.1.0a5",
+    { package="hexdoc-minecraft", op="~=", py-version="1.0.dev", key="minecraftVersion" },
+]
+
+[tool.hatch.metadata.hooks.gradle-properties.optional-dependencies]
+dev = [
+    "ruff~=0.1.4",
+]
+
+# project structure
+
+[tool.hatch.build]
+artifacts = [
+    "/doc/src/hexdoc_hexcasting/_export/generated",
+    "/doc/src/hexdoc_hexcasting/__gradle_version__.py",
+]
+
+[tool.hatch.build.targets.sdist]
+only-include = [
+    "doc/src/hexdoc_hexcasting",
+    "gradle.properties",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = [
+    "doc/src/hexdoc_hexcasting",
+]
+
+# hexdoc
+
+[project.entry-points.hexdoc]
+hexcasting = "hexdoc_hexcasting._hooks:HexcastingPlugin"
+
+# Pytest
+
+[tool.pytest.ini_options]
+addopts = ["--import-mode=importlib"]
+markers = ["template"]
+
+[tool.coverage.report]
+include_namespace_packages = true
+
+# formatting and linting
+
+[tool.isort]
+profile = "black"
+combine_as_imports = true
+known_first_party = ["hexdoc_hexcasting"]
+
+[tool.pyright]
+pythonVersion = "3.11"
+pythonPlatform = "All"
+
+include = [
+    "doc/src",
+]
+extraPaths = [
+    "doc/src",
+]
+
+enableExperimentalFeatures = true
+
+# mostly we use strict mode
+# but pyright doesn't allow decreasing error severity in strict mode
+# so we need to manually specify all of the strict mode overrides so we can do that :/
+typeCheckingMode = "basic"
+
+strictDictionaryInference = true
+strictListInference = true
+strictSetInference = true
+
+reportAssertAlwaysTrue = "error"
+reportConstantRedefinition = "error"
+reportDeprecated = "error"
+reportDuplicateImport = "error"
+reportFunctionMemberAccess = "error"
+reportIncompatibleMethodOverride = "error"
+reportIncompatibleVariableOverride = "error"
+reportIncompleteStub = "error"
+reportInconsistentConstructor = "error"
+reportInvalidStringEscapeSequence = "error"
+reportInvalidStubStatement = "error"
+reportInvalidTypeVarUse = "error"
+reportMatchNotExhaustive = "error"
+reportMissingParameterType = "error"
+reportMissingTypeStubs = "error"
+reportOverlappingOverload = "error"
+reportSelfClsParameterName = "error"
+reportTypeCommentUsage = "error"
+reportUnknownParameterType = "error"
+reportUnnecessaryCast = "error"
+reportUnnecessaryContains = "error"
+reportUnsupportedDunderAll = "error"
+reportUntypedBaseClass = "error"
+reportUntypedClassDecorator = "error"
+reportUntypedFunctionDecorator = "error"
+reportUntypedNamedTuple = "error"
+reportWildcardImportFromLibrary = "error"
+
+reportMissingTypeArgument = "warning"
+reportPrivateUsage = "warning"
+reportUnknownArgumentType = "warning"
+reportUnknownLambdaType = "warning"
+reportUnknownMemberType = "warning"
+reportUnknownVariableType = "warning"
+reportUnnecessaryComparison = "warning"
+reportUnnecessaryIsInstance = "warning"
+reportUnusedClass = "warning"
+reportUnusedExpression = "warning"
+reportUnusedFunction = "warning"
+reportUnusedImport = "warning"
+reportUnusedVariable = "warning"
