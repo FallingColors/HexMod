@@ -151,7 +151,7 @@ function load_animated() {
 const intersection_point = {
   type: "Single",
   marker: {
-    color: [255, 255, 255, 150],
+    color: [255, 255, 255, 255],
     radius: 0.07,
   }
 };
@@ -174,11 +174,11 @@ const intersections = {
 const line_thickness = 0.12;
 
 /** @type {Color[]} */
-const colors = [
-  [214, 9, 177, 255],
-  [108, 25, 140, 255],
-  [50, 102, 207, 255],
-  [102, 110, 125, 255],
+const default_colors = [
+  [255, 107, 255, 255],
+  [168, 30, 227, 255],
+  [100, 144, 237, 255],
+  [177, 137, 199, 255],
 ];
 
 /** @type {Point} */
@@ -194,7 +194,7 @@ const monocolor = {
     type: "Uniform",
     lines: {
       type: "Monocolor",
-      color: colors[0],
+      color: default_colors[0],
       bent: true
     },
     intersections: intersections,
@@ -209,7 +209,7 @@ const gradient = {
     type: "Uniform",
     lines: {
       type: "Gradient",
-      colors: colors,
+      colors: default_colors,
       bent: true,
       segments_per_color: 15,
     },
@@ -225,7 +225,7 @@ const segment = {
     intersections: intersections,
     lines: {
       type: "SegmentColors",
-      colors: colors,
+      colors: default_colors,
       triangles: {
         type: "BorderStartMatch",
         match_radius: 0.13,
@@ -272,7 +272,7 @@ function load_render(name) {
 //the monocolor option only selects the first color in the palette
 //each color is 4 values RGBA (Red, Green, Blue, Alpha (Transparency))
 let palette_options = {
-  default: colors,
+  default: default_colors,
   turbo: [
     [63, 61, 156, 255],
     [64, 150, 254, 255],
