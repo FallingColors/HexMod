@@ -802,7 +802,7 @@
 	"_comment": "Продвинутые руны",
 
 	"hexcasting.entry.itempicking": "Работа с предметами",
-	"hexcasting.page.itempicking.1": "Некоторые руны, такие как $(l:hexcasting:patterns/spells/blockworks#OpPlaceBlock)$(action)Поставить блок/$, потребляют дополнительные предметы из инвентаря. Руна ищёт предмет для использования.",
+	"hexcasting.page.itempicking.1": "Некоторые руны, такие как $(l:hexcasting:patterns/spells/blockworks#hexcasting:place_block)$(action)Поставить блок/$, потребляют дополнительные предметы из инвентаря. Руна ищёт предмет для использования.",
 	"hexcasting.page.itempicking.2": "$(li)Сначала, руна ищёт первый подходящий предмет в хотбаре около $(italic)Посоха/$.$(li)Во вторых, руна использует $(italic)самый далёкий предмет из инвентаря/$.",
 	"hexcasting.page.itempicking.3": "Так можно выбрать какой предмет какое заклинание будет использовать.",
 
@@ -867,7 +867,7 @@
 	"hexcasting.page.flight.1": "The power of flight! I have wrestled Nature to its knees. But Nature is vengeful, and itches for me to break its contract so it may break my shins.",
 	"hexcasting.page.flight.2": "The entity (which must be a player) will be endowed with flight. The first number is the number of seconds they may fly for, and the second number is the radius of the zone they may fly in. If the recipient exits that zone, or their timer runs out while midair, the gravity that they spurned will get its revenge. Painfully.$(br2)It costs approximately 1 $(item)Amethyst Dust/$ multiplied by the radius, per second of flight.",
 
-	"hexcasting.page.teleport.1": "Куда мощнее $(l:patterns/spells/basic#OpBlink)$(action)Блинка/$, это позволит мне телепортироваться на невероятные расстония, пускай ограничение и есть, но оно $(italic)куда больше/$.",
+	"hexcasting.page.teleport.1": "Куда мощнее $(l:patterns/spells/basic#hexcasting:blink)$(action)Блинка/$, это позволит мне телепортироваться на невероятные расстония, пускай ограничение и есть, но оно $(italic)куда больше/$.",
 	"hexcasting.page.teleport.2": "The entity will be teleported by the given vector, which is an offset from its given position. No matter the distance, it always seems to cost about ten $(item)Charged Crystal/$s.$(br2)The transference is not perfect, and it seems when teleporting something as complex as a player, their inventory doesn't $(italic)quite/$ stay attached, and tends to splatter everywhere at the destination.",
 
 	"hexcasting.entry.zeniths": "Zeniths",
@@ -878,7 +878,7 @@
 	"hexcasting.page.zeniths.5": "Bestows haste. Base cost is one $(item)Amethyst Dust/$ per 3 seconds.",
 	"hexcasting.page.zeniths.6": "Bestows strength. Base cost is one $(item)Amethyst Dust/$ per 3 seconds.",
 
-	"hexcasting.page.greater_sentinel.1": "Summon a greater version of my $(l:patterns/sentinels)$(thing)Sentinel/$. Costs about 2 $(item)Amethyst Dust/$s.",
+	"hexcasting.page.greater_sentinel.1": "Summon a greater version of my $(l:patterns/spells/sentinels)$(thing)Sentinel/$. Costs about 2 $(item)Amethyst Dust/$s.",
 	"hexcasting.page.greater_sentinel.2": "The stronger sentinel acts like the normal one I can summon without the use of a Great Spell, if a little more visually interesting. However, the range in which my spells can work is extended to a small region around my greater sentinel, about 16 blocks. In other words, no matter where in the world I am, I can interact with things around my sentinel (the mysterious forces of chunkloading notwithstanding).",
 
 	"hexcasting.page.make_battery.1": "Infuse a bottle with _media to form a $(item)Phial./$",

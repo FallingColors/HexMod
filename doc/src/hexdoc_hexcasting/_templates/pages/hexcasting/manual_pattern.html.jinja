@@ -1,0 +1,18 @@
+{% extends "pages/patchouli/text.html.jinja" %}
+
+{% block inner_body %}
+  <details class="details-collapsible">
+    <summary class="collapse-details collapse-spell"></summary>
+    {% for pattern in page.patterns %}
+      <canvas
+        class="spell-viz"
+        width="216"
+        height="216"
+        data-string="{{ pattern.signature }}"
+        data-start="{{ pattern.startdir.name.lower() }}"
+        data-per-world="{{ pattern.is_per_world }}"
+      >{{ _("hexdoc.pattern.not_supported").format(pattern.signature) }}</canvas>
+    {% endfor %}
+  </details>
+  {{ super() }}
+{% endblock inner_body %}
