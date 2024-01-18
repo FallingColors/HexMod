@@ -5,6 +5,21 @@
       description: "The Hex Book, all in one place.",
     },
 
+    renderer: {
+      renders: "Renders",
+      palettes: "Palettes",
+
+      animated: "animated",
+      monocolor: "monocolor",
+      gradient: "gradient",
+      segment: "segment",
+
+      default: "default",
+      turbo: "turbo",
+      dark2: "dark2",
+      tab10: "tab10",
+    },
+
     pattern: {
       show: "Click to show spell",
       hide: "Click to hide spell",
