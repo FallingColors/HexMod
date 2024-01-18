@@ -336,16 +336,29 @@ export function load_palette(name) {
   }
 }
 
+
+const render_lang = {
+  "{{ _('hexdoc.renderer.animated') }}": "animated",
+  "{{ _('hexdoc.renderer.monocolor') }}": "monocolor",
+  "{{ _('hexdoc.renderer.gradient') }}": "gradient",
+  "{{ _('hexdoc.renderer.segment') }}": "segment",
+}
+const palette_lang = {
+  "{{ _('hexdoc.renderer.default') }}": "default",
+  "{{ _('hexdoc.renderer.turbo') }}": "turbo",
+  "{{ _('hexdoc.renderer.dark2') }}": "dark2",
+  "{{ _('hexdoc.renderer.tab10') }}": "tab10",
+};
 //adds all of the options to the menus (renderer and palette menus)
 function setup_menus() {
   let render_dropdowns = document.getElementsByClassName("render-dropdowns");
   
   for (let render_bar of render_dropdowns) {
-    for (const option in options) {
+    for (const [key, val] of Object.entries(render_lang)) {
       let item = document.createElement("li");
       let button = document.createElement("a");
-      button.onclick = () => { load_render(option) };
-      button.innerText = option;
+      button.onclick = () => { load_render(val) };
+      button.innerText = key;
       button.className = "render-option";
       item.appendChild(button);
       render_bar?.appendChild(item);
@@ -355,11 +368,11 @@ function setup_menus() {
   let palette_dropdowns = document.getElementsByClassName("palette-dropdowns");
   
   for (let palette_bar of palette_dropdowns) {
-    for (const option in palette_options) {
+    for (const [key, val] of Object.entries(palette_lang)) {
       let item = document.createElement("li");
       let button = document.createElement("a");
-      button.onclick = () => { load_palette(option) };
-      button.innerText = option;
+      button.onclick = () => { load_palette(val) };
+      button.innerText = key;
       button.className = "palette-option";
       item.appendChild(button);
       palette_bar?.appendChild(item);
