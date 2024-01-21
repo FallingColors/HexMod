@@ -69,7 +69,7 @@ public class PatternIota extends Iota {
     public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
         @Nullable Component castedName = null;
         try {
-            var lookup = PatternRegistryManifest.matchPattern(this.getPattern(), world, false);
+            var lookup = PatternRegistryManifest.matchPattern(this.getPattern(), world.getServer().overworld(), false);
             vm.getEnv().precheckAction(lookup);
 
             Action action;

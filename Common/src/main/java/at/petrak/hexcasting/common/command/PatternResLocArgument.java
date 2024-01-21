@@ -47,7 +47,7 @@ public class PatternResLocArgument extends ResourceLocationArgument {
         CommandContext<CommandSourceStack> ctx, String argumentName) throws CommandSyntaxException {
         var targetId = ctx.getArgument(argumentName, ResourceLocation.class);
         var targetKey = ResourceKey.create(IXplatAbstractions.INSTANCE.getActionRegistry().key(), targetId);
-        var foundPat = PatternRegistryManifest.getCanonicalStrokesPerWorld(targetKey, ctx.getSource().getLevel());
+        var foundPat = PatternRegistryManifest.getCanonicalStrokesPerWorld(targetKey, ctx.getSource().getServer().overworld());
         if (foundPat == null) {
             throw ERROR_UNKNOWN_PATTERN.create(targetId);
         } else {
