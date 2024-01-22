@@ -41,7 +41,7 @@ class OpExplode(val fire: Boolean) : SpellAction {
                 return
 
             env.world.explode(
-                env.caster,
+                env.castingEntity,
                 pos.x,
                 pos.y,
                 pos.z,

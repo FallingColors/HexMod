@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.misc.MediaConstants
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
@@ -27,7 +28,7 @@ object OpBlockAxisRaycast : ConstMediaAction {
                 Action.raycastEnd(origin, look),
                 ClipContext.Block.COLLIDER,
                 ClipContext.Fluid.NONE,
-                env.caster
+                env.castingEntity as Entity //why do I have to do this. LivingEntity extends Entity...
             )
         )
 

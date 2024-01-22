@@ -26,7 +26,7 @@ object OpEntityRaycast : ConstMediaAction {
         env.assertVecInRange(origin)
 
         val entityHitResult = getEntityHitResult(
-            env.caster,
+            env.castingEntity, //but why do I not need the as Entity here?
             env.world,
             origin,
             endp,
