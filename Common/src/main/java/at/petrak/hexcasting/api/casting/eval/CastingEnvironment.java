@@ -87,6 +87,16 @@ public abstract class CastingEnvironment {
     public abstract ServerPlayer getCaster();
 
     /**
+     * Gets the caster. Can be null if {@link #getCaster()} is also null
+     * <P>
+     * Implementations should NOT rely on this in general, use methods on the class instead.
+     * This is mostly for spells (minds reflection)
+     * @return the entity casting
+     */
+    @Nullable
+    public abstract LivingEntity getCastingEntity();
+
+    /**
      * Get an interface used to do mishaps
      */
     public abstract MishapEnvironment getMishapEnvironment();
