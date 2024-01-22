@@ -41,8 +41,9 @@ class MishapOthersName(val confidant: Player) : Mishap() {
                 val datumToCheck = poolToSearch.removeFirst()
                 if (datumToCheck is EntityIota && datumToCheck.entity is Player && datumToCheck.entity != caster)
                     return datumToCheck.entity as Player
-                if (datumToCheck is ListIota)
-                    poolToSearch.addAll(datumToCheck.list)
+                val datumSubIotas = datumToCheck.subIotas()
+                if (datumSubIotas != null)
+                    poolToSearch.addAll(datumSubIotas)
             }
 
             return null
