@@ -40,7 +40,9 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public @Nullable LivingEntity getCastingEntity() {return this.execState.getCaster(this.world);}
+    public @Nullable LivingEntity getCastingEntity() {
+        return this.execState.getCaster(this.world);
+    }
 
     @Override
     public @Nullable ServerPlayer getCaster() {

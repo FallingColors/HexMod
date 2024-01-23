@@ -48,7 +48,9 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public LivingEntity getCastingEntity() {return this.caster;}
+    public LivingEntity getCastingEntity() {
+        return this.caster;
+    }
 
     @Override
     public ServerPlayer getCaster() {

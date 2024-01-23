@@ -85,7 +85,10 @@ public abstract class CastingEnvironment {
      * This is mostly for spells (flight, etc)
      */
     @Nullable
-    public abstract ServerPlayer getCaster();
+    public ServerPlayer getCaster() {
+        LivingEntity entity = getCastingEntity();
+        return (entity instanceof ServerPlayer) ? (ServerPlayer) entity : null;
+    };
 
     /**
      * Gets the caster. Can be null if {@link #getCaster()} is also null
