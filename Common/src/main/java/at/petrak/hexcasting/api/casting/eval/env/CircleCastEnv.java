@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import static at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv.AMBIT_RADIUS;
 import static at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv.SENTINEL_RADIUS;
 
 public class CircleCastEnv extends CastingEnvironment {
@@ -131,6 +132,9 @@ public class CircleCastEnv extends CastingEnvironment {
                 && caster.level().dimension() == sentinel.dimension()
                 && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS
             ) {
+                return true;
+            }
+            if (vec.distanceToSqr(caster.position()) <= AMBIT_RADIUS * AMBIT_RADIUS) {
                 return true;
             }
         }
