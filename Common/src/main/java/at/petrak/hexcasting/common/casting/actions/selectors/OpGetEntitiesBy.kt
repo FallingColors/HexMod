@@ -31,7 +31,7 @@ class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : Con
             isReasonablySelectable(env, it)
                 && it.distanceToSqr(pos) <= radius * radius
                 && (checker.test(it) != negate)
-        }.filter { it !is EnderDragonPart }.sortedBy { it.distanceToSqr(pos) }
+        }.sortedBy { it.distanceToSqr(pos) }
         return entitiesGot.map(::EntityIota).asActionResult
     }
 
@@ -52,6 +52,6 @@ class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : Con
         fun isPlayer(e: Entity): Boolean = e is Player
 
         @JvmStatic
-        fun isLiving(e: Entity): Boolean = e is LivingEntity
+        fun isLiving(e: Entity): Boolean = (e is LivingEntity) || (e is EnderDragonPart)
     }
 }
