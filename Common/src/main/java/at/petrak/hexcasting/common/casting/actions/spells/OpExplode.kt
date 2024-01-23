@@ -47,7 +47,7 @@ class OpExplode(val fire: Boolean) : SpellAction {
                 pos.z,
                 strength.toFloat(),
                 this.fire,
-                Level.ExplosionInteraction.NONE
+                Level.ExplosionInteraction.TNT
             )
         }
     }
