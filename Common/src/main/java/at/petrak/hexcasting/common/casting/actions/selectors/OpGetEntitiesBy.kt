@@ -11,6 +11,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.animal.WaterAnimal
+import net.minecraft.world.entity.boss.EnderDragonPart
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.player.Player
@@ -30,7 +31,7 @@ class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : Con
             isReasonablySelectable(env, it)
                 && it.distanceToSqr(pos) <= radius * radius
                 && (checker.test(it) != negate)
-        }.sortedBy { it.distanceToSqr(pos) }
+        }.filter { it !is EnderDragonPart }.sortedBy { it.distanceToSqr(pos) }
         return entitiesGot.map(::EntityIota).asActionResult
     }
 
