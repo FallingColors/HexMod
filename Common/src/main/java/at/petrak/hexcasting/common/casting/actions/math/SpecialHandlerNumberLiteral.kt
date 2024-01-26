@@ -34,7 +34,7 @@ class SpecialHandlerNumberLiteral(val x: Double) : SpecialHandler {
     }
 
     class Factory : SpecialHandler.Factory<SpecialHandlerNumberLiteral> {
-        override fun tryMatch(pat: HexPattern): SpecialHandlerNumberLiteral? {
+        override fun tryMatch(pat: HexPattern, env: CastingEnvironment): SpecialHandlerNumberLiteral? {
             val sig = pat.anglesSignature()
             if (sig.startsWith("aqaa") || sig.startsWith("dedd")) {
                 val negate = sig.startsWith("dedd");
