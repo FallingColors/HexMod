@@ -19,6 +19,7 @@ object OpSetScale : SpellAction {
     ): SpellAction.Result {
         val target = args.getEntity(0, argc)
         val scale = args.getDoubleBetween(1, 1.0 / 32.0, 8.0, argc)
+        env.assertEntityInRange(target)
 
         return SpellAction.Result(
             Spell(target, scale),
