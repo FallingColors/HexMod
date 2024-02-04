@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.utils.HexUtils;
@@ -59,11 +60,11 @@ public class PatternRegistryManifest {
      * Try to match this pattern to a special handler. If one is found, return both the handler and its key.
      */
     @Nullable
-    public static Pair<SpecialHandler, ResourceKey<SpecialHandler.Factory<?>>> matchPatternToSpecialHandler(HexPattern pat) {
+    public static Pair<SpecialHandler, ResourceKey<SpecialHandler.Factory<?>>> matchPatternToSpecialHandler(HexPattern pat, CastingEnvironment environment) {
         var registry = IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry();
         for (var key : registry.registryKeySet()) {
             var factory = registry.get(key);
-            var handler = factory.tryMatch(pat);
+            var handler = factory.tryMatch(pat,environment);
             if (handler != null) {
                 return Pair.of(handler, key);
             }
@@ -79,7 +80,7 @@ public class PatternRegistryManifest {
      *                                      order
      *                                      for a per-world pattern.
      */
-    public static PatternShapeMatch matchPattern(HexPattern pat, ServerLevel overworld,
+    public static PatternShapeMatch matchPattern(HexPattern pat, CastingEnvironment environment,
         boolean checkForAlternateStrokeOrders) {
         // I am PURPOSELY checking normal actions before special handlers
         // This way we don't get a repeat of the phial number literal incident
@@ -90,7 +91,7 @@ public class PatternRegistryManifest {
         }
 
         // Look it up in the world?
-        var perWorldPatterns = ScrungledPatternsSave.open(overworld);
+        var perWorldPatterns = ScrungledPatternsSave.open(environment.getWorld());
         var entry = perWorldPatterns.lookup(sig);
         if (entry != null) {
             return new PatternShapeMatch.PerWorld(entry.key(), true);
@@ -100,7 +101,7 @@ public class PatternRegistryManifest {
             throw new NotImplementedException("checking for alternate stroke orders is NYI sorry");
         }
 
-        var shMatch = matchPatternToSpecialHandler(pat);
+        var shMatch = matchPatternToSpecialHandler(pat, environment);
         if (shMatch != null) {
             return new PatternShapeMatch.Special(shMatch.getSecond(), shMatch.getFirst());
         }
