@@ -12,6 +12,7 @@ object OpGetScale : ConstMediaAction {
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val target = args.getEntity(0, argc)
+        env.assertEntityInRange(target)
         return IXplatAbstractions.INSTANCE.pehkuiApi.getScale(target).toDouble().asActionResult
     }
 }
