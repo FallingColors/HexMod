@@ -24,7 +24,9 @@ class MishapUnenlightened : Mishap() {
         val pos = env.mishapSprayPos()
         env.world.playSound(null, pos.x, pos.y, pos.z, SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 0.5f, 0.7f)
 
-        HexAdvancementTriggers.FAIL_GREAT_SPELL_TRIGGER.trigger(env.caster)
+        if (env.caster != null) {
+            HexAdvancementTriggers.FAIL_GREAT_SPELL_TRIGGER.trigger(env.caster)
+        }
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = null
