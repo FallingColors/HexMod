@@ -66,8 +66,10 @@ fun scanPlayerForMediaStuff(player: ServerPlayer): List<ADMediaHolder> {
 
     (player.inventory.items + player.inventory.armor + player.inventory.offhand).forEach {
         val holder = HexAPI.instance().findMediaHolder(it)
-        if (holder != null) {
-            sources.add(holder)
+        if (holder?.canProvide() == true) {
+            if (holder.canProvide()) {
+                sources.add(holder)
+            }
         }
     }
 

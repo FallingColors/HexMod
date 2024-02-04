@@ -191,8 +191,6 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     protected long extractMediaFromInventory(long costLeft, boolean allowOvercast) {
         List<ADMediaHolder> sources = MediaHelper.scanPlayerForMediaStuff(this.caster);
 
-        sources.removeIf(it -> !it.canProvide());
-
         var startCost = costLeft;
 
         for (var source : sources) {
