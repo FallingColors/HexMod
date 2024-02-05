@@ -83,7 +83,9 @@ public abstract class CastingEnvironment {
      * <p>
      * Implementations should NOT rely on this in general, use the methods on this class instead.
      * This is mostly for spells (flight, etc)
+     * @deprecated as of build 619 you are recommended to use {@link #getCastingEntity}
      */
+    @Deprecated(since="619")
     @Nullable
     public ServerPlayer getCaster() {
         LivingEntity entity = getCastingEntity();
@@ -92,9 +94,6 @@ public abstract class CastingEnvironment {
 
     /**
      * Gets the caster. Can be null if {@link #getCaster()} is also null
-     * <P>
-     * Implementations should NOT rely on this in general, use methods on the class instead.
-     * This is mostly for spells (minds reflection)
      * @return the entity casting
      */
     @Nullable
