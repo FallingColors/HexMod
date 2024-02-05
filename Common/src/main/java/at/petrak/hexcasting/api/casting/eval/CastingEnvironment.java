@@ -83,9 +83,9 @@ public abstract class CastingEnvironment {
      * <p>
      * Implementations should NOT rely on this in general, use the methods on this class instead.
      * This is mostly for spells (flight, etc)
-     * @deprecated as of build 619 you are recommended to use {@link #getCastingEntity}
+     * @deprecated as of build 0.11.1-7-pre-619 you are recommended to use {@link #getCastingEntity}
      */
-    @Deprecated(since="619")
+    @Deprecated(since="0.11.1-7-pre-619")
     @Nullable
     public ServerPlayer getCaster() {
         LivingEntity entity = getCastingEntity();
