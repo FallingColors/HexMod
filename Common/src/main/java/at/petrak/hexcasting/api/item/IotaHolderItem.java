@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.item;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.ClientTickCounter;
@@ -54,12 +55,10 @@ public interface IotaHolderItem {
 
     /**
      * What is this considered to contain when nothing can be read?
-     * <p>
-     * TODO i'm not sure what this isCastable for
      */
     @Nullable
     default Iota emptyIota(ItemStack stack) {
-        return null;
+        return new NullIota();
     }
 
     default int getColor(ItemStack stack) {

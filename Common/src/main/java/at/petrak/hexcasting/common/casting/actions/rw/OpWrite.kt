@@ -20,17 +20,17 @@ object OpWrite : SpellAction {
     ): SpellAction.Result {
         val datum = args[0]
 
-        val (handStack, hand) = env.getHeldItemToOperateOn {
+        val (handStack) = env.getHeldItemToOperateOn {
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
             datumHolder != null && datumHolder.writeIota(datum, true)
-        } ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), null, "iota.write") // TODO: hack
+        } ?: throw MishapBadOffhandItem.of(null, "iota.write")
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
-            ?: throw MishapBadOffhandItem.of(handStack, hand, "iota.write")
+            ?: throw MishapBadOffhandItem.of(handStack, "iota.write")
 
         if (!datumHolder.writeIota(datum, true))
-            throw MishapBadOffhandItem.of(handStack, hand, "iota.readonly", datum.display())
+            throw MishapBadOffhandItem.of(handStack, "iota.readonly", datum.display())
 
         val trueName = MishapOthersName.getTrueNameFromDatum(datum, env.castingEntity as? ServerPlayer, env.world)
         if (trueName != null)
