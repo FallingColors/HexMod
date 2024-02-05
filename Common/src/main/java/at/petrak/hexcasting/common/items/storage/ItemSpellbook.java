@@ -2,7 +2,6 @@ package at.petrak.hexcasting.common.items.storage;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
-import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
@@ -127,12 +126,6 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         } else {
             return null;
         }
-    }
-
-    @Override
-    public @Nullable
-    Iota emptyIota(ItemStack stack) {
-        return new NullIota();
     }
 
     @Override

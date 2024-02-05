@@ -3,7 +3,6 @@ package at.petrak.hexcasting.common.casting.actions.rw
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 
@@ -14,7 +13,7 @@ object OpRead : ConstMediaAction {
         val (handStack, hand) = env.getHeldItemToOperateOn {
             val dataHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
             dataHolder != null && (dataHolder.readIota(env.world) != null || dataHolder.emptyIota() != null)
-        } ?: return listOf(NullIota())
+        } ?: throw MishapBadOffhandItem.of(null, null, "iota.read")
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
             ?: throw MishapBadOffhandItem.of(handStack, hand, "iota.read")
