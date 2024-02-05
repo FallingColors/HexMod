@@ -56,7 +56,8 @@ class OpConjureBlock(val light: Boolean) : SpellAction {
 
                 val state = block.getStateForPlacement(placeContext)
                 if (state != null) {
-                    env.world.setBlock(pos, state, 5)
+                    // 1 = block updated + 2 = send to clients
+                    env.world.setBlock(pos, state, 3)
 
                     val pigment = env.pigment
 
