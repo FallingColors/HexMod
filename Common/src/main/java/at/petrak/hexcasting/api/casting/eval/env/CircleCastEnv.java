@@ -125,6 +125,10 @@ public class CircleCastEnv extends CastingEnvironment {
     public boolean isVecInRangeEnvironment(Vec3 vec) {
         var caster = this.execState.getCaster(this.world);
         if (caster != null) {
+            if (vec.distanceToSqr(caster.position()) <= caster.getBbHeight() * caster.getBbHeight()) {
+                return true;
+            }
+
             var sentinel = HexAPI.instance().getSentinel(caster);
             if (sentinel != null
                 && sentinel.extendsRange()
