@@ -29,7 +29,7 @@ object OpBlockAxisRaycast : ConstMediaAction {
                 Action.raycastEnd(origin, look),
                 ClipContext.Block.COLLIDER,
                 ClipContext.Fluid.NONE,
-                env.castingEntity // this is where the NULLABILITY_MISMATCH is... but there is no annotation so...?
+                env.castingEntity
             )
         )
 
