@@ -20,20 +20,20 @@ public class SpendMediaTrigger extends SimpleCriterionTrigger<SpendMediaTrigger.
     protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate,
         DeserializationContext context) {
         return new Instance(predicate,
-            MinMaxBounds.Ints.fromJson(json.get(TAG_MEDIA_SPENT)),
-            MinMaxBounds.Ints.fromJson(json.get(TAG_MEDIA_WASTED)));
+            MinMaxLongs.fromJson(json.get(TAG_MEDIA_SPENT)),
+            MinMaxLongs.fromJson(json.get(TAG_MEDIA_WASTED)));
     }
 
-    public void trigger(ServerPlayer player, int mediaSpent, int mediaWasted) {
+    public void trigger(ServerPlayer player, long mediaSpent, long mediaWasted) {
         super.trigger(player, inst -> inst.test(mediaSpent, mediaWasted));
     }
 
     public static class Instance extends AbstractCriterionTriggerInstance {
-        protected final MinMaxBounds.Ints mediaSpent;
-        protected final MinMaxBounds.Ints mediaWasted;
+        protected final MinMaxLongs mediaSpent;
+        protected final MinMaxLongs mediaWasted;
 
-        public Instance(ContextAwarePredicate predicate, MinMaxBounds.Ints mediaSpent,
-            MinMaxBounds.Ints mediaWasted) {
+        public Instance(ContextAwarePredicate predicate, MinMaxLongs mediaSpent,
+            MinMaxLongs mediaWasted) {
             super(SpendMediaTrigger.ID, predicate);
             this.mediaSpent = mediaSpent;
             this.mediaWasted = mediaWasted;
@@ -56,7 +56,7 @@ public class SpendMediaTrigger extends SimpleCriterionTrigger<SpendMediaTrigger.
             return json;
         }
 
-        private boolean test(int mediaSpentIn, int mediaWastedIn) {
+        private boolean test(long mediaSpentIn, long mediaWastedIn) {
             return this.mediaSpent.matches(mediaSpentIn) && this.mediaWasted.matches(mediaWastedIn);
         }
     }
