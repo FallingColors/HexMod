@@ -71,6 +71,8 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
         val (stackDescs, ravenmind) = generateDescs()
 
         val isStackClear = image.stack.isEmpty() && image.parenCount == 0 && !image.escapeNext && ravenmind == null
+
+        this.env.postCast(image)
         return ExecutionClientView(isStackClear, lastResolutionType, stackDescs, ravenmind)
     }
 
