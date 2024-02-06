@@ -13,6 +13,7 @@ import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord
 import at.petrak.hexcasting.common.lib.HexSounds
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundSource
 
 object OpAkashicWrite : SpellAction {
@@ -33,7 +34,7 @@ object OpAkashicWrite : SpellAction {
             throw MishapNoAkashicRecord(pos)
         }
 
-        val trueName = MishapOthersName.getTrueNameFromDatum(datum, env.caster)
+        val trueName = MishapOthersName.getTrueNameFromDatum(datum, env.castingEntity as? ServerPlayer)
         if (trueName != null)
             throw MishapOthersName(trueName)
 

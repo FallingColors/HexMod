@@ -88,8 +88,7 @@ public abstract class CastingEnvironment {
     @Deprecated(since="0.11.1-7-pre-619")
     @Nullable
     public ServerPlayer getCaster() {
-        LivingEntity entity = getCastingEntity();
-        return (entity instanceof ServerPlayer) ? (ServerPlayer) entity : null;
+        return getCastingEntity() instanceof ServerPlayer sp ? sp : null;
     };
 
     /**
@@ -181,15 +180,15 @@ public abstract class CastingEnvironment {
      * Return whether this env can cast great spells.
      */
     public boolean isEnlightened() {
-        var caster = this.getCaster();
-        if (caster == null)
+        var caster = this.getCastingEntity();
+        if (!(caster instanceof ServerPlayer))
             return false;
 
         var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("enlightenment"));
         if (adv == null)
             return false;
 
-        return caster.getAdvancements().getOrStartProgress(adv).isDone();
+        return ((ServerPlayer)caster).getAdvancements().getOrStartProgress(adv).isDone();
     }
 
     /**

@@ -13,6 +13,7 @@ import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 object OpBlockAxisRaycast : ConstMediaAction {
     override val argc = 2
     override val mediaCost: Long = MediaConstants.DUST_UNIT / 100
@@ -28,7 +29,7 @@ object OpBlockAxisRaycast : ConstMediaAction {
                 Action.raycastEnd(origin, look),
                 ClipContext.Block.COLLIDER,
                 ClipContext.Fluid.NONE,
-                env.castingEntity as Entity //why do I have to do this. LivingEntity extends Entity...
+                env.castingEntity // this is where the NULLABILITY_MISMATCH is... but there is no annotation so...?
             )
         )
 

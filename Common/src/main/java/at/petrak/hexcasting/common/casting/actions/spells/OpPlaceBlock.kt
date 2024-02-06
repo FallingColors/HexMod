@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.particles.BlockParticleOption
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.BlockItem
@@ -35,11 +36,11 @@ object OpPlaceBlock : SpellAction {
         env.assertPosInRangeForEditing(pos)
 
         val blockHit = BlockHitResult(
-            Vec3.atCenterOf(pos), env.caster?.direction ?: Direction.NORTH, pos, false
+            Vec3.atCenterOf(pos), env.castingEntity?.direction ?: Direction.NORTH, pos, false
         )
         val itemUseCtx = env
             .getHeldItemToOperateOn { it.item is BlockItem }
-            ?.stack?.let { UseOnContext(env.world, env.caster, env.castingHand, it, blockHit) }
+            ?.stack?.let { UseOnContext(env.world, env.castingEntity as? ServerPlayer, env.castingHand, it, blockHit) }
             ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY, env.castingHand, "placeable")
         val placeContext = BlockPlaceContext(itemUseCtx)
 
@@ -56,7 +57,7 @@ object OpPlaceBlock : SpellAction {
 
     private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            val caster = env.caster
+            val caster = env.castingEntity
 
             val blockHit = BlockHitResult(
                 Vec3.atCenterOf(pos), caster?.direction ?: Direction.NORTH, pos, false
@@ -65,7 +66,7 @@ object OpPlaceBlock : SpellAction {
             val bstate = env.world.getBlockState(pos)
             val placeeStack = env.getHeldItemToOperateOn { it.item is BlockItem }?.stack
             if (placeeStack != null) {
-                if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(env.world, pos, placeeStack, env.caster))
+                if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(env.world, pos, placeeStack, caster as? ServerPlayer))
                     return
 
                 if (!placeeStack.isEmpty) {
@@ -75,7 +76,7 @@ object OpPlaceBlock : SpellAction {
                     // we temporarily give the player the stack, place it using mc code, then give them the old stack back.
                     spoofedStack.count = 1
 
-                    val itemUseCtx = UseOnContext(env.world, caster, env.castingHand, spoofedStack, blockHit)
+                    val itemUseCtx = UseOnContext(env.world, caster as? ServerPlayer, env.castingHand, spoofedStack, blockHit)
                     val placeContext = BlockPlaceContext(itemUseCtx)
                     if (bstate.canBeReplaced(placeContext)) {
                         if (env.withdrawItem({ it == placeeStack }, 1, false)) {
@@ -85,7 +86,7 @@ object OpPlaceBlock : SpellAction {
                                 env.withdrawItem({ it == placeeStack }, 1, true)
 
                                 env.world.playSound(
-                                    env.caster,
+                                    caster as? ServerPlayer,
                                     pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(),
                                     bstate.soundType.placeSound, SoundSource.BLOCKS, 1.0f,
                                     1.0f + (Math.random() * 0.5 - 0.25).toFloat()
