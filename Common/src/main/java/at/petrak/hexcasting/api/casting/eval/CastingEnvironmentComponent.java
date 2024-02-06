@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api.casting.eval;
 
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 
@@ -13,6 +14,13 @@ public interface CastingEnvironmentComponent {
          * Do whatever you like after a pattern is executed.
          */
         void onPostExecution(CastResult result);
+    }
+
+    interface PostCast extends CastingEnvironmentComponent {
+        /**
+         * Do things after the whole cast is finished (i.e. every pattern to be executed has been executed).
+         */
+        void onPostCast(CastingImage image);
     }
 
     interface ExtractMedia extends CastingEnvironmentComponent {

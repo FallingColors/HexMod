@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.casting.eval;
 
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
@@ -67,6 +68,8 @@ public abstract class CastingEnvironment {
 
     protected Map<CastingEnvironmentComponent.Key<?>, @NotNull CastingEnvironmentComponent> componentMap = new HashMap<>();
     private final List<PostExecution> postExecutions = new ArrayList<>();
+
+    private final List<PostCast> postCasts = new ArrayList<>();
     private final List<ExtractMedia.Pre> preMediaExtract = new ArrayList<>();
     private final List<ExtractMedia.Post> postMediaExtract = new ArrayList<>();
 
@@ -114,6 +117,8 @@ public abstract class CastingEnvironment {
         componentMap.put(extension.getKey(), extension);
         if (extension instanceof PostExecution postExecution)
             postExecutions.add(postExecution);
+        if (extension instanceof PostCast postCast)
+            postCasts.add(postCast);
         if (extension instanceof ExtractMedia extractMedia)
             if (extension instanceof ExtractMedia.Pre pre) {
                 preMediaExtract.add(pre);
@@ -133,6 +138,8 @@ public abstract class CastingEnvironment {
 
         if (extension instanceof PostExecution postExecution)
             postExecutions.remove(postExecution);
+        if (extension instanceof PostCast postCast)
+            postCasts.remove(postCast);
         if (extension instanceof ExtractMedia extractMedia)
             if (extension instanceof ExtractMedia.Pre pre) {
                 preMediaExtract.remove(pre);
@@ -189,6 +196,14 @@ public abstract class CastingEnvironment {
             postExecutionComponent.onPostExecution(result);
     }
 
+    /**
+     * Do things after the whole cast is finished (i.e. every pattern to be executed has been executed).
+     */
+    public void postCast(CastingImage image) {
+        for (var postCastComponent : postCasts)
+            postCastComponent.onPostCast(image);
+    }
+
     public abstract Vec3 mishapSprayPos();
 
     /**
@@ -215,7 +230,7 @@ public abstract class CastingEnvironment {
     public long extractMedia(long cost) {
         for (var extractMediaComponent : preMediaExtract)
             cost = extractMediaComponent.onExtractMedia(cost);
-        cost = extractMediaEnvironment(cost);
+            cost = extractMediaEnvironment(cost);
         for (var extractMediaComponent : postMediaExtract)
             cost = extractMediaComponent.onExtractMedia(cost);
         return cost;
