@@ -58,7 +58,7 @@ public interface IotaHolderItem {
      */
     @Nullable
     default Iota emptyIota(ItemStack stack) {
-        return new NullIota();
+        return null;
     }
 
     default int getColor(ItemStack stack) {

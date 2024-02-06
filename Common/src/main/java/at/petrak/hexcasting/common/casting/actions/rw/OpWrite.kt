@@ -9,7 +9,6 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.casting.mishaps.MishapOthersName
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.world.item.ItemStack
 
 // we make this a spell cause imo it's a little ... anticlimactic for it to just make no noise
 object OpWrite : SpellAction {
@@ -24,6 +23,12 @@ object OpWrite : SpellAction {
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
             datumHolder != null && datumHolder.writeIota(datum, true)
+        }
+            // If there are no data holders that are writeable, find a data holder that isn't writeable
+            // so that the error message is more helpful.
+            ?: env.getHeldItemToOperateOn {
+                val dataHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
+                dataHolder != null
         } ?: throw MishapBadOffhandItem.of(null, "iota.write")
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
