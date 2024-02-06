@@ -17,7 +17,7 @@ import java.util.Collections
 /**
  * Sequence of angles to define a pattern traced.
  */
-data class HexPattern(public val startDir: HexDir, public val angles: MutableList<HexAngle> = arrayListOf()) {
+data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = arrayListOf()) {
     /**
      * @return True if it successfully appended, false if not.
      */
