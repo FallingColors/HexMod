@@ -4,7 +4,6 @@ import at.petrak.hexcasting.api.casting.asActionResult
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 
 object OpWritable : ConstMediaAction {
@@ -18,7 +17,7 @@ object OpWritable : ConstMediaAction {
         } ?: return false.asActionResult
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack) ?: return false.asActionResult
-        val success = datumHolder.writeIota(NullIota(), true)
+        val success = datumHolder.writeable()
         return success.asActionResult
     }
 }
