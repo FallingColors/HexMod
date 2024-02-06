@@ -23,18 +23,17 @@ object OpRecharge : SpellAction {
     ): SpellAction.Result {
         val entity = args.getItemEntity(0, argc)
 
-        val (handStack, hand) = env.getHeldItemToOperateOn {
+        val (handStack) = env.getHeldItemToOperateOn {
             val media = IXplatAbstractions.INSTANCE.findMediaHolder(it)
             media != null && media.canRecharge() && media.insertMedia(-1, true) != 0L
         }
-            ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), null, "rechargable") // TODO: hack
+            ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "rechargable") // TODO: hack
 
         val media = IXplatAbstractions.INSTANCE.findMediaHolder(handStack)
 
         if (media == null || !media.canRecharge())
             throw MishapBadOffhandItem.of(
                 handStack,
-                hand,
                 "rechargable"
             )
 
