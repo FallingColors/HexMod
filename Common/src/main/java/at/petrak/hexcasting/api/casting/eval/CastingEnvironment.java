@@ -180,15 +180,15 @@ public abstract class CastingEnvironment {
      * Return whether this env can cast great spells.
      */
     public boolean isEnlightened() {
-        var caster = this.getCastingEntity();
-        if (!(caster instanceof ServerPlayer))
-            return false;
-
         var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("enlightenment"));
         if (adv == null)
             return false;
 
-        return ((ServerPlayer)caster).getAdvancements().getOrStartProgress(adv).isDone();
+        var caster = this.getCastingEntity();
+        if (caster instanceof ServerPlayer player)
+            return player.getAdvancements().getOrStartProgress(adv).isDone();
+
+        return false;
     }
 
     /**
