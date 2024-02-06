@@ -2,6 +2,7 @@ package at.petrak.hexcasting.datagen;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.advancements.FailToCastGreatSpellTrigger;
+import at.petrak.hexcasting.api.advancements.MinMaxLongs;
 import at.petrak.hexcasting.api.advancements.OvercastTrigger;
 import at.petrak.hexcasting.api.advancements.SpendMediaTrigger;
 import at.petrak.hexcasting.api.misc.MediaConstants;
@@ -57,15 +58,15 @@ public class HexAdvancements extends PaucalAdvancementSubProvider {
             .display(simpleDisplay(Items.GLISTERING_MELON_SLICE, "wasteful_cast", FrameType.TASK))
             .parent(root)
             .addCriterion("waste_amt", new SpendMediaTrigger.Instance(ContextAwarePredicate.ANY,
-                MinMaxBounds.Ints.ANY,
-                MinMaxBounds.Ints.atLeast((int) (89 * MediaConstants.DUST_UNIT / 10))))
+                MinMaxLongs.ANY,
+                MinMaxLongs.atLeast(89 * MediaConstants.DUST_UNIT / 10)))
             .save(consumer, prefix("aaa_wasteful_cast"));
         Advancement.Builder.advancement()
             .display(simpleDisplay(HexItems.CHARGED_AMETHYST, "big_cast", FrameType.TASK))
             .parent(root)
             .addCriterion("cast_amt", new SpendMediaTrigger.Instance(ContextAwarePredicate.ANY,
-                MinMaxBounds.Ints.atLeast((int) (64 * MediaConstants.CRYSTAL_UNIT)),
-                MinMaxBounds.Ints.ANY))
+                MinMaxLongs.atLeast(64 * MediaConstants.CRYSTAL_UNIT),
+                MinMaxLongs.ANY))
             .save(consumer, prefix("aab_big_cast"));
 
         var impotence = Advancement.Builder.advancement()
