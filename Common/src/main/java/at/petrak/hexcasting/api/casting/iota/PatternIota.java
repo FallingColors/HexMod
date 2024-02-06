@@ -58,7 +58,7 @@ public class PatternIota extends Iota {
     public boolean toleratesOther(Iota that) {
         return typesMatch(this, that)
             && that instanceof PatternIota piota
-            && this.getPattern().anglesSignature().equals(piota.getPattern().anglesSignature());
+            && this.getPattern().getAngles().equals(piota.getPattern().getAngles());
     }
 
     @Override
