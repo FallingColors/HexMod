@@ -129,6 +129,11 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     }
 
     @Override
+    public boolean writeable(ItemStack stack) {
+        return !isSealed(stack);
+    }
+
+    @Override
     public boolean canWrite(ItemStack stack, Iota datum) {
         return datum == null || !isSealed(stack);
     }
