@@ -12,6 +12,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.InteractionHand
@@ -56,7 +57,7 @@ object OpExtinguish : SpellAction {
                 if (env.canEditBlockAt(here) && distFromTarget < 10 * 10 && seen.add(here)) {
                     // never seen this pos in my life
                     val blockstate = env.world.getBlockState(here)
-                    if (IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, here, blockstate, env.caster)) {
+                    if (IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, here, blockstate, env.castingEntity as? ServerPlayer)) {
                         val success =
                             when (blockstate.block) {
                                 is BaseFireBlock -> {

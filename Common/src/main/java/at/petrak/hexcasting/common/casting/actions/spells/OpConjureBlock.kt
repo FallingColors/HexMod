@@ -13,6 +13,7 @@ import at.petrak.hexcasting.common.lib.HexBlocks
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.DirectionalPlaceContext
 import net.minecraft.world.phys.Vec3
@@ -51,7 +52,7 @@ class OpConjureBlock(val light: Boolean) : SpellAction {
             if (worldState.canBeReplaced(placeContext)) {
                 val block = if (this.light) HexBlocks.CONJURED_LIGHT else HexBlocks.CONJURED_BLOCK
 
-                if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(env.world, pos, ItemStack(block), env.caster))
+                if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(env.world, pos, ItemStack(block), env.castingEntity as? ServerPlayer))
                     return
 
                 val state = block.getStateForPlacement(placeContext)

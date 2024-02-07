@@ -14,6 +14,7 @@ import at.petrak.hexcasting.api.utils.extractMedia
 import at.petrak.hexcasting.api.utils.isMediaItem
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 
@@ -53,7 +54,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Long) 
             )
         }
 
-        val trueName = MishapOthersName.getTrueNameFromArgs(patterns, env.caster)
+        val trueName = MishapOthersName.getTrueNameFromArgs(patterns, env.castingEntity as? ServerPlayer)
         if (trueName != null)
             throw MishapOthersName(trueName)
 

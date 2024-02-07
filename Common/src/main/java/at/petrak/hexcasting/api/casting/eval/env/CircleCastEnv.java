@@ -20,6 +20,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -36,6 +37,11 @@ public class CircleCastEnv extends CastingEnvironment {
     public CircleCastEnv(ServerLevel world, CircleExecutionState execState) {
         super(world);
         this.execState = execState;
+    }
+
+    @Override
+    public @Nullable LivingEntity getCastingEntity() {
+        return this.execState.getCaster(this.world);
     }
 
     @Override

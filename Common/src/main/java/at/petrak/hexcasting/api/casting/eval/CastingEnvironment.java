@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -82,9 +83,20 @@ public abstract class CastingEnvironment {
      * <p>
      * Implementations should NOT rely on this in general, use the methods on this class instead.
      * This is mostly for spells (flight, etc)
+     * @deprecated as of build 0.11.1-7-pre-619 you are recommended to use {@link #getCastingEntity}
+     */
+    @Deprecated(since="0.11.1-7-pre-619")
+    @Nullable
+    public ServerPlayer getCaster() {
+        return getCastingEntity() instanceof ServerPlayer sp ? sp : null;
+    };
+
+    /**
+     * Gets the caster. Can be null if {@link #getCaster()} is also null
+     * @return the entity casting
      */
     @Nullable
-    public abstract ServerPlayer getCaster();
+    public abstract LivingEntity getCastingEntity();
 
     /**
      * Get an interface used to do mishaps
@@ -168,15 +180,15 @@ public abstract class CastingEnvironment {
      * Return whether this env can cast great spells.
      */
     public boolean isEnlightened() {
-        var caster = this.getCaster();
-        if (caster == null)
-            return false;
-
         var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("enlightenment"));
         if (adv == null)
             return false;
 
-        return caster.getAdvancements().getOrStartProgress(adv).isDone();
+        var caster = this.getCastingEntity();
+        if (caster instanceof ServerPlayer player)
+            return player.getAdvancements().getOrStartProgress(adv).isDone();
+
+        return false;
     }
 
     /**
