@@ -11,7 +11,7 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 object OpThanos : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val opsLeft = HexConfig.server().maxOpCount() - image.opsConsumed
+        val opsLeft = env.maxOpCount() - image.opsConsumed
         val stack = image.stack.toMutableList()
         stack.add(DoubleIota(opsLeft.toDouble()))
 

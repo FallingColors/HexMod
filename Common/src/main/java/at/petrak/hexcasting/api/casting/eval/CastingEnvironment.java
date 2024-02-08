@@ -78,6 +78,10 @@ public abstract class CastingEnvironment {
         return this.world;
     }
 
+    public int maxOpCount() {
+        return HexConfig.server().maxOpCount();
+    }
+
     /**
      * Get the caster. Might be null!
      * <p>

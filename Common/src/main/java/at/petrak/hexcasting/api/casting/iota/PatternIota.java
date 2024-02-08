@@ -106,7 +106,7 @@ public class PatternIota extends Iota {
                     continuation
             );
 
-            if (result.getNewImage().getOpsConsumed() > HexConfig.server().maxOpCount()) {
+            if (result.getNewImage().getOpsConsumed() > vm.getEnv().maxOpCount()) {
                 throw new MishapEvalTooMuch();
             }
 
