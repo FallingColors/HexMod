@@ -23,6 +23,9 @@ public interface CastingEnvironmentComponent {
          * before the CastingEnvironment's extractMedia is executed.
          */
         long onExtractMedia(long cost);
+
+        interface Pre extends ExtractMedia {}
+        interface Post extends ExtractMedia {}
     }
 
     interface IsVecInRange extends CastingEnvironmentComponent {
