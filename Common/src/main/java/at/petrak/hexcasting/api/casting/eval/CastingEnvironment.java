@@ -303,6 +303,7 @@ public abstract class CastingEnvironment {
      * Convenience function to throw if the entity is out of the caster's range or the world
      */
     public final void assertEntityInRange(Entity e) throws MishapEntityTooFarAway {
+        if (e instanceof ServerPlayer){return;}
         if (!this.isVecInWorld(e.position())) {
             throw new MishapEntityTooFarAway(e);
         }
