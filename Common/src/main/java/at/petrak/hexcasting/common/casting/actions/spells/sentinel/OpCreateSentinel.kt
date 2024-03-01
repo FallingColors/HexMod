@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.player.Sentinel
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.phys.Vec3
 
 class OpCreateSentinel(val extendsRange: Boolean) : SpellAction {
@@ -31,7 +32,7 @@ class OpCreateSentinel(val extendsRange: Boolean) : SpellAction {
     private data class Spell(val target: Vec3, val extendsRange: Boolean) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
             IXplatAbstractions.INSTANCE.setSentinel(
-                env.caster,
+                env.castingEntity as? ServerPlayer,
                 Sentinel(
                     extendsRange,
                     target,

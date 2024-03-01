@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.BucketItem
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -30,7 +31,7 @@ class OpCreateFluid(val cost: Long, val bucket: Item, val cauldron: BlockState, 
                 env.world,
                 pos,
                 ItemStack(bucket),
-                env.caster
+                env.castingEntity as? ServerPlayer
             )
         )
             throw MishapBadLocation(vecPos, "forbidden")

@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.common.lib.HexItems
 import net.minecraft.Util
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 
@@ -21,7 +22,7 @@ sealed class OperatorSideEffect {
 
     data class RequiredEnlightenment(val awardStat: Boolean) : OperatorSideEffect() {
         override fun performEffect(harness: CastingVM): Boolean {
-            harness.env.caster?.sendSystemMessage("hexcasting.message.cant_great_spell".asTranslatedComponent)
+            harness.env.castingEntity?.sendSystemMessage("hexcasting.message.cant_great_spell".asTranslatedComponent)
 
 
             return true
@@ -38,7 +39,7 @@ sealed class OperatorSideEffect {
         override fun performEffect(harness: CastingVM): Boolean {
             this.spell.cast(harness.env, harness.image)?.let { harness.image = it }
             if (awardStat)
-                harness.env.caster?.awardStat(HexStatistics.SPELLS_CAST)
+                (harness.env.castingEntity as? ServerPlayer)?.awardStat(HexStatistics.SPELLS_CAST)
 
             return false
         }

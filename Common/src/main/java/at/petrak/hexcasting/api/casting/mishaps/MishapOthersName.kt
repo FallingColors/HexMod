@@ -16,12 +16,12 @@ class MishapOthersName(val confidant: Player) : Mishap() {
         dyeColor(DyeColor.BLACK)
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        val seconds = if (this.confidant == ctx.caster) 5 else 60
+        val seconds = if (this.confidant == ctx.castingEntity) 5 else 60
         ctx.mishapEnvironment.blind(seconds * 20)
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        if (this.confidant == ctx.caster)
+        if (this.confidant == ctx.castingEntity)
             error("others_name.self")
         else
             error("others_name", confidant.name)
