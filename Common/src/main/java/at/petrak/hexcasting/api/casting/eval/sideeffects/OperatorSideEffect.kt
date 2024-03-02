@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM
 import at.petrak.hexcasting.api.casting.mishaps.Mishap
+import at.petrak.hexcasting.api.casting.mishaps.MishapInternalException
 import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.api.pigment.FrozenPigment
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
@@ -41,6 +42,10 @@ sealed class OperatorSideEffect {
                 this.spell.cast(harness.env, harness.image)?.let { harness.image = it }
             } catch (mishap: Mishap) {
                 //so basically this is like call/cc into a mishap? (TODO: request clarification on if mishaps should be allowed in attempted spells)
+                val fakeCtx = Mishap.Context(null, null)
+                return  DoMishap(mishap,fakeCtx).performEffect(harness)
+            } catch (other: Exception) {
+                val mishap = MishapInternalException(other)
                 val fakeCtx = Mishap.Context(null, null)
                 return  DoMishap(mishap,fakeCtx).performEffect(harness)
             }
