@@ -22,6 +22,11 @@ public abstract class CapEntityIotaHolder implements ADIotaHolder {
         }
 
         @Override
+        public boolean writeable() {
+            return inner.writeable();
+        }
+
+        @Override
         public boolean writeIota(@Nullable Iota iota, boolean simulate) {
             return inner.writeIota(iota, simulate);
         }

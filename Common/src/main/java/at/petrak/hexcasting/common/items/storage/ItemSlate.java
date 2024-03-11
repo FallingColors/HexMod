@@ -85,6 +85,11 @@ public class ItemSlate extends BlockItem implements IotaHolderItem {
     }
 
     @Override
+    public boolean writeable(ItemStack stack) {
+        return true;
+    }
+
+    @Override
     public boolean canWrite(ItemStack stack, Iota datum) {
         return datum instanceof PatternIota || datum == null;
     }

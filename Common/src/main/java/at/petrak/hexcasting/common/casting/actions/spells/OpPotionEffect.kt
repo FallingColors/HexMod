@@ -24,7 +24,7 @@ class OpPotionEffect(
         val target = args.getLivingEntityButNotArmorStand(0, argc)
         val duration = args.getPositiveDouble(1, argc)
         val potency = if (this.allowPotency)
-            args.getPositiveDoubleUnderInclusive(2, 127.0, argc)
+            args.getDoubleBetween(2, 1.0, 127.0, argc)
         else 1.0
         env.assertEntityInRange(target)
 

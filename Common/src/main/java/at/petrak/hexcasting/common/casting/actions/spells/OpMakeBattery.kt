@@ -29,19 +29,17 @@ object OpMakeBattery : SpellAction {
         val entity = args.getItemEntity(0, argc)
 
         val (handStack, hand) = env.getHeldItemToOperateOn { it.`is`(HexTags.Items.PHIAL_BASE) }
-            ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), null, "bottle") // TODO: hack
+            ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "bottle") // TODO: hack
 
         if (!handStack.`is`(HexTags.Items.PHIAL_BASE)) {
             throw MishapBadOffhandItem.of(
                 handStack,
-                hand,
                 "bottle"
             )
         }
         if (handStack.count != 1) {
             throw MishapBadOffhandItem.of(
                 handStack,
-                hand,
                 "only_one"
             )
         }

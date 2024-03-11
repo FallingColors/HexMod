@@ -17,9 +17,9 @@ object OpReadable : ConstMediaAction {
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
             ?: return false.asActionResult
 
+        // If the datum contains no iota, return whether it has a default empty iota.
         datumHolder.readIota(env.world)
-            ?: datumHolder.emptyIota()
-            ?: return false.asActionResult
+            ?: return (datumHolder.emptyIota() != null).asActionResult
 
         return true.asActionResult
     }

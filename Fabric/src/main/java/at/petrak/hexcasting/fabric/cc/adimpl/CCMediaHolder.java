@@ -51,7 +51,7 @@ public abstract class CCMediaHolder extends ItemComponent implements ADMediaHold
 
         @Override
         public int getConsumptionPriority() {
-            return ADMediaHolder.BATTERY_PRIORITY;
+            return this.mediaHolder.getConsumptionPriority(this.stack);
         }
 
         @Override
