@@ -15,6 +15,7 @@ import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.*
 import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
+import jdk.incubator.vector.VectorOperators.Operator
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 
@@ -59,7 +60,12 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
 
             continuation = image2.continuation
             lastResolutionType = image2.resolutionType
-            performSideEffects(info, image2.sideEffects)
+            try {
+                performSideEffects(info, image2.sideEffects)
+            } catch (e: Exception) {
+                val javamishap = MishapInternalException(e)
+                performSideEffects(info,listOf(OperatorSideEffect.DoMishap(javamishap,Mishap.Context(null,null))))
+            }
             info.earlyExit = info.earlyExit || !lastResolutionType.success
         }
 

@@ -38,17 +38,7 @@ sealed class OperatorSideEffect {
     ) :
         OperatorSideEffect() {
         override fun performEffect(harness: CastingVM): Boolean {
-            try {
-                this.spell.cast(harness.env, harness.image)?.let { harness.image = it }
-            } catch (mishap: Mishap) {
-                //so basically this is like call/cc into a mishap? (TODO: request clarification on if mishaps should be allowed in attempted spells)
-                val fakeCtx = Mishap.Context(null, null)
-                return  DoMishap(mishap,fakeCtx).performEffect(harness)
-            } catch (other: Exception) {
-                val mishap = MishapInternalException(other)
-                val fakeCtx = Mishap.Context(null, null)
-                return  DoMishap(mishap,fakeCtx).performEffect(harness)
-            }
+            this.spell.cast(harness.env, harness.image)?.let { harness.image = it }
             if (awardStat)
                 (harness.env.castingEntity as? ServerPlayer)?.awardStat(HexStatistics.SPELLS_CAST)
 
