@@ -63,6 +63,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             try {
                 performSideEffects(info, image2.sideEffects)
             } catch (e: Exception) {
+                e.printStackTrace()
                 val javamishap = MishapInternalException(e)
                 performSideEffects(info,listOf(OperatorSideEffect.DoMishap(javamishap,Mishap.Context(null,null))))
             }
