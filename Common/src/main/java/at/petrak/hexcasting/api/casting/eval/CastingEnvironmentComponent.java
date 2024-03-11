@@ -30,7 +30,7 @@ public interface CastingEnvironmentComponent {
 
         /**
          *  ExtractMedia component that extracts media AFTER the call to {@link CastingEnvironment#extractMediaEnvironment(long)}
-         *  if the input is <= 0 you should also probally return 0 (since media cost was allready paid off)
+         *  if the input is <= 0 you should also probably return 0 (since media cost was already paid off)
          */
         interface Post extends ExtractMedia {}
     }
