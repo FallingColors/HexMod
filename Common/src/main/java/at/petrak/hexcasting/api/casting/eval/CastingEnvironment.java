@@ -272,7 +272,7 @@ public abstract class CastingEnvironment {
     }
 
     public final boolean isEntityInRange(Entity e) {
-        return (e instanceof Player && HexConfig.server().trueNameHasAmbit()) || this.isVecInRange(e.position());
+        return (e instanceof Player && HexConfig.server().trueNameHasAmbit()) || (this.isVecInWorld(e.position()) && this.isVecInRange(e.position()));
     }
 
     /**
