@@ -15,7 +15,6 @@ import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.*
 import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
-import jdk.incubator.vector.VectorOperators.Operator
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 
