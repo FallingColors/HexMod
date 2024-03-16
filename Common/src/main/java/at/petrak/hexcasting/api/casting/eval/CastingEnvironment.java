@@ -272,7 +272,7 @@ public abstract class CastingEnvironment {
     }
 
     public final boolean isEntityInRange(Entity e) {
-        return e instanceof Player || this.isVecInRange(e.position());
+        return (e instanceof Player && HexConfig.server().trueNameHasAmbit()) || (this.isVecInWorld(e.position()) && this.isVecInRange(e.position()));
     }
 
     /**
@@ -303,6 +303,9 @@ public abstract class CastingEnvironment {
      * Convenience function to throw if the entity is out of the caster's range or the world
      */
     public final void assertEntityInRange(Entity e) throws MishapEntityTooFarAway {
+        if (e instanceof ServerPlayer && HexConfig.server().trueNameHasAmbit()) {
+            return;
+        }
         if (!this.isVecInWorld(e.position())) {
             throw new MishapEntityTooFarAway(e);
         }

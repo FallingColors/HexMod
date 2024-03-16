@@ -174,6 +174,9 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private List<String> circleActionDenyList = List.of();
         @ConfigEntry.Gui.Tooltip
         private boolean villagersOffendedByMindMurder = DEFAULT_VILLAGERS_DISLIKE_MIND_MURDER;
+        @ConfigEntry.Gui.Tooltip
+        private boolean doesTrueNameHaveAmbit = DEFAULT_TRUE_NAME_HAS_AMBIT;
+
 
         @ConfigEntry.Gui.Tooltip
         private List<String> tpDimDenylist = DEFAULT_DIM_TP_DENYLIST;
@@ -248,6 +251,11 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @Override
         public boolean canTeleportInThisDimension(ResourceKey<Level> dimension) {
             return noneMatch(tpDimDenylist, dimension.location());
+        }
+
+        @Override
+        public boolean trueNameHasAmbit() {
+            return doesTrueNameHaveAmbit;
         }
 
         /**
