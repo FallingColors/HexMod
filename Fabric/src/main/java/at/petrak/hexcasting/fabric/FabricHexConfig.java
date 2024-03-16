@@ -175,7 +175,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private boolean villagersOffendedByMindMurder = DEFAULT_VILLAGERS_DISLIKE_MIND_MURDER;
         @ConfigEntry.Gui.Tooltip
-        private boolean doesTruenameHasAmbit = true;
+        private boolean doesTrueNameHaveAmbit = DEFAULT_TRUE_NAME_HAS_AMBIT;
 
 
         @ConfigEntry.Gui.Tooltip
@@ -254,8 +254,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         }
 
         @Override
-        public boolean truenameHasAmbit() {
-            return doesTruenameHasAmbit;
+        public boolean trueNameHasAmbit() {
+            return doesTrueNameHaveAmbit;
         }
 
         /**
