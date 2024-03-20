@@ -42,8 +42,9 @@ pipeline {
         }
         stage('Publish') {
             when {
-                anyOf {
+                allOf {
                     branch 'main'
+                    not { changeRequest() }
                 }
             }
             stages {
