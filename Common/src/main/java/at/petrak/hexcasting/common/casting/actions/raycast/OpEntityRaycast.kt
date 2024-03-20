@@ -26,7 +26,7 @@ object OpEntityRaycast : ConstMediaAction {
         env.assertVecInRange(origin)
 
         val entityHitResult = getEntityHitResult(
-            env.caster,
+            env.castingEntity,
             env.world,
             origin,
             endp,

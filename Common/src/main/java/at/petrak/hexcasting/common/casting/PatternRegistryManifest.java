@@ -91,7 +91,7 @@ public class PatternRegistryManifest {
         }
 
         // Look it up in the world?
-        var perWorldPatterns = ScrungledPatternsSave.open(environment.getWorld());
+        var perWorldPatterns = ScrungledPatternsSave.open(environment.getWorld().getServer().overworld());
         var entry = perWorldPatterns.lookup(sig);
         if (entry != null) {
             return new PatternShapeMatch.PerWorld(entry.key(), true);

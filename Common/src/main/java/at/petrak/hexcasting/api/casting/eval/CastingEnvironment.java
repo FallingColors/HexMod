@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -65,7 +66,9 @@ public abstract class CastingEnvironment {
 
     protected Map<CastingEnvironmentComponent.Key<?>, @NotNull CastingEnvironmentComponent> componentMap = new HashMap<>();
     private final List<PostExecution> postExecutions = new ArrayList<>();
-    private final List<ExtractMedia> extractMedias = new ArrayList<>();
+    private final List<ExtractMedia.Pre> preMediaExtract = new ArrayList<>();
+    private final List<ExtractMedia.Post> postMediaExtract = new ArrayList<>();
+
     private final List<IsVecInRange> isVecInRanges = new ArrayList<>();
     private final List<HasEditPermissionsAt> hasEditPermissionsAts = new ArrayList<>();
 
@@ -77,14 +80,29 @@ public abstract class CastingEnvironment {
         return this.world;
     }
 
+    public int maxOpCount() {
+        return HexConfig.server().maxOpCount();
+    }
+
     /**
      * Get the caster. Might be null!
      * <p>
      * Implementations should NOT rely on this in general, use the methods on this class instead.
      * This is mostly for spells (flight, etc)
+     * @deprecated as of build 0.11.1-7-pre-619 you are recommended to use {@link #getCastingEntity}
+     */
+    @Deprecated(since="0.11.1-7-pre-619")
+    @Nullable
+    public ServerPlayer getCaster() {
+        return getCastingEntity() instanceof ServerPlayer sp ? sp : null;
+    };
+
+    /**
+     * Gets the caster. Can be null if {@link #getCaster()} is also null
+     * @return the entity casting
      */
     @Nullable
-    public abstract ServerPlayer getCaster();
+    public abstract LivingEntity getCastingEntity();
 
     /**
      * Get an interface used to do mishaps
@@ -96,7 +114,11 @@ public abstract class CastingEnvironment {
         if (extension instanceof PostExecution postExecution)
             postExecutions.add(postExecution);
         if (extension instanceof ExtractMedia extractMedia)
-            extractMedias.add(extractMedia);
+            if (extension instanceof ExtractMedia.Pre pre) {
+                preMediaExtract.add(pre);
+            } else if (extension instanceof ExtractMedia.Post post) {
+                postMediaExtract.add(post);
+            }
         if (extension instanceof IsVecInRange isVecInRange)
             isVecInRanges.add(isVecInRange);
         if (extension instanceof HasEditPermissionsAt hasEditPermissionsAt)
@@ -111,7 +133,11 @@ public abstract class CastingEnvironment {
         if (extension instanceof PostExecution postExecution)
             postExecutions.remove(postExecution);
         if (extension instanceof ExtractMedia extractMedia)
-            extractMedias.remove(extractMedia);
+            if (extension instanceof ExtractMedia.Pre pre) {
+                preMediaExtract.remove(pre);
+            } else if (extension instanceof ExtractMedia.Post post) {
+                postMediaExtract.remove(post);
+            }
         if (extension instanceof IsVecInRange isVecInRange)
             isVecInRanges.remove(isVecInRange);
         if (extension instanceof HasEditPermissionsAt hasEditPermissionsAt)
@@ -168,15 +194,15 @@ public abstract class CastingEnvironment {
      * Return whether this env can cast great spells.
      */
     public boolean isEnlightened() {
-        var caster = this.getCaster();
-        if (caster == null)
-            return false;
-
         var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("enlightenment"));
         if (adv == null)
             return false;
 
-        return caster.getAdvancements().getOrStartProgress(adv).isDone();
+        var caster = this.getCastingEntity();
+        if (caster instanceof ServerPlayer player)
+            return player.getAdvancements().getOrStartProgress(adv).isDone();
+
+        return false;
     }
 
     /**
@@ -186,9 +212,12 @@ public abstract class CastingEnvironment {
      * positive.
      */
     public long extractMedia(long cost) {
-        for (var extractMediaComponent : extractMedias)
+        for (var extractMediaComponent : preMediaExtract)
             cost = extractMediaComponent.onExtractMedia(cost);
-        return extractMediaEnvironment(cost);
+        cost = extractMediaEnvironment(cost);
+        for (var extractMediaComponent : postMediaExtract)
+            cost = extractMediaComponent.onExtractMedia(cost);
+        return cost;
     }
 
     /**
@@ -243,7 +272,7 @@ public abstract class CastingEnvironment {
     }
 
     public final boolean isEntityInRange(Entity e) {
-        return e instanceof Player || this.isVecInRange(e.position());
+        return (e instanceof Player && HexConfig.server().trueNameHasAmbit()) || (this.isVecInWorld(e.position()) && this.isVecInRange(e.position()));
     }
 
     /**
@@ -274,6 +303,9 @@ public abstract class CastingEnvironment {
      * Convenience function to throw if the entity is out of the caster's range or the world
      */
     public final void assertEntityInRange(Entity e) throws MishapEntityTooFarAway {
+        if (e instanceof ServerPlayer && HexConfig.server().trueNameHasAmbit()) {
+            return;
+        }
         if (!this.isVecInWorld(e.position())) {
             throw new MishapEntityTooFarAway(e);
         }

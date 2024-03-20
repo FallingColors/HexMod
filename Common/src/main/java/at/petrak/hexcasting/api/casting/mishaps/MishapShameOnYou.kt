@@ -11,7 +11,7 @@ class MishapShameOnYou() : Mishap() {
         dyeColor(DyeColor.BLACK)
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        val caster = env.caster
+        val caster = env.castingEntity
         if (caster != null) {
             // FIXME: handle null caster case
             trulyHurt(caster, caster.damageSources().source(HexDamageTypes.SHAME_ON_YOU), 69420f)

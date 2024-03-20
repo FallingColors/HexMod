@@ -69,6 +69,8 @@ public class HexConfig {
         // fun fact, although dimension keys are a RegistryHolder, they aren't a registry, so i can't do tags
         boolean canTeleportInThisDimension(ResourceKey<Level> dimension);
 
+        boolean trueNameHasAmbit();
+
         int DEFAULT_MAX_OP_COUNT = 1_000_000;
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
         int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;
@@ -76,6 +78,8 @@ public class HexConfig {
         boolean DEFAULT_VILLAGERS_DISLIKE_MIND_MURDER = true;
 
         List<String> DEFAULT_DIM_TP_DENYLIST = List.of("twilightforest:twilight_forest");
+
+        boolean DEFAULT_TRUE_NAME_HAS_AMBIT = true;
 
         default Tier opBreakHarvestLevel() {
             return switch (this.opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort()) {

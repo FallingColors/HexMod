@@ -74,7 +74,16 @@ subprojects {
     }
 }
 
-allprojects { gradle.projectsEvaluated { tasks.withType(JavaCompile) { options.compilerArgs << "-Xmaxerrs" << "1000" } } }
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xmaxerrs" << "1000"
+        }
+    }
+
+    // disable most javadoc warnings
+    javadoc.options.addStringOption('Xdoclint:none', '-quiet')
+}
 
 compileKotlin {
     kotlinOptions {
