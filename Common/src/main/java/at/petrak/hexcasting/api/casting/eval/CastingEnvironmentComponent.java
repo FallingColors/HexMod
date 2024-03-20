@@ -19,7 +19,7 @@ public interface CastingEnvironmentComponent {
         /**
          * Receives the cost that is being extracted, should return the
          * remaining cost after deducting whatever cost source this component
-         * is responsible for (should be >= 0)
+         * is responsible for (should be &gt;= 0)
          */
         long onExtractMedia(long cost);
 
@@ -30,7 +30,7 @@ public interface CastingEnvironmentComponent {
 
         /**
          *  ExtractMedia component that extracts media AFTER the call to {@link CastingEnvironment#extractMediaEnvironment(long)}
-         *  if the input is <= 0 you should also probably return 0 (since media cost was already paid off)
+         *  if the input is &lt;= 0 you should also probably return 0 (since media cost was already paid off)
          */
         interface Post extends ExtractMedia {}
     }
