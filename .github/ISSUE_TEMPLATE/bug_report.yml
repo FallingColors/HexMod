@@ -1,0 +1,70 @@
+name: Bug Report
+description: Report an issue with Hex Casting
+labels:
+  - bug
+  - unconfirmed
+
+body:
+  - type: dropdown
+    attributes:
+      label: Modloader
+      options:
+        - Forge
+        - Fabric
+        - Quilt
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Minecraft version
+      placeholder: eg. 1.19.2
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Hex Casting version
+      placeholder: eg. 0.11.1-7-pre-609
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Modloader version
+      description: |
+        List the version of the mod loader you are using.
+        If on Fabric, post the versions of both Fabric Loader and Fabric API.
+      placeholder: "eg. Forge: 36.2.9 / Fabric: Loader 0.10.6 + API 0.42.1"
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Modpack info
+      description: If playing a modpack, post the link to it!
+
+  - type: input
+    attributes:
+      label: The latest.log file
+      description: Please use https://mclo.gs/ if possible. Sites like https://gist.github.com/ or https://pastebin.com/ are also acceptable.
+
+  - type: textarea
+    attributes:
+      label: Issue description
+      placeholder: A description of the issue.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. First step
+        2. Second step
+        3. etc...
+
+  - type: textarea
+    attributes:
+      label: Other information
+      description: Any other relevant information that is related to this issue, such as other mods and their versions.
