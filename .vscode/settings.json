@@ -3,7 +3,7 @@
         "editor.defaultFormatter": "charliermarsh.ruff",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-            "source.organizeImports.ruff": true,
+            "source.organizeImports.ruff": "explicit"
         },
         "editor.rulers": [88],
     },
