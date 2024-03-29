@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.Mishap
 import at.petrak.hexcasting.api.pigment.FrozenPigment
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
@@ -13,6 +14,7 @@ class MishapNoSpellCircle : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.LIGHT_BLUE)
 
+    // FIXME: make me work with any entity and not just players
     private inline fun dropAll(player: Player, stacks: MutableList<ItemStack>, filter: (ItemStack) -> Boolean = { true }) {
         for (index in stacks.indices) {
             val item = stacks[index]
@@ -24,7 +26,7 @@ class MishapNoSpellCircle : Mishap() {
     }
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        val caster = env.caster
+        val caster = env.castingEntity as? ServerPlayer
         if (caster != null) {
             // FIXME: handle null caster case
             dropAll(caster, caster.inventory.items)

@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapLocationInWrongDimension
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.server.level.ServerPlayer
 
 object OpDestroySentinel : SpellAction {
     override val argc = 0
@@ -15,7 +16,7 @@ object OpDestroySentinel : SpellAction {
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
-        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(env.caster)
+        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(env.castingEntity as? ServerPlayer)
 
         // TODO why can't you remove things from other dimensions?
         val dim = sentinel?.dimension
@@ -33,7 +34,7 @@ object OpDestroySentinel : SpellAction {
 
     private object Spell : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            IXplatAbstractions.INSTANCE.setSentinel(env.caster, null)
+            IXplatAbstractions.INSTANCE.setSentinel(env.castingEntity as? ServerPlayer, null)
         }
     }
 }

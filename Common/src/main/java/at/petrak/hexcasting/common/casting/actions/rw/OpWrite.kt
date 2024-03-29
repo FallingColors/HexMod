@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.casting.mishaps.MishapOthersName
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.ItemStack
 
 // we make this a spell cause imo it's a little ... anticlimactic for it to just make no noise
@@ -31,7 +32,7 @@ object OpWrite : SpellAction {
         if (!datumHolder.writeIota(datum, true))
             throw MishapBadOffhandItem.of(handStack, hand, "iota.readonly", datum.display())
 
-        val trueName = MishapOthersName.getTrueNameFromDatum(datum, env.caster)
+        val trueName = MishapOthersName.getTrueNameFromDatum(datum, env.castingEntity as? ServerPlayer)
         if (trueName != null)
             throw MishapOthersName(trueName)
 

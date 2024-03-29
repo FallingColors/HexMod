@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api.casting.castables;
 
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
@@ -35,6 +36,6 @@ public interface SpecialHandler {
      */
     @FunctionalInterface
     public interface Factory<T extends SpecialHandler> {
-        @Nullable T tryMatch(HexPattern pattern);
+        @Nullable T tryMatch(HexPattern pattern, CastingEnvironment env);
     }
 }

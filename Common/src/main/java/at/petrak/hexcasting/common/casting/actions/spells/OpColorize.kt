@@ -40,7 +40,7 @@ object OpColorize : SpellAction {
         override fun cast(env: CastingEnvironment) {
             val copy = stack.copy()
             if (env.withdrawItem({ ItemStack.isSameItemSameTags(copy, it) }, 1, true))
-                env.setPigment(FrozenPigment(copy, env.caster?.uuid ?: Util.NIL_UUID))
+                env.setPigment(FrozenPigment(copy, env.castingEntity?.uuid ?: Util.NIL_UUID))
         }
     }
 }

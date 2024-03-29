@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -37,7 +38,7 @@ object OpTheOnlyReasonAnyoneDownloadedPsi : SpellAction {
         override fun cast(env: CastingEnvironment) {
             // https://github.com/VazkiiMods/Psi/blob/master/src/main/java/vazkii/psi/common/spell/trick/PieceTrickOvergrow.java
             val hit = BlockHitResult(Vec3.ZERO, Direction.UP, pos, false)
-            val fakeContext = UseOnContext(env.world, env.caster, InteractionHand.MAIN_HAND, ItemStack(Items.BONE_MEAL), hit)
+            val fakeContext = UseOnContext(env.world, env.castingEntity as? ServerPlayer, InteractionHand.MAIN_HAND, ItemStack(Items.BONE_MEAL), hit)
             Items.BONE_MEAL.useOn(fakeContext)
         }
     }
