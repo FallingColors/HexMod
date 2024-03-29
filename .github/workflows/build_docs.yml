@@ -2,7 +2,7 @@ name: Build the web book
 
 on:
   push:
-    branches: '1.20'
+    branches: main
   workflow_dispatch:
     inputs:
       release:
