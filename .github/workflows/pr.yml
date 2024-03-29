@@ -47,3 +47,4 @@ jobs:
       python-version: "3.11"
       release: false
       deploy-pages: false
+      site-url: https://hexcasting.hexxy.media
