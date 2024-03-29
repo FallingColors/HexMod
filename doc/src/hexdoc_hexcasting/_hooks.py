@@ -147,4 +147,5 @@ class HexcastingModPlugin(ModPluginWithBook):
     def default_rendered_templates(self) -> dict[str | Path, str]:
         return {
             "hexcasting.js": "hexcasting.js.jinja",
+            "hexcasting_render.js": "hexcasting_render.js.jinja",
         }
