@@ -46,9 +46,8 @@ nodemon --config doc/nodemon.json
 # render and serve the web book
 hexdoc serve
 
-# export, render, and merge the web book
-hexdoc export
-hexdoc render
+# build and merge the web book
+hexdoc build
 hexdoc merge
 
 # start the Python interpreter with some extra local variables
