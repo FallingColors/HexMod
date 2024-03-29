@@ -3,29 +3,46 @@
 {% block inner_body %}
   <details class="details-collapsible">
     <summary class="collapse-details collapse-spell"></summary>
-    <li class="dropdown">
-      <a
-        href=""
-        class="dropdown-toggle"
-        data-toggle="dropdown"
-        role="button"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >{{ _("hexdoc.renderer.renders")}} <span class="caret"></span></a>
-      <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
-    </li>
 
-    <li class="dropdown">
-      <a
+    <div class="dropdown spell-settings-dropdown">
+      <span
         href=""
-        class="dropdown-toggle"
+        class="dropdown-toggle spell-settings-toggle"
         data-toggle="dropdown"
         role="button"
         aria-haspopup="true"
         aria-expanded="false"
-      >{{ _("hexdoc.renderer.palettes")}} <span class="caret"></span></a>
-      <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
-    </li>
+      >
+        <i class="bi bi-gear-fill"></i>
+      </span>
+
+      <ul class="dropdown-menu">
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >{{ _("hexdoc.renderer.renders")}}</a>
+          <ul class="dropdown-menu dropdown-menu-left render-dropdowns"></ul>
+        </li>
+
+        <li class="dropdown-submenu">
+          <a
+            href=""
+            class="dropdown-toggle"
+            data-toggle="dropdown"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >{{ _("hexdoc.renderer.palettes")}}</a>
+          <ul class="dropdown-menu dropdown-menu-left palette-dropdowns"></ul>
+        </li>
+      </ul>
+    </div>
+
     {% for pattern in page.patterns %}
       <canvas
         class="spell-viz"
