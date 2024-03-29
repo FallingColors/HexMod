@@ -35,3 +35,15 @@ jobs:
         run: |
           git add --intent-to-add .
           git diff --name-only --exit-code -- ":!:*/src/generated/resources/.cache/*"
+
+  hexdoc:
+    uses: hexdoc-dev/hexdoc/.github/workflows/hexdoc.yml@main
+    permissions:
+      contents: write
+      pages: read
+    secrets:
+      GH_TOKEN: ""
+    with:
+      python-version: "3.11"
+      release: false
+      deploy-pages: false
