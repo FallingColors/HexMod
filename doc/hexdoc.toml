@@ -1,7 +1,7 @@
 modid = "hexcasting"
 book = "hexcasting:thehexbook"
 default_lang = "en_us"
-default_branch = "1.20" # TODO: switch back to main
+default_branch = "main"
 
 resource_dirs = [  # top takes priority
     "resources",
