@@ -1,0 +1,57 @@
+{
+  hexdoc: {
+    hexcasting: {
+      title: "Hex Book",
+      description: "The Hex Book, all in one place.",
+    },
+
+    renderer: {
+      renders: "Renders",
+      palettes: "Palettes",
+
+      animated: "animated",
+      monocolor: "monocolor",
+      gradient: "gradient",
+      segment: "segment",
+
+      default: "default",
+      turbo: "turbo",
+      dark2: "dark2",
+      tab10: "tab10",
+    },
+
+    pattern: {
+      show: "Click to show spell",
+      hide: "Click to hide spell",
+
+      multiplier: "${speedScale()}x",
+      paused: "Paused",
+
+      not_supported: "Your browser does not support visualizing patterns. Pattern code: {}",
+    },
+
+    villager_requirements: {
+      any: "Villager must be a {level} or higher",
+      professional: "Villager must be a {level} {profession} or higher",
+    },
+
+    pages: {
+      hexcasting: {
+        brainsweep: {
+          description: "Depicted in the book: A mind-flaying recipe producing the",
+          separator: "",
+        },
+      },
+    },
+  },
+
+  "block.hexcasting": {
+    slate: "Blank Slate",
+  },
+
+  "tag.item.c": {
+    brown_dye: "Brown Dyes",
+    glowstone_dusts: "Glowstone Dusts",
+    wood_sticks: "Wood Sticks",
+  },
+}

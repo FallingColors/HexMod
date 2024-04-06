@@ -2,6 +2,5 @@
   "name": "hexcasting.category.greatwork",
   "description": "hexcasting.category.greatwork.desc",
   "icon": "minecraft:music_disc_11",
-  "sortnum": 3,
-  "entry_color": "54398a"
+  "sortnum": 3
 }

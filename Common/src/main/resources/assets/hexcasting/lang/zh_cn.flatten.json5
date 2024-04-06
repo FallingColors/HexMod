@@ -1188,7 +1188,7 @@
       "spellcircles.4": "真是精妙。法术环不会从我的物品栏或我的意识中汲取$(media)媒质/$，而是要通过漏斗（或类似装置）向$(l:greatwork/impetus)$(item)促动石/$提供晶态的$(media)媒质/$。$(br2)$(l:items/lens)$(item)探知透镜/$能以紫水晶粉为单位显示$(l:greatwork/impetus)$(item)促动石/$中的$(media)媒质/$量。",
       "spellcircles.5": "然而，用法术环施放的法术有一个限制：它无法影响环外的事物。也即，它无法影响到能将整个法术环包起的最小长方体外的事物（有凹进部分的法术环仍能影响凹进部分内的事物）。",
       "spellcircles.6": "在媒质波减弱前它只能通过有限个方块，但这个值很大，实际不大可能超过这个值。$(br2)相反地，有部分操作只能在法术环上执行，不过它们没有一个是法术。它们似乎都是处理法术环本身性质的操作。相关笔记$(l:patterns/circle)见此/$。",
-      "spellcircles.7": "我还在笔记中找到了一份草稿，是一个古代研究者使用的法术环。另一页上就是它的重绘图（挺抽象的）。$(br2)其中的图案会按逆时针运行，以$(l:patterns/basics#hexcasting:get_caster)$(action)意识之精思/$开始并以$(l:patterns/great_spells/teleport#hexcasting:teleport)$(action)卓越传送/$结束。",
+      "spellcircles.7": "我还在笔记中找到了一份草稿，是一个古代研究者使用的法术环。另一页上就是它的重绘图（挺抽象的）。$(br2)其中的图案会按逆时针运行，以$(l:patterns/basics#hexcasting:get_caster)$(action)意识之精思/$开始并以$(l:patterns/great_spells/teleport#hexcasting:teleport/great)$(action)卓越传送/$结束。",
       "spellcircles.teleport_circle.title": "传送环",
 
 
@@ -1294,7 +1294,7 @@
 
       "sets.numlist": "集合操作比较奇怪，部分操作只能接受两个数或两个列表，一个数一个列表就不行。这类参数记为“(num, num) (list, list)”。$(br2)当接受的是数时，它们将被视为所谓二进制的“位组”，也就是由 1 和 0、真和假、“开”和“关”组成的列表。",
       "sets.or.1": "取两集合的并集。",
-      "sets.or.2": "操作如下：$(li)若栈顶为两个数，将其组合为在两个位组中有一个为 1 处为 1 的位组。$(li)若栈顶为两个列表，则创建一个由第一个列表中所有元素和第二个列表独有的元素组成的列表。和$(l:patterns/lists#hexcasting:concat)$(action)组合之馏化/$类似。",
+      "sets.or.2": "操作如下：$(li)若栈顶为两个数，将其组合为在两个位组中有一个为 1 处为 1 的位组。$(li)若栈顶为两个列表，则创建一个由第一个列表中所有元素和第二个列表独有的元素组成的列表。和$(l:patterns/lists#hexcasting:add)$(action)组合之馏化/$类似。",
       "sets.and.1": "取两集合的交集。",
       "sets.and.2": "操作如下：$(li)若栈顶为两个数，将其组合为仅在两个位组中$(italic)均/$为 1 处为 1 的位组。$(li)若栈顶为两个列表，则创建一个由第一个和第二个列表共有的元素组成的列表。",
       "sets.xor.1": "取两集合中每个集合独有的元素集合。",
@@ -1335,7 +1335,7 @@
       "stackmanip.swizzle.link": "编码列表",
 
 
-      "logic.bool_coerce": "将参数变换为布尔值。数 $(thing)0/$、$(l:influences#null)$(thing)Null/$，以及空列表会变为 False。其余所有则变为 True。",
+      "logic.bool_coerce": "将参数变换为布尔值。数 $(thing)0/$、$(l:casting/influences)$(thing)Null/$，以及空列表会变为 False。其余所有则变为 True。",
       "logic.bool_to_number": "将布尔值变换为数。True 变为 $(thing)1/$， False 变为 $(thing)0/$。",
       "logic.not": "如果参数是 True，返回 False；如果参数是 False，返回 True。",
       "logic.or": "如果至少有一个参数是 True，返回 True。否则返回 False。",

@@ -1,0 +1,9 @@
+{% extends "pages/patchouli/page.html.jinja" %}
+{% import "macros/formatting.html.jinja" as fmt with context %}
+
+{% block body %}
+  {% with recipe=page.recipe %}
+    {% include "recipes/hexcasting/brainsweep.html.jinja" %}
+  {% endwith +%}
+  {{ fmt.styled(page.text) }}
+{% endblock body %}
