@@ -1,0 +1,7 @@
+{% import "macros/textures.html.jinja" as texture_macros with context -%}
+
+{{ texture_macros.render_texture(
+  name=brainsweepee.name,
+  texture=brainsweepee.texture,
+  class_names=["flay-recipe-entity"],
+) }}

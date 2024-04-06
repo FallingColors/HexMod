@@ -1,0 +1,69 @@
+modid = "hexcasting"
+book = "hexcasting:thehexbook"
+default_lang = "en_us"
+default_branch = "1.20" # TODO: switch back to main
+
+resource_dirs = [  # top takes priority
+    "resources",
+    "{_common.src}/main/resources",
+    "{_common.src}/generated/resources",
+    "{_fabric.src}/main/resources",
+    "{_fabric.src}/generated/resources",
+    "{_forge.src}/main/resources",
+    "{_forge.src}/generated/resources",
+    { modid="minecraft" },
+    { modid="hexdoc" },
+]
+export_dir = "src/hexdoc_hexcasting/_export/generated"
+
+[extra.hexcasting]
+# NOTE: "!Raw" means "don't apply variable interpolation to this value"
+_pattern_regex = { "!Raw"='HexPattern\.fromAngles\("(?P<signature>[qweasd]+)", HexDir\.(?P<startdir>\w+)\),\s*modLoc\("(?P<name>[^"]+)"\)[^;]+?(?:makeConstantOp|Op\w+|Widget\.\w+)(?:[^;]*(?P<is_per_world>true)\);)?' }
+
+[[extra.hexcasting.pattern_stubs]]
+path = "{^^^_common.package}/common/casting/RegisterPatterns.java"
+regex = "{^_pattern_regex}"
+
+[[extra.hexcasting.pattern_stubs]]
+path = "{^^^_common.package}/interop/pehkui/PehkuiInterop.java"
+regex = "{^_pattern_regex}"
+
+[[extra.hexcasting.pattern_stubs]]
+path = "{^^^_fabric.package}/interop/gravity/GravityApiInterop.java"
+regex = "{^_pattern_regex}"
+
+[textures]
+missing = [
+    "hexcasting:conjured_block",
+    "hexcasting:conjured_light",
+    "emi:tag/hexcasting/akashic_planks",
+    "emi:tag/hexcasting/wands",
+    "emi:tag/hexcasting/akashic_logs",
+    "emi:tag/hexcasting/phial_base",
+]
+
+[template]
+icon = "../art/logo.png"
+include = [
+    "hexcasting",
+    "hexdoc",
+]
+
+[template.args]
+mod_name = "Hex Casting"
+author = "petrak@, Alwinfy"
+show_landing_text = true
+
+# platforms
+
+[_common]
+src = "../Common/src"
+package = "{src}/main/java/at/petrak/hexcasting"
+
+[_fabric]
+src = "../Fabric/src"
+package = "{src}/main/java/at/petrak/hexcasting/fabric"
+
+[_forge]
+src = "../Forge/src"
+package = "{src}/main/java/at/petrak/hexcasting/forge"
