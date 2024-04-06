@@ -1,0 +1,50 @@
+# mirror of the Jenkins pipeline, used for requiring PRs to build successfully before merging
+# this uses Actions because it's easier to integrate with GitHub PRs, and to allow running the build on forks
+
+name: Build pull request
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17.0.1"
+      - uses: gradle/actions/setup-gradle@v3
+      
+      - name: Clean
+        run: |
+          chmod +x gradlew
+          ./gradlew clean
+
+      - name: Build
+        run: ./gradlew build
+
+      # - name: Run Datagen
+      #   run: ./gradlew runAllDatagen
+
+      # - name: Check Datagen
+      #   run: |
+      #     git add --intent-to-add .
+      #     git diff --name-only --exit-code -- ":!:*/src/generated/resources/.cache/*"
+
+  hexdoc:
+    uses: hexdoc-dev/hexdoc/.github/workflows/hexdoc.yml@main
+    permissions:
+      contents: write
+      pages: read
+    secrets:
+      GH_TOKEN: ""
+    with:
+      python-version: "3.11"
+      release: false
+      deploy-pages: false
+      site-url: https://hexcasting.hexxy.media
