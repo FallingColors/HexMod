@@ -9,6 +9,7 @@
     {
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:sentinel/create/great",
+      "anchor": "hexcasting:sentinel/create/great",
       "text": "hexcasting.page.greater_sentinel.1",
       "input": "vector",
       "output": ""

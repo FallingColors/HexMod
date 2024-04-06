@@ -1,0 +1,7 @@
+{% extends "hexdoc:index.html.jinja" %}
+
+{% block scripts %}
+  {{ super() }}
+  <script type="module" src="hexcasting.js"></script>
+  <script type="module" src="hexcasting_render.js"></script>
+{% endblock scripts %}
