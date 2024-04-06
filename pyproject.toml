@@ -21,8 +21,8 @@ requires-python = ">=3.11"
 dynamic = ["version", "dependencies", "optional-dependencies"]
 
 [project.urls]
-Homepage = "https://gamma-delta.github.io/HexMod/"
-Source = "https://github.com/gamma-delta/HexMod/"
+Homepage = "https://hexcasting.hexxy.media/"
+Source = "https://github.com/FallingColors/HexMod/"
 
 # Gradle version/deps
 
