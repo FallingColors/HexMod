@@ -32,7 +32,7 @@
 
     villager_requirements: {
       any: "必须为{level}级或更高等级的村民",
-      professional: "必须为{level}级{profession}或更高等级的村民",
+      professional: "必须为{level}级或更高等级的{profession}",
     },
 
     pages: {
