@@ -276,13 +276,13 @@ export function load_palette(name) {
   }
 }
 const render_lang = {
-  "animated": "animated",
-  "monocolor": "monocolor",
-  "gradient": "gradient",
-  "segment": "segment",
+  "动画": "animated",
+  "单色": "monocolor",
+  "渐变": "gradient",
+  "线段": "segment",
 }
 const palette_lang = {
-  "default": "default",
+  "默认": "default",
   "turbo": "turbo",
   "dark2": "dark2",
   "tab10": "tab10",
