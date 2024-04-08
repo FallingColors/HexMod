@@ -5,6 +5,21 @@
       description: "咒术之书，辑录合一。",
     },
 
+    renderer: {
+      renders: "渲染方式",
+      palettes: "配色",
+
+      animated: "动画",
+      monocolor: "单色",
+      gradient: "渐变",
+      segment: "线段",
+
+      default: "默认",
+      turbo: "turbo",
+      dark2: "dark2",
+      tab10: "tab10",
+    },
+
     pattern: {
       show: "点击以显示图案",
       hide: "点击以隐藏图案",
@@ -15,33 +30,28 @@
       not_supported: "浏览器不支持图案的可视化。图案代码见此：{}",
     },
 
+    villager_requirements: {
+      any: "必须为{level}级或更高等级的村民",
+      professional: "必须为{level}级或更高等级的{profession}",
+    },
+
     pages: {
       hexcasting: {
-        crafting_multi: {
-          description: "书中显示如下事物的合成配方：",
-          separator: "、",
-        },
-
         brainsweep: {
           description: "书中显示如下事物的意识剥离配方：",
-          separator: "", // this value intentionally left blank
+          separator: "",
         },
       },
     },
   },
 
-  key: {
-    use: "右键",
-    sneak: "左Shift",
-    jump: "空格",
-  },
-
-  "item.minecraft": {
-    amethyst_shard: "紫水晶碎片",
-    budding_amethyst: "紫水晶母岩",
-  },
-
   "block.hexcasting": {
     slate: "空白石板",
+  },
+
+  "tag.item.c": {
+    brown_dye: "棕色染料",
+    glowstone_dusts: "荧石粉",
+    wood_sticks: "木棍",
   },
 }
