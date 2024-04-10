@@ -1,7 +1,7 @@
 {
   "name": "hexcasting.entry.directrix",
   "category": "hexcasting:greatwork",
-  "icon": "hexcasting:directrix_redstone",
+  "icon": "hexcasting:directrix/redstone",
   "advancement": "hexcasting:enlightenment",
   "entry_color": "54398a",
   "sortnum": 3,
@@ -16,7 +16,7 @@
     },
     {
       "type": "patchouli:crafting",
-      "recipe": "hexcasting:empty_directrix",
+      "recipe": "hexcasting:directrix/empty",
       "text": "hexcasting.page.directrix.empty_directrix"
     },
     {
