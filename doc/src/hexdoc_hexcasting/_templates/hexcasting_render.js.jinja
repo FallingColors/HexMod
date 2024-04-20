@@ -74,12 +74,6 @@ function render_collapsible(draw_options, collapsible, palette, class_name) {
     let style = getStyles(img);
 
     let grid_options = draw_options(style, palette);
-    console.log({
-      options: grid_options,
-      pattern: pattern,
-      width: width,
-      height: height
-    });
 
     let img_data = draw_bound_pattern(grid_options, pattern, 0.35, width, height);
 
