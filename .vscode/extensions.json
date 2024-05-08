@@ -1,0 +1,9 @@
+{
+	// List of extensions which should be recommended for users of this workspace.
+	"recommendations": [
+		"ms-python.vscode-pylance",
+		"charliermarsh.ruff",
+		"samuelcolvin.jinjahtml",
+		"noxiz.jinja-snippets",
+	],
+}

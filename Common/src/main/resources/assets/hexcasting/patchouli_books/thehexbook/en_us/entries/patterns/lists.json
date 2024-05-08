@@ -40,12 +40,12 @@
     },
     {
       "type": "hexcasting:pattern",
-      "header": "hexcasting.action.hexcasting:concat",
+      "header": "hexcasting.action.hexcasting:add",
       "op_id": "hexcasting:add",
-      "anchor": "hexcasting:concat",
+      "anchor": "hexcasting:add",
       "input": "list, list",
       "output": "list",
-      "text": "hexcasting.page.lists.concat"
+      "text": "hexcasting.page.lists.add"
     },
     {
       "type": "hexcasting:pattern",
@@ -65,12 +65,12 @@
     },
     {
       "type": "hexcasting:pattern",
-      "header": "hexcasting.action.hexcasting:list_size",
+      "header": "hexcasting.action.hexcasting:abs",
       "op_id": "hexcasting:abs",
-      "anchor": "hexcasting:list_size",
+      "anchor": "hexcasting:abs",
       "input": "list",
       "output": "num",
-      "text": "hexcasting.page.lists.list_size"
+      "text": "hexcasting.page.lists.abs"
     },
     {
       "type": "hexcasting:pattern",

@@ -1,29 +1,60 @@
-name: Build the Python doc-gen
+name: Build the web book
 
 on:
   push:
-    branches: [main]
+    branches: main
+  workflow_dispatch:
+    inputs:
+      release:
+        description: Release this version
+        type: boolean
+        default: false
+      publish:
+        description: Package index to publish to
+        type: choice
+        options:
+          - none
+          - PyPI
+
+env:
+  PYPI_PACKAGE: hexdoc-hexcasting
+
+permissions:
+  contents: read
 
 jobs:
-  build_docs:
-    runs-on: ubuntu-latest
+  hexdoc:
+    uses: hexdoc-dev/hexdoc/.github/workflows/hexdoc.yml@main
     permissions:
       contents: write
+      pages: read
+    secrets:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    with:
+      python-version: "3.11"
+      release: |-
+        ${{
+          github.event_name != 'push' && inputs.release
+          || github.event_name == 'push' && startsWith(github.event.head_commit.message, '[Release]')
+        }}
+
+  publish-pypi:
+    runs-on: ubuntu-latest
+    needs: hexdoc
+    if: |-
+      needs.hexdoc.outputs.release == 'true' &&
+      (github.event_name == 'push' || inputs.publish == 'PyPI')
+    environment:
+      name: pypi
+      url: https://pypi.org/p/${{ env.PYPI_PACKAGE }}
+    permissions:
+      id-token: write
     steps:
-    - uses: actions/checkout@v3
-    - name: Generate file
-      run: doc/collate_data.py Common/src/main/resources hexcasting thehexbook doc/template.html index.html.uncommitted
-    - name: Check out gh-pages
-      uses: actions/checkout@v3
-      with:
-        clean: false
-        ref: gh-pages
-    - name: Overwrite file and commmit
-      run: |
-          mv index.html.uncommitted index.html
-          git config user.name "Documentation Generation Bot"
-          git config user.email "noreply@github.com"
-          git add index.html
-          git diff-index --quiet HEAD || git commit -m "Update docs at index.html from $GITHUB_REF"
-    - name: Upload changes
-      run: git push
+      - name: Download package artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: hexdoc-build
+          path: dist
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
