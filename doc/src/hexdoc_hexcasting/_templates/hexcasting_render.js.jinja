@@ -319,18 +319,79 @@ let options = {
 };
 
 function load_render(name) {
-  if (selected == name) {
+  /*if (selected == name) {
     return;
-  }
+  }*/
 
-  selected = name;
-
-  if (name == "animated") {
+  if (name == "animated" && selected != name) {
     load_animated();
   } else {
     render_images(options[name], last_palette, name + "-settings");
   }
+
+  selected = name;
 }
+
+function checkEqual(ob1, ob2) {
+  if (ob1 == ob2) {
+    return true;
+  } else if (ob1 == null || ob2 == null) {
+    return false;
+  } else if (Object.keys(ob1).length != Object.keys(ob2).length) {
+    return false;
+  }
+
+  for (let key in ob1) {
+    if (!(key in ob2)) {
+      return false;
+    } else if (typeof ob1[key] != typeof ob2[key]) {
+      return false;
+    } else if (typeof ob1[key] == "object") {
+      if (!checkEqual(ob1[key], ob2[key])) {
+        return false;
+      }
+    } else if (ob1[key] != ob2[key]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+let autoUpdateInterval = null;
+function autoUpdateRenderer(interval) {
+  let real_interval = interval;
+  if (autoUpdateInterval != null) {
+    clearInterval(autoUpdateInterval);
+  }
+
+  if (real_interval == null) {
+    real_interval = 500;
+  } else if (real_interval <= 0) {
+    return;
+  }
+  let old_settings = null;
+  autoUpdateInterval = setInterval(() => {
+    if (selected == "animated") {
+      return;
+    }
+    let first_pattern = document.querySelector("img.spell-viz");
+    if (first_pattern == null) return;
+
+    let styles = getStyles(first_pattern);
+
+    let new_settings = options[selected](styles, last_palette);
+    if (!checkEqual(new_settings,old_settings)) {
+      console.log("update!");
+
+      old_settings = new_settings;
+
+      load_render(selected);
+    }
+
+  }, real_interval);
+}
+
+window.autoUpdateRenderer = autoUpdateRenderer;
 
 //palette values stored via css so they can be changedaround
 let palette_options = {
@@ -342,9 +403,9 @@ let palette_options = {
 
 let last_palette = "default";
 export function load_palette(name) {
-  if (last_palette == name) {
+  /*if (last_palette == name) {
     return;
-  }
+  }*/
 
   if (!palette_options[name]) {
     return;
