@@ -163,15 +163,26 @@ function load_animated() {
  * @returns {Color}
  */
 function parseColor(color) {
-  let num = Number("0x" + color.trim().substring(1,7));
+  let trimmed_color = color.trim().substring(1,7);
 
-  if (Number.isNaN(num)) {
-    throw new Error("Failed to parse color!");
+  let first = 0;
+  let second = 0;
+  let third = 0;
+
+  //color is either 12 bits (RGB) or 16 bits (RGBA)
+  if (trimmed_color.length == 3 || trimmed_color.length == 4) {
+    first = Number("0x" + trimmed_color[0]) * 16;
+    second = Number("0x" + trimmed_color[1]) * 16;
+    third = Number("0x" + trimmed_color[2]) * 16;
+  } else { //color is either 24 bits (RGB) or 32 bits (RGBA)
+    first = Number("0x" + trimmed_color.substring(0,2));
+    second = Number("0x" + trimmed_color.substring(2,4));
+    third = Number("0x" + trimmed_color.substring(4,6));
   }
 
-  let first = Math.floor(num/Math.pow(16,4));
-  let second = Math.floor((num/Math.pow(16,2))%256);
-  let third = Math.floor(num%256);
+  if (Number.isNaN(first) || Number.isNaN(second) || Number.isNaN(third)) {
+    throw new Error("Failed to parse color!");
+  }
 
   return [first, second, third, 255]
 }
@@ -332,6 +343,9 @@ function load_render(name) {
     }
   } else {
     render_images(options[name], last_palette, name + "-settings");
+
+    //update cached settings to avoid double update
+    old_settings = getSettings(name);
   }
 
   selected = name;
@@ -364,6 +378,35 @@ function checkEqual(ob1, ob2) {
 
 let autoUpdateInterval = null;
 let cachedPatternImage = null;
+
+let old_settings = null;
+
+function getSettings(render_option) {
+  if (cachedPatternImage == null) {
+    cachedPatternImage = document.querySelector("img.spell-viz");
+    if (cachedPatternImage == null) return;
+  }
+
+  let styles = getStyles(cachedPatternImage);
+
+  return options[render_option](styles, last_palette);
+}
+function updateRenders() {
+  if (selected == "animated") {
+    return;
+  }
+
+  let new_settings = getSettings(selected);
+  
+  if (!checkEqual(new_settings,old_settings)) {
+    console.log("updated pattern render from css");
+
+    old_settings = new_settings;
+
+    load_render(selected);
+  }
+}
+
 function autoUpdateRenderer(interval = 500) {
   if (autoUpdateInterval != null) {
     clearInterval(autoUpdateInterval);
@@ -373,28 +416,7 @@ function autoUpdateRenderer(interval = 500) {
     return;
   }
 
-  let old_settings = null;
-  autoUpdateInterval = setInterval(() => {
-    if (selected == "animated") {
-      return;
-    }
-    if (cachedPatternImage == null) {
-      cachedPatternImage = document.querySelector("img.spell-viz");
-      if (cachedPatternImage == null) return;
-    }
-
-    let styles = getStyles(cachedPatternImage);
-
-    let new_settings = options[selected](styles, last_palette);
-    if (!checkEqual(new_settings,old_settings)) {
-      console.log("updated pattern render from css");
-
-      old_settings = new_settings;
-
-      load_render(selected);
-    }
-
-  }, interval);
+  autoUpdateInterval = setInterval(updateRenders, interval);
 }
 
 window.autoUpdateRenderer = autoUpdateRenderer;
@@ -466,4 +488,17 @@ function setup_menus() {
   
 }
 
+function setup_update_triggers() {
+  let collapsibles = document.getElementsByClassName("details-collapsible");
+
+  for (let collapsible of collapsibles) {
+      collapsible.addEventListener("toggle", () => {
+        if (collapsible.open) {
+          updateRenders();
+        }
+      }, {once: false});
+  }
+}
+
 setup_menus();
+setup_update_triggers();
