@@ -319,12 +319,12 @@ let options = {
 };
 
 function load_render(name) {
-  /*if (selected == name) {
-    return;
-  }*/
 
-  if (name == "animated" && selected != name) {
-    load_animated();
+  if (name == "animated") {
+    if (selected != name) {
+      cachedPatternImage = null;
+      load_animated();
+    }
   } else {
     render_images(options[name], last_palette, name + "-settings");
   }
@@ -358,37 +358,38 @@ function checkEqual(ob1, ob2) {
 }
 
 let autoUpdateInterval = null;
-function autoUpdateRenderer(interval) {
-  let real_interval = interval;
+let cachedPatternImage = null;
+function autoUpdateRenderer(interval = 500) {
   if (autoUpdateInterval != null) {
     clearInterval(autoUpdateInterval);
   }
-
-  if (real_interval == null) {
-    real_interval = 500;
-  } else if (real_interval <= 0) {
+  if (interval <= 0) {
+    console.log(`Invalid interval for autoUpdateRenderer: ${interval}`);
     return;
   }
+
   let old_settings = null;
   autoUpdateInterval = setInterval(() => {
     if (selected == "animated") {
       return;
     }
-    let first_pattern = document.querySelector("img.spell-viz");
-    if (first_pattern == null) return;
+    if (cachedPatternImage == null) {
+      cachedPatternImage = document.querySelector("img.spell-viz");
+      if (cachedPatternImage == null) return;
+    }
 
-    let styles = getStyles(first_pattern);
+    let styles = getStyles(cachedPatternImage);
 
     let new_settings = options[selected](styles, last_palette);
     if (!checkEqual(new_settings,old_settings)) {
-      console.log("update!");
+      console.log("updated pattern render from css");
 
       old_settings = new_settings;
 
       load_render(selected);
     }
 
-  }, real_interval);
+  }, interval);
 }
 
 window.autoUpdateRenderer = autoUpdateRenderer;
@@ -403,9 +404,6 @@ let palette_options = {
 
 let last_palette = "default";
 export function load_palette(name) {
-  /*if (last_palette == name) {
-    return;
-  }*/
 
   if (!palette_options[name]) {
     return;
