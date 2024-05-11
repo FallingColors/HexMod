@@ -67,6 +67,11 @@ data class CastingImage private constructor(
      */
     fun withOverriddenUsedOps(count: Long) = this.copy(opsConsumed = count)
 
+    /**
+     * Returns a copy of this with escape/paren-related fields cleared.
+     */
+    fun withResetEscape() = this.copy(parenCount = 0, parenthesized = listOf(), escapeNext = false)
+
     fun serializeToNbt() = NBTBuilder {
         TAG_STACK %= stack.serializeToNBT()
 
