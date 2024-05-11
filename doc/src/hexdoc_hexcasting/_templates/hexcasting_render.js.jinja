@@ -163,7 +163,12 @@ function load_animated() {
  * @returns {Color}
  */
 function parseColor(color) {
-  let num = Number("0x" + color.trim().substring(1));
+  let num = Number("0x" + color.trim().substring(1,7));
+
+  if (Number.isNaN(num)) {
+    throw new Error("Failed to parse color!");
+  }
+
   let first = Math.floor(num/Math.pow(16,4));
   let second = Math.floor((num/Math.pow(16,2))%256);
   let third = Math.floor(num%256);
