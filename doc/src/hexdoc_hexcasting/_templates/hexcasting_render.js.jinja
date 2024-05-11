@@ -376,7 +376,6 @@ function checkEqual(ob1, ob2) {
   return true;
 }
 
-let autoUpdateInterval = null;
 let cachedPatternImage = null;
 
 let old_settings = null;
@@ -407,19 +406,6 @@ function updateRenders() {
   }
 }
 
-function autoUpdateRenderer(interval = 500) {
-  if (autoUpdateInterval != null) {
-    clearInterval(autoUpdateInterval);
-  }
-  if (interval <= 0) {
-    console.log(`Invalid interval for autoUpdateRenderer: ${interval}`);
-    return;
-  }
-
-  autoUpdateInterval = setInterval(updateRenders, interval);
-}
-
-window.autoUpdateRenderer = autoUpdateRenderer;
 
 //palette values stored via css so they can be changedaround
 let palette_options = {
