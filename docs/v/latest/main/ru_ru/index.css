@@ -439,3 +439,36 @@ img.spell-viz {
 .spell-settings-toggle {
   font-size: large;
 }
+.palettes, .pattern-settings {
+  --default: #ff6bff, #a81ee3, #6490ed, #b189c7;
+  --turbo: #3f3d9c, #4096fe, #19e3b8, #84fe50, #dfde36, #fd8c27, #d63405, #7a0402;
+  --dark2: #1b9e77, #d95f02, #7570b3, #e7298a, #66a61e, #e6ab02, #a6761d, #666666;
+  --tab10: #1f77b4, #ff7f0e, #2ca02c, #d62728, #9467bd, #8c564b, #e377c2, #7f7f7f, #bcbd22, #17becf;
+}
+.pattern-settings {
+  --line-thickness: 0.12;
+  --point-color: #ffffff;
+  --point-inner-radius: 0.04;
+  --point-outer-radius: 0.07;
+}
+@media (prefers-color-scheme: light) {
+  .pattern-settings {
+    --point-color: #000000;
+  }
+}
+.monocolor-settings {
+  --palette-offset: 0
+}
+.gradient-settings {
+  --segs-per-color: 15;
+}
+.segment-settings {
+  --triangle-inner-radius: 0.13;
+  --triangle-outer-radius: 0.2;
+  --triangle-color: #ffffff;
+}
+@media (prefers-color-scheme: light) {
+  .segment-settings {
+    --triangle-color: #000000;
+  }
+}

@@ -7,10 +7,7 @@ import { initializeElem } from "./hexcasting.js";
 // @ts-ignore
 //actual import of the renderer
 //package here: https://www.npmjs.com/package/hex_renderer_javascript
-import init_renderer, {draw_bound_pattern} from "https://cdn.jsdelivr.net/npm/hex_renderer_javascript@0.1.2/hex_renderer_javascript.js";
-//used for when type hints are needed for the functions (doesn't actually import it in runtime)
-//requires hex_renderer_javascript to be installed (npm install hex_renderer_javascript)
-//  import init_renderer, {draw_bound_pattern} from "hex_renderer_javascript";
+import init_renderer, {draw_bound_pattern} from "https://cdn.jsdelivr.net/npm/hex_renderer_javascript@0.1.4/hex_renderer_javascript.js";
 //initializes the WASM code used in the hex_renderer_javascript library
 init_renderer();
 //manually importing typedefs (used for ensuring the render options are formatted correctly)
@@ -19,36 +16,45 @@ init_renderer();
  * @typedef {import('hex_renderer_javascript').Color} Color
  * @typedef {import('hex_renderer_javascript').Intersections} Intersections
  * @typedef {import('hex_renderer_javascript').Point} Point
+ * @typedef {import('hex_renderer_javascript').Lines} Lines
  */
 //renders the patterns in a collapsible menu
 //It reads the previous data of the images/animation, uses it to draw the new one
 //and then it deletes the old
-function render_collapsible(draw_options, collapsible) {
+function render_collapsible(draw_options, collapsible, palette, class_name) {
   let patterns = Array.from(collapsible.getElementsByClassName("spell-viz"));
   for (let pat of patterns) {
-    var attr = pat.attributes;
-    var start_dir = attr["data-start"].value;
-    var pattern_str = attr["data-string"].value;
-    var width = attr["width"].value;
-    var height = attr["height"].value;
-    var per_world = "True" == attr["data-per-world"].value;
+    let img = pat;
+    if (img.tagName != "IMG") {
+      var attr = pat.attributes;
+      img = new Image();
+      img.setAttribute("data-start", attr["data-start"].value);
+      img.setAttribute("data-string", attr["data-string"].value);
+      img.setAttribute("width", attr["width"].value);
+      img.setAttribute("height", attr["height"].value);
+      img.setAttribute("data-per-world", attr["data-per-world"].value);
+      //img.setAttribute("class", "spell-viz");
+      img.innerHTML = pat.innerHTML;
+      pat.parentElement?.appendChild(img);
+      pat.remove()
+    } else {
+      URL.revokeObjectURL(img.src);
+    }
+    img.setAttribute("class", class_name + " pattern-settings spell-viz");
+    let per_world = "True" == img.attributes["data-per-world"].value;
+    let start_dir = img.attributes["data-start"].value;
+    let pattern_str = img.attributes["data-string"].value;
+    let width = img.attributes["width"].value;
+    let height = img.attributes["height"].value;
     var pattern = {
       great_spell: per_world,
       direction: start_dir,
       angle_sigs: pattern_str,
     };
-    let img_data = draw_bound_pattern(draw_options, pattern, 0.35, width, height);
-    let img = new Image();
+    let style = getStyles(img);
+    let grid_options = draw_options(style, palette);
+    let img_data = draw_bound_pattern(grid_options, pattern, 0.35, width, height);
     img.src = URL.createObjectURL(new Blob([img_data.buffer], { type: 'image/png' }))
-    img.setAttribute("data-start", start_dir);
-    img.setAttribute("data-string", pattern_str);
-    img.setAttribute("width", width);
-    img.setAttribute("height", height);
-    img.setAttribute("data-per-world", attr["data-per-world"].value);
-    img.setAttribute("class", "spell-viz");
-    img.innerHTML = pat.innerHTML;
-    pat.parentElement?.appendChild(img);
-    pat.remove()
   }
 }
 //last_load_func allows the previous event listeners to be removed
@@ -56,16 +62,16 @@ function render_collapsible(draw_options, collapsible) {
 let last_load_func = null;
 //lazily renders all of the images with the chosen render options
 //loads all of the currently open ones and then adds event listeners to open the rest when they're opened
-function render_images(draw_options) {
+function render_images(draw_options, palette, class_name) {
   let collapsibles = document.getElementsByClassName("details-collapsible");
   let load_func = (event) => {
-    render_collapsible(draw_options, event.target);
+    render_collapsible(draw_options, event.target, palette, class_name);
   }
   for (let collapsible of collapsibles) {
     // @ts-ignore
     collapsible.removeEventListener("toggle", last_load_func, {once: true});
     if (collapsible.hasAttribute("open")) {
-      render_collapsible(draw_options, collapsible);
+      render_collapsible(draw_options, collapsible, palette, class_name);
     } else {
       collapsible.addEventListener("toggle", load_func, {once: true});
     }
@@ -101,97 +107,158 @@ function load_animated() {
       if (open) {
         initializeElem(canvas);
       }
+      if (pattern.tagName == "IMG") {
+        URL.revokeObjectURL(/** @type {HTMLImageElement} */ (pattern).src);
+      }
       pattern.remove()
     }
   }
   last_load_func = load_func;
 }
-/** @type {Point} */
-const intersection_point = {
-  type: "Single",
-  marker: {
-    color: [255, 255, 255, 255],
-    radius: 0.07,
+/**
+ * 
+ * @param {string} color 
+ * @returns {Color}
+ */
+function parseColor(color) {
+  let trimmed_color = color.trim().substring(1,7);
+  let first = 0;
+  let second = 0;
+  let third = 0;
+  //color is either 12 bits (RGB) or 16 bits (RGBA)
+  if (trimmed_color.length == 3 || trimmed_color.length == 4) {
+    first = Number("0x" + trimmed_color[0]) * 16;
+    second = Number("0x" + trimmed_color[1]) * 16;
+    third = Number("0x" + trimmed_color[2]) * 16;
+  } else { //color is either 24 bits (RGB) or 32 bits (RGBA)
+    first = Number("0x" + trimmed_color.substring(0,2));
+    second = Number("0x" + trimmed_color.substring(2,4));
+    third = Number("0x" + trimmed_color.substring(4,6));
   }
-};
-/** @type {Intersections} */
-const intersections = {
-  type: "EndsAndMiddle",
-  start: {
-    type: "BorderedMatch",
-    match_radius: 0.04,
-    border: intersection_point.marker
-  },
-  middle: intersection_point,
-  end: {
-    type: "Point",
-    point: intersection_point
+  if (Number.isNaN(first) || Number.isNaN(second) || Number.isNaN(third)) {
+    throw new Error("Failed to parse color!");
   }
-};
-const line_thickness = 0.12;
-/** @type {Color[]} */
-const default_colors = [
-  [255, 107, 255, 255],
-  [168, 30, 227, 255],
-  [100, 144, 237, 255],
-  [177, 137, 199, 255],
-];
-/** @type {Point} */
-const center_dot = {
-  type: "None"
-};
-/** @type {GridOptions} */
-const monocolor = {
-  line_thickness: line_thickness,
-  center_dot: center_dot,
-  pattern_options: {
-    type: "Uniform",
-    lines: {
+  return [first, second, third, 255]
+}
+/**
+ * 
+ * @param {Element} elem
+ * @returns {CSSStyleDeclaration}
+ */
+function getStyles(elem) {
+  return window.getComputedStyle(elem);
+}
+/**
+ * 
+ * @param {CSSStyleDeclaration} style 
+ * @param {string} palette 
+ * @returns {Color[]}
+ */
+function getPalette(style, palette) {
+  return style.getPropertyValue("--" + palette)
+      .split(',')
+      .map(row => parseColor(row.trim()));
+}
+/**
+ * 
+ * @param {CSSStyleDeclaration} style
+ * @param {Lines} lines 
+ * @returns {GridOptions}
+ */
+function generateGridOptions(style, lines) {
+  /** @type {Point} */
+  let intersection_point = {
+      type: "Single",
+      marker: {
+          color: parseColor(style.getPropertyValue("--point-color")),
+          radius: Number(style.getPropertyValue("--point-outer-radius"))
+      }
+  };
+  /** @type {Intersections} */
+  let intersections = {
+      type: "EndsAndMiddle",
+      start: {
+          type: "BorderedMatch",
+          match_radius: Number(style.getPropertyValue("--point-inner-radius")),
+          border: intersection_point.marker
+      },
+      middle: intersection_point,
+      end: {
+          type: "Point",
+          point: intersection_point
+      }
+  };
+  return {
+      line_thickness: Number(style.getPropertyValue("--line-thickness")),
+      center_dot: {
+          type: "None"
+      },
+      pattern_options: {
+          type: "Uniform",
+          lines: lines,
+          intersections: intersections
+      }
+  }
+}
+/**
+ * @param {CSSStyleDeclaration} style 
+ * @param {string} palette 
+ * @returns 
+ */
+function generateMonocolor(style, palette) {
+  let palette_offset = Number(style.getPropertyValue("--palette-offset"));
+  /** @type {Lines} */
+  let lines = {
       type: "Monocolor",
-      color: default_colors[0],
+      color: getPalette(style, palette)[palette_offset],
       bent: true
-    },
-    intersections: intersections,
-  },
-};
-/** @type {GridOptions} */
-const gradient = {
-  line_thickness: line_thickness,
-  center_dot: center_dot,
-  pattern_options: {
-    type: "Uniform",
-    lines: {
-      type: "Gradient",
-      colors: default_colors,
-      bent: true,
-      segments_per_color: 15,
-    },
-    intersections: intersections,
-  },
-};
-/** @type {GridOptions} */
-const segment = {
-  line_thickness: line_thickness,
-  pattern_options: {
-    type: "Uniform",
-    intersections: intersections,
-    lines: {
+  }
+  return generateGridOptions(style, lines);
+}
+/**
+ * 
+ * @param {CSSStyleDeclaration} style 
+ * @param {string} palette 
+ * @returns 
+ */
+function generateSegment(style, palette) {
+  let triangle_inner_radius = Number(style.getPropertyValue("--triangle-inner-radius"));
+  let triangle_outer_radius = Number(style.getPropertyValue("--triangle-outer-radius"));
+  let triangle_color = parseColor(style.getPropertyValue("--triangle-color"));
+  /** @type {Lines} */
+  let lines = {
       type: "SegmentColors",
-      colors: default_colors,
+      colors: getPalette(style, palette),
       triangles: {
-        type: "BorderStartMatch",
-        match_radius: 0.13,
-        border: {
-          color: [255, 255, 255, 255],
-          radius: 0.20,
-        }
+          type: "BorderStartMatch",
+          match_radius: triangle_inner_radius,
+          border: {
+              color: triangle_color,
+              radius: triangle_outer_radius
+          }
       },
       collisions: {
-        type: "ParallelLines"
+          type: "ParallelLines"
       }
-    }
-  },
-  center_dot: center_dot,
+  }
+  return generateGridOptions(style, lines);
+}
+/**
+ * 
+ * @param {CSSStyleDeclaration} style 
+ * @param {string} palette 
+ * @returns 
+ */
+function generateGradient(style, palette) {
+  let segs_per_color = Number(style.getPropertyValue("--segs-per-color"));
+  /** @type {Lines} */
+  let lines = {
+      type: "Gradient",
+      colors: getPalette(style, palette),
+      bent: true,
+      segments_per_color: segs_per_color
+  };
+  return generateGridOptions(style, lines);
 }
 let selected = "animated";
 //this is not programmed to accept the Changing pattern option type (it will crash)
@@ -199,80 +266,82 @@ let selected = "animated";
 //and it would take more complex color palettes to work properly
 let options = {
   "animated": -1,
-  "monocolor": monocolor,
-  "gradient": gradient,
-  "segment": segment,
+  "monocolor": generateMonocolor,
+  "gradient": generateGradient,
+  "segment": generateSegment,
 };
 function load_render(name) {
-  if (selected == name) {
-    return;
+  if (name == "animated") {
+    if (selected != name) {
+      cachedPatternImage = null;
+      load_animated();
+    }
+  } else {
+    render_images(options[name], last_palette, name + "-settings");
+    //update cached settings to avoid double update
+    old_settings = getSettings(name);
   }
   selected = name;
-  if (name == "animated") {
-    load_animated();
-  } else {
-    render_images(options[name]);
+}
+function checkEqual(ob1, ob2) {
+  if (ob1 == ob2) {
+    return true;
+  } else if (ob1 == null || ob2 == null) {
+    return false;
+  } else if (Object.keys(ob1).length != Object.keys(ob2).length) {
+    return false;
+  }
+  for (let key in ob1) {
+    if (!(key in ob2)) {
+      return false;
+    } else if (typeof ob1[key] != typeof ob2[key]) {
+      return false;
+    } else if (typeof ob1[key] == "object") {
+      if (!checkEqual(ob1[key], ob2[key])) {
+        return false;
+      }
+    } else if (ob1[key] != ob2[key]) {
+      return false;
+    }
+  }
+  return true;
+}
+let cachedPatternImage = null;
+let old_settings = null;
+function getSettings(render_option) {
+  if (cachedPatternImage == null) {
+    cachedPatternImage = document.querySelector("img.spell-viz");
+    if (cachedPatternImage == null) return;
+  }
+  let styles = getStyles(cachedPatternImage);
+  return options[render_option](styles, last_palette);
+}
+function updateRenders() {
+  if (selected == "animated") {
+    return;
+  }
+  let new_settings = getSettings(selected);
+  if (!checkEqual(new_settings,old_settings)) {
+    console.log("updated pattern render from css");
+    old_settings = new_settings;
+    load_render(selected);
   }
 }
-//all palettes must be an array of colors (to switch between)
-//the monocolor option only selects the first color in the palette
-//each color is 4 values RGBA (Red, Green, Blue, Alpha (Transparency))
+//palette values stored via css so they can be changedaround
 let palette_options = {
-  default: default_colors,
-  turbo: [
-    [63, 61, 156, 255],
-    [64, 150, 254, 255],
-    [25, 227, 184, 255],
-    [132, 254, 80, 255],
-    [223, 222, 54, 255],
-    [253, 140, 39, 255],
-    [214, 52, 5, 255],
-    [122, 4, 2, 255],
-  ],
-  dark2: [
-    [27, 158, 119, 255],
-    [217, 95, 2, 255],
-    [117, 112, 179, 255],
-    [231, 41, 138, 255],
-    [102, 166, 30, 255],
-    [230, 171, 2, 255],
-    [166, 118, 29, 255],
-    [102, 102, 102, 255],
-  ],
-  tab10: [
-    [31, 119, 180, 255],
-    [255, 127, 14, 255],
-    [44, 160, 44, 255],
-    [214, 39, 40, 255],
-    [148, 103, 189, 255],
-    [140, 86, 75, 255],
-    [227, 119, 194, 255],
-    [127, 127, 127, 255],
-    [188, 189, 34, 255],
-    [23, 190, 207, 255],
-  ]
+  default: true,
+  turbo: true,
+  dark2: true,
+  tab10: true
 }
 let last_palette = "default";
 export function load_palette(name) {
-  if (last_palette == name) {
-    return;
-  }
   if (!palette_options[name]) {
     return;
   }
-  for (let key in options) {
-    if (!(options[key] instanceof Object) || !options[key].pattern_options || !options[key].pattern_options.lines) {
-      continue;
-    }
-    if (options[key].pattern_options.lines.color) {
-      options[key].pattern_options.lines.color = palette_options[name][0];
-    } else {
-      options[key].pattern_options.lines.colors = palette_options[name];
-    }
-  }
   last_palette = name;
   if (selected != "animated") {
-    render_images(options[selected]);
+    render_images(options[selected], last_palette, selected + "-settings");
   }
 }
 const render_lang = {
@@ -314,4 +383,15 @@ function setup_menus() {
     }
   }
 }
+function setup_update_triggers() {
+  let collapsibles = document.getElementsByClassName("details-collapsible");
+  for (let collapsible of collapsibles) {
+      collapsible.addEventListener("toggle", () => {
+        if (collapsible.open) {
+          updateRenders();
+        }
+      }, {once: false});
+  }
+}
 setup_menus();
+setup_update_triggers();
