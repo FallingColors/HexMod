@@ -1607,8 +1607,8 @@
 
         floor: "\"Floors\" a number, cutting off the fractional component and leaving an integer value. If passed a vector, instead floors each of its components.",
         ceil: "\"Ceilings\" a number, raising it to the next integer value if it has a fractional component. If passed a vector, instead ceils each of its components.",
-        construct_vec: "Combine three numbers at the top of the stack into a vector's X, Y, and Z components (top to bottom).",
-        deconstruct_vec: "Split a vector into its X, Y, and Z components (top to bottom).",
+        construct_vec: "Combine three numbers at the top of the stack into a vector's X, Y, and Z components (bottom to top).",
+        deconstruct_vec: "Split a vector into its X, Y, and Z components (bottom to top).",
         modulo: "Takes the modulus of two numbers. This is the amount $(italics)remaining/$ after division - for example, 5 %% 2 is 1, and 5 %% 3 is 2. When applied on vectors, performs the above operation elementwise.",
         coerce_axial: "For a vector, coerce it to its nearest axial direction, a unit vector. For a number, return the sign of the number; 1 if positive, -1 if negative. In both cases, zero is unaffected.",
         random: "Creates a random number between 0 and 1.",
