@@ -2036,7 +2036,7 @@
         "3": "Finally, if I find myself interested in the lore and stories of this world, I do not think any notes compiled while examining these interoperations should be considered as anything more than light trifles.",
 
         gravity: {
-          "1": "I have discovered actions to get and set an entity's gravity. I find them interesting, if slightly nauseating.$(br2)Interestingly, although $(l:patterns/great_spells/flight)$(action)Flight/$ is a great spell, and manipulates gravity similarly, these are not. It baffles me why... Perhaps the mod developer wanted players to have fun, for once.",
+          "1": "I have discovered actions to get and set an entity's gravity. I find them interesting, if slightly nauseating.$(br2)Interestingly, although the $(l:patterns/spells/flight)$(action)Flight/$ spells are limited in range or duration, and manipulate gravity similarly, these are not. It baffles me why... Perhaps the mod developer wanted players to have fun, for once.",
           get: "Get the main direction gravity pulls the given entity in, as a unit vector. For most entities, this will be down, <0, -1, 0>.",
           set: "Set the main direction gravity pulls the given entity in. The given vector will be coerced into the nearest axis, as per $(l:patterns/math#hexcasting:coerce_axial)$(action)Axial Purification/$. Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$.",
         },
