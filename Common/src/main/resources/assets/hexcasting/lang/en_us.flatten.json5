@@ -602,7 +602,7 @@
         },
 
         append: "Integration Distillation",
-        unappend: "Derivation Distillation",
+        unappend: "Derivation Decomposition",
         index: "Selection Distillation",
         singleton: "Single's Purification",
         empty_list: "Vacant Reflection",
