@@ -8,7 +8,7 @@
   "entityIn": {
     "type": "villager",
     "minLevel": 2,
-    "profession": "toolsmith"
+    "profession": "fletcher"
   },
   "result": {
     "name": "hexcasting:impetus/look",
