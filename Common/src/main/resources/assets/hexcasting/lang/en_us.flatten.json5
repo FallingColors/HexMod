@@ -1061,7 +1061,7 @@
       great_spells: {
         "": "Great Spells",
         desc: "The spells catalogued here are purported to be of legendary difficulty and power. \
-          They seem to have been recorded only sparsely (for good reason, the texts claim). \
+          They seem to have been recorded only $(l:items/scroll)sparsely/$ (for good reason, the texts claim). \
           It's probably just the ramblings of extinct traditionalists, though -- a pattern's a pattern.$(br2)\
           What could possibly go wrong?",
       },
