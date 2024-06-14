@@ -1,5 +1,5 @@
 modLoader = "kotlinforforge"
-loaderVersion = "[3,)"
+loaderVersion = "[4,)"
 license = "MIT"
 
 issueTrackerURL = "https://github.com/gamma-delta/HexMod/issues"
@@ -39,5 +39,12 @@ side = "BOTH"
 modId = "patchouli"
 mandatory = true
 versionRange = "[1.20.1-80,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.hexcasting]]
+modId = "caelus"
+mandatory = true
+versionRange = "[3.1.0+1.20,)"
 ordering = "NONE"
 side = "BOTH"
