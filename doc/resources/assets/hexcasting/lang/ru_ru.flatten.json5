@@ -1,0 +1,57 @@
+{
+  hexdoc: {
+    hexcasting: {
+      title: "Hex Book",
+      description: "Всё о Hex - в одном месте",
+    },
+
+    renderer: {
+      renders: "Рендеры",
+      palettes: "Palettes",
+
+      animated: "анимация",
+      monocolor: "моноцвет",
+      gradient: "градиент",
+      segment: "сегмент",
+
+      default: "по умолчанию",
+      turbo: "турбо",
+      dark2: "dark2",
+      tab10: "tab10",
+    },
+
+    pattern: {
+      show: "Нажмите, чтобы показать заклинание",
+      hide: "Нажмите, чтобы спрятать заклинание",
+
+      multiplier: "${speedScale()}x",
+      paused: "Пауза",
+
+      not_supported: "Ваш браузер не поддерживает визуализацию узоров. Код паттерна: {}",
+    },
+
+    villager_requirements: {
+      any: "Деревенский житель должен быть {level} уровня или выше",
+      professional: "Деревенский житель должен быть {level} уровня {profession} или выше",
+    },
+
+    pages: {
+      hexcasting: {
+        brainsweep: {
+          description: "Depicted in the book: A mind-flaying recipe producing the",
+          separator: "",
+        },
+      },
+    },
+  },
+
+  "block.hexcasting": {
+    slate: "Пустая Скрижаль",
+  },
+
+  "tag.item.c": {
+    brown_dye: "Коричневые красители",
+    glowstone_dusts: "Пыль СветоКамня",
+    wood_sticks: "Деревянные палочки",
+  },
+}
