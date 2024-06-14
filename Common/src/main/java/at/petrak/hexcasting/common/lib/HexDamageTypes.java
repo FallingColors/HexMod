@@ -8,5 +8,5 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexDamageTypes {
     public static final ResourceKey<DamageType> OVERCAST = ResourceKey.create(Registries.DAMAGE_TYPE, modLoc("overcast"));
-    public static final ResourceKey<DamageType> SHAME_ON_YOU = ResourceKey.create(Registries.DAMAGE_TYPE, modLoc("overcast"));
+    public static final ResourceKey<DamageType> SHAME_ON_YOU = ResourceKey.create(Registries.DAMAGE_TYPE, modLoc("shame"));
 }
