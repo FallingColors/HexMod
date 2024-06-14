@@ -191,7 +191,7 @@ export function initializeElem(canvas) {
       context.fillText(
         // these variables are filled by Jinja
         // slightly scuffed, but it works for now
-        speedScale() ? `${speedScale()}x` : "Paused",
+        speedScale() ? `${speedScale()}x` : "Пауза",
         0.2 * scale,
         canvas.height - 0.2 * scale
       );

@@ -345,14 +345,14 @@ export function load_palette(name) {
   }
 }
 const render_lang = {
-  "animated": "animated",
-  "monocolor": "monocolor",
-  "gradient": "gradient",
-  "segment": "segment",
+  "анимация": "animated",
+  "моноцвет": "monocolor",
+  "градиент": "gradient",
+  "сегмент": "segment",
 }
 const palette_lang = {
-  "default": "default",
-  "turbo": "turbo",
+  "по умолчанию": "default",
+  "турбо": "turbo",
   "dark2": "dark2",
   "tab10": "tab10",
 };

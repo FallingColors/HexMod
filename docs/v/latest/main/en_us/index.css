@@ -225,10 +225,15 @@ p {
 }
 p.fake-li {
   margin: 0;
+  --level: 1;
 }
 p.fake-li::before {
   content: "\2022";
   margin: 1ex;
+  margin-left: calc(1ex + (var(--level) - 1) * 2ex);
+}
+p.fake-li-alt::before {
+  content: "\25E6";
 }
 .linkout::before {
   content: "Link: ";
@@ -300,6 +305,11 @@ p.todo-note {
   -webkit-border-radius: 6px 0 6px 6px;
   -moz-border-radius: 6px 0 6px 6px;
   border-radius: 6px 0 6px 6px;
+}
+.external-link-icon {
+  position: relative;
+  bottom: 2px;
+  margin-left: 2px;
 }
 .nobr {
   white-space: nowrap;
