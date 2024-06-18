@@ -69,7 +69,7 @@ public class PatternIota extends Iota {
     public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
         @Nullable Component castedName = null;
         try {
-            var lookup = PatternRegistryManifest.matchPattern(this.getPattern(), world.getServer().overworld(), false);
+            var lookup = PatternRegistryManifest.matchPattern(this.getPattern(), vm.getEnv(), false);
             vm.getEnv().precheckAction(lookup);
 
             Action action;
@@ -106,7 +106,7 @@ public class PatternIota extends Iota {
                     continuation
             );
 
-            if (result.getNewImage().getOpsConsumed() > HexConfig.server().maxOpCount()) {
+            if (result.getNewImage().getOpsConsumed() > vm.getEnv().maxOpCount()) {
                 throw new MishapEvalTooMuch();
             }
 

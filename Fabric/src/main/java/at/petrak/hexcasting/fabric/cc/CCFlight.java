@@ -45,7 +45,7 @@ public class CCFlight implements Component {
             var timeLeft = tag.getInt(TAG_TIME_LEFT);
             var dim = ResourceKey.create(Registries.DIMENSION,
                 new ResourceLocation(tag.getString(TAG_DIMENSION)));
-            var origin = HexUtils.vecFromNBT(tag.getLongArray(TAG_ORIGIN));
+            var origin = HexUtils.vecFromNBT(tag.getCompound(TAG_ORIGIN));
             var radius = tag.getDouble(TAG_RADIUS);
             this.flight = new FlightAbility(timeLeft, dim, origin, radius);
         }

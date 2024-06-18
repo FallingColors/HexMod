@@ -11,6 +11,7 @@ import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.BlockTags
 import net.minecraft.world.phys.Vec3
 
@@ -40,7 +41,7 @@ object OpEdifySapling : SpellAction {
         override fun cast(env: CastingEnvironment) {
             val blockstate = env.world.getBlockState(pos)
             if (!env.canEditBlockAt(pos) ||
-                !IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, pos, blockstate, env.caster)
+                !IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, pos, blockstate, env.castingEntity as? ServerPlayer)
             )
                 return
 

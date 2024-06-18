@@ -1,5 +1,8 @@
 package at.petrak.hexcasting.common.lib;
 
+import at.petrak.hexcasting.api.HexAPI;
+import com.mojang.serialization.JsonOps;
+import net.minecraft.server.Bootstrap;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.Block;
@@ -14,6 +17,14 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.FancyTrunkPlacer;
 import java.util.OptionalInt;
 
 public class HexFeatureConfigs {
+    public static void dumpConfigs() {
+        // Used to generate the tree data json files
+        // Call this after the game is properly bootstrapped and copy the output logs to data/hexcasting/worldgen/configured_feature/${name}.json
+        // This should be done in DataGen, but I was unable to make that function. - dashkal16
+        HexAPI.LOGGER.info(TreeConfiguration.CODEC.encodeStart(JsonOps.INSTANCE, AMETHYST_EDIFIED_TREE_CONFIG));
+        HexAPI.LOGGER.info(TreeConfiguration.CODEC.encodeStart(JsonOps.INSTANCE, AVENTURINE_EDIFIED_TREE_CONFIG));
+        HexAPI.LOGGER.info(TreeConfiguration.CODEC.encodeStart(JsonOps.INSTANCE, CITRINE_EDIFIED_TREE_CONFIG));
+    }
 
     public static final TreeConfiguration AMETHYST_EDIFIED_TREE_CONFIG = akashicTree(HexBlocks.AMETHYST_EDIFIED_LEAVES, HexBlocks.EDIFIED_LOG_AMETHYST);
     public static final TreeConfiguration AVENTURINE_EDIFIED_TREE_CONFIG = akashicTree(HexBlocks.AVENTURINE_EDIFIED_LEAVES, HexBlocks.EDIFIED_LOG_AVENTURINE);

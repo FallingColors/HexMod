@@ -41,7 +41,7 @@ object OpBreakBlock : SpellAction {
                 && blockstate.getDestroySpeed(env.world, pos) >= 0f // fix being able to break bedrock &c
                 && IXplatAbstractions.INSTANCE.isCorrectTierForDrops(tier, blockstate)
             ) {
-                env.world.destroyBlock(pos, true, env.caster)
+                env.world.destroyBlock(pos, true, env.castingEntity)
             }
         }
     }

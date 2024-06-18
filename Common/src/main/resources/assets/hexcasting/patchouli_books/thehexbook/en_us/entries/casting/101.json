@@ -1,7 +1,7 @@
 {
   "name": "hexcasting.entry.101",
   "category": "hexcasting:casting",
-  "icon": "hexcasting:edified_staff",
+  "icon": "hexcasting:staff/edified",
   "advancement": "hexcasting:root",
   "priority": true,
   "pages": [

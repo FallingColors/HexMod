@@ -27,7 +27,10 @@ On Fabric, it requires:
 
 ## The Branches
 
-We are currently developing Hexcasting v1.x for 1.19.2, on the `main` branch.
+We are currently developing Hexcasting v0.11.x for 1.20.1, on the `main` branch.
+
+The 0.10.x versions, for 1.19, are in long-term support. We probably won't be adding any new features, but we will try
+to fix bugs. Those are on the `1.19` branch.
 
 The 0.9.x versions, for 1.18.2, are in long-term support. We probably won't be adding any new features, but we will try
 to fix bugs. Those are on the `1.18` branch.

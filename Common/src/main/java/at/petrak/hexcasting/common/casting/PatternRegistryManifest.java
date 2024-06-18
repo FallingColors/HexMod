@@ -4,6 +4,8 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
+import at.petrak.hexcasting.api.casting.math.HexAngle;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.utils.HexUtils;
@@ -15,12 +17,13 @@ import net.minecraft.server.level.ServerLevel;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 // Now an internal-only class used to do final processing on the registered stuff
 public class PatternRegistryManifest {
-    private static final ConcurrentMap<String, ResourceKey<ActionRegistryEntry>> NORMAL_ACTION_LOOKUP =
+    private static final ConcurrentMap<List<HexAngle>, ResourceKey<ActionRegistryEntry>> NORMAL_ACTION_LOOKUP =
         new ConcurrentHashMap<>();
 
     /**
@@ -41,8 +44,14 @@ public class PatternRegistryManifest {
         var registry = IXplatAbstractions.INSTANCE.getActionRegistry();
         for (var key : registry.registryKeySet()) {
             var entry = registry.get(key);
+            if (entry == null)
+                continue;
+
             if (!HexUtils.isOfTag(registry, key, HexTags.Actions.PER_WORLD_PATTERN)) {
-                NORMAL_ACTION_LOOKUP.put(entry.prototype().anglesSignature(), key);
+                var old = NORMAL_ACTION_LOOKUP.put(entry.prototype().getAngles(), key);
+                if (old != null) {
+                    HexAPI.LOGGER.warn("Inserted %s which has same signature as %s, overriding it.".formatted(key, old));
+                }
             } else {
                 perWorldActionCount++;
             }
@@ -59,11 +68,13 @@ public class PatternRegistryManifest {
      * Try to match this pattern to a special handler. If one is found, return both the handler and its key.
      */
     @Nullable
-    public static Pair<SpecialHandler, ResourceKey<SpecialHandler.Factory<?>>> matchPatternToSpecialHandler(HexPattern pat) {
+    public static Pair<SpecialHandler, ResourceKey<SpecialHandler.Factory<?>>> matchPatternToSpecialHandler(HexPattern pat, CastingEnvironment environment) {
         var registry = IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry();
         for (var key : registry.registryKeySet()) {
             var factory = registry.get(key);
-            var handler = factory.tryMatch(pat);
+            if (factory == null)
+                continue;
+            var handler = factory.tryMatch(pat,environment);
             if (handler != null) {
                 return Pair.of(handler, key);
             }
@@ -79,19 +90,19 @@ public class PatternRegistryManifest {
      *                                      order
      *                                      for a per-world pattern.
      */
-    public static PatternShapeMatch matchPattern(HexPattern pat, ServerLevel overworld,
+    public static PatternShapeMatch matchPattern(HexPattern pat, CastingEnvironment environment,
         boolean checkForAlternateStrokeOrders) {
         // I am PURPOSELY checking normal actions before special handlers
         // This way we don't get a repeat of the phial number literal incident
-        var sig = pat.anglesSignature();
+        var sig = pat.getAngles();
         if (NORMAL_ACTION_LOOKUP.containsKey(sig)) {
             var key = NORMAL_ACTION_LOOKUP.get(sig);
             return new PatternShapeMatch.Normal(key);
         }
 
         // Look it up in the world?
-        var perWorldPatterns = ScrungledPatternsSave.open(overworld);
-        var entry = perWorldPatterns.lookup(sig);
+        var perWorldPatterns = ScrungledPatternsSave.open(environment.getWorld().getServer().overworld());
+        var entry = perWorldPatterns.lookup(pat.anglesSignature());
         if (entry != null) {
             return new PatternShapeMatch.PerWorld(entry.key(), true);
         }
@@ -100,7 +111,7 @@ public class PatternRegistryManifest {
             throw new NotImplementedException("checking for alternate stroke orders is NYI sorry");
         }
 
-        var shMatch = matchPatternToSpecialHandler(pat);
+        var shMatch = matchPatternToSpecialHandler(pat, environment);
         if (shMatch != null) {
             return new PatternShapeMatch.Special(shMatch.getSecond(), shMatch.getFirst());
         }

@@ -73,7 +73,8 @@ data class FrameForEach(
         return CastResult(
             ListIota(code),
             newCont,
-            newImage.copy(stack = tStack),
+            // reset escapes so they don't carry over to other iterations or out of thoth
+            newImage.withResetEscape().copy(stack = tStack),
             listOf(),
             ResolvedPatternType.EVALUATED,
             HexEvalSounds.THOTH,

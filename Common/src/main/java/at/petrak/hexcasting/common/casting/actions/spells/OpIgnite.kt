@@ -11,6 +11,7 @@ import at.petrak.hexcasting.ktxt.UseOnContext
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -43,7 +44,7 @@ object OpIgnite : SpellAction {
         }
 
         fun tryToClick(ctx: CastingEnvironment, pos: BlockPos, item: Item): Boolean {
-            return IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(item), ctx.caster) &&
+            return IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(item), ctx.castingEntity as? ServerPlayer) &&
                 item.useOn(
                     UseOnContext(
                         ctx.world,

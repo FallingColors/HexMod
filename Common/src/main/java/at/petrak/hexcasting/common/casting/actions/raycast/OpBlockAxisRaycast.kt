@@ -8,10 +8,12 @@ import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.misc.MediaConstants
+import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 object OpBlockAxisRaycast : ConstMediaAction {
     override val argc = 2
     override val mediaCost: Long = MediaConstants.DUST_UNIT / 100
@@ -27,7 +29,7 @@ object OpBlockAxisRaycast : ConstMediaAction {
                 Action.raycastEnd(origin, look),
                 ClipContext.Block.COLLIDER,
                 ClipContext.Fluid.NONE,
-                env.caster
+                env.castingEntity
             )
         )
 

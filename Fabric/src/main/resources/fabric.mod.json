@@ -60,7 +60,8 @@
     "patchouli": ">=1.20.1-80"
   },
   "suggests": {
-    "pehkui": "3.7.6"
+    "pehkui": ">=3.7.6",
+    "modmenu": ">=7.0.1"
   },
   "custom": {
     "cardinal-components": [

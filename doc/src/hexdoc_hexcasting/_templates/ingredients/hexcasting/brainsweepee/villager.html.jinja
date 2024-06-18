@@ -1,0 +1,26 @@
+{% import "macros/textures.html.jinja" as texture_macros with context -%}
+
+{{ texture_macros.render_texture(
+  name=brainsweepee.level_name~" "~brainsweepee.profession_name,
+  texture=brainsweepee.texture,
+  class_names=["flay-recipe-entity"],
+) }}
+
+<div class="flay-recipe-villager-details">
+  <img
+    class="flay-recipe-villager-detail-icon"
+    alt="{{ _('effect.minecraft.hero_of_the_village') }}"
+    src="{{ 'minecraft:textures/mob_effect/hero_of_the_village.png'|hexdoc_texture }}"
+    style="width: 16px; height:16px"
+  >
+  {% if brainsweepee.profession|string != "minecraft:none" %}
+    {{ _("hexdoc.villager_requirements.professional").format(
+      level=brainsweepee.level_name,
+      profession=brainsweepee.profession_name,
+    ) }}
+  {% else %}
+    {{ _("hexdoc.villager_requirements.any").format(
+      level=brainsweepee.level_name,
+    ) }}
+  {% endif %}
+</div>

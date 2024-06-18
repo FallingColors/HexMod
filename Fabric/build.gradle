@@ -81,7 +81,7 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
     compileOnly project(":Common")
 
-    modImplementation "${modID}:paucal-fabric-$minecraftVersion:$paucalVersion"
+    modImplementation "at.petra-k.paucal:paucal-fabric-$minecraftVersion:$paucalVersion"
     modImplementation "vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FABRIC-SNAPSHOT"
 
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:$cardinalComponentsVersion"
