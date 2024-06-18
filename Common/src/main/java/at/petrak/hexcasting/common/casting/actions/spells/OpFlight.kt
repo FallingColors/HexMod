@@ -35,11 +35,20 @@ class OpFlight(val type: Type) : SpellAction {
         val theArg = args.getPositiveDouble(1, argc)
         env.assertEntityInRange(target)
 
-        val cost = when (this.type) {
+        /*val cost = when (this.type) {
             Type.LimitRange -> theArg * MediaConstants.DUST_UNIT
             // A second of flight should cost 1 shard
             Type.LimitTime -> theArg * MediaConstants.SHARD_UNIT
-        }.roundToLong()
+        }.roundToLong()*/
+        val cost = if(target.abilities.mayfly){
+            0L
+        } else {
+            when (this.type) {
+                Type.LimitRange -> theArg * MediaConstants.DUST_UNIT
+                // A second of flight should cost 1 shard
+                Type.LimitTime -> theArg * MediaConstants.SHARD_UNIT
+            }.roundToLong()
+        }
 
         // Convert to ticks
         return SpellAction.Result(
