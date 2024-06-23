@@ -34,13 +34,9 @@ class OpFlight(val type: Type) : SpellAction {
         val target = args.getPlayer(0, argc)
         val theArg = args.getPositiveDouble(1, argc)
         env.assertEntityInRange(target)
-
-        /*val cost = when (this.type) {
-            Type.LimitRange -> theArg * MediaConstants.DUST_UNIT
-            // A second of flight should cost 1 shard
-            Type.LimitTime -> theArg * MediaConstants.SHARD_UNIT
-        }.roundToLong()*/
+        
         val cost = if (target.abilities.mayfly) {
+            //zero in order to not just waste media if you can already fly (see https://github.com/FallingColors/HexMod/pull/687 for some discussion)
             0L
         } else {
             when (this.type) {
