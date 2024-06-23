@@ -40,7 +40,7 @@ class OpFlight(val type: Type) : SpellAction {
             // A second of flight should cost 1 shard
             Type.LimitTime -> theArg * MediaConstants.SHARD_UNIT
         }.roundToLong()*/
-        val cost = if(target.abilities.mayfly){
+        val cost = if (target.abilities.mayfly) {
             0L
         } else {
             when (this.type) {
