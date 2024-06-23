@@ -15,7 +15,7 @@ plugins {
     // This needs to be in the root
     // https://github.com/FabricMC/fabric-loom/issues/612#issuecomment-1198444120
     // Also it looks like property lookups don't work this early
-    id 'fabric-loom' version '1.0-SNAPSHOT' apply false
+    id 'fabric-loom' version '1.6-SNAPSHOT' apply false
 
     id("at.petra-k.PKPlugin") version "0.1.0-pre-87"
     id("at.petra-k.PKSubprojPlugin") version "0.1.0-pre-87" apply false
