@@ -8,7 +8,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.0.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
@@ -143,10 +143,6 @@ minecraft {
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             property 'hexcasting.xplat_datagen', 'true'
             
-            // disable the System.exit(0) at the end of the ForgeGradle datagen so Gradle stops thinking it failed
-            // see: https://github.com/MinecraftForge/ForgeGradle/pull/686
-            forceExit false
-            
             mods {
                 create(modID) {
                     source sourceSets.main
@@ -164,7 +160,6 @@ minecraft {
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             property 'hexcasting.forge_datagen', 'true'
-            forceExit false
             mods {
                 create(modID) {
                     source sourceSets.main
@@ -182,34 +177,11 @@ mixin {
     config "hexcasting_forge.mixins.json"
 }
 
-// https://discord.com/channels/313125603924639766/733055378371117127/980968358658838540
-// > It wint generate a refmap if there are jo changes source files
-// > Since the last build
-// > Gradle task execution avoidance breaks it that way
-// > At one point i got it to work reliably bu forcing some specific task to always run i just don't remember the syntax and which task it was
-// > It might have been compileJava
-//task invalidateJavaForRefmap {
-//    doFirst {
-//        compileJava {
-//            if (!didWork) {
-//                outputs.upToDateWhen { false }
-//            }
-//        }
-//        compileKotlin {
-//            if (!didWork) {
-//                outputs.upToDateWhen { false }
-//            }
-//        }
-//    }
-//}
-
 compileJava {
     source(project(":Common").sourceSets.main.allSource)
-//    shouldRunAfter(invalidateJavaForRefmap)
 }
 compileKotlin {
     source(project(":Common").sourceSets.main.kotlin)
-//    shouldRunAfter(invalidateJavaForRefmap)
 }
 compileTestKotlin {
     source(project(":Common").sourceSets.main.kotlin)
@@ -219,10 +191,6 @@ sourceSets {
     main.resources.srcDirs += ['src/generated/resources', '../Common/src/generated/resources']
     main.kotlin.srcDirs += 'src/main/java'
     test.kotlin.srcDirs += 'src/main/java'
-}
-
-jar {
-//    dependsOn(invalidateJavaForRefmap)
 }
 
 processResources {
