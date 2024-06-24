@@ -59,6 +59,8 @@ repositories {
         url = 'https://thedarkcolour.github.io/KotlinForForge/'
         content { includeGroup "thedarkcolour" }
     }
+
+    maven { url "https://maven.shedaniel.me/" }
 }
 
 dependencies {
@@ -79,6 +81,8 @@ dependencies {
     testCompileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FORGE-SNAPSHOT")
 
     implementation fg.deobf("top.theillusivec4.caelus:caelus-forge:$caelusVersion")
+
+    implementation fg.deobf("com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion")
 
     // Optional interop
 
