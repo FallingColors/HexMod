@@ -39,7 +39,7 @@ dependencies {
     compileOnly "at.petra-k.paucal:paucal-common-$minecraftVersion:$paucalVersion"
     compileOnly "vazkii.patchouli:Patchouli-xplat:$minecraftVersion-$patchouliVersion-SNAPSHOT"
 
-    compileOnly "com.samsthenerd.inline:inline-common:$minecraftVersion-$inlineVersion"
+    compileOnly "com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion"
 
     compileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
     testCompileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
