@@ -2,6 +2,7 @@ package at.petrak.hexcasting.client.render.be;
 
 import at.petrak.hexcasting.client.render.PatternTextureManager;
 import at.petrak.hexcasting.client.render.RenderLib;
+import at.petrak.hexcasting.client.render.WorldlyPatternRenderHelpers;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -31,7 +32,7 @@ public class BlockEntitySlateRenderer implements BlockEntityRenderer<BlockEntity
         var bs = tile.getBlockState();
 
         if(PatternTextureManager.useTextures && !bs.getValue(BlockSlate.ENERGIZED)) {
-            PatternTextureManager.renderPatternForSlate(tile, tile.pattern, ps, buffer, light, bs);
+            WorldlyPatternRenderHelpers.renderPatternForSlate(tile, tile.pattern, ps, buffer, light, bs);
             return;
         }
 

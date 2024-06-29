@@ -3,6 +3,7 @@ package at.petrak.hexcasting.client.render.be;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.client.render.PatternTextureManager;
 import at.petrak.hexcasting.client.render.RenderLib;
+import at.petrak.hexcasting.client.render.WorldlyPatternRenderHelpers;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -14,8 +15,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec2;
-import org.joml.AxisAngle4f;
-import org.joml.Quaternionf;
 
 public class BlockEntityAkashicBookshelfRenderer implements BlockEntityRenderer<BlockEntityAkashicBookshelf> {
     public BlockEntityAkashicBookshelfRenderer(BlockEntityRendererProvider.Context ctx) {
@@ -33,7 +32,7 @@ public class BlockEntityAkashicBookshelfRenderer implements BlockEntityRenderer<
         var bs = tile.getBlockState();
 
         if(PatternTextureManager.useTextures) {
-            PatternTextureManager.renderPatternForAkashicBookshelf(tile, pattern, ps, buffer, light, bs);
+            WorldlyPatternRenderHelpers.renderPatternForAkashicBookshelf(tile, pattern, ps, buffer, light, bs);
             return;
         }
 
