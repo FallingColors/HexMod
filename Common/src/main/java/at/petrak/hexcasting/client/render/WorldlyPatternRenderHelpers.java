@@ -18,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
@@ -64,6 +65,8 @@ public class WorldlyPatternRenderHelpers {
         RenderSystem.setShader(() -> oldShader);
     }
 
+    // TODO: clean up the args of this method, maybe make the whole PSTransformer thing less gross, move it to be just code in the methods or something maybe.
+
     /**
      * Renders a pattern in world space based on the given transform requirements
      */
@@ -78,78 +81,36 @@ public class WorldlyPatternRenderHelpers {
         float x = blockSize, y = blockSize, z = (-1f / 16f) - 0.01f;
         float nx = 0, ny = 0, nz = 0;
 
-        //TODO: refactor this mess of a method
+        PSTransformer transformer;
 
         if(isOnWall)
         {
             if(isScroll)
             {
-                ps.translate(-blockSize / 2f, -blockSize / 2f, 1f / 32f);
-                nz = -1;
+                transformer = wallScrollTransformer;
             }
             else
             {
-                ps.mulPose(Axis.ZP.rotationDegrees(180));
-
                 if(isSlate)
                 {
-                    if(facing == 0)
-                        ps.translate(0,-1,0);
-                    if(facing == 1)
-                        ps.translate(-1,-1,0);
-                    if(facing == 2)
-                        ps.translate(-1,-1,1);
-                    if(facing == 3)
-                        ps.translate(0,-1,1);
+                    transformer = wallSlateTransformer;
                 }
                 else
                 {
+                    transformer = wallBlockTransformer;
                     z = -0.01f;
-                    if(facing == 0)
-                        ps.translate(0,-1,1);
-                    if(facing == 1)
-                        ps.translate(0,-1,0);
-                    if(facing == 2)
-                        ps.translate(-1,-1,0);
-                    if(facing == 3)
-                        ps.translate(-1,-1,1);
                 }
-
-                if(facing == 0)
-                    ps.mulPose(Axis.YP.rotationDegrees(180));
-                if(facing == 1)
-                    ps.mulPose(Axis.YP.rotationDegrees(270));
-                if(facing == 3)
-                    ps.mulPose(Axis.YP.rotationDegrees(90));
-
-                if(facing == 0 || facing == 2)
-                    nz = -1;
-                if(facing == 1 || facing == 3)
-                    nx = -1;
-                ps.translate(0,0,0);
             }
         }
         else //slates on the floor or ceiling
         {
-            if(facing == 0)
-                ps.translate(0,0,0);
-            if(facing == 1)
-                ps.translate(1,0,0);
-            if(facing == 2)
-                ps.translate(1,0,1);
-            if(facing == 3)
-                ps.translate(0,0,1);
-            ps.mulPose(Axis.YP.rotationDegrees(facing*-90));
-
-            if(isOnCeiling)
-            {
-                ps.mulPose(Axis.XP.rotationDegrees(-90));
-                ps.translate(0,-1,1);
-            }
-            else
-                ps.mulPose(Axis.XP.rotationDegrees(90));
-            nz = -1;
+            transformer = isOnCeiling ? ceilSlateTransformer : floorSlateTransformer;
         }
+
+        Vec3 nVec = transformer.transform(ps, facing, blockSize);
+        nx = (float)nVec.x();
+        ny = (float)nVec.y();
+        nz = (float)nVec.z();
 
         int lineWidth = PatternTextureManager.otherLineWidth;
         int outerColor = 0xff_d2c8c8;
@@ -187,4 +148,98 @@ public class WorldlyPatternRenderHelpers {
                 .normal(normal, nx, ny, nz)
                 .endVertex();
     }
+
+
+    @FunctionalInterface
+    public interface PSTransformer{
+        Vec3 transform(PoseStack ps, int facing, int blocksize);
+    }
+
+    public static final PSTransformer wallScrollTransformer = (ps, facing, blockSize) -> {
+        ps.translate(-blockSize / 2f, -blockSize / 2f, 1f / 32f);
+        return new Vec3(0, 0, -1);
+    };
+
+    public static final PSTransformer floorSlateTransformer = (ps, facing, blockSize) -> {
+        if(facing == 0)
+            ps.translate(0,0,0);
+        if(facing == 1)
+            ps.translate(1,0,0);
+        if(facing == 2)
+            ps.translate(1,0,1);
+        if(facing == 3)
+            ps.translate(0,0,1);
+
+        ps.mulPose(Axis.YP.rotationDegrees(facing*-90));
+        ps.mulPose(Axis.XP.rotationDegrees(90));
+
+        return new Vec3(0, 0, -1);
+    };
+
+    public static final PSTransformer ceilSlateTransformer = (ps, facing, blockSize) -> {
+        if(facing == 0)
+            ps.translate(0,0,0);
+        if(facing == 1)
+            ps.translate(1,0,0);
+        if(facing == 2)
+            ps.translate(1,0,1);
+        if(facing == 3)
+            ps.translate(0,0,1);
+
+        ps.mulPose(Axis.YP.rotationDegrees(facing*-90));
+        ps.mulPose(Axis.XP.rotationDegrees(-90));
+        ps.translate(0,-1,1);
+
+        return new Vec3(0, 0, -1);
+    };
+
+    public static final PSTransformer wallSlateTransformer = (ps, facing, blocksize) -> {
+        ps.mulPose(Axis.ZP.rotationDegrees(180));
+
+        if(facing == 0){
+            ps.translate(0,-1,0);
+            ps.mulPose(Axis.YP.rotationDegrees(180));
+            return new Vec3(0, 0, -1);
+        }
+        if(facing == 1){
+            ps.translate(-1,-1,0);
+            ps.mulPose(Axis.YP.rotationDegrees(270));
+            return new Vec3(-1, 0, 0);
+        }
+        if(facing == 2){
+            ps.translate(-1,-1,1);
+            return new Vec3(0, 0, -1);
+        }
+        if(facing == 3){
+            ps.translate(0,-1,1);
+            ps.mulPose(Axis.YP.rotationDegrees(90));
+            return new Vec3(-1, 0, 0);
+        }
+        return new Vec3(0,0,0);
+    };
+
+    public static final PSTransformer wallBlockTransformer = (ps, facing, blocksize) -> {
+        ps.mulPose(Axis.ZP.rotationDegrees(180));
+
+        if(facing == 0){
+            ps.translate(0,-1,1);
+            ps.mulPose(Axis.YP.rotationDegrees(180));
+            return new Vec3(0, 0, -1);
+        }
+        if(facing == 1){
+            ps.translate(0,-1,0);
+            ps.mulPose(Axis.YP.rotationDegrees(270));
+            return new Vec3(-1, 0, 0);
+        }
+        if(facing == 2){
+            ps.translate(-1,-1,0);
+            return new Vec3(0, 0, -1);
+        }
+        if(facing == 3){
+            ps.translate(-1,-1,1);
+            ps.mulPose(Axis.YP.rotationDegrees(90));
+            return new Vec3(-1, 0, 0);
+        }
+        return new Vec3(0,0,0);
+    };
 }
