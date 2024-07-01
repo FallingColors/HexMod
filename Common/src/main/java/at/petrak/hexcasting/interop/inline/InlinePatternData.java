@@ -1,13 +1,20 @@
 package at.petrak.hexcasting.interop.inline;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.common.lib.HexItems;
 import com.mojang.serialization.Codec;
 import com.samsthenerd.inline.api.InlineData;
+import net.minecraft.network.chat.HoverEvent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class InlinePatternData implements InlineData<InlinePatternData>{
+
+    public static final ResourceLocation rendererId = HexAPI.modLoc("pattern");
 
     @NotNull
     public final HexPattern pattern;
@@ -23,7 +30,15 @@ public class InlinePatternData implements InlineData<InlinePatternData>{
 
     @Override
     public ResourceLocation getRendererId(){
-        return new ResourceLocation(HexAPI.MOD_ID, "pattern");
+        return rendererId;
+    }
+
+    public Style getExtraStyle() {
+        ItemStack scrollStack = new ItemStack(HexItems.SCROLL_MEDIUM);
+        HexItems.SCROLL_MEDIUM.writeDatum(scrollStack, new PatternIota(pattern));
+        HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new HoverEvent.ItemStackInfo(scrollStack));
+        // TODO: add copy click event
+        return Style.EMPTY.withHoverEvent(he);
     }
 
     public static class InlinePatternDataType implements InlineDataType<InlinePatternData> {
