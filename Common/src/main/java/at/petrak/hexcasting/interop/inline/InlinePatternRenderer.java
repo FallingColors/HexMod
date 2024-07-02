@@ -1,14 +1,11 @@
 package at.petrak.hexcasting.interop.inline;
 
-import at.petrak.hexcasting.api.casting.iota.PatternIota;
-import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.client.render.PatternRenderSettings;
+import at.petrak.hexcasting.client.render.PatternRenderer;
 import com.samsthenerd.inline.api.client.InlineRenderer;
-import com.samsthenerd.inline.api.client.renderers.InlineItemRenderer;
-import com.samsthenerd.inline.api.data.ItemInlineData;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 
 public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> {
 
@@ -18,17 +15,17 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
         return InlinePatternData.rendererId;
     }
 
+    public static final PatternRenderSettings INLINE_RENDER_SETTINGS = new PatternRenderSettings()
+            .withSizings(PatternRenderSettings.FitAxis.VERT, 8.0, 8.0, 0.0, 0.0, 4.0, null, null)
+            .withColors(0xFF_FFFFFF, 0xFF_FFFFFF, null, null);
+
     public int render(InlinePatternData data, GuiGraphics drawContext, int index, Style style, int codepoint, TextRenderingContext trContext){
-        ItemStack scrollStack = new ItemStack(HexItems.SCROLL_MEDIUM);
-        HexItems.SCROLL_MEDIUM.writeDatum(scrollStack, new PatternIota(data.pattern));
-        // placeholder to test that matcher works
-        return InlineItemRenderer.INSTANCE.render(new ItemInlineData(scrollStack), drawContext, index, style, codepoint, trContext);
+        PatternRenderer.renderPattern(data.pattern, drawContext.pose(), INLINE_RENDER_SETTINGS, 0);
+
+        return (int)(8 * PatternRenderer.getPatternWHRatio(data.pattern, INLINE_RENDER_SETTINGS, 0));
     }
 
     public int charWidth(InlinePatternData data, Style style, int codepoint){
-        ItemStack scrollStack = new ItemStack(HexItems.SCROLL_MEDIUM);
-        HexItems.SCROLL_MEDIUM.writeDatum(scrollStack, new PatternIota(data.pattern));
-        // placeholder to test that matcher works
-        return InlineItemRenderer.INSTANCE.charWidth(new ItemInlineData(scrollStack), style, codepoint);
+        return (int)(8 * PatternRenderer.getPatternWHRatio(data.pattern, INLINE_RENDER_SETTINGS, 0));
     }
 }

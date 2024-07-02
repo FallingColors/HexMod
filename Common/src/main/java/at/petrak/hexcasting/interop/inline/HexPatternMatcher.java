@@ -23,7 +23,7 @@ public class HexPatternMatcher implements RegexMatcher {
     private static final MatcherInfo patternMatcherInfo = MatcherInfo.fromId(patternMatcherID);
 
     // thx kyra <3
-    private static final Pattern PATTERN_PATTERN_REGEX = Pattern.compile("\\A(?<escaped>\\\\?)(?:HexPattern)?[<(\\[{]\\s*(?<direction>[a-z_-]+)(?:\\s*[, ]\\s*(?<pattern>[aqweds]+))?\\s*[>)\\]}]", Pattern.CASE_INSENSITIVE);
+    private static final Pattern PATTERN_PATTERN_REGEX = Pattern.compile("(?<escaped>\\\\?)(?:HexPattern)?[<(\\[{]\\s*(?<direction>[a-z_-]+)(?:\\s*[, ]\\s*(?<pattern>[aqweds]+))?\\s*[>)\\]}]", Pattern.CASE_INSENSITIVE);
 
     public static HexPatternMatcher INSTANCE = new HexPatternMatcher();
 
