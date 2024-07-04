@@ -6,61 +6,72 @@ import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
+import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
-import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
-
-import java.awt.*;
-import java.util.List;
 
 /**
  * Helper methods for rendering patterns in the world.
  */
 public class WorldlyPatternRenderHelpers {
-    public static void renderPatternForScroll(String pointsKey, PoseStack ps, MultiBufferSource bufSource, int light, List<Vec2> zappyPoints, int blockSize, boolean showStrokeOrder)
+
+    public static final PatternRenderSettings WORLDLY_RENDER_SETTINGS = new PatternRenderSettings()
+            .withSizings(PatternRenderSettings.FitAxis.BOTH, 1.0, 1.0, 1.0/16, 1.0/16, 0.25, null, null,
+                    (scale) -> 0.4f/16, (scale) -> 0.8f/16)
+            .named("worldly");
+
+    public static final PatternRenderSettings SCROLL_RENDER_SETTINGS = WORLDLY_RENDER_SETTINGS.withSizings(null, null, null,
+            2.0/16, 2.0/16, null, null, null, null, null)
+            .named("wallscroll");
+
+    public static final PatternRenderSettings READABLE_SCROLL_RENDER_SETTINGS = SCROLL_RENDER_SETTINGS.withZappySettings(
+            null, null, null, null, RenderLib.DEFAULT_READABILITY_OFFSET, RenderLib.DEFAULT_LAST_SEGMENT_LEN_PROP
+            )
+            .named("wallscroll_readable");
+
+    public static final PatternColors DEFAULT_PATTERN_COLOR = new PatternColors(0xc8_322b33, 0xff_d2c8c8);
+
+    public static void renderPatternForScroll(HexPattern pattern, EntityWallScroll scroll, PoseStack ps, MultiBufferSource bufSource, int light, int blockSize, boolean showStrokeOrder)
     {
-        renderPattern(pointsKey, ps, bufSource, light, zappyPoints, blockSize, showStrokeOrder, false, true, false,false, true,-1);
+        ps.pushPose();
+        renderPattern(pattern, showStrokeOrder ? READABLE_SCROLL_RENDER_SETTINGS : SCROLL_RENDER_SETTINGS, DEFAULT_PATTERN_COLOR, scroll.getPos().hashCode(), ps, bufSource, light, blockSize, true, false,false, true,-1);
+        ps.popPose();
     }
 
     public static void renderPatternForSlate(BlockEntitySlate tile, HexPattern pattern, PoseStack ps, MultiBufferSource buffer, int light, BlockState bs)
     {
-        if(tile.points == null)
-            tile.points = generateHexPatternPoints(tile, pattern, 0.2f);
 
         boolean isOnWall = bs.getValue(BlockSlate.ATTACH_FACE) == AttachFace.WALL;
         boolean isOnCeiling = bs.getValue(BlockSlate.ATTACH_FACE) == AttachFace.CEILING;
         int facing = bs.getValue(BlockSlate.FACING).get2DDataValue();
 
-        renderPatternForBlockEntity(tile.points, ps, buffer, light, isOnWall, isOnCeiling, true, facing);
+        renderPatternForBlockEntity(pattern, tile, ps, buffer, light, isOnWall, isOnCeiling, true, facing);
     }
 
     public static void renderPatternForAkashicBookshelf(BlockEntityAkashicBookshelf tile, HexPattern pattern, PoseStack ps, MultiBufferSource buffer, int light, BlockState bs)
     {
-        if(tile.points == null)
-            tile.points = generateHexPatternPoints(tile, pattern, 0f);
-
         int facing = bs.getValue(BlockAkashicBookshelf.FACING).get2DDataValue();
-        renderPatternForBlockEntity(tile.points, ps, buffer, light, true, false, false, facing);
+        renderPatternForBlockEntity(pattern, tile, ps, buffer, LightTexture.FULL_BRIGHT, true, false, false, facing);
     }
 
-    public static void renderPatternForBlockEntity(HexPatternPoints points, PoseStack ps, MultiBufferSource buffer, int light, boolean isOnWall, boolean isOnCeiling, boolean isSlate, int facing)
+    public static void renderPatternForBlockEntity(HexPattern pattern, HexBlockEntity tile, PoseStack ps, MultiBufferSource buffer, int light, boolean isOnWall, boolean isOnCeiling, boolean isSlate, int facing)
     {
         var oldShader = RenderSystem.getShader();
         ps.pushPose();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        renderPattern(points.pointsKey, ps, buffer, light, points.zappyPoints, 1, false, true, isOnWall, isOnCeiling, isSlate, false, facing);
+        renderPattern(pattern, WORLDLY_RENDER_SETTINGS, DEFAULT_PATTERN_COLOR, tile.getBlockPos().hashCode(), ps, buffer, light, 1, isOnWall, isOnCeiling, isSlate, false, facing);
         ps.popPose();
         RenderSystem.setShader(() -> oldShader);
     }
@@ -70,7 +81,7 @@ public class WorldlyPatternRenderHelpers {
     /**
      * Renders a pattern in world space based on the given transform requirements
      */
-    public static void renderPattern(String pointsKey, PoseStack ps, MultiBufferSource bufSource, int light, List<Vec2> zappyPoints, int blockSize, boolean showStrokeOrder, boolean useFullSize, boolean isOnWall, boolean isOnCeiling, boolean isSlate, boolean isScroll, int facing)
+    public static void renderPattern(HexPattern pattern, PatternRenderSettings patSets, PatternColors patColors, double seed, PoseStack ps, MultiBufferSource bufSource, int light, int blockSize, boolean isOnWall, boolean isOnCeiling, boolean isSlate, boolean isScroll, int facing)
     {
         ps.pushPose();
 
@@ -98,7 +109,7 @@ public class WorldlyPatternRenderHelpers {
                 else
                 {
                     transformer = wallBlockTransformer;
-                    z = -0.01f;
+                    z = -0.02f;
                 }
             }
         }
@@ -112,33 +123,40 @@ public class WorldlyPatternRenderHelpers {
         ny = (float)nVec.y();
         nz = (float)nVec.z();
 
+        ps.scale(blockSize, blockSize, 1);
+
         int lineWidth = PatternTextureManager.otherLineWidth;
         int outerColor = 0xff_d2c8c8;
         int innerColor = 0xc8_322b33;
         if(isScroll)
             lineWidth = PatternTextureManager.scrollLineWidth;
 
-        ResourceLocation texture = PatternTextureManager.getTexture(zappyPoints, pointsKey, blockSize, showStrokeOrder, lineWidth, useFullSize, new Color(innerColor), new Color(outerColor));
-        VertexConsumer verts = bufSource.getBuffer(RenderType.entityCutout(texture));
+//        ps.scale(x, y, z);
+        ps.translate(0,0, z);
+        VertexConsumer verts = bufSource.getBuffer(RenderType.entityCutout(TheCoolerRenderLib.WHITE));
+        PatternRenderer.renderPattern(pattern, ps, verts, patSets, patColors, seed, light);
 
-        vertex(mat, normal, light, verts, 0, 0, z, 0, 0, nx, ny, nz);
-        vertex(mat, normal, light, verts, 0, y, z, 0, 1, nx, ny, nz);
-        vertex(mat, normal, light, verts, x, y, z, 1, 1, nx, ny, nz);
-        vertex(mat, normal, light, verts, x, 0, z, 1, 0, nx, ny, nz);
+//        ResourceLocation texture = PatternTextureManager.getTexture(zappyPoints, pointsKey, blockSize, showStrokeOrder, lineWidth, useFullSize, new Color(innerColor), new Color(outerColor));
+//        VertexConsumer verts = bufSource.getBuffer(RenderType.entityCutout(texture));
+//
+//        vertex(mat, normal, light, verts, 0, 0, z, 0, 0, nx, ny, nz);
+//        vertex(mat, normal, light, verts, 0, y, z, 0, 1, nx, ny, nz);
+//        vertex(mat, normal, light, verts, x, y, z, 1, 1, nx, ny, nz);
+//        vertex(mat, normal, light, verts, x, 0, z, 1, 0, nx, ny, nz);
 
         ps.popPose();
     }
 
 
 
-    public static HexPatternPoints generateHexPatternPoints(HexBlockEntity tile, HexPattern pattern, float flowIrregular)
-    {
-        var stupidHash = tile.getBlockPos().hashCode();
-        var lines1 = pattern.toLines(1, Vec2.ZERO);
-        var zappyPoints = RenderLib.makeZappy(lines1, RenderLib.findDupIndices(pattern.positions()),
-                10, 0.5f, 0f, flowIrregular, 0f, 1f, stupidHash);
-        return new HexPatternPoints(zappyPoints);
-    }
+//    public static HexPatternPoints generateHexPatternPoints(HexBlockEntity tile, HexPattern pattern, float flowIrregular)
+//    {
+//        var stupidHash = tile.getBlockPos().hashCode();
+//        var lines1 = pattern.toLines(1, Vec2.ZERO);
+//        var zappyPoints = RenderLib.makeZappy(lines1, RenderLib.findDupIndices(pattern.positions()),
+//                10, 0.5f, 0f, flowIrregular, 0f, 1f, stupidHash);
+//        return new HexPatternPoints(zappyPoints);
+//    }
 
     private static void vertex(Matrix4f mat, Matrix3f normal, int light, VertexConsumer verts, float x, float y, float z,
                                  float u, float v, float nx, float ny, float nz) {

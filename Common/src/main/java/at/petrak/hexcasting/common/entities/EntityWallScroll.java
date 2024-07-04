@@ -3,8 +3,6 @@ package at.petrak.hexcasting.common.entities;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
-import at.petrak.hexcasting.client.render.HexPatternPoints;
-import at.petrak.hexcasting.client.render.RenderLib;
 import at.petrak.hexcasting.common.items.storage.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
@@ -32,11 +30,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class EntityWallScroll extends HangingEntity {
     private static final EntityDataAccessor<Boolean> SHOWS_STROKE_ORDER = SynchedEntityData.defineId(
@@ -48,9 +43,6 @@ public class EntityWallScroll extends HangingEntity {
     public HexPattern pattern;
     public boolean isAncient;
     public int blockSize;
-    // Client-side only!
-    @Nullable
-    public HexPatternPoints points;
 
     public EntityWallScroll(EntityType<? extends EntityWallScroll> type, Level world) {
         super(type, world);
@@ -72,21 +64,21 @@ public class EntityWallScroll extends HangingEntity {
         CompoundTag patternTag = NBTHelper.getCompound(scroll, ItemScroll.TAG_PATTERN);
         if (patternTag != null) {
             this.pattern = HexPattern.fromNBT(patternTag);
-            if (this.level().isClientSide) {
-                var pair = RenderLib.getCenteredPattern(pattern, 128f / 3 * blockSize, 128f / 3 * blockSize,
-                    16f / 3 * blockSize);
-                var dots = pair.getSecond();
-                var readOffset = this.getShowsStrokeOrder() ? RenderLib.DEFAULT_READABILITY_OFFSET : 0f;
-                var lastProp = this.getShowsStrokeOrder() ? RenderLib.DEFAULT_LAST_SEGMENT_LEN_PROP : 1f;
-                var zappyPoints = RenderLib.makeZappy(dots, RenderLib.findDupIndices(pattern.positions()), 10, 0.4f,
-                    0f, 0f, readOffset, lastProp, this.getId());
-                this.points = new HexPatternPoints(zappyPoints);
-            }
+//            if (this.level().isClientSide) {
+//                var pair = RenderLib.getCenteredPattern(pattern, 128f / 3 * blockSize, 128f / 3 * blockSize,
+//                    16f / 3 * blockSize);
+//                var dots = pair.getSecond();
+//                var readOffset = this.getShowsStrokeOrder() ? RenderLib.DEFAULT_READABILITY_OFFSET : 0f;
+//                var lastProp = this.getShowsStrokeOrder() ? RenderLib.DEFAULT_LAST_SEGMENT_LEN_PROP : 1f;
+//                var zappyPoints = RenderLib.makeZappy(dots, RenderLib.findDupIndices(pattern.positions()), 10, 0.4f,
+//                    0f, 0f, readOffset, lastProp, this.getId());
+//                this.points = new HexPatternPoints(zappyPoints);
+//            }
 
             this.isAncient = NBTHelper.hasString(scroll, ItemScroll.TAG_OP_ID);
         } else {
             this.pattern = null;
-            this.points = null;
+//            this.points = null;
             this.isAncient = false;
         }
     }

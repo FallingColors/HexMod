@@ -1,6 +1,8 @@
 package at.petrak.hexcasting.client.render;
 
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
@@ -9,8 +11,8 @@ import net.minecraft.world.phys.Vec2;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
@@ -53,82 +55,104 @@ public class PatternTextureManager {
                 .collect(Collectors.joining(";"));
     }
 
-    public static ResourceLocation getTexture(List<Vec2> points, String pointsKey, int blockSize, boolean showsStrokeOrder, float lineWidth, boolean useFullSize, Color innerColor, Color outerColor) {
-        if (patternTexturesToAdd.containsKey(pointsKey)) {
-            var patternTexture = patternTexturesToAdd.remove(pointsKey);
-            var oldPatternTexture = patternTextures.put(pointsKey, patternTexture);
+    public static Optional<ResourceLocation> getTexture(HexPattern pattern, PoseStack ps, PatternRenderSettings patSets, PatternColors patColors, double seed, boolean innerOrOuter) {
+//    public static ResourceLocation getTexture(List<Vec2> points, String pointsKey, int blockSize, boolean showsStrokeOrder, float lineWidth, boolean useFullSize, Color innerColor, Color outerColor) {
+        String patCacheKey = patSets.getCacheKey(pattern, seed) + (innerOrOuter ? "_inner" : "_outer");
+
+        // move textures from concurrent map to normal hashmap as needed
+        if (patternTexturesToAdd.containsKey(patCacheKey)) {
+            var patternTexture = patternTexturesToAdd.remove(patCacheKey);
+            var oldPatternTexture = patternTextures.put(patCacheKey, patternTexture);
             if (oldPatternTexture != null)
                 Minecraft.getInstance().getTextureManager().getTexture(oldPatternTexture).close();
 
-            return patternTexture;
+            return Optional.of(patternTexture);
         }
-        if (patternTextures.containsKey(pointsKey))
-            return patternTextures.get(pointsKey);
+        if (patternTextures.containsKey(patCacheKey))
+            return Optional.of(patternTextures.get(patCacheKey));
 
         // render a higher-resolution texture in a background thread so it eventually becomes all nice nice and pretty
         executor.submit(() -> {
-            var slowTexture = createTexture(points, blockSize, showsStrokeOrder, lineWidth, useFullSize, innerColor, outerColor, false);
+            var slowTextures = createTextures(pattern, patSets, seed, false);
 
             // TextureManager#register doesn't look very thread-safe, so move back to the main thread after the slow part is done
-            Minecraft.getInstance().execute(() -> registerTexture(points, pointsKey, slowTexture, true));
+            Minecraft.getInstance().execute(() -> {
+                for(Map.Entry<String, DynamicTexture> textureEntry : slowTextures.entrySet()){
+                    registerTexture(patCacheKey + "_" + textureEntry.getKey(), textureEntry.getValue(), true);
+                }
+            });
         });
-
-        // quickly create and cache a low-resolution texture so the client has something to look at
-        var fastTexture = createTexture(points, blockSize, showsStrokeOrder, lineWidth, useFullSize, innerColor, outerColor, true);
-        return registerTexture(points, pointsKey, fastTexture, false);
+        return Optional.empty();
     }
 
-    private static DynamicTexture createTexture(List<Vec2> points, int blockSize, boolean showsStrokeOrder, float lineWidth, boolean useFullSize, Color innerColor, Color outerColor, boolean fastRender)
+    private static Map<String, DynamicTexture> createTextures(HexPattern pattern, PatternRenderSettings patSets, double seed, boolean fastRender)
+//    private static DynamicTexture createTexture(List<Vec2> points, int blockSize, boolean showsStrokeOrder, float lineWidth, boolean useFullSize, Color innerColor, Color outerColor, boolean fastRender)
     {
-        int resolution = resolutionByBlockSize * blockSize;
-        int padding = paddingByBlockSize * blockSize;
+//        int resolution = resolutionByBlockSize * blockSize;
+//        int padding = paddingByBlockSize * blockSize;
+
+        int resolution = resolutionByBlockSize;
+        int padding = paddingByBlockSize;
 
         if (fastRender) {
             resolution /= fastRenderScaleFactor;
             padding /= fastRenderScaleFactor;
-            lineWidth /= (float)fastRenderScaleFactor;
+//            lineWidth /= (float)fastRenderScaleFactor;
         }
 
-        double minX = Double.MAX_VALUE, maxX = Double.MIN_VALUE, minY = Double.MAX_VALUE, maxY = Double.MIN_VALUE;
-        for (Vec2 point : points)
-        {
-            minX = Math.min(minX, point.x);
-            maxX = Math.max(maxX, point.x);
-            minY = Math.min(minY, point.y);
-            maxY = Math.max(maxY, point.y);
+        HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(pattern, patSets, seed);
+
+        double baseScale = patSets.baseScale / 1.5;
+
+        // size of the pattern in pose space with no other adjustments
+        double baseWidth = staticPoints.rangeX * baseScale;
+        double baseHeight = staticPoints.rangeY * baseScale;
+
+        // make sure that the scale fits within our min sizes
+        double scale = Math.max(1.0, Math.max(patSets.minWidth / baseWidth, patSets.minHeight / baseHeight));
+
+        // scale down if needed to fit in vertical space
+        if(patSets.fitAxis.vertFit){
+            scale = Math.min(scale, (patSets.spaceHeight - 2 * patSets.vPadding)/(baseHeight));
         }
 
-        double rangeX = maxX - minX;
-        double rangeY = maxY - minY;
+        // scale down if needed to fit in horizontal space
+        if(patSets.fitAxis.horFit){
+            scale = Math.min(scale, (patSets.spaceWidth - 2 * patSets.hPadding)/(baseWidth));
+        }
 
-        double scale = Math.min((resolution - 2 * padding) / rangeX, (resolution - 2 * padding) / rangeY);
+        List<Vec2> zappyRenderSpace = new ArrayList<>();
 
-        double limit = blockSize * scaleLimit;
-        if (!useFullSize && scale > limit)
-            scale = limit;
+        for (Vec2 point : staticPoints.zappyPoints) {
+            zappyRenderSpace.add(new Vec2(
+                    (float) (((point.x - staticPoints.minX) * baseScale * scale) + patSets.hPadding),
+                    (float) (((point.y - staticPoints.minY) * baseScale * scale) + patSets.vPadding)
+            ));
+        }
 
-        double offsetX = ((resolution - 2 * padding) - rangeX * scale) / 2;
-        double offsetY = ((resolution - 2 * padding) - rangeY * scale) / 2;
+//
+//        double offsetX = ((resolution - 2 * padding) - rangeX * scale) / 2;
+//        double offsetY = ((resolution - 2 * padding) - rangeY * scale) / 2;
 
         BufferedImage img = new BufferedImage(resolution, resolution, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = img.createGraphics();
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g2d.setColor(outerColor);
-        g2d.setStroke(new BasicStroke((blockSize * 5f / 3f) * lineWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-        drawLines(g2d, points, minX, minY, scale, offsetX, offsetY, padding);
-
-        g2d.setColor(innerColor);
-        g2d.setStroke(new BasicStroke((blockSize * 2f / 3f) * lineWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-        drawLines(g2d, points, minX, minY, scale, offsetX, offsetY, padding);
-
-
-        if (showsStrokeOrder) {
-            g2d.setColor(new Color(0xff_d77b5b));
-            Tuple<Integer, Integer> point = getTextureCoordinates(points.get(0), minX, minY, scale, offsetX, offsetY, padding);
-            int spotRadius = circleRadiusByBlockSize * blockSize;
-            drawHexagon(g2d, point.getA(), point.getB(), spotRadius);
-        }
+//        g2d.setColor(outerColor);
+//        g2d.setStroke(new BasicStroke((blockSize * 5f / 3f) * lineWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+//        drawLines(g2d, points, minX, minY, scale, offsetX, offsetY, padding);
+//
+//        g2d.setColor(innerColor);
+//        g2d.setStroke(new BasicStroke((blockSize * 2f / 3f) * lineWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+//        drawLines(g2d, points, minX, minY, scale, offsetX, offsetY, padding);
+//
+//
+//        if (showsStrokeOrder) {
+//            g2d.setColor(new Color(0xff_d77b5b));
+//            Tuple<Integer, Integer> point = getTextureCoordinates(points.get(0), minX, minY, scale, offsetX, offsetY, padding);
+//            int spotRadius = circleRadiusByBlockSize * blockSize;
+//            drawHexagon(g2d, point.getA(), point.getB(), spotRadius);
+//        }
 
         g2d.dispose();
 
@@ -137,16 +161,16 @@ public class PatternTextureManager {
             for (int x = 0; x < img.getWidth(); x++)
                 nativeImage.setPixelRGBA(x, y, img.getRGB(x, y));
 
-        return new DynamicTexture(nativeImage);
+        return new HashMap<>(); // temporary
     }
 
-    private static ResourceLocation registerTexture(List<Vec2> points, String pointsKey, DynamicTexture dynamicTexture, boolean isSlow) {
+    private static ResourceLocation registerTexture(String patTextureKey, DynamicTexture dynamicTexture, boolean isSlow) {
         // isSlow used to register different textures for the low-resolution, fastly rendered version of each texture
         // and the high-resolution, slowly rendered version (this means the slow doesn't replace the fast in the texture manager,
         // which causes occasional visual stuttering for a frame).
-        String name = "hex_pattern_texture_" + points.hashCode() + "_" + repaintIndex + "_" + (isSlow ? "slow" : "fast") + ".png";
+        String name = "hex_pattern_texture_" + patTextureKey + "_" + repaintIndex + "_" + (isSlow ? "slow" : "fast") + ".png";
         ResourceLocation resourceLocation = Minecraft.getInstance().getTextureManager().register(name, dynamicTexture);
-        patternTexturesToAdd.put(pointsKey, resourceLocation);
+        patternTexturesToAdd.put(patTextureKey, resourceLocation);
         return resourceLocation;
     }
 

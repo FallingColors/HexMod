@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.interop.inline;
 
+import at.petrak.hexcasting.client.render.HexPatternPoints;
+import at.petrak.hexcasting.client.render.PatternColors;
 import at.petrak.hexcasting.client.render.PatternRenderSettings;
 import at.petrak.hexcasting.client.render.PatternRenderer;
 import com.samsthenerd.inline.api.client.InlineRenderer;
@@ -16,16 +18,22 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
     }
 
     public static final PatternRenderSettings INLINE_RENDER_SETTINGS = new PatternRenderSettings()
-            .withSizings(PatternRenderSettings.FitAxis.VERT, 8.0, 8.0, 0.0, 0.0, 4.0, null, null)
-            .withColors(0xFF_FFFFFF, 0xFF_FFFFFF, null, null);
+            .withSizings(PatternRenderSettings.FitAxis.VERT, 8.0, 8.0, 0.0, 0.0, 4.0, null, null,
+                    (scale) -> 0.5f, (scale) -> 1f)
+            .named("inline");
+
+    public static final PatternColors FLAT_WHITE_PATTERN_COLOR = new PatternColors(0xFF_FFFFFF);
 
     public int render(InlinePatternData data, GuiGraphics drawContext, int index, Style style, int codepoint, TextRenderingContext trContext){
-        PatternRenderer.renderPattern(data.pattern, drawContext.pose(), INLINE_RENDER_SETTINGS, 0);
+        PatternRenderer.renderPattern(data.pattern, drawContext.pose(), INLINE_RENDER_SETTINGS, FLAT_WHITE_PATTERN_COLOR, 0);
 
-        return (int)(8 * PatternRenderer.getPatternWHRatio(data.pattern, INLINE_RENDER_SETTINGS, 0));
+        HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(data.pattern, INLINE_RENDER_SETTINGS, 0);
+        return (int)Math.ceil(8.0 * staticPoints.rangeX / staticPoints.rangeY);
     }
 
     public int charWidth(InlinePatternData data, Style style, int codepoint){
-        return (int)(8 * PatternRenderer.getPatternWHRatio(data.pattern, INLINE_RENDER_SETTINGS, 0));
+
+        HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(data.pattern, INLINE_RENDER_SETTINGS, 0);
+        return (int)Math.ceil(8.0 * staticPoints.rangeX / staticPoints.rangeY);
     }
 }
