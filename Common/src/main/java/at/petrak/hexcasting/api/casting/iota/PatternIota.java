@@ -14,12 +14,12 @@ import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapEvalTooMuch;
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidPattern;
 import at.petrak.hexcasting.api.casting.mishaps.MishapUnenlightened;
-import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import at.petrak.hexcasting.interop.inline.InlinePatternData;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -162,6 +162,11 @@ public class PatternIota extends Iota {
     }
 
     public static Component display(HexPattern pat) {
+        return (new InlinePatternData(pat)).asText(true);
+    }
+
+    // keep around just in case it's needed.
+    public static Component displayNonInline(HexPattern pat){
         var bob = new StringBuilder();
         bob.append(pat.getStartDir());
 
@@ -171,7 +176,7 @@ public class PatternIota extends Iota {
             bob.append(sig);
         }
         return Component.translatable("hexcasting.tooltip.pattern_iota",
-                Component.literal(bob.toString()).withStyle(ChatFormatting.WHITE))
-            .withStyle(ChatFormatting.GOLD);
+                        Component.literal(bob.toString()).withStyle(ChatFormatting.WHITE))
+                .withStyle(ChatFormatting.GOLD);
     }
 }

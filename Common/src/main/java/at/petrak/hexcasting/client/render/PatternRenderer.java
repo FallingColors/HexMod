@@ -116,6 +116,7 @@ public class PatternRenderer {
 
         RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.outerWidthProvider.apply((float)(scale * baseScale)), 0.005f, patColors.outerEndColor, patColors.outerStartColor);
         RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.innerWidthProvider.apply((float)(scale * baseScale)), 0f, patColors.innerEndColor, patColors.innerStartColor);
+        // TODO: probably want to have option to render little dots and stuff.
         // 2D -- supports gradient stroke (goes through tessellator)
 //        if(vc == null){
 //        } else { // 3D -- goes through vc, supports lighting -- kinda

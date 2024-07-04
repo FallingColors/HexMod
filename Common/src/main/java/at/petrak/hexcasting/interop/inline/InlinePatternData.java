@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.lib.HexItems;
 import com.mojang.serialization.Codec;
 import com.samsthenerd.inline.api.InlineData;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
@@ -33,12 +34,18 @@ public class InlinePatternData implements InlineData<InlinePatternData>{
         return rendererId;
     }
 
+    @Override
     public Style getExtraStyle() {
         ItemStack scrollStack = new ItemStack(HexItems.SCROLL_MEDIUM);
         HexItems.SCROLL_MEDIUM.writeDatum(scrollStack, new PatternIota(pattern));
         HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new HoverEvent.ItemStackInfo(scrollStack));
         // TODO: add copy click event
         return Style.EMPTY.withHoverEvent(he);
+    }
+
+    @Override
+    public Component asText(boolean withExtra) {
+        return Component.literal(pattern.toString()).withStyle(asStyle(withExtra));
     }
 
     public static class InlinePatternDataType implements InlineDataType<InlinePatternData> {
