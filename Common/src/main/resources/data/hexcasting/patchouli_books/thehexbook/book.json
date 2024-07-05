@@ -4,7 +4,7 @@
   "version": 1,
   "show_progress": false,
   "nameplate_color": "00072b",
-  "creative_tab": "hexcasting",
+  "creative_tab": "hexcasting:hexcasting",
   "model": "hexcasting:patchouli_book",
   "book_texture": "hexcasting:textures/gui/patchi_book.png",
   "filler_texture": "hexcasting:textures/gui/patchi_filler.png",
