@@ -4,29 +4,30 @@ package at.petrak.hexcasting.client.render;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.mixin.accessor.client.AccessorLightTexturePixels;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class PatternRenderer {
 
     public static void renderPattern(HexPattern pattern, PoseStack ps, PatternRenderSettings patSets, PatternColors patColors, double seed) {
-        renderPattern(pattern, ps, null, patSets, patColors, seed, null);
+        renderPattern(pattern, ps, null, patSets, patColors, seed, null, new Vec3(0,0,1));
     }
 
-    public static void renderPattern(HexPattern pattern, PoseStack ps, @Nullable VertexConsumer vc, PatternRenderSettings patSets, PatternColors patColors, double seed, Integer light){
-        if(patSets.speed == 0){
+    public static void renderPattern(HexPattern pattern, PoseStack ps, @Nullable MultiBufferSource provider, PatternRenderSettings patSets, PatternColors patColors, double seed, Integer light, Vec3 normalVec){
+        if(patSets.speed == 0 && PatternTextureManager.useTextures){
             // try doing texture rendering
+            boolean didRender = renderPatternTexture(pattern, ps, provider, patSets, patColors, seed, (light != null) ? light : LightTexture.FULL_BRIGHT, normalVec);
+            if(didRender) return;
         }
 
         var oldShader = RenderSystem.getShader();
@@ -50,47 +51,12 @@ public class PatternRenderer {
                 patSets.hops, patSets.variance, patSets.speed, patSets.flowIrregular, patSets.readabilityOffset, patSets.lastSegmentLenProportion, seed);
         }
 
-        int patStepsX = (int)Math.round(staticPoints.rangeX / 1.5);
-        int patStepsY = (int)Math.round(staticPoints.rangeY / 1.7);
-
-        // scales the patterns so that each point is patSets.baseScale units apart
-        double baseScale = patSets.baseScale / 1.5;
-
-        // size of the pattern in pose space with no other adjustments
-        double baseWidth = staticPoints.rangeX * baseScale;
-        double baseHeight = staticPoints.rangeY * baseScale;
-
-        // make sure that the scale fits within our min sizes
-        double scale = Math.max(1.0, Math.max(patSets.minWidth / baseWidth, patSets.minHeight / baseHeight));
-
-
-        // scale down if needed to fit in vertical space
-        if(patSets.fitAxis.vertFit){
-            scale = Math.min(scale, (patSets.spaceHeight - 2 * patSets.vPadding)/(baseHeight));
-        }
-
-        // scale down if needed to fit in horizontal space
-        if(patSets.fitAxis.horFit){
-            scale = Math.min(scale, (patSets.spaceWidth - 2 * patSets.hPadding)/(baseWidth));
-        }
-
-
-        // either the space given or however long it goes if it's not fitted.
-        double fullWidth = (baseWidth * scale) + 2 * patSets.hPadding;
-        double fullHeight = (baseHeight * scale) + 2 * patSets.vPadding;
-
-        if(patSets.fitAxis.horFit) fullWidth = Math.max(patSets.spaceWidth, fullWidth);
-        if(patSets.fitAxis.vertFit) fullHeight = Math.max(patSets.spaceHeight, fullHeight);
-
-        double offsetX = (fullWidth - baseWidth * scale) / 2;
-        double offsetY = (fullHeight - baseHeight * scale) / 2;
-
         List<Vec2> zappyRenderSpace = new ArrayList<>();
 
         for (Vec2 point : zappyPattern) {
             zappyRenderSpace.add(new Vec2(
-                    (float) (((point.x - staticPoints.minX) * baseScale * scale) + offsetX),
-                    (float) (((point.y - staticPoints.minY) * baseScale * scale) + offsetY)
+                (float) (((point.x - staticPoints.minX) * staticPoints.finalScale) + staticPoints.offsetX),
+                (float) (((point.y - staticPoints.minY) * staticPoints.finalScale) + staticPoints.offsetY)
             ));
         }
 
@@ -114,8 +80,8 @@ public class PatternRenderer {
         }
 
 
-        RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.outerWidthProvider.apply((float)(scale * baseScale)), 0.005f, patColors.outerEndColor, patColors.outerStartColor);
-        RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.innerWidthProvider.apply((float)(scale * baseScale)), 0f, patColors.innerEndColor, patColors.innerStartColor);
+        RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.outerWidthProvider.apply((float)(staticPoints.finalScale)), 0.005f, patColors.outerEndColor, patColors.outerStartColor);
+        RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.innerWidthProvider.apply((float)(staticPoints.finalScale)), 0f, patColors.innerEndColor, patColors.innerStartColor);
         // TODO: probably want to have option to render little dots and stuff.
         // 2D -- supports gradient stroke (goes through tessellator)
 //        if(vc == null){
@@ -132,5 +98,65 @@ public class PatternRenderer {
 //        RenderSystem.enableCull();
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         RenderSystem.setShader(() -> oldShader);
+    }
+
+    private static boolean renderPatternTexture(HexPattern pattern, PoseStack ps, @Nullable MultiBufferSource provider, PatternRenderSettings patSets, PatternColors patColors, double seed, int light, Vec3 normalVec){
+        Optional<Map<String, ResourceLocation>> maybeTextures = PatternTextureManager.getTextures(pattern, patSets, seed);
+        if(maybeTextures.isEmpty()){
+            return false;
+        }
+        ShaderInstance oldShader = RenderSystem.getShader();
+
+        Map<String, ResourceLocation> textures = maybeTextures.get();
+
+
+        HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(pattern, patSets, seed);
+
+        RenderSystem.enableDepthTest();
+
+        VertexConsumer vc = setupVC(provider, textures.get("outer"));
+
+        textureVertex(vc, ps, 0, 0, 0, 0, 0, normalVec, light, patColors.outerStartColor);
+        textureVertex(vc, ps, 0, (float)staticPoints.fullHeight, 0, 0, 1, normalVec, light, patColors.outerStartColor);
+        textureVertex(vc, ps, (float)staticPoints.fullWidth, (float)staticPoints.fullHeight, 0, 1, 1, normalVec, light, patColors.outerStartColor);
+        textureVertex(vc, ps, (float)staticPoints.fullWidth, 0, 0, 1, 0, normalVec, light, patColors.outerStartColor);
+
+        if(provider == null) Tesselator.getInstance().end();
+        vc = setupVC(provider, textures.get("inner"));
+
+        textureVertex(vc, ps, 0, 0, 0.001f, 0, 0, normalVec, light, patColors.innerStartColor);
+        textureVertex(vc, ps, 0, (float)staticPoints.fullHeight, 0.001f, 0, 1, normalVec, light, patColors.innerStartColor);
+        textureVertex(vc, ps, (float)staticPoints.fullWidth, (float)staticPoints.fullHeight, 0.001f, 1, 1, normalVec, light, patColors.innerStartColor);
+        textureVertex(vc, ps, (float)staticPoints.fullWidth, 0, 0.001f, 1, 0, normalVec, light, patColors.innerStartColor);
+
+
+        if(provider == null) Tesselator.getInstance().end();
+
+        RenderSystem.setShader(() -> oldShader);
+
+        return true;
+    }
+
+    private static VertexConsumer setupVC(@Nullable MultiBufferSource provider, ResourceLocation texture){
+        VertexConsumer vc;
+
+        if(provider == null){
+            Tesselator.getInstance().getBuilder().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.NEW_ENTITY);
+            vc = Tesselator.getInstance().getBuilder();
+            RenderSystem.setShaderTexture(0, texture);
+            RenderSystem.setShader(GameRenderer::getRendertypeEntityTranslucentShader);
+        } else {
+            vc = provider.getBuffer(RenderType.entityTranslucentCull(texture));
+        }
+
+        return vc;
+    }
+
+    private static void textureVertex(VertexConsumer vc, PoseStack ps, float x, float y, float z, float u, float v, Vec3 normals, int light, int color){
+        vc.vertex(ps.last().pose(), x, y, 0)
+            .color(color)
+            .uv(u, v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light)
+            .normal(ps.last().normal(), (float)normals.x, (float)normals.y, (float)normals.z)
+            .endVertex();
     }
 }

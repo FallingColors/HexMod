@@ -51,7 +51,6 @@ public class PatternRenderSettings {
     protected float readabilityOffset;
     protected float lastSegmentLenProportion = 1f;
 
-
     public PatternRenderSettings(){}
 
     private PatternRenderSettings(
@@ -67,7 +66,7 @@ public class PatternRenderSettings {
     }
 
     public String getCacheKey(HexPattern pattern, double seed){
-        return pattern.toString() + ";" + id + ";" + seed;
+        return (pattern.getStartDir().toString() + "-" + pattern.anglesSignature() + "-" + id + "-" + seed).toLowerCase();
     }
 
     private PatternRenderSettings copy(){

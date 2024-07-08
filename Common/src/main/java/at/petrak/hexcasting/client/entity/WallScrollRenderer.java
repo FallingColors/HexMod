@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.client.entity;
 
-import at.petrak.hexcasting.client.render.PatternTextureManager;
 import at.petrak.hexcasting.client.render.WorldlyPatternRenderHelpers;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -94,8 +93,7 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
 
             ps.popPose();
 
-            if (PatternTextureManager.useTextures) //&& wallScroll.points != null)
-                WorldlyPatternRenderHelpers.renderPatternForScroll(wallScroll.pattern, wallScroll, ps, bufSource, light, wallScroll.blockSize, wallScroll.getShowsStrokeOrder());
+            WorldlyPatternRenderHelpers.renderPatternForScroll(wallScroll.pattern, wallScroll, ps, bufSource, light, wallScroll.blockSize, wallScroll.getShowsStrokeOrder());
         }
 
         //TODO: remove old rendering if not needed anymore for comparison

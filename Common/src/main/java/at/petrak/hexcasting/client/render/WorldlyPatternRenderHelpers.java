@@ -14,7 +14,6 @@ import com.mojang.math.Axis;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
@@ -133,8 +132,9 @@ public class WorldlyPatternRenderHelpers {
 
 //        ps.scale(x, y, z);
         ps.translate(0,0, z);
-        VertexConsumer verts = bufSource.getBuffer(RenderType.entityCutout(TheCoolerRenderLib.WHITE));
-        PatternRenderer.renderPattern(pattern, ps, verts, patSets, patColors, seed, light);
+//        VertexConsumer verts = bufSource.getBuffer(RenderType.entityCutout(TheCoolerRenderLib.WHITE));
+//        PatternRenderer.renderPattern(pattern, ps, bufSource, patSets, patColors, seed, light, nVec);
+        PatternRenderer.renderPattern(pattern, ps, null, patSets, patColors, seed, light, nVec);
 
 //        ResourceLocation texture = PatternTextureManager.getTexture(zappyPoints, pointsKey, blockSize, showStrokeOrder, lineWidth, useFullSize, new Color(innerColor), new Color(outerColor));
 //        VertexConsumer verts = bufSource.getBuffer(RenderType.entityCutout(texture));
