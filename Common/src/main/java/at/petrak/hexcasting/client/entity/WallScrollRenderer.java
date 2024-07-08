@@ -58,7 +58,9 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
             var mat = last.pose();
             var norm = last.normal();
 
-            var verts = bufSource.getBuffer(RenderType.entityCutout(this.getTextureLocation(wallScroll)));
+            RenderType layer = RenderType.entityCutout(this.getTextureLocation(wallScroll));
+
+            var verts = bufSource.getBuffer(layer);
             // Remember: CCW
             // Front face
             vertex(mat, norm, light, verts, 0, 0, dz, 0, 0, 0, 0, -1);

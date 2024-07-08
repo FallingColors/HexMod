@@ -116,12 +116,12 @@ public class PatternRenderer {
 
         VertexConsumer vc = setupVC(provider, textures.get("outer"));
 
-        textureVertex(vc, ps, 0, 0, 0, 0, 0, normalVec, light, patColors.outerStartColor);
-        textureVertex(vc, ps, 0, (float)staticPoints.fullHeight, 0, 0, 1, normalVec, light, patColors.outerStartColor);
+        textureVertex(vc, ps, 0, 0, 0.0005f, 0, 0, normalVec, light, patColors.outerStartColor);
+        textureVertex(vc, ps, 0, (float)staticPoints.fullHeight, 0.0005f, 0, 1, normalVec, light, patColors.outerStartColor);
         textureVertex(vc, ps, (float)staticPoints.fullWidth, (float)staticPoints.fullHeight, 0, 1, 1, normalVec, light, patColors.outerStartColor);
-        textureVertex(vc, ps, (float)staticPoints.fullWidth, 0, 0, 1, 0, normalVec, light, patColors.outerStartColor);
+        textureVertex(vc, ps, (float)staticPoints.fullWidth, 0, 0.0005f, 1, 0, normalVec, light, patColors.outerStartColor);
 
-        if(provider == null) Tesselator.getInstance().end();
+        endDraw(provider, textures.get("outer"), vc);
         vc = setupVC(provider, textures.get("inner"));
 
         textureVertex(vc, ps, 0, 0, 0.001f, 0, 0, normalVec, light, patColors.innerStartColor);
@@ -130,7 +130,7 @@ public class PatternRenderer {
         textureVertex(vc, ps, (float)staticPoints.fullWidth, 0, 0.001f, 1, 0, normalVec, light, patColors.innerStartColor);
 
 
-        if(provider == null) Tesselator.getInstance().end();
+        endDraw(provider, textures.get("inner"), vc);
 
         RenderSystem.setShader(() -> oldShader);
 
@@ -140,16 +140,25 @@ public class PatternRenderer {
     private static VertexConsumer setupVC(@Nullable MultiBufferSource provider, ResourceLocation texture){
         VertexConsumer vc;
 
+        RenderType layer = RenderType.entityTranslucentCull(texture);
+
         if(provider == null){
             Tesselator.getInstance().getBuilder().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.NEW_ENTITY);
             vc = Tesselator.getInstance().getBuilder();
             RenderSystem.setShaderTexture(0, texture);
-            RenderSystem.setShader(GameRenderer::getRendertypeEntityTranslucentShader);
+            RenderSystem.setShader(GameRenderer::getRendertypeEntityTranslucentCullShader);
         } else {
-            vc = provider.getBuffer(RenderType.entityTranslucentCull(texture));
+            vc = provider.getBuffer(layer);
         }
-
+        layer.setupRenderState();
         return vc;
+    }
+
+    private static void endDraw(@Nullable MultiBufferSource provider, ResourceLocation texture, VertexConsumer vc){
+        if(provider == null){
+            RenderType layer = RenderType.entityTranslucentCull(texture);
+            layer.end(Tesselator.getInstance().getBuilder(), VertexSorting.ORTHOGRAPHIC_Z);
+        }
     }
 
     private static void textureVertex(VertexConsumer vc, PoseStack ps, float x, float y, float z, float u, float v, Vec3 normals, int light, int color){
