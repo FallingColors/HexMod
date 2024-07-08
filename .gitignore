@@ -29,6 +29,10 @@ eclipse
 run
 .DS_Store
 
+# Idk what prompted gradle to create this folder
+Fabric/Fabric
+
+
 # MacOS moment
 .DS_Store
 
