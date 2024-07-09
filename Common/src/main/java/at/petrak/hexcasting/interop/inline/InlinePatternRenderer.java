@@ -8,6 +8,7 @@ import com.samsthenerd.inline.api.client.InlineRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 
 public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> {
 
@@ -18,15 +19,25 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
     }
 
     public static final PatternRenderSettings INLINE_RENDER_SETTINGS = new PatternRenderSettings()
-            .withSizings(PatternRenderSettings.FitAxis.VERT, 8.0, 8.0, 1.0, 0.0, 4.0, null, null,
+            .withSizings(PatternRenderSettings.FitAxis.VERT, 8.0, 9.0, 1.0, 0.5, 4.0, null, null,
                     (scale) -> 1f, null)
+            .withZappySettings(null, 0f, 0f, 0f, 0f, null)
             .named("inline");
 
-    public static final PatternColors FLAT_WHITE_PATTERN_COLOR = new PatternColors(0xFF_FFFFFF);
+    public static final int INLINE_TEXTURE_RES = 8; // 64px is probably fine for such small images ?
+
+    public static final PatternColors FLAT_WHITE_PATTERN_COLOR = new PatternColors(0xFF_000000);
 
     public int render(InlinePatternData data, GuiGraphics drawContext, int index, Style style, int codepoint, TextRenderingContext trContext){
-        PatternRenderer.renderPattern(data.pattern, drawContext.pose(), INLINE_RENDER_SETTINGS, FLAT_WHITE_PATTERN_COLOR, 0);
+        drawContext.pose().pushPose();
+        drawContext.pose().translate(0f, -0.5f, 0f);
+        int trColor = FastColor.ARGB32.color((int)(255*trContext.alpha), (int)(255*trContext.red),
+                (int)(255*trContext.green), (int)(255*trContext.blue));
+        int color = style.getColor() == null ? trColor : style.getColor().getValue();
+        PatternRenderer.renderPattern(data.pattern, drawContext.pose(), null, INLINE_RENDER_SETTINGS,
+                new PatternColors(color), 0, trContext.light, null, INLINE_TEXTURE_RES);
 
+        drawContext.pose().popPose();
         return charWidth(data, style, codepoint);
     }
 

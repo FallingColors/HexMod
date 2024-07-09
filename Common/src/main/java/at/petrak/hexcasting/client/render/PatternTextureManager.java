@@ -13,7 +13,6 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 public class PatternTextureManager {
 
@@ -48,16 +47,8 @@ public class PatternTextureManager {
 
     private static final HashMap<String, Map<String, ResourceLocation>> patternTextures = new HashMap<>();
 
-    public static String getPointsKey(List<Vec2> zappyPoints)
-    {
-        return zappyPoints.stream()
-                .map(p -> String.format("(%f,%f)", p.x, p.y))
-                .collect(Collectors.joining(";"));
-    }
-
-    public static Optional<Map<String, ResourceLocation>> getTextures(HexPattern pattern, PatternRenderSettings patSets, double seed) {
-//    public static ResourceLocation getTexture(List<Vec2> points, String pointsKey, int blockSize, boolean showsStrokeOrder, float lineWidth, boolean useFullSize, Color innerColor, Color outerColor) {
-        String patCacheKey = patSets.getCacheKey(pattern, seed);
+    public static Optional<Map<String, ResourceLocation>> getTextures(HexPattern pattern, PatternRenderSettings patSets, double seed, int resPerUnit) {
+        String patCacheKey = patSets.getCacheKey(pattern, seed) + "_" + resPerUnit;
 
         // move textures from concurrent map to normal hashmap as needed
         if (patternTexturesToAdd.containsKey(patCacheKey)) {
@@ -77,7 +68,7 @@ public class PatternTextureManager {
         if(!inProgressPatterns.contains(patCacheKey)){
             inProgressPatterns.add(patCacheKey);
             executor.submit(() -> {
-                var slowTextures = createTextures(pattern, patSets, seed, false);
+                var slowTextures = createTextures(pattern, patSets, seed, resPerUnit);
 
                 // TextureManager#register doesn't look very thread-safe, so move back to the main thread after the slow part is done
                 Minecraft.getInstance().execute(() -> {
@@ -88,22 +79,7 @@ public class PatternTextureManager {
         return Optional.empty();
     }
 
-    private static Map<String, DynamicTexture> createTextures(HexPattern pattern, PatternRenderSettings patSets, double seed, boolean fastRender)
-//    private static DynamicTexture createTexture(List<Vec2> points, int blockSize, boolean showsStrokeOrder, float lineWidth, boolean useFullSize, Color innerColor, Color outerColor, boolean fastRender)
-    {
-//        int resolution = resolutionByBlockSize * blockSize;
-//        int padding = paddingByBlockSize * blockSize;
-//
-//        int resolution = resolutionByBlockSize;
-//        int padding = paddingByBlockSize;
-//
-//        if (fastRender) {
-//            resolution /= fastRenderScaleFactor;
-//            padding /= fastRenderScaleFactor;
-////            lineWidth /= (float)fastRenderScaleFactor;
-//        }
-
-
+    private static Map<String, DynamicTexture> createTextures(HexPattern pattern, PatternRenderSettings patSets, double seed, int resPerUnit) {
         HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(pattern, patSets, seed);
 
         List<Vec2> zappyRenderSpace = new ArrayList<>();
@@ -117,10 +93,10 @@ public class PatternTextureManager {
 
         Map<String, DynamicTexture> patTexts = new HashMap<>();
 
-        NativeImage innerLines = drawLines(zappyRenderSpace, staticPoints, patSets.innerWidthProvider.apply((float)(staticPoints.finalScale)), 128);
+        NativeImage innerLines = drawLines(zappyRenderSpace, staticPoints, patSets.innerWidthProvider.apply((float)(staticPoints.finalScale)), resPerUnit);
         patTexts.put("inner", new DynamicTexture(innerLines));
 
-        NativeImage outerLines = drawLines(zappyRenderSpace, staticPoints, patSets.outerWidthProvider.apply((float)(staticPoints.finalScale)), 128);
+        NativeImage outerLines = drawLines(zappyRenderSpace, staticPoints, patSets.outerWidthProvider.apply((float)(staticPoints.finalScale)), resPerUnit);
         patTexts.put("outer", new DynamicTexture(outerLines));
 
         // TODO: handle start hexagon and grid bits.
@@ -177,8 +153,6 @@ public class PatternTextureManager {
     }
 
     private static Tuple<Integer, Integer> getTextureCoordinates(Vec2 point, HexPatternPoints staticPoints, int resPerUnit) {
-//        int x = (int) ( ((point.x - staticPoints.minX) * staticPoints.finalScale + staticPoints.offsetX) * resPerUnit);
-//        int y = (int) ( ((point.y - staticPoints.minY) * staticPoints.finalScale + staticPoints.offsetY) * resPerUnit);
         int x = (int) ( point.x * resPerUnit);
         int y = (int) ( point.y * resPerUnit);
         return new Tuple<>(x, y);
