@@ -25,6 +25,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
@@ -162,7 +163,8 @@ public class PatternIota extends Iota {
     }
 
     public static Component display(HexPattern pat) {
-        return (new InlinePatternData(pat)).asText(true);
+        Component text = (new InlinePatternData(pat)).asText(true);
+        return text.copy().withStyle(text.getStyle().applyTo(Style.EMPTY.withColor(ChatFormatting.WHITE)));
     }
 
     // keep around just in case it's needed.
