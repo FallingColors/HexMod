@@ -9,6 +9,7 @@ import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
+import at.petrak.hexcasting.interop.inline.InlinePatternData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -127,7 +128,13 @@ public class ItemScroll extends Item implements IotaHolderItem {
             return Component.translatable(descID + ".of",
                 Component.translatable("hexcasting.action." + ResourceLocation.tryParse(ancientId)));
         } else if (NBTHelper.hasCompound(pStack, TAG_PATTERN)) {
-            return Component.translatable(descID);
+            var compound = NBTHelper.getCompound(pStack, ItemScroll.TAG_PATTERN);
+            var patternLabel = Component.literal("");
+            if (compound != null) {
+                var pattern = HexPattern.fromNBT(compound);
+                patternLabel = Component.literal(": ").append(new InlinePatternData(pattern).asText(false));
+            }
+            return Component.translatable(descID).append(patternLabel);
         } else {
             return Component.translatable(descID + ".empty");
         }
