@@ -2,11 +2,14 @@ package at.petrak.hexcasting.client.render;
 
 
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -57,10 +60,14 @@ public class PatternRenderer {
             ));
         }
 
-        RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.outerWidthProvider.apply((float)(staticPoints.finalScale)),
-            patColors.outerEndColor, patColors.outerStartColor, new SillyVCHelper(provider, ps, light, normalVec, 0.005f));
-        RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.innerWidthProvider.apply((float)(staticPoints.finalScale)),
-            patColors.innerEndColor, patColors.innerStartColor, new SillyVCHelper(provider, ps, light, normalVec, 0f));
+        if(FastColor.ARGB32.alpha(patColors.outerEndColor) != 0 && FastColor.ARGB32.alpha(patColors.outerStartColor) != 0){
+            RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.outerWidthProvider.apply((float)(staticPoints.finalScale)),
+                patColors.outerEndColor, patColors.outerStartColor, new SillyVCHelper(provider, ps, light, normalVec, 0.001f, patColors.outerStartColor));
+        }
+        if(FastColor.ARGB32.alpha(patColors.innerEndColor) != 0 && FastColor.ARGB32.alpha(patColors.innerStartColor) != 0) {
+            RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.innerWidthProvider.apply((float) (staticPoints.finalScale)),
+                    patColors.innerEndColor, patColors.innerStartColor, new SillyVCHelper(provider, ps, light, normalVec, 0.0005f, patColors.innerStartColor));
+        }
 
         ps.popPose();
         RenderSystem.setShader(() -> oldShader);
@@ -80,23 +87,29 @@ public class PatternRenderer {
 
         HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(pattern, patSets, seed);
 
-        VertexConsumer vc = setupVC(provider, textures.get("outer"));
 
-        textureVertex(vc, ps, 0, 0, 0.0005f, 0, 0, normalVec, light, patColors.outerStartColor);
-        textureVertex(vc, ps, 0, (float)staticPoints.fullHeight, 0.0005f, 0, 1, normalVec, light, patColors.outerStartColor);
-        textureVertex(vc, ps, (float)staticPoints.fullWidth, (float)staticPoints.fullHeight, 0, 1, 1, normalVec, light, patColors.outerStartColor);
-        textureVertex(vc, ps, (float)staticPoints.fullWidth, 0, 0.0005f, 1, 0, normalVec, light, patColors.outerStartColor);
+        VertexConsumer vc;
+        if(FastColor.ARGB32.alpha(patColors.outerEndColor) != 0 && FastColor.ARGB32.alpha(patColors.outerStartColor) != 0) {
+            vc = setupVC(provider, textures.get("outer"));
 
-        endDraw(provider, textures.get("outer"), vc);
-        vc = setupVC(provider, textures.get("inner"));
+            textureVertex(vc, ps, 0, 0, 0.0005f, 0, 0, normalVec, light, patColors.outerStartColor);
+            textureVertex(vc, ps, 0, (float) staticPoints.fullHeight, 0.0005f, 0, 1, normalVec, light, patColors.outerStartColor);
+            textureVertex(vc, ps, (float) staticPoints.fullWidth, (float) staticPoints.fullHeight, 0, 1, 1, normalVec, light, patColors.outerStartColor);
+            textureVertex(vc, ps, (float) staticPoints.fullWidth, 0, 0.0005f, 1, 0, normalVec, light, patColors.outerStartColor);
 
-        textureVertex(vc, ps, 0, 0, 0.001f, 0, 0, normalVec, light, patColors.innerStartColor);
-        textureVertex(vc, ps, 0, (float)staticPoints.fullHeight, 0.001f, 0, 1, normalVec, light, patColors.innerStartColor);
-        textureVertex(vc, ps, (float)staticPoints.fullWidth, (float)staticPoints.fullHeight, 0.001f, 1, 1, normalVec, light, patColors.innerStartColor);
-        textureVertex(vc, ps, (float)staticPoints.fullWidth, 0, 0.001f, 1, 0, normalVec, light, patColors.innerStartColor);
+            endDraw(provider, textures.get("outer"), vc);
+        }
 
-        endDraw(provider, textures.get("inner"), vc);
+        if(FastColor.ARGB32.alpha(patColors.innerEndColor) != 0 && FastColor.ARGB32.alpha(patColors.innerStartColor) != 0) {
+            vc = setupVC(provider, textures.get("inner"));
 
+            textureVertex(vc, ps, 0, 0, 0.001f, 0, 0, normalVec, light, patColors.innerStartColor);
+            textureVertex(vc, ps, 0, (float) staticPoints.fullHeight, 0.001f, 0, 1, normalVec, light, patColors.innerStartColor);
+            textureVertex(vc, ps, (float) staticPoints.fullWidth, (float) staticPoints.fullHeight, 0.001f, 1, 1, normalVec, light, patColors.innerStartColor);
+            textureVertex(vc, ps, (float) staticPoints.fullWidth, 0, 0.001f, 1, 0, normalVec, light, patColors.innerStartColor);
+
+            endDraw(provider, textures.get("inner"), vc);
+        }
         RenderSystem.setShader(() -> oldShader);
 
         return true;
@@ -149,31 +162,34 @@ public class PatternRenderer {
         private final boolean usesNorm;
         private final int modeIndex;
 
+        private final int alpha;
+
         private static final RenderType rType = RenderType.solid();
 
         private static final VertexFormat[] formatsList = {
                 DefaultVertexFormat.POSITION_COLOR, // no light no normals
                 DefaultVertexFormat.POSITION_COLOR_LIGHTMAP, // yes light no normals
-                DefaultVertexFormat.BLOCK // yes light yes normals
+                DefaultVertexFormat.NEW_ENTITY // yes light yes normals
         };
 
         private static final List<Supplier<ShaderInstance>> shadersList = List.of(
                 GameRenderer::getPositionColorShader, // no light no normals
                 GameRenderer::getPositionColorLightmapShader, // yes light no normals
-                GameRenderer::getRendertypeSolidShader // yes light yes normals
+                GameRenderer::getRendertypeEntityTranslucentCullShader // yes light yes normals
         );
 
         // need pose stack for normal matrix
-        public SillyVCHelper(@Nullable MultiBufferSource provider, PoseStack ps, Integer light, Vec3 normVec, float z){
+        public SillyVCHelper(@Nullable MultiBufferSource provider, PoseStack ps, Integer light, Vec3 normVec, float z, int color){
             this.provider = provider;
             this.light = light;
-            this.normVec = normVec;
+            this.normVec = normVec != null ? normVec : new Vec3(1,1,1);
             this.z = z;
             this.ps = ps;
 
             usesLight = light != null;
-            usesNorm = normVec != null && ps != null && usesLight; // doesn't really make sense to have norms without lighting?
+            usesNorm = this.normVec != null && ps != null && usesLight; // doesn't really make sense to have norms without lighting?
             modeIndex = (usesLight ? 1 : 0) + (usesNorm ? 1 : 0); // index of formats/shaders to use
+            alpha = FastColor.ARGB32.alpha(color);
         }
 
         @NotNull
@@ -189,7 +205,19 @@ public class PatternRenderer {
             Tesselator.getInstance().getBuilder().begin(vertMode, formatsList[modeIndex]);
             if(usesNorm){
                 RenderSystem.setShaderTexture(0, TheCoolerRenderLib.WHITE);
-                rType.setupRenderState();
+//                rType.setupRenderState();
+            }
+            RenderSystem.enableDepthTest();
+            RenderSystem.disableCull();
+            if(usesLight) {
+                Minecraft.getInstance().gameRenderer.lightTexture().turnOnLightLayer();
+            }
+            if(usesNorm){
+                RenderSystem.enableBlend();
+                RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+                if (Minecraft.useShaderTransparency()) {
+                    Minecraft.getInstance().levelRenderer.getTranslucentTarget().bindWrite(false);
+                }
             }
             RenderSystem.setShader( shadersList.get(modeIndex));
             return Tesselator.getInstance().getBuilder();
@@ -199,9 +227,10 @@ public class PatternRenderer {
         public void vertex(@NotNull VertexConsumer vc, int color, @NotNull Vec2 pos, @NotNull Matrix4f matrix) {
 
             vc.vertex(matrix, pos.x, pos.y, z)
-                .color(color);
+                .color(color | 0xFF_000000);
 
-            if (usesNorm) vc.uv(1, 1); // block format needs a texture, we just set it to plain white
+            if (usesNorm) vc.uv(pos.x, pos.y); // block format needs a texture, we just set it to plain white
+            if (usesNorm) vc.overlayCoords(OverlayTexture.NO_OVERLAY);
             if (usesLight) vc.uv2(light);
             if (usesNorm) vc.normal(ps.last().normal(), (float)normVec.x, (float)normVec.y, (float)normVec.z);
 
@@ -210,10 +239,23 @@ public class PatternRenderer {
 
         @Override
         public void vcEndDrawer(@NotNull VertexConsumer vc) {
-            if(usesNorm){
-                rType.clearRenderState();
-            }
+            RenderSystem.setShaderColor(1f, 1f, 1f, alpha/255f);
             Tesselator.getInstance().end();
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+            if(usesLight){
+                Minecraft.getInstance().gameRenderer.lightTexture().turnOffLightLayer();
+            }
+            if(usesNorm){
+                RenderSystem.disableBlend();
+                RenderSystem.defaultBlendFunc();
+                if (Minecraft.useShaderTransparency()) {
+                    Minecraft.getInstance().getMainRenderTarget().bindWrite(false);
+                }
+            }
+            RenderSystem.enableCull();
+//            if(usesNorm){
+//                rType.clearRenderState();
+//            }
         }
     }
 }
