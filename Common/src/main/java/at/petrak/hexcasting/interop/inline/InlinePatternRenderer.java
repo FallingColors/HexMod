@@ -26,15 +26,17 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
 
     public static final int INLINE_TEXTURE_RES = 8; // 64px is probably fine for such small images ?
 
-    public static final PatternColors FLAT_WHITE_PATTERN_COLOR = new PatternColors(0xFF_000000);
-
     public int render(InlinePatternData data, GuiGraphics drawContext, int index, Style style, int codepoint, TextRenderingContext trContext){
         drawContext.pose().pushPose();
         drawContext.pose().translate(0f, -0.5f, 0f);
         int trColor = FastColor.ARGB32.color((int)(255*trContext.alpha), (int)(255*trContext.red),
                 (int)(255*trContext.green), (int)(255*trContext.blue));
         int color = style.getColor() == null ? trColor : style.getColor().getValue();
-        PatternRenderer.renderPattern(data.pattern, drawContext.pose(), null, INLINE_RENDER_SETTINGS,
+        // some places (like tooltips) give an alpha of 0, but we don't want to kill the alpha value entirely.
+        if(FastColor.ARGB32.alpha(color) == 0){
+            color |= 0xFF_000000;
+        }
+        PatternRenderer.renderPattern(data.pattern, drawContext.pose(), trContext.vertexConsumers, INLINE_RENDER_SETTINGS,
                 new PatternColors(color), 0, trContext.light, null, INLINE_TEXTURE_RES);
 
         drawContext.pose().popPose();

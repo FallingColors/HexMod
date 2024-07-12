@@ -4,7 +4,7 @@ package at.petrak.hexcasting.client.render
 
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.mod.HexConfig
-import at.petrak.hexcasting.api.utils.*
+import at.petrak.hexcasting.api.utils.TAU
 import at.petrak.hexcasting.client.ClientTickCounter
 import at.petrak.hexcasting.client.gui.GuiSpellcasting
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
@@ -16,8 +16,8 @@ import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.MultiBufferSource
-import net.minecraft.core.BlockPos
 import net.minecraft.util.FastColor
+import net.minecraft.util.FastColor.ARGB32
 import net.minecraft.util.Mth
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.Level
@@ -42,6 +42,18 @@ const val CAP_THETA = 180f / 10f
 const val DEFAULT_READABILITY_OFFSET = 0.2f
 const val DEFAULT_LAST_SEGMENT_LEN_PROP = 0.8f
 
+
+fun drawLineSeq(
+    mat: Matrix4f,
+    points: List<Vec2>,
+    width: Float,
+    z: Float,
+    tail: Int,
+    head: Int
+) {
+    return drawLineSeq(mat, points, width, tail, head, VCDrawHelper.Basic(z))
+}
+
 /**
  * Draw a sequence of linePoints spanning the given points.
  *
@@ -51,9 +63,9 @@ fun drawLineSeq(
     mat: Matrix4f,
     points: List<Vec2>,
     width: Float,
-    z: Float,
     tail: Int,
     head: Int,
+    vcHelper: VCDrawHelper
 ) {
     if (points.size <= 1) return
 
@@ -61,6 +73,7 @@ fun drawLineSeq(
     val g1 = FastColor.ARGB32.green(tail).toFloat()
     val b1 = FastColor.ARGB32.blue(tail).toFloat()
     val a = FastColor.ARGB32.alpha(tail)
+    val a1 = a.toFloat()
     val headSource = if (Screen.hasControlDown() != HexConfig.client().ctrlTogglesOffStrokeOrder())
         head
     else
@@ -68,10 +81,9 @@ fun drawLineSeq(
     val r2 = FastColor.ARGB32.red(headSource).toFloat()
     val g2 = FastColor.ARGB32.green(headSource).toFloat()
     val b2 = FastColor.ARGB32.blue(headSource).toFloat()
+    val a2 = FastColor.ARGB32.alpha(headSource).toFloat()
 
-    // they spell it wrong at mojang lmao
-    val tess = Tesselator.getInstance()
-    val buf = tess.builder
+    var vc = vcHelper.vcSetupAndSupply(VertexFormat.Mode.TRIANGLES)
 
     val n = points.size
     val joinAngles = FloatArray(n)
@@ -90,10 +102,6 @@ fun drawLineSeq(
         joinOffsets[i - 1] = Mth.clamp(Mth.sin(angle) / (1 + Mth.cos(angle)), -clamp, clamp)
     }
 
-    fun vertex(color: BlockPos, pos: Vec2) =
-        buf.vertex(mat, pos.x, pos.y, z).color(color.x, color.y, color.z, a).endVertex()
-
-    buf.begin(VertexFormat.Mode.TRIANGLES, DefaultVertexFormat.POSITION_COLOR)
     for (i in 0 until points.size - 1) {
         val p1 = points[i]
         val p2 = points[i + 1]
@@ -103,8 +111,9 @@ fun drawLineSeq(
         val tangent = p2.add(p1.negated()).normalized().scale(width * 0.5f)
         val normal = Vec2(-tangent.y, tangent.x)
 
-        fun color(time: Float): BlockPos =
-            BlockPos(Mth.lerp(time, r1, r2).toInt(), Mth.lerp(time, g1, g2).toInt(), Mth.lerp(time, b1, b2).toInt())
+        fun color(time: Float): Int =
+            FastColor.ARGB32.color(Mth.lerp(time, a1, a2).toInt(), Mth.lerp(time, r1, r2).toInt(),
+                Mth.lerp(time, g1, g2).toInt(), Mth.lerp(time, b1, b2).toInt())
 
         val color1 = color(i.toFloat() / n)
         val color2 = color((i + 1f) / n)
@@ -118,21 +127,21 @@ fun drawLineSeq(
         val p2Down = p2.add(tangent.scale(Math.max(0f, jhigh)).negated()).add(normal)
         val p2Up = p2.add(tangent.scale(Math.max(0f, -jhigh)).negated()).add(normal.negated())
 
-        vertex(color1, p1Down)
-        vertex(color1, p1)
-        vertex(color1, p1Up)
+        vcHelper.vertex(vc, color1, p1Down, mat)
+        vcHelper.vertex(vc, color1, p1, mat)
+        vcHelper.vertex(vc, color1, p1Up, mat)
 
-        vertex(color1, p1Down)
-        vertex(color1, p1Up)
-        vertex(color2, p2Up)
+        vcHelper.vertex(vc, color1, p1Down, mat)
+        vcHelper.vertex(vc, color1, p1Up, mat)
+        vcHelper.vertex(vc, color2, p2Up, mat)
 
-        vertex(color1, p1Down)
-        vertex(color2, p2Up)
-        vertex(color2, p2)
+        vcHelper.vertex(vc, color1, p1Down, mat)
+        vcHelper.vertex(vc, color2, p2Up, mat)
+        vcHelper.vertex(vc, color2, p2, mat)
 
-        vertex(color1, p1Down)
-        vertex(color2, p2)
-        vertex(color2, p2Down)
+        vcHelper.vertex(vc, color1, p1Down, mat)
+        vcHelper.vertex(vc, color2, p2, mat)
+        vcHelper.vertex(vc, color2, p2Down, mat)
 
         if (i > 0) {
             // Draw the connector to the next line segment
@@ -150,9 +159,9 @@ fun drawLineSeq(
                     val fan = rotate(rnormal, -sangle * (j.toFloat() / joinSteps))
                     val fanShift = Vec2(p1.x - fan.x, p1.y - fan.y)
 
-                    vertex(color1, p1)
-                    vertex(color1, prevVert)
-                    vertex(color1, fanShift)
+                    vcHelper.vertex(vc, color1, p1, mat)
+                    vcHelper.vertex(vc, color1, prevVert, mat)
+                    vcHelper.vertex(vc, color1, fanShift, mat)
                     prevVert = fanShift
                 }
             } else {
@@ -162,31 +171,32 @@ fun drawLineSeq(
                     val fan = rotate(normal, -sangle * (j.toFloat() / joinSteps))
                     val fanShift = Vec2(p1.x - fan.x, p1.y - fan.y)
 
-                    vertex(color1, p1)
-                    vertex(color1, prevVert)
-                    vertex(color1, fanShift)
+                    vcHelper.vertex(vc, color1, p1, mat)
+                    vcHelper.vertex(vc, color1, prevVert, mat)
+                    vcHelper.vertex(vc, color1, fanShift, mat)
                     prevVert = fanShift
                 }
             }
         }
     }
-    tess.end()
+    vcHelper.vcEndDrawer(vc)
 
-    fun drawCaps(color: BlockPos, point: Vec2, prev: Vec2) {
+    fun drawCaps(color: Int, point: Vec2, prev: Vec2) {
         val tangent = point.add(prev.negated()).normalized().scale(0.5f * width)
         val normal = Vec2(-tangent.y, tangent.x)
         val joinSteps = Mth.ceil(180f / CAP_THETA)
-        buf.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR)
-        vertex(color, point)
+        vc = vcHelper.vcSetupAndSupply(VertexFormat.Mode.TRIANGLE_FAN)
+        vcHelper.vertex(vc, color, point, mat)
         for (j in joinSteps downTo 0) {
             val fan = rotate(normal, -Mth.PI * (j.toFloat() / joinSteps))
-            buf.vertex(mat, point.x + fan.x, point.y + fan.y, z).color(color.x, color.y, color.z, a).endVertex()
+            vcHelper.vertex(vc, color, Vec2(point.x + fan.x, point.y + fan.y), mat)
         }
-        tess.end()
+        vcHelper.vcEndDrawer(vc)
     }
-    drawCaps(BlockPos(r1.toInt(), g1.toInt(), b1.toInt()), points[0], points[1])
-    drawCaps(BlockPos(r2.toInt(), g2.toInt(), b2.toInt()), points[n - 1], points[n - 2])
+    drawCaps(ARGB32.color(a1.toInt(), r1.toInt(), g1.toInt(), b1.toInt()), points[0], points[1])
+    drawCaps(ARGB32.color(a2.toInt(), r2.toInt(), g2.toInt(), b2.toInt()), points[n - 1], points[n - 2])
 }
+
 
 fun rotate(vec: Vec2, theta: Float): Vec2 {
     val cos = Mth.cos(theta)

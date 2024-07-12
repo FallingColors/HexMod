@@ -2,19 +2,19 @@ package at.petrak.hexcasting.client.render;
 
 
 import at.petrak.hexcasting.api.casting.math.HexPattern;
-import at.petrak.hexcasting.mixin.accessor.client.AccessorLightTexturePixels;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
+import org.joml.Matrix4f;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Supplier;
 
 public class PatternRenderer {
 
@@ -31,9 +31,6 @@ public class PatternRenderer {
         }
 
         var oldShader = RenderSystem.getShader();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        RenderSystem.enableDepthTest();
-        RenderSystem.disableCull();
 
         ps.pushPose();
 
@@ -60,34 +57,12 @@ public class PatternRenderer {
             ));
         }
 
-        // TODO: tweak this to suck less or rewrite drawLineSeq to support light -- they're yellow?? in dark lighting??
-        if(light != null){
-            int bri = ((AccessorLightTexturePixels)Minecraft.getInstance().gameRenderer.lightTexture()).getLightPixels().getPixelRGBA(
-                    LightTexture.block(light), LightTexture.sky(light));
-            RenderSystem.setShaderColor(
-                    FastColor.ARGB32.red(bri)/255f,
-                    FastColor.ARGB32.red(bri)/255f,
-                    FastColor.ARGB32.red(bri)/255f,
-                1f);
-        }
-
-
-        RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.outerWidthProvider.apply((float)(staticPoints.finalScale)), 0.005f, patColors.outerEndColor, patColors.outerStartColor);
-        RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.innerWidthProvider.apply((float)(staticPoints.finalScale)), 0f, patColors.innerEndColor, patColors.innerStartColor);
-        // TODO: probably want to have option to render little dots and stuff.
-        // 2D -- supports gradient stroke (goes through tessellator)
-//        if(vc == null){
-//        } else { // 3D -- goes through vc, supports lighting -- kinda
-//            ps.mulPoseMatrix(new Matrix4f().scaling(-1.0f, 1.0f, 1.0f));
-//            ps.pushPose();
-//            ps.translate(0, 0, 0.005f);
-//            TheCoolerRenderLib.theCoolerDrawLineSeq(ps.last().pose(), ps.last().normal(), light, vc, zappyRenderSpace, patSets.outerWidthProvider.apply((float)(scale * baseScale)), patColors.outerStartColor);
-//            ps.popPose();
-//            TheCoolerRenderLib.theCoolerDrawLineSeq(ps.last().pose(), ps.last().normal(), light, vc, zappyRenderSpace, patSets.innerWidthProvider.apply((float)(scale * baseScale)), patColors.innerStartColor);
-//        }
+        RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.outerWidthProvider.apply((float)(staticPoints.finalScale)),
+            patColors.outerEndColor, patColors.outerStartColor, new SillyVCHelper(provider, ps, light, normalVec, 0.005f));
+        RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.innerWidthProvider.apply((float)(staticPoints.finalScale)),
+            patColors.innerEndColor, patColors.innerStartColor, new SillyVCHelper(provider, ps, light, normalVec, 0f));
 
         ps.popPose();
-        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         RenderSystem.setShader(() -> oldShader);
     }
 
@@ -103,10 +78,7 @@ public class PatternRenderer {
 
         Map<String, ResourceLocation> textures = maybeTextures.get();
 
-
         HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(pattern, patSets, seed);
-
-        RenderSystem.enableDepthTest();
 
         VertexConsumer vc = setupVC(provider, textures.get("outer"));
 
@@ -135,6 +107,9 @@ public class PatternRenderer {
 
         RenderType layer = RenderType.entityTranslucentCull(texture);
         layer.setupRenderState();
+        if(provider instanceof MultiBufferSource.BufferSource immediate){
+            immediate.endBatch();
+        }
         if(provider == null){
             Tesselator.getInstance().getBuilder().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.NEW_ENTITY);
             vc = Tesselator.getInstance().getBuilder();
@@ -160,5 +135,85 @@ public class PatternRenderer {
             .uv2(light)
             .normal(ps.last().normal(), (float)normals.x, (float)normals.y, (float)normals.z)
             .endVertex();
+    }
+
+    private static class SillyVCHelper implements VCDrawHelper{
+
+        private final MultiBufferSource provider;
+        private final Integer light;
+        private final Vec3 normVec;
+        private final float z;
+        private final PoseStack ps;
+
+        private final boolean usesLight;
+        private final boolean usesNorm;
+        private final int modeIndex;
+
+        private static final RenderType rType = RenderType.solid();
+
+        private static final VertexFormat[] formatsList = {
+                DefaultVertexFormat.POSITION_COLOR, // no light no normals
+                DefaultVertexFormat.POSITION_COLOR_LIGHTMAP, // yes light no normals
+                DefaultVertexFormat.BLOCK // yes light yes normals
+        };
+
+        private static final List<Supplier<ShaderInstance>> shadersList = List.of(
+                GameRenderer::getPositionColorShader, // no light no normals
+                GameRenderer::getPositionColorLightmapShader, // yes light no normals
+                GameRenderer::getRendertypeSolidShader // yes light yes normals
+        );
+
+        // need pose stack for normal matrix
+        public SillyVCHelper(@Nullable MultiBufferSource provider, PoseStack ps, Integer light, Vec3 normVec, float z){
+            this.provider = provider;
+            this.light = light;
+            this.normVec = normVec;
+            this.z = z;
+            this.ps = ps;
+
+            usesLight = light != null;
+            usesNorm = normVec != null && ps != null && usesLight; // doesn't really make sense to have norms without lighting?
+            modeIndex = (usesLight ? 1 : 0) + (usesNorm ? 1 : 0); // index of formats/shaders to use
+        }
+
+        @NotNull
+        @Override
+        public VertexConsumer vcSetupAndSupply(@NotNull VertexFormat.Mode vertMode) {
+            // we're not actually using provider here because i don't see a render layer that actually supports this?
+            // TODOish: make our own render layer/type for it i guess if we really care, i don't think i do.
+
+            if(provider instanceof MultiBufferSource.BufferSource immediate){
+                immediate.endBatch();
+            }
+
+            Tesselator.getInstance().getBuilder().begin(vertMode, formatsList[modeIndex]);
+            if(usesNorm){
+                RenderSystem.setShaderTexture(0, TheCoolerRenderLib.WHITE);
+                rType.setupRenderState();
+            }
+            RenderSystem.setShader( shadersList.get(modeIndex));
+            return Tesselator.getInstance().getBuilder();
+        }
+
+        @Override
+        public void vertex(@NotNull VertexConsumer vc, int color, @NotNull Vec2 pos, @NotNull Matrix4f matrix) {
+
+            vc.vertex(matrix, pos.x, pos.y, z)
+                .color(color);
+
+            if (usesNorm) vc.uv(1, 1); // block format needs a texture, we just set it to plain white
+            if (usesLight) vc.uv2(light);
+            if (usesNorm) vc.normal(ps.last().normal(), (float)normVec.x, (float)normVec.y, (float)normVec.z);
+
+            vc.endVertex();
+        }
+
+        @Override
+        public void vcEndDrawer(@NotNull VertexConsumer vc) {
+            if(usesNorm){
+                rType.clearRenderState();
+            }
+            Tesselator.getInstance().end();
+        }
     }
 }
