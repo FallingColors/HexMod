@@ -24,7 +24,7 @@ import net.minecraft.server.level.ServerLevel
  */
 class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
     init {
-        env.triggerCreateEvent()
+        env.triggerCreateEvent(image.userData)
     }
 
     /**
