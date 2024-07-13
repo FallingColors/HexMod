@@ -890,6 +890,11 @@
         cos: "the cosine of %s",
       },
 
+      invalid_operator_args: {
+        one: "got an unexpected iota at index %d of the stack: %s",
+        many: "got %d unexpected iotas at indices %d-%d of the stack: %s",
+      },
+
       no_akashic_record: "No Akashic Record at %s",
       disallowed: "has been disallowed by the server admins",
       disallowed_circle: "has been disallowed in spell circles by the server admins",
