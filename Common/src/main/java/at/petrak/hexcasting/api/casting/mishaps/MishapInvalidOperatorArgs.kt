@@ -12,7 +12,7 @@ import net.minecraft.world.item.DyeColor
 /**
  * The value failed some kind of predicate.
  */
-class MishapInvalidOperatorArgs( val perpetrators: List<Iota> ) : Mishap() {
+class MishapInvalidOperatorArgs(val perpetrators: List<Iota>) : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.GRAY)
 
@@ -35,7 +35,7 @@ class MishapInvalidOperatorArgs( val perpetrators: List<Iota> ) : Mishap() {
                 perpetrators.size,
                 0,
                 perpetrators.lastIndex,
-                ComponentUtils.formatList(perpetrators.map {it.display()}, ", ".asTextComponent)
+                ComponentUtils.formatList(perpetrators.map { it.display() }, ", ".asTextComponent)
             )
         }
     }
