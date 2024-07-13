@@ -19,14 +19,11 @@ jobs:
           distribution: temurin
           java-version: "17.0.1"
       - uses: gradle/actions/setup-gradle@v3
-      
-      - name: Clean
-        run: |
-          chmod +x gradlew
-          ./gradlew clean
 
       - name: Build
-        run: ./gradlew build
+        run: |
+          chmod +x gradlew
+          ./gradlew build
 
       - name: Run Datagen
         run: ./gradlew runAllDatagen
