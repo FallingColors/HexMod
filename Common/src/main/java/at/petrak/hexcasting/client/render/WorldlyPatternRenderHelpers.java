@@ -27,12 +27,12 @@ import org.joml.Matrix4f;
 public class WorldlyPatternRenderHelpers {
 
     public static final PatternRenderSettings WORLDLY_RENDER_SETTINGS = new PatternRenderSettings()
-            .withSizings(PatternRenderSettings.FitAxis.BOTH, 1.0, 1.0, 1.0/16, 1.0/16, 0.25, null, null,
-                    (scale) -> 0.4f/16, (scale) -> 0.8f/16)
+            .withSizings(PatternRenderSettings.FitAxis.BOTH, 1.0, 1.0, 1.0/16, 1.0/16, 0.25, null, null)
+            .withWidths((scale) -> 0.4f/16, (scale) -> 0.8f/16)
             .named("worldly");
 
     public static final PatternRenderSettings SCROLL_RENDER_SETTINGS = WORLDLY_RENDER_SETTINGS.withSizings(null, null, null,
-            2.0/16, 2.0/16, null, null, null, null, null)
+            2.0/16, 2.0/16, null, null, null)
             .named("wallscroll");
 
     public static final PatternRenderSettings READABLE_SCROLL_RENDER_SETTINGS = SCROLL_RENDER_SETTINGS.withZappySettings(
@@ -47,12 +47,17 @@ public class WorldlyPatternRenderHelpers {
     // using an opaque inner color based on 0xc8_322b33 because worldly pattern renderer is funky
     public static final PatternColors DEFAULT_PATTERN_COLOR = new PatternColors(0xff_554d54, 0xff_d2c8c8);
 
+    // partially for testing
+    public static final PatternColors READABLE_SCROLL_COLORS = DEFAULT_PATTERN_COLOR.withDotColors(0xff_5b7bd7, 0);
+
     public static final PatternColors SLATE_WOBBLY_COLOR = new PatternColors(RenderLib.screenCol(0xff_64c8ff), 0xff_64c8ff);
 
     public static void renderPatternForScroll(HexPattern pattern, EntityWallScroll scroll, PoseStack ps, MultiBufferSource bufSource, int light, int blockSize, boolean showStrokeOrder)
     {
         ps.pushPose();
-        renderPattern(pattern, showStrokeOrder ? READABLE_SCROLL_RENDER_SETTINGS : SCROLL_RENDER_SETTINGS, DEFAULT_PATTERN_COLOR, scroll.getPos().hashCode(), ps, bufSource, light, blockSize, true, false,false, true,-1);
+        renderPattern(pattern, showStrokeOrder ? READABLE_SCROLL_RENDER_SETTINGS : SCROLL_RENDER_SETTINGS,
+                showStrokeOrder ? READABLE_SCROLL_COLORS : DEFAULT_PATTERN_COLOR,
+                scroll.getPos().hashCode(), ps, bufSource, light, blockSize, true, false,false, true,-1);
         ps.popPose();
     }
 
@@ -187,6 +192,18 @@ public class WorldlyPatternRenderHelpers {
 
     public static final PSTransformer wallScrollTransformer = (ps, facing, blockSize) -> {
         ps.translate(-blockSize / 2f, -blockSize / 2f, 1f / 32f);
+        if(facing == 0){
+            return new Vec3(0, 0, -1);
+        }
+        if(facing == 1){
+            return new Vec3(-1, 0, 0);
+        }
+        if(facing == 2){
+            return new Vec3(0, 0, -1);
+        }
+        if(facing == 3){
+            return new Vec3(-1, 0, 0);
+        }
         return new Vec3(0, 0, -1);
     };
 

@@ -29,43 +29,61 @@ public class PatternRenderer {
     }
 
     public static void renderPattern(HexPattern pattern, PoseStack ps, @Nullable MultiBufferSource provider, PatternRenderSettings patSets, PatternColors patColors, double seed, Integer light, Vec3 normalVec, int resPerUnit){
+        var oldShader = RenderSystem.getShader();
+        HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(pattern, patSets, seed);
+
+        boolean shouldRenderDynamic = true;
+
         // only do texture rendering if it's static and has solid colors
         if(patSets.speed == 0 && PatternTextureManager.useTextures && patColors.innerStartColor == patColors.innerEndColor
         && patColors.outerStartColor == patColors.outerEndColor){
             boolean didRender = renderPatternTexture(pattern, ps, provider, patSets, patColors, seed, light == null ? LightTexture.FULL_BRIGHT : light, normalVec, resPerUnit);
-            if(didRender) return;
+            if(didRender) shouldRenderDynamic = false;
+        }
+        if(shouldRenderDynamic){
+            List<Vec2> zappyPattern;
+
+            if(patSets.speed == 0) {
+                // re-use our static points if we're rendering a static pattern anyway
+                zappyPattern = staticPoints.zappyPoints;
+            } else {
+                List<Vec2> lines1 = pattern.toLines(1, Vec2.ZERO);
+                Set<Integer> dupIndices = RenderLib.findDupIndices(pattern.positions());
+                zappyPattern = RenderLib.makeZappy(lines1, dupIndices,
+                        patSets.hops, patSets.variance, patSets.speed, patSets.flowIrregular, patSets.readabilityOffset, patSets.lastSegmentLenProportion, seed);
+            }
+
+            List<Vec2> zappyRenderSpace = staticPoints.scaleVecs(zappyPattern);
+
+            if(FastColor.ARGB32.alpha(patColors.outerEndColor) != 0 && FastColor.ARGB32.alpha(patColors.outerStartColor) != 0){
+                RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.outerWidthProvider.apply((float)(staticPoints.finalScale)),
+                        patColors.outerEndColor, patColors.outerStartColor, new SillyVCHelper(provider, ps, light, normalVec, 0.001f, patColors.outerStartColor));
+            }
+            if(FastColor.ARGB32.alpha(patColors.innerEndColor) != 0 && FastColor.ARGB32.alpha(patColors.innerStartColor) != 0) {
+                RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.innerWidthProvider.apply((float) (staticPoints.finalScale)),
+                        patColors.innerEndColor, patColors.innerStartColor, new SillyVCHelper(provider, ps, light, normalVec, 0.0005f, patColors.innerStartColor));
+            }
         }
 
-        var oldShader = RenderSystem.getShader();
+        // render dots and grid dynamically for now
 
-        ps.pushPose();
+        if(provider == null) provider.getBuffer(RenderType.solid()); // just to try to refresh it
 
-        HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(pattern, patSets, seed);
+        float dotZ = 0.0004f;
 
-        List<Vec2> zappyPattern;
-
-        if(patSets.speed == 0) {
-            // re-use our static points if we're rendering a static pattern anyway
-            zappyPattern = staticPoints.zappyPoints;
-        } else {
-            List<Vec2> lines1 = pattern.toLines(1, Vec2.ZERO);
-            Set<Integer> dupIndices = RenderLib.findDupIndices(pattern.positions());
-            zappyPattern = RenderLib.makeZappy(lines1, dupIndices,
-                patSets.hops, patSets.variance, patSets.speed, patSets.flowIrregular, patSets.readabilityOffset, patSets.lastSegmentLenProportion, seed);
+        if(FastColor.ARGB32.alpha(patColors.startingDotColor) != 0) {
+            RenderLib.drawSpot(ps.last().pose(), staticPoints.dotsScaled.get(0), patSets.startingDotRadiusProvider.apply((float) (staticPoints.finalScale)),
+                    patColors.startingDotColor, new SillyVCHelper(provider, ps, light, normalVec, dotZ, patColors.innerStartColor));
         }
 
-        List<Vec2> zappyRenderSpace = staticPoints.scaleVecs(zappyPattern);
-
-        if(FastColor.ARGB32.alpha(patColors.outerEndColor) != 0 && FastColor.ARGB32.alpha(patColors.outerStartColor) != 0){
-            RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.outerWidthProvider.apply((float)(staticPoints.finalScale)),
-                patColors.outerEndColor, patColors.outerStartColor, new SillyVCHelper(provider, ps, light, normalVec, 0.001f, patColors.outerStartColor));
-        }
-        if(FastColor.ARGB32.alpha(patColors.innerEndColor) != 0 && FastColor.ARGB32.alpha(patColors.innerStartColor) != 0) {
-            RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.innerWidthProvider.apply((float) (staticPoints.finalScale)),
-                    patColors.innerEndColor, patColors.innerStartColor, new SillyVCHelper(provider, ps, light, normalVec, 0.0005f, patColors.innerStartColor));
+        if(FastColor.ARGB32.alpha(patColors.gridDotsColor) != 0) {
+            for(int i = 1; i < staticPoints.dotsScaled.size(); i++){
+                Vec2 gridDot = staticPoints.dotsScaled.get(i);
+                RenderLib.drawSpot(ps.last().pose(), gridDot, patSets.gridDotsRadiusProvider.apply((float) (staticPoints.finalScale)),
+                    patColors.gridDotsColor, new SillyVCHelper(provider, ps, light, normalVec, dotZ, patColors.innerStartColor));
+            }
         }
 
-        ps.popPose();
         RenderSystem.setShader(() -> oldShader);
     }
 
@@ -83,26 +101,29 @@ public class PatternRenderer {
 
         HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(pattern, patSets, seed);
 
-
         VertexConsumer vc;
-        if(FastColor.ARGB32.alpha(patColors.outerEndColor) != 0 && FastColor.ARGB32.alpha(patColors.outerStartColor) != 0) {
+
+        float outerZ = 0.001f;
+        float innerZ = 0.0005f;
+
+        if(FastColor.ARGB32.alpha(patColors.outerStartColor) != 0) {
             vc = setupVC(provider, textures.get("outer"));
 
-            textureVertex(vc, ps, 0, 0, 0.0005f, 0, 0, normalVec, light, patColors.outerStartColor);
-            textureVertex(vc, ps, 0, (float) staticPoints.fullHeight, 0.0005f, 0, 1, normalVec, light, patColors.outerStartColor);
-            textureVertex(vc, ps, (float) staticPoints.fullWidth, (float) staticPoints.fullHeight, 0, 1, 1, normalVec, light, patColors.outerStartColor);
-            textureVertex(vc, ps, (float) staticPoints.fullWidth, 0, 0.0005f, 1, 0, normalVec, light, patColors.outerStartColor);
+            textureVertex(vc, ps, 0, 0, outerZ, 0, 0, normalVec, light, patColors.outerStartColor);
+            textureVertex(vc, ps, 0, (float) staticPoints.fullHeight, outerZ, 0, 1, normalVec, light, patColors.outerStartColor);
+            textureVertex(vc, ps, (float) staticPoints.fullWidth, (float) staticPoints.fullHeight, outerZ, 1, 1, normalVec, light, patColors.outerStartColor);
+            textureVertex(vc, ps, (float) staticPoints.fullWidth, 0, outerZ, 1, 0, normalVec, light, patColors.outerStartColor);
 
             endDraw(provider, textures.get("outer"), vc);
         }
 
-        if(FastColor.ARGB32.alpha(patColors.innerEndColor) != 0 && FastColor.ARGB32.alpha(patColors.innerStartColor) != 0) {
+        if(FastColor.ARGB32.alpha(patColors.innerStartColor) != 0) {
             vc = setupVC(provider, textures.get("inner"));
 
-            textureVertex(vc, ps, 0, 0, 0.001f, 0, 0, normalVec, light, patColors.innerStartColor);
-            textureVertex(vc, ps, 0, (float) staticPoints.fullHeight, 0.001f, 0, 1, normalVec, light, patColors.innerStartColor);
-            textureVertex(vc, ps, (float) staticPoints.fullWidth, (float) staticPoints.fullHeight, 0.001f, 1, 1, normalVec, light, patColors.innerStartColor);
-            textureVertex(vc, ps, (float) staticPoints.fullWidth, 0, 0.001f, 1, 0, normalVec, light, patColors.innerStartColor);
+            textureVertex(vc, ps, 0, 0, innerZ, 0, 0, normalVec, light, patColors.innerStartColor);
+            textureVertex(vc, ps, 0, (float) staticPoints.fullHeight, innerZ, 0, 1, normalVec, light, patColors.innerStartColor);
+            textureVertex(vc, ps, (float) staticPoints.fullWidth, (float) staticPoints.fullHeight, innerZ, 1, 1, normalVec, light, patColors.innerStartColor);
+            textureVertex(vc, ps, (float) staticPoints.fullWidth, 0, innerZ, 1, 0, normalVec, light, patColors.innerStartColor);
 
             endDraw(provider, textures.get("inner"), vc);
         }
@@ -137,7 +158,7 @@ public class PatternRenderer {
     }
 
     private static void textureVertex(VertexConsumer vc, PoseStack ps, float x, float y, float z, float u, float v, Vec3 normals, int light, int color){
-        vc.vertex(ps.last().pose(), x, y, 0)
+        vc.vertex(ps.last().pose(), x, y, z)
             .color(color)
             .uv(u, v)
             .overlayCoords(OverlayTexture.NO_OVERLAY)

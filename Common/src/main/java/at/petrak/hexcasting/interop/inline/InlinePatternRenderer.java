@@ -19,8 +19,8 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
     }
 
     public static final PatternRenderSettings INLINE_RENDER_SETTINGS = new PatternRenderSettings()
-            .withSizings(PatternRenderSettings.FitAxis.VERT, 8.0, 9.0, 1.0, 0.5, 4.0, null, null,
-                    (scale) -> 1f, null)
+            .withSizings(PatternRenderSettings.FitAxis.VERT, 8.0, 9.0, 1.0, 0.5, 4.0, null, null)
+            .withWidths((scale) -> 1f, null)
             .withZappySettings(null, 0f, 0f, 0f, 0f, null)
             .named("inline");
 

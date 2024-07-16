@@ -353,12 +353,12 @@ fun <T> findDupIndices(pts: Iterable<T>): Set<Int> {
  * include primitive drawing code...
  */
 fun drawSpot(mat: Matrix4f, point: Vec2, radius: Float, r: Float, g: Float, b: Float, a: Float) {
-    val tess = Tesselator.getInstance()
-    val buf = tess.builder
-    // https://stackoverflow.com/questions/20394727/gl-triangle-strip-vs-gl-triangle-fan
-    // Starting point is the center
-    buf.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR)
-    buf.vertex(mat, point.x, point.y, 1f).color(r, g, b, a).endVertex()
+    drawSpot(mat, point, radius, ARGB32.color((a*255).toInt(), (r*255).toInt(), (g*255).toInt(), (b*255).toInt()), VCDrawHelper.Basic(1f))
+}
+
+fun drawSpot(mat: Matrix4f, point: Vec2, radius: Float, color: Int, vcHelper: VCDrawHelper) {
+    var vc = vcHelper.vcSetupAndSupply(VertexFormat.Mode.TRIANGLE_FAN);
+    vcHelper.vertex(vc, color, point, mat)
 
     // https://github.com/not-fl3/macroquad/blob/master/src/shapes.rs#L98
     // yes they are gonna be little hexagons fite me
@@ -368,10 +368,10 @@ fun drawSpot(mat: Matrix4f, point: Vec2, radius: Float, r: Float, g: Float, b: F
         val theta = i.toFloat() / fracOfCircle * TAU.toFloat()
         val rx = Mth.cos(theta) * radius + point.x
         val ry = Mth.sin(theta) * radius + point.y
-        buf.vertex(mat, rx, ry, 1f).color(r, g, b, a).endVertex()
+        vcHelper.vertex(vc, color, Vec2(rx, ry), mat)
     }
 
-    tess.end()
+    vcHelper.vcEndDrawer(vc)
 }
 
 fun screenCol(n: Int): Int {

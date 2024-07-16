@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.client.render;
 
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.world.phys.Vec2;
 
 import java.util.ArrayList;
@@ -14,32 +15,35 @@ import java.util.concurrent.ConcurrentMap;
  * number of extra values here to avoid recomputing them.
  */
 public class HexPatternPoints {
-    public List<Vec2> zappyPoints;
-//    public String pointsKey = null; //TODO: if a string key isnt performant enough override hashcode for points
+    public final ImmutableList<Vec2> zappyPoints;
+    public final ImmutableList<Vec2> zappyPointsScaled;
 
-    public double minX = Double.MAX_VALUE;
-    public double maxX = Double.MIN_VALUE;
-    public double minY = Double.MAX_VALUE;
-    public double maxY = Double.MIN_VALUE;
+    public final ImmutableList<Vec2> dotsScaled;
 
-    public double rangeX;
-    public double rangeY;
+    public final double rangeX;
+    public final double rangeY;
+    public final double finalScale;
 
-    public double offsetX;
-    public double offsetY;
+    public final double fullWidth;
+    public final double fullHeight;
 
-    public double baseScale;
-    public double scale;
-    public double finalScale;
+    private double minX = Double.MAX_VALUE;
+    private double maxX = Double.MIN_VALUE;
+    private double minY = Double.MAX_VALUE;
+    private double maxY = Double.MIN_VALUE;
 
-    public double fullWidth;
-    public double fullHeight;
+    private double offsetX;
+    private double offsetY;
+
+    private double baseScale;
+    private double scale;
 
     private static final ConcurrentMap<String, HexPatternPoints> CACHED_STATIC_POINTS = new ConcurrentHashMap<>();
 
     private HexPatternPoints(HexPattern pattern, PatternRenderSettings patSets, double seed) {
 
         List<Vec2> dots = pattern.toLines(1, Vec2.ZERO);
+
         Set<Integer> dupIndices = RenderLib.findDupIndices(pattern.positions());
 
         // always do space calculations with the static version of the pattern
@@ -48,7 +52,7 @@ public class HexPatternPoints {
                 patSets.hops, patSets.variance, 0f, patSets.flowIrregular, patSets.readabilityOffset, patSets.lastSegmentLenProportion, seed);
 
 
-        this.zappyPoints = zappyPoints;
+        this.zappyPoints = ImmutableList.copyOf(zappyPoints);
 //        pointsKey = PatternTextureManager.getPointsKey(zappyPoints);
         for (Vec2 point : zappyPoints) {
             minX = Math.min(minX, point.x);
@@ -86,14 +90,20 @@ public class HexPatternPoints {
         finalScale = baseScale * scale;
 
         // either the space given or however long it goes if it's not fitted.
-        fullWidth = (baseWidth * scale) + 2 * patSets.hPadding;
-        fullHeight = (baseHeight * scale) + 2 * patSets.vPadding;
+        double fullWidthTmp = (baseWidth * scale) + 2 * patSets.hPadding;
+        double fullHeightTmp = (baseHeight * scale) + 2 * patSets.vPadding;
 
-        if(patSets.fitAxis.horFit) fullWidth = Math.max(patSets.spaceWidth, fullWidth);
-        if(patSets.fitAxis.vertFit) fullHeight = Math.max(patSets.spaceHeight, fullHeight);
+        if(patSets.fitAxis.horFit) fullWidthTmp = Math.max(patSets.spaceWidth, fullWidthTmp);
+        if(patSets.fitAxis.vertFit) fullHeightTmp = Math.max(patSets.spaceHeight, fullHeightTmp);
 
-        offsetX = (fullWidth - baseWidth * scale) / 2;
-        offsetY = (fullHeight - baseHeight * scale) / 2;
+        this.fullWidth = fullWidthTmp;
+        this.fullHeight = fullHeightTmp;
+
+        offsetX = (fullWidthTmp - baseWidth * scale) / 2;
+        offsetY = (fullHeightTmp - baseHeight * scale) / 2;
+
+        this.zappyPointsScaled = ImmutableList.copyOf(scaleVecs(zappyPoints));
+        this.dotsScaled = ImmutableList.copyOf(scaleVecs(dots));
     }
 
     public Vec2 scaleVec(Vec2 point){
