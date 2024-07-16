@@ -44,7 +44,8 @@ public class WorldlyPatternRenderHelpers {
             null, 2.5f, 0.1f, null, null, null)
             .named("slate_wobbly");
 
-    public static final PatternColors DEFAULT_PATTERN_COLOR = new PatternColors(0xc8_322b33, 0xff_d2c8c8);
+    // using an opaque inner color based on 0xc8_322b33 because worldly pattern renderer is funky
+    public static final PatternColors DEFAULT_PATTERN_COLOR = new PatternColors(0xff_554d54, 0xff_d2c8c8);
 
     public static final PatternColors SLATE_WOBBLY_COLOR = new PatternColors(RenderLib.screenCol(0xff_64c8ff), 0xff_64c8ff);
 

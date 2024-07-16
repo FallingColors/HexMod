@@ -95,7 +95,8 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
 
             ps.popPose();
 
-            WorldlyPatternRenderHelpers.renderPatternForScroll(wallScroll.pattern, wallScroll, ps, bufSource, light, wallScroll.blockSize, wallScroll.getShowsStrokeOrder());
+            if(wallScroll.pattern != null)
+                WorldlyPatternRenderHelpers.renderPatternForScroll(wallScroll.pattern, wallScroll, ps, bufSource, light, wallScroll.blockSize, wallScroll.getShowsStrokeOrder());
         }
 
         //TODO: remove old rendering if not needed anymore for comparison

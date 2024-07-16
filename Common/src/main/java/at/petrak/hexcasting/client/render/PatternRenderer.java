@@ -16,7 +16,10 @@ import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class PatternRenderer {
@@ -51,14 +54,7 @@ public class PatternRenderer {
                 patSets.hops, patSets.variance, patSets.speed, patSets.flowIrregular, patSets.readabilityOffset, patSets.lastSegmentLenProportion, seed);
         }
 
-        List<Vec2> zappyRenderSpace = new ArrayList<>();
-
-        for (Vec2 point : zappyPattern) {
-            zappyRenderSpace.add(new Vec2(
-                (float) (((point.x - staticPoints.minX) * staticPoints.finalScale) + staticPoints.offsetX),
-                (float) (((point.y - staticPoints.minY) * staticPoints.finalScale) + staticPoints.offsetY)
-            ));
-        }
+        List<Vec2> zappyRenderSpace = staticPoints.scaleVecs(zappyPattern);
 
         if(FastColor.ARGB32.alpha(patColors.outerEndColor) != 0 && FastColor.ARGB32.alpha(patColors.outerStartColor) != 0){
             RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.outerWidthProvider.apply((float)(staticPoints.finalScale)),

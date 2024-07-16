@@ -82,14 +82,7 @@ public class PatternTextureManager {
     private static Map<String, DynamicTexture> createTextures(HexPattern pattern, PatternRenderSettings patSets, double seed, int resPerUnit) {
         HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(pattern, patSets, seed);
 
-        List<Vec2> zappyRenderSpace = new ArrayList<>();
-
-        for (Vec2 point : staticPoints.zappyPoints) {
-            zappyRenderSpace.add(new Vec2(
-                    (float) (((point.x - staticPoints.minX) * staticPoints.finalScale) + staticPoints.offsetX),
-                    (float) (((point.y - staticPoints.minY) * staticPoints.finalScale) + staticPoints.offsetY)
-            ));
-        }
+        List<Vec2> zappyRenderSpace = staticPoints.scaleVecs(staticPoints.zappyPoints);
 
         Map<String, DynamicTexture> patTexts = new HashMap<>();
 

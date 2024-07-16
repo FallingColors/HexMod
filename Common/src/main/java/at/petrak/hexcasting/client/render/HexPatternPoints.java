@@ -3,6 +3,7 @@ package at.petrak.hexcasting.client.render;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import net.minecraft.world.phys.Vec2;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,7 +37,17 @@ public class HexPatternPoints {
 
     private static final ConcurrentMap<String, HexPatternPoints> CACHED_STATIC_POINTS = new ConcurrentHashMap<>();
 
-    private HexPatternPoints(List<Vec2> zappyPoints, PatternRenderSettings patSets) {
+    private HexPatternPoints(HexPattern pattern, PatternRenderSettings patSets, double seed) {
+
+        List<Vec2> dots = pattern.toLines(1, Vec2.ZERO);
+        Set<Integer> dupIndices = RenderLib.findDupIndices(pattern.positions());
+
+        // always do space calculations with the static version of the pattern
+        // so that it doesn't jump around resizing itself.
+        List<Vec2> zappyPoints = RenderLib.makeZappy(dots, dupIndices,
+                patSets.hops, patSets.variance, 0f, patSets.flowIrregular, patSets.readabilityOffset, patSets.lastSegmentLenProportion, seed);
+
+
         this.zappyPoints = zappyPoints;
 //        pointsKey = PatternTextureManager.getPointsKey(zappyPoints);
         for (Vec2 point : zappyPoints) {
@@ -85,6 +96,21 @@ public class HexPatternPoints {
         offsetY = (fullHeight - baseHeight * scale) / 2;
     }
 
+    public Vec2 scaleVec(Vec2 point){
+        return new Vec2(
+                (float) (((point.x - this.minX) * this.finalScale) + this.offsetX),
+                (float) (((point.y - this.minY) * this.finalScale) + this.offsetY)
+        );
+    }
+
+    public List<Vec2> scaleVecs(List<Vec2> points){
+        List<Vec2> scaledPoints = new ArrayList<>();
+        for (Vec2 point : points) {
+            scaledPoints.add(scaleVec(point));
+        }
+        return scaledPoints;
+    }
+
 
     /**
      * Gets the static points for the given pattern, settings, and seed. This is cached.
@@ -96,16 +122,6 @@ public class HexPatternPoints {
 
         String cacheKey = patSets.getCacheKey(pattern, seed);
 
-        return CACHED_STATIC_POINTS.computeIfAbsent(cacheKey, (key) -> {
-            List<Vec2> lines1 = pattern.toLines(1, Vec2.ZERO);
-            Set<Integer> dupIndices = RenderLib.findDupIndices(pattern.positions());
-
-            // always do space calculations with the static version of the pattern
-            // so that it doesn't jump around resizing itself.
-            List<Vec2> zappyPatternSpace = RenderLib.makeZappy(lines1, dupIndices,
-                    patSets.hops, patSets.variance, 0f, patSets.flowIrregular, patSets.readabilityOffset, patSets.lastSegmentLenProportion, seed);
-
-            return new HexPatternPoints(zappyPatternSpace, patSets);
-        });
+        return CACHED_STATIC_POINTS.computeIfAbsent(cacheKey, (key) -> new HexPatternPoints(pattern, patSets, seed) );
     }
 }
