@@ -7,7 +7,7 @@ import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
-import at.petrak.hexcasting.client.render.GaslightingTracker;
+import at.petrak.hexcasting.api.client.GaslightingTracker;
 import at.petrak.hexcasting.client.render.ScryingLensOverlays;
 import at.petrak.hexcasting.client.render.be.BlockEntityAkashicBookshelfRenderer;
 import at.petrak.hexcasting.client.render.be.BlockEntityQuenchedAllayRenderer;
@@ -30,7 +30,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -109,12 +108,12 @@ public class RegisterClientStuff {
         // purposely skip quenched
         registerWandOverrides(HexItems.STAFF_MINDSPLICE);
 
-        registerGaslight4(HexItems.STAFF_QUENCHED);
-        registerGaslight4(HexBlocks.QUENCHED_ALLAY.asItem());
-        registerGaslight4(HexBlocks.QUENCHED_ALLAY_TILES.asItem());
-        registerGaslight4(HexBlocks.QUENCHED_ALLAY_BRICKS.asItem());
-        registerGaslight4(HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL.asItem());
-        registerGaslight4(HexItems.QUENCHED_SHARD);
+        registerGaslight4(HexItems.STAFF_QUENCHED, "quenched_allay_variants");
+        registerGaslight4(HexBlocks.QUENCHED_ALLAY.asItem(), "quenched_allay_variants");
+        registerGaslight4(HexBlocks.QUENCHED_ALLAY_TILES.asItem(), "quenched_allay_variants");
+        registerGaslight4(HexBlocks.QUENCHED_ALLAY_BRICKS.asItem(), "quenched_allay_variants");
+        registerGaslight4(HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL.asItem(), "quenched_allay_variants");
+        registerGaslight4(HexItems.QUENCHED_SHARD, "quenched_allay_variants");
 
         x.setRenderLayer(HexBlocks.CONJURED_LIGHT, RenderType.cutout());
         x.setRenderLayer(HexBlocks.CONJURED_BLOCK, RenderType.cutout());
@@ -143,10 +142,11 @@ public class RegisterClientStuff {
         ScryingLensOverlays.addScryingLensStuff();
     }
 
-    private static void registerGaslight4(Item item) {
+    private static void registerGaslight4(Item item, String gaslightingPredicate) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty(item,
-            GaslightingTracker.GASLIGHTING_PRED, (stack, level, holder, holderID) ->
-                Math.abs(GaslightingTracker.getGaslightingAmount() % 4));
+                GaslightingTracker.GASLIGHTING_TRACKERS.get(modLoc(gaslightingPredicate)).GASLIGHTING_PRED,
+                (stack, level, holder, holderID) ->
+                        Math.abs(GaslightingTracker.GASLIGHTING_TRACKERS.get(modLoc(gaslightingPredicate)).getGaslightingAmount() % 4));
     }
 
     public static void registerColorProviders(BiConsumer<ItemColor, Item> itemColorRegistry,
