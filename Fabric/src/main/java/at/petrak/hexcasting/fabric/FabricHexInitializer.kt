@@ -69,6 +69,8 @@ object FabricHexInitializer : ModInitializer {
 
         HexInterop.init()
         RegisterMisc.register()
+
+        HexGaslighting.init()
     }
 
     fun initListeners() {
