@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.client.render
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.client.render.PatternRenderer.WorldlyBits
 import com.ibm.icu.impl.CurrencyData.provider
 import com.mojang.blaze3d.platform.GlStateManager
@@ -27,12 +28,21 @@ interface VCDrawHelper {
     fun vcEndDrawer(vc: VertexConsumer)
 
     companion object {
+
+        @JvmStatic
+        val WHITE: ResourceLocation = HexAPI.modLoc("textures/entity/white.png")
+
         @JvmStatic
         fun getHelper(worldlyBits: WorldlyBits?, ps: PoseStack, z: Float, texture: ResourceLocation) : VCDrawHelper{
             if(worldlyBits != null){
                 return Worldly(worldlyBits, ps, z, texture)
             }
             return Basic(z)
+        }
+
+        @JvmStatic
+        fun getHelper(worldlyBits: WorldlyBits?, ps: PoseStack, z: Float) : VCDrawHelper{
+            return getHelper(worldlyBits, ps, z, WHITE)
         }
     }
 
@@ -77,7 +87,7 @@ interface VCDrawHelper {
             }
             buf.begin( vertMode, DefaultVertexFormat.NEW_ENTITY )
             // Generally this would be handled by a RenderLayer, but that doesn't seem to actually work here,,
-            RenderSystem.setShaderTexture(0, TheCoolerRenderLib.WHITE)
+            RenderSystem.setShaderTexture(0, texture)
             RenderSystem.enableDepthTest()
             RenderSystem.disableCull()
             Minecraft.getInstance().gameRenderer.lightTexture().turnOnLightLayer()

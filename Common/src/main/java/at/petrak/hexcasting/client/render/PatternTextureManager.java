@@ -151,6 +151,7 @@ public class PatternTextureManager {
         return new Tuple<>(x, y);
     }
 
+    // keeping this around just in case we ever decide to put the dots in the textures instead of dynamic
     private static void drawHexagon(Graphics2D g2d, int x, int y, int radius) {
         int fracOfCircle = 6;
         Polygon hexagon = new Polygon();

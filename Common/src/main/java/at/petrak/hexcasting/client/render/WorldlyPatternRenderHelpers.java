@@ -9,17 +9,13 @@ import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 
 /**
  * Helper methods for rendering patterns in the world.
@@ -101,12 +97,8 @@ public class WorldlyPatternRenderHelpers {
     {
         ps.pushPose();
 
-        PoseStack.Pose last = ps.last();
-        Matrix4f mat = last.pose();
-        Matrix3f normal = last.normal();
 
-        float x = blockSize, y = blockSize, z = (-1f / 16f) - 0.01f;
-        float nx = 0, ny = 0, nz = 0;
+        float z = (-1f / 16f) - 0.01f;
 
         PSTransformer transformer;
 
@@ -135,56 +127,15 @@ public class WorldlyPatternRenderHelpers {
         }
 
         Vec3 nVec = transformer.transform(ps, facing, blockSize);
-        nx = (float)nVec.x();
-        ny = (float)nVec.y();
-        nz = (float)nVec.z();
 
         ps.scale(blockSize, blockSize, 1);
-
-        int lineWidth = PatternTextureManager.otherLineWidth;
-        int outerColor = 0xff_d2c8c8;
-        int innerColor = 0xc8_322b33;
-        if(isScroll)
-            lineWidth = PatternTextureManager.scrollLineWidth;
-
-//        ps.scale(x, y, z);
         ps.translate(0,0, z);
-//        VertexConsumer verts = bufSource.getBuffer(RenderType.entityCutout(TheCoolerRenderLib.WHITE));
+
         PatternRenderer.renderPattern(pattern, ps, new PatternRenderer.WorldlyBits(bufSource, light, nVec),
                 patSets, patColors, seed, blockSize * PatternTextureManager.resolutionByBlockSize);
-//        PatternRenderer.renderPattern(pattern, ps, null, patSets, patColors, seed, light, nVec);
-
-//        ResourceLocation texture = PatternTextureManager.getTexture(zappyPoints, pointsKey, blockSize, showStrokeOrder, lineWidth, useFullSize, new Color(innerColor), new Color(outerColor));
-//        VertexConsumer verts = bufSource.getBuffer(RenderType.entityCutout(texture));
-//
-//        vertex(mat, normal, light, verts, 0, 0, z, 0, 0, nx, ny, nz);
-//        vertex(mat, normal, light, verts, 0, y, z, 0, 1, nx, ny, nz);
-//        vertex(mat, normal, light, verts, x, y, z, 1, 1, nx, ny, nz);
-//        vertex(mat, normal, light, verts, x, 0, z, 1, 0, nx, ny, nz);
 
         ps.popPose();
     }
-
-
-
-//    public static HexPatternPoints generateHexPatternPoints(HexBlockEntity tile, HexPattern pattern, float flowIrregular)
-//    {
-//        var stupidHash = tile.getBlockPos().hashCode();
-//        var lines1 = pattern.toLines(1, Vec2.ZERO);
-//        var zappyPoints = RenderLib.makeZappy(lines1, RenderLib.findDupIndices(pattern.positions()),
-//                10, 0.5f, 0f, flowIrregular, 0f, 1f, stupidHash);
-//        return new HexPatternPoints(zappyPoints);
-//    }
-
-    private static void vertex(Matrix4f mat, Matrix3f normal, int light, VertexConsumer verts, float x, float y, float z,
-                                 float u, float v, float nx, float ny, float nz) {
-        verts.vertex(mat, x, y, z)
-                .color(0xffffffff)
-                .uv(u, v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light)
-                .normal(normal, nx, ny, nz)
-                .endVertex();
-    }
-
 
     @FunctionalInterface
     public interface PSTransformer{

@@ -7,7 +7,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.phys.Vec2;
@@ -54,30 +53,28 @@ public class PatternRenderer {
 
             if(FastColor.ARGB32.alpha(patColors.outerEndColor) != 0 && FastColor.ARGB32.alpha(patColors.outerStartColor) != 0){
                 RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.outerWidthProvider.apply((float)(staticPoints.finalScale)),
-                        patColors.outerEndColor, patColors.outerStartColor, VCDrawHelper.getHelper(worldlyBits, ps,0.001f, TheCoolerRenderLib.WHITE));
+                        patColors.outerEndColor, patColors.outerStartColor, VCDrawHelper.getHelper(worldlyBits, ps,0.001f));
             }
             if(FastColor.ARGB32.alpha(patColors.innerEndColor) != 0 && FastColor.ARGB32.alpha(patColors.innerStartColor) != 0) {
                 RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.innerWidthProvider.apply((float) (staticPoints.finalScale)),
-                        patColors.innerEndColor, patColors.innerStartColor, VCDrawHelper.getHelper(worldlyBits, ps,0.0005f, TheCoolerRenderLib.WHITE));
+                        patColors.innerEndColor, patColors.innerStartColor, VCDrawHelper.getHelper(worldlyBits, ps,0.0005f));
             }
         }
 
-        // render dots and grid dynamically for now
-
-//        if(provider == null) provider.getBuffer(RenderType.solid()); // just to try to refresh it
+        // render dots and grid dynamically
 
         float dotZ = 0.0004f;
 
         if(FastColor.ARGB32.alpha(patColors.startingDotColor) != 0) {
             RenderLib.drawSpot(ps.last().pose(), staticPoints.dotsScaled.get(0), patSets.startingDotRadiusProvider.apply((float) (staticPoints.finalScale)),
-                    patColors.startingDotColor, VCDrawHelper.getHelper(worldlyBits, ps, dotZ, TheCoolerRenderLib.WHITE));
+                    patColors.startingDotColor, VCDrawHelper.getHelper(worldlyBits, ps, dotZ));
         }
 
         if(FastColor.ARGB32.alpha(patColors.gridDotsColor) != 0) {
             for(int i = 1; i < staticPoints.dotsScaled.size(); i++){
                 Vec2 gridDot = staticPoints.dotsScaled.get(i);
                 RenderLib.drawSpot(ps.last().pose(), gridDot, patSets.gridDotsRadiusProvider.apply((float) (staticPoints.finalScale)),
-                    patColors.gridDotsColor, VCDrawHelper.getHelper(worldlyBits, ps, dotZ, TheCoolerRenderLib.WHITE));
+                    patColors.gridDotsColor, VCDrawHelper.getHelper(worldlyBits, ps, dotZ));
             }
         }
 
@@ -90,16 +87,7 @@ public class PatternRenderer {
             return false;
         }
 
-        Vec3 normalVec = worldlyBits.normal();
-        int light = worldlyBits.light();
-        MultiBufferSource provider = worldlyBits.provider();
-
-        if(normalVec == null) normalVec = new Vec3(1f, 1f, 1f);
-
-        ShaderInstance oldShader = RenderSystem.getShader();
-
         Map<String, ResourceLocation> textures = maybeTextures.get();
-
         HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(pattern, patSets, seed);
 
         VertexConsumer vc;
@@ -134,10 +122,9 @@ public class PatternRenderer {
 
             vcHelper.vcEndDrawer(vc);
         }
-        RenderSystem.setShader(() -> oldShader);
 
         return true;
     }
 
-    public record WorldlyBits(@Nullable MultiBufferSource provider, Integer light, Vec3 normal){};
+    public record WorldlyBits(@Nullable MultiBufferSource provider, Integer light, Vec3 normal){}
 }
