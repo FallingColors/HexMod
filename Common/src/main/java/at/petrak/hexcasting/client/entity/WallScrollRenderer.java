@@ -99,40 +99,6 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
                 WorldlyPatternRenderHelpers.renderPatternForScroll(wallScroll.pattern, wallScroll, ps, bufSource, light, wallScroll.blockSize, wallScroll.getShowsStrokeOrder());
         }
 
-        //TODO: remove old rendering if not needed anymore for comparison
-//        if (!PatternTextureManager.useTextures && wallScroll.points != null) {
-//            var points = wallScroll.points.zappyPoints;
-//            ps.pushPose();
-//
-//            ps.mulPose(Axis.YP.rotationDegrees(180f));
-//            ps.translate(0, 0, 1.1f / 16f);
-//            // make smaller scrolls not be charlie kirk-sized
-//            // i swear, learning about these functions with asymptotes where slope != 0 is the most useful thing
-//            // I've ever learned in a math class
-//            float unCharlieKirk = Mth.sqrt(wallScroll.blockSize * wallScroll.blockSize + 60);
-//            float scale = 1f / 300f * unCharlieKirk;
-//            ps.scale(scale, scale, 0.01f);
-//
-//            var last = ps.last();
-//            var mat = last.pose();
-//            var norm = last.normal();
-//            var outer = 0xff_d2c8c8;
-//            var inner = 0xc8_322b33;
-//            var verts = bufSource.getBuffer(RenderType.entityCutout(WHITE));
-//            theCoolerDrawLineSeq(mat, norm, light, verts, points, wallScroll.blockSize * 5f / 3f, outer);
-//            ps.translate(0, 0, 0.01);
-//            theCoolerDrawLineSeq(mat, norm, light, verts, points, wallScroll.blockSize * 2f / 3f, inner);
-//
-//            if (wallScroll.getShowsStrokeOrder()) {
-//                ps.translate(0, 0, 0.01);
-//                var spotFrac = 0.8f * wallScroll.blockSize;
-//                theCoolerDrawSpot(mat, norm, light, verts, points.get(0), 2f / 3f * spotFrac,
-//                    0xff_5b7bd7);
-//            }
-//
-//            ps.popPose();
-//        }
-
         ps.popPose();
         super.render(wallScroll, yaw, partialTicks, ps, bufSource, packedLight);
     }
