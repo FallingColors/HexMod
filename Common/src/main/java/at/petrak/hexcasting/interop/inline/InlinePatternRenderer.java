@@ -36,8 +36,8 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
         if(FastColor.ARGB32.alpha(color) == 0){
             color |= 0xFF_000000;
         }
-        PatternRenderer.renderPattern(data.pattern, drawContext.pose(), trContext.vertexConsumers, INLINE_RENDER_SETTINGS,
-                new PatternColors(color), 0, trContext.light, null, INLINE_TEXTURE_RES);
+        PatternRenderer.renderPattern(data.pattern, drawContext.pose(), new PatternRenderer.WorldlyBits(trContext.vertexConsumers, trContext.light, null),
+                INLINE_RENDER_SETTINGS, new PatternColors(color), 0, INLINE_TEXTURE_RES);
 
         drawContext.pose().popPose();
         return charWidth(data, style, codepoint);

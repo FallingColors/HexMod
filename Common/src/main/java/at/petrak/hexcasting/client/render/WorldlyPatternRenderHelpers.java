@@ -150,7 +150,8 @@ public class WorldlyPatternRenderHelpers {
 //        ps.scale(x, y, z);
         ps.translate(0,0, z);
 //        VertexConsumer verts = bufSource.getBuffer(RenderType.entityCutout(TheCoolerRenderLib.WHITE));
-        PatternRenderer.renderPattern(pattern, ps, bufSource, patSets, patColors, seed, light, nVec, blockSize * PatternTextureManager.resolutionByBlockSize);
+        PatternRenderer.renderPattern(pattern, ps, new PatternRenderer.WorldlyBits(bufSource, light, nVec),
+                patSets, patColors, seed, blockSize * PatternTextureManager.resolutionByBlockSize);
 //        PatternRenderer.renderPattern(pattern, ps, null, patSets, patColors, seed, light, nVec);
 
 //        ResourceLocation texture = PatternTextureManager.getTexture(zappyPoints, pointsKey, blockSize, showStrokeOrder, lineWidth, useFullSize, new Color(innerColor), new Color(outerColor));
