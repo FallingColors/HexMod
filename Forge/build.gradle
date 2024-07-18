@@ -84,6 +84,9 @@ dependencies {
 
     implementation fg.deobf("com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion")
 
+    // needed for inline to run
+    runtimeOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:$clothConfigVersion")
+
     // Optional interop
 
     compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-common-api:$jeiVersion")
