@@ -37,7 +37,7 @@ interface VCDrawHelper {
             if(worldlyBits != null){
                 return Worldly(worldlyBits, ps, z, texture)
             }
-            return Basic(z)
+            return Basic(z, texture)
         }
 
         @JvmStatic
@@ -46,16 +46,23 @@ interface VCDrawHelper {
         }
     }
 
-    class Basic(val z: Float) : VCDrawHelper {
+    class Basic(val z: Float, val texture: ResourceLocation = WHITE) : VCDrawHelper {
 
         override fun vcSetupAndSupply(vertMode: VertexFormat.Mode): VertexConsumer{
             val tess = Tesselator.getInstance()
             val buf = tess.builder
-            buf.begin(vertMode, DefaultVertexFormat.POSITION_COLOR)
+            buf.begin(vertMode, DefaultVertexFormat.POSITION_COLOR_TEX)
+            RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+            RenderSystem.disableCull()
+            RenderSystem.enableDepthTest()
+            RenderSystem.enableBlend()
+            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA)
+            RenderSystem.setShaderTexture(0, texture)
             return buf
         }
         override fun vertex(vc: VertexConsumer, color: Int, pos: Vec2, uv: Vec2, matrix: Matrix4f){
-            vc.vertex(matrix, pos.x, pos.y, z).color(color).endVertex()
+            vc.vertex(matrix, pos.x, pos.y, z).color(color).uv(uv.x, uv.y).endVertex()
         }
         override fun vcEndDrawer(vc: VertexConsumer){
             Tesselator.getInstance().end()
@@ -94,6 +101,7 @@ interface VCDrawHelper {
             RenderSystem.enableBlend()
             RenderSystem.blendFuncSeparate( GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
                 GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA )
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
             if (Minecraft.useShaderTransparency()) {
                 Minecraft.getInstance().levelRenderer.translucentTarget!!.bindWrite(false)
             }

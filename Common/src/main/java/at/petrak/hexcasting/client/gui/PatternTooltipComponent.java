@@ -1,23 +1,16 @@
 package at.petrak.hexcasting.client.gui;
 
 import at.petrak.hexcasting.api.casting.math.HexPattern;
-import at.petrak.hexcasting.client.render.RenderLib;
+import at.petrak.hexcasting.client.render.PatternRenderer;
+import at.petrak.hexcasting.client.render.WorldlyPatternRenderHelpers;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
-import net.minecraft.world.phys.Vec2;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -36,23 +29,23 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
     private static final int TEXTURE_SIZE = 48;
 
     private final HexPattern pattern;
-    private final List<Vec2> zappyPoints;
-    private final List<Vec2> pathfinderDots;
-    private final float scale;
+//    private final List<Vec2> zappyPoints;
+//    private final List<Vec2> pathfinderDots;
+//    private final float scale;
     private final ResourceLocation background;
 
     public PatternTooltipComponent(PatternTooltip tt) {
         this.pattern = tt.pattern();
         this.background = tt.background();
 
-        var pair = RenderLib.getCenteredPattern(pattern, RENDER_SIZE, RENDER_SIZE, 16f);
-        this.scale = pair.getFirst();
-        var dots = pair.getSecond();
-        this.zappyPoints = RenderLib.makeZappy(
-            dots, RenderLib.findDupIndices(pattern.positions()),
-            10, 0.8f, 0f, 0f, RenderLib.DEFAULT_READABILITY_OFFSET, RenderLib.DEFAULT_LAST_SEGMENT_LEN_PROP,
-            0.0);
-        this.pathfinderDots = dots.stream().distinct().collect(Collectors.toList());
+//        var pair = RenderLib.getCenteredPattern(pattern, RENDER_SIZE, RENDER_SIZE, 16f);
+//        this.scale = pair.getFirst();
+//        var dots = pair.getSecond();
+//        this.zappyPoints = RenderLib.makeZappy(
+//            dots, RenderLib.findDupIndices(pattern.positions()),
+//            10, 0.8f, 0f, 0f, RenderLib.DEFAULT_READABILITY_OFFSET, RenderLib.DEFAULT_LAST_SEGMENT_LEN_PROP,
+//            0.0);
+//        this.pathfinderDots = dots.stream().distinct().collect(Collectors.toList());
     }
 
     @Nullable
@@ -65,9 +58,6 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
 
     @Override
     public void renderImage(Font font, int mouseX, int mouseY, GuiGraphics graphics) {
-        var width = this.getWidth(font);
-        var height = this.getHeight();
-
         var ps = graphics.pose();
 
         // far as i can tell "mouseX" and "mouseY" are actually the positions of the corner of the tooltip
@@ -80,26 +70,13 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
 //                RenderSystem.disableBlend();
         ps.translate(0, 0, 100);
 
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        RenderSystem.disableCull();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA,
-            GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        ps.translate(width / 2f, height / 2f, 1);
+        ps.pushPose();
+        ps.scale(RENDER_SIZE, RENDER_SIZE, 1);
 
-        var mat = ps.last().pose();
-        var outer = 0xff_d2c8c8;
-        var innerLight = 0xc8_aba2a2;
-        var innerDark = 0xc8_322b33;
-        RenderLib.drawLineSeq(mat, this.zappyPoints, 6f, 0,
-            outer, outer);
-        RenderLib.drawLineSeq(mat, this.zappyPoints, 6f * 0.4f, 0,
-            innerDark, innerLight);
-        RenderLib.drawSpot(mat, this.zappyPoints.get(0), 2.5f, 1f, 0.1f, 0.15f, 0.6f);
+        PatternRenderer.renderPattern(pattern, ps, WorldlyPatternRenderHelpers.READABLE_SCROLL_RENDER_SETTINGS,
+                WorldlyPatternRenderHelpers.READABLE_GRID_SCROLL_COLORS, 0, 512);
 
-        for (var dot : this.pathfinderDots) {
-            RenderLib.drawSpot(mat, dot, 1.5f, 0.82f, 0.8f, 0.8f, 0.5f);
-        }
-
+        ps.popPose();
         ps.popPose();
     }
 

@@ -24,7 +24,7 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
             .withZappySettings(null, 0f, 0f, 0f, 0f, null)
             .named("inline");
 
-    public static final int INLINE_TEXTURE_RES = 8; // 64px is probably fine for such small images ?
+    public static final int INLINE_TEXTURE_RES = 16; // 128px so it looks good and pretty on up close signs and whatnot
 
     public int render(InlinePatternData data, GuiGraphics drawContext, int index, Style style, int codepoint, TextRenderingContext trContext){
         drawContext.pose().pushPose();

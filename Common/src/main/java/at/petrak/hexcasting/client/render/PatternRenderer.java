@@ -53,17 +53,17 @@ public class PatternRenderer {
 
             if(FastColor.ARGB32.alpha(patColors.outerEndColor) != 0 && FastColor.ARGB32.alpha(patColors.outerStartColor) != 0){
                 RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.outerWidthProvider.apply((float)(staticPoints.finalScale)),
-                        patColors.outerEndColor, patColors.outerStartColor, VCDrawHelper.getHelper(worldlyBits, ps,0.001f));
+                        patColors.outerEndColor, patColors.outerStartColor, VCDrawHelper.getHelper(worldlyBits, ps,outerZ));
             }
             if(FastColor.ARGB32.alpha(patColors.innerEndColor) != 0 && FastColor.ARGB32.alpha(patColors.innerStartColor) != 0) {
                 RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, patSets.innerWidthProvider.apply((float) (staticPoints.finalScale)),
-                        patColors.innerEndColor, patColors.innerStartColor, VCDrawHelper.getHelper(worldlyBits, ps,0.0005f));
+                        patColors.innerEndColor, patColors.innerStartColor, VCDrawHelper.getHelper(worldlyBits, ps,innerZ));
             }
         }
 
         // render dots and grid dynamically
 
-        float dotZ = 0.0004f;
+        float dotZ = 0.0011f;
 
         if(FastColor.ARGB32.alpha(patColors.startingDotColor) != 0) {
             RenderLib.drawSpot(ps.last().pose(), staticPoints.dotsScaled.get(0), patSets.startingDotRadiusProvider.apply((float) (staticPoints.finalScale)),
@@ -81,6 +81,9 @@ public class PatternRenderer {
         RenderSystem.setShader(() -> oldShader);
     }
 
+    private static final float outerZ = 0.0005f;
+    private static final float innerZ = 0.001f;
+
     private static boolean renderPatternTexture(HexPattern pattern, PoseStack ps, @Nullable WorldlyBits worldlyBits, PatternRenderSettings patSets, PatternColors patColors, double seed, int resPerUnit){
         Optional<Map<String, ResourceLocation>> maybeTextures = PatternTextureManager.getTextures(pattern, patSets, seed, resPerUnit);
         if(maybeTextures.isEmpty()){
@@ -91,9 +94,6 @@ public class PatternRenderer {
         HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(pattern, patSets, seed);
 
         VertexConsumer vc;
-
-        float outerZ = 0.001f;
-        float innerZ = 0.0005f;
 
         if(FastColor.ARGB32.alpha(patColors.outerStartColor) != 0) {
             VCDrawHelper vcHelper = VCDrawHelper.getHelper(worldlyBits, ps, outerZ, textures.get("outer"));
