@@ -2,8 +2,8 @@ package at.petrak.hexcasting.interop.inline;
 
 import at.petrak.hexcasting.client.render.HexPatternPoints;
 import at.petrak.hexcasting.client.render.PatternColors;
-import at.petrak.hexcasting.client.render.PatternRenderSettings;
 import at.petrak.hexcasting.client.render.PatternRenderer;
+import at.petrak.hexcasting.client.render.PatternSettings;
 import com.samsthenerd.inline.api.client.InlineRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Style;
@@ -18,11 +18,12 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
         return InlinePatternData.rendererId;
     }
 
-    public static final PatternRenderSettings INLINE_RENDER_SETTINGS = new PatternRenderSettings()
-            .withSizings(PatternRenderSettings.FitAxis.VERT, 8.0, 9.0, 1.0, 0.5, 4.0, null, null)
-            .withWidths((scale) -> 1f, null)
-            .withZappySettings(null, 0f, 0f, 0f, 0f, null)
-            .named("inline");
+    public static final PatternSettings INLINE_SETTINGS = new PatternSettings("inline",
+            new PatternSettings.PositionSettings(8.0, 9.0, 1.0, 0.5,
+                    PatternSettings.AxisAlignment.NONE, PatternSettings.AxisAlignment.CENTER, 4.0, 0, 0),
+            PatternSettings.StrokeSettings.fromStroke(1.0),
+            PatternSettings.ZappySettings.STATIC
+    );
 
     public static final int INLINE_TEXTURE_RES = 16; // 128px so it looks good and pretty on up close signs and whatnot
 
@@ -37,7 +38,7 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
             color |= 0xFF_000000;
         }
         PatternRenderer.renderPattern(data.pattern, drawContext.pose(), new PatternRenderer.WorldlyBits(trContext.vertexConsumers, trContext.light, null),
-                INLINE_RENDER_SETTINGS, new PatternColors(color), 0, INLINE_TEXTURE_RES);
+                INLINE_SETTINGS, new PatternColors(color), 0, INLINE_TEXTURE_RES);
 
         drawContext.pose().popPose();
         return charWidth(data, style, codepoint);
@@ -45,7 +46,7 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
 
     public int charWidth(InlinePatternData data, Style style, int codepoint){
 
-        HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(data.pattern, INLINE_RENDER_SETTINGS, 0);
+        HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(data.pattern, INLINE_SETTINGS, 0);
 
         double baseScale = 4.0 / 1.5;
         double baseHeight = staticPoints.rangeY * baseScale;

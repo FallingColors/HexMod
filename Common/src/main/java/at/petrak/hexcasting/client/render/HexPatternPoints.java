@@ -40,7 +40,7 @@ public class HexPatternPoints {
 
     private static final ConcurrentMap<String, HexPatternPoints> CACHED_STATIC_POINTS = new ConcurrentHashMap<>();
 
-    private HexPatternPoints(HexPattern pattern, PatternRenderSettings patSets, double seed) {
+    private HexPatternPoints(HexPattern pattern, PatternSettings patSets, double seed) {
 
         List<Vec2> dots = pattern.toLines(1, Vec2.ZERO);
 
@@ -49,7 +49,8 @@ public class HexPatternPoints {
         // always do space calculations with the static version of the pattern
         // so that it doesn't jump around resizing itself.
         List<Vec2> zappyPoints = RenderLib.makeZappy(dots, dupIndices,
-                patSets.hops, patSets.variance, 0f, patSets.flowIrregular, patSets.readabilityOffset, patSets.lastSegmentLenProportion, seed);
+                patSets.getHops(), patSets.getVariance(), 0f, patSets.getFlowIrregular(),
+                patSets.getReadabilityOffset(), patSets.getLastSegmentProp(), seed);
 
 
         this.zappyPoints = ImmutableList.copyOf(zappyPoints);
@@ -67,40 +68,46 @@ public class HexPatternPoints {
         int patStepsY = (int)Math.round(rangeY / 1.7);
 
         // scales the patterns so that each point is patSets.baseScale units apart
-        baseScale = patSets.baseScale / 1.5;
+        baseScale = patSets.getBaseScale() / 1.5;
 
         // size of the pattern in pose space with no other adjustments
         double baseWidth = rangeX * baseScale;
         double baseHeight = rangeY * baseScale;
 
         // make sure that the scale fits within our min sizes
-        scale = Math.max(1.0, Math.max(patSets.minWidth / baseWidth, patSets.minHeight / baseHeight));
+        scale = Math.max(1.0, Math.max(
+                (patSets.getMinWidth() - patSets.getStrokeWidthGuess()) / baseWidth,
+                (patSets.getMinHeight() - patSets.getStrokeWidthGuess()) / baseHeight)
+        );
 
+        boolean vertFit = patSets.getVertAlignment() != PatternSettings.AxisAlignment.NONE;
+        boolean horFit = patSets.getHorAlignment() != PatternSettings.AxisAlignment.NONE;
 
         // scale down if needed to fit in vertical space
-        if(patSets.fitAxis.vertFit){
-            scale = Math.min(scale, (patSets.spaceHeight - 2 * patSets.vPadding)/(baseHeight));
+        if(vertFit){
+            scale = Math.min(scale, (patSets.getTargetHeight() - 2 * patSets.getVertPadding() - patSets.getStrokeWidthGuess())/(baseHeight));
         }
 
         // scale down if needed to fit in horizontal space
-        if(patSets.fitAxis.horFit){
-            scale = Math.min(scale, (patSets.spaceWidth - 2 * patSets.hPadding)/(baseWidth));
+        if(horFit){
+            scale = Math.min(scale, (patSets.getTargetWidth() - 2 * patSets.getHorPadding() - patSets.getStrokeWidthGuess())/(baseWidth));
         }
 
         finalScale = baseScale * scale;
+        double finalStroke = patSets.getStrokeWidth(finalScale);
 
         // either the space given or however long it goes if it's not fitted.
-        double fullWidthTmp = (baseWidth * scale) + 2 * patSets.hPadding;
-        double fullHeightTmp = (baseHeight * scale) + 2 * patSets.vPadding;
+        double fullWidthTmp = (baseWidth * scale) + 2 * patSets.getHorPadding() + finalStroke;
+        double fullHeightTmp = (baseHeight * scale) + 2 * patSets.getVertPadding() + finalStroke;
 
-        if(patSets.fitAxis.horFit) fullWidthTmp = Math.max(patSets.spaceWidth, fullWidthTmp);
-        if(patSets.fitAxis.vertFit) fullHeightTmp = Math.max(patSets.spaceHeight, fullHeightTmp);
+        if(horFit) fullWidthTmp = Math.max(patSets.getTargetWidth(), fullWidthTmp);
+        if(vertFit) fullHeightTmp = Math.max(patSets.getTargetHeight(), fullHeightTmp);
 
         this.fullWidth = fullWidthTmp;
         this.fullHeight = fullHeightTmp;
 
-        offsetX = (fullWidthTmp - baseWidth * scale) / 2;
-        offsetY = (fullHeightTmp - baseHeight * scale) / 2;
+        offsetX = (fullWidthTmp - baseWidth * scale - finalStroke) / 2;
+        offsetY = (fullHeightTmp - baseHeight * scale - finalStroke) / 2;
 
         this.zappyPointsScaled = ImmutableList.copyOf(scaleVecs(zappyPoints));
         this.dotsScaled = ImmutableList.copyOf(scaleVecs(dots));
@@ -128,7 +135,7 @@ public class HexPatternPoints {
      * This is used in rendering static patterns and positioning non-static patterns.
      *
      */
-    public static HexPatternPoints getStaticPoints(HexPattern pattern, PatternRenderSettings patSets, double seed){
+    public static HexPatternPoints getStaticPoints(HexPattern pattern, PatternSettings patSets, double seed){
 
         String cacheKey = patSets.getCacheKey(pattern, seed);
 

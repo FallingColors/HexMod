@@ -21,23 +21,29 @@ import javax.annotation.Nullable;
  */
 public class WorldlyPatternRenderHelpers {
 
-    public static final PatternRenderSettings WORLDLY_RENDER_SETTINGS = new PatternRenderSettings()
-            .withSizings(PatternRenderSettings.FitAxis.BOTH, 1.0, 1.0, 1.0/16, 1.0/16, 0.25, null, null)
-            .withWidths((scale) -> 0.4f/16, (scale) -> 0.8f/16)
-            .named("worldly");
+    public static final PatternSettings SCROLL_SETTINGS = new PatternSettings("scroll",
+            PatternSettings.PositionSettings.paddedSquare(2.0/16),
+            PatternSettings.StrokeSettings.fromStroke(0.8/16),
+            PatternSettings.ZappySettings.STATIC
+    );
 
-    public static final PatternRenderSettings SCROLL_RENDER_SETTINGS = WORLDLY_RENDER_SETTINGS.withSizings(null, null, null,
-            2.0/16, 2.0/16, null, null, null)
-            .named("wallscroll");
+    public static final PatternSettings READABLE_SCROLL_SETTINGS = new PatternSettings("scroll_readable",
+            PatternSettings.PositionSettings.paddedSquare(2.0/16),
+            PatternSettings.StrokeSettings.fromStroke(0.8/16),
+            PatternSettings.ZappySettings.STATIC
+    );
 
-    public static final PatternRenderSettings READABLE_SCROLL_RENDER_SETTINGS = SCROLL_RENDER_SETTINGS.withZappySettings(
-            null, null, null, null, RenderLib.DEFAULT_READABILITY_OFFSET, RenderLib.DEFAULT_LAST_SEGMENT_LEN_PROP
-            )
-            .named("wallscroll_readable");
+    public static final PatternSettings WORLDLY_SETTINGS = new PatternSettings("worldly",
+            PatternSettings.PositionSettings.paddedSquare(2.0/16),
+            PatternSettings.StrokeSettings.fromStroke(0.8/16),
+            PatternSettings.ZappySettings.STATIC
+    );
 
-    public static final PatternRenderSettings SLATE_WOMBLY_SETTINGS = WORLDLY_RENDER_SETTINGS.withZappySettings(
-            null, 2.5f, 0.1f, null, null, null)
-            .named("slate_wobbly");
+    public static final PatternSettings WORLDLY_SETTINGS_WOBBLY = new PatternSettings("wobbly_world",
+            PatternSettings.PositionSettings.paddedSquare(2.0/16),
+            PatternSettings.StrokeSettings.fromStroke(0.8/16),
+            PatternSettings.ZappySettings.WOBBLY
+    );
 
     // using an opaque inner color based on 0xc8_322b33 because worldly pattern renderer is funky
     public static final PatternColors DEFAULT_PATTERN_COLOR = new PatternColors(0xff_554d54, 0xff_d2c8c8);
@@ -56,7 +62,7 @@ public class WorldlyPatternRenderHelpers {
         // TODO: I think scroll normals are maybe slightly messed up or something?? idk, look into that maybe
         ps.pushPose();
         ps.translate(-blockSize / 2f, -blockSize / 2f, 1f / 32f);
-        renderPattern(pattern, showStrokeOrder ? READABLE_SCROLL_RENDER_SETTINGS : SCROLL_RENDER_SETTINGS,
+        renderPattern(pattern, showStrokeOrder ? READABLE_SCROLL_SETTINGS : SCROLL_SETTINGS,
                 showStrokeOrder ? READABLE_SCROLL_COLORS : DEFAULT_PATTERN_COLOR,
                 scroll.getPos().hashCode(), ps, bufSource, null, null, light, blockSize);
         ps.popPose();
@@ -95,7 +101,7 @@ public class WorldlyPatternRenderHelpers {
         }
 
         renderPattern(pattern,
-                wombly ? SLATE_WOMBLY_SETTINGS : WORLDLY_RENDER_SETTINGS,
+                wombly ? WORLDLY_SETTINGS_WOBBLY : WORLDLY_SETTINGS,
                 wombly ? SLATE_WOBBLY_PURPLE_COLOR : DEFAULT_PATTERN_COLOR,
                 tile.getBlockPos().hashCode(), ps, buffer, normal, null, light, 1);
         ps.popPose();
@@ -115,7 +121,7 @@ public class WorldlyPatternRenderHelpers {
         ps.translate(tV.getX(), tV.getY(), tV.getZ());
         ps.mulPose(Axis.YP.rotationDegrees(WALL_ROTATIONS[facing % 4]));
 
-        renderPattern(pattern, WORLDLY_RENDER_SETTINGS, DEFAULT_PATTERN_COLOR,
+        renderPattern(pattern, WORLDLY_SETTINGS , DEFAULT_PATTERN_COLOR,
                 tile.getBlockPos().hashCode(), ps, buffer, WALL_NORMALS[facing % 4].multiply(-1, -1, -1), -0.02f, light, 1);
         ps.popPose();
     }
@@ -123,7 +129,7 @@ public class WorldlyPatternRenderHelpers {
     /**
      * Renders a pattern in world space based on the given transform requirements
      */
-    public static void renderPattern(HexPattern pattern, PatternRenderSettings patSets, PatternColors patColors,
+    public static void renderPattern(HexPattern pattern, PatternSettings patSets, PatternColors patColors,
         double seed, PoseStack ps, MultiBufferSource bufSource, Vec3 normal, @Nullable Float zOffset,
         int light, int blockSize)
     {

@@ -73,7 +73,7 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
         ps.pushPose();
         ps.scale(RENDER_SIZE, RENDER_SIZE, 1);
 
-        PatternRenderer.renderPattern(pattern, ps, WorldlyPatternRenderHelpers.READABLE_SCROLL_RENDER_SETTINGS,
+        PatternRenderer.renderPattern(pattern, ps, WorldlyPatternRenderHelpers.READABLE_SCROLL_SETTINGS,
                 WorldlyPatternRenderHelpers.READABLE_GRID_SCROLL_COLORS, 0, 512);
 
         ps.popPose();

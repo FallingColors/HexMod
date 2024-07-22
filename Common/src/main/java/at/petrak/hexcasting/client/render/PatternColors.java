@@ -32,7 +32,7 @@ public class PatternColors {
 
     // single color -- no outer layer
     public PatternColors(int color){
-        this(color, 0);
+        this(0, color);
     }
 
     // add dots -- note, this is how you tell the renderer to make dots

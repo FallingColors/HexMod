@@ -47,7 +47,7 @@ public class PatternTextureManager {
 
     private static final HashMap<String, Map<String, ResourceLocation>> patternTextures = new HashMap<>();
 
-    public static Optional<Map<String, ResourceLocation>> getTextures(HexPattern pattern, PatternRenderSettings patSets, double seed, int resPerUnit) {
+    public static Optional<Map<String, ResourceLocation>> getTextures(HexPattern pattern, PatternSettings patSets, double seed, int resPerUnit) {
         String patCacheKey = patSets.getCacheKey(pattern, seed) + "_" + resPerUnit;
 
         // move textures from concurrent map to normal hashmap as needed
@@ -79,17 +79,17 @@ public class PatternTextureManager {
         return Optional.empty();
     }
 
-    private static Map<String, DynamicTexture> createTextures(HexPattern pattern, PatternRenderSettings patSets, double seed, int resPerUnit) {
+    private static Map<String, DynamicTexture> createTextures(HexPattern pattern, PatternSettings patSets, double seed, int resPerUnit) {
         HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(pattern, patSets, seed);
 
         List<Vec2> zappyRenderSpace = staticPoints.scaleVecs(staticPoints.zappyPoints);
 
         Map<String, DynamicTexture> patTexts = new HashMap<>();
 
-        NativeImage innerLines = drawLines(zappyRenderSpace, staticPoints, patSets.innerWidthProvider.apply((float)(staticPoints.finalScale)), resPerUnit);
+        NativeImage innerLines = drawLines(zappyRenderSpace, staticPoints, (float)patSets.getInnerWidth((staticPoints.finalScale)), resPerUnit);
         patTexts.put("inner", new DynamicTexture(innerLines));
 
-        NativeImage outerLines = drawLines(zappyRenderSpace, staticPoints, patSets.outerWidthProvider.apply((float)(staticPoints.finalScale)), resPerUnit);
+        NativeImage outerLines = drawLines(zappyRenderSpace, staticPoints, (float)patSets.getOuterWidth((staticPoints.finalScale)), resPerUnit);
         patTexts.put("outer", new DynamicTexture(outerLines));
 
         // TODO: handle start hexagon and grid bits.
