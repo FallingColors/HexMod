@@ -1293,10 +1293,10 @@
         "incorrect_block.title": "Неправильный блок",
         incorrect_block: "Действие требует наличия определенного блока в целевом месте, но предоставленный блок не подходит.$(br2)Вызывает яркие зеленые искры и создает мимолетный взрыв в указанном месте. Однако этот взрыв, кажется, не наносит вреда ни мне, ни миру, ни чему-либо еще;просто пугалка.",
 
-        "retrospection.title": "Hasty Retrospection",
+        "retrospection.title": "Поспешная Ретроспектива",
         retrospection: "Я попытался нарисовать $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Ретроспектива/$ без предварительного рисования $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Интроспекция/$.$(br2)Вызывает оранжевые искры и помещает шаблон для $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Ретроспектива/$ в стек как шаблон иота.",
 
-        "too_deep.title": "Delve Too Deep",
+        "too_deep.title": "Слишком глубоко",
         too_deep: "Оценено слишком много заклинаний с метаоценкой от одного заклинания.$(br2)Вызывает темно-синие искры и лишает меня всего воздуха.",
 
         "true_name.title": "Нарушение Законов",
