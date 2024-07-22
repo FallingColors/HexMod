@@ -38,7 +38,7 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
             color |= 0xFF_000000;
         }
         PatternRenderer.renderPattern(data.pattern, drawContext.pose(), new PatternRenderer.WorldlyBits(trContext.vertexConsumers, trContext.light, null),
-                INLINE_SETTINGS, new PatternColors(color), 0, INLINE_TEXTURE_RES);
+                INLINE_SETTINGS, PatternColors.singleStroke(color), 0, INLINE_TEXTURE_RES);
 
         drawContext.pose().popPose();
         return charWidth(data, style, codepoint);

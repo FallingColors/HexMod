@@ -2,37 +2,43 @@ package at.petrak.hexcasting.client.render;
 
 /**
  * An immutable wrapper for pattern colors.
- *
+ * <p>
  * This is separate from PatternRenderSettings because it does not affect the shape of the pattern, so we can re-use
  * those parts for different colors.
  */
-public class PatternColors {
-    protected final int innerStartColor;
-    protected final int innerEndColor;
-    protected final int outerStartColor;
-    protected final int outerEndColor;
+public record PatternColors(int innerStartColor, int innerEndColor, int outerStartColor, int outerEndColor,
+                            int startingDotColor, int gridDotsColor){
 
-    protected final int startingDotColor;
-    protected final int gridDotsColor;
+    public static final PatternColors DEFAULT_PATTERN_COLOR = new PatternColors(0xff_554d54, 0xff_d2c8c8);
 
-    public PatternColors(int innerStartColor, int innerEndColor, int outerStartColor, int outerEndColor,
-        int startingDotsColor, int gridDotsColor){
-        this.innerStartColor = innerStartColor;
-        this.innerEndColor = innerEndColor;
-        this.outerStartColor = outerStartColor;
-        this.outerEndColor = outerEndColor;
-        this.startingDotColor = startingDotsColor;
-        this.gridDotsColor = gridDotsColor;
-    }
+    public static final PatternColors READABLE_SCROLL_COLORS = DEFAULT_PATTERN_COLOR.withDotColors(0xff_5b7bd7, 0);
+    public static final PatternColors READABLE_GRID_SCROLL_COLORS = DEFAULT_PATTERN_COLOR.withDotColors(0xff_5b7bd7, 0x80_d2c8c8);
+
+    public static final PatternColors SLATE_WOBBLY_COLOR = glowyStroke( 0xff_64c8ff); // old blue color
+    public static final PatternColors SLATE_WOBBLY_PURPLE_COLOR = glowyStroke(0xff_cfa0f3); // shiny new purple one :)
 
     // no gradient
     public PatternColors(int innerColor, int outerColor){
         this(innerColor, innerColor, outerColor, outerColor, 0, 0);
     }
 
-    // single color -- no outer layer
-    public PatternColors(int color){
-        this(0, color);
+    // single color -- no inner layer
+    public static PatternColors singleStroke(int color){
+        return new PatternColors(0, color);
+    }
+
+    // makes a stroke color similar to the glowy effect that slates have.
+    public static PatternColors glowyStroke(int color){
+        return new PatternColors(RenderLib.screenCol(color), color);
+    }
+
+    public static PatternColors gradientStrokes(int innerStartColor, int innerEndColor, int outerStartColor, int outerEndColor){
+        return new PatternColors(innerStartColor, innerEndColor, outerStartColor, outerEndColor, 0, 0);
+    }
+
+    // a single stroke with a gradient -- no inner layer.
+    public static PatternColors gradientStroke(int startColor, int endColor){
+        return PatternColors.gradientStrokes(0, 0, startColor, endColor);
     }
 
     // add dots -- note, this is how you tell the renderer to make dots

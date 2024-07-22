@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.client.gui;
 
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.client.render.PatternColors;
 import at.petrak.hexcasting.client.render.PatternRenderer;
 import at.petrak.hexcasting.client.render.WorldlyPatternRenderHelpers;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
@@ -74,7 +75,7 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
         ps.scale(RENDER_SIZE, RENDER_SIZE, 1);
 
         PatternRenderer.renderPattern(pattern, ps, WorldlyPatternRenderHelpers.READABLE_SCROLL_SETTINGS,
-                WorldlyPatternRenderHelpers.READABLE_GRID_SCROLL_COLORS, 0, 512);
+                PatternColors.READABLE_GRID_SCROLL_COLORS, 0, 512);
 
         ps.popPose();
         ps.popPose();

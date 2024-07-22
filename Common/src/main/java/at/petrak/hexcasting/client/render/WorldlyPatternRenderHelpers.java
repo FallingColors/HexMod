@@ -45,25 +45,13 @@ public class WorldlyPatternRenderHelpers {
             PatternSettings.ZappySettings.WOBBLY
     );
 
-    // using an opaque inner color based on 0xc8_322b33 because worldly pattern renderer is funky
-    public static final PatternColors DEFAULT_PATTERN_COLOR = new PatternColors(0xff_554d54, 0xff_d2c8c8);
-
-    // partially for testing
-    public static final PatternColors READABLE_SCROLL_COLORS = DEFAULT_PATTERN_COLOR.withDotColors(0xff_5b7bd7, 0);
-
-    public static final PatternColors READABLE_GRID_SCROLL_COLORS = DEFAULT_PATTERN_COLOR.withDotColors(0xff_5b7bd7, 0x80_d2c8c8);
-
-    public static final PatternColors SLATE_WOBBLY_COLOR = new PatternColors(RenderLib.screenCol(0xff_64c8ff), 0xff_64c8ff);
-
-    public static final PatternColors SLATE_WOBBLY_PURPLE_COLOR = new PatternColors(RenderLib.screenCol(0xff_cfa0f3), 0xff_cfa0f3);
-
     public static void renderPatternForScroll(HexPattern pattern, EntityWallScroll scroll, PoseStack ps, MultiBufferSource bufSource, int light, int blockSize, boolean showStrokeOrder)
     {
         // TODO: I think scroll normals are maybe slightly messed up or something?? idk, look into that maybe
         ps.pushPose();
         ps.translate(-blockSize / 2f, -blockSize / 2f, 1f / 32f);
         renderPattern(pattern, showStrokeOrder ? READABLE_SCROLL_SETTINGS : SCROLL_SETTINGS,
-                showStrokeOrder ? READABLE_SCROLL_COLORS : DEFAULT_PATTERN_COLOR,
+                showStrokeOrder ? PatternColors.READABLE_SCROLL_COLORS : PatternColors.DEFAULT_PATTERN_COLOR,
                 scroll.getPos().hashCode(), ps, bufSource, null, null, light, blockSize);
         ps.popPose();
     }
@@ -102,7 +90,7 @@ public class WorldlyPatternRenderHelpers {
 
         renderPattern(pattern,
                 wombly ? WORLDLY_SETTINGS_WOBBLY : WORLDLY_SETTINGS,
-                wombly ? SLATE_WOBBLY_PURPLE_COLOR : DEFAULT_PATTERN_COLOR,
+                wombly ? PatternColors.SLATE_WOBBLY_PURPLE_COLOR : PatternColors.DEFAULT_PATTERN_COLOR,
                 tile.getBlockPos().hashCode(), ps, buffer, normal, null, light, 1);
         ps.popPose();
     }
@@ -121,7 +109,7 @@ public class WorldlyPatternRenderHelpers {
         ps.translate(tV.getX(), tV.getY(), tV.getZ());
         ps.mulPose(Axis.YP.rotationDegrees(WALL_ROTATIONS[facing % 4]));
 
-        renderPattern(pattern, WORLDLY_SETTINGS , DEFAULT_PATTERN_COLOR,
+        renderPattern(pattern, WORLDLY_SETTINGS , PatternColors.DEFAULT_PATTERN_COLOR,
                 tile.getBlockPos().hashCode(), ps, buffer, WALL_NORMALS[facing % 4].multiply(-1, -1, -1), -0.02f, light, 1);
         ps.popPose();
     }
