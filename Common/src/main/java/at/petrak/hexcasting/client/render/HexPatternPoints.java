@@ -106,8 +106,8 @@ public class HexPatternPoints {
         this.fullWidth = fullWidthTmp;
         this.fullHeight = fullHeightTmp;
 
-        offsetX = (fullWidthTmp - baseWidth * scale - finalStroke) / 2;
-        offsetY = (fullHeightTmp - baseHeight * scale - finalStroke) / 2;
+        offsetX = (fullWidthTmp - baseWidth * scale) / 2;
+        offsetY = (fullHeightTmp - baseHeight * scale) / 2;
 
         this.zappyPointsScaled = ImmutableList.copyOf(scaleVecs(zappyPoints));
         this.dotsScaled = ImmutableList.copyOf(scaleVecs(dots));

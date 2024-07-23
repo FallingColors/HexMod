@@ -30,7 +30,7 @@ public class WorldlyPatternRenderHelpers {
     public static final PatternSettings READABLE_SCROLL_SETTINGS = new PatternSettings("scroll_readable",
             PatternSettings.PositionSettings.paddedSquare(2.0/16),
             PatternSettings.StrokeSettings.fromStroke(0.8/16),
-            PatternSettings.ZappySettings.STATIC
+            PatternSettings.ZappySettings.READABLE
     );
 
     public static final PatternSettings WORLDLY_SETTINGS = new PatternSettings("worldly",

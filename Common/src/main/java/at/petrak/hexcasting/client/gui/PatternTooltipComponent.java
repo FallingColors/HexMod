@@ -30,23 +30,11 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
     private static final int TEXTURE_SIZE = 48;
 
     private final HexPattern pattern;
-//    private final List<Vec2> zappyPoints;
-//    private final List<Vec2> pathfinderDots;
-//    private final float scale;
     private final ResourceLocation background;
 
     public PatternTooltipComponent(PatternTooltip tt) {
         this.pattern = tt.pattern();
         this.background = tt.background();
-
-//        var pair = RenderLib.getCenteredPattern(pattern, RENDER_SIZE, RENDER_SIZE, 16f);
-//        this.scale = pair.getFirst();
-//        var dots = pair.getSecond();
-//        this.zappyPoints = RenderLib.makeZappy(
-//            dots, RenderLib.findDupIndices(pattern.positions()),
-//            10, 0.8f, 0f, 0f, RenderLib.DEFAULT_READABILITY_OFFSET, RenderLib.DEFAULT_LAST_SEGMENT_LEN_PROP,
-//            0.0);
-//        this.pathfinderDots = dots.stream().distinct().collect(Collectors.toList());
     }
 
     @Nullable
@@ -68,16 +56,12 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
         renderBG(graphics, this.background);
 
         // renderText happens *before* renderImage for some asinine reason
-//                RenderSystem.disableBlend();
         ps.translate(0, 0, 100);
-
-        ps.pushPose();
         ps.scale(RENDER_SIZE, RENDER_SIZE, 1);
 
         PatternRenderer.renderPattern(pattern, ps, WorldlyPatternRenderHelpers.READABLE_SCROLL_SETTINGS,
                 PatternColors.READABLE_GRID_SCROLL_COLORS, 0, 512);
 
-        ps.popPose();
         ps.popPose();
     }
 

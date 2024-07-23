@@ -19,7 +19,7 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
     }
 
     public static final PatternSettings INLINE_SETTINGS = new PatternSettings("inline",
-            new PatternSettings.PositionSettings(8.0, 9.0, 1.0, 0.5,
+            new PatternSettings.PositionSettings(8.0, 9.0, 0, 0.5,
                     PatternSettings.AxisAlignment.NONE, PatternSettings.AxisAlignment.CENTER, 4.0, 0, 0),
             PatternSettings.StrokeSettings.fromStroke(1.0),
             PatternSettings.ZappySettings.STATIC
@@ -51,6 +51,6 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
         double baseScale = 4.0 / 1.5;
         double baseHeight = staticPoints.rangeY * baseScale;
 
-        return (int)Math.round(0.2 + Math.min(baseHeight, 8.0) * staticPoints.rangeX / staticPoints.rangeY) + 2; // (+2 for padding)
+        return (int)Math.ceil(Math.min(baseHeight, 8.0) * staticPoints.rangeX / staticPoints.rangeY) + 1; // (+2 for padding)
     }
 }

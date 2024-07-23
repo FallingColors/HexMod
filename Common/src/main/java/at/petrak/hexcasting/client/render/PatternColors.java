@@ -9,10 +9,14 @@ package at.petrak.hexcasting.client.render;
 public record PatternColors(int innerStartColor, int innerEndColor, int outerStartColor, int outerEndColor,
                             int startingDotColor, int gridDotsColor){
 
+    // keep some handy frequently used colors here.
     public static final PatternColors DEFAULT_PATTERN_COLOR = new PatternColors(0xff_554d54, 0xff_d2c8c8);
 
-    public static final PatternColors READABLE_SCROLL_COLORS = DEFAULT_PATTERN_COLOR.withDotColors(0xff_5b7bd7, 0);
-    public static final PatternColors READABLE_GRID_SCROLL_COLORS = DEFAULT_PATTERN_COLOR.withDotColors(0xff_5b7bd7, 0x80_d2c8c8);
+    public static final int STARTING_DOT = 0xff_5b7bd7;
+    public static final int GRID_DOTS = 0x80_d2c8c8;
+
+    public static final PatternColors READABLE_SCROLL_COLORS = DEFAULT_PATTERN_COLOR.withDotColors(STARTING_DOT, 0);
+    public static final PatternColors READABLE_GRID_SCROLL_COLORS = DEFAULT_PATTERN_COLOR.withDotColors(STARTING_DOT, GRID_DOTS);
 
     public static final PatternColors SLATE_WOBBLY_COLOR = glowyStroke( 0xff_64c8ff); // old blue color
     public static final PatternColors SLATE_WOBBLY_PURPLE_COLOR = glowyStroke(0xff_cfa0f3); // shiny new purple one :)
@@ -45,5 +49,10 @@ public record PatternColors(int innerStartColor, int innerEndColor, int outerSta
     public PatternColors withDotColors(int startingDotColor, int gridDotsColor){
         return new PatternColors(this.innerStartColor, this.innerEndColor, this.outerStartColor, this.outerEndColor,
                 startingDotColor, gridDotsColor);
+    }
+
+    // adds dots with the default colors.
+    public PatternColors withDots(boolean startingDot, boolean gridDots){
+        return withDotColors(startingDot ? STARTING_DOT : 0, gridDots ? GRID_DOTS : 0);
     }
 }
