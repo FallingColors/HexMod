@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
@@ -54,11 +55,11 @@ public class PatternRenderer {
 
             if(FastColor.ARGB32.alpha(patColors.outerEndColor()) != 0 && FastColor.ARGB32.alpha(patColors.outerStartColor()) != 0){
                 RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, (float)patSets.getOuterWidth(staticPoints.finalScale),
-                        patColors.outerEndColor(), patColors.outerStartColor(), VCDrawHelper.getHelper(worldlyBits, ps,outerZ));
+                        patColors.outerStartColor(), patColors.outerEndColor(), VCDrawHelper.getHelper(worldlyBits, ps,outerZ));
             }
             if(FastColor.ARGB32.alpha(patColors.innerEndColor()) != 0 && FastColor.ARGB32.alpha(patColors.innerStartColor()) != 0) {
                 RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, (float)patSets.getInnerWidth(staticPoints.finalScale),
-                        patColors.innerEndColor(), patColors.innerStartColor(), VCDrawHelper.getHelper(worldlyBits, ps,innerZ));
+                        patColors.innerStartColor(), patColors.innerEndColor(), VCDrawHelper.getHelper(worldlyBits, ps,innerZ));
             }
         }
 
@@ -125,6 +126,11 @@ public class PatternRenderer {
         }
 
         return true;
+    }
+
+    // TODO did we want to un-hardcode this for accessibility reasons ?
+    public static boolean shouldDoStrokeGradient(){
+        return Screen.hasControlDown();
     }
 
     public record WorldlyBits(@Nullable MultiBufferSource provider, Integer light, Vec3 normal){}

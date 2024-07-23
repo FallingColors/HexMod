@@ -22,8 +22,17 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
             new PatternSettings.PositionSettings(8.0, 9.0, 0, 0.5,
                     PatternSettings.AxisAlignment.NONE, PatternSettings.AxisAlignment.CENTER, 4.0, 0, 0),
             PatternSettings.StrokeSettings.fromStroke(1.0),
-            PatternSettings.ZappySettings.STATIC
-    );
+            new PatternSettings.ZappySettings(10, 0, 0, 0,
+                    PatternSettings.ZappySettings.READABLE_OFFSET, 0.8f)
+    ){
+        @Override
+        public double getOuterWidth(double scale){
+            if(scale >= 1) return 1;
+            if(scale >= 0.75) return 0.75;
+            if(scale >= 0.5) return 0.5;
+            return 0.25;
+        }
+    };
 
     public static final int INLINE_TEXTURE_RES = 16; // 128px so it looks good and pretty on up close signs and whatnot
 

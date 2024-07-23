@@ -60,7 +60,9 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
         ps.scale(RENDER_SIZE, RENDER_SIZE, 1);
 
         PatternRenderer.renderPattern(pattern, ps, WorldlyPatternRenderHelpers.READABLE_SCROLL_SETTINGS,
-                PatternColors.READABLE_GRID_SCROLL_COLORS, 0, 512);
+                (PatternRenderer.shouldDoStrokeGradient() ? PatternColors.DEFAULT_GRADIENT_COLOR : PatternColors.DEFAULT_PATTERN_COLOR)
+                        .withDots(true, true),
+                0, 512);
 
         ps.popPose();
     }

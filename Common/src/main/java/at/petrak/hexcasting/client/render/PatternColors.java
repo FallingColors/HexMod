@@ -11,12 +11,14 @@ public record PatternColors(int innerStartColor, int innerEndColor, int outerSta
 
     // keep some handy frequently used colors here.
     public static final PatternColors DEFAULT_PATTERN_COLOR = new PatternColors(0xff_554d54, 0xff_d2c8c8);
+    public static final PatternColors DIMMED_COLOR = new PatternColors(0xFF_B4AAAA, 0xff_d2c8c8);
+    public static final PatternColors DEFAULT_GRADIENT_COLOR = DEFAULT_PATTERN_COLOR.withGradientEnds(DIMMED_COLOR);
 
     public static final int STARTING_DOT = 0xff_5b7bd7;
     public static final int GRID_DOTS = 0x80_d2c8c8;
 
-    public static final PatternColors READABLE_SCROLL_COLORS = DEFAULT_PATTERN_COLOR.withDotColors(STARTING_DOT, 0);
-    public static final PatternColors READABLE_GRID_SCROLL_COLORS = DEFAULT_PATTERN_COLOR.withDotColors(STARTING_DOT, GRID_DOTS);
+    public static final PatternColors READABLE_SCROLL_COLORS = DEFAULT_PATTERN_COLOR.withDots(true, false);
+    public static final PatternColors READABLE_GRID_SCROLL_COLORS = DEFAULT_PATTERN_COLOR.withDots(true, true);
 
     public static final PatternColors SLATE_WOBBLY_COLOR = glowyStroke( 0xff_64c8ff); // old blue color
     public static final PatternColors SLATE_WOBBLY_PURPLE_COLOR = glowyStroke(0xff_cfa0f3); // shiny new purple one :)
@@ -43,6 +45,14 @@ public record PatternColors(int innerStartColor, int innerEndColor, int outerSta
     // a single stroke with a gradient -- no inner layer.
     public static PatternColors gradientStroke(int startColor, int endColor){
         return PatternColors.gradientStrokes(0, 0, startColor, endColor);
+    }
+
+    public PatternColors withGradientEnds(int endColorInner, int endColorOuter){
+        return new PatternColors(this.innerStartColor, endColorInner, this.outerStartColor, endColorOuter, this.startingDotColor, this.gridDotsColor);
+    }
+
+    public PatternColors withGradientEnds(PatternColors end){
+        return withGradientEnds(end.innerEndColor, end.outerEndColor);
     }
 
     // add dots -- note, this is how you tell the renderer to make dots

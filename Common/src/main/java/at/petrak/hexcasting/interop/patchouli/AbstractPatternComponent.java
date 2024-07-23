@@ -35,8 +35,6 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
 
     public abstract boolean showStrokeOrder();
 
-    public static final PatternColors GREAT_COLOR = new PatternColors(0xFF_B4AAAA, 0xff_d2c8c8).withDots(false, true);
-
     @Override
     public void render(GuiGraphics graphics, IComponentRenderContext context, float pticks, int mouseX, int mouseY) {
         PoseStack ps = graphics.pose();
@@ -56,6 +54,13 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
                 showStrokeOrder() ? PatternSettings.ZappySettings.READABLE : PatternSettings.ZappySettings.STATIC
         );
 
+        PatternColors patCols = PatternColors.DIMMED_COLOR.withDots(false, true);
+
+        if(showStrokeOrder()){
+            patCols = PatternRenderer.shouldDoStrokeGradient() ? PatternColors.DEFAULT_GRADIENT_COLOR.withDots(true, true)
+                    : PatternColors.READABLE_GRID_SCROLL_COLORS;
+        }
+
         for(int p = 0; p < patterns.size(); p++){
 
             int r = p / cols;
@@ -65,9 +70,7 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
             ps.pushPose();
             ps.translate(cellW * c, cellH * r + 16, 100);
 
-            PatternRenderer.renderPattern(pattern, graphics.pose(), patSets,
-                    showStrokeOrder() ? PatternColors.READABLE_GRID_SCROLL_COLORS : GREAT_COLOR
-                    , 0, 4);
+            PatternRenderer.renderPattern(pattern, graphics.pose(), patSets, patCols, 0, 4);
             ps.popPose();
         }
         ps.popPose();
