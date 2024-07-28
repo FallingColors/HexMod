@@ -64,9 +64,10 @@ public class PatternSettings {
     }
 
     private final String name;
-    private final PositionSettings posSets;
-    private final StrokeSettings strokeSets;
-    private final ZappySettings zapSets;
+    // leaving these public for more convenient chaining. Should prefer using the getters for overrideability.
+    public final PositionSettings posSets;
+    public final StrokeSettings strokeSets;
+    public final ZappySettings zapSets;
 
     public String getName(){ return name; }
 
