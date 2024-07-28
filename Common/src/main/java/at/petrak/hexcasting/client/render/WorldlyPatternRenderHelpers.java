@@ -8,6 +8,7 @@ import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.block.state.BlockState;
@@ -109,8 +110,10 @@ public class WorldlyPatternRenderHelpers {
         ps.translate(tV.getX(), tV.getY(), tV.getZ());
         ps.mulPose(Axis.YP.rotationDegrees(WALL_ROTATIONS[facing % 4]));
 
+        int actualLight = LevelRenderer.getLightColor(tile.getLevel(), tile.getBlockPos().relative(bs.getValue(BlockAkashicBookshelf.FACING)));
+
         renderPattern(pattern, WORLDLY_SETTINGS , PatternColors.DEFAULT_PATTERN_COLOR,
-                tile.getBlockPos().hashCode(), ps, buffer, WALL_NORMALS[facing % 4].multiply(-1, -1, -1), -0.02f, light, 1);
+                tile.getBlockPos().hashCode(), ps, buffer, WALL_NORMALS[facing % 4].multiply(-1, -1, -1), -0.02f, actualLight, 1);
         ps.popPose();
     }
 
