@@ -237,6 +237,9 @@ public class CircleExecutionState {
         var ctrl = executor.acceptControlFlow(this.currentImage, env, this.enteredFrom, this.currentPos,
             executorBlockState, world);
 
+        if (env.getImpetus() == null)
+            return false; //the impetus got removed during the cast and no longer exists in the world. stop casting
+
         if (ctrl instanceof ICircleComponent.ControlFlow.Stop) {
             // acceptControlFlow should have already posted the error
             halt = true;
