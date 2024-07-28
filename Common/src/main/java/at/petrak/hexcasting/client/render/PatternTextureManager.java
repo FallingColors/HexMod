@@ -19,31 +19,11 @@ public class PatternTextureManager {
     //TODO: remove if not needed anymore for comparison
     public static boolean useTextures = true;
     public static int repaintIndex = 0;
-    public static int resolutionScaler = 4;
-    public static int fastRenderScaleFactor = 8; // e.g. this is 8, resolution is 1024, so render at 1024/8 = 128
-
-    public static int resolutionByBlockSize = 128 * resolutionScaler;
-    public static int paddingByBlockSize = 16 * resolutionScaler;
-    public static int circleRadiusByBlockSize = 2 * resolutionScaler;
-    public static int scaleLimit = 4 * resolutionScaler;
-    public static int scrollLineWidth = 3 * resolutionScaler;
-    public static int otherLineWidth = 4 * resolutionScaler;
-
-    public static void setResolutionScaler(int resolutionScaler) {
-        PatternTextureManager.resolutionScaler = resolutionScaler;
-        resolutionByBlockSize = 128 * resolutionScaler;
-        paddingByBlockSize = 16 * resolutionScaler;
-        circleRadiusByBlockSize = 2 * resolutionScaler;
-        scaleLimit = 4 * resolutionScaler;
-        scrollLineWidth = 3 * resolutionScaler;
-        otherLineWidth = 4 * resolutionScaler;
-    }
 
     private static final ConcurrentMap<String, Map<String, ResourceLocation>> patternTexturesToAdd = new ConcurrentHashMap<>();
     private static final Set<String> inProgressPatterns = new HashSet<>();
     // basically newCachedThreadPool, but with a max pool size
     private static final ExecutorService executor = new ThreadPoolExecutor(0, 16, 60L, TimeUnit.SECONDS, new LinkedBlockingDeque<>());
-
 
     private static final HashMap<String, Map<String, ResourceLocation>> patternTextures = new HashMap<>();
 
@@ -59,7 +39,7 @@ public class PatternTextureManager {
                 for(ResourceLocation oldPatternTextureSingle : oldPatternTexture.values())
                     Minecraft.getInstance().getTextureManager().getTexture(oldPatternTextureSingle).close();
 
-            return Optional.of(patternTexture);
+            return Optional.empty(); // try not giving it immediately to avoid flickering?
         }
         if (patternTextures.containsKey(patCacheKey))
             return Optional.of(patternTextures.get(patCacheKey));
@@ -92,29 +72,10 @@ public class PatternTextureManager {
         NativeImage outerLines = drawLines(zappyRenderSpace, staticPoints, (float)patSets.getOuterWidth((staticPoints.finalScale)), resPerUnit);
         patTexts.put("outer", new DynamicTexture(outerLines));
 
-        // TODO: handle start hexagon and grid bits.
-
-//        g2d.setColor(outerColor);
-//        g2d.setStroke(new BasicStroke((blockSize * 5f / 3f) * lineWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-//        drawLines(g2d, points, minX, minY, scale, offsetX, offsetY, padding);
-//
-
-//
-//        if (showsStrokeOrder) {
-//            g2d.setColor(new Color(0xff_d77b5b));
-//            Tuple<Integer, Integer> point = getTextureCoordinates(points.get(0), minX, minY, scale, offsetX, offsetY, padding);
-//            int spotRadius = circleRadiusByBlockSize * blockSize;
-//            drawHexagon(g2d, point.getA(), point.getB(), spotRadius);
-//        }
-
-
         return patTexts;
     }
 
     private static Map<String, ResourceLocation> registerTextures(String patTextureKeyBase, Map<String, DynamicTexture> dynamicTextures) {
-        // isSlow used to register different textures for the low-resolution, fastly rendered version of each texture
-        // and the high-resolution, slowly rendered version (this means the slow doesn't replace the fast in the texture manager,
-        // which causes occasional visual stuttering for a frame).
         Map<String, ResourceLocation> resLocs = new HashMap<>();
         for(Map.Entry<String, DynamicTexture> textureEntry : dynamicTextures.entrySet()){
             String name = "hex_pattern_texture_" + patTextureKeyBase + "_" + textureEntry.getKey() + "_" + repaintIndex + ".png";

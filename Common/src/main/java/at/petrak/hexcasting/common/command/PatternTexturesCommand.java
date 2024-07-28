@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.common.command;
 
 import at.petrak.hexcasting.client.render.PatternTextureManager;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -26,14 +25,5 @@ public class PatternTexturesCommand
                     ctx.getSource().sendSuccess(() -> Component.literal("Repainting pattern textures. This is meant for debugging."), true);
                     return 1;
                 }));
-        cmd.then(Commands.literal("textureSetResolutionScaler")
-                .requires(dp -> dp.hasPermission(Commands.LEVEL_ADMINS))
-                .then(Commands.argument("integer", IntegerArgumentType.integer()).executes(ctx -> {
-                    int newRes = IntegerArgumentType.getInteger(ctx, "integer");
-                    PatternTextureManager.setResolutionScaler(newRes);
-                    PatternTextureManager.repaint();
-                    ctx.getSource().sendSuccess(() -> Component.literal("Setting pattern resolution scaler to " + newRes + ". This is meant for debugging."), true);
-                    return 1;
-                })));
     }
 }
