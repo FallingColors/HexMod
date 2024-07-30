@@ -15,6 +15,16 @@ public class PatternSettings {
         this.zapSets = zapSets;
     }
 
+    /**
+     * Settings for positioning the pattern and defining its general size/render area. All values are in 'pose units',
+     * meaning we use them directly with the pose/matrix stack given to the renderer.
+     *
+     * <p>
+     * We do a first pass at the pattern scale using baseScale. We then make sure it's larger than minWidth and
+     * minHeight. Then on each axis, if that axis is has a FIT alignment then we may scale down the pattern to make sure it
+     * fits. Note that the padding is not scaled and is always respected.
+     * </p>
+     */
     public record PositionSettings(double spaceWidth, double spaceHeight, double hPadding, double vPadding,
                                    AxisAlignment hAxis, AxisAlignment vAxis, double baseScale, double minWidth, double minHeight){
         /**
@@ -32,6 +42,10 @@ public class PatternSettings {
         }
     }
 
+    /**
+     * Settings for stroke and dot sizings. If you want to *not* render dots or inner/outer you should prefer setting
+     * alpha to 0 in PatternColors.
+     */
     public record StrokeSettings(double innerWidth, double outerWidth,
                                  double startDotRadius, double gridDotsRadius){
         public static StrokeSettings fromStroke(double stroke){
@@ -39,6 +53,16 @@ public class PatternSettings {
         }
     }
 
+    /**
+     * Controls how the pattern is zappified.
+     *
+     * @param hops number of little pulses
+     * @param variance how jumpy/distorting the pulses are
+     * @param speed how fast the pulses go
+     * @param flowIrregular randomness of pulse travel
+     * @param readabilityOffset how curved inward the corners are
+     * @param lastSegmentLenProportion length of the last segment relative to the others. used for increased readability.
+     */
     public record ZappySettings(int hops, float variance, float speed, float flowIrregular, float readabilityOffset, float lastSegmentLenProportion){
         public static float READABLE_OFFSET = 0.2f;
         public static float READABLE_SEGMENT = 0.8f;

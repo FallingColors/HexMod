@@ -7,6 +7,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * A simple wrapper around the parts of HexPattern that are actually used for rendering.
+ *
+ * This lets the pattern renderer work on arbitrary lists of vecs - this is never used in base hex but is included
+ * to future-proof and for if addons or something wants to use it.
+ */
 public interface HexPatternLike {
     List<Vec2> getNonZappyPoints();
 

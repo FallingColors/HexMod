@@ -29,6 +29,16 @@ public class PatternRenderer {
         renderPattern(HexPatternLike.of(pattern), ps, worldlyBits, patSets, patColors, seed, resPerUnit);
     }
 
+    /**
+     * Renders a pattern (or rather a pattern-like) according to the given settings.
+     * @param patternlike the pattern (or more generally the lines) to render.
+     * @param ps pose/matrix stack to render based on. (0,0) is treated as the top left corner. The size of the render is determined by patSets.
+     * @param worldlyBits used for rendering with light/normals/render-layers if possible. This is optional and probably shouldn't be used for UI rendering.
+     * @param patSets settings that control how the pattern is drawn.
+     * @param patColors colors to use for drawing the pattern and dots.
+     * @param seed seed to use for zappy wobbles.
+     * @param resPerUnit the texture resolution per pose unit space to be used *if* the texture renderer is used.
+     */
     public static void renderPattern(HexPatternLike patternlike, PoseStack ps, @Nullable WorldlyBits worldlyBits, PatternSettings patSets, PatternColors patColors, double seed, int resPerUnit){
         var oldShader = RenderSystem.getShader();
         HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(patternlike, patSets, seed);
