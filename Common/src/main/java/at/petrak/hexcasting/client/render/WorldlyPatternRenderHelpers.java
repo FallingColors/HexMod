@@ -141,7 +141,7 @@ public class WorldlyPatternRenderHelpers {
         ps.mulPoseMatrix(noNormalInv.last().pose());
 
         PatternRenderer.renderPattern(pattern, ps, new PatternRenderer.WorldlyBits(bufSource, light, normal),
-                patSets, patColors, seed, blockSize * PatternTextureManager.resolutionByBlockSize);
+                patSets, patColors, seed, blockSize * 512);
 
         ps.popPose();
     }

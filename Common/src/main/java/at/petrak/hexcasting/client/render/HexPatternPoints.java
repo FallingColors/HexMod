@@ -1,12 +1,10 @@
 package at.petrak.hexcasting.client.render;
 
-import at.petrak.hexcasting.api.casting.math.HexPattern;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.world.phys.Vec2;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -40,15 +38,13 @@ public class HexPatternPoints {
 
     private static final ConcurrentMap<String, HexPatternPoints> CACHED_STATIC_POINTS = new ConcurrentHashMap<>();
 
-    private HexPatternPoints(HexPattern pattern, PatternSettings patSets, double seed) {
+    private HexPatternPoints(HexPatternLike patternlike, PatternSettings patSets, double seed) {
 
-        List<Vec2> dots = pattern.toLines(1, Vec2.ZERO);
-
-        Set<Integer> dupIndices = RenderLib.findDupIndices(pattern.positions());
+        List<Vec2> dots = patternlike.getNonZappyPoints();
 
         // always do space calculations with the static version of the pattern
         // so that it doesn't jump around resizing itself.
-        List<Vec2> zappyPoints = RenderLib.makeZappy(dots, dupIndices,
+        List<Vec2> zappyPoints = RenderLib.makeZappy(dots, patternlike.getDups(),
                 patSets.getHops(), patSets.getVariance(), 0f, patSets.getFlowIrregular(),
                 patSets.getReadabilityOffset(), patSets.getLastSegmentProp(), seed);
 
@@ -135,10 +131,10 @@ public class HexPatternPoints {
      * This is used in rendering static patterns and positioning non-static patterns.
      *
      */
-    public static HexPatternPoints getStaticPoints(HexPattern pattern, PatternSettings patSets, double seed){
+    public static HexPatternPoints getStaticPoints(HexPatternLike patternlike, PatternSettings patSets, double seed){
 
-        String cacheKey = patSets.getCacheKey(pattern, seed);
+        String cacheKey = patSets.getCacheKey(patternlike, seed);
 
-        return CACHED_STATIC_POINTS.computeIfAbsent(cacheKey, (key) -> new HexPatternPoints(pattern, patSets, seed) );
+        return CACHED_STATIC_POINTS.computeIfAbsent(cacheKey, (key) -> new HexPatternPoints(patternlike, patSets, seed) );
     }
 }

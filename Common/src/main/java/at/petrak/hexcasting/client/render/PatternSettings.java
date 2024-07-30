@@ -1,7 +1,5 @@
 package at.petrak.hexcasting.client.render;
 
-import at.petrak.hexcasting.api.casting.math.HexPattern;
-
 /**
  * A class holding settings for shaping and positioning patterns.
  *
@@ -49,8 +47,8 @@ public class PatternSettings {
         public static ZappySettings WOBBLY = new ZappySettings(10, 2.5f, 0.1f, 0.2f, 0, 1f);
     }
 
-    public String getCacheKey(HexPattern pattern, double seed){
-        return (pattern.getStartDir() + "-" + pattern.anglesSignature() + "-" + getName() + "-" + seed).toLowerCase();
+    public String getCacheKey(HexPatternLike patternlike, double seed){
+        return (patternlike.getName() + "-" + getName() + "-" + seed).toLowerCase();
     }
 
     // determines how the pattern is fit and aligned on a given axis

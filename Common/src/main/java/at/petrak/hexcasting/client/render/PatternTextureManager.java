@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.client.render;
 
-import at.petrak.hexcasting.api.casting.math.HexPattern;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -27,8 +26,8 @@ public class PatternTextureManager {
 
     private static final HashMap<String, Map<String, ResourceLocation>> patternTextures = new HashMap<>();
 
-    public static Optional<Map<String, ResourceLocation>> getTextures(HexPattern pattern, PatternSettings patSets, double seed, int resPerUnit) {
-        String patCacheKey = patSets.getCacheKey(pattern, seed) + "_" + resPerUnit;
+    public static Optional<Map<String, ResourceLocation>> getTextures(HexPatternLike patternlike, PatternSettings patSets, double seed, int resPerUnit) {
+        String patCacheKey = patSets.getCacheKey(patternlike, seed) + "_" + resPerUnit;
 
         // move textures from concurrent map to normal hashmap as needed
         if (patternTexturesToAdd.containsKey(patCacheKey)) {
@@ -48,7 +47,7 @@ public class PatternTextureManager {
         if(!inProgressPatterns.contains(patCacheKey)){
             inProgressPatterns.add(patCacheKey);
             executor.submit(() -> {
-                var slowTextures = createTextures(pattern, patSets, seed, resPerUnit);
+                var slowTextures = createTextures(patternlike, patSets, seed, resPerUnit);
 
                 // TextureManager#register doesn't look very thread-safe, so move back to the main thread after the slow part is done
                 Minecraft.getInstance().execute(() -> {
@@ -59,8 +58,8 @@ public class PatternTextureManager {
         return Optional.empty();
     }
 
-    private static Map<String, DynamicTexture> createTextures(HexPattern pattern, PatternSettings patSets, double seed, int resPerUnit) {
-        HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(pattern, patSets, seed);
+    private static Map<String, DynamicTexture> createTextures(HexPatternLike patternlike, PatternSettings patSets, double seed, int resPerUnit) {
+        HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(patternlike, patSets, seed);
 
         List<Vec2> zappyRenderSpace = staticPoints.scaleVecs(staticPoints.zappyPoints);
 

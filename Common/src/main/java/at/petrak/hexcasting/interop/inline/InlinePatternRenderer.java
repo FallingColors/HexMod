@@ -1,9 +1,6 @@
 package at.petrak.hexcasting.interop.inline;
 
-import at.petrak.hexcasting.client.render.HexPatternPoints;
-import at.petrak.hexcasting.client.render.PatternColors;
-import at.petrak.hexcasting.client.render.PatternRenderer;
-import at.petrak.hexcasting.client.render.PatternSettings;
+import at.petrak.hexcasting.client.render.*;
 import com.samsthenerd.inline.api.client.InlineRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Style;
@@ -55,7 +52,7 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
 
     public int charWidth(InlinePatternData data, Style style, int codepoint){
 
-        HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(data.pattern, INLINE_SETTINGS, 0);
+        HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(HexPatternLike.of(data.pattern), INLINE_SETTINGS, 0);
 
         double baseScale = 4.0 / 1.5;
         double baseHeight = staticPoints.rangeY * baseScale;

@@ -25,16 +25,20 @@ public class PatternRenderer {
         renderPattern(pattern, ps, null, patSets, patColors, seed, resPerUnit);
     }
 
-    public static void renderPattern(HexPattern pattern, PoseStack ps, @Nullable WorldlyBits worldlyBits, PatternSettings patSets, PatternColors patColors, double seed, int resPerUnit){
+    public static void renderPattern(HexPattern pattern, PoseStack ps, @Nullable WorldlyBits worldlyBits, PatternSettings patSets, PatternColors patColors, double seed, int resPerUnit) {
+        renderPattern(HexPatternLike.of(pattern), ps, worldlyBits, patSets, patColors, seed, resPerUnit);
+    }
+
+    public static void renderPattern(HexPatternLike patternlike, PoseStack ps, @Nullable WorldlyBits worldlyBits, PatternSettings patSets, PatternColors patColors, double seed, int resPerUnit){
         var oldShader = RenderSystem.getShader();
-        HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(pattern, patSets, seed);
+        HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(patternlike, patSets, seed);
 
         boolean shouldRenderDynamic = true;
 
         // only do texture rendering if it's static and has solid colors
         if(patSets.getSpeed() == 0 && PatternTextureManager.useTextures && patColors.innerStartColor() == patColors.innerEndColor()
         && patColors.outerStartColor() == patColors.outerEndColor()){
-            boolean didRender = renderPatternTexture(pattern, ps, worldlyBits, patSets, patColors, seed, resPerUnit);
+            boolean didRender = renderPatternTexture(patternlike, ps, worldlyBits, patSets, patColors, seed, resPerUnit);
             if(didRender) shouldRenderDynamic = false;
         }
         if(shouldRenderDynamic){
@@ -44,9 +48,9 @@ public class PatternRenderer {
                 // re-use our static points if we're rendering a static pattern anyway
                 zappyPattern = staticPoints.zappyPoints;
             } else {
-                List<Vec2> lines1 = pattern.toLines(1, Vec2.ZERO);
-                Set<Integer> dupIndices = RenderLib.findDupIndices(pattern.positions());
-                zappyPattern = RenderLib.makeZappy(lines1, dupIndices,
+                List<Vec2> nonzappyLines = patternlike.getNonZappyPoints();
+                Set<Integer> dupIndices = RenderLib.findDupIndices(nonzappyLines);
+                zappyPattern = RenderLib.makeZappy(nonzappyLines, dupIndices,
                         patSets.getHops(), patSets.getVariance(), patSets.getSpeed(), patSets.getFlowIrregular(),
                         patSets.getReadabilityOffset(), patSets.getLastSegmentProp(), seed);
             }
@@ -86,14 +90,14 @@ public class PatternRenderer {
     private static final float outerZ = 0.0005f;
     private static final float innerZ = 0.001f;
 
-    private static boolean renderPatternTexture(HexPattern pattern, PoseStack ps, @Nullable WorldlyBits worldlyBits, PatternSettings patSets, PatternColors patColors, double seed, int resPerUnit){
-        Optional<Map<String, ResourceLocation>> maybeTextures = PatternTextureManager.getTextures(pattern, patSets, seed, resPerUnit);
+    private static boolean renderPatternTexture(HexPatternLike patternlike, PoseStack ps, @Nullable WorldlyBits worldlyBits, PatternSettings patSets, PatternColors patColors, double seed, int resPerUnit){
+        Optional<Map<String, ResourceLocation>> maybeTextures = PatternTextureManager.getTextures(patternlike, patSets, seed, resPerUnit);
         if(maybeTextures.isEmpty()){
             return false;
         }
 
         Map<String, ResourceLocation> textures = maybeTextures.get();
-        HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(pattern, patSets, seed);
+        HexPatternPoints staticPoints = HexPatternPoints.getStaticPoints(patternlike, patSets, seed);
 
         VertexConsumer vc;
 
