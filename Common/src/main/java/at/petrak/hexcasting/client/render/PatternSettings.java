@@ -28,7 +28,7 @@ public class PatternSettings {
         }
 
         public static PositionSettings paddedSquare(double padding, double baseScale, double minSize){
-            return new PositionSettings(1.0, 1.0, padding, padding, AxisAlignment.CENTER, AxisAlignment.CENTER, baseScale, minSize, minSize);
+            return new PositionSettings(1.0, 1.0, padding, padding, AxisAlignment.CENTER_FIT, AxisAlignment.CENTER_FIT, baseScale, minSize, minSize);
         }
     }
 
@@ -53,12 +53,22 @@ public class PatternSettings {
 
     // determines how the pattern is fit and aligned on a given axis
     public enum AxisAlignment{
-        // aligns the pattern if there's extra space. these 3 are the same when the pattern needs to be scaled down to fit
-        BEGIN,
-        CENTER,
-        END,
-        // NONE ignores target space requirements when fitting on this axis.
-        NONE
+        // These 3 scale the pattern down to fit if needed.
+        BEGIN_FIT(true, 0),
+        CENTER_FIT(true, 1),
+        END_FIT(true, 2),
+        // these 3 do *not* scale the pattern down, it will overflow if needed.
+        BEGIN(false, 0),
+        CENTER(false, 1),
+        END(false, 2);
+
+        public final boolean fit;
+        public final int amtInFront; // how many halves go in front. yes it's a weird way to do it.
+
+        AxisAlignment(boolean fit, int amtInFront){
+            this.fit = fit;
+            this.amtInFront = amtInFront;
+        }
     }
 
     private final String name;

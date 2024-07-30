@@ -49,7 +49,7 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
 
         PatternSettings patSets = new PatternSettings("book" + patterns.size() + (showStrokeOrder() ? "" : "r"),
                 new PatternSettings.PositionSettings(cellW, cellH, 2, 2,
-                        PatternSettings.AxisAlignment.CENTER, PatternSettings.AxisAlignment.CENTER, 16, 0, 0),
+                        PatternSettings.AxisAlignment.CENTER_FIT, PatternSettings.AxisAlignment.CENTER_FIT, 16, 0, 0),
                 PatternSettings.StrokeSettings.fromStroke(4),
                 showStrokeOrder() ? PatternSettings.ZappySettings.READABLE : PatternSettings.ZappySettings.STATIC
         );

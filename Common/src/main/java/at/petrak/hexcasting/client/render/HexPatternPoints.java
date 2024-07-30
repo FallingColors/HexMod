@@ -26,15 +26,10 @@ public class HexPatternPoints {
     public final double fullHeight;
 
     private double minX = Double.MAX_VALUE;
-    private double maxX = Double.MIN_VALUE;
     private double minY = Double.MAX_VALUE;
-    private double maxY = Double.MIN_VALUE;
 
-    private double offsetX;
-    private double offsetY;
-
-    private double baseScale;
-    private double scale;
+    private final double offsetX;
+    private final double offsetY;
 
     private static final ConcurrentMap<String, HexPatternPoints> CACHED_STATIC_POINTS = new ConcurrentHashMap<>();
 
@@ -50,7 +45,8 @@ public class HexPatternPoints {
 
 
         this.zappyPoints = ImmutableList.copyOf(zappyPoints);
-//        pointsKey = PatternTextureManager.getPointsKey(zappyPoints);
+        double maxY = Double.MIN_VALUE;
+        double maxX = Double.MIN_VALUE;
         for (Vec2 point : zappyPoints) {
             minX = Math.min(minX, point.x);
             maxX = Math.max(maxX, point.x);
@@ -60,24 +56,21 @@ public class HexPatternPoints {
         rangeX = maxX - minX;
         rangeY = maxY - minY;
 
-        int patStepsX = (int)Math.round(rangeX / 1.5);
-        int patStepsY = (int)Math.round(rangeY / 1.7);
-
         // scales the patterns so that each point is patSets.baseScale units apart
-        baseScale = patSets.getBaseScale() / 1.5;
+        double baseScale = patSets.getBaseScale() / 1.5;
 
         // size of the pattern in pose space with no other adjustments
         double baseWidth = rangeX * baseScale;
         double baseHeight = rangeY * baseScale;
 
         // make sure that the scale fits within our min sizes
-        scale = Math.max(1.0, Math.max(
+        double scale = Math.max(1.0, Math.max(
                 (patSets.getMinWidth() - patSets.getStrokeWidthGuess()) / baseWidth,
                 (patSets.getMinHeight() - patSets.getStrokeWidthGuess()) / baseHeight)
         );
 
-        boolean vertFit = patSets.getVertAlignment() != PatternSettings.AxisAlignment.NONE;
-        boolean horFit = patSets.getHorAlignment() != PatternSettings.AxisAlignment.NONE;
+        boolean vertFit = patSets.getVertAlignment().fit;
+        boolean horFit = patSets.getHorAlignment().fit;
 
         // scale down if needed to fit in vertical space
         if(vertFit){
@@ -92,18 +85,19 @@ public class HexPatternPoints {
         finalScale = baseScale * scale;
         double finalStroke = patSets.getStrokeWidth(finalScale);
 
-        // either the space given or however long it goes if it's not fitted.
-        double fullWidthTmp = (baseWidth * scale) + 2 * patSets.getHorPadding() + finalStroke;
-        double fullHeightTmp = (baseHeight * scale) + 2 * patSets.getVertPadding() + finalStroke;
+        double inherentWidth = (baseWidth * scale) + 2 * patSets.getHorPadding() + finalStroke;
+        double inherentHeight = (baseHeight * scale) + 2 * patSets.getVertPadding() + finalStroke;
 
-        if(horFit) fullWidthTmp = Math.max(patSets.getTargetWidth(), fullWidthTmp);
-        if(vertFit) fullHeightTmp = Math.max(patSets.getTargetHeight(), fullHeightTmp);
+        // this is the amount of actual wiggle room we have for configurable position-ing.
+        double widthDiff = Math.max(patSets.getTargetWidth() - inherentWidth, 0);
+        double heightDiff = Math.max(patSets.getTargetHeight() - inherentHeight, 0);
 
-        this.fullWidth = fullWidthTmp;
-        this.fullHeight = fullHeightTmp;
+        this.fullWidth = inherentWidth + widthDiff;
+        this.fullHeight = inherentHeight + heightDiff;
 
-        offsetX = (fullWidthTmp - baseWidth * scale) / 2;
-        offsetY = (fullHeightTmp - baseHeight * scale) / 2;
+        // center in inherent space and put extra space according to alignment stuff
+        offsetX = ((inherentWidth - baseWidth * scale) / 2) + (widthDiff * patSets.getHorAlignment().amtInFront / 2);
+        offsetY = ((inherentHeight - baseHeight * scale) / 2) + (heightDiff * patSets.getVertAlignment().amtInFront / 2);
 
         this.zappyPointsScaled = ImmutableList.copyOf(scaleVecs(zappyPoints));
         this.dotsScaled = ImmutableList.copyOf(scaleVecs(dots));

@@ -16,8 +16,8 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
     }
 
     public static final PatternSettings INLINE_SETTINGS = new PatternSettings("inline",
-            new PatternSettings.PositionSettings(8.0, 9.0, 0, 0.5,
-                    PatternSettings.AxisAlignment.NONE, PatternSettings.AxisAlignment.CENTER, 4.0, 0, 0),
+            new PatternSettings.PositionSettings(1.0, 9.0, 0, 0.5,
+                    PatternSettings.AxisAlignment.CENTER, PatternSettings.AxisAlignment.CENTER_FIT, 4.0, 0, 0),
             PatternSettings.StrokeSettings.fromStroke(1.0),
             new PatternSettings.ZappySettings(10, 0, 0, 0,
                     PatternSettings.ZappySettings.READABLE_OFFSET, 0.8f)

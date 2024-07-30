@@ -36,7 +36,7 @@ public class PatternRendererEMI implements EmiRenderable {
         this.height = h;
         this.patSets = new PatternSettings("pattern_drawable_" + w + "_" + h,
                 new PositionSettings(width, height, 0, 0,
-                        PatternSettings.AxisAlignment.CENTER, PatternSettings.AxisAlignment.CENTER, Math.max(width, height), 0, 0),
+                        PatternSettings.AxisAlignment.CENTER_FIT, PatternSettings.AxisAlignment.CENTER_FIT, Math.max(width, height), 0, 0),
                 StrokeSettings.fromStroke(0.075 * Math.min(width, height)),
                 ZappySettings.READABLE);
     }
