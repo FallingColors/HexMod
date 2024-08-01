@@ -20,7 +20,7 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
                     PatternSettings.AxisAlignment.CENTER, PatternSettings.AxisAlignment.CENTER_FIT, 4.0, 0, 0),
             PatternSettings.StrokeSettings.fromStroke(1.0),
             new PatternSettings.ZappySettings(10, 0, 0, 0,
-                    PatternSettings.ZappySettings.READABLE_OFFSET, 0.8f)
+                    PatternSettings.ZappySettings.READABLE_OFFSET, 1f)
     ){
         @Override
         public double getOuterWidth(double scale){
