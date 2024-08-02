@@ -890,6 +890,11 @@
         cos: "%s的余弦",
       },
 
+      invalid_operator_args: {
+        one: "在栈下标为%d处获取到意外iota：%s",
+        many: "在栈下标为%2$d到%3$d处获取到意外iota：%4$s",
+      },
+
       no_akashic_record: "%s处无阿卡夏记录",
       disallowed: "已被服务器管理员禁用于施法",
       disallowed_circle: "已被服务器管理员禁用于法术环",

@@ -18,7 +18,7 @@ data class OperationAction(val pattern: HexPattern) : Action {
         return try {
             HexArithmetics.getEngine().run(pattern, env, image, continuation)
         } catch (e: NoOperatorCandidatesException) {
-            throw MishapInvalidOperatorArgs(e.args, e.pattern)
+            throw MishapInvalidOperatorArgs(e.args)
         }
     }
 }
