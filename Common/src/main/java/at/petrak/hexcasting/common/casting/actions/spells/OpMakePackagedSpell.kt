@@ -28,17 +28,17 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Long) 
         val entity = args.getItemEntity(0, argc)
         val patterns = args.getList(1, argc).toList()
 
-        val (handStack, hand) = env.getHeldItemToOperateOn {
+        val (handStack) = env.getHeldItemToOperateOn {
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)
             it.`is`(itemType) && hexHolder != null && !hexHolder.hasHex()
         }
-            ?: throw MishapBadOffhandItem(ItemStack.EMPTY.copy(), null, itemType.description) // TODO: hack
+            ?: throw MishapBadOffhandItem(ItemStack.EMPTY.copy(), itemType.description) // TODO: hack
 
         val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
         if (!handStack.`is`(itemType)) {
-            throw MishapBadOffhandItem(handStack, hand, itemType.description)
+            throw MishapBadOffhandItem(handStack, itemType.description)
         } else if (hexHolder == null || hexHolder.hasHex()) {
-            throw MishapBadOffhandItem.of(handStack, hand, "iota.write")
+            throw MishapBadOffhandItem.of(handStack, "iota.write")
         }
 
         env.assertEntityInRange(entity)

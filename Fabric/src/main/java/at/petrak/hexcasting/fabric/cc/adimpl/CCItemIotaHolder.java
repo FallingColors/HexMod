@@ -33,6 +33,11 @@ public abstract class CCItemIotaHolder extends ItemComponent implements CCIotaHo
         }
 
         @Override
+        public boolean writeable() {
+            return this.iotaHolder.writeable(this.stack);
+        }
+
+        @Override
         public boolean writeIota(@Nullable Iota iota, boolean simulate) {
             var canWrite = this.iotaHolder.canWrite(this.stack, iota);
             if (!canWrite) {
@@ -57,6 +62,11 @@ public abstract class CCItemIotaHolder extends ItemComponent implements CCIotaHo
         public @Nullable CompoundTag readIotaTag() {
             var iota = this.provider.apply(this.stack);
             return iota == null ? null : IotaType.serialize(iota);
+        }
+
+        @Override
+        public boolean writeable() {
+            return false;
         }
 
         @Override

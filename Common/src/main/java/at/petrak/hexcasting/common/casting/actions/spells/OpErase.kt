@@ -16,13 +16,13 @@ object OpErase : SpellAction {
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
-        val (handStack, hand) = env.getHeldItemToOperateOn {
+        val (handStack) = env.getHeldItemToOperateOn {
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)
             val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
             (hexHolder?.hasHex() == true) ||
                 (datumHolder?.writeIota(null, true) == true)
-        } ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), null, "eraseable") // TODO: hack
+        } ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "eraseable") // TODO: hack
 
         val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
@@ -30,7 +30,7 @@ object OpErase : SpellAction {
         if ((hexHolder?.hasHex() != true) &&
             (datumHolder?.writeIota(null, true) != true)
         ) {
-            throw MishapBadOffhandItem.of(handStack, hand, "eraseable")
+            throw MishapBadOffhandItem.of(handStack, "eraseable")
         }
 
         return SpellAction.Result(
