@@ -67,8 +67,11 @@ public abstract class CastingEnvironment {
 
     protected Map<CastingEnvironmentComponent.Key<?>, @NotNull CastingEnvironmentComponent> componentMap = new HashMap<>();
     private final List<PostExecution> postExecutions = new ArrayList<>();
+
     private final List<PostCast> postCasts = new ArrayList<>();
-    private final List<ExtractMedia> extractMedias = new ArrayList<>();
+    private final List<ExtractMedia.Pre> preMediaExtract = new ArrayList<>();
+    private final List<ExtractMedia.Post> postMediaExtract = new ArrayList<>();
+
     private final List<IsVecInRange> isVecInRanges = new ArrayList<>();
     private final List<HasEditPermissionsAt> hasEditPermissionsAts = new ArrayList<>();
 
@@ -116,7 +119,11 @@ public abstract class CastingEnvironment {
         if (extension instanceof PostCast postCast)
             postCasts.add(postCast);
         if (extension instanceof ExtractMedia extractMedia)
-            extractMedias.add(extractMedia);
+            if (extension instanceof ExtractMedia.Pre pre) {
+                preMediaExtract.add(pre);
+            } else if (extension instanceof ExtractMedia.Post post) {
+                postMediaExtract.add(post);
+            }
         if (extension instanceof IsVecInRange isVecInRange)
             isVecInRanges.add(isVecInRange);
         if (extension instanceof HasEditPermissionsAt hasEditPermissionsAt)
@@ -133,7 +140,11 @@ public abstract class CastingEnvironment {
         if (extension instanceof PostCast postCast)
             postCasts.remove(postCast);
         if (extension instanceof ExtractMedia extractMedia)
-            extractMedias.remove(extractMedia);
+            if (extension instanceof ExtractMedia.Pre pre) {
+                preMediaExtract.remove(pre);
+            } else if (extension instanceof ExtractMedia.Post post) {
+                postMediaExtract.remove(post);
+            }
         if (extension instanceof IsVecInRange isVecInRange)
             isVecInRanges.remove(isVecInRange);
         if (extension instanceof HasEditPermissionsAt hasEditPermissionsAt)
@@ -216,9 +227,12 @@ public abstract class CastingEnvironment {
      * positive.
      */
     public long extractMedia(long cost) {
-        for (var extractMediaComponent : extractMedias)
+        for (var extractMediaComponent : preMediaExtract)
             cost = extractMediaComponent.onExtractMedia(cost);
-        return extractMediaEnvironment(cost);
+        cost = extractMediaEnvironment(cost);
+        for (var extractMediaComponent : postMediaExtract)
+            cost = extractMediaComponent.onExtractMedia(cost);
+        return cost;
     }
 
     /**
@@ -273,7 +287,7 @@ public abstract class CastingEnvironment {
     }
 
     public final boolean isEntityInRange(Entity e) {
-        return e instanceof Player || this.isVecInRange(e.position());
+        return (e instanceof Player && HexConfig.server().trueNameHasAmbit()) || (this.isVecInWorld(e.position()) && this.isVecInRange(e.position()));
     }
 
     /**
@@ -304,6 +318,9 @@ public abstract class CastingEnvironment {
      * Convenience function to throw if the entity is out of the caster's range or the world
      */
     public final void assertEntityInRange(Entity e) throws MishapEntityTooFarAway {
+        if (e instanceof ServerPlayer && HexConfig.server().trueNameHasAmbit()) {
+            return;
+        }
         if (!this.isVecInWorld(e.position())) {
             throw new MishapEntityTooFarAway(e);
         }

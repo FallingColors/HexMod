@@ -27,10 +27,20 @@ public interface CastingEnvironmentComponent {
         /**
          * Receives the cost that is being extracted, should return the
          * remaining cost after deducting whatever cost source this component
-         * is responsible for (should be >= 0). All Components are executed
-         * before the CastingEnvironment's extractMedia is executed.
+         * is responsible for (should be &gt;= 0)
          */
         long onExtractMedia(long cost);
+
+        /**
+         *  ExtractMedia component that extracts media BEFORE the call to {@link CastingEnvironment#extractMediaEnvironment(long)}
+         */
+        interface Pre extends ExtractMedia {}
+
+        /**
+         *  ExtractMedia component that extracts media AFTER the call to {@link CastingEnvironment#extractMediaEnvironment(long)}
+         *  if the input is &lt;= 0 you should also probably return 0 (since media cost was already paid off)
+         */
+        interface Post extends ExtractMedia {}
     }
 
     interface IsVecInRange extends CastingEnvironmentComponent {

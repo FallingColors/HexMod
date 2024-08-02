@@ -134,6 +134,8 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> tpDimDenyList;
 
+        private static ForgeConfigSpec.BooleanValue doesTrueNameHaveAmbit;
+
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> fewScrollTables;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> someScrollTables;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> manyScrollTables;
@@ -170,6 +172,10 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
             tpDimDenyList = builder.comment("Resource locations of dimensions you can't Blink or Greater Teleport in.")
                 .defineList("tpDimDenyList", DEFAULT_DIM_TP_DENYLIST, Server::isValidReslocArg);
+
+            doesTrueNameHaveAmbit = builder.comment(
+                    "when false makes player reference iotas behave as normal entity reference iotas")
+                .define("doesTrueNameHaveAmbit", DEFAULT_TRUE_NAME_HAS_AMBIT);
         }
 
         @Override
@@ -205,6 +211,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public boolean canTeleportInThisDimension(ResourceKey<Level> dimension) {
             return noneMatch(tpDimDenyList.get(), dimension.location());
+        }
+
+        @Override
+        public boolean trueNameHasAmbit() {
+            return doesTrueNameHaveAmbit.get();
         }
 
         private static boolean isValidReslocArg(Object o) {

@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.forge.datagen;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.common.lib.HexDamageTypes;
 import at.petrak.hexcasting.datagen.HexAdvancements;
 import at.petrak.hexcasting.datagen.HexLootTables;
 import at.petrak.hexcasting.datagen.IXplatIngredients;
@@ -8,12 +9,15 @@ import at.petrak.hexcasting.datagen.recipe.HexplatRecipes;
 import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightToolIngredient;
 import at.petrak.hexcasting.datagen.tag.HexActionTagProvider;
 import at.petrak.hexcasting.datagen.tag.HexBlockTagProvider;
+import at.petrak.hexcasting.datagen.tag.HexDamageTypeTagProvider;
 import at.petrak.hexcasting.datagen.tag.HexItemTagProvider;
 import at.petrak.hexcasting.forge.datagen.xplat.HexBlockStatesAndModels;
 import at.petrak.hexcasting.forge.datagen.xplat.HexItemModels;
 import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonObject;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.data.loot.LootTableProvider;
@@ -26,6 +30,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.ToolActions;
+import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -53,14 +58,28 @@ public class ForgeHexDataGenerators {
         var output = gen.getPackOutput();
         var lookup = ev.getLookupProvider();
         ExistingFileHelper efh = ev.getExistingFileHelper();
+
+        // https://docs.minecraftforge.net/en/latest/datagen/server/datapackregistries/
+        // https://github.com/MinecraftForge/MinecraftForge/pull/9580
+        var datapackProvider = new DatapackBuiltinEntriesProvider(
+            output,
+            lookup,
+            new RegistrySetBuilder()
+                .add(Registries.DAMAGE_TYPE, HexDamageTypes::bootstrap),
+            Set.of(HexAPI.MOD_ID)
+        );
+        var datapackLookup = datapackProvider.getRegistryProvider();
+
         gen.addProvider(ev.includeClient(), new HexItemModels(output, efh));
         gen.addProvider(ev.includeClient(), new HexBlockStatesAndModels(output, efh));
         gen.addProvider(ev.includeServer(), new AdvancementProvider(
             output, lookup, List.of(new HexAdvancements())
         ));
+        gen.addProvider(ev.includeServer(), datapackProvider);
+        gen.addProvider(ev.includeServer(), new HexDamageTypeTagProvider(output, datapackLookup));
     }
 
-    @SuppressWarnings("DataFlowIssue")
+    @SuppressWarnings({"DataFlowIssue", "UnreachableCode"})
     private static void configureForgeDatagen(GatherDataEvent ev) {
         HexAPI.LOGGER.info("Starting Forge-specific datagen");
 
@@ -73,6 +92,7 @@ public class ForgeHexDataGenerators {
         ));
         gen.addProvider(ev.includeServer(), new HexplatRecipes(output, INGREDIENTS, ForgeHexConditionsBuilder::new));
 
+        // TODO: refactor?
         var xtags = IXplatAbstractions.INSTANCE.tags();
         var blockTagProvider = new HexBlockTagProvider(output, lookup, xtags);
         ((TagsProviderEFHSetter) blockTagProvider).setEFH(efh);

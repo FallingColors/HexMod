@@ -1,0 +1,117 @@
+{% include "hexdoc:index.css.jinja" %}
+
+.flay-recipe{
+  image-rendering: pixelated; /* put it up here so it's inherited */
+  position: relative;
+}
+
+.flay-recipe-background{
+  position: relative;
+  top:0;
+  left: 0;
+}
+
+.flay-recipe-block-ingredient{
+  position: absolute;
+  top: 70px;
+  left: 24px;
+}
+
+/* entity chamber starts at top: 38px & left: 74px. it is 52px wide & 96px tall  */
+.flay-recipe-entity{
+  position: absolute;
+  top: 86px;
+  left: 100px;
+  transform: translate(-50%, -50%);
+  max-height: 94px;
+  max-width: 50px;
+}
+
+.flay-recipe-result{
+  position: absolute;
+  top: 70px;
+  left: 176px;
+}
+
+canvas.spell-viz {
+  --dot-color: #777f;
+  --dot-color: #777f;
+  --start-dot-color: #f009;
+  --moving-dot-color: #0fa9;
+
+  --path-color: darkgray;
+  --visited-path-color: #0c8;
+
+  --dot-scale: 0.0625;
+  --moving-dot-scale: 0.125;
+  --line-scale: 0.08333;
+  --pausetext-scale: 0.5;
+  --dark-mode: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  canvas.spell-viz {
+    /* hack */
+    --dark-mode: 1;
+  }
+}
+
+
+/* For hexcasting_render */
+img.spell-viz {
+  object-fit: contain;
+}
+
+.render-option {
+  cursor: pointer;
+}
+
+.palette-option {
+  cursor: pointer;
+}
+
+.spell-settings-dropdown {
+  position: absolute;
+}
+
+.spell-settings-toggle {
+  font-size: large;
+}
+
+.palettes, .pattern-settings {
+  --default: #ff6bff, #a81ee3, #6490ed, #b189c7;
+  --turbo: #3f3d9c, #4096fe, #19e3b8, #84fe50, #dfde36, #fd8c27, #d63405, #7a0402;
+  --dark2: #1b9e77, #d95f02, #7570b3, #e7298a, #66a61e, #e6ab02, #a6761d, #666666;
+  --tab10: #1f77b4, #ff7f0e, #2ca02c, #d62728, #9467bd, #8c564b, #e377c2, #7f7f7f, #bcbd22, #17becf;
+}
+
+.pattern-settings {
+  --line-thickness: 0.12;
+  --point-color: #ffffff;
+  --point-inner-radius: 0.04;
+  --point-outer-radius: 0.07;
+}
+@media (prefers-color-scheme: light) {
+  .pattern-settings {
+    --point-color: #000000;
+  }
+}
+
+.monocolor-settings {
+  --palette-offset: 0
+}
+
+.gradient-settings {
+  --segs-per-color: 15;
+}
+
+.segment-settings {
+  --triangle-inner-radius: 0.13;
+  --triangle-outer-radius: 0.2;
+  --triangle-color: #ffffff;
+}
+@media (prefers-color-scheme: light) {
+  .segment-settings {
+    --triangle-color: #000000;
+  }
+}

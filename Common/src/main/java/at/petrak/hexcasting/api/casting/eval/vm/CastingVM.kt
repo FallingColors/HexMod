@@ -59,7 +59,12 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
 
             continuation = image2.continuation
             lastResolutionType = image2.resolutionType
-            performSideEffects(info, image2.sideEffects)
+            try {
+                performSideEffects(info, image2.sideEffects)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                performSideEffects(info, listOf(OperatorSideEffect.DoMishap(MishapInternalException(e), Mishap.Context(null, null))))
+            }
             info.earlyExit = info.earlyExit || !lastResolutionType.success
         }
 
@@ -185,7 +190,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                         val newParenCount = this.image.parenCount + if (last == null || last.escaped || last.iota !is PatternIota) 0 else when (last.iota.pattern) {
                             SpecialPatterns.INTROSPECTION -> -1
                             SpecialPatterns.RETROSPECTION -> 1
-                            else -> -1
+                            else -> 0
                         }
                         this.image.copy(parenthesized = newParens, parenCount = newParenCount) to if (last == null) ResolvedPatternType.ERRORED else ResolvedPatternType.UNDONE
                     }

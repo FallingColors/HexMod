@@ -1,4 +1,4 @@
-// 1.20.1	2023-12-24T17:58:56.8955301	Recipes
+// 1.20.1	2024-06-13T19:17:41.8621305	Recipes
 29056d8bbc023668564ee81f4eb8b2a11411cf4a data/create/recipes/crushing/amethyst_block.json
 5bb0b70967a422bfd88c01fa1af64e9b98781fd1 data/create/recipes/crushing/amethyst_cluster.json
 bc729ac7cf84d29a99cd34d50c152c0b9d20bd7a data/hexcasting/advancements/recipes/brainsweep/brainsweep/akashic_record.json
@@ -117,7 +117,7 @@ c2a1ba123e94a114489b31063b17f7a0ec71678a data/hexcasting/recipes/ancient_scroll_
 e0609202271e402d8ae58e4f8eaf11dcdda10a9e data/hexcasting/recipes/brainsweep/akashic_record.json
 5a90084c03d6e8424872870c8b65f4771b447f03 data/hexcasting/recipes/brainsweep/budding_amethyst.json
 b16ff5314d457bc7e9e224e102d1e04ce3a62361 data/hexcasting/recipes/brainsweep/directrix_redstone.json
-4e7d9780689ac1412f2d37107928a59c3e6bf711 data/hexcasting/recipes/brainsweep/impetus_look.json
+92bdf87687d8823036fae6bd01782c653831286b data/hexcasting/recipes/brainsweep/impetus_look.json
 ed5c690324e3d9b55599f00f078ae225072a2e7f data/hexcasting/recipes/brainsweep/impetus_rightclick.json
 a366ea3750adc0d336ab8f318c40baed3f9c3eb7 data/hexcasting/recipes/brainsweep/impetus_storedplayer.json
 2aa7d74e29a7c5ee4f1b8835cf7c6109eed81d77 data/hexcasting/recipes/brainsweep/quench_allay.json

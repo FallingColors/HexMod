@@ -440,7 +440,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .save(recipes, modLoc("brainsweep/impetus_rightclick"));
 
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.IMPETUS_EMPTY),
-            new VillagerIngredient(VillagerProfession.TOOLSMITH, null, 2),
+            new VillagerIngredient(VillagerProfession.FLETCHER, null, 2),
             HexBlocks.IMPETUS_LOOK.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/impetus_look"));
