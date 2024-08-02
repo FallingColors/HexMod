@@ -40,7 +40,7 @@ public class ItemThoughtKnot extends Item implements IotaHolderItem {
 
     @Override
     public boolean canWrite(ItemStack stack, @Nullable Iota iota) {
-        return iota != null && !NBTHelper.contains(stack, TAG_DATA);
+        return iota != null && writeable(stack);
     }
 
     @Override
