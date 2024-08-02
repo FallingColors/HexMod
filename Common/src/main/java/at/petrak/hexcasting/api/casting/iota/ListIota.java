@@ -107,7 +107,10 @@ public class ListIota extends Iota {
 
                 out.append(IotaType.getDisplay(csub));
 
-                if (i < list.size() - 1) {
+                // only add a comma between 2 non-patterns (commas don't look good with Inline patterns)
+                // TODO: maybe add a config? maybe add a method on IotaType to allow it to opt out of commas
+                if (i < list.size() - 1 && (IotaType.getTypeFromTag(csub) != PatternIota.TYPE
+                        || IotaType.getTypeFromTag(HexUtils.downcast(list.get(i+1), CompoundTag.TYPE)) != PatternIota.TYPE)) {
                     out.append(", ");
                 }
             }

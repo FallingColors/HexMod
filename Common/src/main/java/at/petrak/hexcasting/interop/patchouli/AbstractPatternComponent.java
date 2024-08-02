@@ -1,14 +1,11 @@
 package at.petrak.hexcasting.interop.patchouli;
 
-import at.petrak.hexcasting.api.casting.math.HexCoord;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
-import at.petrak.hexcasting.client.render.RenderLib;
-import at.petrak.hexcasting.interop.utils.PatternDrawingUtil;
-import at.petrak.hexcasting.interop.utils.PatternEntry;
+import at.petrak.hexcasting.client.render.PatternColors;
+import at.petrak.hexcasting.client.render.PatternRenderer;
+import at.petrak.hexcasting.client.render.PatternSettings;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.world.phys.Vec2;
 import vazkii.patchouli.api.IComponentRenderContext;
 import vazkii.patchouli.api.ICustomComponent;
 import vazkii.patchouli.api.IVariable;
@@ -23,8 +20,7 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
     protected transient int x, y;
     protected transient float hexSize;
 
-    private transient List<PatternEntry> patterns;
-    private transient List<Vec2> zappyPoints;
+    private transient List<HexPattern> patterns;
 
     /**
      * Pass -1, -1 to center it.
@@ -35,29 +31,57 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
         this.y = y == -1 ? 70 : y;
     }
 
-    public abstract List<Pair<HexPattern, HexCoord>> getPatterns(UnaryOperator<IVariable> lookup);
+    public abstract List<HexPattern> getPatterns(UnaryOperator<IVariable> lookup);
 
     public abstract boolean showStrokeOrder();
 
     @Override
     public void render(GuiGraphics graphics, IComponentRenderContext context, float pticks, int mouseX, int mouseY) {
-        PatternDrawingUtil.drawPattern(graphics, this.x, this.y, this.patterns, this.zappyPoints,
-                this.showStrokeOrder(),
-                0xff_d2c8c8, 0xc8_aba2a2, 0xc8_322b33, 0x80_d1cccc);
+        PoseStack ps = graphics.pose();
+        // want to position x: [0, 116], y: [16, 80]
+        ps.pushPose();
+
+        int cols = (int)Math.ceil(Math.sqrt(patterns.size()));
+        int rows = (int)Math.ceil(patterns.size()/(double)cols);
+
+        double cellW = 116 / (double)cols;
+        double cellH = 64 / (double)rows;
+
+        PatternSettings patSets = new PatternSettings("book" + patterns.size() + (showStrokeOrder() ? "" : "r"),
+                new PatternSettings.PositionSettings(cellW, cellH, 2, 2,
+                        PatternSettings.AxisAlignment.CENTER_FIT, PatternSettings.AxisAlignment.CENTER_FIT, 16, 0, 0),
+                PatternSettings.StrokeSettings.fromStroke(4),
+                showStrokeOrder() ? PatternSettings.ZappySettings.READABLE : PatternSettings.ZappySettings.STATIC
+        );
+
+        PatternColors patCols = PatternColors.DIMMED_COLOR.withDots(false, true);
+
+        if(showStrokeOrder()){
+            patCols = PatternRenderer.shouldDoStrokeGradient() ? PatternColors.DEFAULT_GRADIENT_COLOR.withDots(true, true)
+                    : PatternColors.READABLE_GRID_SCROLL_COLORS;
+        }
+
+        for(int p = 0; p < patterns.size(); p++){
+
+            int r = p / cols;
+            int c = p % cols;
+            HexPattern pattern = patterns.get(p);
+
+            ps.pushPose();
+            ps.translate(cellW * c, cellH * r + 16, 100);
+
+            PatternRenderer.renderPattern(pattern, graphics.pose(), patSets, patCols, 0, 4);
+            ps.popPose();
+        }
+        ps.popPose();
     }
 
     @Override
     public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
-        var patterns = this.getPatterns(lookup);
-        var data = PatternDrawingUtil.loadPatterns(
-            patterns,
-            this.showStrokeOrder() ? RenderLib.DEFAULT_READABILITY_OFFSET : 0f,
-            this.showStrokeOrder() ? RenderLib.DEFAULT_LAST_SEGMENT_LEN_PROP : 1f);
-        this.hexSize = data.hexSize();
-        this.patterns = data.patterns();
-        this.zappyPoints = data.pathfinderDots();
+        this.patterns = this.getPatterns(lookup);
     }
 
+    // used for deserialization from patchi
     protected static class RawPattern {
         protected String startdir;
         protected String signature;

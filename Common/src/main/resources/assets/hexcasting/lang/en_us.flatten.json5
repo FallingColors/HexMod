@@ -427,7 +427,15 @@
       "fail.already": "%s is already empty",
     },
   },
-  
+
+  // === Inline ! ===
+  "matcher.hexcasting.pattern": {
+    "title": "Hex Pattern",
+    "title.styled": "Hex Pattern <se,deaqq>",
+    "description": "Visual Hex Casting Patterns",
+    "example": "<ne,qaq><e,aa><ne,qaq><e,wa><e,wqaawdd><e,aawaawaa>"
+  },
+
   hexcasting: {
     "pattern.unknown": "Unknown pattern resource location %s",
     

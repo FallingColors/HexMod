@@ -57,7 +57,8 @@
     "cardinal-components-block": "~5.2.1",
     "paucal": ">=0.6.0-pre <0.7.0",
     "cloth-config": "11.1.*",
-    "patchouli": ">=1.20.1-80"
+    "patchouli": ">=1.20.1-80",
+    "inline": ">=1.20.1-0.0.1"
   },
   "suggests": {
     "pehkui": ">=3.7.6",

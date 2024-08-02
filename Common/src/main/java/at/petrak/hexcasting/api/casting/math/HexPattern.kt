@@ -4,6 +4,8 @@ import at.petrak.hexcasting.api.utils.NBTBuilder
 import at.petrak.hexcasting.api.utils.coordToPx
 import at.petrak.hexcasting.api.utils.findCenter
 import at.petrak.hexcasting.api.utils.getSafe
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.world.phys.Vec2
@@ -126,6 +128,13 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
     companion object {
         const val TAG_START_DIR = "start_dir"
         const val TAG_ANGLES = "angles"
+
+        @JvmField
+        val CODEC: Codec<HexPattern> = RecordCodecBuilder.create({instance -> instance.group(
+            Codec.STRING.fieldOf(TAG_START_DIR).forGetter(HexPattern::anglesSignature),
+            HexDir.CODEC.fieldOf(TAG_ANGLES).forGetter(HexPattern::startDir)
+        ).apply(instance, HexPattern::fromAngles)
+        })
 
         @JvmStatic
         fun isPattern(tag: CompoundTag): Boolean {

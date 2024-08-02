@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.interop;
 
+import at.petrak.hexcasting.interop.inline.InlineHex;
+import at.petrak.hexcasting.interop.inline.InlineHexClient;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -30,10 +32,13 @@ public class HexInterop {
         }
 
         xplat.initPlatformSpecific();
+
+        InlineHex.init();
     }
 
     public static void clientInit() {
         IClientXplatAbstractions.INSTANCE.initPlatformSpecific();
+        InlineHexClient.init();
     }
 
     private static void initPatchouli() {

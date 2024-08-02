@@ -11,6 +11,7 @@ import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
+import at.petrak.hexcasting.interop.inline.InlinePatternData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -38,16 +39,27 @@ public class ItemSlate extends BlockItem implements IotaHolderItem {
     @Override
     public Component getName(ItemStack pStack) {
         var key = "block." + HexAPI.MOD_ID + ".slate." + (hasPattern(pStack) ? "written" : "blank");
-        return Component.translatable(key);
+        Component patternText = getPattern(pStack)
+            .map(pat -> Component.literal(": ").append(new InlinePatternData(pat).asText(false)))
+            .orElse(Component.literal(""));
+        return Component.translatable(key).append(patternText);
+    }
+
+    public static Optional<HexPattern> getPattern(ItemStack stack){
+        var bet = NBTHelper.getCompound(stack, "BlockEntityTag");
+
+        if (bet != null && bet.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND)) {
+            var patTag = bet.getCompound(BlockEntitySlate.TAG_PATTERN);
+            if (!patTag.isEmpty()) {
+                var pattern = HexPattern.fromNBT(patTag);
+                return Optional.of(pattern);
+            }
+        }
+        return Optional.empty();
     }
 
     public static boolean hasPattern(ItemStack stack) {
-        var bet = NBTHelper.getCompound(stack, "BlockEntityTag");
-        if (bet != null) {
-            return bet.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND) &&
-                !bet.getCompound(BlockEntitySlate.TAG_PATTERN).isEmpty();
-        }
-        return false;
+        return getPattern(stack).isPresent();
     }
 
     @SoftImplement("IForgeItem")
@@ -107,15 +119,6 @@ public class ItemSlate extends BlockItem implements IotaHolderItem {
 
     @Override
     public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-        var bet = NBTHelper.getCompound(stack, "BlockEntityTag");
-
-        if (bet != null && bet.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND)) {
-            var patTag = bet.getCompound(BlockEntitySlate.TAG_PATTERN);
-            if (!patTag.isEmpty()) {
-                var pattern = HexPattern.fromNBT(patTag);
-                return Optional.of(new PatternTooltip(pattern, PatternTooltipComponent.SLATE_BG));
-            }
-        }
-        return Optional.empty();
+        return getPattern(stack).map(pat -> new PatternTooltip(pat, PatternTooltipComponent.SLATE_BG));
     }
 }
