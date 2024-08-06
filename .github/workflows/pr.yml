@@ -19,17 +19,20 @@ jobs:
           distribution: temurin
           java-version: "17.0.1"
       - uses: gradle/actions/setup-gradle@v3
-      
-      - name: Clean
-        run: |
-          chmod +x gradlew
-          ./gradlew clean
 
       - name: Build
-        run: ./gradlew build
+        run: |
+          chmod +x gradlew
+          ./gradlew build
 
+      # ForgeGradle datagen asset download often fails (see #692)
+      # so just allow it to automatically retry a few times
       - name: Run Datagen
-        run: ./gradlew runAllDatagen
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: ./gradlew runAllDatagen
 
       - name: Check Datagen
         run: |
