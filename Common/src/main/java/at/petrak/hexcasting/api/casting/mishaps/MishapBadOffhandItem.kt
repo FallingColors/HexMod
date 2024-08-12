@@ -17,10 +17,10 @@ class MishapBadOffhandItem(val item: ItemStack?, val wanted: Component) : Mishap
         env.mishapEnvironment.dropHeldItems()
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = if (item?.isEmpty != false)
-        error("no_item.offhand", wanted)
-    else
+    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = if (item?.isEmpty == false)
         error("bad_item.offhand", wanted, item.count, item.displayName)
+    else
+        error("no_item.offhand", wanted)
 
     companion object {
         @JvmStatic

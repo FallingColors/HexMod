@@ -45,7 +45,7 @@ public class ItemFocus extends Item implements IotaHolderItem, VariantItem {
 
     @Override
     public boolean writeable(ItemStack stack) {
-        return !NBTHelper.getBoolean(stack, TAG_SEALED);
+        return !isSealed(stack);
     }
 
     @Override
