@@ -31,7 +31,7 @@ public class ItemAbacus extends Item implements IotaHolderItem {
     public @Nullable
     CompoundTag readIotaTag(ItemStack stack) {
         var datum = new DoubleIota(NBTHelper.getDouble(stack, TAG_VALUE));
-        return (CompoundTag) HexUtils.serializeWithCodec(datum, Iota.CODEC.get().codec());
+        return (CompoundTag) HexUtils.serializeWithCodec(datum, Iota.getCodec());
     }
 
     @Override

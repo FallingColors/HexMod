@@ -62,7 +62,7 @@ public abstract class CCItemIotaHolder extends ItemComponent implements CCIotaHo
         @Override
         public @Nullable CompoundTag readIotaTag() {
             var iota = this.provider.apply(this.stack);
-            return iota == null ? null : (CompoundTag) HexUtils.serializeWithCodec(iota, Iota.CODEC.get().codec());
+            return iota == null ? null : (CompoundTag) HexUtils.serializeWithCodec(iota, Iota.getCodec());
         }
 
         @Override

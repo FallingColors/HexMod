@@ -43,7 +43,7 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
     public void setNewMapping(HexPattern pattern, Iota iota) {
         var previouslyEmpty = this.pattern == null;
         this.pattern = pattern;
-        this.iotaTag = (CompoundTag) HexUtils.serializeWithCodec(iota, Iota.CODEC.get().codec());
+        this.iotaTag = (CompoundTag) HexUtils.serializeWithCodec(iota, Iota.getCodec());
 
         if (previouslyEmpty) {
             var oldBs = this.getBlockState();

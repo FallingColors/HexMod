@@ -15,7 +15,7 @@ public interface ADIotaHolder {
     default Iota readIota(ServerLevel world) {
         var tag = readIotaTag();
         if (tag != null) {
-            return HexUtils.deserializeWithCodec(tag, Iota.CODEC.get().codec());
+            return HexUtils.deserializeWithCodec(tag, Iota.getCodec(world));
         } else {
             return null;
         }

@@ -153,14 +153,14 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
                 pages.remove(key);
                 NBTHelper.remove(NBTHelper.getCompound(stack, TAG_SEALED), key);
             } else {
-                pages.put(key, HexUtils.serializeWithCodec(datum, Iota.CODEC.get().codec()));
+                pages.put(key, HexUtils.serializeWithCodec(datum, Iota.getCodec()));
             }
 
             if (pages.isEmpty()) {
                 NBTHelper.remove(stack, TAG_PAGES);
             }
         } else if (datum != null) {
-            NBTHelper.getOrCreateCompound(stack, TAG_PAGES).put(key, HexUtils.serializeWithCodec(datum, Iota.CODEC.get().codec()));
+            NBTHelper.getOrCreateCompound(stack, TAG_PAGES).put(key, HexUtils.serializeWithCodec(datum, Iota.getCodec()));
         } else {
             NBTHelper.remove(NBTHelper.getCompound(stack, TAG_SEALED), key);
         }
