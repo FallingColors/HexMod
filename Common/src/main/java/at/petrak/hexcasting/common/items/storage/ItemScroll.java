@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
@@ -72,7 +73,7 @@ public class ItemScroll extends Item implements IotaHolderItem {
     public void writeDatum(ItemStack stack, Iota datum) {
         if (this.canWrite(stack, datum)) {
             if (datum instanceof PatternIota pat) {
-                NBTHelper.putCompound(stack, TAG_PATTERN, pat.getPattern().serializeToNBT());
+                NBTHelper.put(stack, TAG_PATTERN, HexUtils.serializeWithCodec(pat.getPattern(), HexPattern.CODEC));
             } else if (datum == null) {
                 NBTHelper.remove(stack, TAG_PATTERN);
             }
@@ -139,7 +140,7 @@ public class ItemScroll extends Item implements IotaHolderItem {
     public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
         var compound = NBTHelper.getCompound(stack, ItemScroll.TAG_PATTERN);
         if (compound != null) {
-            var pattern = HexPattern.fromNBT(compound);
+            var pattern = HexUtils.deserializeWithCodec(compound, HexPattern.CODEC);
             return Optional.of(new PatternTooltip(
                 pattern,
                 NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID)

@@ -34,17 +34,14 @@ class MishapOthersName(val confidant: Player) : Mishap() {
          * If `caster` is non-null, it will ignore that when checking.
          */
         @JvmStatic
-        fun getTrueNameFromDatum(datum: Iota, caster: Player?, world: ServerLevel): Player? {
+        fun getTrueNameFromDatum(datum: Iota, caster: Player?): Player? {
             val poolToSearch = ArrayDeque<Iota>()
             poolToSearch.addLast(datum)
 
             while (poolToSearch.isNotEmpty()) {
                 val datumToCheck = poolToSearch.removeFirst()
-                if (datumToCheck is EntityIota && datumToCheck.isTrueName) {
-                    val player = datumToCheck.getEntity(world) as Player
-                    if (player != caster)
-                        return player
-                }
+                if (datumToCheck is EntityIota && datumToCheck.uuid != caster?.uuid)
+                    return datumToCheck.getEntity(caster?.level() as ServerLevel) as? Player
                 val datumSubIotas = datumToCheck.subIotas()
                 if (datumSubIotas != null)
                     poolToSearch.addAll(datumSubIotas)
@@ -54,8 +51,8 @@ class MishapOthersName(val confidant: Player) : Mishap() {
         }
 
         @JvmStatic
-        fun getTrueNameFromArgs(datums: List<Iota>, caster: Player?, world: ServerLevel): Player? {
-            return datums.firstNotNullOfOrNull { getTrueNameFromDatum(it, caster, world) }
+        fun getTrueNameFromArgs(datums: List<Iota>, caster: Player?): Player? {
+            return datums.firstNotNullOfOrNull { getTrueNameFromDatum(it, caster) }
         }
     }
 }

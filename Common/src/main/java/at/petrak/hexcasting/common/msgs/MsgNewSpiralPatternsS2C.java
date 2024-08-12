@@ -1,9 +1,11 @@
 package at.petrak.hexcasting.common.msgs;
 
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
@@ -25,7 +27,7 @@ public record MsgNewSpiralPatternsS2C(UUID playerUUID, List<HexPattern> patterns
         var buf = new FriendlyByteBuf(buffer);
 
         var player = buf.readUUID();
-        var patterns = buf.readCollection(ArrayList::new, buff -> HexPattern.fromNBT(buf.readNbt()));
+        var patterns = buf.readCollection(ArrayList::new, buff -> HexUtils.deserializeWithCodec(buf.readNbt(), HexPattern.CODEC));
         var lifetime = buf.readInt();
 
 
@@ -35,7 +37,7 @@ public record MsgNewSpiralPatternsS2C(UUID playerUUID, List<HexPattern> patterns
     @Override
     public void serialize(FriendlyByteBuf buf) {
         buf.writeUUID(playerUUID);
-        buf.writeCollection(patterns, (buff, pattern) -> buff.writeNbt(pattern.serializeToNBT()));
+        buf.writeCollection(patterns, (buff, pattern) -> buff.writeNbt((CompoundTag) HexUtils.serializeWithCodec(pattern, HexPattern.CODEC)));
         buf.writeInt(lifetime);
     }
 

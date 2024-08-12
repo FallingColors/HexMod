@@ -41,7 +41,7 @@ public class ItemThoughtKnot extends Item implements IotaHolderItem {
     @Override
     public void writeDatum(ItemStack stack, @Nullable Iota iota) {
         if (iota != null) {
-            NBTHelper.put(stack, TAG_DATA, HexUtils.serializeWithCodec(iota, Iota.getCodec()));
+            NBTHelper.put(stack, TAG_DATA, HexUtils.serializeWithCodec(iota, Iota.CODEC.get().codec()));
         }
     }
 

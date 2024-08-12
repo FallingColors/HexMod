@@ -46,7 +46,7 @@ public interface IotaHolderItem {
 
         var tag = dh.readIotaTag(stack);
         if (tag != null) {
-            return HexUtils.deserializeWithCodec(tag, Iota.getCodec(world));
+            return HexUtils.deserializeWithCodec(tag, Iota.CODEC.get().codec());
         } else {
             return null;
         }

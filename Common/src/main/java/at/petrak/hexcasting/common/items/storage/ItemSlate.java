@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
@@ -100,7 +101,7 @@ public class ItemSlate extends BlockItem implements IotaHolderItem {
                 }
             } else if (datum instanceof PatternIota pat) {
                 var beTag = NBTHelper.getOrCreateCompound(stack, "BlockEntityTag");
-                beTag.put(BlockEntitySlate.TAG_PATTERN, pat.getPattern().serializeToNBT());
+                beTag.put(BlockEntitySlate.TAG_PATTERN, HexUtils.serializeWithCodec(pat.getPattern(), HexPattern.CODEC));
             }
         }
     }
@@ -112,7 +113,7 @@ public class ItemSlate extends BlockItem implements IotaHolderItem {
         if (bet != null && bet.contains(BlockEntitySlate.TAG_PATTERN, Tag.TAG_COMPOUND)) {
             var patTag = bet.getCompound(BlockEntitySlate.TAG_PATTERN);
             if (!patTag.isEmpty()) {
-                var pattern = HexPattern.fromNBT(patTag);
+                var pattern = HexUtils.deserializeWithCodec(patTag, HexPattern.CODEC);
                 return Optional.of(new PatternTooltip(pattern, PatternTooltipComponent.SLATE_BG));
             }
         }

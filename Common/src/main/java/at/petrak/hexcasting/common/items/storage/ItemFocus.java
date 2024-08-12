@@ -61,7 +61,7 @@ public class ItemFocus extends Item implements IotaHolderItem, VariantItem {
             stack.removeTagKey(TAG_DATA);
             stack.removeTagKey(TAG_SEALED);
         } else if (!isSealed(stack)) {
-            NBTHelper.put(stack, TAG_DATA, HexUtils.serializeWithCodec(datum, Iota.getCodec()));
+            NBTHelper.put(stack, TAG_DATA, HexUtils.serializeWithCodec(datum, Iota.CODEC.get().codec()));
         }
     }
 

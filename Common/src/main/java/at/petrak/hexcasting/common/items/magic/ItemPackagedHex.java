@@ -77,7 +77,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         var out = new ArrayList<Iota>();
         for (var patTag : patsTag) {
             CompoundTag tag = NBTHelper.getAsCompound(patTag);
-            out.add(HexUtils.deserializeWithCodec(tag, Iota.getCodec(level)));
+            out.add(HexUtils.deserializeWithCodec(tag, Iota.CODEC.get().codec()));
         }
         return out;
     }
@@ -86,7 +86,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
     public void writeHex(ItemStack stack, List<Iota> program, @Nullable FrozenPigment pigment, long media) {
         ListTag patsTag = new ListTag();
         for (Iota pat : program) {
-            patsTag.add(HexUtils.serializeWithCodec(pat, Iota.getCodec()));
+            patsTag.add(HexUtils.serializeWithCodec(pat, Iota.CODEC.get().codec()));
         }
 
         NBTHelper.putList(stack, TAG_PROGRAM, patsTag);
