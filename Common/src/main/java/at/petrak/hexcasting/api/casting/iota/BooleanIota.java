@@ -1,9 +1,11 @@
 package at.petrak.hexcasting.api.casting.iota;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.mojang.serialization.Codec;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.ByteTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -31,22 +33,38 @@ public class BooleanIota extends Iota {
             && this.getBool() == b.getBool();
     }
 
+    /**
+     * @deprecated
+     * Use {@link BooleanIota#TYPE#getCodec} instead.
+     */
+    @Deprecated
     @Override
     public @NotNull Tag serialize() {
-        // there is no boolean tag :(
-        return ByteTag.valueOf(this.getBool());
+        return HexUtils.serializeWithCodec(this, TYPE.getCodec());
     }
 
     public static IotaType<BooleanIota> TYPE = new IotaType<>() {
+
+        @Override
+        public Codec<BooleanIota> getCodec() {
+            return Codec.BOOL.xmap(BooleanIota::new, BooleanIota::getBool);
+        }
+
+        /**
+         * @deprecated
+         * Use {@link BooleanIota#TYPE#getCodec} instead.
+         */
+        @Deprecated
         @Nullable
         @Override
         public BooleanIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            return BooleanIota.deserialize(tag);
+            return HexUtils.deserializeWithCodec(tag, getCodec(world));
         }
+
 
         @Override
         public Component display(Tag tag) {
-            return BooleanIota.display(BooleanIota.deserialize(tag).getBool());
+            return BooleanIota.display(HexUtils.deserializeWithCodec(tag, getCodec()).getBool());
         }
 
         @Override
@@ -55,11 +73,6 @@ public class BooleanIota extends Iota {
             return 0xff_ffff55;
         }
     };
-
-    public static BooleanIota deserialize(Tag tag) throws IllegalArgumentException {
-        var dtag = HexUtils.downcast(tag, ByteTag.TYPE);
-        return new BooleanIota(dtag.getAsByte() != 0);
-    }
 
     public static Component display(boolean b) {
         return Component.translatable(b ? "hexcasting.tooltip.boolean_true" : "hexcasting.tooltip.boolean_false")

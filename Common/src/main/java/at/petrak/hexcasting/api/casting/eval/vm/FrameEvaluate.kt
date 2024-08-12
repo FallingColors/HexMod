@@ -1,16 +1,18 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
-import at.petrak.hexcasting.api.utils.NBTBuilder
-import at.petrak.hexcasting.api.utils.getList
-import at.petrak.hexcasting.api.utils.serializeToNBT
+import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 
@@ -44,14 +46,24 @@ data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : Cont
             }
         } else {
             // If there are no patterns (e.g. empty Hermes), just return OK.
-            CastResult(ListIota(list), continuation, null, listOf(), ResolvedPatternType.EVALUATED, HexEvalSounds.HERMES)
+            CastResult(
+                ListIota(list),
+                continuation,
+                null,
+                listOf(),
+                ResolvedPatternType.EVALUATED,
+                HexEvalSounds.HERMES
+            )
         }
     }
 
-    override fun serializeToNBT() = NBTBuilder {
-        "patterns" %= list.serializeToNBT()
-        "isMetacasting" %= isMetacasting
-    }
+    @Deprecated(
+        "Use the CODEC instead.",
+        replaceWith = ReplaceWith("serializeWithCodec(FrameEvaluate.TYPE.getCodec())")
+    )
+    override fun serializeToNBT() =
+        TYPE.getCodec().encodeStart(NbtOps.INSTANCE, this).resultOrPartial(HexAPI.LOGGER::error)
+            .orElseThrow() as CompoundTag
 
     override fun size() = list.size()
 
@@ -60,15 +72,19 @@ data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : Cont
     companion object {
         @JvmField
         val TYPE: ContinuationFrame.Type<FrameEvaluate> = object : ContinuationFrame.Type<FrameEvaluate> {
-            override fun deserializeFromNBT(tag: CompoundTag, world: ServerLevel): FrameEvaluate {
-                return FrameEvaluate(
-                    HexIotaTypes.LIST.deserialize(
-                        tag.getList("patterns", Tag.TAG_COMPOUND),
-                        world
-                    )!!.list,
-                    tag.getBoolean("isMetacasting"))
+            override fun getCodec(): Codec<FrameEvaluate> = RecordCodecBuilder.create {
+                it.group(
+                    SpellList.getCodec().fieldOf("patterns").forGetter(FrameEvaluate::list),
+                    Codec.BOOL.fieldOf("isMetacasting").forGetter(FrameEvaluate::isMetacasting)
+                ).apply(it, ::FrameEvaluate)
             }
 
+            override fun getCodec(world: ServerLevel): Codec<FrameEvaluate> = RecordCodecBuilder.create {
+                it.group(
+                    SpellList.getCodec(world).fieldOf("patterns").forGetter(FrameEvaluate::list),
+                    Codec.BOOL.fieldOf("isMetacasting").forGetter(FrameEvaluate::isMetacasting)
+                ).apply(it, ::FrameEvaluate)
+            }
         }
     }
 }

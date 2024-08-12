@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.iota.EntityIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.pigment.FrozenPigment
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 
@@ -33,14 +34,17 @@ class MishapOthersName(val confidant: Player) : Mishap() {
          * If `caster` is non-null, it will ignore that when checking.
          */
         @JvmStatic
-        fun getTrueNameFromDatum(datum: Iota, caster: Player?): Player? {
+        fun getTrueNameFromDatum(datum: Iota, caster: Player?, world: ServerLevel): Player? {
             val poolToSearch = ArrayDeque<Iota>()
             poolToSearch.addLast(datum)
 
             while (poolToSearch.isNotEmpty()) {
                 val datumToCheck = poolToSearch.removeFirst()
-                if (datumToCheck is EntityIota && datumToCheck.entity is Player && datumToCheck.entity != caster)
-                    return datumToCheck.entity as Player
+                if (datumToCheck is EntityIota && datumToCheck.isTrueName) {
+                    val player = datumToCheck.getEntity(world) as Player
+                    if (player != caster)
+                        return player
+                }
                 val datumSubIotas = datumToCheck.subIotas()
                 if (datumSubIotas != null)
                     poolToSearch.addAll(datumSubIotas)
@@ -50,8 +54,8 @@ class MishapOthersName(val confidant: Player) : Mishap() {
         }
 
         @JvmStatic
-        fun getTrueNameFromArgs(datums: List<Iota>, caster: Player?): Player? {
-            return datums.firstNotNullOfOrNull { getTrueNameFromDatum(it, caster) }
+        fun getTrueNameFromArgs(datums: List<Iota>, caster: Player?, world: ServerLevel): Player? {
+            return datums.firstNotNullOfOrNull { getTrueNameFromDatum(it, caster, world) }
         }
     }
 }

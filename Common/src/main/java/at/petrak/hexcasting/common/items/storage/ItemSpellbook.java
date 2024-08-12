@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.VariantItem;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -154,14 +155,14 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
                 pages.remove(key);
                 NBTHelper.remove(NBTHelper.getCompound(stack, TAG_SEALED), key);
             } else {
-                pages.put(key, IotaType.serialize(datum));
+                pages.put(key, HexUtils.serializeWithCodec(datum, Iota.getCodec()));
             }
 
             if (pages.isEmpty()) {
                 NBTHelper.remove(stack, TAG_PAGES);
             }
         } else if (datum != null) {
-            NBTHelper.getOrCreateCompound(stack, TAG_PAGES).put(key, IotaType.serialize(datum));
+            NBTHelper.getOrCreateCompound(stack, TAG_PAGES).put(key, HexUtils.serializeWithCodec(datum, Iota.getCodec()));
         } else {
             NBTHelper.remove(NBTHelper.getCompound(stack, TAG_SEALED), key);
         }

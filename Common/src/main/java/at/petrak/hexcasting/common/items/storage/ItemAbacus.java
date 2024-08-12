@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.nbt.CompoundTag;
@@ -30,7 +31,7 @@ public class ItemAbacus extends Item implements IotaHolderItem {
     public @Nullable
     CompoundTag readIotaTag(ItemStack stack) {
         var datum = new DoubleIota(NBTHelper.getDouble(stack, TAG_VALUE));
-        return IotaType.serialize(datum);
+        return (CompoundTag) HexUtils.serializeWithCodec(datum, Iota.getCodec());
     }
 
     @Override

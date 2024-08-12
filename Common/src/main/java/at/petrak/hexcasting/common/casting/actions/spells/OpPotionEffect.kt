@@ -21,7 +21,7 @@ class OpPotionEffect(
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
-        val target = args.getLivingEntityButNotArmorStand(0, argc)
+        val target = args.getLivingEntityButNotArmorStand(0, argc, env.world)
         val duration = args.getPositiveDouble(1, argc)
         val potency = if (this.allowPotency)
             args.getPositiveDoubleUnderInclusive(2, 127.0, argc)

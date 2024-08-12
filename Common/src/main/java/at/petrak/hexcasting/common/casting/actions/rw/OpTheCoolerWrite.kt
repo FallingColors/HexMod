@@ -19,7 +19,7 @@ object OpTheCoolerWrite : SpellAction {
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
-        val target = args.getEntity(0, argc)
+        val target = args.getEntity(0, argc, env.world)
         val datum = args[1]
 
         env.assertEntityInRange(target)
@@ -32,7 +32,7 @@ object OpTheCoolerWrite : SpellAction {
 
         // We pass null here so that even the own caster won't be allowed into a focus.
         // Otherwise, you could sentinel scout to people and remotely write their names into things using a cleric circle.
-        val trueName = MishapOthersName.getTrueNameFromDatum(datum, null)
+        val trueName = MishapOthersName.getTrueNameFromDatum(datum, null, env.world)
         if (trueName != null)
             throw MishapOthersName(trueName)
 

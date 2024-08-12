@@ -1,9 +1,12 @@
 package at.petrak.hexcasting.api.casting.iota;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.mojang.serialization.Codec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.DoubleTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -37,21 +40,37 @@ public class DoubleIota extends Iota {
         return Math.abs(a - b) < TOLERANCE;
     }
 
+    /**
+     * @deprecated
+     * Use {@link DoubleIota#TYPE#getCodec()} instead.
+     */
+    @Deprecated
     @Override
     public @NotNull Tag serialize() {
-        return DoubleTag.valueOf(this.getDouble());
+        return HexUtils.serializeWithCodec(this, TYPE.getCodec());
     }
 
     public static IotaType<DoubleIota> TYPE = new IotaType<>() {
+
+        @Override
+        public Codec<DoubleIota> getCodec() {
+            return Codec.DOUBLE.xmap(DoubleIota::new, DoubleIota::getDouble);
+        }
+
+        /**
+         * @deprecated
+         * Use {@link DoubleIota#TYPE#getCodec} instead.
+         */
+        @Deprecated
         @Nullable
         @Override
         public DoubleIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            return DoubleIota.deserialize(tag);
+            return HexUtils.deserializeWithCodec(tag, getCodec(world));
         }
 
         @Override
         public Component display(Tag tag) {
-            return DoubleIota.display(DoubleIota.deserialize(tag).getDouble());
+            return DoubleIota.display(HexUtils.deserializeWithCodec(tag, getCodec()).getDouble());
         }
 
         @Override
@@ -60,10 +79,6 @@ public class DoubleIota extends Iota {
         }
     };
 
-    public static DoubleIota deserialize(Tag tag) throws IllegalArgumentException {
-        var dtag = HexUtils.downcast(tag, DoubleTag.TYPE);
-        return new DoubleIota(dtag.getAsDouble());
-    }
 
     public static Component display(double d) {
         return Component.literal(String.format("%.2f", d)).withStyle(ChatFormatting.GREEN);

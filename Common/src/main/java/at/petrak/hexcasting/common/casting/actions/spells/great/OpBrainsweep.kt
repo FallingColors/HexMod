@@ -35,7 +35,7 @@ object OpBrainsweep : SpellAction {
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
-        val sacrifice = args.getMob(0, argc)
+        val sacrifice = args.getMob(0, argc, env.world)
         val vecPos = args.getVec3(1, argc)
         val pos = BlockPos.containing(vecPos)
 

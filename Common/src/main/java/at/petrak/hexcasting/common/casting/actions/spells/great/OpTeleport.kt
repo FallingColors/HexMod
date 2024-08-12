@@ -32,7 +32,7 @@ object OpTeleport : SpellAction {
             env: CastingEnvironment
     ): SpellAction.Result {
 
-        val teleportee = args.getEntity(0, argc)
+        val teleportee = args.getEntity(0, argc, env.world)
         val delta = args.getVec3(1, argc)
         env.assertEntityInRange(teleportee)
 
