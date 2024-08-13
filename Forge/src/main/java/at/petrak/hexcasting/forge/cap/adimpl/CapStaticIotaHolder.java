@@ -27,6 +27,11 @@ public record CapStaticIotaHolder(Function<ItemStack, Iota> provider,
     }
 
     @Override
+    public boolean writeable() {
+        return false;
+    }
+
+    @Override
     public boolean writeIota(@Nullable Iota iota, boolean simulate) {
         return false;
     }

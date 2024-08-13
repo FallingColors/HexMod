@@ -54,8 +54,6 @@ public interface IotaHolderItem {
 
     /**
      * What is this considered to contain when nothing can be read?
-     * <p>
-     * TODO i'm not sure what this isCastable for
      */
     @Nullable
     default Iota emptyIota(ItemStack stack) {
@@ -86,6 +84,11 @@ public interface IotaHolderItem {
 
         return IotaType.getColor(tag);
     }
+
+    /**
+     * @return whether it is possible to write to this IotaHolder
+     */
+    boolean writeable(ItemStack stack);
 
     /**
      * Write {@code null} to indicate erasing

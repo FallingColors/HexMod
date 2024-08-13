@@ -29,4 +29,9 @@ public interface ADIotaHolder {
      * @return if the writing succeeded/would succeed
      */
     boolean writeIota(@Nullable Iota iota, boolean simulate);
+
+    /**
+     * @return whether it is possible to write to this IotaHolder
+     */
+    boolean writeable();
 }

@@ -39,9 +39,9 @@ object OpPlaceBlock : SpellAction {
             Vec3.atCenterOf(pos), env.castingEntity?.direction ?: Direction.NORTH, pos, false
         )
         val itemUseCtx = env
-            .getHeldItemToOperateOn { it.item is BlockItem }
-            ?.stack?.let { UseOnContext(env.world, env.castingEntity as? ServerPlayer, env.castingHand, it, blockHit) }
-            ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY, env.castingHand, "placeable")
+            .queryForMatchingStack { it.item is BlockItem }
+            ?.let { UseOnContext(env.world, env.castingEntity as? ServerPlayer, env.castingHand, it, blockHit) }
+            ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY, "placeable")
         val placeContext = BlockPlaceContext(itemUseCtx)
 
         val worldState = env.world.getBlockState(pos)
@@ -64,7 +64,7 @@ object OpPlaceBlock : SpellAction {
             )
 
             val bstate = env.world.getBlockState(pos)
-            val placeeStack = env.getHeldItemToOperateOn { it.item is BlockItem }?.stack
+            val placeeStack = env.queryForMatchingStack { it.item is BlockItem }
             if (placeeStack != null) {
                 if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(env.world, pos, placeeStack, caster as? ServerPlayer))
                     return

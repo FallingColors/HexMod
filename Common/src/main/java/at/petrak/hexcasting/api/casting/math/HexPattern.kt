@@ -11,7 +11,7 @@ import net.minecraft.world.phys.Vec2
 /**
  * Sequence of angles to define a pattern traced.
  */
-data class HexPattern(public val startDir: HexDir, public val angles: MutableList<HexAngle> = arrayListOf()) {
+data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = arrayListOf()) {
     /**
      * @return True if it successfully appended, false if not.
      */
@@ -113,7 +113,7 @@ data class HexPattern(public val startDir: HexDir, public val angles: MutableLis
     fun toLines(hexSize: Float, origin: Vec2): List<Vec2> =
         this.positions().map { coordToPx(it, hexSize, origin) }
 
-    fun sigsEqual(that: HexPattern) = this.anglesSignature() == that.anglesSignature()
+    fun sigsEqual(that: HexPattern) = this.angles == that.angles
 
     override fun toString(): String = buildString {
         append("HexPattern[")

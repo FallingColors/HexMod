@@ -76,6 +76,8 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
         val (stackDescs, ravenmind) = generateDescs()
 
         val isStackClear = image.stack.isEmpty() && image.parenCount == 0 && !image.escapeNext && ravenmind == null
+
+        this.env.postCast(image)
         return ExecutionClientView(isStackClear, lastResolutionType, stackDescs, ravenmind)
     }
 
@@ -161,7 +163,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
      */
     @Throws(MishapTooManyCloseParens::class)
     private fun handleParentheses(iota: Iota): Pair<CastingImage, ResolvedPatternType>? {
-        val sig = (iota as? PatternIota)?.pattern?.anglesSignature()
+        val sig = (iota as? PatternIota)?.pattern?.angles
 
         var displayDepth = this.image.parenCount
 
@@ -176,13 +178,13 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             } else {
 
                 when (sig) {
-                    SpecialPatterns.CONSIDERATION.anglesSignature() -> {
+                    SpecialPatterns.CONSIDERATION.angles -> {
                         this.image.copy(
                             escapeNext = true,
                         ) to ResolvedPatternType.EVALUATED
                     }
 
-                    SpecialPatterns.EVANITION.anglesSignature() -> {
+                    SpecialPatterns.EVANITION.angles -> {
                         val newParens = this.image.parenthesized.toMutableList()
                         val last = newParens.removeLastOrNull()
                         val newParenCount = this.image.parenCount + if (last == null || last.escaped || last.iota !is PatternIota) 0 else when (last.iota.pattern) {
@@ -193,7 +195,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                         this.image.copy(parenthesized = newParens, parenCount = newParenCount) to if (last == null) ResolvedPatternType.ERRORED else ResolvedPatternType.UNDONE
                     }
 
-                    SpecialPatterns.INTROSPECTION.anglesSignature() -> {
+                    SpecialPatterns.INTROSPECTION.angles -> {
                         // we have escaped the parens onto the stack; we just also record our count.
                         val newParens = this.image.parenthesized.toMutableList()
                         newParens.add(ParenthesizedIota(iota, false))
@@ -203,7 +205,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                         ) to if (this.image.parenCount == 0) ResolvedPatternType.EVALUATED else ResolvedPatternType.ESCAPED
                     }
 
-                    SpecialPatterns.RETROSPECTION.anglesSignature() -> {
+                    SpecialPatterns.RETROSPECTION.angles -> {
                         val newParenCount = this.image.parenCount - 1
                         displayDepth--
                         if (newParenCount == 0) {
@@ -246,19 +248,19 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             ) to ResolvedPatternType.ESCAPED
         } else {
             when (sig) {
-                SpecialPatterns.CONSIDERATION.anglesSignature() -> {
+                SpecialPatterns.CONSIDERATION.angles -> {
                     this.image.copy(
                         escapeNext = true
                     ) to ResolvedPatternType.EVALUATED
                 }
 
-                SpecialPatterns.INTROSPECTION.anglesSignature() -> {
+                SpecialPatterns.INTROSPECTION.angles -> {
                     this.image.copy(
                         parenCount = this.image.parenCount + 1
                     ) to ResolvedPatternType.EVALUATED
                 }
 
-                SpecialPatterns.RETROSPECTION.anglesSignature() -> {
+                SpecialPatterns.RETROSPECTION.angles -> {
                     throw MishapTooManyCloseParens()
                 }
 
