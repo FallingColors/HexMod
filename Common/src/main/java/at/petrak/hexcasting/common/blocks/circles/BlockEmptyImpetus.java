@@ -38,7 +38,7 @@ public class BlockEmptyImpetus extends BlockCircleComponent {
 
     @Override
     public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
-        return enterDir != bs.getValue(FACING);
+        return enterDir != bs.getValue(FACING).getOpposite();
     }
 
     @Override
