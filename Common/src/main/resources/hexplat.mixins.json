@@ -6,6 +6,7 @@
   "package": "at.petrak.hexcasting.mixin",
   "mixins": [
     "MixinAbstractVillager",
+    "MixinClipContext",
     "MixinMob",
     "MixinRaider",
     "MixinVillager",
