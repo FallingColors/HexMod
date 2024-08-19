@@ -40,9 +40,11 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
 
     protected @Nullable
     GameProfile getPlayerName() {
-        Player player = getStoredPlayer();
-        if (player != null) {
-            return player.getGameProfile();
+        if (this.level instanceof ServerLevel) {
+            Player player = getStoredPlayer();
+            if (player != null) {
+                return player.getGameProfile();
+            }
         }
 
         return this.storedPlayerProfile;
