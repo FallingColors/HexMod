@@ -51,21 +51,29 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             // ...and execute it.
             // TODO there used to be error checking code here; I'm pretty sure any and all mishaps should already
             // get caught and folded into CastResult by evaluate.
-            val image2 = next.evaluate(continuation.next, world, this)
-            // Then write all pertinent data back to the harness for the next iteration.
-            if (image2.newData != null) {
-                if (isTooLargeToSerialize(image2.newData.stack)){
-                    // Ugly cast, probably need to rethink location
-                    (image2.sideEffects as MutableList<OperatorSideEffect>).add(OperatorSideEffect.DoMishap(MishapStackSize(), Mishap.Context(null, null)))
-                    lastResolutionType = ResolvedPatternType.ERRORED
-                }else {
-                    continuation = image2.continuation
-                    lastResolutionType = image2.resolutionType
-                    this.image = image2.newData
+            val image2 = next.evaluate(continuation.next, world, this).let { result ->
+                // if stack is unable to be serialized, have the result be an error
+                if (result.newData != null && isTooLargeToSerialize(result.newData.stack)) {
+                    result.copy(
+                        newData = null,
+                        sideEffects = result.sideEffects + OperatorSideEffect.DoMishap(MishapStackSize(), Mishap.Context(null, null)),
+                        resolutionType = ResolvedPatternType.ERRORED,
+                        sound = HexEvalSounds.MISHAP,
+                    )
+                } else {
+                    result
                 }
             }
 
+            // Then write all pertinent data back to the harness for the next iteration.
+            if (image2.newData != null) {
+                this.image = image2.newData
+            }
+
             this.env.postExecution(image2)
+
+            continuation = image2.continuation
+            lastResolutionType = image2.resolutionType
 
             try {
                 performSideEffects(info, image2.sideEffects)
