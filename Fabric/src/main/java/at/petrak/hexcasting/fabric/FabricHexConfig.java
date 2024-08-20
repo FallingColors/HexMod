@@ -78,7 +78,6 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private int artifactCooldown = DEFAULT_ARTIFACT_COOLDOWN;
 
 
-
         @Override
         public void validatePostLoad() throws ValidationException {
             this.dustMediaAmount = Math.max(this.dustMediaAmount, 0);
@@ -121,7 +120,6 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         public int artifactCooldown() {
             return artifactCooldown;
         }
-
     }
 
     @Config(name = "client")

@@ -14,15 +14,15 @@ public class HexDamageTypes {
 
     public static void bootstrap(BootstapContext<DamageType> ctx) {
         ctx.register(OVERCAST, new DamageType(
-                "hexcasting.overcast",
-                DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER,
-                0f
+            "hexcasting.overcast",
+            DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER,
+            0f
         ));
 
         ctx.register(SHAME_ON_YOU, new DamageType(
-                "hexcasting.shame",
-                DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER,
-                0f
+            "hexcasting.shame",
+            DamageScaling.WHEN_CAUSED_BY_LIVING_NON_PLAYER,
+            0f
         ));
     }
 }
