@@ -50,7 +50,20 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             // ...and execute it.
             // TODO there used to be error checking code here; I'm pretty sure any and all mishaps should already
             // get caught and folded into CastResult by evaluate.
-            val image2 = next.evaluate(continuation.next, world, this)
+            val image2 = next.evaluate(continuation.next, world, this).let { result ->
+                // if stack is unable to be serialized, have the result be an error
+                if (result.newData != null && IotaType.isTooLargeToSerialize(result.newData.stack)) {
+                    result.copy(
+                        newData = null,
+                        sideEffects = listOf(OperatorSideEffect.DoMishap(MishapStackSize(), Mishap.Context(null, null))),
+                        resolutionType = ResolvedPatternType.ERRORED,
+                        sound = HexEvalSounds.MISHAP,
+                    )
+                } else {
+                    result
+                }
+            }
+
             // Then write all pertinent data back to the harness for the next iteration.
             if (image2.newData != null) {
                 this.image = image2.newData
