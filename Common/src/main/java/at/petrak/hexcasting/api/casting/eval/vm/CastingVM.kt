@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
+import at.petrak.hexcasting.api.casting.iota.IotaType.isTooLargeToSerialize
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.iota.PatternIota
 import at.petrak.hexcasting.api.casting.math.HexDir
@@ -53,12 +54,19 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             val image2 = next.evaluate(continuation.next, world, this)
             // Then write all pertinent data back to the harness for the next iteration.
             if (image2.newData != null) {
-                this.image = image2.newData
+                if (isTooLargeToSerialize(image2.newData.stack)){
+                    // Ugly cast, probably need to rethink location
+                    (image2.sideEffects as MutableList<OperatorSideEffect>).add(OperatorSideEffect.DoMishap(MishapStackSize(), Mishap.Context(null, null)))
+                    lastResolutionType = ResolvedPatternType.ERRORED
+                }else {
+                    continuation = image2.continuation
+                    lastResolutionType = image2.resolutionType
+                    this.image = image2.newData
+                }
             }
+
             this.env.postExecution(image2)
 
-            continuation = image2.continuation
-            lastResolutionType = image2.resolutionType
             try {
                 performSideEffects(info, image2.sideEffects)
             } catch (e: Exception) {

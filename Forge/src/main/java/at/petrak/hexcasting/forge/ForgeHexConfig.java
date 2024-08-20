@@ -25,27 +25,22 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     public ForgeHexConfig(ForgeConfigSpec.Builder builder) {
         builder.push("Media Amounts");
         dustMediaAmount = builder.comment("How much media a single Amethyst Dust item is worth")
-                .defineInRange("dustMediaAmount", DEFAULT_DUST_MEDIA_AMOUNT, 0, Integer.MAX_VALUE);
+            .defineInRange("dustMediaAmount", DEFAULT_DUST_MEDIA_AMOUNT, 0, Integer.MAX_VALUE);
         shardMediaAmount = builder.comment("How much media a single Amethyst Shard item is worth")
-                .defineInRange("shardMediaAmount", DEFAULT_SHARD_MEDIA_AMOUNT, 0, Integer.MAX_VALUE);
+            .defineInRange("shardMediaAmount", DEFAULT_SHARD_MEDIA_AMOUNT, 0, Integer.MAX_VALUE);
         chargedCrystalMediaAmount = builder.comment("How much media a single Charged Amethyst Crystal item is worth")
-                .defineInRange("chargedCrystalMediaAmount", DEFAULT_CHARGED_MEDIA_AMOUNT, 0, Integer.MAX_VALUE);
+            .defineInRange("chargedCrystalMediaAmount", DEFAULT_CHARGED_MEDIA_AMOUNT, 0, Integer.MAX_VALUE);
         mediaToHealthRate = builder.comment("How many points of media a half-heart is worth when casting from HP")
-                .defineInRange("mediaToHealthRate", DEFAULT_MEDIA_TO_HEALTH_RATE, 0.0, Double.POSITIVE_INFINITY);
+            .defineInRange("mediaToHealthRate", DEFAULT_MEDIA_TO_HEALTH_RATE, 0.0, Double.POSITIVE_INFINITY);
         builder.pop();
 
         builder.push("Cooldowns");
         cypherCooldown = builder.comment("Cooldown in ticks of a cypher")
-                .defineInRange("cypherCooldown", DEFAULT_CYPHER_COOLDOWN, 0, Integer.MAX_VALUE);
+            .defineInRange("cypherCooldown", DEFAULT_CYPHER_COOLDOWN, 0, Integer.MAX_VALUE);
         trinketCooldown = builder.comment("Cooldown in ticks of a trinket")
-                .defineInRange("trinketCooldown", DEFAULT_TRINKET_COOLDOWN, 0, Integer.MAX_VALUE);
+            .defineInRange("trinketCooldown", DEFAULT_TRINKET_COOLDOWN, 0, Integer.MAX_VALUE);
         artifactCooldown = builder.comment("Cooldown in ticks of a artifact")
-                .defineInRange("artifactCooldown", DEFAULT_ARTIFACT_COOLDOWN, 0, Integer.MAX_VALUE);
-        builder.pop();
-
-        builder.push("Stack Limitations");
-        stackIotaLimit = builder.comment("Max limit of iotas allowed on the stack")
-                .defineInRange("stackIotaLimit", DEFAUlT_STACK_IOTA_LIMIT, 0, Integer.MAX_VALUE);
+            .defineInRange("artifactCooldown", DEFAULT_ARTIFACT_COOLDOWN, 0, Integer.MAX_VALUE);
         builder.pop();
 
     }
@@ -85,9 +80,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         return artifactCooldown.get();
     }
 
-    @Override
-    public int stackIotaLimit() { return stackIotaLimit.get(); }
-
     public static class Client implements HexConfig.ClientConfigAccess {
         private static ForgeConfigSpec.BooleanValue ctrlTogglesOffStrokeOrder;
         private static ForgeConfigSpec.BooleanValue invertSpellbookScrollDirection;
@@ -96,19 +88,19 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
         public Client(ForgeConfigSpec.Builder builder) {
             ctrlTogglesOffStrokeOrder = builder.comment(
-                            "Whether the ctrl key will instead turn *off* the color gradient on patterns")
-                    .define("ctrlTogglesOffStrokeOrder", DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER);
+                        "Whether the ctrl key will instead turn *off* the color gradient on patterns")
+                .define("ctrlTogglesOffStrokeOrder", DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER);
             invertSpellbookScrollDirection = builder.comment(
-                            "Whether scrolling up (as opposed to down) will increase the page index of the spellbook, and " +
-                                    "vice versa")
-                    .define("invertSpellbookScrollDirection", DEFAULT_INVERT_SPELLBOOK_SCROLL);
+                        "Whether scrolling up (as opposed to down) will increase the page index of the spellbook, and " +
+                                "vice versa")
+                .define("invertSpellbookScrollDirection", DEFAULT_INVERT_SPELLBOOK_SCROLL);
             invertAbacusScrollDirection = builder.comment(
-                            "Whether scrolling up (as opposed to down) will increase the value of the abacus, and vice versa")
-                    .define("invertAbacusScrollDirection", DEFAULT_INVERT_ABACUS_SCROLL);
+                        "Whether scrolling up (as opposed to down) will increase the value of the abacus, and vice versa")
+                .define("invertAbacusScrollDirection", DEFAULT_INVERT_ABACUS_SCROLL);
             gridSnapThreshold = builder.comment(
-                            "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 " +
-                                    "means 50% of the way.")
-                    .defineInRange("gridSnapThreshold", DEFAULT_GRID_SNAP_THRESHOLD, 0.5, 1.0);
+                        "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 " +
+                                "means 50% of the way.")
+                .defineInRange("gridSnapThreshold", DEFAULT_GRID_SNAP_THRESHOLD, 0.5, 1.0);
         }
 
         @Override
@@ -155,38 +147,38 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         public Server(ForgeConfigSpec.Builder builder) {
             builder.push("Spells");
             maxOpCount = builder.comment("The maximum number of actions that can be executed in one tick, to avoid " +
-                            "hanging the server.")
-                    .defineInRange("maxOpCount", DEFAULT_MAX_OP_COUNT, 0, Integer.MAX_VALUE);
+                        "hanging the server.")
+                .defineInRange("maxOpCount", DEFAULT_MAX_OP_COUNT, 0, Integer.MAX_VALUE);
             opBreakHarvestLevel = builder.comment(
-                    "The harvest level of the Break Block spell.",
-                    "0 = wood, 1 = stone, 2 = iron, 3 = diamond, 4 = netherite."
+                "The harvest level of the Break Block spell.",
+                "0 = wood, 1 = stone, 2 = iron, 3 = diamond, 4 = netherite."
             ).defineInRange("opBreakHarvestLevel", DEFAULT_OP_BREAK_HARVEST_LEVEL, 0, 4);
             builder.pop();
 
             builder.push("Spell Circles");
             maxSpellCircleLength = builder.comment("The maximum number of slates in a spell circle")
-                    .defineInRange("maxSpellCircleLength", DEFAULT_MAX_SPELL_CIRCLE_LENGTH, 4, Integer.MAX_VALUE);
+                .defineInRange("maxSpellCircleLength", DEFAULT_MAX_SPELL_CIRCLE_LENGTH, 4, Integer.MAX_VALUE);
 
             circleActionDenyList = builder.comment(
-                            "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle" +
-                                    " will result in a mishap. For example: hexcasting:get_caster will prevent Mind's Reflection.")
-                    .defineList("circleActionDenyList", List.of(), Server::isValidReslocArg);
+                        "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle" +
+                                " will result in a mishap. For example: hexcasting:get_caster will prevent Mind's Reflection.")
+                .defineList("circleActionDenyList", List.of(), Server::isValidReslocArg);
             builder.pop();
 
             actionDenyList = builder.comment(
-                            "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
-                    .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
+                        "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
+                .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
 
             villagersOffendedByMindMurder = builder.comment(
-                            "Should villagers take offense when you flay the mind of their fellow villagers?")
-                    .define("villagersOffendedByMindMurder", true);
+                        "Should villagers take offense when you flay the mind of their fellow villagers?")
+                .define("villagersOffendedByMindMurder", true);
 
             tpDimDenyList = builder.comment("Resource locations of dimensions you can't Blink or Greater Teleport in.")
-                    .defineList("tpDimDenyList", DEFAULT_DIM_TP_DENYLIST, Server::isValidReslocArg);
+                .defineList("tpDimDenyList", DEFAULT_DIM_TP_DENYLIST, Server::isValidReslocArg);
 
             doesTrueNameHaveAmbit = builder.comment(
-                            "when false makes player reference iotas behave as normal entity reference iotas")
-                    .define("doesTrueNameHaveAmbit", DEFAULT_TRUE_NAME_HAS_AMBIT);
+                        "when false makes player reference iotas behave as normal entity reference iotas")
+                .define("doesTrueNameHaveAmbit", DEFAULT_TRUE_NAME_HAS_AMBIT);
         }
 
         @Override
