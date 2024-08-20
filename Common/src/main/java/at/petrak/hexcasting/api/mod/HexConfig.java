@@ -36,9 +36,6 @@ public class HexConfig {
         int DEFAULT_TRINKET_COOLDOWN = 5;
         int DEFAULT_ARTIFACT_COOLDOWN = 3;
 
-        int DEFAUlT_STACK_IOTA_LIMIT = 2048;
-
-        int stackIotaLimit();
     }
 
     public interface ClientConfigAccess {
