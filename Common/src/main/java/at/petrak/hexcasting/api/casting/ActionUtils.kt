@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.MishapEntityNotFound
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.casting.mishaps.MishapShameOnYou
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import com.mojang.datafixers.util.Either
 import net.minecraft.core.BlockPos
@@ -23,6 +24,22 @@ import java.util.function.DoubleUnaryOperator
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
+
+fun List<Iota>.getIotaListSize(): Int{
+    val work = mutableListOf<Iota>()
+    work.addAll(this)
+    var size = 0
+    while (work.isNotEmpty()) {
+        val iota = work.removeLast()
+        val subiotas = iota.subIotas()
+        if (subiotas != null) {
+            work.addAll(subiotas)
+        }
+        size += iota.size()
+    }
+
+    return size
+}
 
 fun List<Iota>.getDouble(idx: Int, argc: Int = 0): Double {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }

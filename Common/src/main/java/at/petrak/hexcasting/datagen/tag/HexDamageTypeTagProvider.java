@@ -31,6 +31,13 @@ public class HexDamageTypeTagProvider extends DamageTypeTagsProvider {
             DamageTypeTags.BYPASSES_INVULNERABILITY,
             DamageTypeTags.BYPASSES_SHIELD
         );
+
+        add(HexDamageTypes.STACK_SIZE,
+            DamageTypeTags.BYPASSES_ARMOR,
+            DamageTypeTags.BYPASSES_EFFECTS,
+            DamageTypeTags.BYPASSES_INVULNERABILITY,
+            DamageTypeTags.BYPASSES_SHIELD
+        );
     }
 
     @SafeVarargs

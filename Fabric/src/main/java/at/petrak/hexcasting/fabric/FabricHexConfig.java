@@ -77,6 +77,9 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private int artifactCooldown = DEFAULT_ARTIFACT_COOLDOWN;
 
+        @ConfigEntry.Gui.Tooltip
+        private int stackIotaLimit = DEFAUlT_STACK_IOTA_LIMIT;
+
 
         @Override
         public void validatePostLoad() throws ValidationException {
@@ -120,6 +123,9 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         public int artifactCooldown() {
             return artifactCooldown;
         }
+
+        @Override
+        public int stackIotaLimit() { return stackIotaLimit;}
     }
 
     @Config(name = "client")

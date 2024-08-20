@@ -12,6 +12,10 @@ import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
+import at.petrak.hexcasting.api.casting.getIotaListSize
+import at.petrak.hexcasting.api.casting.mishaps.MishapStackSize
+import at.petrak.hexcasting.api.mod.HexConfig
+
 
 /**
  * The state of a casting VM, containing the stack and all
@@ -26,6 +30,13 @@ data class CastingImage private constructor(
 
     val userData: CompoundTag
 ) {
+    init {
+        val size = stack.getIotaListSize()
+        if (size > HexConfig.common().stackIotaLimit()) {
+            throw MishapStackSize()
+        }
+    }
+
     constructor() : this(listOf(), 0, listOf(), false, 0, CompoundTag())
 
     data class ParenthesizedIota(val iota: Iota, val escaped: Boolean) {
@@ -113,7 +124,12 @@ data class CastingImage private constructor(
                 val parenEscapedTag = parenTag.getByteArray(TAG_ESCAPED)
 
                 for ((subtag, isEscapedByte) in parenIotasTag.zipWithDefault(parenEscapedTag) { _ -> 0 }) {
-                    parenthesized.add(ParenthesizedIota(IotaType.deserialize(subtag.downcast(CompoundTag.TYPE), world), isEscapedByte != 0.toByte()))
+                    parenthesized.add(
+                        ParenthesizedIota(
+                            IotaType.deserialize(subtag.downcast(CompoundTag.TYPE), world),
+                            isEscapedByte != 0.toByte()
+                        )
+                    )
                 }
 
                 val parenCount = tag.getInt(TAG_PAREN_COUNT)
