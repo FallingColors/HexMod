@@ -26,7 +26,6 @@ data class CastingImage private constructor(
 
     val userData: CompoundTag
 ) {
-
     constructor() : this(listOf(), 0, listOf(), false, 0, CompoundTag())
 
     data class ParenthesizedIota(val iota: Iota, val escaped: Boolean) {
