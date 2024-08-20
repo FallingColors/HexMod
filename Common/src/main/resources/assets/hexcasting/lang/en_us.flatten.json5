@@ -901,7 +901,7 @@
       invalid_spell_datum_type: "Tried to use a value of invalid type as a SpellDatum: %s (class %s). This is a bug in the mod.",
       unknown: "threw an exception (%s). This is a bug in the mod.",
       shame: "Shame on you!",
-      stack_size: "My mind was too small to contain the breadth of this spell.",
+      stack_size: "Exceeded stack size limit",
       
       invalid_value: {
         "": "expected %s at index %s of the stack, but got %s",
