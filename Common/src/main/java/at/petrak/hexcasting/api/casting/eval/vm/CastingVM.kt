@@ -8,7 +8,6 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
-import at.petrak.hexcasting.api.casting.iota.IotaType.isTooLargeToSerialize
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.iota.PatternIota
 import at.petrak.hexcasting.api.casting.math.HexDir
@@ -53,10 +52,10 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             // get caught and folded into CastResult by evaluate.
             val image2 = next.evaluate(continuation.next, world, this).let { result ->
                 // if stack is unable to be serialized, have the result be an error
-                if (result.newData != null && isTooLargeToSerialize(result.newData.stack)) {
+                if (result.newData != null && IotaType.isTooLargeToSerialize(result.newData.stack)) {
                     result.copy(
                         newData = null,
-                        sideEffects = result.sideEffects + OperatorSideEffect.DoMishap(MishapStackSize(), Mishap.Context(null, null)),
+                        sideEffects = listOf(OperatorSideEffect.DoMishap(MishapStackSize(), Mishap.Context(null, null))),
                         resolutionType = ResolvedPatternType.ERRORED,
                         sound = HexEvalSounds.MISHAP,
                     )
@@ -69,12 +68,10 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             if (image2.newData != null) {
                 this.image = image2.newData
             }
-
             this.env.postExecution(image2)
 
             continuation = image2.continuation
             lastResolutionType = image2.resolutionType
-
             try {
                 performSideEffects(info, image2.sideEffects)
             } catch (e: Exception) {
