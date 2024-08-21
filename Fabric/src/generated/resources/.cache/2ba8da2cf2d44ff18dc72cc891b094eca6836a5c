@@ -1,6 +1,6 @@
-// 1.20.1	2024-08-21T00:46:56.715286	Hex Casting/Tags for minecraft:item
-fdb48f194d7937ab6b423fa4b90a4d438bf6dd90 data\minecraft\tags\items\wooden_doors.json
+// 1.20.1	2024-08-21T16:55:57.0223613	Hex Casting/Tags for minecraft:item
 5bbfd513fd2eb2090b0c2d1ec33504deb79d53b9 data\minecraft\tags\items\wooden_slabs.json
+fdb48f194d7937ab6b423fa4b90a4d438bf6dd90 data\minecraft\tags\items\wooden_doors.json
 37cff4ce449b8069b59b2327d78e073fc026d348 data\minecraft\tags\items\wooden_pressure_plates.json
 5928bad07d3872bb60f29ef4f3c885c8e1967c20 data\hexcasting\tags\items\phial_base.json
 e186f43ed06770e698c886691f91b2c6acdb5a2a data\hexcasting\tags\items\seal_materials.json
