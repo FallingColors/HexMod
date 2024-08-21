@@ -402,7 +402,7 @@
 
   "stat.hexcasting": {
     media_used: "消耗媒质量（以紫水晶粉计）",
-    media_overcasted: "过度施法消耗媒质量（以紫水晶粉计）",
+    media_overcast: "过度施法消耗媒质量（以紫水晶粉计）",
     patterns_drawn: "绘制图案次数",
     spells_cast: "施放法术次数",
   },
