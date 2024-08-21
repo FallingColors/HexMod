@@ -30,25 +30,28 @@ jobs:
 
       # ForgeGradle datagen asset download often fails (see #692)
       # so just allow it to automatically retry a few times
-      - name: Run Datagen
+      - name: Run datagen
         uses: nick-fields/retry@v3
         with:
           timeout_minutes: 10
           max_attempts: 3
           command: ./gradlew runAllDatagen
 
-      - name: Check Datagen
+      - name: Check datagen
         run: |
           git add --intent-to-add .
           git diff --name-only --exit-code -- ":!:*/src/generated/resources/.cache/*"
 
-      - name: Upload Artifacts
+      - name: Prepare artifacts for upload
+        run: |
+          mkdir -p dist
+          cp {Common,Forge,Fabric}/build/libs/*.jar dist
+
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          path: |
-            Common/build/libs/*.jar
-            Forge/build/libs/*.jar
-            Fabric/build/libs/*.jar
+          name: mod-build
+          path: dist
 
   hexdoc:
     # don't bother running the docs build when pushing to main - nothing necessary to cache here
