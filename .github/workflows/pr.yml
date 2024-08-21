@@ -10,6 +10,9 @@ on:
   push:
     branches: main
 
+env:
+  JAVA_VERSION: '17.0.1'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,27 +23,13 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "17.0.1"
+          java-version: ${{ env.JAVA_VERSION }}
       - uses: gradle/actions/setup-gradle@v3
 
       - name: Build
         run: |
           chmod +x gradlew
           ./gradlew build
-
-      # ForgeGradle datagen asset download often fails (see #692)
-      # so just allow it to automatically retry a few times
-      - name: Run datagen
-        uses: nick-fields/retry@v3
-        with:
-          timeout_minutes: 10
-          max_attempts: 3
-          command: ./gradlew runAllDatagen
-
-      - name: Check datagen
-        run: |
-          git add --intent-to-add .
-          git diff --name-only --exit-code -- ":!:*/src/generated/resources/.cache/*"
 
       - name: Prepare artifacts for upload
         run: |
@@ -52,6 +41,34 @@ jobs:
         with:
           name: mod-build
           path: dist
+  
+  datagen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+      - uses: gradle/actions/setup-gradle@v3
+
+      # ForgeGradle datagen asset download often fails (see #692)
+      # so just allow it to automatically retry a few times
+      - name: Run datagen
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: |
+            chmod +x gradlew
+            ./gradlew runAllDatagen
+
+      - name: Check datagen
+        run: |
+          git add --intent-to-add .
+          git diff --name-only --exit-code -- ":!:*/src/generated/resources/.cache/*"
 
   hexdoc:
     # don't bother running the docs build when pushing to main - nothing necessary to cache here
