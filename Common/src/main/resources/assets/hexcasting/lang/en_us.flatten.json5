@@ -402,13 +402,16 @@
 
   "stat.hexcasting": {
     media_used: "Media Consumed (in dust)",
-    media_overcasted: "Media Overcast (in dust)",
+    media_overcast: "Media Overcast (in dust)",
     patterns_drawn: "Patterns Drawn",
     spells_cast: "Spells Cast",
   },
 
   "death.attack.hexcasting": {
-    overcast: "%s's mind was subsumed into energy",
+    overcast: {
+      "": "%s's mind was subsumed into energy",
+      player: "%s's mind was subsumed into energy while fighting %s",
+    },
     shame: "Shame on %s!",
   },
 
