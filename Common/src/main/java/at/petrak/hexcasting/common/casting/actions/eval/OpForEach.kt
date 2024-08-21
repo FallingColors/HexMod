@@ -22,20 +22,8 @@ object OpForEach : Action {
 
         val newStack = stack.takeLast(2)
 
-        val instrs: SpellList
-        val datums: SpellList
-
-        try {
-            instrs = newStack.getList(newStack.lastIndex - 1)
-        } catch (m: MishapInvalidIota) {
-            throw  MishapInvalidIota.ofType(m.perpetrator, 1, "list")
-        }
-
-        try {
-            datums = newStack.getList(newStack.lastIndex)
-        } catch (m: MishapInvalidIota) {
-            throw  MishapInvalidIota.ofType(m.perpetrator, 0, "list")
-        }
+        val instrs = newStack.getList(0, 2)
+        val datums = newStack.getList(1, 2)
 
         stack.removeLastOrNull()
         stack.removeLastOrNull()
