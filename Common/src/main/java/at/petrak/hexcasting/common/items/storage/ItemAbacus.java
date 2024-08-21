@@ -34,6 +34,11 @@ public class ItemAbacus extends Item implements IotaHolderItem {
     }
 
     @Override
+    public boolean writeable(ItemStack stack) {
+        return false;
+    }
+
+    @Override
     public boolean canWrite(ItemStack stack, Iota datum) {
         return false;
     }

@@ -5,8 +5,10 @@ import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.ExecutionClientView;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.msgs.*;
@@ -19,9 +21,13 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class StaffCastEnv extends PlayerBasedCastEnv {
     private final InteractionHand castingHand;
+
+    private final Set<HexPattern> castPatterns = new HashSet<>();
+    private int soundsPlayed = 0;
 
 
     public StaffCastEnv(ServerPlayer caster, InteractionHand castingHand) {
@@ -35,20 +41,31 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
         super.postExecution(result);
 
         if (result.component1() instanceof PatternIota patternIota) {
-            var packet = new MsgNewSpiralPatternsS2C(
-                this.caster.getUUID(), List.of(patternIota.getPattern()), Integer.MAX_VALUE
-            );
-            IXplatAbstractions.INSTANCE.sendPacketToPlayer(this.caster, packet);
-            IXplatAbstractions.INSTANCE.sendPacketTracking(this.caster, packet);
+            castPatterns.add(patternIota.getPattern());
         }
 
         // we always want to play this sound one at a time
         var sound = result.getSound().sound();
-        if (sound != null) {
+        if (soundsPlayed < 100 && sound != null) { // TODO: Make configurable
             var soundPos = this.caster.position();
             this.world.playSound(null, soundPos.x, soundPos.y, soundPos.z,
                 sound, SoundSource.PLAYERS, 1f, 1f);
+            soundsPlayed++;
         }
+    }
+
+    @Override
+    public void postCast(CastingImage image) {
+        super.postCast(image);
+
+        var packet = new MsgNewSpiralPatternsS2C(
+            this.caster.getUUID(), castPatterns.stream().toList(), Integer.MAX_VALUE
+        );
+        IXplatAbstractions.INSTANCE.sendPacketToPlayer(this.caster, packet);
+        IXplatAbstractions.INSTANCE.sendPacketTracking(this.caster, packet);
+
+        castPatterns.clear();
+        soundsPlayed = 0;
     }
 
     @Override

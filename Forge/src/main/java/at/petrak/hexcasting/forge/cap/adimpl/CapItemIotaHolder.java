@@ -39,4 +39,9 @@ public record CapItemIotaHolder(IotaHolderItem holder,
         }
         return true;
     }
+
+    @Override
+    public boolean writeable() {
+        return holder.writeable(stack);
+    }
 }

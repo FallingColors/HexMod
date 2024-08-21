@@ -57,7 +57,8 @@ object DoubleArithmetic : Arithmetic {
             MUL     -> make2 { a, b -> a * b }
             DIV     -> make2 { a, b -> if (b == 0.0) throw MishapDivideByZero.of(a, b) else a / b }
             ABS     -> make1 { a -> abs(a) }
-            POW     -> make2 { a, b -> a.pow(b) }
+            // throw MishapDivideByZero if raising a negative number to a fractional power (ie. sqrt(-1) etc)
+            POW     -> make2 { a, b -> if (a < 0 && !DoubleIota.tolerates(floor(b), b)) throw MishapDivideByZero.of(a, b, "exponent") else a.pow(b) }
             FLOOR   -> make1 { a -> floor(a) }
             CEIL    -> make1 { a -> ceil(a) }
             SIN     -> make1 { a -> sin(a) }

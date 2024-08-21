@@ -223,6 +223,11 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         }
 
         this.caster.awardStat(HexStatistics.MEDIA_USED, (int) (startCost - costLeft));
+        HexAdvancementTriggers.SPEND_MEDIA_TRIGGER.trigger(
+            this.caster,
+            startCost - costLeft,
+            costLeft < 0 ? -costLeft : 0
+        );
 
         return costLeft;
     }

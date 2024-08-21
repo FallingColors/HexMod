@@ -32,6 +32,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import static at.petrak.hexcasting.api.utils.HexUtils.isOfTag;
 
@@ -57,7 +58,7 @@ public class PatternIota extends Iota {
     public boolean toleratesOther(Iota that) {
         return typesMatch(this, that)
             && that instanceof PatternIota piota
-            && this.getPattern().anglesSignature().equals(piota.getPattern().anglesSignature());
+            && this.getPattern().getAngles().equals(piota.getPattern().getAngles());
     }
 
     @Override
@@ -67,7 +68,7 @@ public class PatternIota extends Iota {
 
     @Override
     public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
-        @Nullable Component castedName = null;
+        Supplier<@Nullable Component> castedName = () -> null;
         try {
             var lookup = PatternRegistryManifest.matchPattern(this.getPattern(), vm.getEnv(), false);
             vm.getEnv().precheckAction(lookup);
@@ -85,7 +86,7 @@ public class PatternIota extends Iota {
                 var reqsEnlightenment = isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), key,
                         HexTags.Actions.REQUIRES_ENLIGHTENMENT);
 
-                castedName = HexAPI.instance().getActionI18n(key, reqsEnlightenment);
+                castedName = () -> HexAPI.instance().getActionI18n(key, reqsEnlightenment);
                 action = Objects.requireNonNull(IXplatAbstractions.INSTANCE.getActionRegistry().get(key)).action();
 
                 if (reqsEnlightenment && !vm.getEnv().isEnlightened()) {
@@ -93,7 +94,7 @@ public class PatternIota extends Iota {
                     throw new MishapUnenlightened();
                 }
             } else if (lookup instanceof PatternShapeMatch.Special special) {
-                castedName = special.handler.getName();
+                castedName = special.handler::getName;
                 action = special.handler.act();
             } else if (lookup instanceof PatternShapeMatch.Nothing) {
                 throw new MishapInvalidPattern();
@@ -127,7 +128,7 @@ public class PatternIota extends Iota {
                 this,
                 continuation,
                 null,
-                List.of(new OperatorSideEffect.DoMishap(mishap, new Mishap.Context(this.getPattern(), castedName))),
+                List.of(new OperatorSideEffect.DoMishap(mishap, new Mishap.Context(this.getPattern(), castedName.get()))),
                 mishap.resolutionType(vm.getEnv()),
                 HexEvalSounds.MISHAP);
         }
