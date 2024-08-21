@@ -1,9 +1,9 @@
-// 1.20.1	2024-08-21T00:46:56.7162857	Hex Casting/Recipes
+// 1.20.1	2024-08-21T16:55:57.0233614	Hex Casting/Recipes
 7166cd4355d11c209bc7749bc862caddcfd795fb data\hexcasting\recipes\dye_colorizer_cyan.json
 c2a0a489967db4064dfbe1ee6367e132665f3c00 data\hexcasting\recipes\edified_slab.json
 7baf0777533737aef68bcac36944943b77138d29 data\hexcasting\recipes\edified_button.json
-3b03fdae3896212a0b8b9b3a2d4880d197e67d2d data\hexcasting\recipes\jeweler_hammer.json
 b6fa898369ac52cdd9d7f91e3b8a2cb881c3829f data\hexcasting\advancements\recipes\decorations\scroll_medium.json
+3b03fdae3896212a0b8b9b3a2d4880d197e67d2d data\hexcasting\recipes\jeweler_hammer.json
 8f8773a541bc6a4a6c55a23f4f98b5da4f61a031 data\hexcasting\recipes\scroll_paper.json
 06402fb37fe4bb05918d13dbfdb89f4c2b67f3ec data\hexcasting\advancements\recipes\tools\cypher.json
 31ec6474ddae967a6c1dadf9be8292d375510364 data\hexcasting\advancements\recipes\building_blocks\edified_tile.json
