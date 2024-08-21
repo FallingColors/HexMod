@@ -10,6 +10,7 @@ import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.phys.Vec3
 
 object OpBreakBlock : SpellAction {
@@ -40,6 +41,12 @@ object OpBreakBlock : SpellAction {
                 !blockstate.isAir
                 && blockstate.getDestroySpeed(env.world, pos) >= 0f // fix being able to break bedrock &c
                 && IXplatAbstractions.INSTANCE.isCorrectTierForDrops(tier, blockstate)
+                && IXplatAbstractions.INSTANCE.isBreakingAllowed(
+                    env.world,
+                    pos,
+                    blockstate,
+                    env.castingEntity as? ServerPlayer
+                )
             ) {
                 env.world.destroyBlock(pos, true, env.castingEntity)
             }

@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api.item;
 
+import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -58,5 +59,9 @@ public interface MediaHolderItem {
             setMedia(stack, newMedia);
         }
         return inserting;
+    }
+
+    default int getConsumptionPriority(ItemStack stack) {
+        return ADMediaHolder.BATTERY_PRIORITY;
     }
 }

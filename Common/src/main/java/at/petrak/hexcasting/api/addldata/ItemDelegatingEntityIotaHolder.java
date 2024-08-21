@@ -30,6 +30,12 @@ public abstract class ItemDelegatingEntityIotaHolder implements ADIotaHolder {
     }
 
     @Override
+    public boolean writeable() {
+        var delegate = IXplatAbstractions.INSTANCE.findDataHolder(this.stackSupplier.get());
+        return delegate != null && delegate.writeable();
+    }
+
+    @Override
     public boolean writeIota(@Nullable Iota datum, boolean simulate) {
         var stacc = this.stackSupplier.get();
         var delegate = IXplatAbstractions.INSTANCE.findDataHolder(stacc);
