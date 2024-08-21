@@ -26,6 +26,7 @@ object OpForEach : Action {
 
         val frame = FrameForEach(datums, instrs, null, mutableListOf())
         val image2 = image.withUsedOp().copy(stack = stack)
+
         return OperationResult(image2, listOf(), continuation.pushFrame(frame), HexEvalSounds.THOTH)
     }
 }
