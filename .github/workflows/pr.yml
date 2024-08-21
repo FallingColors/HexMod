@@ -6,6 +6,9 @@ name: Build pull request
 on:
   pull_request:
   workflow_dispatch:
+  # trigger on pushes to the default branch (main) to keep the cache up to date
+  push:
+    branches: main
 
 jobs:
   build:
@@ -48,6 +51,8 @@ jobs:
             Fabric/build/libs/*.jar
 
   hexdoc:
+    # don't bother running the docs build when pushing to main - nothing necessary to cache here
+    if: github.event_name != 'push'
     uses: hexdoc-dev/hexdoc/.github/workflows/hexdoc.yml@main
     permissions:
       contents: write
