@@ -6,6 +6,12 @@ name: Build pull request
 on:
   pull_request:
   workflow_dispatch:
+  # trigger on pushes to the default branch (main) to keep the cache up to date
+  push:
+    branches: main
+
+env:
+  JAVA_VERSION: '17.0.1'
 
 jobs:
   build:
@@ -17,26 +23,57 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: "17.0.1"
+          java-version: ${{ env.JAVA_VERSION }}
       - uses: gradle/actions/setup-gradle@v3
-      
-      - name: Clean
-        run: |
-          chmod +x gradlew
-          ./gradlew clean
 
       - name: Build
-        run: ./gradlew build
+        run: |
+          chmod +x gradlew
+          ./gradlew build
 
-      - name: Run Datagen
-        run: ./gradlew runAllDatagen
+      - name: Prepare artifacts for upload
+        run: |
+          mkdir -p dist
+          cp {Common,Forge,Fabric}/build/libs/*.jar dist
 
-      - name: Check Datagen
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mod-build
+          path: dist
+          retention-days: 30
+  
+  datagen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+      - uses: gradle/actions/setup-gradle@v3
+
+      # ForgeGradle datagen asset download often fails (see #692)
+      # so just allow it to automatically retry a few times
+      - name: Run datagen
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: |
+            chmod +x gradlew
+            ./gradlew runAllDatagen
+
+      - name: Check datagen
         run: |
           git add --intent-to-add .
           git diff --name-only --exit-code -- ":!:*/src/generated/resources/.cache/*"
 
   hexdoc:
+    # don't bother running the docs build when pushing to main - nothing necessary to cache here
+    if: github.event_name != 'push'
     uses: hexdoc-dev/hexdoc/.github/workflows/hexdoc.yml@main
     permissions:
       contents: write
