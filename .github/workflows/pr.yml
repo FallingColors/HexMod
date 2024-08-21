@@ -41,6 +41,7 @@ jobs:
         with:
           name: mod-build
           path: dist
+          retention-days: 30
   
   datagen:
     runs-on: ubuntu-latest
