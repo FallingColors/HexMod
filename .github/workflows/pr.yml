@@ -39,6 +39,14 @@ jobs:
           git add --intent-to-add .
           git diff --name-only --exit-code -- ":!:*/src/generated/resources/.cache/*"
 
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: |
+            Common/build/libs/*.jar
+            Forge/build/libs/*.jar
+            Fabric/build/libs/*.jar
+
   hexdoc:
     uses: hexdoc-dev/hexdoc/.github/workflows/hexdoc.yml@main
     permissions:
