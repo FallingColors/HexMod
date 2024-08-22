@@ -20,7 +20,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-import static at.petrak.hexcasting.api.mod.HexConfig.anyMatchResLoc;
+import static at.petrak.hexcasting.api.mod.HexConfig.anyMatch;
 import static at.petrak.hexcasting.api.mod.HexConfig.noneMatch;
 
 @Config(name = HexAPI.MOD_ID)
@@ -192,7 +192,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
 
         // TODO: hook this up to the config, change Jankery, test, also test scroll injects on fabric
         @ConfigEntry.Gui.Tooltip
-        private List<ResourceLocation> loreInjections = HexLootHandler.DEFAULT_LORE_INJECTS;
+        private List<String> loreInjections = HexLootHandler.DEFAULT_LORE_INJECTS;
         @ConfigEntry.Gui.Tooltip
         private double loreChance = HexLootHandler.DEFAULT_LORE_CHANCE;
 
@@ -266,7 +266,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         }
 
         public boolean shouldInjectLore(ResourceLocation lootTable) {
-            return anyMatchResLoc(this.loreInjections, lootTable);
+            return anyMatch(this.loreInjections, lootTable);
         }
 
         public double getLoreChance() {

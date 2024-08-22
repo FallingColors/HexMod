@@ -47,18 +47,18 @@ public class HexLootHandler {
         new ScrollInjection(new ResourceLocation("minecraft", "chests/stronghold_library"), 5)
     );
 
-    public static final ImmutableList<ResourceLocation> DEFAULT_LORE_INJECTS = ImmutableList.of(
-        new ResourceLocation("minecraft", "chests/simple_dungeon"),
-        new ResourceLocation("minecraft", "chests/abandoned_mineshaft"),
-        new ResourceLocation("minecraft", "chests/pillager_outpost"),
-        new ResourceLocation("minecraft", "chests/woodland_mansion"),
-        new ResourceLocation("minecraft", "chests/stronghold_library"),
-        // >:)
-        new ResourceLocation("minecraft", "chests/village/village_desert_house"),
-        new ResourceLocation("minecraft", "chests/village/village_plains_house"),
-        new ResourceLocation("minecraft", "chests/village/village_savanna_house"),
-        new ResourceLocation("minecraft", "chests/village/village_snowy_house"),
-        new ResourceLocation("minecraft", "chests/village/village_taiga_house")
+    public static final ImmutableList<String> DEFAULT_LORE_INJECTS = ImmutableList.of(
+        "minecraft:chests/simple_dungeon",
+        "minecraft:chests/abandoned_mineshaft",
+        "minecraft:chests/pillager_outpost",
+        "minecraft:chests/woodland_mansion",
+        "minecraft:chests/stronghold_library",
+        // >:3
+        "minecraft:chests/village/village_desert_house",
+        "minecraft:chests/village/village_plains_house",
+        "minecraft:chests/village/village_savanna_house",
+        "minecraft:chests/village/village_snowy_house",
+        "minecraft:chests/village/village_taiga_house"
     );
 
     public static int getScrollCount(int range, RandomSource random) {
