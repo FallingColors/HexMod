@@ -191,7 +191,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private transient Object2IntMap<ResourceLocation> scrollInjections;
 
         // TODO: hook this up to the config, change Jankery, test, also test scroll injects on fabric
-        @ConfigEntry.Gui.Tooltip
+        @ConfigEntry.Gui.Excluded
         private List<ResourceLocation> loreInjections = HexLootHandler.DEFAULT_LORE_INJECTS;
         @ConfigEntry.Gui.Tooltip
         private double loreChance = HexLootHandler.DEFAULT_LORE_CHANCE;
