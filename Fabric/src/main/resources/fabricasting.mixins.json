@@ -22,6 +22,7 @@
     "client.FabricMixinGameRenderer",
     "client.FabricModelManagerMixin",
     "client.FabricMouseHandlerMixin",
-    "client.FabricParticleEngineMixin"
+    "client.FabricParticleEngineMixin",
+    "client.FabricPlayerRendererMixin"
   ]
 }
