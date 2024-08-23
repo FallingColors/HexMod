@@ -866,7 +866,6 @@
       
       wrong_dimension: "cannot see %s from %s",
       entity_too_far: "%s is out of range",
-      location_too_far: "Location is out of range",
       immune_entity: "cannot alter %s",
       eval_too_deep: "Recursively evaluated too deep",
       no_item: "needs %s but got nothing",
@@ -956,7 +955,7 @@
         bool_commute: "a boolean, 0, or 1",
       },
 
-      location: {
+      location_: {
         too_far: "%s is out of range",
         out_of_world: "%s is not within the world",
         too_close_to_out: "%s is too close to the boundary of the world",
