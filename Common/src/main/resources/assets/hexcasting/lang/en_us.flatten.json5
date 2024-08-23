@@ -300,6 +300,10 @@
           "": "Grid Snap Threshold",
           "@Tooltip": "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 means 50% of the way (0.5-1)",
         },
+        clickingTogglesDrawing: {
+          "": "Clicking Toggles Drawing",
+          "@Tooltip": "Whether you click to start and stop drawing instead of clicking and dragging to draw",
+        },
       },
       
       server: {
