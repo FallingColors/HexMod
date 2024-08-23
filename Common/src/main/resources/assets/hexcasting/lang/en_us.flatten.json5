@@ -867,6 +867,7 @@
       
       wrong_dimension: "cannot see %s from %s",
       entity_too_far: "%s is out of range",
+      location_too_far: "Location is out of range",
       immune_entity: "cannot alter %s",
       eval_too_deep: "Recursively evaluated too deep",
       no_item: "needs %s but got nothing",
