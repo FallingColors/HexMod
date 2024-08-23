@@ -51,6 +51,13 @@
     {
       "type": "patchouli:text",
       "text": "hexcasting.page.meta.halt.2"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:thanatos",
+      "anchor": "hexcasting:thanatos",
+      "output": "number",
+      "text": "hexcasting.page.meta.thanatos.1"
     }
   ]
 }
