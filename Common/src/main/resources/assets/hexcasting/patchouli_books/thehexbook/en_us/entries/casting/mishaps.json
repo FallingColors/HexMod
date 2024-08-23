@@ -30,6 +30,11 @@
     },
     {
       "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.stack_size.title",
+      "text": "hexcasting.page.mishaps.stack_size"
+    },
+    {
+      "type": "patchouli:text",
       "title": "hexcasting.page.mishaps.incorrect_iota.title",
       "text": "hexcasting.page.mishaps.incorrect_iota"
     },
@@ -77,11 +82,6 @@
       "type": "patchouli:text",
       "title": "hexcasting.page.mishaps.true_name.title",
       "text": "hexcasting.page.mishaps.true_name"
-    },
-    {
-      "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.stack_size.title",
-      "text": "hexcasting.page.mishaps.stack_size"
     },
     {
       "type": "patchouli:text",
