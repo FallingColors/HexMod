@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -51,6 +52,13 @@ public abstract class CastingEnvironment {
      */
     public static void addCreateEventListener(BiConsumer<CastingEnvironment, CompoundTag> listener) {
         createEventListeners.add(listener);
+    }
+
+    /**
+     * Add a listener that will be called whenever a new CastingEnvironment is created (legacy).
+     */
+    public static void addCreateEventListener(Consumer<CastingEnvironment> listener) {
+        createEventListeners.add((env, data) -> {listener.accept(env);});
     }
 
     private boolean createEventTriggered = false;
