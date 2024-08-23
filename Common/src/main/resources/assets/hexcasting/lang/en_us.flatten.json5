@@ -956,7 +956,7 @@
         bool_commute: "a boolean, 0, or 1",
       },
 
-      location: {
+      location_: {
         too_far: "%s is out of range",
         out_of_world: "%s is not within the world",
         too_close_to_out: "%s is too close to the boundary of the world",
