@@ -951,7 +951,7 @@
         bool_commute: "一个布尔值、0或1",
       },
 
-      location: {
+      location_: {
         too_far: "%s超出影响范围",
         out_of_world: "%s不在此世界内",
         too_close_to_out: "%s离世界边界太近了",
