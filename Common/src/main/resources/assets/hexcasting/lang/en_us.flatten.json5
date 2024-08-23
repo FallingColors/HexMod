@@ -1313,6 +1313,9 @@
         "true_name.title": "Transgress Other",
         true_name: "I attempted to $(l:patterns/readwrite#hexcasting:write)$(action)save a reference/$ to another player to a permanent medium.$(br2)Causes black sparks, and robs me of my sight for approximately one minute.",
 
+        "stack_size.title": "Stack Size",
+        "stack_size": "I tried to cast a spell which exceeded the size limit of the $(thing)Stack/$.$(br2)Causes my spell to halt and pushes a $(l:casting/influences)$(action)Garbage/$ to my stack.",
+
         "disabled.title": "Disallowed Action",
         disabled: "I tried to cast an action that has been disallowed by a server administrator.$(br2)Causes black sparks.",
 
