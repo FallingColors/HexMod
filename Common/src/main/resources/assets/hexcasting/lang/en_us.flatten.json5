@@ -770,7 +770,8 @@
         "eval/cc": "Iris' Gambit",
         for_each: "Thoth's Gambit",
         halt: "Charon's Gambit",
-        
+        thanatos: "Thanatos' Reflection",
+
         "interop/": {
           "gravity/": {
             get: "Gravitational Purification",
@@ -1778,6 +1779,8 @@
 
         "eval/cc.1": "Cast a pattern or list of patterns from the stack exactly like $(l:patterns/meta#hexcasting:eval)$(action)Hermes' Gambit/$, except that a unique \"Jump\" iota is pushed to the stack beforehand. ",
         "eval/cc.2": "When the \"Jump\"-iota is executed, it'll skip the rest of the patterns and jump directly to the end of the pattern list.$(p)While this may seem redundant given $(l:patterns/meta#hexcasting:halt)$(action)Charon's Gambit/$ exists, this allows you to exit $(italic)nested/$ $(l:patterns/meta#hexcasting:eval)$(action)Hermes'/$ invocations in a controlled way, where Charon only allows you to exit one.$(p)The \"Jump\" iota will apparently stay on the stack even after execution is finished... better not think about the implications of that.",
+
+        "thanatos.1": "Adds the number of evaluations a _Hex is still capable of to the stack. This is reduced by $(l:patterns/meta#hexcasting:eval)$(action)Hermes'/$ and $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's/$ Gambit."
       },
 
       circle_patterns: {
