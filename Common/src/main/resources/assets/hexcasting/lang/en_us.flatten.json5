@@ -1283,7 +1283,7 @@
         not_enough_iotas: "The action required more iotas than were on the stack.$(br2)Causes light gray sparks, and as many $(l:casting/influences)$(action)Garbages/$ as would be required to fill up the argument count will be pushed.",
 
         "stack_size.title": "Too Many Iotas",
-        "stack_size": "I tried to cast a spell which exceeded the size limit of the stack.$(br2)Causes black sparks, and my spell to halt and entire stack will be replaced with a single $(l:casting/influences)$(action)Garbage/$.",
+        "stack_size": "I tried to cast a spell which exceeded the size limit of the stack.$(br2)Causes black sparks, and my entire stack will be replaced with a single $(l:casting/influences)$(action)Garbage/$.",
 
         "incorrect_iota.title": "Incorrect Iota",
         incorrect_iota: "The action that was executed expected an iota of a certain type for an argument, but it got something invalid. If multiple iotas are invalid, the error message will only tell me about the error deepest in the stack.$(br2)Causes dark gray sparks, and the invalid iota will be replaced with $(l:casting/influences)$(action)Garbage/$.",
