@@ -56,7 +56,9 @@ public abstract class CastingEnvironment {
 
     /**
      * Add a listener that will be called whenever a new CastingEnvironment is created (legacy).
+     * @deprecated replaced by {@link #addCreateEventListener(BiConsumer)}
      */
+    @Deprecated(since = "0.11.0-pre-660")
     public static void addCreateEventListener(Consumer<CastingEnvironment> listener) {
         createEventListeners.add((env, data) -> {listener.accept(env);});
     }
