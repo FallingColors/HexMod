@@ -21,6 +21,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -158,19 +159,116 @@ public class CircleCastEnv extends CastingEnvironment {
         return InteractionHand.MAIN_HAND;
     }
 
+    // TODO: if I'm understanding correctly, this should probably be replaced with a gloop-like solution
+    // allow access to player inv for now though
     @Override
     protected List<ItemStack> getUsableStacks(StackDiscoveryMode mode) {
-        return new ArrayList<>(); // TODO: Could do something like get items in inventories adjacent to the circle?
+        var caster = this.execState.getCaster(this.world);
+        if (caster == null) {
+            return List.of();
+        }
+        return switch (mode) {
+            case QUERY -> {
+                var out = new ArrayList<ItemStack>();
+
+                var mainhand = caster.getItemInHand(InteractionHand.MAIN_HAND);
+                if (!mainhand.isEmpty()) {
+                    out.add(mainhand);
+                }
+
+                var offhand = caster.getItemInHand(InteractionHand.OFF_HAND);
+                if (!offhand.isEmpty()) {
+                    out.add(offhand);
+                }
+
+                var anchorSlot = (caster.getInventory().selected + 1) % 9;
+
+
+                for (int delta = 0; delta < 9; delta++) {
+                    var slot = (anchorSlot + delta) % 9;
+                    out.add(caster.getInventory().getItem(slot));
+                }
+
+                yield out;
+            }
+            case EXTRACTION -> {
+                // https://wiki.vg/Inventory is WRONG
+                // slots 0-8 are the hotbar
+                // for what purpose i cannot imagine
+                // http://redditpublic.com/images/b/b2/Items_slot_number.png looks right
+                // and offhand is 150 Inventory.java:464
+                var out = new ArrayList<ItemStack>();
+
+                // First, the inventory backwards
+                // We use inv.items here to get the main inventory, but not offhand or armor
+                Inventory inv = caster.getInventory();
+                for (int i = inv.items.size() - 1; i >= 0; i--) {
+                    if (i != inv.selected) {
+                        out.add(inv.items.get(i));
+                    }
+                }
+
+                // then the offhand, then the selected hand
+                out.addAll(inv.offhand);
+                out.add(inv.getSelected());
+
+                yield out;
+            }
+        };
     }
 
     @Override
     protected List<HeldItemInfo> getPrimaryStacks() {
-        return List.of(); // TODO: Adjacent inv!
+        var caster = this.execState.getCaster(this.world);
+        if (caster == null) {
+            return List.of();
+        }
+
+        var primaryItem = caster.getItemInHand(InteractionHand.MAIN_HAND);
+
+        if (primaryItem.isEmpty())
+            primaryItem = ItemStack.EMPTY.copy();
+
+        var alternateItem = caster.getItemInHand(InteractionHand.OFF_HAND);
+
+        if (alternateItem.isEmpty())
+            alternateItem = ItemStack.EMPTY.copy();
+
+        return List.of(new HeldItemInfo(primaryItem, InteractionHand.MAIN_HAND),
+                new HeldItemInfo(alternateItem, InteractionHand.OFF_HAND));
     }
 
     @Override
     public boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand) {
-        return false; // TODO: Adjacent inv!
+        var caster = this.execState.getCaster(this.world);
+        if (caster == null)
+            return false;
+
+        if (hand != null && stackOk.test(caster.getItemInHand(hand))) {
+            caster.setItemInHand(hand, replaceWith);
+            return true;
+        }
+
+        Inventory inv = caster.getInventory();
+        for (int i = inv.items.size() - 1; i >= 0; i--) {
+            if (i != inv.selected) {
+                if (stackOk.test(inv.items.get(i))) {
+                    inv.setItem(i, replaceWith);
+                    return true;
+                }
+            }
+        }
+
+        if (stackOk.test(caster.getItemInHand(InteractionHand.MAIN_HAND))) {
+            caster.setItemInHand(InteractionHand.MAIN_HAND, replaceWith);
+            return true;
+        }
+        if (stackOk.test(caster.getItemInHand(InteractionHand.OFF_HAND))) {
+            caster.setItemInHand(InteractionHand.OFF_HAND, replaceWith);
+            return true;
+        }
+
+        return false;
     }
 
     @Override
