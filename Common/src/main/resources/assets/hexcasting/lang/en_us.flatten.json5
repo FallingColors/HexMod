@@ -412,7 +412,6 @@
       "": "%s's mind was subsumed into energy",
       player: "%s's mind was subsumed into energy while fighting %s",
     },
-    shame: "Shame on %s!",
   },
 
   "command.hexcasting": {
@@ -904,7 +903,6 @@
       disallowed_circle: "has been disallowed in spell circles by the server admins",
       invalid_spell_datum_type: "Tried to use a value of invalid type as a SpellDatum: %s (class %s). This is a bug in the mod.",
       unknown: "threw an exception (%s). This is a bug in the mod.",
-      shame: "Shame on you!",
       stack_size: "Exceeded the size limit of the stack",
       
       invalid_value: {
