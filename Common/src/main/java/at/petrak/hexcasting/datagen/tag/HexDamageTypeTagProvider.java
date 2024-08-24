@@ -24,13 +24,6 @@ public class HexDamageTypeTagProvider extends DamageTypeTagsProvider {
             DamageTypeTags.BYPASSES_EFFECTS,
             DamageTypeTags.BYPASSES_SHIELD
         );
-
-        add(HexDamageTypes.SHAME_ON_YOU,
-            DamageTypeTags.BYPASSES_ARMOR,
-            DamageTypeTags.BYPASSES_EFFECTS,
-            DamageTypeTags.BYPASSES_INVULNERABILITY,
-            DamageTypeTags.BYPASSES_SHIELD
-        );
     }
 
     @SafeVarargs
