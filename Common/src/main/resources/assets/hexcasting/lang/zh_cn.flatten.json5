@@ -409,7 +409,6 @@
 
   "death.attack.hexcasting": {
     overcast: "%s的意识消散为了能量",
-    shame: "%s真是可耻！",
   },
 
   "command.hexcasting": {
@@ -900,7 +899,6 @@
       disallowed_circle: "已被服务器管理员禁用于法术环",
       invalid_spell_datum_type: "尝试将某无效类型的值用作SpellDatum：%s（class %s）。这是模组中的bug。",
       unknown: "抛出异常（%s）。这是模组中的bug。",
-      shame: "你真是可耻！",
 
       invalid_value: {
         "": "本应在栈下标为%2$s处接受%1$s，而实际接受了%3$s",
