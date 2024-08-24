@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.casting.eval;
 
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
@@ -10,6 +11,7 @@ import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -42,21 +45,30 @@ public abstract class CastingEnvironment {
     /**
      * Stores all listeners that should be notified whenever a CastingEnvironment is initialised.
      */
-    private static final List<Consumer<CastingEnvironment>> createEventListeners = new ArrayList<>();
+    private static final List<BiConsumer<CastingEnvironment, CompoundTag>> createEventListeners = new ArrayList<>();
 
     /**
      * Add a listener that will be called whenever a new CastingEnvironment is created.
      */
-    public static void addCreateEventListener(Consumer<CastingEnvironment> listener) {
+    public static void addCreateEventListener(BiConsumer<CastingEnvironment, CompoundTag> listener) {
         createEventListeners.add(listener);
+    }
+
+    /**
+     * Add a listener that will be called whenever a new CastingEnvironment is created (legacy).
+     * @deprecated replaced by {@link #addCreateEventListener(BiConsumer)}
+     */
+    @Deprecated(since = "0.11.0-pre-660")
+    public static void addCreateEventListener(Consumer<CastingEnvironment> listener) {
+        createEventListeners.add((env, data) -> {listener.accept(env);});
     }
 
     private boolean createEventTriggered = false;
 
-    public final void triggerCreateEvent() {
+    public final void triggerCreateEvent(CompoundTag userData) {
         if (!createEventTriggered) {
             for (var listener : createEventListeners)
-                listener.accept(this);
+                listener.accept(this, userData);
             createEventTriggered = true;
         }
     }
@@ -66,6 +78,8 @@ public abstract class CastingEnvironment {
 
     protected Map<CastingEnvironmentComponent.Key<?>, @NotNull CastingEnvironmentComponent> componentMap = new HashMap<>();
     private final List<PostExecution> postExecutions = new ArrayList<>();
+
+    private final List<PostCast> postCasts = new ArrayList<>();
     private final List<ExtractMedia.Pre> preMediaExtract = new ArrayList<>();
     private final List<ExtractMedia.Post> postMediaExtract = new ArrayList<>();
 
@@ -113,6 +127,8 @@ public abstract class CastingEnvironment {
         componentMap.put(extension.getKey(), extension);
         if (extension instanceof PostExecution postExecution)
             postExecutions.add(postExecution);
+        if (extension instanceof PostCast postCast)
+            postCasts.add(postCast);
         if (extension instanceof ExtractMedia extractMedia)
             if (extension instanceof ExtractMedia.Pre pre) {
                 preMediaExtract.add(pre);
@@ -132,6 +148,8 @@ public abstract class CastingEnvironment {
 
         if (extension instanceof PostExecution postExecution)
             postExecutions.remove(postExecution);
+        if (extension instanceof PostCast postCast)
+            postCasts.remove(postCast);
         if (extension instanceof ExtractMedia extractMedia)
             if (extension instanceof ExtractMedia.Pre pre) {
                 preMediaExtract.remove(pre);
@@ -186,6 +204,14 @@ public abstract class CastingEnvironment {
     public void postExecution(CastResult result) {
         for (var postExecutionComponent : postExecutions)
             postExecutionComponent.onPostExecution(result);
+    }
+
+    /**
+     * Do things after the whole cast is finished (i.e. every pattern to be executed has been executed).
+     */
+    public void postCast(CastingImage image) {
+        for (var postCastComponent : postCasts)
+            postCastComponent.onPostCast(image);
     }
 
     public abstract Vec3 mishapSprayPos();

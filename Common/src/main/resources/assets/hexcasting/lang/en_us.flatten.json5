@@ -402,13 +402,16 @@
 
   "stat.hexcasting": {
     media_used: "Media Consumed (in dust)",
-    media_overcasted: "Media Overcast (in dust)",
+    media_overcast: "Media Overcast (in dust)",
     patterns_drawn: "Patterns Drawn",
     spells_cast: "Spells Cast",
   },
 
   "death.attack.hexcasting": {
-    overcast: "%s's mind was subsumed into energy",
+    overcast: {
+      "": "%s's mind was subsumed into energy",
+      player: "%s's mind was subsumed into energy while fighting %s",
+    },
     shame: "Shame on %s!",
   },
 
@@ -767,7 +770,8 @@
         "eval/cc": "Iris' Gambit",
         for_each: "Thoth's Gambit",
         halt: "Charon's Gambit",
-        
+        thanatos: "Thanatos' Reflection",
+
         "interop/": {
           "gravity/": {
             get: "Gravitational Purification",
@@ -890,12 +894,18 @@
         cos: "the cosine of %s",
       },
 
+      invalid_operator_args: {
+        one: "got an unexpected iota at index %d of the stack: %s",
+        many: "got %d unexpected iotas at indices %d-%d of the stack: %s",
+      },
+
       no_akashic_record: "No Akashic Record at %s",
       disallowed: "has been disallowed by the server admins",
       disallowed_circle: "has been disallowed in spell circles by the server admins",
       invalid_spell_datum_type: "Tried to use a value of invalid type as a SpellDatum: %s (class %s). This is a bug in the mod.",
       unknown: "threw an exception (%s). This is a bug in the mod.",
       shame: "Shame on you!",
+      stack_size: "Exceeded the size limit of the stack",
       
       invalid_value: {
         "": "expected %s at index %s of the stack, but got %s",
@@ -946,7 +956,7 @@
         bool_commute: "a boolean, 0, or 1",
       },
 
-      location: {
+      location_: {
         too_far: "%s is out of range",
         out_of_world: "%s is not within the world",
         too_close_to_out: "%s is too close to the boundary of the world",
@@ -1271,6 +1281,9 @@
 
         "not_enough_iotas.title": "Not Enough Iotas",
         not_enough_iotas: "The action required more iotas than were on the stack.$(br2)Causes light gray sparks, and as many $(l:casting/influences)$(action)Garbages/$ as would be required to fill up the argument count will be pushed.",
+
+        "stack_size.title": "Too Many Iotas",
+        "stack_size": "I tried to cast a spell which exceeded the size limit of the stack.$(br2)Causes black sparks, and my entire stack will be replaced with a single $(l:casting/influences)$(action)Garbage/$.",
 
         "incorrect_iota.title": "Incorrect Iota",
         incorrect_iota: "The action that was executed expected an iota of a certain type for an argument, but it got something invalid. If multiple iotas are invalid, the error message will only tell me about the error deepest in the stack.$(br2)Causes dark gray sparks, and the invalid iota will be replaced with $(l:casting/influences)$(action)Garbage/$.",
@@ -1769,6 +1782,8 @@
 
         "eval/cc.1": "Cast a pattern or list of patterns from the stack exactly like $(l:patterns/meta#hexcasting:eval)$(action)Hermes' Gambit/$, except that a unique \"Jump\" iota is pushed to the stack beforehand. ",
         "eval/cc.2": "When the \"Jump\"-iota is executed, it'll skip the rest of the patterns and jump directly to the end of the pattern list.$(p)While this may seem redundant given $(l:patterns/meta#hexcasting:halt)$(action)Charon's Gambit/$ exists, this allows you to exit $(italic)nested/$ $(l:patterns/meta#hexcasting:eval)$(action)Hermes'/$ invocations in a controlled way, where Charon only allows you to exit one.$(p)The \"Jump\" iota will apparently stay on the stack even after execution is finished... better not think about the implications of that.",
+
+        "thanatos.1": "Adds the number of patterns a _Hex is still capable of evaluating to the stack. This is reduced by one for each pattern cast by the _Hex."
       },
 
       circle_patterns: {

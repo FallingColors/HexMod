@@ -2,7 +2,6 @@ package at.petrak.hexcasting.common.items.storage;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
-import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
@@ -45,13 +44,13 @@ public class ItemFocus extends Item implements IotaHolderItem, VariantItem {
     }
 
     @Override
-    public @Nullable Iota emptyIota(ItemStack stack) {
-        return new NullIota();
+    public boolean writeable(ItemStack stack) {
+        return !isSealed(stack);
     }
 
     @Override
     public boolean canWrite(ItemStack stack, Iota datum) {
-        return datum == null || !NBTHelper.getBoolean(stack, TAG_SEALED);
+        return datum == null || !isSealed(stack);
     }
 
     @Override

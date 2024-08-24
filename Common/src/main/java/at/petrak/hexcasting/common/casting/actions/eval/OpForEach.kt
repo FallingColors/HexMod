@@ -17,8 +17,8 @@ object OpForEach : Action {
         if (stack.size < 2)
             throw MishapNotEnoughArgs(2, stack.size)
 
-        val instrs = stack.getList(stack.lastIndex - 1)
-        val datums = stack.getList(stack.lastIndex)
+        val instrs = stack.getList(stack.lastIndex - 1, stack.size)
+        val datums = stack.getList(stack.lastIndex, stack.size)
         stack.removeLastOrNull()
         stack.removeLastOrNull()
 

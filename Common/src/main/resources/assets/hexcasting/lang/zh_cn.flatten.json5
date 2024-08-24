@@ -402,7 +402,7 @@
 
   "stat.hexcasting": {
     media_used: "消耗媒质量（以紫水晶粉计）",
-    media_overcasted: "过度施法消耗媒质量（以紫水晶粉计）",
+    media_overcast: "过度施法消耗媒质量（以紫水晶粉计）",
     patterns_drawn: "绘制图案次数",
     spells_cast: "施放法术次数",
   },
@@ -890,6 +890,11 @@
         cos: "%s的余弦",
       },
 
+      invalid_operator_args: {
+        one: "在栈下标为%d处获取到意外iota：%s",
+        many: "在栈下标为%2$d到%3$d处获取到意外iota：%4$s",
+      },
+
       no_akashic_record: "%s处无阿卡夏记录",
       disallowed: "已被服务器管理员禁用于施法",
       disallowed_circle: "已被服务器管理员禁用于法术环",
@@ -946,7 +951,7 @@
         bool_commute: "一个布尔值、0或1",
       },
 
-      location: {
+      location_: {
         too_far: "%s超出影响范围",
         out_of_world: "%s不在此世界内",
         too_close_to_out: "%s离世界边界太近了",
