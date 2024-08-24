@@ -5,7 +5,6 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.msgs.MsgShiftScrollC2S;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.item.Item;
 
@@ -46,7 +45,7 @@ public class ShiftScrollListener {
     public static void clientTickEnd() {
         if (mainHandDelta != 0 || offHandDelta != 0) {
             IClientXplatAbstractions.INSTANCE.sendPacketToServer(
-                new MsgShiftScrollC2S(mainHandDelta, offHandDelta, Screen.hasControlDown(),
+                new MsgShiftScrollC2S(mainHandDelta, offHandDelta, Minecraft.getInstance().options.keySprint.isDown(),
                     HexConfig.client().invertSpellbookScrollDirection(),
                     HexConfig.client().invertAbacusScrollDirection()));
             mainHandDelta = 0;
