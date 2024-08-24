@@ -1392,7 +1392,7 @@
 
       abacus: {
         "1": "Although there are $(l:patterns/numbers)$(action)patterns for drawing numbers/$, I find them ... cumbersome, to say the least.$(br2)Fortunately, the old masters of my craft invented an ingenious device called an $(l:items/abacus)$(item)Abacus/$ to provide numbers to my casting. I simply set the number to what I want, then read the value using $(l:patterns/readwrite#hexcasting:read)$(action)Scribe's Reflection/$, just like I would read a $(l:items/thought_knot)$(item)Thought-Knot/$ or $(l:items/focus)$(item)Focus/$.",
-        "2": "To operate one, I simply hold it, sneak, and scroll. If in my main hand, the number will increment or decrement by 1, or 10 if I am also holding Control/Command. If in my off hand, the number will increment or decrement by 0.1, or 0.001 if I am also holding Control/Command.$(br2)I can shake the abacus to reset it to zero by sneak-right-clicking.",
+        "2": "To operate one, I simply hold it, sneak, and scroll. If in my main hand, the number will increment or decrement by 1, or 10 if I am also holding $(k:sprint). If in my off hand, the number will increment or decrement by 0.1, or 0.001 if I am also holding $(k:sprint).$(br2)I can shake the abacus to reset it to zero by sneak-right-clicking.",
         "crafting.desc": "$(italic)Mathematics? That's for eggheads!/$",
       },
 
