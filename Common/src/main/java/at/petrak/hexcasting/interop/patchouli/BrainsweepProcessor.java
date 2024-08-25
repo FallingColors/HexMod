@@ -1,18 +1,25 @@
 package at.petrak.hexcasting.interop.patchouli;
 
+import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
+
+import javax.print.attribute.standard.Media;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BrainsweepProcessor implements IComponentProcessor {
 	private BrainsweepRecipe recipe;
@@ -76,6 +83,28 @@ public class BrainsweepProcessor implements IComponentProcessor {
 					.stream()
 					.map(IVariable::from)
 					.toList());
+			}
+			case "mediaCost" -> {
+				ArrayList<ItemStack> validItemStacks = new java.util.ArrayList<>();
+				// if divisible by even number of charged crystals shards or dust render appropriately
+				if (this.recipe.mediaCost() % MediaConstants.CRYSTAL_UNIT == 0){
+					validItemStacks.add(new ItemStack(HexItems.CHARGED_AMETHYST, (int) (this.recipe.mediaCost() / MediaConstants.CRYSTAL_UNIT)));
+				}
+				if (this.recipe.mediaCost() % MediaConstants.SHARD_UNIT == 0) {
+					validItemStacks.add(new ItemStack(Items.AMETHYST_SHARD, (int) (this.recipe.mediaCost() / MediaConstants.SHARD_UNIT)));
+				}
+				if (this.recipe.mediaCost() % MediaConstants.DUST_UNIT == 0){
+					validItemStacks.add(new ItemStack(HexItems.AMETHYST_DUST, (int) (this.recipe.mediaCost() / MediaConstants.DUST_UNIT)));
+				}
+
+				if (!validItemStacks.isEmpty()) {
+					return IVariable.wrapList(validItemStacks.stream()
+						.map(IVariable::from)
+						.toList());
+				}
+
+				// fallback: display in terms of dust
+				return IVariable.from(new ItemStack(HexItems.AMETHYST_DUST, (int) (this.recipe.mediaCost() / MediaConstants.DUST_UNIT)));
 			}
 			default -> {
 				return null;
