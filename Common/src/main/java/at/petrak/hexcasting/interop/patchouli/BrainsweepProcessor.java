@@ -16,9 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
-
-import javax.print.attribute.standard.Media;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class BrainsweepProcessor implements IComponentProcessor {
@@ -85,24 +83,27 @@ public class BrainsweepProcessor implements IComponentProcessor {
 					.toList());
 			}
 			case "mediaCost" -> {
-				ArrayList<ItemStack> validItemStacks = new java.util.ArrayList<>();
-				// if divisible by even number of charged crystals shards or dust render appropriately
-				if (this.recipe.mediaCost() % MediaConstants.CRYSTAL_UNIT == 0){
-					validItemStacks.add(new ItemStack(HexItems.CHARGED_AMETHYST, (int) (this.recipe.mediaCost() / MediaConstants.CRYSTAL_UNIT)));
+				record ItemCost(Item item, int cost) {
+					public boolean dividesEvenly (int dividend) {
+                        return dividend % cost == 0;
+                    }
 				}
-				if (this.recipe.mediaCost() % MediaConstants.SHARD_UNIT == 0) {
-					validItemStacks.add(new ItemStack(Items.AMETHYST_SHARD, (int) (this.recipe.mediaCost() / MediaConstants.SHARD_UNIT)));
-				}
-				if (this.recipe.mediaCost() % MediaConstants.DUST_UNIT == 0){
-					validItemStacks.add(new ItemStack(HexItems.AMETHYST_DUST, (int) (this.recipe.mediaCost() / MediaConstants.DUST_UNIT)));
-				}
+				ItemCost[] costs  = {
+						new ItemCost(HexItems.AMETHYST_DUST, (int)MediaConstants.DUST_UNIT),
+						new ItemCost(Items.AMETHYST_SHARD, (int)MediaConstants.SHARD_UNIT),
+						new ItemCost(HexItems.CHARGED_AMETHYST, (int)MediaConstants.CRYSTAL_UNIT),
+				};
+
+				// get evenly divisible ItemStacks
+				List<IVariable> validItemStacks = Arrays.stream(costs)
+						.filter(itemCost -> itemCost.dividesEvenly((int)this.recipe.mediaCost()))
+						.map(validItemCost -> new ItemStack(validItemCost.item, (int) this.recipe.mediaCost() / validItemCost.cost))
+						.map(IVariable::from)
+						.toList();
 
 				if (!validItemStacks.isEmpty()) {
-					return IVariable.wrapList(validItemStacks.stream()
-						.map(IVariable::from)
-						.toList());
+					return IVariable.wrapList(validItemStacks);
 				}
-
 				// fallback: display in terms of dust
 				return IVariable.from(new ItemStack(HexItems.AMETHYST_DUST, (int) (this.recipe.mediaCost() / MediaConstants.DUST_UNIT)));
 			}
