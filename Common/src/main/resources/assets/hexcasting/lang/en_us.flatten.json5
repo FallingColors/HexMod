@@ -2,7 +2,7 @@
 {
   "item.hexcasting": {
     book: "Hex Notebook",
-    
+
     staff: {
       oak: "Oak Staff",
       spruce: "Spruce Staff",
@@ -19,7 +19,7 @@
       quenched: "Quenched Shard Staff",
       mindsplice: "Mindsplice Staff",
     },
-    
+
     amethyst_dust: "Amethyst Dust",
     charged_amethyst: "Charged Amethyst",
     quenched_allay_shard: "Shard of Quenched Allay",
@@ -111,11 +111,11 @@
       all: "It seems I have found all the lore this world has to offer.",
     },
   },
-  
+
   "entity.hexcasting": {
     wall_scroll: "Hanging Scroll",
   },
-  
+
   "block.hexcasting": {
     conjured_light: "Conjured Light",
     conjured_block: "Conjured Block",
@@ -160,7 +160,7 @@
       bricks_small: "Small Amethyst Bricks",
       pillar: "Amethyst Pillar",
     },
-    
+
     slate_amethyst_: {
       tiles: "Slate & Amethyst Tiles",
       bricks: "Slate & Amethyst Bricks",
@@ -202,7 +202,7 @@
     citrine_edified_leaves: "Citrine Edified Leaves",
 
     quenched_allay: "Quenched Allay",
-    
+
     quenched_allay_: {
       tiles: "Quenched Allay Tiles",
       bricks: "Quenched Allay Bricks",
@@ -218,7 +218,7 @@
   "gui.hexcasting": {
     spellcasting: "Hex Grid",
   },
-  
+
   "tag.hexcasting": {
     staves: "Hex Staves",
     edified_logs: "Edified Logs",
@@ -233,7 +233,7 @@
     impeti: "Impeti",
     seal_materials: "Seal Materials",
   },
-  
+
   "emi.category.hexcasting": {
     brainsweep: "Flay Mind",
     "craft.battery": "Craft Phial",
@@ -241,10 +241,10 @@
     villager_leveling: "Trade Leveling",
     villager_profession: "Villager Profession",
   },
-  
+
   "text.autoconfig.hexcasting": {
     title: "Hexcasting Config",
-    
+
     category: {
       common: "Common",
       client: "Client",
@@ -282,7 +282,7 @@
           "@Tooltip": "Cooldown of an artifact in ticks",
         },
       },
-      
+
       client: {
         ctrlTogglesOffStrokeOrder: {
           "": "Ctrl Toggles Off Stroke Order",
@@ -305,7 +305,7 @@
           "@Tooltip": "Whether you click to start and stop drawing instead of clicking and dragging to draw",
         },
       },
-      
+
       server: {
         opBreakHarvestLevel: {
           "": "Break Harvest Level",
@@ -437,10 +437,10 @@
       "fail.already": "%s is already empty",
     },
   },
-  
+
   hexcasting: {
     "pattern.unknown": "Unknown pattern resource location %s",
-    
+
     debug: {
       media_withdrawn: "%s - Media withdrawn: %s",
       "media_withdrawn.with_dust": "%s - Media withdrawn: %s (%s in dust)",
@@ -449,13 +449,13 @@
       all_media: "Entire contents",
       infinite_media: "Infinite",
     },
-    
+
     // TODO: post-eigengrau make these less anticlimactic
     message: {
       cant_overcast: "That Hex needed more media than I had... I should double-check my math.",
       cant_great_spell: "The spell failed, somehow... am I not skilled enough?",
     },
-    
+
     tooltip: {
       spellbook: {
         page: {
@@ -484,7 +484,7 @@
         many_exits: "The flow of media had too many exits at %s",
         no_closure: "The flow of media will not be able to return to the impetus at %s",
       },
-      
+
       lens: {
         "pattern.invalid": "Invalid Pattern",
         bee: {
@@ -529,7 +529,7 @@
       "entity.whoknows": "An unknown entity",
       "akashic.nopos": "The owning record does not know of any iota here (this is a bug)",
     },
-    
+
     subtitles: {
       casting: {
         pattern: {
@@ -543,10 +543,10 @@
           thoth: "Thoth's twangs",
         },
       },
-      
+
       ambiance: "Hex grid hums",
       "staff.reset": "Casting resets",
-      
+
       abacus: {
         "": "Abacus clicks",
         shake: "Abacus shakes",
@@ -561,15 +561,15 @@
       "flight.ambience": "Player flies",
       "flight.finish": "Flight ends",
     },
-    
+
     attributes: {
       grid_zoom: "Casting Grid Size",
       // TODO: the +1 is kind of janky
       scry_sight: "Scrying Sight",
     },
-    
+
     // Action localizations
-    
+
     action: {
       "hexcasting:": {
         "const/": {
@@ -625,7 +625,7 @@
         replace: "Surgeon's Exaltation",
         construct: "Speaker's Distillation",
         deconstruct: "Speaker's Decomposition",
-        
+
         get_entity: "Entity Purification",
         "get_entity/": {
           animal: "Entity Purification: Animal",
@@ -661,12 +661,12 @@
         fisherman: "Fisherman's Gambit",
         "fisherman/copy": "Fisherman's Gambit II",
         swizzle: "Swindler's Gambit",
-        
+
         unique: "Uniqueness Purification",
         and: "Conjunction Distillation",
         or: "Disjunction Distillation",
         xor: "Exclusion Distillation",
-        
+
         greater: "Maximus Distillation",
         less: "Minimus Distillation",
         greater_eq: "Maximus Distillation II",
@@ -676,7 +676,7 @@
         not: "Negation Purification",
         bool_coerce: "Augur's Purification",
         if: "Augur's Exaltation",
-        
+
         add: "Additive Distillation",
         sub: "Subtractive Distillation",
         mul: "Multiplicative Distillation",
@@ -698,7 +698,7 @@
         random: "Entropy Reflection",
         logarithm: "Logarithmic Distillation",
         coerce_axial: "Axial Purification",
-        
+
         read: "Scribe's Reflection",
         "read/entity": "Chronicler's Purification",
         "read/local": "Muninn's Reflection",
@@ -732,7 +732,7 @@
         erase: "Erase Item",
         create_water: "Create Water",
         destroy_water: "Destroy Liquid",
-        ignite: "Ignite Block",
+        ignite: "Ignite",
         extinguish: "Extinguish Area",
         conjure_block: "Conjure Block",
         conjure_light: "Conjure Light",
@@ -792,7 +792,7 @@
           },
         },
       },
-      
+
       // hexcasting.action.book.[resloc] override the name of that pattern in the patchi book, for abbreviations
       "book.hexcasting:": {
         get_entity_height: "Stadiometer's Prfn.",
@@ -865,14 +865,14 @@
 
     mishap: {
       "": "%s: %s",
-      
+
       invalid_pattern: "That pattern isn't associated with any action",
       unescaped: "Expected to evaluate a pattern, but evaluated %s instead",
-      
+
       not_enough_args: "expected %s or more arguments but the stack was only %s tall",
       no_args: "expected %s or more arguments but the stack was empty",
       too_many_close_parens: "Did not first use Introspection",
-      
+
       wrong_dimension: "cannot see %s from %s",
       entity_too_far: "%s is out of range",
       immune_entity: "cannot alter %s",
@@ -913,7 +913,7 @@
       invalid_spell_datum_type: "Tried to use a value of invalid type as a SpellDatum: %s (class %s). This is a bug in the mod.",
       unknown: "threw an exception (%s). This is a bug in the mod.",
       stack_size: "Exceeded the size limit of the stack",
-      
+
       invalid_value: {
         "": "expected %s at index %s of the stack, but got %s",
 
@@ -932,6 +932,8 @@
             villager: "a villager",
             living: "a living entity",
           },
+
+          entity_or_vector: "an entity or a vector",
 
           unknown: "(unknown, uh-oh, this is a bug)",
         },
@@ -970,7 +972,7 @@
         forbidden: "%s is forbidden to you",
         bad_dimension: "This dimension forbids that action",
       },
-      
+
       bad_item: {
         "": "needs %s but got %dx %s",
         offhand: "needs %s in the other hand but got %dx %s",
@@ -997,27 +999,27 @@
         sapling: "a sapling",
         replaceable: "somewhere to place a block",
       },
-      
+
       "circle.bool_directrix": {
         no_bool: "the iota encountered at %s was %s, not a bool",
         empty_stack: "the stack was empty at %s",
       },
     },
     // ^ mishap
-    
+
     circles: {
       no_exit: "The flow of media at %s could not find an exit",
       many_exits: "The flow of media at %s had too many exits",
     },
-    
+
 
     // === Patchi stuff! ===
 
-    
+
     landing: "I seem to have discovered a new method of magical arts, in which one draws patterns strange and wild onto a hexagonal grid. \
       It fascinates me. I've decided to start a journal of my thoughts and findings.\
       $(br2)$(l:https://forum.petra-k.at/index.php)Forum Link/$",
-    
+
     category: {
       basics: {
         "": "Getting Started",
@@ -1034,7 +1036,7 @@
         "": "Items",
         desc: "I devote this section to the magical and mysterious items I might encounter in my studies.",
       },
-      
+
       greatwork: {
         "": "The Great Work",
         desc: "I have seen... so much. I have... experienced... annihilation and deconstruction and reconstruction. \
@@ -1053,7 +1055,7 @@
         "": "Cross-Mod Compatibility",
         desc: "It appears I have installed some mods Hexcasting interoperates with! I've detailed them here.",
       },
-      
+
       patterns: {
         "": "Patterns",
         desc: "A list of all the patterns I've discovered, as well as what they do.",
@@ -1075,7 +1077,7 @@
       }
     },
     // ^ categories
-    
+
     entry: {
       media: "Media",
       media_cube: "The Media Cube",
@@ -1090,27 +1092,27 @@
       influences: "Influences",
       mishaps2: "Enlightened Mishaps",
       amethyst: "Amethyst",
-      
+
       staff: "Staves",
       lens: "Scrying Lens",
       jeweler_hammer: "Jeweler's Hammer",
-      
+
       thought_knot: "Thought-Knot",
       focus: "Focus",
       abacus: "Abacus",
       spellbook: "Spellbook",
-      
+
       scroll: "Scrolls",
       slate: "Slates",
-      
+
       // why is this called "hexcasting"?
       hexcasting: "Casting Items",
       phials: "Phials of Media",
       pigments: "Pigments",
-      
+
       edified: "Edified Trees",
       decoration: "Decorative Blocks",
-      
+
       the_work: "The Work",
       brainsweeping: "On The Flaying of Minds",
       spellcircles: "Spell Circles",
@@ -1119,7 +1121,7 @@
       akashiclib: "Akashic Libraries",
       quenching_allays: "Quenching Allays",
       fanciful_staves: "Fanciful Staves",
-      
+
       // and the actions
       readers_guide: "How to Read This Section",
       // ops
@@ -1138,7 +1140,7 @@
       meta: "Meta-Evaluation",
       circle_patterns: "Spell Circle Patterns",
       akashic_patterns: "Akashic Patterns",
-      
+
       // spells
       itempicking: "Working with Items",
       basic_spell: "Basic Spells",
@@ -1148,11 +1150,11 @@
       sentinels: "Sentinels",
       // internalize pigment uses the action name
       flights: "Flight",
-      
+
       // great spells usually use the action name
       weather_manip: "Weather Manipulation",
       zeniths: "Zeniths",
-      
+
       lore: {
         cardamom1: "Cardamom Steles, #1",
         cardamom2: "Cardamom Steles, #2",
@@ -1163,7 +1165,7 @@
         experiment2: "Wooleye Interview Logs",
         inventory: "Restoration Log #72",
       },
-      
+
       interop: {
         "": "Cross-Mod Interations",
         gravity: "Gravity Changer",
@@ -1174,7 +1176,7 @@
       },
     },
     // ^ entries
-    
+
     page: {
       creative_unlocker: {
         "1": "The $(#74b3f2)Media Cube/$ is a near-limitless source of power, acting as an infinite source of _media for whatever _Hexes I wish to cast. It also looks quite tasty. Eating it might perhaps reveal more about the world, possibly delving into spoiler territory..."
@@ -1255,7 +1257,7 @@
             This takes an entity iota and transforms it into a vector iota, representing the position of that entity.",
         },
       },
-      
+
       // Casting
       "101": {
         "1": "Casting a _Hex is quite difficult-- no wonder this art was lost to time! I'll have to re-read my notes carefully.$(br2)I can start a _Hex by pressing $(k:use) with a $(l:items/staff)$(item)Staff/$ in my hand-- this will cause a hexagonal grid of dots to appear in front of me. Then I can click and drag from dot to dot to draw patterns in the _media of the grid; finishing a pattern will run its corresponding action (more on that later).",
@@ -1476,7 +1478,7 @@
 
 
       // The Work
-      
+
       the_work: {
         "1": "I have seen so many things. Unspeakable things. Innumerable things. I could write three words and turn my mind inside-out and smear my brains across the shadowed walls of my skull to decay into fluff and nothing.",
         "2": "I have seen staccato-needle patterns and acid-etched schematics written on the inside of my eyelids. They smolder there-- they dance, they taunt, they $(italic)ache/$. I'm possessed by an intense $(italic)need/$ to draw them, create them. Form them. Liberate them from the gluey shackles of my mortal mind-- present them in their Glory to the world for all to see.$(p)All shall see.$(p)All will see.",
@@ -1540,7 +1542,7 @@
 
 
       "fanciful_staves.1": "It is only right as I shed the husk of ignorance I replace my tools, my palm-polished staves. These new constructions of mine have no additional properties -- but they are so glorious, oh so Glorious... They match the radiance winking at the corners of my sight.",
-      
+
       // Patterns
 
       readers_guide: {
@@ -1815,7 +1817,7 @@
       },
 
       // Normal Spells
-      
+
       itempicking: {
         "1": "Certain spells, such as $(l:patterns/spells/blockworks#hexcasting:place_block)$(action)Place Block/$, will consume additional items from my inventory. When this happens, the spell will first look for the item to use, and then draw from all such items in my inventory.$(br2)This process is called \"picking an item.\"",
         "2": "More specifically:$(li)First, the spell will search for the first valid item in my hotbar to the $(italic)right of my $(l:items/staff)$(item)staff/$, wrapping around at the right-hand side, and starting at the first slot if my $(l:items/staff)$(item)staff/$ is in my off-hand.$(li)Second, the spell will draw that item from as $(italic)far back in my inventory/$ as possible, prioritizing the main inventory over the hotbar.",
@@ -1845,7 +1847,7 @@
         conjure_light: "Conjure a magical light that softly glows with my pigment at the given position. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         bonemeal: "Encourage a plant or sapling at the target position to grow, as if $(item)Bonemeal/$ was applied. Costs a bit more than one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         edify: "Forcibly infuse _media into the sapling at the target position, causing it to grow into an $(l:items/edified)$(thing)Edified Tree/$. Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$.",
-        ignite: "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
+        ignite: "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied, or sets fire to a creature. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         extinguish: "Extinguish blocks in a large area. Costs about six $(l:items/amethyst)$(item)Amethyst Dust/$.",
       },
 
@@ -1940,7 +1942,7 @@
       },
 
       "brainsweep_spell.1": "I cannot make heads or tails of this spell... To be honest, I'm not sure I want to know what it does.",
-      
+
 
       lore: {
         cardamom1: {
