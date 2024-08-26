@@ -47,7 +47,7 @@ public class HexItemTagProvider extends PaucalItemTagProvider {
             Items.GLASS_BOTTLE);
         add(tag(HexTags.Items.GRANTS_ROOT_ADVANCEMENT),
             HexItems.AMETHYST_DUST, Items.AMETHYST_SHARD,
-            HexItems.CHARGED_AMETHYST);
+            HexItems.CHARGED_AMETHYST, HexItems.CREATIVE_UNLOCKER);
         add(tag(HexTags.Items.SEAL_MATERIALS),
             Items.HONEYCOMB);
 
