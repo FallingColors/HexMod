@@ -6,6 +6,15 @@ name: Build pull request
 on:
   pull_request:
   workflow_dispatch:
+    inputs:
+      disable-cache:
+        description: Do not read from or write to the Gradle cache for this run.
+        type: boolean
+        default: false
+      invalidate-cache:
+        description: Do not read from the Gradle cache for this run, but still write to it. Should only be used on main.
+        type: boolean
+        default: false
   # trigger on pushes to the default branch (main) to keep the cache up to date
   push:
     branches: main
@@ -25,6 +34,9 @@ jobs:
           distribution: temurin
           java-version: ${{ env.JAVA_VERSION }}
       - uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-disabled: ${{ inputs.disable-cache }}
+          cache-write-only: ${{ inputs.invalidate-cache }}
 
       - name: Build
         run: |
