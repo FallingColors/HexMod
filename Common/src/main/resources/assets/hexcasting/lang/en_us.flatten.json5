@@ -349,6 +349,10 @@
       "": "Hexcasting Research",
       desc: "Find and mine a concentrated form of media growing deep beneath the earth.",
     },
+    creative_unlocker:{
+      "": "UNLIMITED POWAH",
+      "desc": "Found the creative debug item."
+    },
     enlightenment: {
       "": "Achieve Enlightenment",
       desc: "Shatter a barrier by casting a hex using almost all of your health.",
@@ -1060,11 +1064,16 @@
           It's probably just the ramblings of extinct traditionalists, though -- a pattern's a pattern.$(br2)\
           What could possibly go wrong?",
       },
+      creative_unlocker: {
+        "": "The Media Cube",
+        desc: "I have found a source of near limitless power, The Media Cube.",
+      }
     },
     // ^ categories
     
     entry: {
       media: "Media",
+      media_cube: "The Media Cube",
       geodes: "Geodes",
       couldnt_cast: "A Frustration",
       start_to_see: "WHAT DID I SEE",
@@ -1162,12 +1171,14 @@
     // ^ entries
     
     page: {
+      creative_unlocker: {
+        "1": "The $(#74b3f2)Media Cube/$ is a near-limitless source of power, acting as an infinite source of _media for whatever _Hexes I wish to cast. It also looks quite tasty. Eating it might perhaps reveal more about the world, possibly delving into spoiler territory..."
+      },
       media: {
         "1": "_Media is a form of mental energy external to a mind. All living creatures generate trace amounts of _media when thinking about anything; after the thought is finished, the media is released into the environment.$(br2)The art of casting _Hexes is all about manipulating _media to do your bidding.",
         "2": "_Media can exert influences on other media-- the strength and type of influence can be manipulated by drawing _media out into patterns.$(p)Scholars of the art used a concentrated blob of _media on the end of a stick: by waving it in the air in precise configurations, they were able to manipulate enough _media with enough precision to influence the world itself, in the form of a _Hex.",
         "3": "Sadly, even a fully sentient being (like myself, presumably) can only generate miniscule amounts of _media. It would be quite impractical to try and use my own brainpower to cast Hexes.$(br2)But legend has it that there are underground deposits where _media slowly accumulates, growing into crystalline forms.$(p)If I could just find one of those...",
       },
-
       geodes: {
         "1": "Aha! While mining deep underground, I found an enormous geode resonating with energy-- energy which pressed against my skull and my thoughts. And now, I hold that pressure in my hand, in solid form. That proves it. This $(italic)must/$ be the place spoken about in legends where _media accumulates.$(br2)These $(l:items/amethyst)$(item)amethyst crystals/$ must be a $(l:items/amethyst)$(thing)convenient, solidified form of _Media/$.",
         "2": "It appears that, in addition to the $(l:items/amethyst)$(item)Amethyst Shards/$ I have seen in the past, these crystals can also drop bits of powdered $(l:items/amethyst)$(item)Amethyst Dust/$, as well as these $(l:items/amethyst)$(item)Charged Amethyst Crystals/$. It looks like I'll have a better chance of finding the $(l:items/amethyst)$(item)Charged Amethyst Crystals/$ by using a Fortune pickaxe.",
