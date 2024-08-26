@@ -3,5 +3,6 @@
   "icon": "hexcasting:creative_unlocker",
   "description": "hexcasting.category.creative_unlocker.desc",
   "sortnum": 99,
+  "advancement": "hexcasting:creative_unlocker",
   "secret": true
 }
