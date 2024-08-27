@@ -16,7 +16,8 @@ import java.util.concurrent.CompletableFuture;
 public class HexBlockTagProvider extends PaucalBlockTagProvider {
     public final IXplatTags xtags;
 
-    public HexBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, IXplatTags xtags) {
+    public HexBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,
+        IXplatTags xtags) {
         super(output, lookupProvider);
         this.xtags = xtags;
     }
@@ -94,18 +95,17 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
         add(tag(BlockTags.STAIRS),
             HexBlocks.EDIFIED_STAIRS);
         add(tag(BlockTags.FENCES),
-                HexBlocks.EDIFIED_FENCE);
+            HexBlocks.EDIFIED_FENCE);
         add(tag(BlockTags.WOODEN_FENCES),
-                HexBlocks.EDIFIED_FENCE);
+            HexBlocks.EDIFIED_FENCE);
         add(tag(BlockTags.FENCE_GATES),
-                HexBlocks.EDIFIED_FENCE_GATE);
+            HexBlocks.EDIFIED_FENCE_GATE);
         add(tag(BlockTags.UNSTABLE_BOTTOM_CENTER),
-                HexBlocks.EDIFIED_FENCE_GATE);
-
+            HexBlocks.EDIFIED_FENCE_GATE);
 
 
         add(tag(BlockTags.WOODEN_FENCES),
-                HexBlocks.EDIFIED_FENCE);
+            HexBlocks.EDIFIED_FENCE);
         add(tag(BlockTags.WOODEN_STAIRS),
             HexBlocks.EDIFIED_STAIRS);
         add(tag(BlockTags.DOORS),
@@ -127,6 +127,8 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
 
         add(tag(HexTags.Blocks.WATER_PLANTS),
             Blocks.KELP, Blocks.KELP_PLANT, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS);
+        add(tag(HexTags.Blocks.CHEAP_TO_BREAK_BLOCK),
+            HexBlocks.CONJURED_BLOCK, HexBlocks.CONJURED_LIGHT);
     }
 
     void add(TagAppender<Block> appender, Block... blocks) {
