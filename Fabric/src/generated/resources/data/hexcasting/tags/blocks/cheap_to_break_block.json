@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "hexcasting:conjured_block",
+    "hexcasting:conjured_light"
+  ]
+}
