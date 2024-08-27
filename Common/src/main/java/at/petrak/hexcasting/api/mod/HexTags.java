@@ -2,8 +2,6 @@ package at.petrak.hexcasting.api.mod;
 
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -46,6 +44,8 @@ public class HexTags {
 
         // Used to determine what blocks should be replaced with air by OpDestroyFluid
         public static final TagKey<Block> WATER_PLANTS = create("water_plants");
+
+        public static final TagKey<Block> CHEAP_TO_BREAK_BLOCK = create("cheap_to_break_block");
 
         public static TagKey<Block> create(String name) {
             return TagKey.create(Registries.BLOCK, modLoc(name));

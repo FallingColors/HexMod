@@ -1,5 +1,6 @@
-// 1.20.1	2023-12-24T17:58:56.8920242	Tags for minecraft:block mod id vanilla
+// 1.20.1	2024-08-27T12:44:48.881057546	Tags for minecraft:block mod id vanilla
 c5aac196bf97183b43d794c6aac8e206f4b71e37 data/hexcasting/tags/blocks/brainswept_circle_components.json
+0ac2f0afe13705ae24edcb339a5e1e2cdcfe51cf data/hexcasting/tags/blocks/cheap_to_break_block.json
 abaec2d0102fef5865ac638cf7c528a4d5b2a69b data/hexcasting/tags/blocks/directrices.json
 7e27f819889d2f0bca863b1cdb6d7d640ea21986 data/hexcasting/tags/blocks/edified_logs.json
 86828f8056bfdfdd2aff10d7a9dbc6c269c25b8a data/hexcasting/tags/blocks/edified_planks.json
@@ -8,8 +9,8 @@ abaec2d0102fef5865ac638cf7c528a4d5b2a69b data/hexcasting/tags/blocks/directrices
 841dfbe4970e9167b205e5aa2b0f0936c6b9af60 data/minecraft/tags/blocks/buttons.json
 8b7d16a34235e6062e47f6b3a3a08be760a3bb85 data/minecraft/tags/blocks/crystal_sound_blocks.json
 cba96d2ff28087e7fd9807e5e80104f3befc2512 data/minecraft/tags/blocks/doors.json
-c460821db89b3d3f95a0fb336b6b6625da65ec37 data/minecraft/tags/blocks/fences.json
 d57d93d193fada6e232bde266430a155fa6e1707 data/minecraft/tags/blocks/fence_gates.json
+c460821db89b3d3f95a0fb336b6b6625da65ec37 data/minecraft/tags/blocks/fences.json
 6312e44ef31d2401dddbd46c4d3eda03da6e2db3 data/minecraft/tags/blocks/leaves.json
 7e27f819889d2f0bca863b1cdb6d7d640ea21986 data/minecraft/tags/blocks/logs.json
 7e27f819889d2f0bca863b1cdb6d7d640ea21986 data/minecraft/tags/blocks/logs_that_burn.json
