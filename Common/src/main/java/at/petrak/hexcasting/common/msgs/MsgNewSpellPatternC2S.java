@@ -3,7 +3,9 @@ package at.petrak.hexcasting.common.msgs;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.env.StaffCastEnv;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -32,12 +34,12 @@ public record MsgNewSpellPatternC2S(InteractionHand handUsed, HexPattern pattern
     public static MsgNewSpellPatternC2S deserialize(ByteBuf buffer) {
         var buf = new FriendlyByteBuf(buffer);
         var hand = buf.readEnum(InteractionHand.class);
-        var pattern = HexPattern.fromNBT(buf.readNbt());
+        var pattern = HexUtils.deserializeWithCodec(buf.readNbt(), HexPattern.CODEC);
 
         var resolvedPatternsLen = buf.readInt();
         var resolvedPatterns = new ArrayList<ResolvedPattern>(resolvedPatternsLen);
         for (int i = 0; i < resolvedPatternsLen; i++) {
-            resolvedPatterns.add(ResolvedPattern.fromNBT(buf.readNbt()));
+            resolvedPatterns.add(HexUtils.deserializeWithCodec(buf.readNbt(), ResolvedPattern.CODEC));
         }
         return new MsgNewSpellPatternC2S(hand, pattern, resolvedPatterns);
     }
@@ -45,10 +47,10 @@ public record MsgNewSpellPatternC2S(InteractionHand handUsed, HexPattern pattern
     @Override
     public void serialize(FriendlyByteBuf buf) {
         buf.writeEnum(handUsed);
-        buf.writeNbt(this.pattern.serializeToNBT());
+        buf.writeNbt((CompoundTag) HexUtils.serializeWithCodec(this.pattern, HexPattern.CODEC));
         buf.writeInt(this.resolvedPatterns.size());
         for (var pat : this.resolvedPatterns) {
-            buf.writeNbt(pat.serializeToNBT());
+            buf.writeNbt((CompoundTag) HexUtils.serializeWithCodec(pat, ResolvedPattern.CODEC));
         }
     }
 

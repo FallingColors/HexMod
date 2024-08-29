@@ -100,7 +100,7 @@ public class ListPerWorldPatternsCommand {
 
                     var tag = new CompoundTag();
                     tag.putString(ItemScroll.TAG_OP_ID, key.location().toString());
-                    tag.put(ItemScroll.TAG_PATTERN, pat.serializeToNBT());
+                    tag.put(ItemScroll.TAG_PATTERN, HexUtils.serializeWithCodec(pat, HexPattern.CODEC));
 
                     var stack = new ItemStack(HexItems.SCROLL_LARGE);
                     stack.setTag(tag);
@@ -134,7 +134,7 @@ public class ListPerWorldPatternsCommand {
         if (!targets.isEmpty()) {
             var tag = new CompoundTag();
             tag.putString(ItemScroll.TAG_OP_ID, patternName.toString());
-            tag.put(ItemScroll.TAG_PATTERN, pat.serializeToNBT());
+            tag.put(ItemScroll.TAG_PATTERN, HexUtils.serializeWithCodec(pat, HexPattern.CODEC));
 
             var stack = new ItemStack(HexItems.SCROLL_LARGE);
             stack.setTag(tag);

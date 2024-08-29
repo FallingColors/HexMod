@@ -993,6 +993,8 @@
         no_bool: "the iota encountered at %s was %s, not a bool",
         empty_stack: "the stack was empty at %s",
       },
+
+      entity_not_found: "the entity referenced by %s at index %s of the stack could not be found"
     },
     // ^ mishap
     

@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.iota.EntityIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.pigment.FrozenPigment
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 
@@ -39,8 +40,8 @@ class MishapOthersName(val confidant: Player) : Mishap() {
 
             while (poolToSearch.isNotEmpty()) {
                 val datumToCheck = poolToSearch.removeFirst()
-                if (datumToCheck is EntityIota && datumToCheck.entity is Player && datumToCheck.entity != caster)
-                    return datumToCheck.entity as Player
+                if (datumToCheck is EntityIota && datumToCheck.uuid != caster?.uuid)
+                    return datumToCheck.getEntity(caster?.level() as ServerLevel) as? Player
                 val datumSubIotas = datumToCheck.subIotas()
                 if (datumSubIotas != null)
                     poolToSearch.addAll(datumSubIotas)

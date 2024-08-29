@@ -1,6 +1,9 @@
 package at.petrak.hexcasting.api.casting
 
 import at.petrak.hexcasting.api.casting.iota.Iota
+import com.mojang.serialization.Codec
+import net.minecraft.server.level.ServerLevel
+import java.util.Collections
 
 /**
  * Restricted interface for functional lists.
@@ -89,5 +92,13 @@ sealed class SpellList : Iterable<Iota> {
             list = list.cdr
             return car
         }
+    }
+
+    companion object {
+        @JvmStatic
+        fun getCodec(): Codec<SpellList> = Iota.getCodec().listOf().xmap(SpellList::LList, SpellList::toMutableList)
+
+        @JvmStatic
+        fun getCodec(world: ServerLevel): Codec<SpellList> = Iota.getCodec(world).listOf().xmap(SpellList::LList, SpellList::toMutableList)
     }
 }

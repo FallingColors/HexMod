@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.msgs.MsgNewSpiralPatternsS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -76,7 +77,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         var out = new ArrayList<Iota>();
         for (var patTag : patsTag) {
             CompoundTag tag = NBTHelper.getAsCompound(patTag);
-            out.add(IotaType.deserialize(tag, level));
+            out.add(HexUtils.deserializeWithCodec(tag, Iota.CODEC.get().codec()));
         }
         return out;
     }
@@ -85,7 +86,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
     public void writeHex(ItemStack stack, List<Iota> program, @Nullable FrozenPigment pigment, long media) {
         ListTag patsTag = new ListTag();
         for (Iota pat : program) {
-            patsTag.add(IotaType.serialize(pat));
+            patsTag.add(HexUtils.serializeWithCodec(pat, Iota.CODEC.get().codec()));
         }
 
         NBTHelper.putList(stack, TAG_PROGRAM, patsTag);

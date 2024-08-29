@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.blocks.circles;
 
 import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.client.render.HexPatternPoints;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -9,6 +10,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class BlockEntitySlate extends HexBlockEntity {
     public static final String TAG_PATTERN = "pattern";
@@ -24,7 +27,7 @@ public class BlockEntitySlate extends HexBlockEntity {
     @Override
     protected void saveModData(CompoundTag tag) {
         if (this.pattern != null) {
-            tag.put(TAG_PATTERN, this.pattern.serializeToNBT());
+            tag.put(TAG_PATTERN, Objects.requireNonNull(HexUtils.serializeWithCodec(this.pattern, HexPattern.CODEC)));
         } else {
             tag.put(TAG_PATTERN, new CompoundTag());
         }
@@ -35,7 +38,7 @@ public class BlockEntitySlate extends HexBlockEntity {
         if (tag.contains(TAG_PATTERN, Tag.TAG_COMPOUND)) {
             CompoundTag patternTag = tag.getCompound(TAG_PATTERN);
             if (HexPattern.isPattern(patternTag)) {
-                this.pattern = HexPattern.fromNBT(patternTag);
+                this.pattern = HexUtils.deserializeWithCodec(patternTag, HexPattern.CODEC);
             } else {
                 this.pattern = null;
             }

@@ -1,12 +1,18 @@
 package at.petrak.hexcasting.api.casting.math
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.utils.NBTBuilder
 import at.petrak.hexcasting.api.utils.coordToPx
 import at.petrak.hexcasting.api.utils.findCenter
 import at.petrak.hexcasting.api.utils.getSafe
+import com.google.common.collect.ImmutableList
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
 import net.minecraft.world.phys.Vec2
+import java.util.Collections
 
 /**
  * Sequence of angles to define a pattern traced.
@@ -71,11 +77,12 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
     fun finalDir(): HexDir =
         this.angles.fold(this.startDir) { acc, angle -> acc * angle }
 
-
-    fun serializeToNBT() = NBTBuilder {
-        TAG_START_DIR %= byte(startDir.ordinal)
-        TAG_ANGLES %= byteArray(angles.map(HexAngle::ordinal))
-    }
+    @Deprecated(
+        "Use the CODEC instead.",
+        replaceWith = ReplaceWith("serializeWithCodec(HexPattern.CODEC)")
+    )
+    fun serializeToNBT() =
+        CODEC.encodeStart(NbtOps.INSTANCE, this).resultOrPartial(HexAPI.LOGGER::error).orElseThrow() as CompoundTag
 
     // Terrible shorthand method for easy matching
     fun anglesSignature(): String {
@@ -127,18 +134,28 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
         const val TAG_START_DIR = "start_dir"
         const val TAG_ANGLES = "angles"
 
-        @JvmStatic
-        fun isPattern(tag: CompoundTag): Boolean {
-            return tag.contains(TAG_START_DIR, Tag.TAG_ANY_NUMERIC.toInt())
-                && tag.contains(TAG_ANGLES, Tag.TAG_BYTE_ARRAY.toInt())
+        @JvmField
+        val CODEC: Codec<HexPattern> = RecordCodecBuilder.create {
+            it.group(
+                HexDir.CODEC.fieldOf(TAG_START_DIR).forGetter(HexPattern::startDir),
+                HexAngle.CODEC.listOf().fieldOf(TAG_ANGLES)
+                    .xmap(List<HexAngle>::toMutableList, Collections::unmodifiableList).forGetter(HexPattern::angles)
+            ).apply(it, ::HexPattern)
         }
 
         @JvmStatic
-        fun fromNBT(tag: CompoundTag): HexPattern {
-            val startDir = HexDir.values().getSafe(tag.getByte(TAG_START_DIR))
-            val angles = tag.getByteArray(TAG_ANGLES).map(HexAngle.values()::getSafe)
-            return HexPattern(startDir, angles.toMutableList())
+        fun isPattern(tag: CompoundTag): Boolean {
+            return tag.contains(TAG_START_DIR, Tag.TAG_ANY_NUMERIC.toInt())
+                    && tag.contains(TAG_ANGLES, Tag.TAG_BYTE_ARRAY.toInt())
         }
+
+        @Deprecated(
+            "Use the CODEC instead.",
+            replaceWith = ReplaceWith("tag.deserializeWithCodec(HexPattern.CODEC)")
+        )
+        @JvmStatic
+        fun fromNBT(tag: CompoundTag): HexPattern =
+            CODEC.parse(NbtOps.INSTANCE, tag).resultOrPartial(HexAPI.LOGGER::error).orElseThrow()
 
         @JvmStatic
         fun fromAngles(signature: String, startDir: HexDir): HexPattern {

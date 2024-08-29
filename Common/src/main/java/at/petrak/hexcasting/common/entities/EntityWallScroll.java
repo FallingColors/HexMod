@@ -71,7 +71,7 @@ public class EntityWallScroll extends HangingEntity {
     public void recalculateDisplay() {
         CompoundTag patternTag = NBTHelper.getCompound(scroll, ItemScroll.TAG_PATTERN);
         if (patternTag != null) {
-            this.pattern = HexPattern.fromNBT(patternTag);
+            this.pattern = HexUtils.deserializeWithCodec(patternTag, HexPattern.CODEC);
             if (this.level().isClientSide) {
                 var pair = RenderLib.getCenteredPattern(pattern, 128f / 3 * blockSize, 128f / 3 * blockSize,
                     16f / 3 * blockSize);

@@ -26,7 +26,7 @@ object OpMakeBattery : SpellAction {
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
-        val entity = args.getItemEntity(0, argc)
+        val entity = args.getItemEntity(0, argc, env.world)
 
         val (handStack, hand) = env.getHeldItemToOperateOn { it.`is`(HexTags.Items.PHIAL_BASE) }
             ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "bottle") // TODO: hack

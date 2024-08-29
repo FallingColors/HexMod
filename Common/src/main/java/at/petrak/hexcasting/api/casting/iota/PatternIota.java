@@ -21,8 +21,10 @@ import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import com.mojang.serialization.Codec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -61,9 +63,14 @@ public class PatternIota extends Iota {
             && this.getPattern().getAngles().equals(piota.getPattern().getAngles());
     }
 
+    /**
+     * @deprecated
+     * Use {@link PatternIota#TYPE#getCodec} instead.
+     */
+    @Deprecated
     @Override
     public @NotNull Tag serialize() {
-        return this.getPattern().serializeToNBT();
+        return HexUtils.serializeWithCodec(this, TYPE.getCodec());
     }
 
     @Override
@@ -140,14 +147,25 @@ public class PatternIota extends Iota {
     }
 
     public static IotaType<PatternIota> TYPE = new IotaType<>() {
+
+        @Override
+        public Codec<PatternIota> getCodec() {
+            return HexPattern.CODEC.xmap(PatternIota::new, PatternIota::getPattern);
+        }
+
+        /**
+         * @deprecated
+         * Use {@link PatternIota#TYPE#getCodec} instead.
+         */
+        @Deprecated
         @Override
         public PatternIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            return PatternIota.deserialize(tag);
+            return HexUtils.deserializeWithCodec(tag, getCodec(world));
         }
 
         @Override
         public Component display(Tag tag) {
-            return PatternIota.display(PatternIota.deserialize(tag).getPattern());
+            return PatternIota.display(HexUtils.deserializeWithCodec(tag, getCodec()).getPattern());
         }
 
         @Override
@@ -155,12 +173,6 @@ public class PatternIota extends Iota {
             return 0xff_ffaa00;
         }
     };
-
-    public static PatternIota deserialize(Tag tag) throws IllegalArgumentException {
-        var patTag = HexUtils.downcast(tag, CompoundTag.TYPE);
-        HexPattern pat = HexPattern.fromNBT(patTag);
-        return new PatternIota(pat);
-    }
 
     public static Component display(HexPattern pat) {
         var bob = new StringBuilder();

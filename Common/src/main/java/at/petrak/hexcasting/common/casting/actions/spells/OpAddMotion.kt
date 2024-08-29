@@ -25,7 +25,7 @@ object OpAddMotion : SpellAction {
             env: CastingEnvironment,
             userData: CompoundTag
     ): SpellAction.Result {
-        val target = args.getEntity(0, argc)
+        val target = args.getEntity(0, argc, env.world)
         val motion = args.getVec3(1, argc)
         env.assertEntityInRange(target)
 

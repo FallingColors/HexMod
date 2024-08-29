@@ -1,6 +1,8 @@
 package at.petrak.hexcasting.common.msgs;
 
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
+import at.petrak.hexcasting.api.casting.iota.PatternIota;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.client.gui.GuiSpellcasting;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -47,7 +49,7 @@ public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> pat
     public void serialize(FriendlyByteBuf buf) {
         buf.writeEnum(this.hand);
 
-        buf.writeCollection(this.patterns, (fbb, pat) -> fbb.writeNbt(pat.serializeToNBT()));
+        buf.writeCollection(this.patterns, (fbb, pat) -> fbb.writeNbt((CompoundTag) HexUtils.serializeWithCodec(pat, ResolvedPattern.CODEC)));
 
         buf.writeCollection(this.stack, FriendlyByteBuf::writeNbt);
         buf.writeNbt(this.ravenmind);

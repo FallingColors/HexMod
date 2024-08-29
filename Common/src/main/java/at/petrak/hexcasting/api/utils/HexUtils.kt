@@ -2,10 +2,14 @@
 
 package at.petrak.hexcasting.api.utils
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.math.HexCoord
+import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.OptionalFieldCodec
 import net.minecraft.ChatFormatting
 import net.minecraft.core.Registry
 import net.minecraft.nbt.*
@@ -44,6 +48,7 @@ fun vecFromNBT(tag: LongArray): Vec3 = if (tag.size != 3) Vec3.ZERO else
         Double.fromBits(tag[1]),
         Double.fromBits(tag[2])
     )
+
 fun vecFromNBT(tag: CompoundTag): Vec3 {
     return if (!tag.contains("x") || !tag.contains("y") || !tag.contains("z"))
         Vec3.ZERO
@@ -312,4 +317,19 @@ fun <T> isOfTag(registry: Registry<T>, key: ResourceKey<T>, tag: TagKey<T>): Boo
 fun <T> isOfTag(registry: Registry<T>, loc: ResourceLocation, tag: TagKey<T>): Boolean {
     val key = ResourceKey.create(registry.key(), loc);
     return isOfTag(registry, key, tag)
+}
+
+fun <T : Any> Codec<T>.nullableFieldOf(name: String): MapCodec<T?> {
+    return OptionalFieldCodec(name, this).xmap(
+        { optional -> if (optional.isPresent) optional.get() else null },
+        { obj -> Optional.ofNullable(obj) }
+    )
+}
+
+fun <T : Any> T.serializeWithCodec(codec: Codec<T>): Tag? {
+    return codec.encodeStart(NbtOps.INSTANCE, this).resultOrPartial(HexAPI.LOGGER::error).orElse(null)
+}
+
+fun <T : Any> Tag.deserializeWithCodec(codec: Codec<T>): T? {
+    return codec.parse(NbtOps.INSTANCE, this).resultOrPartial(HexAPI.LOGGER::error).orElse(null)
 }

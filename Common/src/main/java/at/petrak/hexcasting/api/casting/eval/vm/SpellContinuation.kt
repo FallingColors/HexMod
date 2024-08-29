@@ -1,8 +1,13 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.utils.NBTBuilder
+import at.petrak.hexcasting.api.utils.deserializeWithCodec
 import at.petrak.hexcasting.api.utils.getList
+import at.petrak.hexcasting.api.utils.serializeWithCodec
+import com.mojang.serialization.Codec
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 
@@ -16,28 +21,51 @@ sealed interface SpellContinuation {
 
     fun pushFrame(frame: ContinuationFrame): SpellContinuation = NotDone(frame, this)
 
-    fun serializeToNBT() = NBTBuilder {
-        TAG_FRAME %= list(getNBTFrames())
-    }
-    fun getNBTFrames(): List<CompoundTag> {
+    @Deprecated(
+        "Use the codec instead.",
+        replaceWith = ReplaceWith("serializeWithCodec(SpellContinuation.getCodec())")
+    )
+    fun serializeToNBT(): CompoundTag = this.serializeWithCodec(getCodec()) as CompoundTag
+
+    private fun toList(): List<ContinuationFrame> {
         var self = this
-        val frames = mutableListOf<CompoundTag>()
+        val frames = mutableListOf<ContinuationFrame>()
         while (self is NotDone) {
-            frames.add(ContinuationFrame.toNBT(self.frame))
+            frames.add(self.frame)
             self = self.next
         }
         return frames
     }
+
     companion object {
-        const val TAG_FRAME = "frame"
+        @JvmStatic
+        fun getCodec(): Codec<SpellContinuation> = ContinuationFrame.getCodec().listOf()
+            .xmap(SpellContinuation::fromList, SpellContinuation::toList)
 
         @JvmStatic
-        fun fromNBT(nbt: CompoundTag, world: ServerLevel): SpellContinuation {
-            val frames = nbt.getList(TAG_FRAME, Tag.TAG_COMPOUND)
+        fun getCodec(world: ServerLevel): Codec<SpellContinuation> = ContinuationFrame.getCodec(world).listOf()
+            .xmap(SpellContinuation::fromList, SpellContinuation::toList)
+
+        @JvmField
+        val TAG_FRAME = "frame"
+
+        /**
+         * Takes a tag containing the ContinuationFrame.Type resourcelocation and the serialized continuation frame, and returns
+         * the deserialized continuation frame.
+         */
+        @Deprecated(
+            "Use the codec instead.",
+            replaceWith = ReplaceWith("tag.deserializeWithCodec(SpellContinuation.getCodec(world))")
+        )
+        @JvmStatic
+        fun fromNBT(nbt: CompoundTag, world: ServerLevel): SpellContinuation =
+            nbt.deserializeWithCodec(getCodec(world))!!
+
+        private fun fromList(frames: List<ContinuationFrame>): SpellContinuation {
             var result: SpellContinuation = Done
             for (frame in frames.asReversed()) {
                 if (frame is CompoundTag) {
-                    result = result.pushFrame(ContinuationFrame.fromNBT(frame, world))
+                    result = result.pushFrame(frame)
                 }
             }
             return result

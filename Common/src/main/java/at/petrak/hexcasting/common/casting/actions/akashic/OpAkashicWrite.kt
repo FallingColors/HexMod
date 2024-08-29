@@ -34,7 +34,7 @@ object OpAkashicWrite : SpellAction {
             throw MishapNoAkashicRecord(pos)
         }
 
-        val trueName = MishapOthersName.getTrueNameFromDatum(datum, env.castingEntity as? ServerPlayer)
+        val trueName = MishapOthersName.getTrueNameFromDatum(datum, env.castingEntity as? ServerPlayer, env.world)
         if (trueName != null)
             throw MishapOthersName(trueName)
 

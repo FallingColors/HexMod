@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.client.render.HexPatternPoints;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -42,7 +43,7 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
     public void setNewMapping(HexPattern pattern, Iota iota) {
         var previouslyEmpty = this.pattern == null;
         this.pattern = pattern;
-        this.iotaTag = IotaType.serialize(iota);
+        this.iotaTag = (CompoundTag) HexUtils.serializeWithCodec(iota, Iota.CODEC.get().codec());
 
         if (previouslyEmpty) {
             var oldBs = this.getBlockState();

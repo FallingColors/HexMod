@@ -11,6 +11,9 @@ import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapUnescapedValue;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.google.common.base.Suppliers;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -18,8 +21,32 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 public abstract class Iota {
+
+    /**
+     * Get a generic Iota codec for encoding/decoding any Iota, without validating iotas.
+     * This codec is useful for serialization, and deserialization on the client side.
+     * @return an Iota codec.
+     */
+    public static Codec<Iota> getCodec() {
+        return HexIotaTypes.REGISTRY.byNameCodec().<Iota>dispatchMap(HexIotaTypes.KEY_TYPE, Iota::getType,
+                iotaType -> iotaType.getCodec().fieldOf(HexIotaTypes.KEY_DATA).codec()).codec();
+    }
+
+    /**
+     * Get a generic Iota codec for encoding/decoding any Iota, validating iotas using the given world.
+     * This codec is useful for deserialization on the server side.
+     * @param world the world to be used for validation
+     * @return an Iota codec
+     */
+    public static Codec<Iota> getCodec(@Nullable ServerLevel world) {
+        return HexIotaTypes.REGISTRY.byNameCodec().<Iota>dispatchMap(HexIotaTypes.KEY_TYPE, Iota::getType,
+                iotaType -> iotaType.getCodec(world).fieldOf(HexIotaTypes.KEY_DATA).codec()).codec().orElseGet(NullIota::new);
+    }
+
     @NotNull
     protected final Object payload;
     @NotNull
@@ -45,7 +72,11 @@ public abstract class Iota {
      * Serialize this under the {@code data} tag.
      * <p>
      * You probably don't want to call this directly; use {@link IotaType#serialize}.
+     *
+     * @deprecated
+     * Use the Iota's {@code CODEC} instead.
      */
+    @Deprecated
     abstract public @NotNull Tag serialize();
 
     /**
@@ -54,17 +85,17 @@ public abstract class Iota {
      */
     public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
         return new CastResult(
-            this,
-            continuation,
-            null,  // Should never matter
-            List.of(
-                new OperatorSideEffect.DoMishap(
-                    new MishapUnescapedValue(this),
-                    new Mishap.Context(new HexPattern(HexDir.WEST, List.of()), null)
-                )
-            ),
-            ResolvedPatternType.INVALID,
-            HexEvalSounds.MISHAP);
+                this,
+                continuation,
+                null,  // Should never matter
+                List.of(
+                        new OperatorSideEffect.DoMishap(
+                                new MishapUnescapedValue(this),
+                                new Mishap.Context(new HexPattern(HexDir.WEST, List.of()), null)
+                        )
+                ),
+                ResolvedPatternType.INVALID,
+                HexEvalSounds.MISHAP);
     }
 
     /**

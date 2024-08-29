@@ -25,7 +25,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Long) 
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
-        val entity = args.getItemEntity(0, argc)
+        val entity = args.getItemEntity(0, argc, env.world)
         val patterns = args.getList(1, argc).toList()
 
         val (handStack) = env.getHeldItemToOperateOn {
@@ -54,7 +54,7 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val itemType: T, val cost: Long) 
             )
         }
 
-        val trueName = MishapOthersName.getTrueNameFromArgs(patterns, env.castingEntity as? ServerPlayer)
+        val trueName = MishapOthersName.getTrueNameFromArgs(patterns, env.castingEntity as? ServerPlayer, env.world)
         if (trueName != null)
             throw MishapOthersName(trueName)
 

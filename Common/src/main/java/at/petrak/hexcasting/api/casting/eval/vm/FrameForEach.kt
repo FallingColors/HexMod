@@ -1,19 +1,22 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
+import at.petrak.hexcasting.api.casting.eval.vm.FrameEvaluate.Companion
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
-import at.petrak.hexcasting.api.utils.NBTBuilder
-import at.petrak.hexcasting.api.utils.getList
-import at.petrak.hexcasting.api.utils.hasList
-import at.petrak.hexcasting.api.utils.serializeToNBT
+import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
+import java.util.Collections
 
 /**
  * A frame representing all the state for a Thoth evaluation.
@@ -81,13 +84,13 @@ data class FrameForEach(
         )
     }
 
-    override fun serializeToNBT() = NBTBuilder {
-        "data" %= data.serializeToNBT()
-        "code" %= code.serializeToNBT()
-        if (baseStack != null)
-            "base" %= baseStack.serializeToNBT()
-        "accumulator" %= acc.serializeToNBT()
-    }
+    @Deprecated(
+        "Use the codec instead.",
+        replaceWith = ReplaceWith("serializeWithCodec(FrameForEach.TYPE.getCodec())")
+    )
+    override fun serializeToNBT() =
+        this.serializeWithCodec(TYPE.getCodec()) as CompoundTag
+
 
     override fun size() = data.size() + code.size() + acc.size + (baseStack?.size ?: 0)
 
@@ -96,21 +99,26 @@ data class FrameForEach(
     companion object {
         @JvmField
         val TYPE: ContinuationFrame.Type<FrameForEach> = object : ContinuationFrame.Type<FrameForEach> {
-            override fun deserializeFromNBT(tag: CompoundTag, world: ServerLevel): FrameForEach {
-                return FrameForEach(
-                    HexIotaTypes.LIST.deserialize(tag.getList("data", Tag.TAG_COMPOUND), world)!!.list,
-                    HexIotaTypes.LIST.deserialize(tag.getList("code", Tag.TAG_COMPOUND), world)!!.list,
-                    if (tag.hasList("base", Tag.TAG_COMPOUND))
-                        HexIotaTypes.LIST.deserialize(tag.getList("base", Tag.TAG_COMPOUND), world)!!.list.toList()
-                    else
-                        null,
-                    HexIotaTypes.LIST.deserialize(
-                        tag.getList("accumulator", Tag.TAG_COMPOUND),
-                        world
-                    )!!.list.toMutableList()
-                )
+            override fun getCodec(): Codec<FrameForEach> = RecordCodecBuilder.create {
+                it.group(
+                    SpellList.getCodec().fieldOf("data").forGetter(FrameForEach::data),
+                    SpellList.getCodec().fieldOf("code").forGetter(FrameForEach::code),
+                    Iota.getCodec().listOf().nullableFieldOf("base").forGetter(FrameForEach::baseStack),
+                    Iota.getCodec().listOf().xmap(List<Iota>::toMutableList, Collections::unmodifiableList)
+                        .fieldOf("acc").forGetter(FrameForEach::acc)
+                ).apply(it, ::FrameForEach)
             }
 
+            override fun getCodec(world: ServerLevel): Codec<FrameForEach> =
+                RecordCodecBuilder.create {
+                    it.group(
+                        SpellList.getCodec(world).fieldOf("data").forGetter(FrameForEach::data),
+                        SpellList.getCodec(world).fieldOf("code").forGetter(FrameForEach::code),
+                        Iota.getCodec(world).listOf().nullableFieldOf("base").forGetter(FrameForEach::baseStack),
+                        Iota.getCodec(world).listOf().xmap(List<Iota>::toMutableList, Collections::unmodifiableList)
+                            .fieldOf("acc").forGetter(FrameForEach::acc)
+                    ).apply(it, ::FrameForEach)
+                }
         }
     }
 }

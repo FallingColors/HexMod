@@ -1,8 +1,12 @@
 package at.petrak.hexcasting.api.casting.iota;
 
+import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.mojang.serialization.Codec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -34,16 +38,32 @@ public class NullIota extends Iota {
         return typesMatch(this, that);
     }
 
+    /**
+     * @deprecated
+     * use {@link NullIota#TYPE#getCodec} instead.
+     */
+    @Deprecated
     @Override
     public @NotNull Tag serialize() {
-        return new CompoundTag();
+        return HexUtils.serializeWithCodec(this, TYPE.getCodec());
     }
 
     public static IotaType<NullIota> TYPE = new IotaType<>() {
+
+        @Override
+        public Codec<NullIota> getCodec() {
+            return Codec.unit(NullIota::new);
+        }
+
+        /**
+         * @deprecated
+         * use {@link NullIota#TYPE#getCodec} instead.
+         */
+        @Deprecated
         @Nullable
         @Override
         public NullIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            return new NullIota();
+            return HexUtils.deserializeWithCodec(tag, getCodec(world));
         }
 
         @Override

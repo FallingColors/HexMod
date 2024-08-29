@@ -1,12 +1,17 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.utils.NBTBuilder
+import at.petrak.hexcasting.api.utils.deserializeWithCodec
+import at.petrak.hexcasting.api.utils.serializeWithCodec
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
+import com.mojang.serialization.Codec
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
 import net.minecraft.server.level.ServerLevel
 
 /**
@@ -14,6 +19,7 @@ import net.minecraft.server.level.ServerLevel
  * so that we know when to stop removing frames during a Halt.
  */
 object FrameFinishEval : ContinuationFrame {
+
     // Don't do anything else to the stack, just finish the halt statement.
     override fun breakDownwards(stack: List<Iota>) = true to stack
 
@@ -33,13 +39,21 @@ object FrameFinishEval : ContinuationFrame {
         )
     }
 
-    override fun serializeToNBT() = CompoundTag()
+    @Deprecated(
+        "Use the codec instead.",
+        replaceWith = ReplaceWith("serializeWithCodec(FrameFinishEval.TYPE.getCodec())")
+    )
+    override fun serializeToNBT() =
+        this.serializeWithCodec(TYPE.getCodec()) as CompoundTag
 
     override fun size() = 0
 
     @JvmField
     val TYPE: ContinuationFrame.Type<FrameFinishEval> = object : ContinuationFrame.Type<FrameFinishEval> {
-        override fun deserializeFromNBT(tag: CompoundTag, world: ServerLevel) = FrameFinishEval
+        override fun getCodec(): Codec<FrameFinishEval> = Codec.unit { FrameFinishEval }
+
+        override fun getCodec(world: ServerLevel): Codec<FrameFinishEval> = Codec.unit { FrameFinishEval }
+
     }
 
     override val type = TYPE

@@ -1,13 +1,17 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
-import at.petrak.hexcasting.api.casting.SpellList
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.utils.deserializeWithCodec
 import at.petrak.hexcasting.common.lib.hex.HexContinuationTypes
+import com.google.common.base.Suppliers
+import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.Tag
-import net.minecraft.resources.ResourceLocation
+import net.minecraft.nbt.NbtOps
 import net.minecraft.server.level.ServerLevel
+import java.util.function.Supplier
 
 /**
  * A single frame of evaluation during the execution of a spell.
@@ -50,59 +54,59 @@ interface ContinuationFrame {
     val type: Type<*>
 
     interface Type<U : ContinuationFrame> {
-        fun deserializeFromNBT(tag: CompoundTag, world: ServerLevel): U?
+        fun getCodec(): Codec<U>
+
+        fun getCodec(world: ServerLevel): Codec<U>
+
+        @Deprecated(
+            "Use the CODEC instead.",
+            replaceWith = ReplaceWith("tag.deserializeWithCodec(getCodec())")
+        )
+        fun deserializeFromNBT(tag: CompoundTag, world: ServerLevel): U? =
+            tag.deserializeWithCodec(getCodec())
     }
 
     companion object {
+        @JvmStatic
+        fun getCodec(): Codec<ContinuationFrame> =
+            HexContinuationTypes.REGISTRY.byNameCodec().dispatchMap(
+                HexContinuationTypes.KEY_TYPE,
+                ContinuationFrame::type
+            ) { continuationType ->
+                continuationType.getCodec().fieldOf(HexContinuationTypes.KEY_DATA).codec()
+            }.codec()
+
+        @JvmStatic
+        fun getCodec(world: ServerLevel): Codec<ContinuationFrame> =
+                HexContinuationTypes.REGISTRY.byNameCodec().dispatchMap(
+                    HexContinuationTypes.KEY_TYPE,
+                    ContinuationFrame::type
+                ) { continuationType ->
+                    continuationType.getCodec(world).fieldOf(HexContinuationTypes.KEY_DATA).codec()
+            }.codec()
+
         /**
          * Takes a tag containing the ContinuationFrame.Type resourcelocation and the serialized continuation frame, and returns
          * the deserialized continuation frame.
          */
+        @Deprecated(
+            "Use the codec instead.",
+            replaceWith = ReplaceWith("tag.deserializeWithCodec(ContinuationFrame.getCodec(world))")
+        )
         @JvmStatic
-        fun fromNBT(tag: CompoundTag, world: ServerLevel): ContinuationFrame {
-            val type = getTypeFromTag(tag) ?: return FrameEvaluate(SpellList.LList(0, listOf()), false)
-
-            return (tag.get(HexContinuationTypes.KEY_DATA) as? CompoundTag)?.let { type.deserializeFromNBT(it, world) }
-                    ?: FrameEvaluate(SpellList.LList(0, listOf()), false)
-        }
+        fun fromNBT(tag: CompoundTag, world: ServerLevel): ContinuationFrame =
+            getCodec(world).parse(NbtOps.INSTANCE, tag).resultOrPartial(HexAPI.LOGGER::error).orElseThrow()
 
         /**
          * Takes a continuation frame and serializes it along with its type.
          */
+        @Deprecated(
+            "Use the codec instead.",
+            replaceWith = ReplaceWith("serializeWithCodec(ContinuationFrame.getCodec())")
+        )
         @JvmStatic
-        fun toNBT(frame: ContinuationFrame): CompoundTag {
-            val type = frame.type
-            val typeId = HexContinuationTypes.REGISTRY.getKey(type)
-                ?: throw IllegalStateException(
-                    "Tried to serialize an unregistered continuation type. Continuation: " + frame
-                        + " ; Type" + type.javaClass.typeName)
-
-            val data = frame.serializeToNBT()
-
-            val out = CompoundTag()
-            out.putString(HexContinuationTypes.KEY_TYPE, typeId.toString())
-            out.put(HexContinuationTypes.KEY_DATA, data)
-            return out
-        }
-
-        /**
-         * This method attempts to find the type from the `type` key.
-         * See [ContinuationFrame.serializeToNBT] for the storage format.
-         *
-         * @return `null` if it cannot get the type.
-         */
-        private fun getTypeFromTag(tag: CompoundTag): Type<*>? {
-            if (!tag.contains(HexContinuationTypes.KEY_TYPE, Tag.TAG_STRING.toInt())) {
-                return null
-            }
-
-            val typeKey = tag.getString(HexContinuationTypes.KEY_TYPE)
-            if (!ResourceLocation.isValidResourceLocation(typeKey)) {
-                return null
-            }
-
-            val typeLoc = ResourceLocation(typeKey)
-            return HexContinuationTypes.REGISTRY[typeLoc]
-        }
+        fun toNBT(frame: ContinuationFrame): CompoundTag =
+            getCodec().encodeStart(NbtOps.INSTANCE, frame).resultOrPartial(HexAPI.LOGGER::error)
+                .orElseThrow() as CompoundTag
     }
 }

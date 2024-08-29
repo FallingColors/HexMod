@@ -1,11 +1,14 @@
 package at.petrak.hexcasting.api.casting.iota;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.SpellList;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.mojang.serialization.Codec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -64,13 +67,14 @@ public class ListIota extends Iota {
         }
     }
 
+    /**
+     * @deprecated
+     * use {@link ListIota#TYPE#getCodec} instead.
+     */
+    @Deprecated
     @Override
     public @NotNull Tag serialize() {
-        var out = new ListTag();
-        for (var subdatum : this.getList()) {
-            out.add(IotaType.serialize(subdatum));
-        }
-        return out;
+        return HexUtils.serializeWithCodec(this, TYPE.getCodec());
     }
 
     @Override
@@ -79,27 +83,31 @@ public class ListIota extends Iota {
     }
 
     public static IotaType<ListIota> TYPE = new IotaType<>() {
+        @Override
+        public Codec<ListIota> getCodec() {
+            return SpellList.getCodec().xmap(ListIota::new, ListIota::getList);
+        }
+
+        @Override
+        public Codec<ListIota> getCodec(ServerLevel world) {
+            return SpellList.getCodec(world).xmap(ListIota::new, ListIota::getList);
+        }
+
+        /**
+         * @deprecated
+         * use {@link ListIota#TYPE#getCodec} instead.
+         */
+        @Deprecated
         @Nullable
         @Override
         public ListIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            var listTag = HexUtils.downcast(tag, ListTag.TYPE);
-            var out = new ArrayList<Iota>(listTag.size());
-
-            for (var sub : listTag) {
-                var csub = HexUtils.downcast(sub, CompoundTag.TYPE);
-                var subiota = IotaType.deserialize(csub, world);
-                if (subiota == null) {
-                    return null;
-                }
-                out.add(subiota);
-            }
-
-            return new ListIota(out);
+            return HexUtils.deserializeWithCodec(tag, getCodec(world));
         }
 
         @Override
         public Component display(Tag tag) {
             var out = Component.empty();
+
             var list = HexUtils.downcast(tag, ListTag.TYPE);
             for (int i = 0; i < list.size(); i++) {
                 Tag sub = list.get(i);

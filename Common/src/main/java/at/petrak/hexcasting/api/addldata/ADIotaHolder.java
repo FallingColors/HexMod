@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.addldata;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +15,7 @@ public interface ADIotaHolder {
     default Iota readIota(ServerLevel world) {
         var tag = readIotaTag();
         if (tag != null) {
-            return IotaType.deserialize(tag, world);
+            return HexUtils.deserializeWithCodec(tag, Iota.CODEC.get().codec());
         } else {
             return null;
         }
