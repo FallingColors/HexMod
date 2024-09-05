@@ -1494,7 +1494,7 @@
         empty_impetus: "First, the cradle. Although it does not work as an $(l:greatwork/impetus)$(item)Impetus/$, the flow of _media in a circle will only exit out the side pointed to by the arrows. This allows me to change the plane in which the wave flows, for example.",
         impetus_rightclick: "Then, to transpose the mind. Villagers of different professions will lend different actuation conditions to the resulting $(l:greatwork/impetus)$(item)Impetus/$. A $(l:greatwork/impetus)$(item)Toolsmith Impetus/$ activates on a simple $(k:use).",
         impetus_storedplayer: {
-          "1": "A $(l:greatwork/impetus)$(item)Cleric Impetus/$ must be bound to a player by using an item with a reference to that player, like a $(l:items/focus)$(item)Focus/$, on the block. Then, it activates when receiving a redstone signal.",
+          "1": "A $(l:greatwork/impetus)$(item)Cleric Impetus/$ activates when receiving a redstone signal. It may be bound to a player by using an item with a reference to that player, like a $(l:items/focus)$(item)Focus/$, on the block.",
           "2": "Peculiarly to this $(l:greatwork/impetus)$(item)Impetus/$, the bound player, as well as a small region around them, are always accessible to the spell circle. It's as if they were standing within the bounds of the circle, no matter how far away they might stand.$(br2)The bound player is shown when looking at a $(l:greatwork/impetus)$(item)Cleric Impetus/$ through a $(l:items/lens)$(item)Scrying Lens/$.",
         },
         impetus_look: "A $(l:greatwork/impetus)$(item)Fletcher Impetus/$ activates when looked at for a short time.",
