@@ -3,7 +3,7 @@
   "category": "hexcasting:patterns/spells",
   "icon": "minecraft:feather",
   "advancement": "hexcasting:root",
-  "sortnum": 6,
+  "sortnum": 7,
   "read_by_default": true,
   "pages": [
     "hexcasting.page.flights.1",
