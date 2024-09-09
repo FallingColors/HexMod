@@ -1,4 +1,4 @@
-// 1.20.1	2024-06-13T19:17:10.5351337	Hex Casting/Tags for hexcasting:action
-6fe30f41e2bcd48589caab26d210a513dce1ab7c data\hexcasting\tags\action\requires_enlightenment.json
-6fe30f41e2bcd48589caab26d210a513dce1ab7c data\hexcasting\tags\action\per_world_pattern.json
-6fe30f41e2bcd48589caab26d210a513dce1ab7c data\hexcasting\tags\action\can_start_enlighten.json
+// 1.20.1	2024-08-27T12:42:38.120411259	Hex Casting/Tags for hexcasting:action
+6fe30f41e2bcd48589caab26d210a513dce1ab7c data/hexcasting/tags/action/per_world_pattern.json
+6fe30f41e2bcd48589caab26d210a513dce1ab7c data/hexcasting/tags/action/requires_enlightenment.json
+6fe30f41e2bcd48589caab26d210a513dce1ab7c data/hexcasting/tags/action/can_start_enlighten.json

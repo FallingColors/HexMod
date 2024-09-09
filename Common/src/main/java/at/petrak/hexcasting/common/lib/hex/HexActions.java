@@ -395,6 +395,9 @@ public class HexActions {
     public static final ActionRegistryEntry WRITE$LOCAL = make("write/local",
         new ActionRegistryEntry(HexPattern.fromAngles("eqqwawqaaw", HexDir.NORTH_WEST), OpPushLocal.INSTANCE));
 
+    public static final ActionRegistryEntry THANATOS = make("thanatos",
+        new ActionRegistryEntry(HexPattern.fromAngles("qqaed", HexDir.SOUTH_EAST), OpThanos.INSTANCE));
+
     // == Consts ==
 
     public static final ActionRegistryEntry CONST$NULL = make("const/null",
