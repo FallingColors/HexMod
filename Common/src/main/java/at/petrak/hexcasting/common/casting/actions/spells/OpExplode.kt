@@ -8,9 +8,11 @@ import at.petrak.hexcasting.api.casting.getPositiveDoubleUnderInclusive
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.common.casting.actions.selectors.OpGetEntitiesBy
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
 import net.minecraft.world.level.Level
+import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
 
 class OpExplode(val fire: Boolean) : SpellAction {
@@ -18,12 +20,23 @@ class OpExplode(val fire: Boolean) : SpellAction {
         get() = 2
 
     override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
+        args: List<Iota>,
+        env: CastingEnvironment
     ): SpellAction.Result {
-        val pos = args.getVec3(0, argc)
+        var pos = args.getVec3(0, argc)
         val strength = args.getPositiveDoubleUnderInclusive(1, 10.0, argc)
         env.assertVecInRange(pos)
+
+        // Prevent the footgun of explosions exactly at an entity's eye position not doing damage
+        val eps = 0.01;
+        val epsv = Vec3(eps, eps, eps)
+        val aabb = AABB(pos.subtract(epsv), pos.add(epsv))
+        val tooCloseToEyePos = env.world.getEntities(null, aabb) {
+            OpGetEntitiesBy.isReasonablySelectable(env, it)
+        }.any { it.eyePosition.distanceToSqr(pos) == 0.0 }
+        if (tooCloseToEyePos) {
+            pos = pos.add(0.0, 0.000001, 0.0)
+        }
 
         val clampedStrength = Mth.clamp(strength, 0.0, 10.0)
         val cost = MediaConstants.DUST_UNIT * (3 * clampedStrength + if (fire) 1.0 else 0.125)
