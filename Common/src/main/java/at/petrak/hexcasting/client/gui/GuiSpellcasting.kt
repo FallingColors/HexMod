@@ -131,7 +131,16 @@ class GuiSpellcasting constructor(
         if (super.mouseClicked(mxOut, myOut, pButton)) {
             return true
         }
+        if (HexConfig.client().clickingTogglesDrawing()) {
+            return if (this.drawState is PatternDrawState.BetweenPatterns)
+                drawStart(mxOut, myOut)
+            else
+                drawEnd()
+        }
+        return drawStart(mxOut, myOut)
+    }
 
+    private fun drawStart(mxOut: Double, myOut: Double): Boolean {
         val mx = Mth.clamp(mxOut, 0.0, this.width.toDouble())
         val my = Mth.clamp(myOut, 0.0, this.height.toDouble())
         if (this.drawState is PatternDrawState.BetweenPatterns) {
@@ -156,11 +165,23 @@ class GuiSpellcasting constructor(
         return false
     }
 
+    override fun mouseMoved(mxOut: Double, myOut: Double) {
+        super.mouseMoved(mxOut, myOut)
+
+        if (HexConfig.client().clickingTogglesDrawing() && this.drawState !is PatternDrawState.BetweenPatterns)
+            drawMove(mxOut, myOut)
+    }
+
     override fun mouseDragged(mxOut: Double, myOut: Double, pButton: Int, pDragX: Double, pDragY: Double): Boolean {
         if (super.mouseDragged(mxOut, myOut, pButton, pDragX, pDragY)) {
             return true
         }
+        if (HexConfig.client().clickingTogglesDrawing())
+            return false
+        return drawMove(mxOut, myOut)
+    }
 
+    private fun drawMove(mxOut: Double, myOut: Double): Boolean {
         val mx = Mth.clamp(mxOut, 0.0, this.width.toDouble())
         val my = Mth.clamp(myOut, 0.0, this.height.toDouble())
 
@@ -237,7 +258,12 @@ class GuiSpellcasting constructor(
         if (super.mouseReleased(mx, my, pButton)) {
             return true
         }
+        if (HexConfig.client().clickingTogglesDrawing())
+            return false
+        return drawEnd()
+    }
 
+    private fun drawEnd(): Boolean {
         when (this.drawState) {
             PatternDrawState.BetweenPatterns -> {}
             is PatternDrawState.JustStarted -> {
