@@ -230,4 +230,12 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
             default -> pState.getValue(FACING);
         };
     }
+
+    public BlockState rotate(BlockState state, Rotation rot) {
+        return (BlockState) state.setValue(FACING, rot.rotate((Direction) state.getValue(FACING)));
+    }
+
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        return state.rotate(mirror.getRotation((Direction) state.getValue(FACING)));
+    }
 }
