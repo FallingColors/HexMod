@@ -132,6 +132,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private boolean invertAbacusScrollDirection = DEFAULT_INVERT_SPELLBOOK_SCROLL;
         @ConfigEntry.Gui.Tooltip
         private double gridSnapThreshold = DEFAULT_GRID_SNAP_THRESHOLD;
+        @ConfigEntry.Gui.Tooltip
+        private boolean clickingTogglesDrawing = DEFAULT_CLICKING_TOGGLES_DRAWING;
 
         @Override
         public void validatePostLoad() throws ValidationException {
@@ -156,6 +158,11 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @Override
         public double gridSnapThreshold() {
             return gridSnapThreshold;
+        }
+
+        @Override
+        public boolean clickingTogglesDrawing() {
+             return clickingTogglesDrawing;
         }
     }
 

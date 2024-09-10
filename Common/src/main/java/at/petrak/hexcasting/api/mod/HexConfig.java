@@ -47,10 +47,13 @@ public class HexConfig {
 
         double gridSnapThreshold();
 
+        boolean clickingTogglesDrawing();
+
         boolean DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER = false;
         boolean DEFAULT_INVERT_SPELLBOOK_SCROLL = false;
         boolean DEFAULT_INVERT_ABACUS_SCROLL = false;
         double DEFAULT_GRID_SNAP_THRESHOLD = 0.5;
+        boolean DEFAULT_CLICKING_TOGGLES_DRAWING = false;
     }
 
     public interface ServerConfigAccess {
