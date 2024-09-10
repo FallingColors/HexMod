@@ -39,6 +39,12 @@
     },
     {
       "type": "patchouli:item",
+      "x": 12,
+      "y": 55,
+      "item": "#mediaCost"
+    },
+    {
+      "type": "patchouli:item",
       "x": 87,
       "y": 35,
       "item": "#result",
