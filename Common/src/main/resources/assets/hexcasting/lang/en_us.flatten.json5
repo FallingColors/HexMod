@@ -608,7 +608,7 @@
         },
         
         append: "Integration Distillation",
-        unappend: "Derivation Distillation",
+        unappend: "Derivation Decomposition",
         index: "Selection Distillation",
         singleton: "Single's Purification",
         empty_list: "Vacant Reflection",
@@ -1061,7 +1061,7 @@
       great_spells: {
         "": "Great Spells",
         desc: "The spells catalogued here are purported to be of legendary difficulty and power. \
-          They seem to have been recorded only sparsely (for good reason, the texts claim). \
+          They seem to have been recorded only $(l:items/scroll)sparsely/$ (for good reason, the texts claim). \
           It's probably just the ramblings of extinct traditionalists, though -- a pattern's a pattern.$(br2)\
           What could possibly go wrong?",
       },
@@ -1523,7 +1523,7 @@
         "1": "THEY ARE BITS OF MEDIA. How did I not see it sooner? They are -- as I am a heap of flesh with a scrap, blessed with a scrap of thought, an Allay is a self-sustaining quarrel of media pinned to a scrap of flesh. It explains everything -- their propensity for media, their response to music, I SEE NOW, HOW did the ones before NOT?",
         "2": "And given this it is only RIGHT I conquer their peculiar minds -- their peculiar selves -- that is all they are, a mind, a self, a coda. Something about their phase speaks to me. I can... I can compress _media with them, overlay two wends of thought in one space, physical and cognitive, all and once.$(br2)Somehow, the process produces _media of its own. How? Perhaps -- perhaps MY work, the process of doing it --",
         "3": "It matters not. I matter not. They matter not, all that matters is what it does. And this is it.$(br2)It must hurt so very much.",
-        "4": "The product is fragile. Breaking it shatters it into pieces, with $(thing)Fortune/$ increasing the yield... if I wish the block itself I need a silken touch.$(br2)The produced shards are worth thrice an $(l:items/amethyst)$(item)Charged Amethyst Crystal/$ apiece. The block itself is worth four of the shards.",
+        "4": "The product is fragile. Breaking it shatters it into pieces, with $(thing)Fortune/$ increasing the yield... if I wish the block itself I need a silken touch.$(br2)The produced shards are worth thrice a $(l:items/amethyst)$(item)Charged Amethyst Crystal/$ apiece. The block itself is worth four of the shards.",
         "5": "They are mercurial, they seem to twist and wink under my fingers, and by giving them a mentor in another form of _media they may be coerced into its shape, in an equivalent exchange of _media.",
       },
       
@@ -1600,8 +1600,8 @@
         
         floor: "\"Floors\" a number, cutting off the fractional component and leaving an integer value. If passed a vector, instead floors each of its components.",
         ceil: "\"Ceilings\" a number, raising it to the next integer value if it has a fractional component. If passed a vector, instead ceils each of its components.",
-        construct_vec: "Combine three numbers at the top of the stack into a vector's X, Y, and Z components (top to bottom).",
-        deconstruct_vec: "Split a vector into its X, Y, and Z components (top to bottom).",
+        construct_vec: "Combine three numbers at the top of the stack into a vector's X, Y, and Z components (bottom to top).",
+        deconstruct_vec: "Split a vector into its X, Y, and Z components (bottom to top).",
         modulo: "Takes the modulus of two numbers. This is the amount $(italics)remaining/$ after division - for example, 5 %% 2 is 1, and 5 %% 3 is 2. When applied on vectors, performs the above operation elementwise.",
         coerce_axial: "For a vector, coerce it to its nearest axial direction, a unit vector. For a number, return the sign of the number; 1 if positive, -1 if negative. In both cases, zero is unaffected.",
         random: "Creates a random number between 0 and 1.",
@@ -1682,7 +1682,7 @@
       },
       
       logic: {
-        bool_coerce: "Convert an argument to a boolean. The number $(thing)0/$, $(l:casting/influences)$(thing)Null/$, and the empty list become False; everything else becomes True.",
+        bool_coerce: "Convert an argument to a boolean. The number $(thing)0/$, $(l:casting/influences)$(thing)Null/$, False, and the empty list become False; everything else becomes True.",
         bool_to_number: "Convert a boolean to a number; True becomes $(thing)1/$, and False becomes $(thing)0/$.",
         not: "If the argument is True, return False; if it is False, return True.",
         or: "Returns True if at least one of the arguments are True; otherwise returns False.",
@@ -1753,11 +1753,11 @@
           "2": "If I draw another $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Introspection/$, it'll still be saved to the list, but I'll then have to draw $(italic)two/$ $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospections/$ to get back to normal casting.",
           "3": "Also, I can escape the special behavior of $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ by drawing a $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ before them, which will simply add them to the list without affecting which the number of $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospections/$ I need to return to casting.$(br2)If I draw two $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Considerations/$ in a row while $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)introspecting/$, it will add a single $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ to the list.",
         },
-        undo: "Finally, if I make a mistake while drawning patterns inside $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ I can draw $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ to remove the last pattern that I drew from the pattern list that is being constructed.",
+        undo: "Finally, if I make a mistake while drawing patterns inside $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ I can draw $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ to remove the last pattern that I drew from the pattern list that is being constructed.",
       },
       
       readwrite: {
-        "1": "This section deals with the storage of $(thing)Iotas/$ in a more permanent medium. Nearly any iota can be stored to a suitable item, such as a $(l:items/focus)$(item)Focus/$ or $(l:items/spellbook)$(item)Spellbook/$), and read back later. Certain items, such as an $(l:items/abacus)$(item)Abacus/$, can only be read from.$(br2)Iotas are usually read and written from the other hand, but it is also possible to read and write with an item when it is sitting on the ground as an item entity, or when in an item frame.",
+        "1": "This section deals with the storage of $(thing)Iotas/$ in a more permanent medium. Nearly any iota can be stored to a suitable item, such as a $(l:items/focus)$(item)Focus/$ or $(l:items/spellbook)$(item)Spellbook/$, and read back later. Certain items, such as an $(l:items/abacus)$(item)Abacus/$, can only be read from.$(br2)Iotas are usually read and written from the other hand, but it is also possible to read and write with an item when it is sitting on the ground as an item entity, or when in an item frame.",
         "2": "There may be other entities I can interact with in this way. For example, a $(l:items/scroll)$(item)Scroll/$ hung on the wall can have its pattern read off of it.$(br2)However, it seems I am unable to save a reference to another player, only me. I suppose an entity reference is similar to the idea of a True Name; perhaps Nature is helping to keep our Names out of the hands of enemies. If I want a friend to have my Name I can make a $(l:items/focus)$(item)Focus/$ for them.",
         read: "Copy the iota stored in the item in my other hand and add it to the stack.",
         write: "Remove the top iota from the stack, and save it into the item in my other hand.",
@@ -1905,7 +1905,7 @@
       
       "teleport/great": {
         "1": "Far more powerful than $(l:patterns/spells/basic#hexcasting:blink)$(action)Blink/$, this spell lets me teleport nearly anywhere in the entire world! There does seem to be a limit, but it is $(italic)much/$ greater than the normal radius of influence I am used to.",
-        "2": "The entity will be teleported by the given vector, which is an offset from its given position. No matter the distance, it always seems to cost about ten $(l:items/amethyst)$(item)Charged Amethyst/$.$(br2)The transference is not perfect, and it seems when teleporting something as complex as a player, their inventory doesn't $(italic)quite/$ stay attached, and tends to splatter everywhere at the destination. In addition, the target will be forcibly removed from anything inanimate they are riding or sitting on ... but I've read scraps that suggest animals can come along for the ride, so to speak.",
+        "2": "The entity will be teleported by the given vector. Curiously, this vector seems to be an offset, not an absolute position in the world; for example, if I use $(l:patterns/consts#hexcasting:const/vec/x)$(action)Vector Reflection +X/$, the entity will end up precisely one block east of its original position. No matter the distance, it always seems to cost about ten $(l:items/amethyst)$(item)Charged Amethyst/$.$(br2)The transference is not perfect, and it seems when teleporting something as complex as a player, their inventory doesn't $(italic)quite/$ stay attached, and tends to splatter everywhere at the destination. In addition, the target will be forcibly removed from anything inanimate they are riding or sitting on ... but I've read scraps that suggest animals can come along for the ride, so to speak.",
       },
       
       zeniths: {
@@ -2029,7 +2029,7 @@
         "3": "Finally, if I find myself interested in the lore and stories of this world, I do not think any notes compiled while examining these interoperations should be considered as anything more than light trifles.",
         
         gravity: {
-          "1": "I have discovered actions to get and set an entity's gravity. I find them interesting, if slightly nauseating.$(br2)Interestingly, although $(l:patterns/great_spells/flight)$(action)Flight/$ is a great spell, and manipulates gravity similarly, these are not. It baffles me why... Perhaps the mod developer wanted players to have fun, for once.",
+          "1": "I have discovered actions to get and set an entity's gravity. I find them interesting, if slightly nauseating.$(br2)Interestingly, although the $(l:patterns/spells/flight)$(action)Flight/$ spells are limited in range or duration, and manipulate gravity similarly, these are not. It baffles me why... Perhaps the mod developer wanted players to have fun, for once.",
           get: "Get the main direction gravity pulls the given entity in, as a unit vector. For most entities, this will be down, <0, -1, 0>.",
           set: "Set the main direction gravity pulls the given entity in. The given vector will be coerced into the nearest axis, as per $(l:patterns/math#hexcasting:coerce_axial)$(action)Axial Purification/$. Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$.",
         },
