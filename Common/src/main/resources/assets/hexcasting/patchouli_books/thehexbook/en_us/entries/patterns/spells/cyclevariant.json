@@ -1,0 +1,18 @@
+{
+  "name": "hexcasting.action.hexcasting:cycle_variant",
+  "category": "hexcasting:patterns/spells",
+  "icon": "minecraft:smithing_table",
+  "sortnum": 6,
+  "advancement": "hexcasting:root",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:cycle_variant",
+      "anchor": "hexcasting:cycle_variant",
+      "input": "",
+      "output": "",
+      "text": "hexcasting.page.cycle_variant"
+    }
+  ]
+}
