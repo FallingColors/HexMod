@@ -9,6 +9,7 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import com.mojang.serialization.Codec;
 import com.samsthenerd.inline.api.InlineData;
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.Style;
@@ -43,8 +44,8 @@ public class InlinePatternData implements InlineData<InlinePatternData>{
         HexItems.SCROLL_MEDIUM.writeDatum(scrollStack, new PatternIota(pattern));
         scrollStack.setHoverName(getPatternName(pattern).copy().withStyle(ChatFormatting.WHITE));
         HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new HoverEvent.ItemStackInfo(scrollStack));
-        // TODO: add copy click event
-        return Style.EMPTY.withHoverEvent(he);
+        ClickEvent ce = new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, pattern.toString());
+        return Style.EMPTY.withHoverEvent(he).withClickEvent(ce);
     }
 
     public static Component getPatternName(HexPattern pattern){
