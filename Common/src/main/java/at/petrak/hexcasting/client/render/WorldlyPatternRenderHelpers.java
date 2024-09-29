@@ -14,6 +14,7 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix3f;
 
 import javax.annotation.Nullable;
 
@@ -48,9 +49,10 @@ public class WorldlyPatternRenderHelpers {
 
     public static void renderPatternForScroll(HexPattern pattern, EntityWallScroll scroll, PoseStack ps, MultiBufferSource bufSource, int light, int blockSize, boolean showStrokeOrder)
     {
-        // TODO: I think scroll normals are maybe slightly messed up or something?? idk, look into that maybe
         ps.pushPose();
         ps.translate(-blockSize / 2f, -blockSize / 2f, 1f / 32f);
+        // there's almost certainly a better way to do this, but we're just flipping the y and z axes to fix normals
+        ps.last().normal().mul(new Matrix3f(1, 0, 0, 0, 0, 1, 0, 1, 0));
         renderPattern(pattern, showStrokeOrder ? READABLE_SCROLL_SETTINGS : SCROLL_SETTINGS,
                 showStrokeOrder ? PatternColors.READABLE_SCROLL_COLORS : PatternColors.DEFAULT_PATTERN_COLOR,
                 scroll.getPos().hashCode(), ps, bufSource, null, null, light, blockSize);
