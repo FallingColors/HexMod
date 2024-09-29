@@ -3,9 +3,10 @@ package at.petrak.hexcasting.interop.inline;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
-import com.samsthenerd.inline.api.client.InlineMatch;
-import com.samsthenerd.inline.api.client.MatcherInfo;
-import com.samsthenerd.inline.api.client.matchers.RegexMatcher;
+import com.samsthenerd.inline.api.matching.InlineMatch;
+import com.samsthenerd.inline.api.matching.MatchContext;
+import com.samsthenerd.inline.api.matching.MatcherInfo;
+import com.samsthenerd.inline.api.matching.RegexMatcher;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
@@ -31,8 +32,9 @@ public class HexPatternMatcher implements RegexMatcher {
         return PATTERN_PATTERN_REGEX;
     }
 
+    @Override
     @NotNull
-    public Tuple<InlineMatch, Integer> getMatchAndGroup(MatchResult regexMatch) {
+    public Tuple<InlineMatch, Integer> getMatchAndGroup(MatchResult regexMatch, MatchContext ctx) {
         String escaped = regexMatch.group(1);
         String dirString = regexMatch.group(2).toLowerCase().strip().replace("_", "");
         String angleSigs = regexMatch.group(3);
@@ -54,8 +56,9 @@ public class HexPatternMatcher implements RegexMatcher {
     }
 
     // not really used since we're doing escaping
+    @Override
     @Nullable
-    public InlineMatch getMatch(MatchResult mr){
+    public InlineMatch getMatch(MatchResult mr, MatchContext ctx){
         return null; // nop
     }
 

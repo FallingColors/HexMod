@@ -5,7 +5,6 @@ import com.samsthenerd.inline.api.client.InlineRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.FastColor;
 
 public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> {
 
@@ -36,14 +35,8 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
     public int render(InlinePatternData data, GuiGraphics drawContext, int index, Style style, int codepoint, TextRenderingContext trContext){
         drawContext.pose().pushPose();
         drawContext.pose().translate(0f, -0.5f, 0f);
-        int trColor = FastColor.ARGB32.color((int)(255*trContext.alpha), (int)(255*trContext.red),
-                (int)(255*trContext.green), (int)(255*trContext.blue));
-        int color = style.getColor() == null ? trColor : style.getColor().getValue();
-        // some places (like tooltips) give an alpha of 0, but we don't want to kill the alpha value entirely.
-        if(FastColor.ARGB32.alpha(color) == 0){
-            color |= 0xFF_000000;
-        }
-        PatternRenderer.renderPattern(data.pattern, drawContext.pose(), new PatternRenderer.WorldlyBits(trContext.vertexConsumers, trContext.light, null),
+        int color = trContext.usableColor();
+        PatternRenderer.renderPattern(data.pattern, drawContext.pose(), new PatternRenderer.WorldlyBits(drawContext.bufferSource(), trContext.light(), null),
                 INLINE_SETTINGS, PatternColors.singleStroke(color), 0, INLINE_TEXTURE_RES);
 
         drawContext.pose().popPose();
