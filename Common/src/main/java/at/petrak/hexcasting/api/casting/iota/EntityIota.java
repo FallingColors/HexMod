@@ -2,6 +2,8 @@ package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.samsthenerd.inline.api.data.EntityInlineData;
+import com.samsthenerd.inline.api.data.PlayerHeadData;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -51,17 +53,19 @@ public class EntityIota extends Iota {
 
     private Component getEntityNameWithInline(boolean fearSerializer){
         MutableComponent baseName = this.getEntity().getName().copy();
-        // TODO: Inline is a bit broken, serialization doesn't seem to actually work so we have placeholder raw text for now
         Component inlineEnt = null;
         if(this.getEntity() instanceof Player player){
-//            inlineEnt = new PlayerHeadData(player.getGameProfile()).asText(!fearSerializer);
-            inlineEnt = Component.literal("[face:" + player.getGameProfile().getName() + "]");
+            inlineEnt = new PlayerHeadData(player.getGameProfile()).asText(!fearSerializer);
+//            inlineEnt = Component.literal("[face:" + player.getGameProfile().getName() + "]");
         } else{
-//            if(fearSerializer){ // we don't want to have to serialize an entity just to display it
-//                inlineEnt = EntityInlineData.fromType(this.getEntity().getType()).asText(!fearSerializer);
-//            } else {
-//                inlineEnt = EntityInlineData.fromEntity(this.getEntity()).asText(!fearSerializer);
-//            }
+            if(fearSerializer){ // we don't want to have to serialize an entity just to display it
+                inlineEnt = EntityInlineData.fromType(this.getEntity().getType()).asText(!fearSerializer);
+            } else {
+//                CompoundTag tag = new CompoundTag();
+//                this.getEntity().save(tag);
+//                inlineEnt = EntityInlineData.fromNbt(tag).asText(!fearSerializer);
+                inlineEnt = EntityInlineData.fromEntity(this.getEntity()).asText(!fearSerializer);
+            }
 //            inlineEnt = Component.literal("[entity:" + EntityType.getKey(this.getEntity().getType()).toString() + "]");
         }
         if(inlineEnt != null){
