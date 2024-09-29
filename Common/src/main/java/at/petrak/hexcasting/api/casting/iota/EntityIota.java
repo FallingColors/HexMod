@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.samsthenerd.inline.api.InlineAPI;
 import com.samsthenerd.inline.api.data.EntityInlineData;
 import com.samsthenerd.inline.api.data.PlayerHeadData;
 import net.minecraft.ChatFormatting;
@@ -56,22 +57,15 @@ public class EntityIota extends Iota {
         Component inlineEnt = null;
         if(this.getEntity() instanceof Player player){
             inlineEnt = new PlayerHeadData(player.getGameProfile()).asText(!fearSerializer);
-//            inlineEnt = Component.literal("[face:" + player.getGameProfile().getName() + "]");
+            inlineEnt = inlineEnt.plainCopy().withStyle(InlineAPI.INSTANCE.withSizeModifier(inlineEnt.getStyle(), 1.5));
         } else{
             if(fearSerializer){ // we don't want to have to serialize an entity just to display it
                 inlineEnt = EntityInlineData.fromType(this.getEntity().getType()).asText(!fearSerializer);
             } else {
-//                CompoundTag tag = new CompoundTag();
-//                this.getEntity().save(tag);
-//                inlineEnt = EntityInlineData.fromNbt(tag).asText(!fearSerializer);
                 inlineEnt = EntityInlineData.fromEntity(this.getEntity()).asText(!fearSerializer);
             }
-//            inlineEnt = Component.literal("[entity:" + EntityType.getKey(this.getEntity().getType()).toString() + "]");
         }
-        if(inlineEnt != null){
-            baseName.append(Component.literal(": ")).append(inlineEnt);
-        }
-        return baseName;
+        return baseName.append(Component.literal(": ")).append(inlineEnt);
     }
 
     public static IotaType<EntityIota> TYPE = new IotaType<>() {
