@@ -3,11 +3,13 @@ package at.petrak.hexcasting.interop.inline;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import com.samsthenerd.inline.api.InlineAPI;
 import com.samsthenerd.inline.api.matching.InlineMatch;
 import com.samsthenerd.inline.api.matching.MatchContext;
 import com.samsthenerd.inline.api.matching.MatcherInfo;
 import com.samsthenerd.inline.api.matching.RegexMatcher;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Tuple;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +26,7 @@ public class HexPatternMatcher implements RegexMatcher {
     private static final MatcherInfo patternMatcherInfo = MatcherInfo.fromId(patternMatcherID);
 
     // thx kyra <3
-    private static final Pattern PATTERN_PATTERN_REGEX = Pattern.compile("(?<escaped>\\\\?)(?:HexPattern)?[<(\\[{]\\s*(?<direction>[a-z_-]+)(?:\\s*[, ]\\s*(?<pattern>[aqweds]+))?\\s*[>)\\]}]", Pattern.CASE_INSENSITIVE);
+    private static final Pattern PATTERN_PATTERN_REGEX = Pattern.compile("(?<escaped>\\\\?)(?:HexPattern)?[<(\\[{]\\s*(?<direction>[a-z_-]+)(?:\\s*(?<sizemod>[,!+:; ])\\s*(?<pattern>[aqweds]+))?\\s*[>)\\]}]", Pattern.CASE_INSENSITIVE);
 
     public static HexPatternMatcher INSTANCE = new HexPatternMatcher();
 
@@ -37,7 +39,8 @@ public class HexPatternMatcher implements RegexMatcher {
     public Tuple<InlineMatch, Integer> getMatchAndGroup(MatchResult regexMatch, MatchContext ctx) {
         String escaped = regexMatch.group(1);
         String dirString = regexMatch.group(2).toLowerCase().strip().replace("_", "");
-        String angleSigs = regexMatch.group(3);
+        String sizeModString = regexMatch.group(3);
+        String angleSigs = regexMatch.group(4);
         if(escaped == null){
             return new Tuple<>(new InlineMatch.TextMatch(Component.literal("")), 1);
         }
@@ -49,7 +52,12 @@ public class HexPatternMatcher implements RegexMatcher {
         try{
             pat = HexPattern.fromAngles(angleSigs, dir);
             InlinePatternData patData = new InlinePatternData(pat);
-            return new Tuple<>(new InlineMatch.DataMatch(patData, patData.getExtraStyle()), 0);
+            Style patDataStyle = patData.getExtraStyle();
+            if(sizeModString.equals("+"))
+                patDataStyle = InlineAPI.INSTANCE.withSizeModifier(patDataStyle, 2);
+            if(sizeModString.equals("!")) 
+                patDataStyle = InlineAPI.INSTANCE.withSizeModifier(patDataStyle, 1.5);
+            return new Tuple<>(new InlineMatch.DataMatch(patData,patDataStyle ), 0);
         } catch (Exception e){
             return new Tuple<>(null, 0);
         }
