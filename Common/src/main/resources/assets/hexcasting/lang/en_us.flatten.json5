@@ -728,7 +728,7 @@
         erase: "Erase Item",
         create_water: "Create Water",
         destroy_water: "Destroy Liquid",
-        ignite: "Ignite Block",
+        ignite: "Ignite",
         extinguish: "Extinguish Area",
         conjure_block: "Conjure Block",
         conjure_light: "Conjure Light",
