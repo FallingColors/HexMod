@@ -26,7 +26,7 @@ public class HexPatternMatcher implements RegexMatcher {
     private static final MatcherInfo patternMatcherInfo = MatcherInfo.fromId(patternMatcherID);
 
     // thx kyra <3
-    private static final Pattern PATTERN_PATTERN_REGEX = Pattern.compile("(?<escaped>\\\\?)(?:HexPattern)?[<(\\[{]\\s*(?<direction>[a-z_-]+)(?:\\s*(?<sizemod>[,!+:; ])\\s*(?<pattern>[aqweds]+))?\\s*[>)\\]}]", Pattern.CASE_INSENSITIVE);
+    private static final Pattern PATTERN_PATTERN_REGEX = Pattern.compile("(?<escaped>\\\\?)(?:HexPattern)?[<(\\[{]\\s*(?<direction>[a-zA-Z_-]+)(?:\\s*(?<sizemod>[,!+:; ])\\s*(?<pattern>[aqwedsAQWEDS]+)?)\\s*[>)\\]}]", Pattern.CASE_INSENSITIVE);
 
     public static HexPatternMatcher INSTANCE = new HexPatternMatcher();
 
@@ -49,13 +49,16 @@ public class HexPatternMatcher implements RegexMatcher {
         if(dir == null)
             return new Tuple<>(null, 0);
         HexPattern pat;
+        if(angleSigs == null){
+            angleSigs = "";
+        }
         try{
-            pat = HexPattern.fromAngles(angleSigs, dir);
+            pat = HexPattern.fromAngles(angleSigs.toLowerCase(), dir);
             InlinePatternData patData = new InlinePatternData(pat);
             Style patDataStyle = patData.getExtraStyle();
-            if(sizeModString.equals("+"))
+            if(sizeModString != null && sizeModString.equals("+"))
                 patDataStyle = InlineAPI.INSTANCE.withSizeModifier(patDataStyle, 2);
-            if(sizeModString.equals("!")) 
+            if(sizeModString != null && sizeModString.equals("!"))
                 patDataStyle = InlineAPI.INSTANCE.withSizeModifier(patDataStyle, 1.5);
             return new Tuple<>(new InlineMatch.DataMatch(patData,patDataStyle ), 0);
         } catch (Exception e){
