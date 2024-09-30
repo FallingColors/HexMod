@@ -1,19 +1,18 @@
 package at.petrak.hexcasting.fabric.interop.emi;
 
-import at.petrak.hexcasting.api.casting.math.HexCoord;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.utils.HexUtils;
-import at.petrak.hexcasting.interop.utils.PatternDrawingUtil;
-import at.petrak.hexcasting.interop.utils.PatternEntry;
+import at.petrak.hexcasting.client.render.PatternColors;
+import at.petrak.hexcasting.client.render.PatternRenderer;
+import at.petrak.hexcasting.client.render.PatternSettings;
+import at.petrak.hexcasting.client.render.PatternSettings.PositionSettings;
+import at.petrak.hexcasting.client.render.PatternSettings.StrokeSettings;
+import at.petrak.hexcasting.client.render.PatternSettings.ZappySettings;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.datafixers.util.Pair;
 import dev.emi.emi.api.render.EmiRenderable;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.Vec2;
-
-import java.util.List;
 
 public class PatternRendererEMI implements EmiRenderable {
 
@@ -25,19 +24,21 @@ public class PatternRendererEMI implements EmiRenderable {
 
     private boolean strokeOrder;
 
-    private final List<PatternEntry> patterns;
-    private final List<Vec2> pathfinderDots;
+    private final HexPattern pat;
+    private PatternSettings patSets;
 
     public PatternRendererEMI(ResourceLocation pattern, int w, int h) {
         var regi = IXplatAbstractions.INSTANCE.getActionRegistry();
         var entry = regi.get(pattern);
         this.strokeOrder = HexUtils.isOfTag(regi, pattern, HexTags.Actions.PER_WORLD_PATTERN);
-        var data = PatternDrawingUtil.loadPatterns(List.of(new Pair<>(entry.prototype(), HexCoord.getOrigin())), 0f,
-            1f);
-        this.patterns = data.patterns();
-        this.pathfinderDots = data.pathfinderDots();
+        this.pat = entry.prototype();
         this.width = w;
         this.height = h;
+        this.patSets = new PatternSettings("pattern_drawable_" + w + "_" + h,
+                new PositionSettings(width, height, 0, 0,
+                        PatternSettings.AxisAlignment.CENTER_FIT, PatternSettings.AxisAlignment.CENTER_FIT, Math.max(width, height), 0, 0),
+                StrokeSettings.fromStroke(0.075 * Math.min(width, height)),
+                ZappySettings.READABLE);
     }
 
     public PatternRendererEMI shift(int x, int y) {
@@ -47,6 +48,13 @@ public class PatternRendererEMI implements EmiRenderable {
     }
 
     public PatternRendererEMI strokeOrder(boolean order) {
+        if(order != strokeOrder){
+            patSets = new PatternSettings("pattern_drawable_" + width + "_" + height + (order ? "" : "nostroke"),
+                    patSets.posSets,
+                    patSets.strokeSets,
+                    order ? ZappySettings.READABLE : ZappySettings.STATIC
+            );
+        }
         strokeOrder = order;
         return this;
     }
@@ -55,10 +63,11 @@ public class PatternRendererEMI implements EmiRenderable {
     public void render(GuiGraphics graphics, int x, int y, float delta) {
         var ps = graphics.pose();
         ps.pushPose();
-        ps.translate(xOffset + x - 0.5f + width / 2f, yOffset + y + 1 + height / 2f, 0);
-        ps.scale(width / 64f, height / 64f, 1f);
-        PatternDrawingUtil.drawPattern(graphics, 0, 0, this.patterns, this.pathfinderDots, this.strokeOrder,
-            0xff_333030, 0xff_191818, 0xc8_0c0a0c, 0x80_666363);
+        ps.translate(xOffset + x, yOffset + y + 1, 0);
+        PatternRenderer.renderPattern(pat, graphics.pose(), patSets,
+                new PatternColors(0xc8_0c0a0c, 0xff_333030).withDotColors(0x80_666363, 0),
+                0, 10
+        );
         ps.popPose();
     }
 }
