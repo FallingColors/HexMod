@@ -732,7 +732,7 @@
         erase: "Erase Item",
         create_water: "Create Water",
         destroy_water: "Destroy Liquid",
-        ignite: "Ignite Block",
+        ignite: "Ignite",
         extinguish: "Extinguish Area",
         conjure_block: "Conjure Block",
         conjure_light: "Conjure Light",
@@ -932,6 +932,8 @@
             villager: "a villager",
             living: "a living entity",
           },
+          
+          entity_or_vector: "an entity or a vector",
           
           unknown: "(unknown, uh-oh, this is a bug)",
         },
@@ -1846,7 +1848,7 @@
         conjure_light: "Conjure a magical light that softly glows with my pigment at the given position. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         bonemeal: "Encourage a plant or sapling at the target position to grow, as if $(item)Bonemeal/$ was applied. Costs a bit more than one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         edify: "Forcibly infuse _media into the sapling at the target position, causing it to grow into an $(l:items/edified)$(thing)Edified Tree/$. Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$.",
-        ignite: "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
+        ignite: "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied, or sets fire to a creature. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         extinguish: "Extinguish blocks in a large area. Costs about six $(l:items/amethyst)$(item)Amethyst Dust/$.",
       },
       
