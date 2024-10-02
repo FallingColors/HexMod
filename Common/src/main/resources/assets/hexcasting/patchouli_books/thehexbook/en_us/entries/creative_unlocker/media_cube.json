@@ -9,6 +9,14 @@
     {
       "type": "patchouli:text",
       "text": "hexcasting.page.creative_unlocker.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.creative_unlocker.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.creative_unlocker.3"
     }
   ]
 }
