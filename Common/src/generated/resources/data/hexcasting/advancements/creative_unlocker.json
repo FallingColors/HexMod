@@ -1,0 +1,39 @@
+{
+  "parent": "hexcasting:root",
+  "criteria": {
+    "has_creative_unlocker": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "hexcasting:creative_unlocker"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:textures/block/calcite.png",
+    "description": {
+      "translate": "advancement.hexcasting:creative_unlocker.desc"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "hexcasting:creative_unlocker"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.hexcasting:creative_unlocker"
+    }
+  },
+  "requirements": [
+    [
+      "has_creative_unlocker"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
