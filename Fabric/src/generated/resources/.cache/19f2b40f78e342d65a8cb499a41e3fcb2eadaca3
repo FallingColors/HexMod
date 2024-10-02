@@ -1,4 +1,4 @@
-// 1.20.1	2024-08-27T15:13:30.624872	Hex Casting/Loot Tables
+// 1.20.1	2024-10-01T20:27:20.395994	Hex Casting/Loot Tables
 6c35afda4ca349f3506fe08f86f0afe58a6f2c44 data/hexcasting/loot_tables/blocks/quenched_allay.json
 847bc3ead8a88a8f210a24e7732c28d50aa2f5dc data/hexcasting/loot_tables/blocks/edified_planks.json
 b706c8a064f717c57104c48ea42aa860b45cf7a4 data/hexcasting/loot_tables/blocks/amethyst_dust_block.json
@@ -12,8 +12,8 @@ d16fa9e366d48646686470c2d1f9bda4db3a1afa data/hexcasting/loot_tables/blocks/anci
 49940d1cb2599212e2837d7ed66c6c66e54f80f8 data/hexcasting/loot_tables/blocks/akashic_record.json
 1dd4268edf7d6fa247013ab45541c7bfb915eef8 data/hexcasting/loot_tables/blocks/amethyst_bricks_small.json
 cf6ff1ed1ee6fdbb05af16468a0a0ced79ac334e data/hexcasting/loot_tables/blocks/amethyst_bricks.json
-c426245d51f1e0fa0db7c4bfb454284d75506c9c data/hexcasting/loot_tables/blocks/quenched_allay_bricks.json
 b6c23fdde4f2c22c81f008604d5ff1c32ca8eb61 data/hexcasting/loot_tables/blocks/amethyst_tiles.json
+c426245d51f1e0fa0db7c4bfb454284d75506c9c data/hexcasting/loot_tables/blocks/quenched_allay_bricks.json
 7123b1a0469d7bd5bf8a2772182d222bf354df1a data/hexcasting/loot_tables/blocks/slate_bricks_small.json
 2ac70e3c3600c88b2544d9755fc634216a7a523c data/hexcasting/loot_tables/blocks/edified_wood.json
 5f8d09e8c759d05cf9c2265ae28ea942cfbbe2be data/hexcasting/loot_tables/blocks/edified_pressure_plate.json

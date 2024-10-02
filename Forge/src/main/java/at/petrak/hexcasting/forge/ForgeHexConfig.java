@@ -82,6 +82,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.BooleanValue invertSpellbookScrollDirection;
         private static ForgeConfigSpec.BooleanValue invertAbacusScrollDirection;
         private static ForgeConfigSpec.DoubleValue gridSnapThreshold;
+        private static ForgeConfigSpec.BooleanValue clickingTogglesDrawing;
 
         public Client(ForgeConfigSpec.Builder builder) {
             ctrlTogglesOffStrokeOrder = builder.comment(
@@ -98,6 +99,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                     "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 " +
                         "means 50% of the way.")
                 .defineInRange("gridSnapThreshold", DEFAULT_GRID_SNAP_THRESHOLD, 0.5, 1.0);
+            clickingTogglesDrawing = builder.comment(
+                            "Whether you click to start and stop drawing instead of clicking and dragging")
+                    .define("clickingTogglesDrawing", DEFAULT_CLICKING_TOGGLES_DRAWING);
         }
 
         @Override
@@ -118,6 +122,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public double gridSnapThreshold() {
             return gridSnapThreshold.get();
+        }
+
+        @Override
+        public boolean clickingTogglesDrawing() {
+            return clickingTogglesDrawing.get();
         }
     }
 
