@@ -1,0 +1,7 @@
+{
+  "name": "hexcasting.category.creative_unlocker",
+  "icon": "hexcasting:creative_unlocker",
+  "description": "hexcasting.category.creative_unlocker.desc",
+  "sortnum": 99,
+  "secret": true
+}

@@ -353,6 +353,10 @@
       "": "Hexcasting Research",
       desc: "Find and mine a concentrated form of media growing deep beneath the earth.",
     },
+    creative_unlocker:{
+      "": "UNLIMITED POWAH",
+      "desc": "Found the creative debug item."
+    },
     enlightenment: {
       "": "Achieve Enlightenment",
       desc: "Shatter a barrier by casting a hex using almost all of your health.",
@@ -1051,7 +1055,7 @@
         "": "Cross-Mod Compatibility",
         desc: "It appears I have installed some mods Hexcasting interoperates with! I've detailed them here.",
       },
-      
+
       patterns: {
         "": "Patterns",
         desc: "A list of all the patterns I've discovered, as well as what they do.",
@@ -1067,11 +1071,16 @@
           It's probably just the ramblings of extinct traditionalists, though -- a pattern's a pattern.$(br2)\
           What could possibly go wrong?",
       },
+      creative_unlocker: {
+        "": "The Media Cube",
+        desc: "I have found a source of near limitless power, The Media Cube.",
+      }
     },
     // ^ categories
     
     entry: {
       media: "Media",
+      media_cube: "The Media Cube",
       geodes: "Geodes",
       couldnt_cast: "A Frustration",
       start_to_see: "WHAT DID I SEE",
@@ -1169,6 +1178,13 @@
     // ^ entries
     
     page: {
+      creative_unlocker: {
+        "1": "The $(#74b3f2)Media Cube/$ is a near-limitless source of power, acting as an infinite source of _media for whatever _Hexes I wish to cast. It also looks quite tasty. Eating it might perhaps reveal more about the world, possibly delving into spoiler territory...",
+        "2": "Additionally, it seems that by renaming a $(#74b3f2)Media Cube/$ at an Anvil, I should be able to utilize it to test and understand more about my _Hexes. If I have somehow acquired Creative power over the world, I might wish to turn that off before attempting any of the following.",
+        "3": "By renaming the $(#74b3f2)Media Cube/$ to 'debug media', I will be given feedback in the chat window about the amount of media consumed.",
+        // NOTE: The following feature documented is broken in the current implementation. It should be uncommented and the page in patchouli should be updated when the feature is fixed.
+        //"4": "By renaming the $(#74b3f2)Media Cube/$ to 'debug patterns', I will be given feedback in the chat window about the order patterns are ran."
+      },
       media: {
         "1": "_Media is a form of mental energy external to a mind. All living creatures generate trace amounts of _media when thinking about anything; after the thought is finished, the media is released into the environment.$(br2)The art of casting _Hexes is all about manipulating _media to do your bidding.",
         "2": "_Media can exert influences on other media-- the strength and type of influence can be manipulated by drawing _media out into patterns.$(p)Scholars of the art used a concentrated blob of _media on the end of a stick: by waving it in the air in precise configurations, they were able to manipulate enough _media with enough precision to influence the world itself, in the form of a _Hex.",
