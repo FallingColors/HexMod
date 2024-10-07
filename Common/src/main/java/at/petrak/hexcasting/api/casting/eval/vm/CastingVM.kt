@@ -69,9 +69,6 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             if (image2.newData != null) {
                 this.image = image2.newData!!
             }
-
-            continuation = image2.continuation
-            lastResolutionType = image2.resolutionType
             try {
                 val maybeMishap = performSideEffects(info, image2.sideEffects)
                 if (maybeMishap.isPresent) {
@@ -93,6 +90,9 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 }
             }
             this.env.postExecution(image2)
+
+            continuation = image2.continuation
+            lastResolutionType = image2.resolutionType
             info.earlyExit = info.earlyExit || !lastResolutionType.success
         }
 
