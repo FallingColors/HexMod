@@ -17,6 +17,7 @@ import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
+import java.util.Optional
 
 /**
  * The virtual machine! This is the glue that determines the next iteration of a [CastingImage], using a
@@ -50,7 +51,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             // ...and execute it.
             // TODO there used to be error checking code here; I'm pretty sure any and all mishaps should already
             // get caught and folded into CastResult by evaluate.
-            val image2 = next.evaluate(continuation.next, world, this).let { result ->
+            var image2 = next.evaluate(continuation.next, world, this).let { result ->
                 // if stack is unable to be serialized, have the result be an error
                 if (result.newData != null && IotaType.isTooLargeToSerialize(result.newData.stack)) {
                     result.copy(
@@ -66,18 +67,32 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
 
             // Then write all pertinent data back to the harness for the next iteration.
             if (image2.newData != null) {
-                this.image = image2.newData
+                this.image = image2.newData!!
             }
-            this.env.postExecution(image2)
 
             continuation = image2.continuation
             lastResolutionType = image2.resolutionType
             try {
-                performSideEffects(info, image2.sideEffects)
+                val maybeMishap = performSideEffects(info, image2.sideEffects)
+                if (maybeMishap.isPresent) {
+                    image2 = image2.copy(
+                        sideEffects = listOf(maybeMishap.get()),
+                        resolutionType = maybeMishap.get().mishap.resolutionType(this.env),
+                        sound = HexEvalSounds.MISHAP
+                    )
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
-                performSideEffects(info, listOf(OperatorSideEffect.DoMishap(MishapInternalException(e), Mishap.Context(null, null))))
+                val maybeMishap = performSideEffects(info, listOf(OperatorSideEffect.DoMishap(MishapInternalException(e), Mishap.Context(null, null))))
+                if (maybeMishap.isPresent) {
+                    image2 = image2.copy(
+                        sideEffects = listOf(maybeMishap.get()),
+                        resolutionType = maybeMishap.get().mishap.resolutionType(this.env),
+                        sound = HexEvalSounds.MISHAP
+                    )
+                }
             }
+            this.env.postExecution(image2)
             info.earlyExit = info.earlyExit || !lastResolutionType.success
         }
 
@@ -152,14 +167,16 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
     /**
      * Execute the side effects of a pattern, updating our aggregated info.
      */
-    fun performSideEffects(info: TempControllerInfo, sideEffects: List<OperatorSideEffect>) {
+    fun performSideEffects(info: TempControllerInfo, sideEffects: List<OperatorSideEffect>): Optional<OperatorSideEffect.DoMishap> {
         for (haskellProgrammersShakingandCryingRN in sideEffects) {
             val mustStop = haskellProgrammersShakingandCryingRN.performEffect(this)
-            if (mustStop) {
+            if (mustStop.isPresent) {
+                mustStop.get().performMishap(this)
                 info.earlyExit = true
-                break
+                return mustStop
             }
         }
+        return Optional.empty()
     }
 
     fun generateDescs(): Pair<List<CompoundTag>, CompoundTag?> {
