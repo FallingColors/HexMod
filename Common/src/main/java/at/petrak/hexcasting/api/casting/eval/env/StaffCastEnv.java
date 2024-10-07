@@ -13,7 +13,6 @@ import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.msgs.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -74,11 +73,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
             return 0;
 
         var canOvercast = this.canOvercast();
-        var remaining = this.extractMediaFromInventory(cost, canOvercast);
-        if (remaining > 0 && !canOvercast) {
-            this.caster.sendSystemMessage(Component.translatable("hexcasting.message.cant_overcast"));
-        }
-        return remaining;
+        return this.extractMediaFromInventory(cost, canOvercast);
     }
 
     @Override
