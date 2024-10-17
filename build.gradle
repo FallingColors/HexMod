@@ -17,6 +17,8 @@ plugins {
     // Also it looks like property lookups don't work this early
     id 'fabric-loom' version '1.6-SNAPSHOT' apply false
 
+    id "com.diffplug.spotless" version "6.25.0" apply false
+
     id("at.petra-k.PKPlugin") version "0.1.0-pre-87"
     id("at.petra-k.PKSubprojPlugin") version "0.1.0-pre-87" apply false
 }
@@ -47,6 +49,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'kotlin'
     apply plugin: 'maven-publish'
+    apply plugin: "com.diffplug.spotless"
 
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = 'UTF-8'
@@ -71,6 +74,17 @@ subprojects {
     }
     sourcesJar {
         duplicatesStrategy 'exclude'
+    }
+
+    spotless {
+        enforceCheck = false
+        java {
+            removeUnusedImports()
+            googleJavaFormat()
+            formatAnnotations()
+            indentWithTabs(2)
+            importOrder('\\#', 'java|javax', 'net.minecraft|com.mojang', 'net.fabricmc|net.minecraftforge', 'at.petrak', '')
+        }
     }
 }
 
