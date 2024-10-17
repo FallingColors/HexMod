@@ -83,7 +83,10 @@ subprojects {
             googleJavaFormat()
             formatAnnotations()
             indentWithTabs(2)
-            importOrder('\\#', 'java|javax', 'net.minecraft|com.mojang', 'net.fabricmc|net.minecraftforge', 'at.petrak', '')
+        }
+        kotlin {
+            ktfmt().googleStyle()
+            indentWithTabs(2)
         }
     }
 }
