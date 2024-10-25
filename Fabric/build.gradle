@@ -84,6 +84,8 @@ dependencies {
     modImplementation "at.petra-k.paucal:paucal-fabric-$minecraftVersion:$paucalVersion"
     modImplementation "vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FABRIC-SNAPSHOT"
 
+    modImplementation "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
+
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:$cardinalComponentsVersion"
 //    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-util:$cardinalComponentsVersion"
     modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:$cardinalComponentsVersion"

@@ -48,3 +48,10 @@ mandatory = true
 versionRange = "[3.1.0+1.20,)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.hexcasting]]
+modId = "inline"
+mandatory = true
+versionRange = "[1.20.1-1.0.1,)"
+ordering = "NONE"
+side = "BOTH"
