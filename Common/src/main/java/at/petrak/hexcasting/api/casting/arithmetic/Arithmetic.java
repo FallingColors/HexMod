@@ -5,8 +5,8 @@ import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 
 /**
- * This is the interface to implement if you want to override the behaviour of an Operator pattern like ADD, SUB, etc. for some type/s of
- * iotas for which that Operator pattern is not yet defined.
+ * This is the interface to implement if you want to override the behaviour of an Operator pattern
+ * like ADD, SUB, etc. for some type/s of iotas for which that Operator pattern is not yet defined.
  */
 public interface Arithmetic {
 	String arithName();
@@ -41,7 +41,6 @@ public interface Arithmetic {
 	HexPattern ARCTAN2 = HexPattern.fromAngles("deadeeeeewd", HexDir.WEST);
 	HexPattern LOG = HexPattern.fromAngles("eqaqe", HexDir.NORTH_WEST);
 	HexPattern MOD = HexPattern.fromAngles("addwaad", HexDir.NORTH_EAST);
-
 
 	// Vecs
 	HexPattern PACK = HexPattern.fromAngles("eqqqqq", HexDir.EAST);

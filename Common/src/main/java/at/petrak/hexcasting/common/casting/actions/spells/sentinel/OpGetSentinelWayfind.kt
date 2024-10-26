@@ -14,16 +14,19 @@ import net.minecraft.server.level.ServerPlayer
 // TODO I don't think anyone has ever used this operation in the history of the world.
 // TODO standardize "a negligible amount" of media to be 1/8 a dust
 object OpGetSentinelWayfind : ConstMediaAction {
-    override val argc = 1
-    override val mediaCost: Long = MediaConstants.DUST_UNIT / 10
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
-        val from = args.getVec3(0, argc)
+	override val argc = 1
+	override val mediaCost: Long = MediaConstants.DUST_UNIT / 10
 
-        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(env.castingEntity as? ServerPlayer) ?: return listOf(NullIota())
+	override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+		val from = args.getVec3(0, argc)
 
-        if (sentinel.dimension != env.world.dimension())
-            throw MishapLocationInWrongDimension(sentinel.dimension.location())
+		val sentinel =
+			IXplatAbstractions.INSTANCE.getSentinel(env.castingEntity as? ServerPlayer)
+				?: return listOf(NullIota())
 
-        return sentinel.position.subtract(from).normalize().asActionResult
-    }
+		if (sentinel.dimension != env.world.dimension())
+			throw MishapLocationInWrongDimension(sentinel.dimension.location())
+
+		return sentinel.position.subtract(from).normalize().asActionResult
+	}
 }

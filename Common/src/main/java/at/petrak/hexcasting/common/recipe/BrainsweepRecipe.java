@@ -23,12 +23,12 @@ import org.jetbrains.annotations.NotNull;
 
 // God I am a horrible person
 public record BrainsweepRecipe(
-	ResourceLocation id,
-	StateIngredient blockIn,
-	BrainsweepeeIngredient entityIn,
-	long mediaCost,
-	BlockState result
-) implements Recipe<Container> {
+		ResourceLocation id,
+		StateIngredient blockIn,
+		BrainsweepeeIngredient entityIn,
+		long mediaCost,
+		BlockState result)
+		implements Recipe<Container> {
 	public boolean matches(BlockState blockIn, Entity victim, ServerLevel level) {
 		return this.blockIn.test(blockIn) && this.entityIn.test(victim, level);
 	}
@@ -87,7 +87,8 @@ public record BrainsweepRecipe(
 		@Override
 		public @NotNull BrainsweepRecipe fromJson(ResourceLocation recipeID, JsonObject json) {
 			var blockIn = StateIngredientHelper.deserialize(GsonHelper.getAsJsonObject(json, "blockIn"));
-			var villagerIn = BrainsweepeeIngredient.deserialize(GsonHelper.getAsJsonObject(json, "entityIn"));
+			var villagerIn =
+					BrainsweepeeIngredient.deserialize(GsonHelper.getAsJsonObject(json, "entityIn"));
 			var cost = GsonHelper.getAsInt(json, "cost");
 			var result = StateIngredientHelper.readBlockState(GsonHelper.getAsJsonObject(json, "result"));
 			return new BrainsweepRecipe(recipeID, blockIn, villagerIn, cost, result);

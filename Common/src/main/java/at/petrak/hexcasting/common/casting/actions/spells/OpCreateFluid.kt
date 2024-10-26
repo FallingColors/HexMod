@@ -18,47 +18,50 @@ import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.phys.Vec3
 
-class OpCreateFluid(val cost: Long, val bucket: Item, val cauldron: BlockState, val fluid: Fluid) : SpellAction {
-    override val argc = 1
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
-        val vecPos = args.getVec3(0, argc)
-        val pos = BlockPos.containing(vecPos)
+class OpCreateFluid(val cost: Long, val bucket: Item, val cauldron: BlockState, val fluid: Fluid) :
+	SpellAction {
+	override val argc = 1
 
-        if (!env.canEditBlockAt(pos) || !IXplatAbstractions.INSTANCE.isPlacingAllowed(
-                env.world,
-                pos,
-                ItemStack(bucket),
-                env.castingEntity as? ServerPlayer
-            )
-        )
-            throw MishapBadLocation(vecPos, "forbidden")
+	override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+		val vecPos = args.getVec3(0, argc)
+		val pos = BlockPos.containing(vecPos)
 
-        return SpellAction.Result(
-            Spell(pos, bucket, cauldron, fluid),
-            cost,
-            listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(pos)), 1.0))
-        )
-    }
+		if (
+			!env.canEditBlockAt(pos) ||
+				!IXplatAbstractions.INSTANCE.isPlacingAllowed(
+					env.world,
+					pos,
+					ItemStack(bucket),
+					env.castingEntity as? ServerPlayer
+				)
+		)
+			throw MishapBadLocation(vecPos, "forbidden")
 
-    private data class Spell(val pos: BlockPos, val bucket: Item, val cauldron: BlockState, val fluid: Fluid) : RenderedSpell {
-        override fun cast(env: CastingEnvironment) {
+		return SpellAction.Result(
+			Spell(pos, bucket, cauldron, fluid),
+			cost,
+			listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(pos)), 1.0))
+		)
+	}
 
-            val state = env.world.getBlockState(pos)
+	private data class Spell(
+		val pos: BlockPos,
+		val bucket: Item,
+		val cauldron: BlockState,
+		val fluid: Fluid
+	) : RenderedSpell {
+		override fun cast(env: CastingEnvironment) {
 
-            if (state.block == Blocks.CAULDRON)
-                env.world.setBlock(pos, cauldron, 3)
-            else if (!IXplatAbstractions.INSTANCE.tryPlaceFluid(
-                    env.world,
-                    env.castingHand,
-                    pos,
-                    fluid
-                ) && bucket is BucketItem) {
-                // make the player null so we don't give them a usage statistic for example
-                bucket.emptyContents(null, env.world, pos, null)
-            }
-        }
-    }
+			val state = env.world.getBlockState(pos)
+
+			if (state.block == Blocks.CAULDRON) env.world.setBlock(pos, cauldron, 3)
+			else if (
+				!IXplatAbstractions.INSTANCE.tryPlaceFluid(env.world, env.castingHand, pos, fluid) &&
+					bucket is BucketItem
+			) {
+				// make the player null so we don't give them a usage statistic for example
+				bucket.emptyContents(null, env.world, pos, null)
+			}
+		}
+	}
 }

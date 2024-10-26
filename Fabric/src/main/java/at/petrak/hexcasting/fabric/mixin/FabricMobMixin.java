@@ -10,12 +10,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Mob.class)
 public class FabricMobMixin {
-    @Inject(method = "convertTo", at = @At("RETURN"))
-    public <T extends Mob> void onThunderHit(EntityType<T> entityType, boolean bl, CallbackInfoReturnable<T> cir) {
-        var self = (Mob) (Object) this;
-        var mob = cir.getReturnValue();
-        if (mob != null) {
-            VillagerConversionCallback.EVENT.invoker().interact(self, mob);
-        }
-    }
+	@Inject(method = "convertTo", at = @At("RETURN"))
+	public <T extends Mob> void onThunderHit(
+			EntityType<T> entityType, boolean bl, CallbackInfoReturnable<T> cir) {
+		var self = (Mob) (Object) this;
+		var mob = cir.getReturnValue();
+		if (mob != null) {
+			VillagerConversionCallback.EVENT.invoker().interact(self, mob);
+		}
+	}
 }

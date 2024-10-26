@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.api.casting.arithmetic.engine;
 
-
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 

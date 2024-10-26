@@ -9,22 +9,25 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockHexFence extends FenceBlock {
 
-    public BlockHexFence(Properties $$0) {
-        super($$0);
-    }
+	public BlockHexFence(Properties $$0) {
+		super($$0);
+	}
 
-    @SoftImplement("forge")
-    public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return true;
-    }
+	@SoftImplement("forge")
+	public boolean isFlammable(
+			BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+		return true;
+	}
 
-    @SoftImplement("forge")
-    public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return 20;
-    }
+	@SoftImplement("forge")
+	public int getFlammability(
+			BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+		return 20;
+	}
 
-    @SoftImplement("forge")
-    public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return 5;
-    }
+	@SoftImplement("forge")
+	public int getFireSpreadSpeed(
+			BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+		return 5;
+	}
 }

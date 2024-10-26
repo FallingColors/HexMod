@@ -10,5 +10,5 @@ import net.minecraft.world.item.ItemStack;
  * I feel like botnia probably does it this way becase it's older than xplat curios
  */
 public interface HexBaubleItem {
-    Multimap<Attribute, AttributeModifier> getHexBaubleAttrs(ItemStack stack);
+	Multimap<Attribute, AttributeModifier> getHexBaubleAttrs(ItemStack stack);
 }

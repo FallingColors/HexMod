@@ -8,11 +8,11 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import kotlin.math.sin
 
 object OpSin : ConstMediaAction {
-    override val argc: Int
-        get() = 1
+	override val argc: Int
+		get() = 1
 
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
-        val angle = args.getDouble(0, argc)
-        return sin(angle).asActionResult
-    }
+	override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+		val angle = args.getDouble(0, argc)
+		return sin(angle).asActionResult
+	}
 }

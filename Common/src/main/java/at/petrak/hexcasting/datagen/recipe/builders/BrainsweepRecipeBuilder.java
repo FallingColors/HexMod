@@ -5,6 +5,7 @@ import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
 import com.google.gson.JsonObject;
+import java.util.function.Consumer;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.CriterionTriggerInstance;
@@ -18,8 +19,6 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Consumer;
-
 public class BrainsweepRecipeBuilder implements RecipeBuilder {
 	private final StateIngredient blockIn;
 	private final BrainsweepeeIngredient entityIn;
@@ -28,8 +27,8 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
 
 	private final Advancement.Builder advancement;
 
-	public BrainsweepRecipeBuilder(StateIngredient blockIn, BrainsweepeeIngredient entityIn, BlockState result,
-		long mediaCost) {
+	public BrainsweepRecipeBuilder(
+			StateIngredient blockIn, BrainsweepeeIngredient entityIn, BlockState result, long mediaCost) {
 		this.blockIn = blockIn;
 		this.entityIn = entityIn;
 		this.result = result;
@@ -38,7 +37,8 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
 	}
 
 	@Override
-	public RecipeBuilder unlockedBy(String pCriterionName, CriterionTriggerInstance pCriterionTrigger) {
+	public RecipeBuilder unlockedBy(
+			String pCriterionName, CriterionTriggerInstance pCriterionTrigger) {
 		this.advancement.addCriterion(pCriterionName, pCriterionTrigger);
 		return this;
 	}
@@ -59,20 +59,32 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
 			throw new IllegalStateException("No way of obtaining recipe " + pRecipeId);
 		}
 
-		this.advancement.parent(new ResourceLocation("recipes/root"))
-			.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pRecipeId))
-			.rewards(AdvancementRewards.Builder.recipe(pRecipeId))
-			.requirements(RequirementsStrategy.OR);
-		pFinishedRecipeConsumer.accept(new Result(
-			pRecipeId,
-			this.blockIn, this.entityIn, this.mediaCost, this.result,
-			this.advancement,
-			new ResourceLocation(pRecipeId.getNamespace(), "recipes/brainsweep/" + pRecipeId.getPath())));
+		this.advancement
+				.parent(new ResourceLocation("recipes/root"))
+				.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pRecipeId))
+				.rewards(AdvancementRewards.Builder.recipe(pRecipeId))
+				.requirements(RequirementsStrategy.OR);
+		pFinishedRecipeConsumer.accept(
+				new Result(
+						pRecipeId,
+						this.blockIn,
+						this.entityIn,
+						this.mediaCost,
+						this.result,
+						this.advancement,
+						new ResourceLocation(
+								pRecipeId.getNamespace(), "recipes/brainsweep/" + pRecipeId.getPath())));
 	}
 
-	public record Result(ResourceLocation id, StateIngredient blockIn, BrainsweepeeIngredient villagerIn,
-						 long mediaCost, BlockState result, Advancement.Builder advancement,
-						 ResourceLocation advancementId) implements FinishedRecipe {
+	public record Result(
+			ResourceLocation id,
+			StateIngredient blockIn,
+			BrainsweepeeIngredient villagerIn,
+			long mediaCost,
+			BlockState result,
+			Advancement.Builder advancement,
+			ResourceLocation advancementId)
+			implements FinishedRecipe {
 		@Override
 		public void serializeRecipeData(JsonObject json) {
 			json.add("blockIn", this.blockIn.serialize());
@@ -91,14 +103,12 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
 			return HexRecipeStuffRegistry.BRAINSWEEP;
 		}
 
-		@Nullable
-		@Override
+		@Nullable @Override
 		public JsonObject serializeAdvancement() {
 			return this.advancement.serializeToJson();
 		}
 
-		@Nullable
-		@Override
+		@Nullable @Override
 		public ResourceLocation getAdvancementId() {
 			return this.advancementId;
 		}

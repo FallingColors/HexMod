@@ -7,15 +7,14 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment
 import net.minecraft.world.item.DyeColor
 
 class MishapDisallowedSpell(val type: String = "disallowed") : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
-        dyeColor(DyeColor.BLACK)
+	override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+		dyeColor(DyeColor.BLACK)
 
-    override fun resolutionType(ctx: CastingEnvironment) = ResolvedPatternType.INVALID
+	override fun resolutionType(ctx: CastingEnvironment) = ResolvedPatternType.INVALID
 
-    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        // NO-OP
-    }
+	override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+		// NO-OP
+	}
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error(type)
+	override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = error(type)
 }

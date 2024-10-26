@@ -8,21 +8,28 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 
-public class BlockEntityAkashicBookshelfRenderer implements BlockEntityRenderer<BlockEntityAkashicBookshelf> {
-    public BlockEntityAkashicBookshelfRenderer(BlockEntityRendererProvider.Context ctx) {
-        // NO-OP
-    }
+public class BlockEntityAkashicBookshelfRenderer
+		implements BlockEntityRenderer<BlockEntityAkashicBookshelf> {
+	public BlockEntityAkashicBookshelfRenderer(BlockEntityRendererProvider.Context ctx) {
+		// NO-OP
+	}
 
-    @Override
-    public void render(BlockEntityAkashicBookshelf tile, float pPartialTick, PoseStack ps,
-        MultiBufferSource buffer, int light, int overlay) {
-        HexPattern pattern = tile.getPattern();
-        if (pattern == null) {
-            return;
-        }
+	@Override
+	public void render(
+			BlockEntityAkashicBookshelf tile,
+			float pPartialTick,
+			PoseStack ps,
+			MultiBufferSource buffer,
+			int light,
+			int overlay) {
+		HexPattern pattern = tile.getPattern();
+		if (pattern == null) {
+			return;
+		}
 
-        var bs = tile.getBlockState();
+		var bs = tile.getBlockState();
 
-        WorldlyPatternRenderHelpers.renderPatternForAkashicBookshelf(tile, pattern, ps, buffer, light, bs);
-    }
+		WorldlyPatternRenderHelpers.renderPatternForAkashicBookshelf(
+				tile, pattern, ps, buffer, light, bs);
+	}
 }

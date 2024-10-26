@@ -8,23 +8,22 @@ import net.minecraft.world.entity.player.Player;
 
 public class CCClientCastingStack implements Component, ClientTickingComponent {
 
-    public CCClientCastingStack(Player owner) {
-    }
+	public CCClientCastingStack(Player owner) {}
 
-    private final ClientCastingStack clientCastingStack = new ClientCastingStack();
+	private final ClientCastingStack clientCastingStack = new ClientCastingStack();
 
-    public ClientCastingStack getClientCastingStack() {
-        return clientCastingStack;
-    }
+	public ClientCastingStack getClientCastingStack() {
+		return clientCastingStack;
+	}
 
-    @Override
-    public void clientTick() {
-        clientCastingStack.tick();
-    }
+	@Override
+	public void clientTick() {
+		clientCastingStack.tick();
+	}
 
-    @Override
-    public void readFromNbt(CompoundTag tag) { }
+	@Override
+	public void readFromNbt(CompoundTag tag) {}
 
-    @Override
-    public void writeToNbt(CompoundTag tag) { }
+	@Override
+	public void writeToNbt(CompoundTag tag) {}
 }

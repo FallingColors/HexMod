@@ -31,71 +31,73 @@ import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 public class FabricClientXplatImpl implements IClientXplatAbstractions {
-    @Override
-    public void sendPacketToServer(IMessage packet) {
-        ClientPlayNetworking.send(packet.getFabricId(), packet.toBuf());
-    }
+	@Override
+	public void sendPacketToServer(IMessage packet) {
+		ClientPlayNetworking.send(packet.getFabricId(), packet.toBuf());
+	}
 
-    @Override
-    public void setRenderLayer(Block block, RenderType type) {
-        BlockRenderLayerMap.INSTANCE.putBlock(block, type);
-    }
+	@Override
+	public void setRenderLayer(Block block, RenderType type) {
+		BlockRenderLayerMap.INSTANCE.putBlock(block, type);
+	}
 
-    @Override
-    public void initPlatformSpecific() {
-        if (IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Fabric.TRINKETS_API_ID)) {
-            TrinketsApiInterop.clientInit();
-        }
-    }
+	@Override
+	public void initPlatformSpecific() {
+		if (IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Fabric.TRINKETS_API_ID)) {
+			TrinketsApiInterop.clientInit();
+		}
+	}
 
-    @Override
-    public <T extends Entity> void registerEntityRenderer(EntityType<? extends T> type,
-        EntityRendererProvider<T> renderer) {
-        EntityRendererRegistry.register(type, renderer);
-    }
+	@Override
+	public <T extends Entity> void registerEntityRenderer(
+			EntityType<? extends T> type, EntityRendererProvider<T> renderer) {
+		EntityRendererRegistry.register(type, renderer);
+	}
 
-    // suck it fabric trying to be "safe"
-    private record UnclampedClampedItemPropFunc(ItemPropertyFunction inner) implements ClampedItemPropertyFunction {
-        @Override
-        public float unclampedCall(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity,
-            int seed) {
-            return inner.call(stack, level, entity, seed);
-        }
+	// suck it fabric trying to be "safe"
+	private record UnclampedClampedItemPropFunc(ItemPropertyFunction inner)
+			implements ClampedItemPropertyFunction {
+		@Override
+		public float unclampedCall(
+				ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity, int seed) {
+			return inner.call(stack, level, entity, seed);
+		}
 
-        @Override
-        public float call(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity, int seed) {
-            return this.unclampedCall(stack, level, entity, seed);
-        }
-    }
+		@Override
+		public float call(
+				ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity, int seed) {
+			return this.unclampedCall(stack, level, entity, seed);
+		}
+	}
 
-    @Override
-    public void registerItemProperty(Item item, ResourceLocation id, ItemPropertyFunction func) {
-        ItemProperties.register(item, id, new UnclampedClampedItemPropFunc(func));
-    }
+	@Override
+	public void registerItemProperty(Item item, ResourceLocation id, ItemPropertyFunction func) {
+		ItemProperties.register(item, id, new UnclampedClampedItemPropFunc(func));
+	}
 
-    @Override
-    public ClientCastingStack getClientCastingStack(Player player) {
-        return HexCardinalComponents.CLIENT_CASTING_STACK.get(player).getClientCastingStack();
-    }
+	@Override
+	public ClientCastingStack getClientCastingStack(Player player) {
+		return HexCardinalComponents.CLIENT_CASTING_STACK.get(player).getClientCastingStack();
+	}
 
-    @Override
-    public void setFilterSave(AbstractTexture texture, boolean filter, boolean mipmap) {
-        ((ExtendedTexture) texture).setFilterSave(filter, mipmap);
-    }
+	@Override
+	public void setFilterSave(AbstractTexture texture, boolean filter, boolean mipmap) {
+		((ExtendedTexture) texture).setFilterSave(filter, mipmap);
+	}
 
-    @Override
-    public void restoreLastFilter(AbstractTexture texture) {
-        ((ExtendedTexture) texture).restoreLastFilter();
-    }
+	@Override
+	public void restoreLastFilter(AbstractTexture texture) {
+		((ExtendedTexture) texture).restoreLastFilter();
+	}
 
-    // Set by FabricLevelRendererMixin
-    public static Frustum LEVEL_RENDERER_FRUSTUM = null;
+	// Set by FabricLevelRendererMixin
+	public static Frustum LEVEL_RENDERER_FRUSTUM = null;
 
-    @Override
-    public boolean fabricAdditionalQuenchFrustumCheck(AABB aabb) {
-        if (LEVEL_RENDERER_FRUSTUM == null) {
-            return true; // fail safe
-        }
-        return LEVEL_RENDERER_FRUSTUM.isVisible(aabb);
-    }
+	@Override
+	public boolean fabricAdditionalQuenchFrustumCheck(AABB aabb) {
+		if (LEVEL_RENDERER_FRUSTUM == null) {
+			return true; // fail safe
+		}
+		return LEVEL_RENDERER_FRUSTUM.isVisible(aabb);
+	}
 }

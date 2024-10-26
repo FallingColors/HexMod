@@ -9,14 +9,14 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 
 public class HexCommands {
-    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        var mainCmd = Commands.literal("hexcasting");
+	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
+		var mainCmd = Commands.literal("hexcasting");
 
-        BrainsweepCommand.add(mainCmd);
-        ListPerWorldPatternsCommand.add(mainCmd);
-        RecalcPatternsCommand.add(mainCmd);
-        PatternTexturesCommand.add(mainCmd);
+		BrainsweepCommand.add(mainCmd);
+		ListPerWorldPatternsCommand.add(mainCmd);
+		RecalcPatternsCommand.add(mainCmd);
+		PatternTexturesCommand.add(mainCmd);
 
-        dispatcher.register(mainCmd);
-    }
+		dispatcher.register(mainCmd);
+	}
 }

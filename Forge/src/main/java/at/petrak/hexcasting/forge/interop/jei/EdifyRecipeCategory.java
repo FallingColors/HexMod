@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.forge.interop.jei;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 import at.petrak.hexcasting.common.casting.actions.spells.OpEdifySapling;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -19,60 +21,63 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
-
 public class EdifyRecipeCategory implements IRecipeCategory<OpEdifySapling> {
-    public static final ResourceLocation UID = modLoc("edify_tree");
+	public static final ResourceLocation UID = modLoc("edify_tree");
 
-    private final IDrawableStatic background;
-    private final IDrawable icon;
-    private final Component localizedName;
+	private final IDrawableStatic background;
+	private final IDrawable icon;
+	private final Component localizedName;
 
-    public EdifyRecipeCategory(IGuiHelper guiHelper) {
-        ResourceLocation location = modLoc("textures/gui/edify_jei.png");
-        background = guiHelper.drawableBuilder(location, 0, 0, 79, 61).setTextureSize(128, 128).build();
-        var edify = modLoc("edify");
-        localizedName = Component.translatable("hexcasting.action." + edify);
-        icon = new PatternDrawable(edify, 16, 16).strokeOrder(false);
-    }
+	public EdifyRecipeCategory(IGuiHelper guiHelper) {
+		ResourceLocation location = modLoc("textures/gui/edify_jei.png");
+		background = guiHelper.drawableBuilder(location, 0, 0, 79, 61).setTextureSize(128, 128).build();
+		var edify = modLoc("edify");
+		localizedName = Component.translatable("hexcasting.action." + edify);
+		icon = new PatternDrawable(edify, 16, 16).strokeOrder(false);
+	}
 
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public @NotNull Component getTitle() {
-        return localizedName;
-    }
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public @NotNull Component getTitle() {
+		return localizedName;
+	}
 
-    @Override
-    public @NotNull IDrawable getBackground() {
-        return background;
-    }
+	@Override
+	public @NotNull IDrawable getBackground() {
+		return background;
+	}
 
-    @Override
-    public @NotNull IDrawable getIcon() {
-        return icon;
-    }
+	@Override
+	public @NotNull IDrawable getIcon() {
+		return icon;
+	}
 
-    @Override
-    public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull OpEdifySapling recipe,
-        @NotNull IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 12, 22)
-            .addIngredients(Ingredient.of(ItemTags.SAPLINGS));
+	@Override
+	public void setRecipe(
+			@NotNull IRecipeLayoutBuilder builder,
+			@NotNull OpEdifySapling recipe,
+			@NotNull IFocusGroup focuses) {
+		builder
+				.addSlot(RecipeIngredientRole.INPUT, 12, 22)
+				.addIngredients(Ingredient.of(ItemTags.SAPLINGS));
 
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 51, 10)
-            .addItemStack(new ItemStack(HexBlocks.AMETHYST_EDIFIED_LEAVES))
-            .addItemStack(new ItemStack(HexBlocks.AVENTURINE_EDIFIED_LEAVES))
-            .addItemStack(new ItemStack(HexBlocks.CITRINE_EDIFIED_LEAVES));
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 51, 35)
-            .addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG))
-            .addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG_AMETHYST))
-            .addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG_AVENTURINE))
-            .addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG_CITRINE));
-//            .addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG_PURPLE));
+		builder
+				.addSlot(RecipeIngredientRole.OUTPUT, 51, 10)
+				.addItemStack(new ItemStack(HexBlocks.AMETHYST_EDIFIED_LEAVES))
+				.addItemStack(new ItemStack(HexBlocks.AVENTURINE_EDIFIED_LEAVES))
+				.addItemStack(new ItemStack(HexBlocks.CITRINE_EDIFIED_LEAVES));
+		builder
+				.addSlot(RecipeIngredientRole.OUTPUT, 51, 35)
+				.addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG))
+				.addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG_AMETHYST))
+				.addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG_AVENTURINE))
+				.addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG_CITRINE));
+		//            .addItemStack(new ItemStack(HexBlocks.EDIFIED_LOG_PURPLE));
 
-    }
+	}
 
-    @Override
-    public @NotNull RecipeType<OpEdifySapling> getRecipeType() {
-        return HexJEIPlugin.EDIFY;
-    }
+	@Override
+	public @NotNull RecipeType<OpEdifySapling> getRecipeType() {
+		return HexJEIPlugin.EDIFY;
+	}
 }

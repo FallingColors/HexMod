@@ -23,110 +23,116 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 
 object OpExtinguish : SpellAction {
-    override val argc = 1
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
-        // TODO: sho
-        val vecPos = args.getVec3(0, argc)
-        val pos = BlockPos.containing(vecPos)
-        env.assertPosInRangeForEditing(pos)
+	override val argc = 1
 
-        return SpellAction.Result(
-            Spell(pos),
-            MediaConstants.DUST_UNIT * 6,
-            listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0))
-        )
-    }
+	override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+		// TODO: sho
+		val vecPos = args.getVec3(0, argc)
+		val pos = BlockPos.containing(vecPos)
+		env.assertPosInRangeForEditing(pos)
 
-    const val MAX_DESTROY_COUNT = 1024
+		return SpellAction.Result(
+			Spell(pos),
+			MediaConstants.DUST_UNIT * 6,
+			listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0))
+		)
+	}
 
-    private data class Spell(val target: BlockPos) : RenderedSpell {
-        override fun cast(env: CastingEnvironment) {
-            // how many levels of "borrowed" code are we on now
-            val todo = ArrayDeque<BlockPos>()
-            val seen = HashSet<BlockPos>()
-            todo.add(target)
+	const val MAX_DESTROY_COUNT = 1024
 
-            var successes = 0
-            while (todo.isNotEmpty() && successes <= MAX_DESTROY_COUNT) {
-                val here = todo.removeFirst()
-                val distFromTarget =
-                    target.distSqr(here) // max distance to prevent runaway shenanigans
-                if (env.canEditBlockAt(here) && distFromTarget < 10 * 10 && seen.add(here)) {
-                    // never seen this pos in my life
-                    val blockstate = env.world.getBlockState(here)
-                    if (IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, here, blockstate, env.castingEntity as? ServerPlayer)) {
-                        val success =
-                            when (blockstate.block) {
-                                is BaseFireBlock -> {
-                                    env.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3); true
-                                }
+	private data class Spell(val target: BlockPos) : RenderedSpell {
+		override fun cast(env: CastingEnvironment) {
+			// how many levels of "borrowed" code are we on now
+			val todo = ArrayDeque<BlockPos>()
+			val seen = HashSet<BlockPos>()
+			todo.add(target)
 
-                                is CampfireBlock -> {
-                                    if (blockstate.getValue(CampfireBlock.LIT)) { // check if campfire is lit before putting it out
-                                        val wilson =
-                                            Items.WOODEN_SHOVEL // summon shovel from the ether to do our bidding
-                                        val hereVec = Vec3.atCenterOf(here)
-                                        wilson.useOn(
-                                            UseOnContext(
-                                                env.world,
-                                                null,
-                                                InteractionHand.MAIN_HAND,
-                                                ItemStack(wilson),
-                                                BlockHitResult(hereVec, Direction.UP, here, false)
-                                            )
-                                        ); true
-                                    } else false
-                                }
+			var successes = 0
+			while (todo.isNotEmpty() && successes <= MAX_DESTROY_COUNT) {
+				val here = todo.removeFirst()
+				val distFromTarget = target.distSqr(here) // max distance to prevent runaway shenanigans
+				if (env.canEditBlockAt(here) && distFromTarget < 10 * 10 && seen.add(here)) {
+					// never seen this pos in my life
+					val blockstate = env.world.getBlockState(here)
+					if (
+						IXplatAbstractions.INSTANCE.isBreakingAllowed(
+							env.world,
+							here,
+							blockstate,
+							env.castingEntity as? ServerPlayer
+						)
+					) {
+						val success =
+							when (blockstate.block) {
+								is BaseFireBlock -> {
+									env.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3)
+									true
+								}
+								is CampfireBlock -> {
+									if (
+										blockstate.getValue(CampfireBlock.LIT)
+									) { // check if campfire is lit before putting it out
+										val wilson =
+											Items.WOODEN_SHOVEL // summon shovel from the ether to do our bidding
+										val hereVec = Vec3.atCenterOf(here)
+										wilson.useOn(
+											UseOnContext(
+												env.world,
+												null,
+												InteractionHand.MAIN_HAND,
+												ItemStack(wilson),
+												BlockHitResult(hereVec, Direction.UP, here, false)
+											)
+										)
+										true
+									} else false
+								}
+								is AbstractCandleBlock -> {
+									if (blockstate.getValue(AbstractCandleBlock.LIT)) { // same check for candles
+										AbstractCandleBlock.extinguish(null, blockstate, env.world, here)
+										true
+									} else false
+								}
+								is NetherPortalBlock -> {
+									env.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3)
+									true
+								}
+								else -> false
+							}
 
-                                is AbstractCandleBlock -> {
-                                    if (blockstate.getValue(AbstractCandleBlock.LIT)) { // same check for candles
-                                        AbstractCandleBlock.extinguish(null, blockstate, env.world, here); true
-                                    } else false
-                                }
+						if (success) {
+							env.world.sendParticles(
+								ParticleTypes.SMOKE,
+								here.x + 0.5 + Math.random() * 0.4 - 0.2,
+								here.y + 0.5 + Math.random() * 0.4 - 0.2,
+								here.z + 0.5 + Math.random() * 0.4 - 0.2,
+								2,
+								0.0,
+								0.05,
+								0.0,
+								0.0
+							)
+							successes++
+						}
+						for (dir in Direction.values()) {
+							todo.add(here.relative(dir))
+						}
+					}
+				}
+			}
 
-                                is NetherPortalBlock -> {
-                                    env.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3); true
-                                }
-
-                                else -> false
-                            }
-
-                        if (success) {
-                            env.world.sendParticles(
-                                ParticleTypes.SMOKE,
-                                here.x + 0.5 + Math.random() * 0.4 - 0.2,
-                                here.y + 0.5 + Math.random() * 0.4 - 0.2,
-                                here.z + 0.5 + Math.random() * 0.4 - 0.2,
-                                2,
-                                0.0,
-                                0.05,
-                                0.0,
-                                0.0
-                            )
-                            successes++
-                        }
-                        for (dir in Direction.values()) {
-                            todo.add(here.relative(dir))
-                        }
-                    }
-                }
-            }
-
-            if (successes > 0) {
-                env.world.playSound(
-                    null,
-                    target.x.toDouble(),
-                    target.y.toDouble(),
-                    target.z.toDouble(),
-                    SoundEvents.FIRE_EXTINGUISH,
-                    SoundSource.BLOCKS,
-                    1.0f,
-                    0.95f
-                )
-            }
-        }
-    }
+			if (successes > 0) {
+				env.world.playSound(
+					null,
+					target.x.toDouble(),
+					target.y.toDouble(),
+					target.z.toDouble(),
+					SoundEvents.FIRE_EXTINGUISH,
+					SoundSource.BLOCKS,
+					1.0f,
+					0.95f
+				)
+			}
+		}
+	}
 }

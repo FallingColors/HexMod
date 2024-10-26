@@ -12,12 +12,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EnchantmentTableBlock.class)
 public class FabricEnchantmentTableBlockMixin {
-    @Inject(method = "isValidBookShelf", at = @At("HEAD"), cancellable = true)
-    private static void treatAsBookshelf(Level level, BlockPos blockPos, BlockPos blockPos2, CallbackInfoReturnable<Boolean> cir) {
-        BlockState state = level.getBlockState(blockPos.offset(blockPos2));
-        if (state.getBlock() instanceof IForgeLikeBlock forgeLike) {
-            boolean emptyBetween = level.isEmptyBlock(blockPos.offset(blockPos2.getX() / 2, blockPos2.getY(), blockPos2.getZ() / 2));
-            cir.setReturnValue(emptyBetween && forgeLike.hasEnchantPowerBonus(state, level, blockPos));
-        }
-    }
+	@Inject(method = "isValidBookShelf", at = @At("HEAD"), cancellable = true)
+	private static void treatAsBookshelf(
+			Level level, BlockPos blockPos, BlockPos blockPos2, CallbackInfoReturnable<Boolean> cir) {
+		BlockState state = level.getBlockState(blockPos.offset(blockPos2));
+		if (state.getBlock() instanceof IForgeLikeBlock forgeLike) {
+			boolean emptyBetween =
+					level.isEmptyBlock(
+							blockPos.offset(blockPos2.getX() / 2, blockPos2.getY(), blockPos2.getZ() / 2));
+			cir.setReturnValue(emptyBetween && forgeLike.hasEnchantPowerBonus(state, level, blockPos));
+		}
+	}
 }

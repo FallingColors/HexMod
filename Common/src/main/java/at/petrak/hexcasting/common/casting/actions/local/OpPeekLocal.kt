@@ -11,18 +11,23 @@ import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 object OpPeekLocal : Action {
-    override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stack = image.stack.toMutableList()
+	override fun operate(
+		env: CastingEnvironment,
+		image: CastingImage,
+		continuation: SpellContinuation
+	): OperationResult {
+		val stack = image.stack.toMutableList()
 
-        val rm = if (image.userData.contains(HexAPI.RAVENMIND_USERDATA)) {
-            IotaType.deserialize(image.userData.getCompound(HexAPI.RAVENMIND_USERDATA), env.world)
-        } else {
-            NullIota()
-        }
-        stack.add(rm)
+		val rm =
+			if (image.userData.contains(HexAPI.RAVENMIND_USERDATA)) {
+				IotaType.deserialize(image.userData.getCompound(HexAPI.RAVENMIND_USERDATA), env.world)
+			} else {
+				NullIota()
+			}
+		stack.add(rm)
 
-        // does not mutate userdata
-        val image2 = image.withUsedOp().copy(stack = stack)
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
-    }
+		// does not mutate userdata
+		val image2 = image.withUsedOp().copy(stack = stack)
+		return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
+	}
 }

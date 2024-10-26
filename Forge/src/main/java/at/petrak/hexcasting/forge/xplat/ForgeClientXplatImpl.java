@@ -20,53 +20,52 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
 
 public class ForgeClientXplatImpl implements IClientXplatAbstractions {
-    @Override
-    public void sendPacketToServer(IMessage packet) {
-        ForgePacketHandler.getNetwork().sendToServer(packet);
-    }
+	@Override
+	public void sendPacketToServer(IMessage packet) {
+		ForgePacketHandler.getNetwork().sendToServer(packet);
+	}
 
-    @Override
-    public void setRenderLayer(Block block, RenderType type) {
-        // For forge, handled in block models
-//        ItemBlockRenderTypes.setRenderLayer(block, type);
-    }
+	@Override
+	public void setRenderLayer(Block block, RenderType type) {
+		// For forge, handled in block models
+		//        ItemBlockRenderTypes.setRenderLayer(block, type);
+	}
 
-    @Override
-    public void initPlatformSpecific() {
-        // NO-OP
-    }
+	@Override
+	public void initPlatformSpecific() {
+		// NO-OP
+	}
 
-    @Override
-    public <T extends Entity> void registerEntityRenderer(EntityType<? extends T> type,
-        EntityRendererProvider<T> renderer) {
-        EntityRenderers.register(type, renderer);
-    }
+	@Override
+	public <T extends Entity> void registerEntityRenderer(
+			EntityType<? extends T> type, EntityRendererProvider<T> renderer) {
+		EntityRenderers.register(type, renderer);
+	}
 
-    @Override
-    public void registerItemProperty(Item item, ResourceLocation id, ItemPropertyFunction func) {
-        ItemProperties.register(item, id, func);
-    }
+	@Override
+	public void registerItemProperty(Item item, ResourceLocation id, ItemPropertyFunction func) {
+		ItemProperties.register(item, id, func);
+	}
 
-    @Override
-    public ClientCastingStack getClientCastingStack(Player player) {
-        var maybeCap = player.getCapability(HexCapabilities.CLIENT_CASTING_STACK).resolve();
-        if (maybeCap.isEmpty())
-            return new ClientCastingStack(); // lie
-        return maybeCap.get().get();
-    }
+	@Override
+	public ClientCastingStack getClientCastingStack(Player player) {
+		var maybeCap = player.getCapability(HexCapabilities.CLIENT_CASTING_STACK).resolve();
+		if (maybeCap.isEmpty()) return new ClientCastingStack(); // lie
+		return maybeCap.get().get();
+	}
 
-    @Override
-    public void setFilterSave(AbstractTexture texture, boolean filter, boolean mipmap) {
-        texture.setBlurMipmap(filter, mipmap);
-    }
+	@Override
+	public void setFilterSave(AbstractTexture texture, boolean filter, boolean mipmap) {
+		texture.setBlurMipmap(filter, mipmap);
+	}
 
-    @Override
-    public void restoreLastFilter(AbstractTexture texture) {
-        texture.restoreLastBlurMipmap();
-    }
+	@Override
+	public void restoreLastFilter(AbstractTexture texture) {
+		texture.restoreLastBlurMipmap();
+	}
 
-    @Override
-    public boolean fabricAdditionalQuenchFrustumCheck(AABB aabb) {
-        return true; // forge fixes this with a patch so we just say "yep"
-    }
+	@Override
+	public boolean fabricAdditionalQuenchFrustumCheck(AABB aabb) {
+		return true; // forge fixes this with a patch so we just say "yep"
+	}
 }

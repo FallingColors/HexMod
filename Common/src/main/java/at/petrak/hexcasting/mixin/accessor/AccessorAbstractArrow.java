@@ -6,6 +6,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(AbstractArrow.class)
 public interface AccessorAbstractArrow {
-    @Accessor("inGround")
-    boolean hex$isInGround();
+	@Accessor("inGround")
+	boolean hex$isInGround();
 }

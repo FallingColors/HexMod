@@ -11,61 +11,61 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class DoubleIota extends Iota {
-    public static final double TOLERANCE = 0.0001;
+	public static final double TOLERANCE = 0.0001;
 
-    public DoubleIota(double d) {
-        super(HexIotaTypes.DOUBLE, d);
-    }
+	public DoubleIota(double d) {
+		super(HexIotaTypes.DOUBLE, d);
+	}
 
-    public double getDouble() {
-        return HexUtils.fixNAN((Double) this.payload);
-    }
+	public double getDouble() {
+		return HexUtils.fixNAN((Double) this.payload);
+	}
 
-    @Override
-    public boolean isTruthy() {
-        return this.getDouble() != 0.0;
-    }
+	@Override
+	public boolean isTruthy() {
+		return this.getDouble() != 0.0;
+	}
 
-    @Override
-    public boolean toleratesOther(Iota that) {
-        return typesMatch(this, that)
-            && that instanceof DoubleIota dd
-            && tolerates(this.getDouble(), dd.getDouble());
-    }
+	@Override
+	public boolean toleratesOther(Iota that) {
+		return typesMatch(this, that)
+				&& that instanceof DoubleIota dd
+				&& tolerates(this.getDouble(), dd.getDouble());
+	}
 
-    public static boolean tolerates(double a, double b) {
-        return Math.abs(a - b) < TOLERANCE;
-    }
+	public static boolean tolerates(double a, double b) {
+		return Math.abs(a - b) < TOLERANCE;
+	}
 
-    @Override
-    public @NotNull Tag serialize() {
-        return DoubleTag.valueOf(this.getDouble());
-    }
+	@Override
+	public @NotNull Tag serialize() {
+		return DoubleTag.valueOf(this.getDouble());
+	}
 
-    public static IotaType<DoubleIota> TYPE = new IotaType<>() {
-        @Nullable
-        @Override
-        public DoubleIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            return DoubleIota.deserialize(tag);
-        }
+	public static IotaType<DoubleIota> TYPE =
+			new IotaType<>() {
+				@Nullable @Override
+				public DoubleIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
+					return DoubleIota.deserialize(tag);
+				}
 
-        @Override
-        public Component display(Tag tag) {
-            return DoubleIota.display(DoubleIota.deserialize(tag).getDouble());
-        }
+				@Override
+				public Component display(Tag tag) {
+					return DoubleIota.display(DoubleIota.deserialize(tag).getDouble());
+				}
 
-        @Override
-        public int color() {
-            return 0xff_55ff55;
-        }
-    };
+				@Override
+				public int color() {
+					return 0xff_55ff55;
+				}
+			};
 
-    public static DoubleIota deserialize(Tag tag) throws IllegalArgumentException {
-        var dtag = HexUtils.downcast(tag, DoubleTag.TYPE);
-        return new DoubleIota(dtag.getAsDouble());
-    }
+	public static DoubleIota deserialize(Tag tag) throws IllegalArgumentException {
+		var dtag = HexUtils.downcast(tag, DoubleTag.TYPE);
+		return new DoubleIota(dtag.getAsDouble());
+	}
 
-    public static Component display(double d) {
-        return Component.literal(String.format("%.2f", d)).withStyle(ChatFormatting.GREEN);
-    }
+	public static Component display(double d) {
+		return Component.literal(String.format("%.2f", d)).withStyle(ChatFormatting.GREEN);
+	}
 }

@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(PotionBrewing.class)
 public interface AccessorPotionBrewing {
-    @Invoker("addMix")
-    static void addMix(Potion p_43514_, Item p_43515_, Potion p_43516_) {
-    }
+	@Invoker("addMix")
+	static void addMix(Potion p_43514_, Item p_43515_, Potion p_43516_) {}
 }

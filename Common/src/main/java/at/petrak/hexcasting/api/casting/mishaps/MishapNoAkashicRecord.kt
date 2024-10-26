@@ -7,13 +7,13 @@ import net.minecraft.core.BlockPos
 import net.minecraft.world.item.DyeColor
 
 class MishapNoAkashicRecord(val pos: BlockPos) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
-        dyeColor(DyeColor.PURPLE)
+	override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+		dyeColor(DyeColor.PURPLE)
 
-    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        env.mishapEnvironment.removeXp(100)
-    }
+	override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+		env.mishapEnvironment.removeXp(100)
+	}
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("no_akashic_record", pos.toShortString())
+	override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
+		error("no_akashic_record", pos.toShortString())
 }

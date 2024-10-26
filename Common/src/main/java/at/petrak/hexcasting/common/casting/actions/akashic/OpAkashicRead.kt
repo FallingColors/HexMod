@@ -11,19 +11,19 @@ import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord
 
 object OpAkashicRead : ConstMediaAction {
-    override val argc = 2
-    override val mediaCost: Long = MediaConstants.DUST_UNIT
+	override val argc = 2
+	override val mediaCost: Long = MediaConstants.DUST_UNIT
 
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
-        val pos = args.getBlockPos(0, argc)
-        val key = args.getPattern(1, argc)
+	override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+		val pos = args.getBlockPos(0, argc)
+		val key = args.getPattern(1, argc)
 
-        val record = env.world.getBlockState(pos).block
-        if (record !is BlockAkashicRecord) {
-            throw MishapNoAkashicRecord(pos)
-        }
+		val record = env.world.getBlockState(pos).block
+		if (record !is BlockAkashicRecord) {
+			throw MishapNoAkashicRecord(pos)
+		}
 
-        val datum = record.lookupPattern(pos, key, env.world)
-        return listOf(datum ?: NullIota())
-    }
+		val datum = record.lookupPattern(pos, key, env.world)
+		return listOf(datum ?: NullIota())
+	}
 }

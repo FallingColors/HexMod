@@ -2,23 +2,21 @@ package at.petrak.hexcasting.api.addldata;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import java.util.List;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 public interface ADHexHolder {
 
-    boolean canDrawMediaFromInventory();
+	boolean canDrawMediaFromInventory();
 
-    boolean hasHex();
+	boolean hasHex();
 
-    @Nullable
-    List<Iota> getHex(ServerLevel level);
+	@Nullable List<Iota> getHex(ServerLevel level);
 
-    void writeHex(List<Iota> patterns, @Nullable FrozenPigment pigment, long media);
+	void writeHex(List<Iota> patterns, @Nullable FrozenPigment pigment, long media);
 
-    void clearHex();
+	void clearHex();
 
-    @Nullable FrozenPigment getPigment();
+	@Nullable FrozenPigment getPigment();
 }
