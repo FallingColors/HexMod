@@ -1,7 +1,10 @@
 package at.petrak.hexcasting.client;
 
-import at.petrak.hexcasting.client.render.GaslightingTracker;
+import at.petrak.hexcasting.api.client.GaslightingTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
+
+import java.util.Map;
 
 public class ClientTickCounter {
     public static long ticksInGame = 0L;
@@ -19,7 +22,9 @@ public class ClientTickCounter {
         if (!Minecraft.getInstance().isPaused()) {
             ++ticksInGame;
             partialTicks = 0.0F;
-            GaslightingTracker.postFrameCheckRendered();
+            for (Map.Entry<ResourceLocation, GaslightingTracker> entry : GaslightingTracker.GASLIGHTING_TRACKERS.entrySet()) {
+                entry.getValue().postFrameCheckRendered();
+            }
         }
     }
 }
