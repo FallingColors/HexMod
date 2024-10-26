@@ -6,6 +6,6 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(Entity.class)
 public interface AccessorEntity {
-    @Invoker("markHurt")
-    void hex$markHurt();
+	@Invoker("markHurt")
+	void hex$markHurt();
 }

@@ -11,30 +11,23 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerPlayer
 
 object OpDestroySentinel : SpellAction {
-    override val argc = 0
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
-        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(env.castingEntity as? ServerPlayer)
+	override val argc = 0
 
-        // TODO why can't you remove things from other dimensions?
-        val dim = sentinel?.dimension
-        if (dim != null && dim != env.world.dimension())
-            throw MishapLocationInWrongDimension(dim.location())
+	override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+		val sentinel = IXplatAbstractions.INSTANCE.getSentinel(env.castingEntity as? ServerPlayer)
 
-        val particles = sentinel?.position?.let { listOf(ParticleSpray.cloud(it, 2.0)) }
-            ?: listOf()
-        return SpellAction.Result(
-            Spell,
-            MediaConstants.DUST_UNIT / 10,
-            particles
-        )
-    }
+		// TODO why can't you remove things from other dimensions?
+		val dim = sentinel?.dimension
+		if (dim != null && dim != env.world.dimension())
+			throw MishapLocationInWrongDimension(dim.location())
 
-    private object Spell : RenderedSpell {
-        override fun cast(env: CastingEnvironment) {
-            IXplatAbstractions.INSTANCE.setSentinel(env.castingEntity as? ServerPlayer, null)
-        }
-    }
+		val particles = sentinel?.position?.let { listOf(ParticleSpray.cloud(it, 2.0)) } ?: listOf()
+		return SpellAction.Result(Spell, MediaConstants.DUST_UNIT / 10, particles)
+	}
+
+	private object Spell : RenderedSpell {
+		override fun cast(env: CastingEnvironment) {
+			IXplatAbstractions.INSTANCE.setSentinel(env.castingEntity as? ServerPlayer, null)
+		}
+	}
 }

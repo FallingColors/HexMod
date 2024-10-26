@@ -7,31 +7,28 @@ import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.Nullable;
 
 public interface ADIotaHolder {
-    @Nullable
-    CompoundTag readIotaTag();
+	@Nullable CompoundTag readIotaTag();
 
-    @Nullable
-    default Iota readIota(ServerLevel world) {
-        var tag = readIotaTag();
-        if (tag != null) {
-            return IotaType.deserialize(tag, world);
-        } else {
-            return null;
-        }
-    }
+	@Nullable default Iota readIota(ServerLevel world) {
+		var tag = readIotaTag();
+		if (tag != null) {
+			return IotaType.deserialize(tag, world);
+		} else {
+			return null;
+		}
+	}
 
-    @Nullable
-    default Iota emptyIota() {
-        return null;
-    }
+	@Nullable default Iota emptyIota() {
+		return null;
+	}
 
-    /**
-     * @return if the writing succeeded/would succeed
-     */
-    boolean writeIota(@Nullable Iota iota, boolean simulate);
+	/**
+	 * @return if the writing succeeded/would succeed
+	 */
+	boolean writeIota(@Nullable Iota iota, boolean simulate);
 
-    /**
-     * @return whether it is possible to write to this IotaHolder
-     */
-    boolean writeable();
+	/**
+	 * @return whether it is possible to write to this IotaHolder
+	 */
+	boolean writeable();
 }

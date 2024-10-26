@@ -1,6 +1,11 @@
 package at.petrak.hexcasting.common.items;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 import at.petrak.hexcasting.common.lib.HexSounds;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.network.chat.Component;
@@ -15,69 +20,74 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
-
 public class ItemLoreFragment extends Item {
-    public static final List<ResourceLocation> NAMES = List.of(new ResourceLocation[]{
-        modLoc("lore/cardamom1"),
-        modLoc("lore/cardamom2"),
-        modLoc("lore/cardamom3"),
-        modLoc("lore/cardamom4"),
-        modLoc("lore/cardamom5"),
-        modLoc("lore/experiment1"),
-        modLoc("lore/experiment2"),
-        modLoc("lore/inventory"),
-    });
+	public static final List<ResourceLocation> NAMES =
+			List.of(
+					new ResourceLocation[] {
+						modLoc("lore/cardamom1"),
+						modLoc("lore/cardamom2"),
+						modLoc("lore/cardamom3"),
+						modLoc("lore/cardamom4"),
+						modLoc("lore/cardamom5"),
+						modLoc("lore/experiment1"),
+						modLoc("lore/experiment2"),
+						modLoc("lore/inventory"),
+					});
 
-    public static final String CRITEREON_KEY = "grant";
+	public static final String CRITEREON_KEY = "grant";
 
-    public ItemLoreFragment(Properties properties) {
-        super(properties);
-    }
+	public ItemLoreFragment(Properties properties) {
+		super(properties);
+	}
 
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
-        player.playSound(HexSounds.READ_LORE_FRAGMENT, 1f, 1f);
+	@Override
+	public InteractionResultHolder<ItemStack> use(
+			Level level, Player player, InteractionHand usedHand) {
+		player.playSound(HexSounds.READ_LORE_FRAGMENT, 1f, 1f);
 
-        var handStack = player.getItemInHand(usedHand);
-        if (!(player instanceof ServerPlayer splayer)) {
-            handStack.shrink(1);
-            return InteractionResultHolder.success(handStack);
-        }
+		var handStack = player.getItemInHand(usedHand);
+		if (!(player instanceof ServerPlayer splayer)) {
+			handStack.shrink(1);
+			return InteractionResultHolder.success(handStack);
+		}
 
-        Advancement unfoundLore = null;
-        var shuffled = new ArrayList<>(NAMES);
-        Collections.shuffle(shuffled);
-        for (var advID : shuffled) {
-            var adv = splayer.server.getAdvancements().getAdvancement(advID);
-            if (adv == null) {
-                continue; // uh oh
-            }
+		Advancement unfoundLore = null;
+		var shuffled = new ArrayList<>(NAMES);
+		Collections.shuffle(shuffled);
+		for (var advID : shuffled) {
+			var adv = splayer.server.getAdvancements().getAdvancement(advID);
+			if (adv == null) {
+				continue; // uh oh
+			}
 
-            if (!splayer.getAdvancements().getOrStartProgress(adv).isDone()) {
-                unfoundLore = adv;
-                break;
-            }
-        }
+			if (!splayer.getAdvancements().getOrStartProgress(adv).isDone()) {
+				unfoundLore = adv;
+				break;
+			}
+		}
 
-        if (unfoundLore == null) {
-            splayer.displayClientMessage(Component.translatable("item.hexcasting.lore_fragment.all"), true);
-            splayer.giveExperiencePoints(20);
-            level.playSound(null, player.position().x, player.position().y, player.position().z,
-                HexSounds.READ_LORE_FRAGMENT, SoundSource.PLAYERS, 1f, 1f);
-        } else {
-            // et voila!
-            splayer.getAdvancements().award(unfoundLore, CRITEREON_KEY);
-        }
+		if (unfoundLore == null) {
+			splayer.displayClientMessage(
+					Component.translatable("item.hexcasting.lore_fragment.all"), true);
+			splayer.giveExperiencePoints(20);
+			level.playSound(
+					null,
+					player.position().x,
+					player.position().y,
+					player.position().z,
+					HexSounds.READ_LORE_FRAGMENT,
+					SoundSource.PLAYERS,
+					1f,
+					1f);
+		} else {
+			// et voila!
+			splayer.getAdvancements().award(unfoundLore, CRITEREON_KEY);
+		}
 
-        CriteriaTriggers.CONSUME_ITEM.trigger(splayer, handStack);
-        splayer.awardStat(Stats.ITEM_USED.get(this));
-        handStack.shrink(1);
+		CriteriaTriggers.CONSUME_ITEM.trigger(splayer, handStack);
+		splayer.awardStat(Stats.ITEM_USED.get(this));
+		handStack.shrink(1);
 
-        return InteractionResultHolder.success(handStack);
-    }
+		return InteractionResultHolder.success(handStack);
+	}
 }

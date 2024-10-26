@@ -13,28 +13,32 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 // TODO should this dump the whole stack
 object OpPrint : Action {
-    override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stack = image.stack.toMutableList()
+	override fun operate(
+		env: CastingEnvironment,
+		image: CastingImage,
+		continuation: SpellContinuation
+	): OperationResult {
+		val stack = image.stack.toMutableList()
 
-        if (stack.isEmpty()) {
-            throw MishapNotEnoughArgs(1, 0)
-        }
-        val datum = stack[stack.lastIndex]
+		if (stack.isEmpty()) {
+			throw MishapNotEnoughArgs(1, 0)
+		}
+		val datum = stack[stack.lastIndex]
 
-        val image2 = image.withUsedOp().copy(stack = stack)
-        return OperationResult(
-            image2,
-            listOf(
-                OperatorSideEffect.AttemptSpell(Spell(datum), hasCastingSound = false, awardStat = false)
-            ),
-            continuation,
-            HexEvalSounds.SPELL,
-        )
-    }
+		val image2 = image.withUsedOp().copy(stack = stack)
+		return OperationResult(
+			image2,
+			listOf(
+				OperatorSideEffect.AttemptSpell(Spell(datum), hasCastingSound = false, awardStat = false)
+			),
+			continuation,
+			HexEvalSounds.SPELL,
+		)
+	}
 
-    private data class Spell(val datum: Iota) : RenderedSpell {
-        override fun cast(env: CastingEnvironment) {
-            env.printMessage(datum.display())
-        }
-    }
+	private data class Spell(val datum: Iota) : RenderedSpell {
+		override fun cast(env: CastingEnvironment) {
+			env.printMessage(datum.display())
+		}
+	}
 }

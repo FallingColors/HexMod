@@ -25,59 +25,64 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 
 object OpIgnite : SpellAction {
-    override val argc = 1
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
-        when (val target = args[0]) {
-            is EntityIota -> {
-                val entity = args.getEntity(0, argc)
-                env.assertEntityInRange(entity)
-                return SpellAction.Result(
-                    EntitySpell(entity),
-                    MediaConstants.DUST_UNIT,
-                    listOf(ParticleSpray.burst(entity.position(), 1.0))
-                )
-            }
-            is Vec3Iota -> {
-                val block = args.getBlockPos(0, argc)
-                env.assertPosInRangeForEditing(block)
-                return SpellAction.Result(
-                    BlockSpell(block),
-                    MediaConstants.DUST_UNIT,
-                    listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(block)), 1.0))
-                )
-            }
-            else -> throw MishapInvalidIota.ofType(target, 0, "entity_or_vector")
-        }
-    }
+	override val argc = 1
 
-    private data class BlockSpell(val pos: BlockPos) : RenderedSpell {
-        override fun cast(env: CastingEnvironment) {
-            // help
-            if (!tryToClick(env, pos, Items.FIRE_CHARGE)) {
-                tryToClick(env, pos, Items.FLINT_AND_STEEL)
-            }
-        }
+	override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+		when (val target = args[0]) {
+			is EntityIota -> {
+				val entity = args.getEntity(0, argc)
+				env.assertEntityInRange(entity)
+				return SpellAction.Result(
+					EntitySpell(entity),
+					MediaConstants.DUST_UNIT,
+					listOf(ParticleSpray.burst(entity.position(), 1.0))
+				)
+			}
+			is Vec3Iota -> {
+				val block = args.getBlockPos(0, argc)
+				env.assertPosInRangeForEditing(block)
+				return SpellAction.Result(
+					BlockSpell(block),
+					MediaConstants.DUST_UNIT,
+					listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(block)), 1.0))
+				)
+			}
+			else -> throw MishapInvalidIota.ofType(target, 0, "entity_or_vector")
+		}
+	}
 
-        fun tryToClick(ctx: CastingEnvironment, pos: BlockPos, item: Item): Boolean {
-            return IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(item), ctx.castingEntity as? ServerPlayer) &&
-                item.useOn(
-                    UseOnContext(
-                        ctx.world,
-                        null,
-                        InteractionHand.MAIN_HAND,
-                        ItemStack(item),
-                        BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false)
-                    )
-                ).consumesAction()
-        }
-    }
+	private data class BlockSpell(val pos: BlockPos) : RenderedSpell {
+		override fun cast(env: CastingEnvironment) {
+			// help
+			if (!tryToClick(env, pos, Items.FIRE_CHARGE)) {
+				tryToClick(env, pos, Items.FLINT_AND_STEEL)
+			}
+		}
 
-    private data class EntitySpell(val entity: Entity) : RenderedSpell {
-        override fun cast(env: CastingEnvironment) {
-            entity.setSecondsOnFire(8)
-        }
-    }
+		fun tryToClick(ctx: CastingEnvironment, pos: BlockPos, item: Item): Boolean {
+			return IXplatAbstractions.INSTANCE.isPlacingAllowed(
+				ctx.world,
+				pos,
+				ItemStack(item),
+				ctx.castingEntity as? ServerPlayer
+			) &&
+				item
+					.useOn(
+						UseOnContext(
+							ctx.world,
+							null,
+							InteractionHand.MAIN_HAND,
+							ItemStack(item),
+							BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false)
+						)
+					)
+					.consumesAction()
+		}
+	}
+
+	private data class EntitySpell(val entity: Entity) : RenderedSpell {
+		override fun cast(env: CastingEnvironment) {
+			entity.setSecondsOnFire(8)
+		}
+	}
 }

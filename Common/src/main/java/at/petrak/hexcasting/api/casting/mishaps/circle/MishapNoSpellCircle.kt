@@ -11,32 +11,33 @@ import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.enchantment.EnchantmentHelper
 
 class MishapNoSpellCircle : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
-        dyeColor(DyeColor.LIGHT_BLUE)
+	override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+		dyeColor(DyeColor.LIGHT_BLUE)
 
-    // FIXME: make me work with any entity and not just players
-    private inline fun dropAll(player: Player, stacks: MutableList<ItemStack>, filter: (ItemStack) -> Boolean = { true }) {
-        for (index in stacks.indices) {
-            val item = stacks[index]
-            if (!item.isEmpty && filter(item)) {
-                player.drop(item, true, false)
-                stacks[index] = ItemStack.EMPTY
-            }
-        }
-    }
+	// FIXME: make me work with any entity and not just players
+	private inline fun dropAll(
+		player: Player,
+		stacks: MutableList<ItemStack>,
+		filter: (ItemStack) -> Boolean = { true }
+	) {
+		for (index in stacks.indices) {
+			val item = stacks[index]
+			if (!item.isEmpty && filter(item)) {
+				player.drop(item, true, false)
+				stacks[index] = ItemStack.EMPTY
+			}
+		}
+	}
 
-    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        val caster = env.castingEntity as? ServerPlayer
-        if (caster != null) {
-            // FIXME: handle null caster case
-            dropAll(caster, caster.inventory.items)
-            dropAll(caster, caster.inventory.offhand)
-            dropAll(caster, caster.inventory.armor) {
-                !EnchantmentHelper.hasBindingCurse(it)
-            }
-        }
-    }
+	override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+		val caster = env.castingEntity as? ServerPlayer
+		if (caster != null) {
+			// FIXME: handle null caster case
+			dropAll(caster, caster.inventory.items)
+			dropAll(caster, caster.inventory.offhand)
+			dropAll(caster, caster.inventory.armor) { !EnchantmentHelper.hasBindingCurse(it) }
+		}
+	}
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("no_spell_circle")
+	override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = error("no_spell_circle")
 }

@@ -9,10 +9,12 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 // Prevents the witch from joining a raid
 @Mixin(Raider.class)
 public class MixinRaider {
-    @Redirect(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/raid/Raider;isAlive" +
-        "()Z"))
-    private boolean isAliveForAiPurposes(Raider instance) {
-        var self = (Raider) (Object) this;
-        return self.isAlive() && !IXplatAbstractions.INSTANCE.isBrainswept(self);
-    }
+	@Redirect(
+			method = "aiStep",
+			at =
+					@At(value = "INVOKE", target = "Lnet/minecraft/world/entity/raid/Raider;isAlive" + "()Z"))
+	private boolean isAliveForAiPurposes(Raider instance) {
+		var self = (Raider) (Object) this;
+		return self.isAlive() && !IXplatAbstractions.INSTANCE.isBrainswept(self);
+	}
 }

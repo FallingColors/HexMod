@@ -10,8 +10,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemColors.class)
 public class ForgeMixinItemColors {
-    @Inject(method = "createDefault", at = @At("RETURN"))
-    private static void hex$onCreateDefault(BlockColors blockColors, CallbackInfoReturnable<ItemColors> info) {
-        ForgeHexClientInitializer.GLOBAL_ITEM_COLORS = info.getReturnValue();
-    }
+	@Inject(method = "createDefault", at = @At("RETURN"))
+	private static void hex$onCreateDefault(
+			BlockColors blockColors, CallbackInfoReturnable<ItemColors> info) {
+		ForgeHexClientInitializer.GLOBAL_ITEM_COLORS = info.getReturnValue();
+	}
 }

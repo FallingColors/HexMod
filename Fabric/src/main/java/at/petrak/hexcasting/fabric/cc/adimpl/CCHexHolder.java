@@ -1,63 +1,61 @@
 package at.petrak.hexcasting.fabric.cc.adimpl;
 
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
-import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
+import java.util.List;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 public abstract class CCHexHolder extends ItemComponent implements ADHexHolder {
-    public CCHexHolder(ItemStack stack) {
-        super(stack, HexCardinalComponents.HEX_HOLDER);
-    }
+	public CCHexHolder(ItemStack stack) {
+		super(stack, HexCardinalComponents.HEX_HOLDER);
+	}
 
-    public static class ItemBased extends CCHexHolder {
-        private final HexHolderItem hexHolder;
+	public static class ItemBased extends CCHexHolder {
+		private final HexHolderItem hexHolder;
 
-        public ItemBased(ItemStack owner) {
-            super(owner);
-            var item = owner.getItem();
-            if (!(item instanceof HexHolderItem hexHolderItem)) {
-                throw new IllegalStateException("item is not a pigment: " + owner);
-            }
-            this.hexHolder = hexHolderItem;
-        }
+		public ItemBased(ItemStack owner) {
+			super(owner);
+			var item = owner.getItem();
+			if (!(item instanceof HexHolderItem hexHolderItem)) {
+				throw new IllegalStateException("item is not a pigment: " + owner);
+			}
+			this.hexHolder = hexHolderItem;
+		}
 
+		@Override
+		public boolean canDrawMediaFromInventory() {
+			return this.hexHolder.canDrawMediaFromInventory(this.stack);
+		}
 
-        @Override
-        public boolean canDrawMediaFromInventory() {
-            return this.hexHolder.canDrawMediaFromInventory(this.stack);
-        }
+		@Override
+		public boolean hasHex() {
+			return this.hexHolder.hasHex(this.stack);
+		}
 
-        @Override
-        public boolean hasHex() {
-            return this.hexHolder.hasHex(this.stack);
-        }
+		@Override
+		public @Nullable List<Iota> getHex(ServerLevel level) {
+			return this.hexHolder.getHex(this.stack, level);
+		}
 
-        @Override
-        public @Nullable List<Iota> getHex(ServerLevel level) {
-            return this.hexHolder.getHex(this.stack, level);
-        }
+		@Override
+		public void writeHex(List<Iota> patterns, @Nullable FrozenPigment pigment, long media) {
+			this.hexHolder.writeHex(this.stack, patterns, pigment, media);
+		}
 
-        @Override
-        public void writeHex(List<Iota> patterns, @Nullable FrozenPigment pigment, long media) {
-            this.hexHolder.writeHex(this.stack, patterns, pigment, media);
-        }
+		@Override
+		public void clearHex() {
+			this.hexHolder.clearHex(this.stack);
+		}
 
-        @Override
-        public void clearHex() {
-            this.hexHolder.clearHex(this.stack);
-        }
-
-        @Override
-        public @Nullable FrozenPigment getPigment() {
-            return this.hexHolder.getPigment(this.stack);
-        }
-    }
+		@Override
+		public @Nullable FrozenPigment getPigment() {
+			return this.hexHolder.getPigment(this.stack);
+		}
+	}
 }

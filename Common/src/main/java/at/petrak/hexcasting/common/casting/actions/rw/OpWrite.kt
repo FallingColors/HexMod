@@ -12,45 +12,41 @@ import net.minecraft.server.level.ServerPlayer
 
 // we make this a spell cause imo it's a little ... anticlimactic for it to just make no noise
 object OpWrite : SpellAction {
-    override val argc = 1
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
-        val datum = args[0]
+	override val argc = 1
 
-        val (handStack) = env.getHeldItemToOperateOn {
-            val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
+	override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+		val datum = args[0]
 
-            datumHolder != null && datumHolder.writeIota(datum, true)
-        }
-            // If there are no data holders that are writeable, find a data holder that isn't writeable
-            // so that the error message is more helpful.
-            ?: env.getHeldItemToOperateOn {
-                val dataHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
-                dataHolder != null
-        } ?: throw MishapBadOffhandItem.of(null, "iota.write")
+		val (handStack) =
+			env.getHeldItemToOperateOn {
+				val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
 
-        val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
-            ?: throw MishapBadOffhandItem.of(handStack, "iota.write")
+				datumHolder != null && datumHolder.writeIota(datum, true)
+			}
+				// If there are no data holders that are writeable, find a data holder that isn't writeable
+				// so that the error message is more helpful.
+				?: env.getHeldItemToOperateOn {
+					val dataHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
+					dataHolder != null
+				}
+				?: throw MishapBadOffhandItem.of(null, "iota.write")
 
-        if (!datumHolder.writeIota(datum, true))
-            throw MishapBadOffhandItem.of(handStack, "iota.readonly", datum.display())
+		val datumHolder =
+			IXplatAbstractions.INSTANCE.findDataHolder(handStack)
+				?: throw MishapBadOffhandItem.of(handStack, "iota.write")
 
-        val trueName = MishapOthersName.getTrueNameFromDatum(datum, env.castingEntity as? ServerPlayer)
-        if (trueName != null)
-            throw MishapOthersName(trueName)
+		if (!datumHolder.writeIota(datum, true))
+			throw MishapBadOffhandItem.of(handStack, "iota.readonly", datum.display())
 
-        return SpellAction.Result(
-            Spell(datum, datumHolder),
-            0,
-            listOf()
-        )
-    }
+		val trueName = MishapOthersName.getTrueNameFromDatum(datum, env.castingEntity as? ServerPlayer)
+		if (trueName != null) throw MishapOthersName(trueName)
 
-    private data class Spell(val datum: Iota, val datumHolder: ADIotaHolder) : RenderedSpell {
-        override fun cast(env: CastingEnvironment) {
-            datumHolder.writeIota(datum, false)
-        }
-    }
+		return SpellAction.Result(Spell(datum, datumHolder), 0, listOf())
+	}
+
+	private data class Spell(val datum: Iota, val datumHolder: ADIotaHolder) : RenderedSpell {
+		override fun cast(env: CastingEnvironment) {
+			datumHolder.writeIota(datum, false)
+		}
+	}
 }

@@ -13,11 +13,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BlockBehaviour.class)
 public class FabricBlockBehaviorMixin {
-    @Inject(method = "getDestroyProgress", at = @At("HEAD"), cancellable = true)
-    private void destroyProgress(BlockState blockState, Player player, BlockGetter blockGetter, BlockPos blockPos,
-        CallbackInfoReturnable<Float> cir) {
-        if (ItemJewelerHammer.shouldFailToBreak(player, blockState, blockPos)) {
-            cir.setReturnValue(0F);
-        }
-    }
+	@Inject(method = "getDestroyProgress", at = @At("HEAD"), cancellable = true)
+	private void destroyProgress(
+			BlockState blockState,
+			Player player,
+			BlockGetter blockGetter,
+			BlockPos blockPos,
+			CallbackInfoReturnable<Float> cir) {
+		if (ItemJewelerHammer.shouldFailToBreak(player, blockState, blockPos)) {
+			cir.setReturnValue(0F);
+		}
+	}
 }

@@ -15,64 +15,64 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.network.chat.Component
 
 class SpecialHandlerNumberLiteral(val x: Double) : SpecialHandler {
-    override fun act(): Action {
-        return InnerAction(this.x)
-    }
+	override fun act(): Action {
+		return InnerAction(this.x)
+	}
 
-    override fun getName(): Component {
-        val key = IXplatAbstractions.INSTANCE.specialHandlerRegistry.getResourceKey(HexSpecialHandlers.NUMBER).get()
-        return HexAPI.instance().getSpecialHandlerI18nKey(key)
-            .asTranslatedComponent(Action.DOUBLE_FORMATTER.format(x)).lightPurple
-    }
+	override fun getName(): Component {
+		val key =
+			IXplatAbstractions.INSTANCE.specialHandlerRegistry
+				.getResourceKey(HexSpecialHandlers.NUMBER)
+				.get()
+		return HexAPI.instance()
+			.getSpecialHandlerI18nKey(key)
+			.asTranslatedComponent(Action.DOUBLE_FORMATTER.format(x))
+			.lightPurple
+	}
 
-    class InnerAction(val x: Double) : ConstMediaAction {
-        override val argc = 0
+	class InnerAction(val x: Double) : ConstMediaAction {
+		override val argc = 0
 
-        override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
-            return this.x.asActionResult
-        }
-    }
+		override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+			return this.x.asActionResult
+		}
+	}
 
-    class Factory : SpecialHandler.Factory<SpecialHandlerNumberLiteral> {
-        override fun tryMatch(pat: HexPattern, env: CastingEnvironment): SpecialHandlerNumberLiteral? {
-            val sig = pat.anglesSignature()
-            if (sig.startsWith("aqaa") || sig.startsWith("dedd")) {
-                val negate = sig.startsWith("dedd");
-                var accumulator = 0.0;
-                for (ch in sig.substring(4)) {
-                    when (ch) {
-                        'w' -> {
-                            accumulator += 1;
-                        }
-
-                        'q' -> {
-                            accumulator += 5;
-                        }
-
-                        'e' -> {
-                            accumulator += 10;
-                        }
-
-                        'a' -> {
-                            accumulator *= 2;
-                        }
-
-                        'd' -> {
-                            accumulator /= 2;
-                        }
-                        // ok funny man
-                        's' -> {}
-                        else -> throw IllegalStateException()
-                    }
-                }
-                if (negate) {
-                    accumulator = -accumulator;
-                }
-                return SpecialHandlerNumberLiteral(accumulator);
-            } else {
-                return null;
-            }
-        }
-
-    }
+	class Factory : SpecialHandler.Factory<SpecialHandlerNumberLiteral> {
+		override fun tryMatch(pat: HexPattern, env: CastingEnvironment): SpecialHandlerNumberLiteral? {
+			val sig = pat.anglesSignature()
+			if (sig.startsWith("aqaa") || sig.startsWith("dedd")) {
+				val negate = sig.startsWith("dedd")
+				var accumulator = 0.0
+				for (ch in sig.substring(4)) {
+					when (ch) {
+						'w' -> {
+							accumulator += 1
+						}
+						'q' -> {
+							accumulator += 5
+						}
+						'e' -> {
+							accumulator += 10
+						}
+						'a' -> {
+							accumulator *= 2
+						}
+						'd' -> {
+							accumulator /= 2
+						}
+						// ok funny man
+						's' -> {}
+						else -> throw IllegalStateException()
+					}
+				}
+				if (negate) {
+					accumulator = -accumulator
+				}
+				return SpecialHandlerNumberLiteral(accumulator)
+			} else {
+				return null
+			}
+		}
+	}
 }

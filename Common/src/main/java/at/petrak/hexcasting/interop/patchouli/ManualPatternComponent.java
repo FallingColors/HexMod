@@ -5,50 +5,48 @@ import at.petrak.hexcasting.api.casting.math.HexPattern;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
-import vazkii.patchouli.api.IVariable;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
+import vazkii.patchouli.api.IVariable;
 
-/**
- * Provide the pattern(s) manually
- */
+/** Provide the pattern(s) manually */
 public class ManualPatternComponent extends AbstractPatternComponent {
-    @SerializedName("patterns")
-    public String patternsRaw;
-    @SerializedName("stroke_order")
-    public String strokeOrderRaw;
+	@SerializedName("patterns")
+	public String patternsRaw;
 
-    protected transient boolean strokeOrder;
+	@SerializedName("stroke_order")
+	public String strokeOrderRaw;
 
-    @Override
-    public List<HexPattern> getPatterns(UnaryOperator<IVariable> lookup) {
-        this.strokeOrder = lookup.apply(IVariable.wrap(this.strokeOrderRaw)).asBoolean(true);
-        var patsRaw = lookup.apply(IVariable.wrap(patternsRaw)).asListOrSingleton();
+	protected transient boolean strokeOrder;
 
-        var out = new ArrayList<HexPattern>();
-        for (var ivar : patsRaw) {
-            JsonElement json = ivar.unwrap();
-            RawPattern raw = new Gson().fromJson(json, RawPattern.class);
+	@Override
+	public List<HexPattern> getPatterns(UnaryOperator<IVariable> lookup) {
+		this.strokeOrder = lookup.apply(IVariable.wrap(this.strokeOrderRaw)).asBoolean(true);
+		var patsRaw = lookup.apply(IVariable.wrap(patternsRaw)).asListOrSingleton();
 
-            var dir = HexDir.fromString(raw.startdir);
-            var pat = HexPattern.fromAngles(raw.signature, dir);
-            out.add(pat);
-        }
+		var out = new ArrayList<HexPattern>();
+		for (var ivar : patsRaw) {
+			JsonElement json = ivar.unwrap();
+			RawPattern raw = new Gson().fromJson(json, RawPattern.class);
 
-        return out;
-    }
+			var dir = HexDir.fromString(raw.startdir);
+			var pat = HexPattern.fromAngles(raw.signature, dir);
+			out.add(pat);
+		}
 
-    @Override
-    public boolean showStrokeOrder() {
-        return this.strokeOrder;
-    }
+		return out;
+	}
 
-    @Override
-    public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
-        this.strokeOrder = IVariable.wrap(this.strokeOrderRaw).asBoolean(true);
+	@Override
+	public boolean showStrokeOrder() {
+		return this.strokeOrder;
+	}
 
-        super.onVariablesAvailable(lookup);
-    }
+	@Override
+	public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
+		this.strokeOrder = IVariable.wrap(this.strokeOrderRaw).asBoolean(true);
+
+		super.onVariablesAvailable(lookup);
+	}
 }

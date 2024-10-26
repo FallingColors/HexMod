@@ -16,66 +16,57 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 
 object OpRecharge : SpellAction {
-    override val argc = 1
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
-        val entity = args.getItemEntity(0, argc)
+	override val argc = 1
 
-        val (handStack) = env.getHeldItemToOperateOn {
-            val media = IXplatAbstractions.INSTANCE.findMediaHolder(it)
-            media != null && media.canRecharge() && media.insertMedia(-1, true) != 0L
-        }
-            ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "rechargable") // TODO: hack
+	override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+		val entity = args.getItemEntity(0, argc)
 
-        val media = IXplatAbstractions.INSTANCE.findMediaHolder(handStack)
+		val (handStack) =
+			env.getHeldItemToOperateOn {
+				val media = IXplatAbstractions.INSTANCE.findMediaHolder(it)
+				media != null && media.canRecharge() && media.insertMedia(-1, true) != 0L
+			} ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "rechargable") // TODO: hack
 
-        if (media == null || !media.canRecharge())
-            throw MishapBadOffhandItem.of(
-                handStack,
-                "rechargable"
-            )
+		val media = IXplatAbstractions.INSTANCE.findMediaHolder(handStack)
 
-        env.assertEntityInRange(entity)
+		if (media == null || !media.canRecharge())
+			throw MishapBadOffhandItem.of(handStack, "rechargable")
 
-        if (!isMediaItem(entity.item)) {
-            throw MishapBadItem.of(
-                entity,
-                "media"
-            )
-        }
+		env.assertEntityInRange(entity)
 
-        // TODO: why did this code exist
-        /*
-        if (media.insertMedia(-1, true) == 0L)
-            return null
-         */
+		if (!isMediaItem(entity.item)) {
+			throw MishapBadItem.of(entity, "media")
+		}
 
-        return SpellAction.Result(
-            Spell(entity, handStack),
-            MediaConstants.SHARD_UNIT,
-            listOf(ParticleSpray.burst(entity.position(), 0.5))
-        )
-    }
+		// TODO: why did this code exist
+		/*
+		if (media.insertMedia(-1, true) == 0L)
+				return null
+		 */
 
-    private data class Spell(val itemEntity: ItemEntity, val stack: ItemStack) : RenderedSpell {
-        override fun cast(env: CastingEnvironment) {
-            val media = IXplatAbstractions.INSTANCE.findMediaHolder(stack)
+		return SpellAction.Result(
+			Spell(entity, handStack),
+			MediaConstants.SHARD_UNIT,
+			listOf(ParticleSpray.burst(entity.position(), 0.5))
+		)
+	}
 
-            if (media != null && itemEntity.isAlive) {
-                val entityStack = itemEntity.item.copy()
+	private data class Spell(val itemEntity: ItemEntity, val stack: ItemStack) : RenderedSpell {
+		override fun cast(env: CastingEnvironment) {
+			val media = IXplatAbstractions.INSTANCE.findMediaHolder(stack)
 
-                val emptySpace = media.insertMedia(-1, true)
+			if (media != null && itemEntity.isAlive) {
+				val entityStack = itemEntity.item.copy()
 
-                val mediaAmt = extractMedia(entityStack, emptySpace)
+				val emptySpace = media.insertMedia(-1, true)
 
-                media.insertMedia(mediaAmt, false)
+				val mediaAmt = extractMedia(entityStack, emptySpace)
 
-                itemEntity.item = entityStack
-                if (entityStack.isEmpty)
-                    itemEntity.kill()
-            }
-        }
-    }
+				media.insertMedia(mediaAmt, false)
+
+				itemEntity.item = entityStack
+				if (entityStack.isEmpty) itemEntity.kill()
+			}
+		}
+	}
 }

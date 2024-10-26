@@ -13,42 +13,44 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
 public class AmethystReducerFunc extends LootItemConditionalFunction {
-    public final double delta;
+	public final double delta;
 
-    public AmethystReducerFunc(LootItemCondition[] lootItemConditions, double delta) {
-        super(lootItemConditions);
-        this.delta = delta;
-    }
+	public AmethystReducerFunc(LootItemCondition[] lootItemConditions, double delta) {
+		super(lootItemConditions);
+		this.delta = delta;
+	}
 
-    public static ItemStack doStatic(ItemStack stack, LootContext ctx, double amount) {
-        if (stack.is(Items.AMETHYST_SHARD)) {
-            stack.setCount((int) (stack.getCount() * (1 + amount)));
-        }
-        return stack;
-    }
+	public static ItemStack doStatic(ItemStack stack, LootContext ctx, double amount) {
+		if (stack.is(Items.AMETHYST_SHARD)) {
+			stack.setCount((int) (stack.getCount() * (1 + amount)));
+		}
+		return stack;
+	}
 
-    @Override
-    protected ItemStack run(ItemStack stack, LootContext ctx) {
-        return doStatic(stack, ctx, this.delta);
-    }
+	@Override
+	protected ItemStack run(ItemStack stack, LootContext ctx) {
+		return doStatic(stack, ctx, this.delta);
+	}
 
-    @Override
-    public LootItemFunctionType getType() {
-        return HexLootFunctions.AMETHYST_SHARD_REDUCER;
-    }
+	@Override
+	public LootItemFunctionType getType() {
+		return HexLootFunctions.AMETHYST_SHARD_REDUCER;
+	}
 
-    public static class Serializer extends LootItemConditionalFunction.Serializer<AmethystReducerFunc> {
-        @Override
-        public void serialize(JsonObject json, AmethystReducerFunc value, JsonSerializationContext ctx) {
-            super.serialize(json, value, ctx);
-            json.addProperty("delta", value.delta);
-        }
+	public static class Serializer
+			extends LootItemConditionalFunction.Serializer<AmethystReducerFunc> {
+		@Override
+		public void serialize(
+				JsonObject json, AmethystReducerFunc value, JsonSerializationContext ctx) {
+			super.serialize(json, value, ctx);
+			json.addProperty("delta", value.delta);
+		}
 
-        @Override
-        public AmethystReducerFunc deserialize(JsonObject object, JsonDeserializationContext ctx,
-            LootItemCondition[] conditions) {
-            var delta = GsonHelper.getAsDouble(object, "delta");
-            return new AmethystReducerFunc(conditions, delta);
-        }
-    }
+		@Override
+		public AmethystReducerFunc deserialize(
+				JsonObject object, JsonDeserializationContext ctx, LootItemCondition[] conditions) {
+			var delta = GsonHelper.getAsDouble(object, "delta");
+			return new AmethystReducerFunc(conditions, delta);
+		}
+	}
 }

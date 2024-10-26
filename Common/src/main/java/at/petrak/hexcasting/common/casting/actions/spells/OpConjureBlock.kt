@@ -19,54 +19,59 @@ import net.minecraft.world.item.context.DirectionalPlaceContext
 import net.minecraft.world.phys.Vec3
 
 class OpConjureBlock(val light: Boolean) : SpellAction {
-    override val argc = 1
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
-        val vecPos = args.getVec3(0, argc)
-        val pos = BlockPos.containing(vecPos)
-        env.assertPosInRangeForEditing(pos)
+	override val argc = 1
 
-        val placeContext = DirectionalPlaceContext(env.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
+	override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+		val vecPos = args.getVec3(0, argc)
+		val pos = BlockPos.containing(vecPos)
+		env.assertPosInRangeForEditing(pos)
 
-        val worldState = env.world.getBlockState(pos)
-        if (!worldState.canBeReplaced(placeContext))
-            throw MishapBadBlock.of(pos, "replaceable")
+		val placeContext =
+			DirectionalPlaceContext(env.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
 
-        return SpellAction.Result(
-            Spell(pos, light),
-            MediaConstants.DUST_UNIT,
-            listOf(ParticleSpray.cloud(Vec3.atCenterOf(pos), 1.0))
-        )
-    }
+		val worldState = env.world.getBlockState(pos)
+		if (!worldState.canBeReplaced(placeContext)) throw MishapBadBlock.of(pos, "replaceable")
 
-    private data class Spell(val pos: BlockPos, val light: Boolean) : RenderedSpell {
-        override fun cast(env: CastingEnvironment) {
-            if (!env.canEditBlockAt(pos))
-                return
+		return SpellAction.Result(
+			Spell(pos, light),
+			MediaConstants.DUST_UNIT,
+			listOf(ParticleSpray.cloud(Vec3.atCenterOf(pos), 1.0))
+		)
+	}
 
-            val placeContext = DirectionalPlaceContext(env.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
+	private data class Spell(val pos: BlockPos, val light: Boolean) : RenderedSpell {
+		override fun cast(env: CastingEnvironment) {
+			if (!env.canEditBlockAt(pos)) return
 
-            val worldState = env.world.getBlockState(pos)
-            if (worldState.canBeReplaced(placeContext)) {
-                val block = if (this.light) HexBlocks.CONJURED_LIGHT else HexBlocks.CONJURED_BLOCK
+			val placeContext =
+				DirectionalPlaceContext(env.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
 
-                if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(env.world, pos, ItemStack(block), env.castingEntity as? ServerPlayer))
-                    return
+			val worldState = env.world.getBlockState(pos)
+			if (worldState.canBeReplaced(placeContext)) {
+				val block = if (this.light) HexBlocks.CONJURED_LIGHT else HexBlocks.CONJURED_BLOCK
 
-                val state = block.getStateForPlacement(placeContext)
-                if (state != null) {
-                    // 1 = block updated + 2 = send to clients
-                    env.world.setBlock(pos, state, 3)
+				if (
+					!IXplatAbstractions.INSTANCE.isPlacingAllowed(
+						env.world,
+						pos,
+						ItemStack(block),
+						env.castingEntity as? ServerPlayer
+					)
+				)
+					return
 
-                    val pigment = env.pigment
+				val state = block.getStateForPlacement(placeContext)
+				if (state != null) {
+					// 1 = block updated + 2 = send to clients
+					env.world.setBlock(pos, state, 3)
 
-                    if (env.world.getBlockState(pos).block is BlockConjured) {
-                        BlockConjured.setColor(env.world, pos, pigment)
-                    }
-                }
-            }
-        }
-    }
+					val pigment = env.pigment
+
+					if (env.world.getBlockState(pos).block is BlockConjured) {
+						BlockConjured.setColor(env.world, pos, pigment)
+					}
+				}
+			}
+		}
+	}
 }

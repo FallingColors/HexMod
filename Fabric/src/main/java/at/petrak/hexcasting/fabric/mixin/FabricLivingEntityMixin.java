@@ -15,33 +15,42 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(LivingEntity.class)
 public class FabricLivingEntityMixin {
-    @Unique
-    private BlockState hex$cachedParticleState;
+	@Unique private BlockState hex$cachedParticleState;
 
-    @ModifyVariable(method = "checkFallDamage", at = @At(value = "LOAD", ordinal = 0), argsOnly = true)
-    private BlockState overwrite(BlockState state, double d, boolean bl, BlockState _ignored, BlockPos pos) {
-        LivingEntity entity = (LivingEntity) (Object) this;
+	@ModifyVariable(
+			method = "checkFallDamage",
+			at = @At(value = "LOAD", ordinal = 0),
+			argsOnly = true)
+	private BlockState overwrite(
+			BlockState state, double d, boolean bl, BlockState _ignored, BlockPos pos) {
+		LivingEntity entity = (LivingEntity) (Object) this;
 
-        if (state.getBlock() instanceof IForgeLikeBlock forgeLike) {
-            float dist = (float) Mth.ceil(entity.fallDistance - 3.0F);
-            double e = Math.min(0.2F + dist / 15.0F, 2.5D);
-            int i = (int)(150.0D * e);
-            if (forgeLike.addLandingEffects(state, (ServerLevel) entity.level(), pos, entity, i)) {
-                hex$cachedParticleState = state;
-                return Blocks.AIR.defaultBlockState();
-            }
-        }
+		if (state.getBlock() instanceof IForgeLikeBlock forgeLike) {
+			float dist = (float) Mth.ceil(entity.fallDistance - 3.0F);
+			double e = Math.min(0.2F + dist / 15.0F, 2.5D);
+			int i = (int) (150.0D * e);
+			if (forgeLike.addLandingEffects(state, (ServerLevel) entity.level(), pos, entity, i)) {
+				hex$cachedParticleState = state;
+				return Blocks.AIR.defaultBlockState();
+			}
+		}
 
-        return state;
-    }
+		return state;
+	}
 
-    @ModifyArg(method = "checkFallDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;checkFallDamage(DZLnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)V"))
-    private BlockState restore(BlockState state) {
-        if (hex$cachedParticleState != null) {
-            BlockState cached = hex$cachedParticleState;
-            hex$cachedParticleState = null;
-            return cached;
-        }
-        return state;
-    }
+	@ModifyArg(
+			method = "checkFallDamage",
+			at =
+					@At(
+							value = "INVOKE",
+							target =
+									"Lnet/minecraft/world/entity/Entity;checkFallDamage(DZLnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)V"))
+	private BlockState restore(BlockState state) {
+		if (hex$cachedParticleState != null) {
+			BlockState cached = hex$cachedParticleState;
+			hex$cachedParticleState = null;
+			return cached;
+		}
+		return state;
+	}
 }

@@ -1,61 +1,80 @@
 package at.petrak.hexcasting.fabric.interop.emi;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
+import java.util.List;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+public record EmiBrainsweepRecipe(
+		EmiIngredient blockInput, EmiIngredient villagerInput, EmiStack output, ResourceLocation id)
+		implements EmiRecipe {
+	private static final ResourceLocation OVERLAY = modLoc("textures/gui/brainsweep_jei.png");
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
+	@Override
+	public EmiRecipeCategory getCategory() {
+		return HexEMIPlugin.BRAINSWEEP;
+	}
 
-public record EmiBrainsweepRecipe(EmiIngredient blockInput,
-                                  EmiIngredient villagerInput,
-                                  EmiStack output,
-                                  ResourceLocation id) implements EmiRecipe {
-    private static final ResourceLocation OVERLAY = modLoc("textures/gui/brainsweep_jei.png");
+	@Override
+	public @Nullable ResourceLocation getId() {
+		return id;
+	}
 
-    @Override
-    public EmiRecipeCategory getCategory() {
-        return HexEMIPlugin.BRAINSWEEP;
-    }
+	@Override
+	public List<EmiIngredient> getInputs() {
+		return List.of(blockInput, villagerInput);
+	}
 
-    @Override
-    public @Nullable ResourceLocation getId() {
-        return id;
-    }
+	@Override
+	public List<EmiStack> getOutputs() {
+		return List.of(output);
+	}
 
-    @Override
-    public List<EmiIngredient> getInputs() {
-        return List.of(blockInput, villagerInput);
-    }
+	@Override
+	public int getDisplayWidth() {
+		return 118;
+	}
 
-    @Override
-    public List<EmiStack> getOutputs() {
-        return List.of(output);
-    }
+	@Override
+	public int getDisplayHeight() {
+		return 85;
+	}
 
-    @Override
-    public int getDisplayWidth() {
-        return 118;
-    }
+	@Override
+	public void addWidgets(WidgetHolder widgets) {
+		widgets.addTexture(
+				OVERLAY,
+				0,
+				0,
+				getDisplayWidth(),
+				getDisplayHeight(),
+				0,
+				0,
+				getDisplayWidth(),
+				getDisplayHeight(),
+				128,
+				128);
+		widgets.addSlot(blockInput, 11, 34).drawBack(false).customBackground(null, 0, 0, 19, 19);
 
-    @Override
-    public int getDisplayHeight() {
-        return 85;
-    }
+		widgets
+				.add(
+						new TheCoolerSlotWidget(villagerInput, 37, 19, 2.75f)
+								.useOffset(false)
+								.customShift(-8.5f, 2.485f))
+				.drawBack(false)
+				.customBackground(null, 0, 0, 27, 49);
 
-    @Override
-    public void addWidgets(WidgetHolder widgets) {
-        widgets.addTexture(OVERLAY, 0, 0, getDisplayWidth(), getDisplayHeight(), 0, 0, getDisplayWidth(), getDisplayHeight(), 128, 128);
-        widgets.addSlot(blockInput, 11, 34).drawBack(false).customBackground(null, 0, 0, 19, 19);
-
-        widgets.add(new TheCoolerSlotWidget(villagerInput, 37, 19, 2.75f).useOffset(false).customShift(-8.5f, 2.485f))
-                .drawBack(false).customBackground(null, 0, 0, 27, 49);
-
-        widgets.addSlot(output, 86, 34).drawBack(false).large(true).recipeContext(this).customBackground(null, 0, 0, 19, 19);
-    }
+		widgets
+				.addSlot(output, 86, 34)
+				.drawBack(false)
+				.large(true)
+				.recipeContext(this)
+				.customBackground(null, 0, 0, 19, 19);
+	}
 }

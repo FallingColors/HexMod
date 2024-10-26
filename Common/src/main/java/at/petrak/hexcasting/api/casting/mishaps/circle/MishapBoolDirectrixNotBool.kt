@@ -10,16 +10,16 @@ import net.minecraft.world.item.DyeColor
 
 // what a mouthful
 class MishapBoolDirectrixNotBool(
-    val perpetrator: Iota,
-    val pos: BlockPos,
+	val perpetrator: Iota,
+	val pos: BlockPos,
 ) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
-        dyeColor(DyeColor.GRAY)
+	override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+		dyeColor(DyeColor.GRAY)
 
-    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        env.world.destroyBlock(this.pos, true)
-    }
+	override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+		env.world.destroyBlock(this.pos, true)
+	}
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component =
-        error("circle.bool_directrix_no_bool", pos.toShortString(), perpetrator.display())
+	override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component =
+		error("circle.bool_directrix_no_bool", pos.toShortString(), perpetrator.display())
 }

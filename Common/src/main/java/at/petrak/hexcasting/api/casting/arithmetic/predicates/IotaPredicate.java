@@ -2,19 +2,20 @@ package at.petrak.hexcasting.api.casting.arithmetic.predicates;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
-
 import java.util.List;
 
 /**
- * Used to determine whether a given iota is an acceptable type for the operator that is storing this. It must be strictly a function
- * of the passed Iota's IotaType, or the caching done by ArithmeticEngine will be invalid.
+ * Used to determine whether a given iota is an acceptable type for the operator that is storing
+ * this. It must be strictly a function of the passed Iota's IotaType, or the caching done by
+ * ArithmeticEngine will be invalid.
  */
 @FunctionalInterface
 public interface IotaPredicate {
 	boolean test(Iota iota);
 
 	/**
-	 * The resulting IotaPredicate returns true if the given iota matches either the left or right predicates.
+	 * The resulting IotaPredicate returns true if the given iota matches either the left or right
+	 * predicates.
 	 */
 	static IotaPredicate or(IotaPredicate left, IotaPredicate right) {
 		return new Or(left, right);
@@ -28,9 +29,7 @@ public interface IotaPredicate {
 		return new Any(any.toArray(IotaPredicate[]::new));
 	}
 
-	/**
-	 * The resulting IotaPredicate returns true if the given iota's type is type.
-	 */
+	/** The resulting IotaPredicate returns true if the given iota's type is type. */
 	static IotaPredicate ofType(IotaType<?> type) {
 		return new OfType(type);
 	}
@@ -47,8 +46,7 @@ public interface IotaPredicate {
 		@Override
 		public boolean test(Iota iota) {
 			for (var i : any) {
-				if (i.test(iota))
-					return true;
+				if (i.test(iota)) return true;
 			}
 			return false;
 		}
@@ -61,8 +59,6 @@ public interface IotaPredicate {
 		}
 	}
 
-	/**
-	 * This IotaPredicate returns true for all iotas.
-	 */
+	/** This IotaPredicate returns true for all iotas. */
 	IotaPredicate TRUE = iota -> true;
 }

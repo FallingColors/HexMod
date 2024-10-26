@@ -8,23 +8,25 @@ import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockHexSlab extends SlabBlock {
-    public BlockHexSlab(Properties properties) {
-        super(properties);
-    }
+	public BlockHexSlab(Properties properties) {
+		super(properties);
+	}
 
+	@SoftImplement("forge")
+	public boolean isFlammable(
+			BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+		return true;
+	}
 
-    @SoftImplement("forge")
-    public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return true;
-    }
+	@SoftImplement("forge")
+	public int getFlammability(
+			BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+		return 20;
+	}
 
-    @SoftImplement("forge")
-    public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return 20;
-    }
-
-    @SoftImplement("forge")
-    public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
-        return 5;
-    }
+	@SoftImplement("forge")
+	public int getFireSpreadSpeed(
+			BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+		return 5;
+	}
 }

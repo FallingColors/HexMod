@@ -9,27 +9,27 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(LivingEntity.class)
 public interface AccessorLivingEntity {
-    @Accessor("lastHurt")
-    float hex$getLastHurt();
+	@Accessor("lastHurt")
+	float hex$getLastHurt();
 
-    @Accessor("lastHurt")
-    void hex$setLastHurt(float lastHurt);
+	@Accessor("lastHurt")
+	void hex$setLastHurt(float lastHurt);
 
-    @Invoker("playHurtSound")
-    void hex$playHurtSound(DamageSource source);
+	@Invoker("playHurtSound")
+	void hex$playHurtSound(DamageSource source);
 
-    @Invoker("checkTotemDeathProtection")
-    boolean hex$checkTotemDeathProtection(DamageSource source);
+	@Invoker("checkTotemDeathProtection")
+	boolean hex$checkTotemDeathProtection(DamageSource source);
 
-    @Invoker("getDeathSound")
-    SoundEvent hex$getDeathSound();
+	@Invoker("getDeathSound")
+	SoundEvent hex$getDeathSound();
 
-    @Invoker("getSoundVolume")
-    float hex$getSoundVolume();
+	@Invoker("getSoundVolume")
+	float hex$getSoundVolume();
 
-    @Accessor("lastDamageSource")
-    void hex$setLastDamageSource(DamageSource source);
+	@Accessor("lastDamageSource")
+	void hex$setLastDamageSource(DamageSource source);
 
-    @Accessor("lastDamageStamp")
-    void hex$setLastDamageStamp(long stamp);
+	@Accessor("lastDamageStamp")
+	void hex$setLastDamageStamp(long stamp);
 }

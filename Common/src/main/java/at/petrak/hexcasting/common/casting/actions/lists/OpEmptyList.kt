@@ -6,8 +6,9 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 
 object OpEmptyList : ConstMediaAction {
-    override val argc = 0
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
-        return emptyList<Iota>().asActionResult // sorry for taking all the easy impls, hudeler
-    }
+	override val argc = 0
+
+	override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+		return emptyList<Iota>().asActionResult // sorry for taking all the easy impls, hudeler
+	}
 }

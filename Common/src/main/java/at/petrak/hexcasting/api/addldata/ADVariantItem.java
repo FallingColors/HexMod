@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.api.addldata;
 
 public interface ADVariantItem {
-    int numVariants();
-    int getVariant();
+	int numVariants();
 
+	int getVariant();
 
-    void setVariant(int variant);
+	void setVariant(int variant);
 }

@@ -22,80 +22,89 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockRedstoneImpetus extends BlockAbstractImpetus {
-    public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
-    public BlockRedstoneImpetus(Properties p_49795_) {
-        super(p_49795_);
-    }
+	public BlockRedstoneImpetus(Properties p_49795_) {
+		super(p_49795_);
+	}
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new BlockEntityRedstoneImpetus(pPos, pState);
-    }
+	@Nullable @Override
+	public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+		return new BlockEntityRedstoneImpetus(pPos, pState);
+	}
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
-        builder.add(POWERED);
-    }
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
+		builder.add(POWERED);
+	}
 
-    @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-        BlockHitResult pHit) {
-        if (pLevel instanceof ServerLevel level
-            && level.getBlockEntity(pPos) instanceof BlockEntityRedstoneImpetus tile) {
-            var usedStack = pPlayer.getItemInHand(pHand);
-            if (usedStack.isEmpty() && pPlayer.isDiscrete()) {
-                tile.clearPlayer();
-                tile.sync();
-            } else {
-                var datumContainer = IXplatAbstractions.INSTANCE.findDataHolder(usedStack);
-                if (datumContainer != null) {
-                    var stored = datumContainer.readIota(level);
-                    if (stored instanceof EntityIota eieio) {
-                        var entity = eieio.getEntity();
-                        if (entity instanceof Player player) {
-                            // phew, we got something
-                            tile.setPlayer(player.getGameProfile(), entity.getUUID());
-                            tile.sync();
+	@Override
+	public InteractionResult use(
+			BlockState pState,
+			Level pLevel,
+			BlockPos pPos,
+			Player pPlayer,
+			InteractionHand pHand,
+			BlockHitResult pHit) {
+		if (pLevel instanceof ServerLevel level
+				&& level.getBlockEntity(pPos) instanceof BlockEntityRedstoneImpetus tile) {
+			var usedStack = pPlayer.getItemInHand(pHand);
+			if (usedStack.isEmpty() && pPlayer.isDiscrete()) {
+				tile.clearPlayer();
+				tile.sync();
+			} else {
+				var datumContainer = IXplatAbstractions.INSTANCE.findDataHolder(usedStack);
+				if (datumContainer != null) {
+					var stored = datumContainer.readIota(level);
+					if (stored instanceof EntityIota eieio) {
+						var entity = eieio.getEntity();
+						if (entity instanceof Player player) {
+							// phew, we got something
+							tile.setPlayer(player.getGameProfile(), entity.getUUID());
+							tile.sync();
 
-                            pLevel.playSound(pPlayer, pPos, HexSounds.IMPETUS_REDSTONE_DING,
-                                SoundSource.BLOCKS, 1f, 1f);
-                        }
-                    }
-                }
-            }
-        }
+							pLevel.playSound(
+									pPlayer, pPos, HexSounds.IMPETUS_REDSTONE_DING, SoundSource.BLOCKS, 1f, 1f);
+						}
+					}
+				}
+			}
+		}
 
-        return InteractionResult.PASS;
-    }
+		return InteractionResult.PASS;
+	}
 
-    @Override
-    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        super.tick(pState, pLevel, pPos, pRandom);
-        if (pLevel.getBlockEntity(pPos) instanceof BlockEntityRedstoneImpetus tile) {
-            tile.updatePlayerProfile();
-        }
-    }
+	@Override
+	public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+		super.tick(pState, pLevel, pPos, pRandom);
+		if (pLevel.getBlockEntity(pPos) instanceof BlockEntityRedstoneImpetus tile) {
+			tile.updatePlayerProfile();
+		}
+	}
 
-    @Override
-    public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos,
-        boolean pIsMoving) {
-        super.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);
+	@Override
+	public void neighborChanged(
+			BlockState pState,
+			Level pLevel,
+			BlockPos pPos,
+			Block pBlock,
+			BlockPos pFromPos,
+			boolean pIsMoving) {
+		super.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);
 
-        if (pLevel instanceof ServerLevel slevel) {
-            boolean prevPowered = pState.getValue(POWERED);
-            boolean isPowered = pLevel.hasNeighborSignal(pPos);
+		if (pLevel instanceof ServerLevel slevel) {
+			boolean prevPowered = pState.getValue(POWERED);
+			boolean isPowered = pLevel.hasNeighborSignal(pPos);
 
-            if (prevPowered != isPowered) {
-                pLevel.setBlockAndUpdate(pPos, pState.setValue(POWERED, isPowered));
+			if (prevPowered != isPowered) {
+				pLevel.setBlockAndUpdate(pPos, pState.setValue(POWERED, isPowered));
 
-                if (isPowered && pLevel.getBlockEntity(pPos) instanceof BlockEntityRedstoneImpetus tile) {
-                    var player = tile.getStoredPlayer();
-                    tile.startExecution(player);
-                }
-            }
-        }
-    }
+				if (isPowered && pLevel.getBlockEntity(pPos) instanceof BlockEntityRedstoneImpetus tile) {
+					var player = tile.getStoredPlayer();
+					tile.startExecution(player);
+				}
+			}
+		}
+	}
 }

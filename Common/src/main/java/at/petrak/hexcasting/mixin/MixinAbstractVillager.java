@@ -11,11 +11,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 // Prevents the villager from having any offers if it's brainswept
 @Mixin(AbstractVillager.class)
 public class MixinAbstractVillager {
-    @Inject(method = "getOffers", at = @At("HEAD"), cancellable = true)
-    private void nixOffers(CallbackInfoReturnable<MerchantOffers> cir) {
-        var self = (AbstractVillager) (Object) this;
-        if (IXplatAbstractions.INSTANCE.isBrainswept(self)) {
-            cir.setReturnValue(new MerchantOffers());
-        }
-    }
+	@Inject(method = "getOffers", at = @At("HEAD"), cancellable = true)
+	private void nixOffers(CallbackInfoReturnable<MerchantOffers> cir) {
+		var self = (AbstractVillager) (Object) this;
+		if (IXplatAbstractions.INSTANCE.isBrainswept(self)) {
+			cir.setReturnValue(new MerchantOffers());
+		}
+	}
 }

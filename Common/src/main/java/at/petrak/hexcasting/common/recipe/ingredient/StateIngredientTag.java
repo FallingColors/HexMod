@@ -2,8 +2,13 @@ package at.petrak.hexcasting.common.recipe.ingredient;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonObject;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+import javax.annotation.Nonnull;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -12,13 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public class StateIngredientTag extends StateIngredientBlocks {
 	private final TagKey<Block> tag;
@@ -30,7 +28,7 @@ public class StateIngredientTag extends StateIngredientBlocks {
 
 	public Stream<Block> resolve() {
 		return StreamSupport.stream(BuiltInRegistries.BLOCK.getTagOrEmpty(tag).spliterator(), false)
-			.map(Holder::value);
+				.map(Holder::value);
 	}
 
 	@Override
@@ -58,9 +56,9 @@ public class StateIngredientTag extends StateIngredientBlocks {
 	@Override
 	public List<ItemStack> getDisplayedStacks() {
 		return resolve()
-			.filter(b -> b.asItem() != Items.AIR)
-			.map(ItemStack::new)
-			.collect(Collectors.toList());
+				.filter(b -> b.asItem() != Items.AIR)
+				.map(ItemStack::new)
+				.collect(Collectors.toList());
 	}
 
 	@Nonnull

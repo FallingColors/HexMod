@@ -9,10 +9,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemEntity.class)
 public class FabricItemEntityMixin {
-    @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
-    private void tick(CallbackInfo ci) {
-        ItemEntity entity = (ItemEntity) (Object) this;
-        if (entity.getItem().is(HexItems.SLATE) && HexItems.SLATE.onEntityItemUpdate(entity.getItem(), entity))
-            ci.cancel();
-    }
+	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
+	private void tick(CallbackInfo ci) {
+		ItemEntity entity = (ItemEntity) (Object) this;
+		if (entity.getItem().is(HexItems.SLATE)
+				&& HexItems.SLATE.onEntityItemUpdate(entity.getItem(), entity)) ci.cancel();
+	}
 }

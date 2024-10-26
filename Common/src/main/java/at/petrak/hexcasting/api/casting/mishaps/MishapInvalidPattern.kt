@@ -8,15 +8,14 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment
 import net.minecraft.world.item.DyeColor
 
 class MishapInvalidPattern : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
-        dyeColor(DyeColor.YELLOW)
+	override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+		dyeColor(DyeColor.YELLOW)
 
-    override fun resolutionType(ctx: CastingEnvironment) = ResolvedPatternType.INVALID
+	override fun resolutionType(ctx: CastingEnvironment) = ResolvedPatternType.INVALID
 
-    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        stack.add(GarbageIota())
-    }
+	override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+		stack.add(GarbageIota())
+	}
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("invalid_pattern")
+	override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = error("invalid_pattern")
 }

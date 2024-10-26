@@ -13,54 +13,50 @@ import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.common.casting.actions.spells.great.OpTeleport
-import net.minecraft.world.entity.Entity
 import kotlin.math.absoluteValue
 import kotlin.math.roundToLong
+import net.minecraft.world.entity.Entity
 
 object OpBlink : SpellAction {
-    override val argc = 2
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
-        val target = args.getEntity(0, argc)
-        val delta = args.getDouble(1, argc)
-        env.assertEntityInRange(target)
+	override val argc = 2
 
-        if (!target.canChangeDimensions() || target.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
-            throw MishapImmuneEntity(target)
+	override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+		val target = args.getEntity(0, argc)
+		val delta = args.getDouble(1, argc)
+		env.assertEntityInRange(target)
 
-        val dvec = target.lookAngle.scale(delta)
-        val endPos = target.position().add(dvec)
+		if (!target.canChangeDimensions() || target.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
+			throw MishapImmuneEntity(target)
 
-        if (!HexConfig.server().canTeleportInThisDimension(env.world.dimension()))
-            throw MishapBadLocation(endPos, "bad_dimension")
+		val dvec = target.lookAngle.scale(delta)
+		val endPos = target.position().add(dvec)
 
-        env.assertVecInRange(target.position())
-        env.assertVecInRange(endPos)
-        if (!env.isVecInWorld(endPos.subtract(0.0, 1.0, 0.0)))
-            throw MishapBadLocation(endPos, "too_close_to_out")
+		if (!HexConfig.server().canTeleportInThisDimension(env.world.dimension()))
+			throw MishapBadLocation(endPos, "bad_dimension")
 
+		env.assertVecInRange(target.position())
+		env.assertVecInRange(endPos)
+		if (!env.isVecInWorld(endPos.subtract(0.0, 1.0, 0.0)))
+			throw MishapBadLocation(endPos, "too_close_to_out")
 
-        val targetMiddlePos = target.position().add(0.0, target.eyeHeight / 2.0, 0.0)
+		val targetMiddlePos = target.position().add(0.0, target.eyeHeight / 2.0, 0.0)
 
-        return SpellAction.Result(
-            Spell(target, delta),
-            (MediaConstants.SHARD_UNIT * delta.absoluteValue * 0.5).roundToLong(),
-            listOf(
-                ParticleSpray.cloud(targetMiddlePos, 2.0, 50),
-                ParticleSpray.burst(targetMiddlePos.add(dvec), 2.0, 100)
-            )
-        )
-    }
+		return SpellAction.Result(
+			Spell(target, delta),
+			(MediaConstants.SHARD_UNIT * delta.absoluteValue * 0.5).roundToLong(),
+			listOf(
+				ParticleSpray.cloud(targetMiddlePos, 2.0, 50),
+				ParticleSpray.burst(targetMiddlePos.add(dvec), 2.0, 100)
+			)
+		)
+	}
 
-    private data class Spell(val target: Entity, val delta: Double) : RenderedSpell {
-        override fun cast(env: CastingEnvironment) {
-            if (!HexConfig.server().canTeleportInThisDimension(env.world.dimension()))
-                return
+	private data class Spell(val target: Entity, val delta: Double) : RenderedSpell {
+		override fun cast(env: CastingEnvironment) {
+			if (!HexConfig.server().canTeleportInThisDimension(env.world.dimension())) return
 
-            val delta = target.lookAngle.scale(delta)
-            OpTeleport.teleportRespectSticky(target, delta, env.world)
-        }
-    }
+			val delta = target.lookAngle.scale(delta)
+			OpTeleport.teleportRespectSticky(target, delta, env.world)
+		}
+	}
 }

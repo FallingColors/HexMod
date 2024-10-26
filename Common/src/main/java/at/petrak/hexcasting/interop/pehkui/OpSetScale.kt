@@ -11,26 +11,23 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.entity.Entity
 
 object OpSetScale : SpellAction {
-    override val argc = 2
+	override val argc = 2
 
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
-        val target = args.getEntity(0, argc)
-        val scale = args.getDoubleBetween(1, 1.0 / 32.0, 8.0, argc)
-        env.assertEntityInRange(target)
+	override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+		val target = args.getEntity(0, argc)
+		val scale = args.getDoubleBetween(1, 1.0 / 32.0, 8.0, argc)
+		env.assertEntityInRange(target)
 
-        return SpellAction.Result(
-            Spell(target, scale),
-            50_000,
-            listOf(ParticleSpray.burst(target.position(), scale, 40))
-        )
-    }
+		return SpellAction.Result(
+			Spell(target, scale),
+			50_000,
+			listOf(ParticleSpray.burst(target.position(), scale, 40))
+		)
+	}
 
-    private data class Spell(val target: Entity, val scale: Double) : RenderedSpell {
-        override fun cast(env: CastingEnvironment) {
-            IXplatAbstractions.INSTANCE.pehkuiApi.setScale(target, scale.toFloat())
-        }
-    }
+	private data class Spell(val target: Entity, val scale: Double) : RenderedSpell {
+		override fun cast(env: CastingEnvironment) {
+			IXplatAbstractions.INSTANCE.pehkuiApi.setScale(target, scale.toFloat())
+		}
+	}
 }

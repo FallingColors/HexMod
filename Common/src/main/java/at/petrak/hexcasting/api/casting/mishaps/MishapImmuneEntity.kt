@@ -8,13 +8,13 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.DyeColor
 
 class MishapImmuneEntity(val entity: Entity) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
-        dyeColor(DyeColor.BLUE)
+	override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+		dyeColor(DyeColor.BLUE)
 
-    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        env.mishapEnvironment.yeetHeldItemsTowards(entity.position())
-    }
+	override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+		env.mishapEnvironment.yeetHeldItemsTowards(entity.position())
+	}
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("immune_entity", entity.displayName.plainCopy().aqua)
+	override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
+		error("immune_entity", entity.displayName.plainCopy().aqua)
 }

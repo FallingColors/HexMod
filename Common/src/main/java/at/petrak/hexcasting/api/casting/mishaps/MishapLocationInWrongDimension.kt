@@ -9,16 +9,17 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.DyeColor
 
 class MishapLocationInWrongDimension(val properDimension: ResourceLocation) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
-        dyeColor(DyeColor.MAGENTA)
+	override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+		dyeColor(DyeColor.MAGENTA)
 
-    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        stack.add(GarbageIota())
-    }
+	override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+		stack.add(GarbageIota())
+	}
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component =
-        error(
-            "wrong_dimension", properDimension.toString(),
-            ctx.world.dimension().location().toString()
-        )
+	override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component =
+		error(
+			"wrong_dimension",
+			properDimension.toString(),
+			ctx.world.dimension().location().toString()
+		)
 }
