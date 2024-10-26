@@ -53,6 +53,18 @@ public class HexAdvancements extends PaucalAdvancementSubProvider {
                 ItemPredicate.Builder.item().of(HexTags.Items.GRANTS_ROOT_ADVANCEMENT).build()))
             .save(consumer, prefix("root")); // how the hell does one even read this
 
+        //Creative Debug Unlocker
+        Advancement.Builder.advancement()
+            .display(new DisplayInfo(new ItemStack(HexItems.CREATIVE_UNLOCKER),
+                Component.translatable("advancement.hexcasting:creative_unlocker"),
+                Component.translatable("advancement.hexcasting:creative_unlocker.desc"),
+                new ResourceLocation("minecraft", "textures/block/calcite.png"),
+                FrameType.TASK, true, false, true))
+            .parent(root)
+            .addCriterion("has_creative_unlocker", InventoryChangeTrigger.TriggerInstance.hasItems(
+                ItemPredicate.Builder.item().of(HexItems.CREATIVE_UNLOCKER).build()))
+            .save(consumer, prefix("creative_unlocker"));
+
         // weird names so we have alphabetical parity
         Advancement.Builder.advancement()
             .display(simpleDisplay(Items.GLISTERING_MELON_SLICE, "wasteful_cast", FrameType.TASK))
