@@ -178,12 +178,13 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         if (sentinel != null
             && sentinel.extendsRange()
             && this.caster.level().dimension() == sentinel.dimension()
-            && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS
+                // adding 0.00000000001 to avoid machine precision errors at specific angles
+                && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS + 0.00000000001
         ) {
             return true;
         }
 
-        return vec.distanceToSqr(this.caster.position()) <= AMBIT_RADIUS * AMBIT_RADIUS;
+        return vec.distanceToSqr(this.caster.position()) <= AMBIT_RADIUS * AMBIT_RADIUS + 0.00000000001;
     }
 
     @Override
