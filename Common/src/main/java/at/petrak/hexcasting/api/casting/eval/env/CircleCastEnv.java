@@ -149,6 +149,13 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
+    public boolean isEnlightened() {
+        // have unbound circles be enlightened.
+        if(getCastingEntity() == null) return true;
+        return super.isEnlightened();
+    }
+
+    @Override
     public boolean hasEditPermissionsAtEnvironment(BlockPos pos) {
         return true;
     }
