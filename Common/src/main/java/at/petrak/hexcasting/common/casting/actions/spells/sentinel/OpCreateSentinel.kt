@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.player.Sentinel
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -19,6 +20,9 @@ class OpCreateSentinel(val extendsRange: Boolean) : SpellAction {
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
+        if (env.castingEntity == null)
+            throw MishapBadCaster()
+
         val target = args.getVec3(0, argc)
         env.assertVecInRange(target)
 
