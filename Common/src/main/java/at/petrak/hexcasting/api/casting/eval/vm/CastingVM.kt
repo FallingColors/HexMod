@@ -73,10 +73,10 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             continuation = image2.continuation
             lastResolutionType = image2.resolutionType
             try {
-                performSideEffects(info, image2.sideEffects)
+                performSideEffects(image2.sideEffects)
             } catch (e: Exception) {
                 e.printStackTrace()
-                performSideEffects(info, listOf(OperatorSideEffect.DoMishap(MishapInternalException(e), Mishap.Context(null, null))))
+                performSideEffects(listOf(OperatorSideEffect.DoMishap(MishapInternalException(e), Mishap.Context(null, null))))
             }
             info.earlyExit = info.earlyExit || !lastResolutionType.success
         }
@@ -152,13 +152,9 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
     /**
      * Execute the side effects of a pattern, updating our aggregated info.
      */
-    fun performSideEffects(info: TempControllerInfo, sideEffects: List<OperatorSideEffect>) {
+    fun performSideEffects(sideEffects: List<OperatorSideEffect>) {
         for (haskellProgrammersShakingandCryingRN in sideEffects) {
-            val mustStop = haskellProgrammersShakingandCryingRN.performEffect(this)
-            if (mustStop) {
-                info.earlyExit = true
-                break
-            }
+            haskellProgrammersShakingandCryingRN.performEffect(this)
         }
     }
 

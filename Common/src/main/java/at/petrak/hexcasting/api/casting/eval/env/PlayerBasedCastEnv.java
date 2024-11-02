@@ -106,13 +106,13 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     /**
      * Search the player's inventory for media ADs and use them.
      */
-    protected long extractMediaFromInventory(long costLeft, boolean allowOvercast) {
+    protected long extractMediaFromInventory(long costLeft, boolean allowOvercast, boolean simulate) {
         List<ADMediaHolder> sources = MediaHelper.scanPlayerForMediaStuff(this.caster);
 
         var startCost = costLeft;
 
         for (var source : sources) {
-            var found = MediaHelper.extractMedia(source, costLeft, false, false);
+            var found = MediaHelper.extractMedia(source, costLeft, false, simulate);
             costLeft -= found;
             if (costLeft <= 0) {
                 break;
@@ -122,24 +122,31 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         if (costLeft > 0 && allowOvercast) {
             double mediaToHealth = HexConfig.common().mediaToHealthRate();
             double healthToRemove = Math.max(costLeft / mediaToHealth, 0.5);
-            var mediaAbleToCastFromHP = this.caster.getHealth() * mediaToHealth;
+            if (simulate) {
+                long simulatedRemovedMedia = Mth.ceil(Math.min(this.caster.getHealth(), healthToRemove) * mediaToHealth);
+                costLeft -= simulatedRemovedMedia;
+            } else {
+                var mediaAbleToCastFromHP = this.caster.getHealth() * mediaToHealth;
 
-            Mishap.trulyHurt(this.caster, this.caster.damageSources().source(HexDamageTypes.OVERCAST), (float) healthToRemove);
+                Mishap.trulyHurt(this.caster, this.caster.damageSources().source(HexDamageTypes.OVERCAST), (float) healthToRemove);
 
-            var actuallyTaken = Mth.ceil(mediaAbleToCastFromHP - (this.caster.getHealth() * mediaToHealth));
+                var actuallyTaken = Mth.ceil(mediaAbleToCastFromHP - (this.caster.getHealth() * mediaToHealth));
 
-            HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.caster, actuallyTaken);
-            this.caster.awardStat(HexStatistics.MEDIA_OVERCAST, actuallyTaken);
+                HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.caster, actuallyTaken);
+                this.caster.awardStat(HexStatistics.MEDIA_OVERCAST, actuallyTaken);
 
-            costLeft -= actuallyTaken;
+                costLeft -= actuallyTaken;
+            }
         }
 
-        this.caster.awardStat(HexStatistics.MEDIA_USED, (int) (startCost - costLeft));
-        HexAdvancementTriggers.SPEND_MEDIA_TRIGGER.trigger(
-            this.caster,
-            startCost - costLeft,
-            costLeft < 0 ? -costLeft : 0
-        );
+        if (!simulate) {
+            this.caster.awardStat(HexStatistics.MEDIA_USED, (int) (startCost - costLeft));
+            HexAdvancementTriggers.SPEND_MEDIA_TRIGGER.trigger(
+                    this.caster,
+                    startCost - costLeft,
+                    costLeft < 0 ? -costLeft : 0
+            );
+        }
 
         return costLeft;
     }

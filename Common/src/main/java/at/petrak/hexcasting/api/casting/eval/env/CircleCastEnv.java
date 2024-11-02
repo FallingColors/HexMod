@@ -111,7 +111,7 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public long extractMediaEnvironment(long cost) {
+    public long extractMediaEnvironment(long cost, boolean simulate) {
         var entity = this.getImpetus();
         if (entity == null)
             return cost;
@@ -122,7 +122,9 @@ public class CircleCastEnv extends CastingEnvironment {
 
         long mediaToTake = Math.min(cost, mediaAvailable);
         cost -= mediaToTake;
-        entity.setMedia(mediaAvailable - mediaToTake);
+        if (!simulate) {
+            entity.setMedia(mediaAvailable - mediaToTake);
+        }
 
         return cost;
     }

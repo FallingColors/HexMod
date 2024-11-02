@@ -238,10 +238,10 @@ public abstract class CastingEnvironment {
      * If there was enough media found, it will return less or equal to zero; if there wasn't, it will be
      * positive.
      */
-    public long extractMedia(long cost) {
+    public long extractMedia(long cost, boolean simulate) {
         for (var extractMediaComponent : preMediaExtract)
             cost = extractMediaComponent.onExtractMedia(cost);
-        cost = extractMediaEnvironment(cost);
+        cost = extractMediaEnvironment(cost, simulate);
         for (var extractMediaComponent : postMediaExtract)
             cost = extractMediaComponent.onExtractMedia(cost);
         return cost;
@@ -253,7 +253,7 @@ public abstract class CastingEnvironment {
      * If there was enough media found, it will return less or equal to zero; if there wasn't, it will be
      * positive.
      */
-    protected abstract long extractMediaEnvironment(long cost);
+    protected abstract long extractMediaEnvironment(long cost, boolean simulate);
 
     /**
      * Get if the vec is close enough, to the player or sentinel ...
