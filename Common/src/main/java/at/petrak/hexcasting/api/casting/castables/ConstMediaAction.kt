@@ -29,7 +29,7 @@ interface ConstMediaAction : Action {
         val stack = image.stack.toMutableList()
 
         if (env.extractMedia(this.mediaCost, true) > 0)
-            throw MishapNotEnoughMedia()
+            throw MishapNotEnoughMedia(this.mediaCost)
         if (this.argc > stack.size)
             throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)
