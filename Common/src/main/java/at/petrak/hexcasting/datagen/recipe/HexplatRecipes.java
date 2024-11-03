@@ -457,6 +457,12 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .unlockedBy("enlightenment", enlightenment)
             .save(recipes, modLoc("brainsweep/directrix_redstone"));
 
+        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_DIRECTRIX),
+                new VillagerIngredient(VillagerProfession.FISHERMAN, null, 1),
+                HexBlocks.DIRECTRIX_BOOLEAN.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
+                .unlockedBy("enlightenment", enlightenment)
+                .save(recipes, modLoc("brainsweep/directrix_boolean"));
+
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.AKASHIC_LIGATURE),
             new VillagerIngredient(VillagerProfession.LIBRARIAN, null, 5),
             HexBlocks.AKASHIC_RECORD.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)

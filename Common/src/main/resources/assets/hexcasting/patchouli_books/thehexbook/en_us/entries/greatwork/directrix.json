@@ -23,6 +23,11 @@
       "type": "hexcasting:brainsweep",
       "recipe": "hexcasting:brainsweep/directrix_redstone",
       "text": "hexcasting.page.directrix.directrix_redstone"
+    },
+    {
+      "type": "hexcasting:brainsweep",
+      "recipe": "hexcasting:brainsweep/directrix_boolean",
+      "text": "hexcasting.page.directrix.directrix_boolean"
     }
   ]
 }
