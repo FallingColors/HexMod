@@ -22,6 +22,8 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -229,5 +231,13 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
             case FLOOR -> Direction.UP;
             default -> pState.getValue(FACING);
         };
+    }
+
+    public BlockState rotate(BlockState state, Rotation rot) {
+        return (BlockState) state.setValue(FACING, rot.rotate((Direction) state.getValue(FACING)));
+    }
+
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        return state.rotate(mirror.getRotation((Direction) state.getValue(FACING)));
     }
 }
