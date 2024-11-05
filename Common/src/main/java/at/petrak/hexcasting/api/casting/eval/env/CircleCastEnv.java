@@ -139,7 +139,7 @@ public class CircleCastEnv extends CastingEnvironment {
             if (sentinel != null
                 && sentinel.extendsRange()
                 && caster.level().dimension() == sentinel.dimension()
-                && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS
+                && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS + 0.00000000001
             ) {
                 return true;
             }
