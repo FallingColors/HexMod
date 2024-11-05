@@ -20,7 +20,7 @@ class OpCreateSentinel(val extendsRange: Boolean) : SpellAction {
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
-        if (env.castingEntity == null)
+        if (env.castingEntity !is ServerPlayer)
             throw MishapBadCaster()
 
         val target = args.getVec3(0, argc)

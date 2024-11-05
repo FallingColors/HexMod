@@ -17,7 +17,7 @@ object OpDestroySentinel : SpellAction {
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
-        if (env.castingEntity == null)
+        if (env.castingEntity !is ServerPlayer)
             throw MishapBadCaster()
 
         val sentinel = IXplatAbstractions.INSTANCE.getSentinel(env.castingEntity as? ServerPlayer)

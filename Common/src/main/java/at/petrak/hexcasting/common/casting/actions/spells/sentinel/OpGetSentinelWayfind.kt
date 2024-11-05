@@ -18,7 +18,7 @@ object OpGetSentinelWayfind : ConstMediaAction {
     override val argc = 1
     override val mediaCost: Long = MediaConstants.DUST_UNIT / 10
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
-        if (env.castingEntity == null)
+        if (env.castingEntity !is ServerPlayer)
             throw MishapBadCaster()
 
         val from = args.getVec3(0, argc)
