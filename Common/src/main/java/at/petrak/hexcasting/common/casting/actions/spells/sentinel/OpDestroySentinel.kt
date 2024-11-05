@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster
 import at.petrak.hexcasting.api.casting.mishaps.MishapLocationInWrongDimension
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -16,6 +17,9 @@ object OpDestroySentinel : SpellAction {
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
+        if (env.castingEntity !is ServerPlayer)
+            throw MishapBadCaster()
+
         val sentinel = IXplatAbstractions.INSTANCE.getSentinel(env.castingEntity as? ServerPlayer)
 
         // TODO why can't you remove things from other dimensions?
