@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.casting.math
 
 import at.petrak.hexcasting.api.utils.getSafe
+import com.mojang.serialization.Codec
 
 enum class HexDir {
     NORTH_EAST, EAST, SOUTH_EAST, SOUTH_WEST, WEST, NORTH_WEST;
@@ -26,6 +27,11 @@ enum class HexDir {
         }
 
     companion object {
+        val CODEC: Codec<HexDir> = Codec.STRING.xmap(
+            HexDir::fromString,
+            HexDir::name
+        )
+
         @JvmStatic
         fun fromString(key: String): HexDir {
             return values().getSafe(key, WEST)

@@ -1,0 +1,22 @@
+{
+  "name": "hexcasting.entry.media_cube",
+  "icon": "hexcasting:creative_unlocker",
+  "category": "hexcasting:creative_unlocker",
+  "sortnum": 0,
+  "priority": true,
+  "advancement": "hexcasting:creative_unlocker",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.creative_unlocker.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.creative_unlocker.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.creative_unlocker.3"
+    }
+  ]
+}
