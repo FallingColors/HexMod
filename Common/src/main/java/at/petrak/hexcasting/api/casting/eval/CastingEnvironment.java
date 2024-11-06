@@ -240,10 +240,10 @@ public abstract class CastingEnvironment {
      */
     public long extractMedia(long cost, boolean simulate) {
         for (var extractMediaComponent : preMediaExtract)
-            cost = extractMediaComponent.onExtractMedia(cost);
+            cost = extractMediaComponent.onExtractMedia(cost, simulate);
         cost = extractMediaEnvironment(cost, simulate);
         for (var extractMediaComponent : postMediaExtract)
-            cost = extractMediaComponent.onExtractMedia(cost);
+            cost = extractMediaComponent.onExtractMedia(cost, simulate);
         return cost;
     }
 
