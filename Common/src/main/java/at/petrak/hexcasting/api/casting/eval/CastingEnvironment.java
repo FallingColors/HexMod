@@ -19,6 +19,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -360,10 +361,87 @@ public abstract class CastingEnvironment {
      */
     protected abstract List<ItemStack> getUsableStacks(StackDiscoveryMode mode);
 
+    protected List<ItemStack> getUsableStacksForPlayer(StackDiscoveryMode mode, @Nullable InteractionHand castingHand, ServerPlayer caster) {
+        return switch (mode) {
+            case QUERY -> {
+                var out = new ArrayList<ItemStack>();
+
+                if (castingHand == null) {
+                    var mainhand = caster.getItemInHand(InteractionHand.MAIN_HAND);
+                    if (!mainhand.isEmpty()) {
+                        out.add(mainhand);
+                    }
+
+                    var offhand = caster.getItemInHand(InteractionHand.OFF_HAND);
+                    if (!offhand.isEmpty()) {
+                        out.add(offhand);
+                    }
+                } else {
+                    var offhand = caster.getItemInHand(HexUtils.otherHand(castingHand));
+                    if (!offhand.isEmpty()) {
+                        out.add(offhand);
+                    }
+                }
+
+                // If we're casting from the main hand, try to pick from the slot one to the right of the selected slot
+                // Otherwise, scan the hotbar left to right
+                var anchorSlot = castingHand != InteractionHand.OFF_HAND
+                        ? (caster.getInventory().selected + 1) % 9
+                        : 0;
+
+
+                for (int delta = 0; delta < 9; delta++) {
+                    var slot = (anchorSlot + delta) % 9;
+                    out.add(caster.getInventory().getItem(slot));
+                }
+
+                yield out;
+            }
+            case EXTRACTION -> {
+                // https://wiki.vg/Inventory is WRONG
+                // slots 0-8 are the hotbar
+                // for what purpose i cannot imagine
+                // http://redditpublic.com/images/b/b2/Items_slot_number.png looks right
+                // and offhand is 150 Inventory.java:464
+                var out = new ArrayList<ItemStack>();
+
+                // First, the inventory backwards
+                // We use inv.items here to get the main inventory, but not offhand or armor
+                Inventory inv = caster.getInventory();
+                for (int i = inv.items.size() - 1; i >= 0; i--) {
+                    if (i != inv.selected) {
+                        out.add(inv.items.get(i));
+                    }
+                }
+
+                // then the offhand, then the selected hand
+                out.addAll(inv.offhand);
+                out.add(inv.getSelected());
+
+                yield out;
+            }
+        };
+    }
+
     /**
      * Get the primary/secondary item stacks this env can use (i.e. main hand and offhand for the player).
      */
     protected abstract List<HeldItemInfo> getPrimaryStacks();
+
+    protected List<HeldItemInfo> getPrimaryStacksForPlayer(InteractionHand castingHand, ServerPlayer caster) {
+        var primaryItem = caster.getItemInHand(castingHand);
+
+        if (primaryItem.isEmpty())
+            primaryItem = ItemStack.EMPTY.copy();
+
+        var secondaryItem = caster.getItemInHand(HexUtils.otherHand(castingHand));
+
+        if (secondaryItem.isEmpty())
+            secondaryItem = ItemStack.EMPTY.copy();
+
+        return List.of(new HeldItemInfo(secondaryItem, HexUtils.otherHand(castingHand)), new HeldItemInfo(primaryItem,
+                castingHand));
+    }
 
     /**
      * Return the slot from which to take blocks and items.
@@ -462,6 +540,38 @@ public abstract class CastingEnvironment {
      * @return whether it was successful.
      */
     public abstract boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand);
+
+
+    public boolean replaceItemForPlayer(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand, ServerPlayer caster) {
+        if (caster == null)
+            return false;
+
+        if (hand != null && stackOk.test(caster.getItemInHand(hand))) {
+            caster.setItemInHand(hand, replaceWith);
+            return true;
+        }
+
+        Inventory inv = caster.getInventory();
+        for (int i = inv.items.size() - 1; i >= 0; i--) {
+            if (i != inv.selected) {
+                if (stackOk.test(inv.items.get(i))) {
+                    inv.setItem(i, replaceWith);
+                    return true;
+                }
+            }
+        }
+
+        if (stackOk.test(caster.getItemInHand(getOtherHand()))) {
+            caster.setItemInHand(getOtherHand(), replaceWith);
+            return true;
+        }
+        if (stackOk.test(caster.getItemInHand(getCastingHand()))) {
+            caster.setItemInHand(getCastingHand(), replaceWith);
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * The order/mode stacks should be discovered in
