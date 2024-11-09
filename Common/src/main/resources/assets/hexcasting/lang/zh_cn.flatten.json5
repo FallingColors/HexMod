@@ -123,7 +123,7 @@
     directrix: {
       empty: "空白导向石",
       redstone: "石匠导向石",
-      boolean: "???导向石",
+      boolean: "牧羊人导向石",
     },
 
     impetus: {
@@ -353,6 +353,10 @@
       "": "咒法学研究",
       desc: "在地底深处找到并采集不断生长着的、凝聚的媒质",
     },
+    creative_unlocker: {
+      "": "无尽能量！",
+      "desc": "找到创造调试物品。"
+    },
     enlightenment: {
       "": "获得启迪",
       desc: "施放咒术至生命将尽来击碎屏障",
@@ -432,6 +436,14 @@
       "fail.badtype": "%s不是生物",
       "fail.already": "%s早已没有了意识",
     },
+  },
+
+  // === Inline ! ===
+  "matcher.hexcasting.pattern": {
+    "title": "咒术图案",
+    "title.styled": "咒术图案<se,deaqq>",
+    "description": "咒法学图案可视化",
+    "example": "<ne,qaq><e,aa><ne,qaq><e,wa><e,wqaawdd><e,aawaawaa>"
   },
 
   hexcasting: {
@@ -728,7 +740,7 @@
         erase: "清除物品",
         create_water: "制造水源",
         destroy_water: "清除流体",
-        ignite: "点燃方块",
+        ignite: "点燃",
         extinguish: "广域熄灭",
         conjure_block: "构筑方块",
         conjure_light: "构筑光源",
@@ -909,6 +921,7 @@
       invalid_spell_datum_type: "尝试将某无效类型的值用作SpellDatum：%s（class %s）。这是模组中的bug。",
       unknown: "抛出异常（%s）。这是模组中的bug。",
       stack_size: "超出了栈的大小上限",
+      bad_caster: "试图运行的图案需要强大的意识才能承受",
 
       invalid_value: {
         "": "本应在栈下标为%2$s处接受%1$s，而实际接受了%3$s",
@@ -928,6 +941,8 @@
             villager: "一个村民",
             living: "一个生物",
           },
+
+          entity_or_vector: "一个实体或向量",
 
           unknown: "（未知，这是个bug）",
         },
@@ -1065,11 +1080,16 @@
           这也许只是某些消亡的老古董口中的胡言乱语，不过——它们只是简单的图案罢了。$(br2)\
           试试看又能出什么错呢？",
       },
+      creative_unlocker: {
+        "": "媒质立方",
+        desc: "我找到了一个近乎无限的媒质源——媒质立方。",
+      }
     },
     // ^ categories
 
     entry: {
       media: "媒质",
+      media_cube: "媒质立方",
       geodes: "晶洞",
       couldnt_cast: "挫折",
       start_to_see: "我看到了什么？",
@@ -1167,6 +1187,13 @@
     // ^ entries
 
     page: {
+      creative_unlocker: {
+        "1": "$(#74b3f2)媒质立方/$是近乎无尽的媒质源，能为所有$(hex)咒术/$无限提供$(media)媒质/$。它看上去也挺好吃的。食用后也许会揭示世界的更多秘密，亦有可能触碰到剧透内容……",
+        "2": "而且，在铁砧中为$(#74b3f2)媒质立方/$重命名，似乎就能用来测试$(hex)咒术/$，以此加深理解。假使真有一天，我得到了创造的力量，在按照后页所说内容操作之前，最好还是先把它禁用掉。",
+        "3": "将$(#74b3f2)媒质立方/$重命名为“debug media”，聊天栏中即会出现所消耗媒质量的反馈信息。",
+        // NOTE: The following feature documented is broken in the current implementation. It should be uncommented and the page in patchouli should be updated when the feature is fixed.
+        //"4": "将$(#74b3f2)媒质立方/$重命名为“debug patterns”，聊天栏中即会出现所运行图案的运行顺序。"
+      },
       media: {
         "1": "$(media)媒质/$是一种独立于意识的思维能量。所有生物都会在思考时产生痕量的$(media)媒质/$，而在这一思考过程结束后，产生的媒质就会被释放至环境中。$(br2)所谓施放$(hex)咒术/$，就是操纵$(media)媒质/$以产生有效影响的过程。",
         "2": "$(media)媒质/$可以影响其他媒质，而这种影响的强度和种类都可通过将$(media)媒质/$绘制为各式图案来进行控制。$(p)研究这种魔法的学者则会使用接在木棍一端的浓缩的$(media)媒质/$。只要在空中按特定模式挥舞，学者们就能以足够的精度操控足量的$(media)媒质/$来影响世界，也即“$(hex)咒术/$”。",
@@ -1510,6 +1537,7 @@
 
         empty_directrix: "第一步，基床……用“基底”这个名字会准确些。倘若没有意识引导，媒质的流向是由$(media)媒质/$波的微观涨落和环境决定的，换句话说，随机的。",
         directrix_redstone: "$(l:greatwork/directrix)$(item)石匠导向石/$会根据红石信号改变输出方向。没有信号的话，出口是$(media)媒质/$色的一端；有信号的话，出口是红石色的一端。",
+        directrix_boolean: "$(l:greatwork/directrix)$(item)牧羊人导向石/$会根据栈中的布尔值改变输出方向。为$(thing)True/$时，媒质自后方流出；为$(thing)False/$时，媒质自前方流出。"
       },
 
       akashiclib: {
@@ -1622,7 +1650,7 @@
         numlist: "集合操作比较奇怪，部分操作只能接受两个数或两个列表，一个数一个列表就不行。这类参数记为“(num, num) (list, list)”。$(br2)当接受的是数时，它们将被视为所谓二进制的“位组”，也就是由 1 和 0、真和假、“开”和“关”组成的列表。",
 
         "or.1": "取两集合的并集。",
-        "or.2": "操作如下：$(li)若栈顶为两个数，将其组合为在两个位组中有一个为 1 处为 1 的位组。$(li)若栈顶为两个列表，则创建一个由第一个列表中所有元素和第二个列表独有的元素组成的列表。和$(l:patterns/lists#hexcasting:add)$(action)组合之馏化/$类似。",
+        "or.2": "操作如下：$(li)若栈顶为两个数，将其组合为在两个位组中有一个为 1 处为 1 的位组。$(li)若栈顶为两个列表，则创建一个由第一个列表中所有元素和第二个列表独有的元素组成的列表。和$(l:patterns/lists#hexcasting:add)$(action)加法之馏化/$有些类似。",
 
         "and.1": "取两集合的交集。",
         "and.2": "操作如下：$(li)若栈顶为两个数，将其组合为仅在两个位组中$(italic)均/$为 1 处为 1 的位组。$(li)若栈顶为两个列表，则创建一个由第一个和第二个列表共有的元素组成的列表。",
@@ -1834,7 +1862,7 @@
         conjure_light: "在给定位置构筑一个发着我染色剂颜色的光的魔法光源。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
         bonemeal: "使目标位置的植物或树苗更快成长，就像对其施以$(item)骨粉/$一样。消耗略多于 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
         edify: "将$(media)媒质/$强制注入目标位置的树苗，使其长为$(l:items/edified)$(thing)启迪树/$。消耗大约 1 个$(l:items/amethyst)$(item)充能紫水晶/$。",
-        ignite: "在给定位置上方生火，就像在该位置使用$(item)火焰弹/$一样。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
+        ignite: "在给定位置上方生火，或点燃给定生物，就像对其使用$(item)火焰弹/$一样。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
         extinguish: "熄灭周围较大区域内的火焰。消耗大约 6 个$(l:items/amethyst)$(item)紫水晶粉/$。",
       },
 
