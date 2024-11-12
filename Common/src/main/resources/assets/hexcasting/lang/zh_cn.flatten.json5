@@ -210,6 +210,47 @@
     },
   },
 
+  "effect.hexcasting": {
+    enlarge_grid: "明晰",
+    shrink_grid: "蒙翳",
+  },
+
+  "item.minecraft.potion.effect": {
+    enlarge_grid: "明晰药水",
+    enlarge_grid_long: "明晰药水",
+    enlarge_grid_strong: "明晰药水",
+    shrink_grid: "蒙翳药水",
+    shrink_grid_long: "蒙翳药水",
+    shrink_grid_strong: "蒙翳药水",
+  },
+
+  "item.minecraft.splash_potion.effect": {
+    enlarge_grid: "喷溅型明晰药水",
+    enlarge_grid_long: "喷溅型明晰药水",
+    enlarge_grid_strong: "喷溅型明晰药水",
+    shrink_grid: "喷溅型蒙翳药水",
+    shrink_grid_long: "喷溅型蒙翳药水",
+    shrink_grid_strong: "喷溅型蒙翳药水",
+  },
+
+  "item.minecraft.lingering_potion.effect": {
+    enlarge_grid: "滞留型明晰药水",
+    enlarge_grid_long: "滞留型明晰药水",
+    enlarge_grid_strong: "滞留型明晰药水",
+    shrink_grid: "滞留型蒙翳药水",
+    shrink_grid_long: "滞留型蒙翳药水",
+    shrink_grid_strong: "滞留型蒙翳药水",
+  },
+
+  "item.minecraft.tipped_arrow.effect": {
+    enlarge_grid: "明晰之箭",
+    enlarge_grid_long: "明晰之箭",
+    enlarge_grid_strong: "明晰之箭",
+    shrink_grid: "蒙翳之箭",
+    shrink_grid_long: "蒙翳之箭",
+    shrink_grid_strong: "蒙翳之箭",
+  },
+
   "itemGroup.hexcasting": {
     "": "咒法学",
     creative_tab: "咒法学",
@@ -1117,6 +1158,7 @@
       // why is this called "hexcasting"?
       hexcasting: "施法物品",
       phials: "媒质之瓶",
+      potions: "咒术药水",
       pigments: "染色剂",
 
       edified: "启迪树",
@@ -1460,6 +1502,12 @@
         "2": "我找到了记载着一种注入了$(media)媒质/$的$(item)玻璃瓶/$的卷轴。施放$(hex)咒术/$时，法术会从这种试剂瓶中汲取$(media)媒质/$。液态的$(media)媒质/$便于按量使用，不会有媒质被浪费。它就和$(l:items/hexcasting)$(item)缀品/$的内部电池差不多，也一样可以用$(l:patterns/spells/hexcasting#hexcasting:recharge)$(action)重新充能/$补充媒质。",
         "3": "而不幸的是，用于$(italic)制作/$这种试剂瓶的技艺已经散佚了。我确实发现了$(l:patterns/great_spells/make_battery#hexcasting:craft/battery)$(thing)对应图案画法的提示/$，但具体绘制方法难以捉摸，怎么都画不对。不过我想只要勤学苦练就能修得真功。现在的话，浪费$(media)媒质/$是没法避免了……$(br2)但我不会一直囿于此处的。",
         desc: "$(italic)玉液琼浆。/$",
+      },
+
+      potions: {
+        "1": "透过$(l:items/lens)$(item)探知透镜/$观察，就能在咒术网格里塞进更多图案。想让施法变得更紧凑？我想炼金术可能有方法。$(br2)向$(item)粗制的药水/$里放进一撮紫水晶粉，酿成的药水便能像透镜那样增大我的咒术网格。甚至还能两者一起使用，将网格推向极致！",
+        "2": "明晰效果可延长，可增强，也可如同其他药水那样精制。$(br2)还可用$(item)发酵蛛眼/$腐化，以产生效果相反的药水。那些不怀好意的咒术师可以尝尝它的威力。",
+        "effects.header": "明晰与蒙翳",
       },
 
       pigments: {
