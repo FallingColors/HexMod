@@ -131,7 +131,6 @@ public class ForgeHexInitializer {
         bind(Registries.ATTRIBUTE, HexAttributes::register);
         bind(Registries.MOB_EFFECT, HexMobEffects::register);
         bind(Registries.POTION, HexPotions::register);
-        HexPotions.addRecipes();
 
         bind(Registries.PARTICLE_TYPE, HexParticles::registerParticles);
 
