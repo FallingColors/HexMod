@@ -69,16 +69,12 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
     }
 
     @Override
-    public long extractMediaEnvironment(long cost) {
+    public long extractMediaEnvironment(long cost, boolean simulate) {
         if (this.caster.isCreative())
             return 0;
 
         var canOvercast = this.canOvercast();
-        var remaining = this.extractMediaFromInventory(cost, canOvercast);
-        if (remaining > 0 && !canOvercast) {
-            this.caster.sendSystemMessage(Component.translatable("hexcasting.message.cant_overcast"));
-        }
-        return remaining;
+        return this.extractMediaFromInventory(cost, canOvercast, simulate);
     }
 
     @Override
