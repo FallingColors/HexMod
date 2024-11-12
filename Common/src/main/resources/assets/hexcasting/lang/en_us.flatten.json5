@@ -209,6 +209,47 @@
       bricks_small: "Small Quenched Allay Bricks",
     },
   },
+
+  "effect.hexcasting": {
+    enlarge_grid: "Clarity",
+    shrink_grid: "Clouding",
+  },
+
+  "item.minecraft.potion.effect": {
+    enlarge_grid: "Potion of Clarity",
+    enlarge_grid_long: "Potion of Clarity",
+    enlarge_grid_strong: "Potion of Clarity",
+    shrink_grid: "Potion of Clouding",
+    shrink_grid_long: "Potion of Clouding",
+    shrink_grid_strong: "Potion of Clouding",
+  },
+
+  "item.minecraft.splash_potion.effect": {
+    enlarge_grid: "Splash Potion of Clarity",
+    enlarge_grid_long: "Splash Potion of Clarity",
+    enlarge_grid_strong: "Splash Potion of Clarity",
+    shrink_grid: "Splash Potion of Clouding",
+    shrink_grid_long: "Splash Potion of Clouding",
+    shrink_grid_strong: "Splash Potion of Clouding",
+  },
+
+  "item.minecraft.lingering_potion.effect": {
+    enlarge_grid: "Lingering Potion of Clarity",
+    enlarge_grid_long: "Lingering Potion of Clarity",
+    enlarge_grid_strong: "Lingering Potion of Clarity",
+    shrink_grid: "Lingering Potion of Clouding",
+    shrink_grid_long: "Lingering Potion of Clouding",
+    shrink_grid_strong: "Lingering Potion of Clouding",
+  },
+
+  "item.minecraft.tipped_arrow.effect": {
+    enlarge_grid: "Arrow of Clarity",
+    enlarge_grid_long: "Arrow of Clarity",
+    enlarge_grid_strong: "Arrow of Clarity",
+    shrink_grid: "Arrow of Clouding",
+    shrink_grid_long: "Arrow of Clouding",
+    shrink_grid_strong: "Arrow of Clouding",
+  },
   
   "itemGroup.hexcasting": {
     "": "Hexcasting",
@@ -1117,6 +1158,7 @@
       // why is this called "hexcasting"?
       hexcasting: "Casting Items",
       phials: "Phials of Media",
+      potions: "Hex Potions",
       pigments: "Pigments",
       
       edified: "Edified Trees",
@@ -1460,6 +1502,12 @@
         "2": "I've found old scrolls describing a $(item)Glass Bottle/$ infused with _media. When casting _Hexes, my spells would then draw _media out of the phial. The liquid form of the _media would let me take exact change, so to speak; nothing would be wasted. It's quite like the internal battery of a $(l:items/hexcasting)$(item)Trinket/$, or similar; I can even $(l:patterns/spells/hexcasting#hexcasting:recharge)$(action)Recharge/$ them in the same manner.",
         "3": "Unfortunately, the art of actually $(italic)making/$ the things seems to have been lost to time. I've found a $(l:patterns/great_spells/make_battery#hexcasting:craft/battery)$(thing)hint at the pattern used to craft it/$, but the technique is irritatingly elusive, and I can't seem to do it successfully. I suspect I will figure it out with study and practice, though. For now, I will simply deal with the wasted _media...$(br2)But I won't settle for it forever.",
         desc: "$(italic)Drink the milk./$",
+      },
+
+      potions: {
+        "1": "Peering through a $(l:items/lens)$(item)Scrying Lens/$ allows me to fit more patterns onto my casting grid. But what if I want to improve my casting even further? Alchemy has an answer.$(br2)By adding a pinch of Amethyst Dust to an $(item)Awkward Potion/$, I can create a brew that increases the size of my grid in much the same way as the Lens. I can even use both at once for the ultimate grid!",
+        "2": "The Potion of Clarity can be extended, strengthened, and modified like any other potion.$(br2)It can also be corrupted with a $(item)Fermented Spider Eye/$ to produce a variant with the opposite effect. This may be useful for dealing with enemy casters.",
+        "effects.header": "Clarity and Clouding",
       },
       
       pigments: {
