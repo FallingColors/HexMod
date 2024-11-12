@@ -211,17 +211,44 @@
   },
 
   "effect.hexcasting": {
-    enlarge_grid: "ясность",
-    shrink_grid: "замешательство",
+    enlarge_grid: "Ясность",
+    shrink_grid: "Помутнение",
   },
 
   "item.minecraft.potion.effect": {
-    enlarge_grid: "зелье ясности",
-    enlarge_grid_long: "зелье ясности",
-    enlarge_grid_strong: "зелье ясности",
-    shrink_grid: "зелье замешательства",
-    shrink_grid_long: "зелье замешательства",
-    shrink_grid_strong: "зелье замешательства",
+    enlarge_grid: "Зелье ясности",
+    enlarge_grid_long: "Зелье ясности",
+    enlarge_grid_strong: "Зелье ясности",
+    shrink_grid: "Зелье помутнения",
+    shrink_grid_long: "Зелье помутнения",
+    shrink_grid_strong: "Зелье помутнения",
+  }
+
+  "item.minecraft.splash_potion.effect": {
+    enlarge_grid: "Взрывающиеся зелье ясности",
+    enlarge_grid_long: "Взрывающиеся зелье ясности",
+    enlarge_grid_strong: "Взрывающиеся зелье ясности",
+    shrink_grid: "Взрывающиеся зелье помутнения",
+    shrink_grid_long: "Взрывающиеся зелье помутнения",
+    shrink_grid_strong: "Взрывающиеся зелье помутнения",
+  }
+
+  "item.minecraft.lingering_potion.effect": {
+    enlarge_grid: "Оседающее зелье ясности",
+    enlarge_grid_long: "Оседающее зелье ясности",
+    enlarge_grid_strong: "Оседающее зелье ясности",
+    shrink_grid: "Оседающее зелье помутнения",
+    shrink_grid_long: "Оседающее зелье помутнения",
+    shrink_grid_strong: "Оседающее зелье помутнения",
+  }
+
+  "item.minecraft.tipped_arrow.effect": {
+    enlarge_grid: "Стрела ясности",
+    enlarge_grid_long: "Стрела ясности",
+    enlarge_grid_strong: "Стрела ясности",
+    shrink_grid: "Стрела помутнения",
+    shrink_grid_long: "Стрела помутнения",
+    shrink_grid_strong: "Стрела помутнения",
   }
 
   "itemGroup.hexcasting": {

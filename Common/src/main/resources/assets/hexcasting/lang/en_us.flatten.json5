@@ -212,16 +212,43 @@
 
   "effect.hexcasting": {
     enlarge_grid: "Clarity",
-    shrink_grid: "Confusion",
+    shrink_grid: "Clouding",
   },
 
   "item.minecraft.potion.effect": {
     enlarge_grid: "Potion of Clarity",
     enlarge_grid_long: "Potion of Clarity",
     enlarge_grid_strong: "Potion of Clarity",
-    shrink_grid: "Potion of Confusion",
-    shrink_grid_long: "Potion of Confusion",
-    shrink_grid_strong: "Potion of Confusion",
+    shrink_grid: "Potion of Clouding",
+    shrink_grid_long: "Potion of Clouding",
+    shrink_grid_strong: "Potion of Clouding",
+  }
+
+  "item.minecraft.splash_potion.effect": {
+    enlarge_grid: "Splash Potion of Clarity",
+    enlarge_grid_long: "Splash Potion of Clarity",
+    enlarge_grid_strong: "Splash Potion of Clarity",
+    shrink_grid: "Splash Potion of Clouding",
+    shrink_grid_long: "Splash Potion of Clouding",
+    shrink_grid_strong: "Splash Potion of Clouding",
+  }
+
+  "item.minecraft.lingering_potion.effect": {
+    enlarge_grid: "Lingering Potion of Clarity",
+    enlarge_grid_long: "Lingering Potion of Clarity",
+    enlarge_grid_strong: "Lingering Potion of Clarity",
+    shrink_grid: "Lingering Potion of Clouding",
+    shrink_grid_long: "Lingering Potion of Clouding",
+    shrink_grid_strong: "Lingering Potion of Clouding",
+  }
+
+  "item.minecraft.tipped_arrow.effect": {
+    enlarge_grid: "Arrow of Clarity",
+    enlarge_grid_long: "Arrow of Clarity",
+    enlarge_grid_strong: "Arrow of Clarity",
+    shrink_grid: "Arrow of Clouding",
+    shrink_grid_long: "Arrow of Clouding",
+    shrink_grid_strong: "Arrow of Clouding",
   }
   
   "itemGroup.hexcasting": {

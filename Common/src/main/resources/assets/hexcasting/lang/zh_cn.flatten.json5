@@ -212,16 +212,43 @@
 
   "effect.hexcasting": {
     enlarge_grid: "明晰",
-    shrink_grid: "困惑",
+    shrink_grid: "有雾",
   },
 
   "item.minecraft.potion.effect": {
     enlarge_grid: "明晰药水",
     enlarge_grid_long: "明晰药水",
     enlarge_grid_strong: "明晰药水",
-    shrink_grid: "困惑药水",
-    shrink_grid_long: "困惑药水",
-    shrink_grid_strong: "困惑药水",
+    shrink_grid: "有雾药水",
+    shrink_grid_long: "有雾药水",
+    shrink_grid_strong: "有雾药水",
+  }
+
+  "item.minecraft.splash_potion.effect": {
+    enlarge_grid: "喷溅型明晰药水",
+    enlarge_grid_long: "喷溅型明晰药水",
+    enlarge_grid_strong: "喷溅型明晰药水",
+    shrink_grid: "喷溅型有雾药水",
+    shrink_grid_long: "喷溅型有雾药水",
+    shrink_grid_strong: "喷溅型有雾药水",
+  }
+
+  "item.minecraft.lingering_potion.effect": {
+    enlarge_grid: "滞留型明晰药水",
+    enlarge_grid_long: "滞留型明晰药水",
+    enlarge_grid_strong: "滞留型明晰药水",
+    shrink_grid: "滞留型有雾药水",
+    shrink_grid_long: "滞留型有雾药水",
+    shrink_grid_strong: "滞留型有雾药水",
+  }
+
+  "item.minecraft.tipped_arrow.effect": {
+    enlarge_grid: "明晰之箭",
+    enlarge_grid_long: "明晰之箭",
+    enlarge_grid_strong: "明晰之箭",
+    shrink_grid: "有雾之箭",
+    shrink_grid_long: "有雾之箭",
+    shrink_grid_strong: "有雾之箭",
   }
 
   "itemGroup.hexcasting": {
