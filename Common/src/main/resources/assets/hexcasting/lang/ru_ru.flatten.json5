@@ -1123,6 +1123,7 @@
       // why is this called "hexcasting"?
       hexcasting: "Предметы для Заклинаний",
       phials: "Сосуд мысли",
+      potions: "Рунные зелья",
       pigments: "Пигмент",
       
       edified: "Деревья Созидания",
@@ -1456,6 +1457,12 @@
         "2": "Я нашел старые свитки, описывающие $(item)Стеклянную Бутылку/$, пропитанную Мысли. При колдовстве мои заклинания тогда бы забирать Мысли из флакона. Жидкая форма Мысли позволяла бы мне брать сдачу, так сказать; ничего не было бы потеряно. Это довольно похоже на внутреннюю батарею $(l:items/hexcasting)$(item)Талисмана/$, или что-то подобное; я даже могу $(l:patterns/spells/hexcasting#hexcasting:recharge)$(action)Recharge/$ их тем же способом.",
         "3": "К сожалению, искусство фактически $(italic)создания/$ этих вещей, кажется, было утрачено со временем. Я нашел $(l:patterns/great_spells/make_battery#hexcasting:craft/battery)$(thing)намек на использованный шаблон для его создания/$, но техника упорно ускользает, и мне не удается сделать это успешно. Я подозреваю, что разберусь с этим с помощью изучения и практики. Пока что я просто буду справляться с растраченным Мысли...$(br2)Но я не буду удовлетворяться этим навсегда.",
         desc: "$(italic)Выпей молоко./$",
+      },
+
+      potions: {
+        "1": "Peering through a $(l:items/lens)$(item)Scrying Lens/$ allows me to fit more patterns onto my casting grid. But what if I want to improve my casting even further? Alchemy has an answer.$(br2)By adding a pinch of Amethyst Dust to an $(item)Awkward Potion/$, I can create a brew that increases the size of my grid in much the same way as the Lens. I can even use both at once for the ultimate grid!",
+        "2": "The Potion of Clarity can be extended, strengthened, and modified like any other potion.$(br2)It can also be corrupted with a $(item)Fermented Spider Eye/$ to produce a variant with the opposite effect. This may be useful for dealing with enemy casters.",
+        "effects.header": "Clarity and Clouding",
       },
 
       pigments: {
