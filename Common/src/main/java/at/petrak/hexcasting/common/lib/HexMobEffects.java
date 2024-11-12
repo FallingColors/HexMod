@@ -26,7 +26,7 @@ public class HexMobEffects {
         .addAttributeModifier(HexAttributes.GRID_ZOOM, "d4afaf0f-df37-4253-9fa7-029e8e4415d9",
             0.25, AttributeModifier.Operation.MULTIPLY_TOTAL);
     public static final MobEffect SHRINK_GRID = make("shrink_grid",
-        new HexMobEffect(MobEffectCategory.HARMFUL, 0xebad1c))
+        new HexMobEffect(MobEffectCategory.HARMFUL, 0xc0e660))
         .addAttributeModifier(HexAttributes.GRID_ZOOM, "1ce492a9-8bf5-4091-a482-c6d9399e448a",
             -0.2, AttributeModifier.Operation.MULTIPLY_TOTAL);
 
