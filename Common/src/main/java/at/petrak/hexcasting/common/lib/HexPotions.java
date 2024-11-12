@@ -29,10 +29,24 @@ public class HexPotions {
     public static final Potion ENLARGE_GRID_STRONG = make("enlarge_grid_strong",
         new Potion("enlarge_grid_strong", new MobEffectInstance(HexMobEffects.ENLARGE_GRID, 1800, 1)));
 
+    public static final Potion SHRINK_GRID = make("shrink_grid",
+        new Potion("shrink_grid", new MobEffectInstance(HexMobEffects.SHRINK_GRID, 3600)));
+    public static final Potion SHRINK_GRID_LONG = make("shrink_grid_long",
+        new Potion("shrink_grid_long", new MobEffectInstance(HexMobEffects.SHRINK_GRID, 9600)));
+    public static final Potion SHRINK_GRID_STRONG = make("shrink_grid_strong",
+        new Potion("shrink_grid_strong", new MobEffectInstance(HexMobEffects.SHRINK_GRID, 1800, 1)));
+
     public static void addRecipes() {
         AccessorPotionBrewing.addMix(Potions.AWKWARD, HexItems.AMETHYST_DUST, ENLARGE_GRID);
         AccessorPotionBrewing.addMix(ENLARGE_GRID, Items.REDSTONE, ENLARGE_GRID_LONG);
         AccessorPotionBrewing.addMix(ENLARGE_GRID, Items.GLOWSTONE_DUST, ENLARGE_GRID_STRONG);
+
+        AccessorPotionBrewing.addMix(ENLARGE_GRID, Items.FERMENTED_SPIDER_EYE, SHRINK_GRID);
+        AccessorPotionBrewing.addMix(ENLARGE_GRID_LONG, Items.FERMENTED_SPIDER_EYE, SHRINK_GRID_LONG);
+        AccessorPotionBrewing.addMix(ENLARGE_GRID_STRONG, Items.FERMENTED_SPIDER_EYE, SHRINK_GRID_STRONG);
+
+        AccessorPotionBrewing.addMix(SHRINK_GRID, Items.REDSTONE, SHRINK_GRID_LONG);
+        AccessorPotionBrewing.addMix(SHRINK_GRID, Items.GLOWSTONE_DUST, SHRINK_GRID_STRONG);
     }
 
     private static <T extends Potion> T make(String id, T potion) {

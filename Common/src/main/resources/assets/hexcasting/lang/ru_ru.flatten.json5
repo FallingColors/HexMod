@@ -210,6 +210,20 @@
     },
   },
 
+  "effect.hexcasting": {
+    enlarge_grid: "ясность",
+    shrink_grid: "замешательство",
+  },
+
+  "item.minecraft.potion.effect": {
+    enlarge_grid: "зелье ясности",
+    enlarge_grid_long: "зелье ясности",
+    enlarge_grid_strong: "зелье ясности",
+    shrink_grid: "зелье замешательства",
+    shrink_grid_long: "зелье замешательства",
+    shrink_grid_strong: "зелье замешательства",
+  }
+
   "itemGroup.hexcasting": {
     "": "Hexcasting",
     creative_tab: "Hexcasting",

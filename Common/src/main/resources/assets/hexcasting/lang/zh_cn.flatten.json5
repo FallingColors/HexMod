@@ -210,6 +210,20 @@
     },
   },
 
+  "effect.hexcasting": {
+    enlarge_grid: "明晰",
+    shrink_grid: "困惑",
+  },
+
+  "item.minecraft.potion.effect": {
+    enlarge_grid: "明晰药水",
+    enlarge_grid_long: "明晰药水",
+    enlarge_grid_strong: "明晰药水",
+    shrink_grid: "困惑药水",
+    shrink_grid_long: "困惑药水",
+    shrink_grid_strong: "困惑药水",
+  }
+
   "itemGroup.hexcasting": {
     "": "咒法学",
     creative_tab: "咒法学",

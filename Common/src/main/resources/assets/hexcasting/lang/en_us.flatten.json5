@@ -209,6 +209,20 @@
       bricks_small: "Small Quenched Allay Bricks",
     },
   },
+
+  "effect.hexcasting": {
+    enlarge_grid: "Clarity",
+    shrink_grid: "Confusion",
+  },
+
+  "item.minecraft.potion.effect": {
+    enlarge_grid: "Potion of Clarity",
+    enlarge_grid_long: "Potion of Clarity",
+    enlarge_grid_strong: "Potion of Clarity",
+    shrink_grid: "Potion of Confusion",
+    shrink_grid_long: "Potion of Confusion",
+    shrink_grid_strong: "Potion of Confusion",
+  }
   
   "itemGroup.hexcasting": {
     "": "Hexcasting",
