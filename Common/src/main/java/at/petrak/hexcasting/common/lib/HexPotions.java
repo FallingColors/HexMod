@@ -18,6 +18,7 @@ public class HexPotions {
         for (var e : POTIONS.entrySet()) {
             r.accept(e.getValue(), e.getKey());
         }
+        HexPotions.addRecipes();
     }
 
     private static final Map<ResourceLocation, Potion> POTIONS = new LinkedHashMap<>();
