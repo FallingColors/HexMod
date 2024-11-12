@@ -222,7 +222,7 @@
     shrink_grid: "Potion of Clouding",
     shrink_grid_long: "Potion of Clouding",
     shrink_grid_strong: "Potion of Clouding",
-  }
+  },
 
   "item.minecraft.splash_potion.effect": {
     enlarge_grid: "Splash Potion of Clarity",
@@ -231,7 +231,7 @@
     shrink_grid: "Splash Potion of Clouding",
     shrink_grid_long: "Splash Potion of Clouding",
     shrink_grid_strong: "Splash Potion of Clouding",
-  }
+  },
 
   "item.minecraft.lingering_potion.effect": {
     enlarge_grid: "Lingering Potion of Clarity",
@@ -240,7 +240,7 @@
     shrink_grid: "Lingering Potion of Clouding",
     shrink_grid_long: "Lingering Potion of Clouding",
     shrink_grid_strong: "Lingering Potion of Clouding",
-  }
+  },
 
   "item.minecraft.tipped_arrow.effect": {
     enlarge_grid: "Arrow of Clarity",
@@ -249,7 +249,7 @@
     shrink_grid: "Arrow of Clouding",
     shrink_grid_long: "Arrow of Clouding",
     shrink_grid_strong: "Arrow of Clouding",
-  }
+  },
   
   "itemGroup.hexcasting": {
     "": "Hexcasting",
