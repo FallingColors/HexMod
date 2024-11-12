@@ -3,12 +3,15 @@ package at.petrak.hexcasting.common.lib;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.Items;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
+import at.petrak.hexcasting.mixin.accessor.AccessorPotionBrewing;
 
 public class HexPotions {
     public static void register(BiConsumer<Potion, ResourceLocation> r) {
@@ -27,11 +30,9 @@ public class HexPotions {
         new Potion("enlarge_grid_strong", new MobEffectInstance(HexMobEffects.ENLARGE_GRID, 1800, 1)));
 
     public static void addRecipes() {
-        /*
         AccessorPotionBrewing.addMix(Potions.AWKWARD, HexItems.AMETHYST_DUST, ENLARGE_GRID);
         AccessorPotionBrewing.addMix(ENLARGE_GRID, Items.REDSTONE, ENLARGE_GRID_LONG);
         AccessorPotionBrewing.addMix(ENLARGE_GRID, Items.GLOWSTONE_DUST, ENLARGE_GRID_STRONG);
-         */
     }
 
     private static <T extends Potion> T make(String id, T potion) {
