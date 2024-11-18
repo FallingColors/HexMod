@@ -199,6 +199,18 @@ fun List<Iota>.getPositiveInt(idx: Int, argc: Int = 0): Int {
     throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.positive")
 }
 
+fun List<Iota>.getPositiveLong(idx: Int, argc: Int = 0): Long {
+    val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
+    if (x is DoubleIota) {
+        val double = x.double
+        val rounded = double.roundToLong()
+        if (abs(double - rounded) <= DoubleIota.TOLERANCE && rounded >= 0) {
+            return rounded
+        }
+    }
+    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.positive")
+}
+
 fun List<Iota>.getPositiveIntUnder(idx: Int, max: Int, argc: Int = 0): Int {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is DoubleIota) {
