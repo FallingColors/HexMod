@@ -209,12 +209,12 @@
       bricks_small: "Small Quenched Allay Bricks",
     },
   },
-
+  
   "effect.hexcasting": {
     enlarge_grid: "Clarity",
     shrink_grid: "Clouding",
   },
-
+  
   "item.minecraft.potion.effect": {
     enlarge_grid: "Potion of Clarity",
     enlarge_grid_long: "Potion of Clarity",
@@ -223,7 +223,7 @@
     shrink_grid_long: "Potion of Clouding",
     shrink_grid_strong: "Potion of Clouding",
   },
-
+  
   "item.minecraft.splash_potion.effect": {
     enlarge_grid: "Splash Potion of Clarity",
     enlarge_grid_long: "Splash Potion of Clarity",
@@ -232,7 +232,7 @@
     shrink_grid_long: "Splash Potion of Clouding",
     shrink_grid_strong: "Splash Potion of Clouding",
   },
-
+  
   "item.minecraft.lingering_potion.effect": {
     enlarge_grid: "Lingering Potion of Clarity",
     enlarge_grid_long: "Lingering Potion of Clarity",
@@ -241,7 +241,7 @@
     shrink_grid_long: "Lingering Potion of Clouding",
     shrink_grid_strong: "Lingering Potion of Clouding",
   },
-
+  
   "item.minecraft.tipped_arrow.effect": {
     enlarge_grid: "Arrow of Clarity",
     enlarge_grid_long: "Arrow of Clarity",
@@ -394,7 +394,7 @@
       "": "Hexcasting Research",
       desc: "Find and mine a concentrated form of media growing deep beneath the earth.",
     },
-    creative_unlocker:{
+    creative_unlocker: {
       "": "UNLIMITED POWAH",
       "desc": "Found the creative debug item."
     },
@@ -478,7 +478,7 @@
       "fail.already": "%s is already empty",
     },
   },
-
+  
   // === Inline ! ===
   "matcher.hexcasting.pattern": {
     "title": "Hex Pattern",
@@ -486,7 +486,7 @@
     "description": "Visual Hex Casting Patterns",
     "example": "<ne,qaq><e,aa><ne,qaq><e,wa><e,wqaawdd><e,aawaawaa>"
   },
-
+  
   hexcasting: {
     "pattern.unknown": "Unknown pattern resource location %s",
     
@@ -815,6 +815,7 @@
         flight: "Altiora",
         "flight/range": "Anchorite's Flight",
         "flight/time": "Wayfarer's Flight",
+        "flight/can_fly": "Aviator's Purification",
         
         lightning: "Summon Lightning",
         summon_rain: "Summon Rain",
@@ -1105,7 +1106,7 @@
         "": "Cross-Mod Compatibility",
         desc: "It appears I have installed some mods Hexcasting interoperates with! I've detailed them here.",
       },
-
+      
       patterns: {
         "": "Patterns",
         desc: "A list of all the patterns I've discovered, as well as what they do.",
@@ -1503,7 +1504,7 @@
         "3": "Unfortunately, the art of actually $(italic)making/$ the things seems to have been lost to time. I've found a $(l:patterns/great_spells/make_battery#hexcasting:craft/battery)$(thing)hint at the pattern used to craft it/$, but the technique is irritatingly elusive, and I can't seem to do it successfully. I suspect I will figure it out with study and practice, though. For now, I will simply deal with the wasted _media...$(br2)But I won't settle for it forever.",
         desc: "$(italic)Drink the milk./$",
       },
-
+      
       potions: {
         "1": "Peering through a $(l:items/lens)$(item)Scrying Lens/$ allows me to fit more patterns onto my casting grid. But what if I want to improve my casting even further? Alchemy has an answer.$(br2)By adding a pinch of Amethyst Dust to an $(item)Awkward Potion/$, I can create a brew that increases the size of my grid in much the same way as the Lens. I can even use both at once for the ultimate grid!",
         "2": "The Potion of Clarity can be extended, strengthened, and modified like any other potion.$(br2)It can also be corrupted with a $(item)Fermented Spider Eye/$ to produce a variant with the opposite effect. This may be useful for dealing with enemy casters.",
@@ -1949,9 +1950,9 @@
       },
       
       colorize: "I must be holding a $(l:items/pigments)$(item)Pigment/$ in my other hand to cast this spell. When I do, it will consume the dye and permanently change my mind's coloration (at least, until I cast the spell again). Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
-
+      
       cycle_variant: "Certain items I create seem oddly receptive to the influence of _media. By holding a $(l:items/hexcasting)$(item)Cypher/$, $(l:items/hexcasting)$(item)Trinket/$, $(l:items/hexcasting)$(item)Artifact/$, $(l:items/focus)$(item)Focus/$, or $(l:items/spellbook)$(item)Spellbook/$ in my other hand, I can use this spell to change the appearance of the item. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
-
+      
       flights: {
         "1": "Although it seems that true, limitless flight is out of my grasp, I have nonetheless found some methods of holding one in the sky, each with their respective drawbacks.$(br2)All forms produce a shimmer of excess _media; as the spell gets closer to ending, the sparks are shot through with more red and black.",
         "2": "Other forms of flight do exist, of course. For example, a combination of $(l:patterns/spells/basic#hexcasting:add_motion)$(action)Impulse/$ and $(l:patterns/spells/nadirs#hexcasting:potion/levitation)$(action)Blue Sun's Nadir/$ has been used since antiquity for a flight of sorts.$(br2)I've also heard tell of a thin membrane worn on the back that allows the ability to glide. From my research, I believe the Great spell $(l:patterns/great_spells/altiora)$(action)Altiora/$ may be used to mimic it.",
@@ -1961,6 +1962,10 @@
         
         "time.1": "A flight limited in its duration.",
         "time.2": "The second argument is an amount of time in seconds for which the spell is stable. After that time, the spell ends and I am dropped from the sky. $(br2)It is relatively expensive at about 1 $(l:items/amethyst)$(item)Charged Crystal/$ per second of flight; I believe it is best suited for travel.",
+        
+        // Putting this in this category instead of elsewhere -- see sentinel chapter also containing some reflections/nonspells
+        "can_fly.1": "Returns whether the given player is under the effects of $(l:patterns/spells/flight#hexcasting:flight/range)Anchorite's/$ or $(l:patterns/spells/flight#hexcasting:flight/time)Wayfarer's Flight/$.",
+        "can_fly.2": "Does not detect whether the player can fly by other means.$(br2)It is unclear to me what use this has. But I suppose its utility is in the eye of the beholder."
       },
       
       create_lava: {

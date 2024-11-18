@@ -29,10 +29,7 @@ import at.petrak.hexcasting.common.casting.actions.math.logic.OpBoolIf;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpBoolNot;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpCoerceToBool;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpEquality;
-import at.petrak.hexcasting.common.casting.actions.queryentity.OpEntityHeight;
-import at.petrak.hexcasting.common.casting.actions.queryentity.OpEntityLook;
-import at.petrak.hexcasting.common.casting.actions.queryentity.OpEntityPos;
-import at.petrak.hexcasting.common.casting.actions.queryentity.OpEntityVelocity;
+import at.petrak.hexcasting.common.casting.actions.queryentity.*;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockAxisRaycast;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockRaycast;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpEntityRaycast;
@@ -340,6 +337,9 @@ public class HexActions {
     public static final ActionRegistryEntry FLIGHT$TIME = make("flight/time",
         new ActionRegistryEntry(HexPattern.fromAngles("dwdwdewq", HexDir.NORTH_EAST),
             new OpFlight(OpFlight.Type.LimitTime)));
+    public static final ActionRegistryEntry FLIGHT$CAN_FLY = make("flight/can_fly",
+        new ActionRegistryEntry(HexPattern.fromAngles("dwdwdeweaqa", HexDir.NORTH_EAST),
+            OpCanEntityHexFly.INSTANCE));
 
     public static final ActionRegistryEntry SENTINEL$CREATE = make("sentinel/create",
         new ActionRegistryEntry(HexPattern.fromAngles("waeawae", HexDir.EAST), new OpCreateSentinel(false)));
