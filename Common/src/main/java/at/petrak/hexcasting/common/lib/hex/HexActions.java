@@ -11,24 +11,46 @@ import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.HexUtils;
-import at.petrak.hexcasting.common.casting.actions.*;
-import at.petrak.hexcasting.common.casting.actions.akashic.*;
-import at.petrak.hexcasting.common.casting.actions.circles.*;
+import at.petrak.hexcasting.common.casting.actions.akashic.OpAkashicRead;
+import at.petrak.hexcasting.common.casting.actions.akashic.OpAkashicWrite;
+import at.petrak.hexcasting.common.casting.actions.circles.OpCircleBounds;
+import at.petrak.hexcasting.common.casting.actions.circles.OpImpetusDir;
+import at.petrak.hexcasting.common.casting.actions.circles.OpImpetusPos;
 import at.petrak.hexcasting.common.casting.actions.eval.*;
-import at.petrak.hexcasting.common.casting.actions.lists.*;
-import at.petrak.hexcasting.common.casting.actions.local.*;
-import at.petrak.hexcasting.common.casting.actions.math.*;
-import at.petrak.hexcasting.common.casting.actions.math.logic.*;
-import at.petrak.hexcasting.common.casting.actions.raycast.*;
+import at.petrak.hexcasting.common.casting.actions.lists.OpEmptyList;
+import at.petrak.hexcasting.common.casting.actions.lists.OpLastNToList;
+import at.petrak.hexcasting.common.casting.actions.lists.OpSingleton;
+import at.petrak.hexcasting.common.casting.actions.lists.OpSplat;
+import at.petrak.hexcasting.common.casting.actions.local.OpPeekLocal;
+import at.petrak.hexcasting.common.casting.actions.local.OpPushLocal;
+import at.petrak.hexcasting.common.casting.actions.math.OpCoerceToAxial;
+import at.petrak.hexcasting.common.casting.actions.math.OpRandom;
+import at.petrak.hexcasting.common.casting.actions.math.logic.OpBoolIf;
+import at.petrak.hexcasting.common.casting.actions.math.logic.OpBoolNot;
+import at.petrak.hexcasting.common.casting.actions.math.logic.OpCoerceToBool;
+import at.petrak.hexcasting.common.casting.actions.math.logic.OpEquality;
+import at.petrak.hexcasting.common.casting.actions.queryentity.OpEntityHeight;
+import at.petrak.hexcasting.common.casting.actions.queryentity.OpEntityLook;
+import at.petrak.hexcasting.common.casting.actions.queryentity.OpEntityPos;
+import at.petrak.hexcasting.common.casting.actions.queryentity.OpEntityVelocity;
+import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockAxisRaycast;
+import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockRaycast;
+import at.petrak.hexcasting.common.casting.actions.raycast.OpEntityRaycast;
 import at.petrak.hexcasting.common.casting.actions.rw.*;
-import at.petrak.hexcasting.common.casting.actions.selectors.*;
+import at.petrak.hexcasting.common.casting.actions.selectors.OpGetCaster;
+import at.petrak.hexcasting.common.casting.actions.selectors.OpGetEntitiesBy;
+import at.petrak.hexcasting.common.casting.actions.selectors.OpGetEntityAt;
 import at.petrak.hexcasting.common.casting.actions.spells.*;
 import at.petrak.hexcasting.common.casting.actions.spells.great.*;
-import at.petrak.hexcasting.common.casting.actions.spells.sentinel.*;
+import at.petrak.hexcasting.common.casting.actions.spells.sentinel.OpCreateSentinel;
+import at.petrak.hexcasting.common.casting.actions.spells.sentinel.OpDestroySentinel;
+import at.petrak.hexcasting.common.casting.actions.spells.sentinel.OpGetSentinelPos;
+import at.petrak.hexcasting.common.casting.actions.spells.sentinel.OpGetSentinelWayfind;
 import at.petrak.hexcasting.common.casting.actions.stack.*;
-import at.petrak.hexcasting.common.casting.actions.eval.OpEvalBreakable;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.interop.pehkui.*;
+import at.petrak.hexcasting.interop.pehkui.OpGetScale;
+import at.petrak.hexcasting.interop.pehkui.OpSetScale;
+import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -224,7 +246,7 @@ public class HexActions {
     public static final ActionRegistryEntry COLORIZE = make("colorize",
         new ActionRegistryEntry(HexPattern.fromAngles("awddwqawqwawq", HexDir.EAST), OpColorize.INSTANCE));
     public static final ActionRegistryEntry CYCLE_VARIANT = make("cycle_variant",
-            new ActionRegistryEntry(HexPattern.fromAngles("dwaawedwewdwe", HexDir.WEST), OpCycleVariant.INSTANCE));
+        new ActionRegistryEntry(HexPattern.fromAngles("dwaawedwewdwe", HexDir.WEST), OpCycleVariant.INSTANCE));
     public static final ActionRegistryEntry CREATE_WATER = make("create_water",
         new ActionRegistryEntry(HexPattern.fromAngles("aqawqadaq", HexDir.SOUTH_EAST), new OpCreateFluid(
             MediaConstants.DUST_UNIT,
@@ -510,14 +532,14 @@ public class HexActions {
     public static final ActionRegistryEntry APPEND = make("append",
         new OperationAction(HexPattern.fromAngles("edqde", HexDir.SOUTH_WEST)));
     public static final ActionRegistryEntry UNAPPEND = make("unappend",
-            new OperationAction(HexPattern.fromAngles("qaeaq", HexDir.NORTH_WEST)));
-//    public static final ActionRegistryEntry CONCAT = make("concat",
+        new OperationAction(HexPattern.fromAngles("qaeaq", HexDir.NORTH_WEST)));
+    //    public static final ActionRegistryEntry CONCAT = make("concat",
 //        new ActionRegistryEntry(HexPattern.fromAngles("qaeaq", HexDir.NORTH_WEST), OpConcat.INSTANCE));
     public static final ActionRegistryEntry INDEX = make("index",
         new OperationAction(HexPattern.fromAngles("deeed", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry FOR_EACH = make("for_each",
         new ActionRegistryEntry(HexPattern.fromAngles("dadad", HexDir.NORTH_EAST), OpForEach.INSTANCE));
-//    public static final ActionRegistryEntry LIST_SIZE = make("list_size",
+    //    public static final ActionRegistryEntry LIST_SIZE = make("list_size",
 //        new ActionRegistryEntry(HexPattern.fromAngles("aqaeaq", HexDir.EAST), OpListSize.INSTANCE));
     public static final ActionRegistryEntry SINGLETON = make("singleton",
         new ActionRegistryEntry(HexPattern.fromAngles("adeeed", HexDir.EAST), OpSingleton.INSTANCE));
