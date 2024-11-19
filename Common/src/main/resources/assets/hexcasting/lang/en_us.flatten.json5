@@ -606,6 +606,7 @@
       "scroll.scribble": "Scroll is scribbled",
       "impetus.fletcher.tick": "Fletcher Impetus ticks",
       "impetus.redstone.register": "Cleric Impetus dings",
+      "impetus.redstone.clear": "Cleric Impetus clears",
       "lore_fragment.read": "Read lore fragment",
       "flight.ambience": "Player flies",
       "flight.finish": "Flight ends",

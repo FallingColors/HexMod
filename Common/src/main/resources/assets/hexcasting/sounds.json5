@@ -132,6 +132,12 @@
     ],
     "subtitle": "hexcasting.subtitles.impetus.redstone.register"
   },
+  "impetus.redstone.clear": {
+    "sounds": [
+      "hexcasting:cast/fail"
+    ],
+    "subtitle": "hexcasting.subtitles.impetus.redstone.clear"
+  },
   
   "lore_fragment.read": {
     "sounds": [
