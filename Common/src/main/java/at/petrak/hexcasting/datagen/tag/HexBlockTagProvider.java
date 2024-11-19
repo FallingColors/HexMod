@@ -6,8 +6,11 @@ import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.paucal.api.datagen.PaucalBlockTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -129,6 +132,10 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
             Blocks.KELP, Blocks.KELP_PLANT, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS);
         add(tag(HexTags.Blocks.CHEAP_TO_BREAK_BLOCK),
             HexBlocks.CONJURED_BLOCK, HexBlocks.CONJURED_LIGHT);
+
+        // this is a hack but fixes #532
+        var createBrittle = TagKey.create(Registries.BLOCK, new ResourceLocation("create", "brittle"));
+        tag(createBrittle).addOptionalTag(BuiltInRegistries.BLOCK.getKey(HexBlocks.SLATE));
     }
 
     void add(TagAppender<Block> appender, Block... blocks) {
