@@ -29,8 +29,8 @@ object OpPlaceBlock : SpellAction {
         get() = 1
 
     override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
+        args: List<Iota>,
+        env: CastingEnvironment
     ): SpellAction.Result {
         val pos = args.getBlockPos(0, argc)
         env.assertPosInRangeForEditing(pos)
@@ -76,7 +76,8 @@ object OpPlaceBlock : SpellAction {
                     // we temporarily give the player the stack, place it using mc code, then give them the old stack back.
                     spoofedStack.count = 1
 
-                    val itemUseCtx = UseOnContext(env.world, caster as? ServerPlayer, env.castingHand, spoofedStack, blockHit)
+                    val itemUseCtx =
+                        UseOnContext(env.world, caster as? ServerPlayer, env.otherHand, spoofedStack, blockHit)
                     val placeContext = BlockPlaceContext(itemUseCtx)
                     if (bstate.canBeReplaced(placeContext)) {
                         if (env.withdrawItem({ it == placeeStack }, 1, false)) {
