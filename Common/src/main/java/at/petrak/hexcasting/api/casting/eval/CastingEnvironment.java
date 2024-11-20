@@ -57,11 +57,14 @@ public abstract class CastingEnvironment {
 
     /**
      * Add a listener that will be called whenever a new CastingEnvironment is created (legacy).
+     *
      * @deprecated replaced by {@link #addCreateEventListener(BiConsumer)}
      */
     @Deprecated(since = "0.11.0-pre-660")
     public static void addCreateEventListener(Consumer<CastingEnvironment> listener) {
-        createEventListeners.add((env, data) -> {listener.accept(env);});
+        createEventListeners.add((env, data) -> {
+            listener.accept(env);
+        });
     }
 
     private boolean createEventTriggered = false;
@@ -77,7 +80,8 @@ public abstract class CastingEnvironment {
 
     protected final ServerLevel world;
 
-    protected Map<CastingEnvironmentComponent.Key<?>, @NotNull CastingEnvironmentComponent> componentMap = new HashMap<>();
+    protected Map<CastingEnvironmentComponent.Key<?>, @NotNull CastingEnvironmentComponent> componentMap =
+        new HashMap<>();
     private final List<PostExecution> postExecutions = new ArrayList<>();
 
     private final List<PostCast> postCasts = new ArrayList<>();
@@ -104,16 +108,20 @@ public abstract class CastingEnvironment {
      * <p>
      * Implementations should NOT rely on this in general, use the methods on this class instead.
      * This is mostly for spells (flight, etc)
+     *
      * @deprecated as of build 0.11.1-7-pre-619 you are recommended to use {@link #getCastingEntity}
      */
-    @Deprecated(since="0.11.1-7-pre-619")
+    @Deprecated(since = "0.11.1-7-pre-619")
     @Nullable
     public ServerPlayer getCaster() {
         return getCastingEntity() instanceof ServerPlayer sp ? sp : null;
-    };
+    }
+
+    ;
 
     /**
      * Gets the caster. Can be null if {@link #getCaster()} is also null
+     *
      * @return the entity casting
      */
     @Nullable
@@ -299,7 +307,12 @@ public abstract class CastingEnvironment {
     }
 
     public final boolean isEntityInRange(Entity e) {
-        return (e instanceof Player && HexConfig.server().trueNameHasAmbit()) || (this.isVecInWorld(e.position()) && this.isVecInRange(e.position()));
+        return isEntityInRange(e, false);
+    }
+
+    public final boolean isEntityInRange(Entity e, boolean ignoreTruenameAmbit) {
+        boolean truenameCheat = !ignoreTruenameAmbit && (e instanceof Player && HexConfig.server().trueNameHasAmbit());
+        return truenameCheat || (this.isVecInWorld(e.position()) && this.isVecInRange(e.position()));
     }
 
     /**
@@ -361,7 +374,8 @@ public abstract class CastingEnvironment {
      */
     protected abstract List<ItemStack> getUsableStacks(StackDiscoveryMode mode);
 
-    protected List<ItemStack> getUsableStacksForPlayer(StackDiscoveryMode mode, @Nullable InteractionHand castingHand, ServerPlayer caster) {
+    protected List<ItemStack> getUsableStacksForPlayer(StackDiscoveryMode mode, @Nullable InteractionHand castingHand
+        , ServerPlayer caster) {
         return switch (mode) {
             case QUERY -> {
                 var out = new ArrayList<ItemStack>();
@@ -386,8 +400,8 @@ public abstract class CastingEnvironment {
                 // If we're casting from the main hand, try to pick from the slot one to the right of the selected slot
                 // Otherwise, scan the hotbar left to right
                 var anchorSlot = castingHand != InteractionHand.OFF_HAND
-                        ? (caster.getInventory().selected + 1) % 9
-                        : 0;
+                    ? (caster.getInventory().selected + 1) % 9
+                    : 0;
 
 
                 for (int delta = 0; delta < 9; delta++) {
@@ -440,7 +454,7 @@ public abstract class CastingEnvironment {
             secondaryItem = ItemStack.EMPTY.copy();
 
         return List.of(new HeldItemInfo(secondaryItem, HexUtils.otherHand(castingHand)), new HeldItemInfo(primaryItem,
-                castingHand));
+            castingHand));
     }
 
     /**
@@ -537,12 +551,15 @@ public abstract class CastingEnvironment {
 
     /**
      * Attempt to replace the first stack found which matches the predicate with the stack to replace with.
+     *
      * @return whether it was successful.
      */
-    public abstract boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand);
+    public abstract boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith,
+        @Nullable InteractionHand hand);
 
 
-    public boolean replaceItemForPlayer(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand, ServerPlayer caster) {
+    public boolean replaceItemForPlayer(Predicate<ItemStack> stackOk, ItemStack replaceWith,
+        @Nullable InteractionHand hand, ServerPlayer caster) {
         if (caster == null)
             return false;
 
