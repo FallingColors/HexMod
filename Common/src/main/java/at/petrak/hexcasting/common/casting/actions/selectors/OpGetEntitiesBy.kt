@@ -12,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.animal.Animal
 import net.minecraft.world.entity.animal.WaterAnimal
 import net.minecraft.world.entity.boss.EnderDragonPart
+import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.monster.Enemy
 import net.minecraft.world.entity.player.Player
@@ -53,6 +54,6 @@ class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : Con
         fun isPlayer(e: Entity): Boolean = e is Player
 
         @JvmStatic
-        fun isLiving(e: Entity): Boolean = (e is LivingEntity) || (e is EnderDragonPart)
+        fun isLiving(e: Entity): Boolean = (e !is ArmorStand) && (e is LivingEntity || e is EnderDragonPart)
     }
 }
