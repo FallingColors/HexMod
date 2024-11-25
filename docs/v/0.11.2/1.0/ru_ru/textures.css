@@ -1,0 +1,1260 @@
+  .texture-hexcasting-textures-item-colorizer-dye_black-png {
+    animation: texture-hexcasting-textures-item-colorizer-dye_black-png 2.9s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/dye_black.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-dye_black-png {
+      0%, 17.23% { background-position-y: 0% }
+      17.24%, 20.68% { background-position-y: -100% }
+      20.69%, 24.13% { background-position-y: -200% }
+      24.14%, 27.58% { background-position-y: -300% }
+      27.59%, 31.02% { background-position-y: -400% }
+      31.03%, 34.47% { background-position-y: -500% }
+      34.48%, 37.92% { background-position-y: -600% }
+      37.93%, 41.37% { background-position-y: -700% }
+      41.38%, 43.09% { background-position-y: -800% }
+      43.1%, 44.82% { background-position-y: -900% }
+      44.83%, 46.54% { background-position-y: -1000% }
+      46.55%, 48.27% { background-position-y: -1100% }
+      48.28%, 49.99% { background-position-y: -1200% }
+      50%, 67.23% { background-position-y: -1300% }
+      67.24%, 68.96% { background-position-y: -1400% }
+      68.97%, 75.85% { background-position-y: -1500% }
+      75.86%, 77.58% { background-position-y: -1600% }
+      77.59%, 79.3% { background-position-y: -1700% }
+      79.31%, 81.02% { background-position-y: -1800% }
+      81.03%, 82.75% { background-position-y: -1900% }
+      82.76%, 84.47% { background-position-y: -2000% }
+      84.48%, 86.2% { background-position-y: -2100% }
+      86.21%, 87.92% { background-position-y: -2200% }
+      87.93%, 89.65% { background-position-y: -2300% }
+      89.66%, 91.37% { background-position-y: -2400% }
+      91.38%, 93.09% { background-position-y: -2500% }
+      93.1%, 94.82% { background-position-y: -2600% }
+      94.83%, 96.54% { background-position-y: -2700% }
+      96.55%, 98.27% { background-position-y: -2800% }
+      98.28%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-dye_blue-png {
+    animation: texture-hexcasting-textures-item-colorizer-dye_blue-png 2.9s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/dye_blue.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-dye_blue-png {
+      0%, 17.23% { background-position-y: 0% }
+      17.24%, 20.68% { background-position-y: -100% }
+      20.69%, 24.13% { background-position-y: -200% }
+      24.14%, 27.58% { background-position-y: -300% }
+      27.59%, 31.02% { background-position-y: -400% }
+      31.03%, 34.47% { background-position-y: -500% }
+      34.48%, 37.92% { background-position-y: -600% }
+      37.93%, 41.37% { background-position-y: -700% }
+      41.38%, 43.09% { background-position-y: -800% }
+      43.1%, 44.82% { background-position-y: -900% }
+      44.83%, 46.54% { background-position-y: -1000% }
+      46.55%, 48.27% { background-position-y: -1100% }
+      48.28%, 49.99% { background-position-y: -1200% }
+      50%, 67.23% { background-position-y: -1300% }
+      67.24%, 68.96% { background-position-y: -1400% }
+      68.97%, 75.85% { background-position-y: -1500% }
+      75.86%, 77.58% { background-position-y: -1600% }
+      77.59%, 79.3% { background-position-y: -1700% }
+      79.31%, 81.02% { background-position-y: -1800% }
+      81.03%, 82.75% { background-position-y: -1900% }
+      82.76%, 84.47% { background-position-y: -2000% }
+      84.48%, 86.2% { background-position-y: -2100% }
+      86.21%, 87.92% { background-position-y: -2200% }
+      87.93%, 89.65% { background-position-y: -2300% }
+      89.66%, 91.37% { background-position-y: -2400% }
+      91.38%, 93.09% { background-position-y: -2500% }
+      93.1%, 94.82% { background-position-y: -2600% }
+      94.83%, 96.54% { background-position-y: -2700% }
+      96.55%, 98.27% { background-position-y: -2800% }
+      98.28%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-dye_brown-png {
+    animation: texture-hexcasting-textures-item-colorizer-dye_brown-png 2.9s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/dye_brown.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-dye_brown-png {
+      0%, 17.23% { background-position-y: 0% }
+      17.24%, 20.68% { background-position-y: -100% }
+      20.69%, 24.13% { background-position-y: -200% }
+      24.14%, 27.58% { background-position-y: -300% }
+      27.59%, 31.02% { background-position-y: -400% }
+      31.03%, 34.47% { background-position-y: -500% }
+      34.48%, 37.92% { background-position-y: -600% }
+      37.93%, 41.37% { background-position-y: -700% }
+      41.38%, 43.09% { background-position-y: -800% }
+      43.1%, 44.82% { background-position-y: -900% }
+      44.83%, 46.54% { background-position-y: -1000% }
+      46.55%, 48.27% { background-position-y: -1100% }
+      48.28%, 49.99% { background-position-y: -1200% }
+      50%, 67.23% { background-position-y: -1300% }
+      67.24%, 68.96% { background-position-y: -1400% }
+      68.97%, 75.85% { background-position-y: -1500% }
+      75.86%, 77.58% { background-position-y: -1600% }
+      77.59%, 79.3% { background-position-y: -1700% }
+      79.31%, 81.02% { background-position-y: -1800% }
+      81.03%, 82.75% { background-position-y: -1900% }
+      82.76%, 84.47% { background-position-y: -2000% }
+      84.48%, 86.2% { background-position-y: -2100% }
+      86.21%, 87.92% { background-position-y: -2200% }
+      87.93%, 89.65% { background-position-y: -2300% }
+      89.66%, 91.37% { background-position-y: -2400% }
+      91.38%, 93.09% { background-position-y: -2500% }
+      93.1%, 94.82% { background-position-y: -2600% }
+      94.83%, 96.54% { background-position-y: -2700% }
+      96.55%, 98.27% { background-position-y: -2800% }
+      98.28%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-dye_cyan-png {
+    animation: texture-hexcasting-textures-item-colorizer-dye_cyan-png 2.9s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/dye_cyan.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-dye_cyan-png {
+      0%, 17.23% { background-position-y: 0% }
+      17.24%, 20.68% { background-position-y: -100% }
+      20.69%, 24.13% { background-position-y: -200% }
+      24.14%, 27.58% { background-position-y: -300% }
+      27.59%, 31.02% { background-position-y: -400% }
+      31.03%, 34.47% { background-position-y: -500% }
+      34.48%, 37.92% { background-position-y: -600% }
+      37.93%, 41.37% { background-position-y: -700% }
+      41.38%, 43.09% { background-position-y: -800% }
+      43.1%, 44.82% { background-position-y: -900% }
+      44.83%, 46.54% { background-position-y: -1000% }
+      46.55%, 48.27% { background-position-y: -1100% }
+      48.28%, 49.99% { background-position-y: -1200% }
+      50%, 67.23% { background-position-y: -1300% }
+      67.24%, 68.96% { background-position-y: -1400% }
+      68.97%, 75.85% { background-position-y: -1500% }
+      75.86%, 77.58% { background-position-y: -1600% }
+      77.59%, 79.3% { background-position-y: -1700% }
+      79.31%, 81.02% { background-position-y: -1800% }
+      81.03%, 82.75% { background-position-y: -1900% }
+      82.76%, 84.47% { background-position-y: -2000% }
+      84.48%, 86.2% { background-position-y: -2100% }
+      86.21%, 87.92% { background-position-y: -2200% }
+      87.93%, 89.65% { background-position-y: -2300% }
+      89.66%, 91.37% { background-position-y: -2400% }
+      91.38%, 93.09% { background-position-y: -2500% }
+      93.1%, 94.82% { background-position-y: -2600% }
+      94.83%, 96.54% { background-position-y: -2700% }
+      96.55%, 98.27% { background-position-y: -2800% }
+      98.28%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-dye_gray-png {
+    animation: texture-hexcasting-textures-item-colorizer-dye_gray-png 2.9s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/dye_gray.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-dye_gray-png {
+      0%, 17.23% { background-position-y: 0% }
+      17.24%, 20.68% { background-position-y: -100% }
+      20.69%, 24.13% { background-position-y: -200% }
+      24.14%, 27.58% { background-position-y: -300% }
+      27.59%, 31.02% { background-position-y: -400% }
+      31.03%, 34.47% { background-position-y: -500% }
+      34.48%, 37.92% { background-position-y: -600% }
+      37.93%, 41.37% { background-position-y: -700% }
+      41.38%, 43.09% { background-position-y: -800% }
+      43.1%, 44.82% { background-position-y: -900% }
+      44.83%, 46.54% { background-position-y: -1000% }
+      46.55%, 48.27% { background-position-y: -1100% }
+      48.28%, 49.99% { background-position-y: -1200% }
+      50%, 67.23% { background-position-y: -1300% }
+      67.24%, 68.96% { background-position-y: -1400% }
+      68.97%, 75.85% { background-position-y: -1500% }
+      75.86%, 77.58% { background-position-y: -1600% }
+      77.59%, 79.3% { background-position-y: -1700% }
+      79.31%, 81.02% { background-position-y: -1800% }
+      81.03%, 82.75% { background-position-y: -1900% }
+      82.76%, 84.47% { background-position-y: -2000% }
+      84.48%, 86.2% { background-position-y: -2100% }
+      86.21%, 87.92% { background-position-y: -2200% }
+      87.93%, 89.65% { background-position-y: -2300% }
+      89.66%, 91.37% { background-position-y: -2400% }
+      91.38%, 93.09% { background-position-y: -2500% }
+      93.1%, 94.82% { background-position-y: -2600% }
+      94.83%, 96.54% { background-position-y: -2700% }
+      96.55%, 98.27% { background-position-y: -2800% }
+      98.28%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-dye_green-png {
+    animation: texture-hexcasting-textures-item-colorizer-dye_green-png 2.9s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/dye_green.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-dye_green-png {
+      0%, 17.23% { background-position-y: 0% }
+      17.24%, 20.68% { background-position-y: -100% }
+      20.69%, 24.13% { background-position-y: -200% }
+      24.14%, 27.58% { background-position-y: -300% }
+      27.59%, 31.02% { background-position-y: -400% }
+      31.03%, 34.47% { background-position-y: -500% }
+      34.48%, 37.92% { background-position-y: -600% }
+      37.93%, 41.37% { background-position-y: -700% }
+      41.38%, 43.09% { background-position-y: -800% }
+      43.1%, 44.82% { background-position-y: -900% }
+      44.83%, 46.54% { background-position-y: -1000% }
+      46.55%, 48.27% { background-position-y: -1100% }
+      48.28%, 49.99% { background-position-y: -1200% }
+      50%, 67.23% { background-position-y: -1300% }
+      67.24%, 68.96% { background-position-y: -1400% }
+      68.97%, 75.85% { background-position-y: -1500% }
+      75.86%, 77.58% { background-position-y: -1600% }
+      77.59%, 79.3% { background-position-y: -1700% }
+      79.31%, 81.02% { background-position-y: -1800% }
+      81.03%, 82.75% { background-position-y: -1900% }
+      82.76%, 84.47% { background-position-y: -2000% }
+      84.48%, 86.2% { background-position-y: -2100% }
+      86.21%, 87.92% { background-position-y: -2200% }
+      87.93%, 89.65% { background-position-y: -2300% }
+      89.66%, 91.37% { background-position-y: -2400% }
+      91.38%, 93.09% { background-position-y: -2500% }
+      93.1%, 94.82% { background-position-y: -2600% }
+      94.83%, 96.54% { background-position-y: -2700% }
+      96.55%, 98.27% { background-position-y: -2800% }
+      98.28%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-dye_light_blue-png {
+    animation: texture-hexcasting-textures-item-colorizer-dye_light_blue-png 2.9s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/dye_light_blue.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-dye_light_blue-png {
+      0%, 17.23% { background-position-y: 0% }
+      17.24%, 20.68% { background-position-y: -100% }
+      20.69%, 24.13% { background-position-y: -200% }
+      24.14%, 27.58% { background-position-y: -300% }
+      27.59%, 31.02% { background-position-y: -400% }
+      31.03%, 34.47% { background-position-y: -500% }
+      34.48%, 37.92% { background-position-y: -600% }
+      37.93%, 41.37% { background-position-y: -700% }
+      41.38%, 43.09% { background-position-y: -800% }
+      43.1%, 44.82% { background-position-y: -900% }
+      44.83%, 46.54% { background-position-y: -1000% }
+      46.55%, 48.27% { background-position-y: -1100% }
+      48.28%, 49.99% { background-position-y: -1200% }
+      50%, 67.23% { background-position-y: -1300% }
+      67.24%, 68.96% { background-position-y: -1400% }
+      68.97%, 75.85% { background-position-y: -1500% }
+      75.86%, 77.58% { background-position-y: -1600% }
+      77.59%, 79.3% { background-position-y: -1700% }
+      79.31%, 81.02% { background-position-y: -1800% }
+      81.03%, 82.75% { background-position-y: -1900% }
+      82.76%, 84.47% { background-position-y: -2000% }
+      84.48%, 86.2% { background-position-y: -2100% }
+      86.21%, 87.92% { background-position-y: -2200% }
+      87.93%, 89.65% { background-position-y: -2300% }
+      89.66%, 91.37% { background-position-y: -2400% }
+      91.38%, 93.09% { background-position-y: -2500% }
+      93.1%, 94.82% { background-position-y: -2600% }
+      94.83%, 96.54% { background-position-y: -2700% }
+      96.55%, 98.27% { background-position-y: -2800% }
+      98.28%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-dye_light_gray-png {
+    animation: texture-hexcasting-textures-item-colorizer-dye_light_gray-png 2.9s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/dye_light_gray.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-dye_light_gray-png {
+      0%, 17.23% { background-position-y: 0% }
+      17.24%, 20.68% { background-position-y: -100% }
+      20.69%, 24.13% { background-position-y: -200% }
+      24.14%, 27.58% { background-position-y: -300% }
+      27.59%, 31.02% { background-position-y: -400% }
+      31.03%, 34.47% { background-position-y: -500% }
+      34.48%, 37.92% { background-position-y: -600% }
+      37.93%, 41.37% { background-position-y: -700% }
+      41.38%, 43.09% { background-position-y: -800% }
+      43.1%, 44.82% { background-position-y: -900% }
+      44.83%, 46.54% { background-position-y: -1000% }
+      46.55%, 48.27% { background-position-y: -1100% }
+      48.28%, 49.99% { background-position-y: -1200% }
+      50%, 67.23% { background-position-y: -1300% }
+      67.24%, 68.96% { background-position-y: -1400% }
+      68.97%, 75.85% { background-position-y: -1500% }
+      75.86%, 77.58% { background-position-y: -1600% }
+      77.59%, 79.3% { background-position-y: -1700% }
+      79.31%, 81.02% { background-position-y: -1800% }
+      81.03%, 82.75% { background-position-y: -1900% }
+      82.76%, 84.47% { background-position-y: -2000% }
+      84.48%, 86.2% { background-position-y: -2100% }
+      86.21%, 87.92% { background-position-y: -2200% }
+      87.93%, 89.65% { background-position-y: -2300% }
+      89.66%, 91.37% { background-position-y: -2400% }
+      91.38%, 93.09% { background-position-y: -2500% }
+      93.1%, 94.82% { background-position-y: -2600% }
+      94.83%, 96.54% { background-position-y: -2700% }
+      96.55%, 98.27% { background-position-y: -2800% }
+      98.28%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-dye_lime-png {
+    animation: texture-hexcasting-textures-item-colorizer-dye_lime-png 2.9s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/dye_lime.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-dye_lime-png {
+      0%, 17.23% { background-position-y: 0% }
+      17.24%, 20.68% { background-position-y: -100% }
+      20.69%, 24.13% { background-position-y: -200% }
+      24.14%, 27.58% { background-position-y: -300% }
+      27.59%, 31.02% { background-position-y: -400% }
+      31.03%, 34.47% { background-position-y: -500% }
+      34.48%, 37.92% { background-position-y: -600% }
+      37.93%, 41.37% { background-position-y: -700% }
+      41.38%, 43.09% { background-position-y: -800% }
+      43.1%, 44.82% { background-position-y: -900% }
+      44.83%, 46.54% { background-position-y: -1000% }
+      46.55%, 48.27% { background-position-y: -1100% }
+      48.28%, 49.99% { background-position-y: -1200% }
+      50%, 67.23% { background-position-y: -1300% }
+      67.24%, 68.96% { background-position-y: -1400% }
+      68.97%, 75.85% { background-position-y: -1500% }
+      75.86%, 77.58% { background-position-y: -1600% }
+      77.59%, 79.3% { background-position-y: -1700% }
+      79.31%, 81.02% { background-position-y: -1800% }
+      81.03%, 82.75% { background-position-y: -1900% }
+      82.76%, 84.47% { background-position-y: -2000% }
+      84.48%, 86.2% { background-position-y: -2100% }
+      86.21%, 87.92% { background-position-y: -2200% }
+      87.93%, 89.65% { background-position-y: -2300% }
+      89.66%, 91.37% { background-position-y: -2400% }
+      91.38%, 93.09% { background-position-y: -2500% }
+      93.1%, 94.82% { background-position-y: -2600% }
+      94.83%, 96.54% { background-position-y: -2700% }
+      96.55%, 98.27% { background-position-y: -2800% }
+      98.28%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-dye_magenta-png {
+    animation: texture-hexcasting-textures-item-colorizer-dye_magenta-png 2.9s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/dye_magenta.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-dye_magenta-png {
+      0%, 17.23% { background-position-y: 0% }
+      17.24%, 20.68% { background-position-y: -100% }
+      20.69%, 24.13% { background-position-y: -200% }
+      24.14%, 27.58% { background-position-y: -300% }
+      27.59%, 31.02% { background-position-y: -400% }
+      31.03%, 34.47% { background-position-y: -500% }
+      34.48%, 37.92% { background-position-y: -600% }
+      37.93%, 41.37% { background-position-y: -700% }
+      41.38%, 43.09% { background-position-y: -800% }
+      43.1%, 44.82% { background-position-y: -900% }
+      44.83%, 46.54% { background-position-y: -1000% }
+      46.55%, 48.27% { background-position-y: -1100% }
+      48.28%, 49.99% { background-position-y: -1200% }
+      50%, 67.23% { background-position-y: -1300% }
+      67.24%, 68.96% { background-position-y: -1400% }
+      68.97%, 75.85% { background-position-y: -1500% }
+      75.86%, 77.58% { background-position-y: -1600% }
+      77.59%, 79.3% { background-position-y: -1700% }
+      79.31%, 81.02% { background-position-y: -1800% }
+      81.03%, 82.75% { background-position-y: -1900% }
+      82.76%, 84.47% { background-position-y: -2000% }
+      84.48%, 86.2% { background-position-y: -2100% }
+      86.21%, 87.92% { background-position-y: -2200% }
+      87.93%, 89.65% { background-position-y: -2300% }
+      89.66%, 91.37% { background-position-y: -2400% }
+      91.38%, 93.09% { background-position-y: -2500% }
+      93.1%, 94.82% { background-position-y: -2600% }
+      94.83%, 96.54% { background-position-y: -2700% }
+      96.55%, 98.27% { background-position-y: -2800% }
+      98.28%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-dye_orange-png {
+    animation: texture-hexcasting-textures-item-colorizer-dye_orange-png 2.9s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/dye_orange.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-dye_orange-png {
+      0%, 17.23% { background-position-y: 0% }
+      17.24%, 20.68% { background-position-y: -100% }
+      20.69%, 24.13% { background-position-y: -200% }
+      24.14%, 27.58% { background-position-y: -300% }
+      27.59%, 31.02% { background-position-y: -400% }
+      31.03%, 34.47% { background-position-y: -500% }
+      34.48%, 37.92% { background-position-y: -600% }
+      37.93%, 41.37% { background-position-y: -700% }
+      41.38%, 43.09% { background-position-y: -800% }
+      43.1%, 44.82% { background-position-y: -900% }
+      44.83%, 46.54% { background-position-y: -1000% }
+      46.55%, 48.27% { background-position-y: -1100% }
+      48.28%, 49.99% { background-position-y: -1200% }
+      50%, 67.23% { background-position-y: -1300% }
+      67.24%, 68.96% { background-position-y: -1400% }
+      68.97%, 75.85% { background-position-y: -1500% }
+      75.86%, 77.58% { background-position-y: -1600% }
+      77.59%, 79.3% { background-position-y: -1700% }
+      79.31%, 81.02% { background-position-y: -1800% }
+      81.03%, 82.75% { background-position-y: -1900% }
+      82.76%, 84.47% { background-position-y: -2000% }
+      84.48%, 86.2% { background-position-y: -2100% }
+      86.21%, 87.92% { background-position-y: -2200% }
+      87.93%, 89.65% { background-position-y: -2300% }
+      89.66%, 91.37% { background-position-y: -2400% }
+      91.38%, 93.09% { background-position-y: -2500% }
+      93.1%, 94.82% { background-position-y: -2600% }
+      94.83%, 96.54% { background-position-y: -2700% }
+      96.55%, 98.27% { background-position-y: -2800% }
+      98.28%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-dye_pink-png {
+    animation: texture-hexcasting-textures-item-colorizer-dye_pink-png 2.9s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/dye_pink.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-dye_pink-png {
+      0%, 17.23% { background-position-y: 0% }
+      17.24%, 20.68% { background-position-y: -100% }
+      20.69%, 24.13% { background-position-y: -200% }
+      24.14%, 27.58% { background-position-y: -300% }
+      27.59%, 31.02% { background-position-y: -400% }
+      31.03%, 34.47% { background-position-y: -500% }
+      34.48%, 37.92% { background-position-y: -600% }
+      37.93%, 41.37% { background-position-y: -700% }
+      41.38%, 43.09% { background-position-y: -800% }
+      43.1%, 44.82% { background-position-y: -900% }
+      44.83%, 46.54% { background-position-y: -1000% }
+      46.55%, 48.27% { background-position-y: -1100% }
+      48.28%, 49.99% { background-position-y: -1200% }
+      50%, 67.23% { background-position-y: -1300% }
+      67.24%, 68.96% { background-position-y: -1400% }
+      68.97%, 75.85% { background-position-y: -1500% }
+      75.86%, 77.58% { background-position-y: -1600% }
+      77.59%, 79.3% { background-position-y: -1700% }
+      79.31%, 81.02% { background-position-y: -1800% }
+      81.03%, 82.75% { background-position-y: -1900% }
+      82.76%, 84.47% { background-position-y: -2000% }
+      84.48%, 86.2% { background-position-y: -2100% }
+      86.21%, 87.92% { background-position-y: -2200% }
+      87.93%, 89.65% { background-position-y: -2300% }
+      89.66%, 91.37% { background-position-y: -2400% }
+      91.38%, 93.09% { background-position-y: -2500% }
+      93.1%, 94.82% { background-position-y: -2600% }
+      94.83%, 96.54% { background-position-y: -2700% }
+      96.55%, 98.27% { background-position-y: -2800% }
+      98.28%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-dye_purple-png {
+    animation: texture-hexcasting-textures-item-colorizer-dye_purple-png 2.9s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/dye_purple.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-dye_purple-png {
+      0%, 17.23% { background-position-y: 0% }
+      17.24%, 20.68% { background-position-y: -100% }
+      20.69%, 24.13% { background-position-y: -200% }
+      24.14%, 27.58% { background-position-y: -300% }
+      27.59%, 31.02% { background-position-y: -400% }
+      31.03%, 34.47% { background-position-y: -500% }
+      34.48%, 37.92% { background-position-y: -600% }
+      37.93%, 41.37% { background-position-y: -700% }
+      41.38%, 43.09% { background-position-y: -800% }
+      43.1%, 44.82% { background-position-y: -900% }
+      44.83%, 46.54% { background-position-y: -1000% }
+      46.55%, 48.27% { background-position-y: -1100% }
+      48.28%, 49.99% { background-position-y: -1200% }
+      50%, 67.23% { background-position-y: -1300% }
+      67.24%, 68.96% { background-position-y: -1400% }
+      68.97%, 75.85% { background-position-y: -1500% }
+      75.86%, 77.58% { background-position-y: -1600% }
+      77.59%, 79.3% { background-position-y: -1700% }
+      79.31%, 81.02% { background-position-y: -1800% }
+      81.03%, 82.75% { background-position-y: -1900% }
+      82.76%, 84.47% { background-position-y: -2000% }
+      84.48%, 86.2% { background-position-y: -2100% }
+      86.21%, 87.92% { background-position-y: -2200% }
+      87.93%, 89.65% { background-position-y: -2300% }
+      89.66%, 91.37% { background-position-y: -2400% }
+      91.38%, 93.09% { background-position-y: -2500% }
+      93.1%, 94.82% { background-position-y: -2600% }
+      94.83%, 96.54% { background-position-y: -2700% }
+      96.55%, 98.27% { background-position-y: -2800% }
+      98.28%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-dye_red-png {
+    animation: texture-hexcasting-textures-item-colorizer-dye_red-png 2.9s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/dye_red.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-dye_red-png {
+      0%, 17.23% { background-position-y: 0% }
+      17.24%, 20.68% { background-position-y: -100% }
+      20.69%, 24.13% { background-position-y: -200% }
+      24.14%, 27.58% { background-position-y: -300% }
+      27.59%, 31.02% { background-position-y: -400% }
+      31.03%, 34.47% { background-position-y: -500% }
+      34.48%, 37.92% { background-position-y: -600% }
+      37.93%, 41.37% { background-position-y: -700% }
+      41.38%, 43.09% { background-position-y: -800% }
+      43.1%, 44.82% { background-position-y: -900% }
+      44.83%, 46.54% { background-position-y: -1000% }
+      46.55%, 48.27% { background-position-y: -1100% }
+      48.28%, 49.99% { background-position-y: -1200% }
+      50%, 67.23% { background-position-y: -1300% }
+      67.24%, 68.96% { background-position-y: -1400% }
+      68.97%, 75.85% { background-position-y: -1500% }
+      75.86%, 77.58% { background-position-y: -1600% }
+      77.59%, 79.3% { background-position-y: -1700% }
+      79.31%, 81.02% { background-position-y: -1800% }
+      81.03%, 82.75% { background-position-y: -1900% }
+      82.76%, 84.47% { background-position-y: -2000% }
+      84.48%, 86.2% { background-position-y: -2100% }
+      86.21%, 87.92% { background-position-y: -2200% }
+      87.93%, 89.65% { background-position-y: -2300% }
+      89.66%, 91.37% { background-position-y: -2400% }
+      91.38%, 93.09% { background-position-y: -2500% }
+      93.1%, 94.82% { background-position-y: -2600% }
+      94.83%, 96.54% { background-position-y: -2700% }
+      96.55%, 98.27% { background-position-y: -2800% }
+      98.28%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-dye_white-png {
+    animation: texture-hexcasting-textures-item-colorizer-dye_white-png 2.9s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/dye_white.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-dye_white-png {
+      0%, 17.23% { background-position-y: 0% }
+      17.24%, 20.68% { background-position-y: -100% }
+      20.69%, 24.13% { background-position-y: -200% }
+      24.14%, 27.58% { background-position-y: -300% }
+      27.59%, 31.02% { background-position-y: -400% }
+      31.03%, 34.47% { background-position-y: -500% }
+      34.48%, 37.92% { background-position-y: -600% }
+      37.93%, 41.37% { background-position-y: -700% }
+      41.38%, 43.09% { background-position-y: -800% }
+      43.1%, 44.82% { background-position-y: -900% }
+      44.83%, 46.54% { background-position-y: -1000% }
+      46.55%, 48.27% { background-position-y: -1100% }
+      48.28%, 49.99% { background-position-y: -1200% }
+      50%, 67.23% { background-position-y: -1300% }
+      67.24%, 68.96% { background-position-y: -1400% }
+      68.97%, 75.85% { background-position-y: -1500% }
+      75.86%, 77.58% { background-position-y: -1600% }
+      77.59%, 79.3% { background-position-y: -1700% }
+      79.31%, 81.02% { background-position-y: -1800% }
+      81.03%, 82.75% { background-position-y: -1900% }
+      82.76%, 84.47% { background-position-y: -2000% }
+      84.48%, 86.2% { background-position-y: -2100% }
+      86.21%, 87.92% { background-position-y: -2200% }
+      87.93%, 89.65% { background-position-y: -2300% }
+      89.66%, 91.37% { background-position-y: -2400% }
+      91.38%, 93.09% { background-position-y: -2500% }
+      93.1%, 94.82% { background-position-y: -2600% }
+      94.83%, 96.54% { background-position-y: -2700% }
+      96.55%, 98.27% { background-position-y: -2800% }
+      98.28%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-dye_yellow-png {
+    animation: texture-hexcasting-textures-item-colorizer-dye_yellow-png 2.9s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/dye_yellow.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-dye_yellow-png {
+      0%, 17.23% { background-position-y: 0% }
+      17.24%, 20.68% { background-position-y: -100% }
+      20.69%, 24.13% { background-position-y: -200% }
+      24.14%, 27.58% { background-position-y: -300% }
+      27.59%, 31.02% { background-position-y: -400% }
+      31.03%, 34.47% { background-position-y: -500% }
+      34.48%, 37.92% { background-position-y: -600% }
+      37.93%, 41.37% { background-position-y: -700% }
+      41.38%, 43.09% { background-position-y: -800% }
+      43.1%, 44.82% { background-position-y: -900% }
+      44.83%, 46.54% { background-position-y: -1000% }
+      46.55%, 48.27% { background-position-y: -1100% }
+      48.28%, 49.99% { background-position-y: -1200% }
+      50%, 67.23% { background-position-y: -1300% }
+      67.24%, 68.96% { background-position-y: -1400% }
+      68.97%, 75.85% { background-position-y: -1500% }
+      75.86%, 77.58% { background-position-y: -1600% }
+      77.59%, 79.3% { background-position-y: -1700% }
+      79.31%, 81.02% { background-position-y: -1800% }
+      81.03%, 82.75% { background-position-y: -1900% }
+      82.76%, 84.47% { background-position-y: -2000% }
+      84.48%, 86.2% { background-position-y: -2100% }
+      86.21%, 87.92% { background-position-y: -2200% }
+      87.93%, 89.65% { background-position-y: -2300% }
+      89.66%, 91.37% { background-position-y: -2400% }
+      91.38%, 93.09% { background-position-y: -2500% }
+      93.1%, 94.82% { background-position-y: -2600% }
+      94.83%, 96.54% { background-position-y: -2700% }
+      96.55%, 98.27% { background-position-y: -2800% }
+      98.28%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-pride_agender-png {
+    animation: texture-hexcasting-textures-item-colorizer-pride_agender-png 2.95s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/pride_agender.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-pride_agender-png {
+      0%, 16.94% { background-position-y: 0% }
+      16.95%, 23.72% { background-position-y: -100% }
+      23.73%, 25.41% { background-position-y: -200% }
+      25.42%, 27.11% { background-position-y: -300% }
+      27.12%, 28.8% { background-position-y: -400% }
+      28.81%, 30.5% { background-position-y: -500% }
+      30.51%, 32.19% { background-position-y: -600% }
+      32.2%, 33.89% { background-position-y: -700% }
+      33.9%, 35.58% { background-position-y: -800% }
+      35.59%, 37.28% { background-position-y: -900% }
+      37.29%, 38.97% { background-position-y: -1000% }
+      38.98%, 40.67% { background-position-y: -1100% }
+      40.68%, 57.62% { background-position-y: -1200% }
+      57.63%, 59.31% { background-position-y: -1300% }
+      59.32%, 61.01% { background-position-y: -1400% }
+      61.02%, 62.7% { background-position-y: -1500% }
+      62.71%, 69.48% { background-position-y: -1600% }
+      69.49%, 71.18% { background-position-y: -1700% }
+      71.19%, 72.87% { background-position-y: -1800% }
+      72.88%, 74.57% { background-position-y: -1900% }
+      74.58%, 76.26% { background-position-y: -2000% }
+      76.27%, 77.96% { background-position-y: -2100% }
+      77.97%, 79.65% { background-position-y: -2200% }
+      79.66%, 86.43% { background-position-y: -2300% }
+      86.44%, 88.13% { background-position-y: -2400% }
+      88.14%, 89.82% { background-position-y: -2500% }
+      89.83%, 91.52% { background-position-y: -2600% }
+      91.53%, 93.21% { background-position-y: -2700% }
+      93.22%, 94.91% { background-position-y: -2800% }
+      94.92%, 96.6% { background-position-y: -2900% }
+      96.61%, 98.3% { background-position-y: -3000% }
+      98.31%, 100% { background-position-y: -3100% }
+  }
+  .texture-hexcasting-textures-item-colorizer-pride_aroace-png {
+    animation: texture-hexcasting-textures-item-colorizer-pride_aroace-png 2.6s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/pride_aroace.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-pride_aroace-png {
+      0%, 19.22% { background-position-y: 0% }
+      19.23%, 26.91% { background-position-y: -100% }
+      26.92%, 28.84% { background-position-y: -200% }
+      28.85%, 30.76% { background-position-y: -300% }
+      30.77%, 32.68% { background-position-y: -400% }
+      32.69%, 34.61% { background-position-y: -500% }
+      34.62%, 36.53% { background-position-y: -600% }
+      36.54%, 38.45% { background-position-y: -700% }
+      38.46%, 40.37% { background-position-y: -800% }
+      40.38%, 42.3% { background-position-y: -900% }
+      42.31%, 44.22% { background-position-y: -1000% }
+      44.23%, 46.14% { background-position-y: -1100% }
+      46.15%, 48.07% { background-position-y: -1200% }
+      48.08%, 49.99% { background-position-y: -1300% }
+      50%, 51.91% { background-position-y: -1400% }
+      51.92%, 53.84% { background-position-y: -1500% }
+      53.85%, 55.76% { background-position-y: -1600% }
+      55.77%, 57.68% { background-position-y: -1700% }
+      57.69%, 59.61% { background-position-y: -1800% }
+      59.62%, 61.53% { background-position-y: -1900% }
+      61.54%, 63.45% { background-position-y: -2000% }
+      63.46%, 82.68% { background-position-y: -2100% }
+      82.69%, 84.61% { background-position-y: -2200% }
+      84.62%, 86.53% { background-position-y: -2300% }
+      86.54%, 88.45% { background-position-y: -2400% }
+      88.46%, 90.37% { background-position-y: -2500% }
+      90.38%, 92.3% { background-position-y: -2600% }
+      92.31%, 94.22% { background-position-y: -2700% }
+      94.23%, 96.14% { background-position-y: -2800% }
+      96.15%, 98.07% { background-position-y: -2900% }
+      98.08%, 100% { background-position-y: -3000% }
+  }
+  .texture-hexcasting-textures-item-colorizer-pride_aromantic-png {
+    animation: texture-hexcasting-textures-item-colorizer-pride_aromantic-png 2.6s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/pride_aromantic.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-pride_aromantic-png {
+      0%, 19.22% { background-position-y: 0% }
+      19.23%, 26.91% { background-position-y: -100% }
+      26.92%, 28.84% { background-position-y: -200% }
+      28.85%, 30.76% { background-position-y: -300% }
+      30.77%, 32.68% { background-position-y: -400% }
+      32.69%, 34.61% { background-position-y: -500% }
+      34.62%, 36.53% { background-position-y: -600% }
+      36.54%, 38.45% { background-position-y: -700% }
+      38.46%, 40.37% { background-position-y: -800% }
+      40.38%, 42.3% { background-position-y: -900% }
+      42.31%, 44.22% { background-position-y: -1000% }
+      44.23%, 46.14% { background-position-y: -1100% }
+      46.15%, 48.07% { background-position-y: -1200% }
+      48.08%, 49.99% { background-position-y: -1300% }
+      50%, 51.91% { background-position-y: -1400% }
+      51.92%, 53.84% { background-position-y: -1500% }
+      53.85%, 55.76% { background-position-y: -1600% }
+      55.77%, 57.68% { background-position-y: -1700% }
+      57.69%, 59.61% { background-position-y: -1800% }
+      59.62%, 61.53% { background-position-y: -1900% }
+      61.54%, 63.45% { background-position-y: -2000% }
+      63.46%, 82.68% { background-position-y: -2100% }
+      82.69%, 84.61% { background-position-y: -2200% }
+      84.62%, 86.53% { background-position-y: -2300% }
+      86.54%, 88.45% { background-position-y: -2400% }
+      88.46%, 90.37% { background-position-y: -2500% }
+      90.38%, 92.3% { background-position-y: -2600% }
+      92.31%, 94.22% { background-position-y: -2700% }
+      94.23%, 96.14% { background-position-y: -2800% }
+      96.15%, 98.07% { background-position-y: -2900% }
+      98.08%, 100% { background-position-y: -3000% }
+  }
+  .texture-hexcasting-textures-item-colorizer-pride_asexual-png {
+    animation: texture-hexcasting-textures-item-colorizer-pride_asexual-png 2.95s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/pride_asexual.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-pride_asexual-png {
+      0%, 16.94% { background-position-y: 0% }
+      16.95%, 23.72% { background-position-y: -100% }
+      23.73%, 25.41% { background-position-y: -200% }
+      25.42%, 27.11% { background-position-y: -300% }
+      27.12%, 28.8% { background-position-y: -400% }
+      28.81%, 30.5% { background-position-y: -500% }
+      30.51%, 32.19% { background-position-y: -600% }
+      32.2%, 33.89% { background-position-y: -700% }
+      33.9%, 35.58% { background-position-y: -800% }
+      35.59%, 37.28% { background-position-y: -900% }
+      37.29%, 38.97% { background-position-y: -1000% }
+      38.98%, 40.67% { background-position-y: -1100% }
+      40.68%, 57.62% { background-position-y: -1200% }
+      57.63%, 59.31% { background-position-y: -1300% }
+      59.32%, 61.01% { background-position-y: -1400% }
+      61.02%, 62.7% { background-position-y: -1500% }
+      62.71%, 69.48% { background-position-y: -1600% }
+      69.49%, 71.18% { background-position-y: -1700% }
+      71.19%, 72.87% { background-position-y: -1800% }
+      72.88%, 74.57% { background-position-y: -1900% }
+      74.58%, 76.26% { background-position-y: -2000% }
+      76.27%, 77.96% { background-position-y: -2100% }
+      77.97%, 79.65% { background-position-y: -2200% }
+      79.66%, 86.43% { background-position-y: -2300% }
+      86.44%, 88.13% { background-position-y: -2400% }
+      88.14%, 89.82% { background-position-y: -2500% }
+      89.83%, 91.52% { background-position-y: -2600% }
+      91.53%, 93.21% { background-position-y: -2700% }
+      93.22%, 94.91% { background-position-y: -2800% }
+      94.92%, 96.6% { background-position-y: -2900% }
+      96.61%, 98.3% { background-position-y: -3000% }
+      98.31%, 100% { background-position-y: -3100% }
+  }
+  .texture-hexcasting-textures-item-colorizer-pride_bisexual-png {
+    animation: texture-hexcasting-textures-item-colorizer-pride_bisexual-png 3.3s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/pride_bisexual.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-pride_bisexual-png {
+      0%, 15.14% { background-position-y: 0% }
+      15.15%, 16.66% { background-position-y: -100% }
+      16.67%, 18.17% { background-position-y: -200% }
+      18.18%, 19.69% { background-position-y: -300% }
+      19.7%, 21.2% { background-position-y: -400% }
+      21.21%, 22.72% { background-position-y: -500% }
+      22.73%, 24.23% { background-position-y: -600% }
+      24.24%, 25.75% { background-position-y: -700% }
+      25.76%, 27.26% { background-position-y: -800% }
+      27.27%, 28.78% { background-position-y: -900% }
+      28.79%, 30.29% { background-position-y: -1000% }
+      30.3%, 31.81% { background-position-y: -1100% }
+      31.82%, 33.32% { background-position-y: -1200% }
+      33.33%, 34.84% { background-position-y: -1300% }
+      34.85%, 36.35% { background-position-y: -1400% }
+      36.36%, 37.87% { background-position-y: -1500% }
+      37.88%, 53.02% { background-position-y: -1600% }
+      53.03%, 59.08% { background-position-y: -1700% }
+      59.09%, 60.6% { background-position-y: -1800% }
+      60.61%, 62.11% { background-position-y: -1900% }
+      62.12%, 63.63% { background-position-y: -2000% }
+      63.64%, 65.14% { background-position-y: -2100% }
+      65.15%, 66.66% { background-position-y: -2200% }
+      66.67%, 68.17% { background-position-y: -2300% }
+      68.18%, 69.69% { background-position-y: -2400% }
+      69.7%, 71.2% { background-position-y: -2500% }
+      71.21%, 72.72% { background-position-y: -2600% }
+      72.73%, 74.23% { background-position-y: -2700% }
+      74.24%, 75.75% { background-position-y: -2800% }
+      75.76%, 77.26% { background-position-y: -2900% }
+      77.27%, 78.78% { background-position-y: -3000% }
+      78.79%, 80.29% { background-position-y: -3100% }
+      80.3%, 81.81% { background-position-y: -3200% }
+      81.82%, 83.32% { background-position-y: -3300% }
+      83.33%, 84.84% { background-position-y: -3400% }
+      84.85%, 100% { background-position-y: -3500% }
+  }
+  .texture-hexcasting-textures-item-colorizer-pride_demiboy-png {
+    animation: texture-hexcasting-textures-item-colorizer-pride_demiboy-png 3.3s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/pride_demiboy.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-pride_demiboy-png {
+      0%, 15.14% { background-position-y: 0% }
+      15.15%, 16.66% { background-position-y: -100% }
+      16.67%, 18.17% { background-position-y: -200% }
+      18.18%, 19.69% { background-position-y: -300% }
+      19.7%, 21.2% { background-position-y: -400% }
+      21.21%, 22.72% { background-position-y: -500% }
+      22.73%, 24.23% { background-position-y: -600% }
+      24.24%, 25.75% { background-position-y: -700% }
+      25.76%, 27.26% { background-position-y: -800% }
+      27.27%, 28.78% { background-position-y: -900% }
+      28.79%, 30.29% { background-position-y: -1000% }
+      30.3%, 31.81% { background-position-y: -1100% }
+      31.82%, 33.32% { background-position-y: -1200% }
+      33.33%, 34.84% { background-position-y: -1300% }
+      34.85%, 36.35% { background-position-y: -1400% }
+      36.36%, 37.87% { background-position-y: -1500% }
+      37.88%, 53.02% { background-position-y: -1600% }
+      53.03%, 59.08% { background-position-y: -1700% }
+      59.09%, 60.6% { background-position-y: -1800% }
+      60.61%, 62.11% { background-position-y: -1900% }
+      62.12%, 63.63% { background-position-y: -2000% }
+      63.64%, 65.14% { background-position-y: -2100% }
+      65.15%, 66.66% { background-position-y: -2200% }
+      66.67%, 68.17% { background-position-y: -2300% }
+      68.18%, 69.69% { background-position-y: -2400% }
+      69.7%, 71.2% { background-position-y: -2500% }
+      71.21%, 72.72% { background-position-y: -2600% }
+      72.73%, 74.23% { background-position-y: -2700% }
+      74.24%, 75.75% { background-position-y: -2800% }
+      75.76%, 77.26% { background-position-y: -2900% }
+      77.27%, 78.78% { background-position-y: -3000% }
+      78.79%, 80.29% { background-position-y: -3100% }
+      80.3%, 81.81% { background-position-y: -3200% }
+      81.82%, 83.32% { background-position-y: -3300% }
+      83.33%, 84.84% { background-position-y: -3400% }
+      84.85%, 100% { background-position-y: -3500% }
+  }
+  .texture-hexcasting-textures-item-colorizer-pride_demigirl-png {
+    animation: texture-hexcasting-textures-item-colorizer-pride_demigirl-png 3.3s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/pride_demigirl.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-pride_demigirl-png {
+      0%, 15.14% { background-position-y: 0% }
+      15.15%, 16.66% { background-position-y: -100% }
+      16.67%, 18.17% { background-position-y: -200% }
+      18.18%, 19.69% { background-position-y: -300% }
+      19.7%, 21.2% { background-position-y: -400% }
+      21.21%, 22.72% { background-position-y: -500% }
+      22.73%, 24.23% { background-position-y: -600% }
+      24.24%, 25.75% { background-position-y: -700% }
+      25.76%, 27.26% { background-position-y: -800% }
+      27.27%, 28.78% { background-position-y: -900% }
+      28.79%, 30.29% { background-position-y: -1000% }
+      30.3%, 31.81% { background-position-y: -1100% }
+      31.82%, 33.32% { background-position-y: -1200% }
+      33.33%, 34.84% { background-position-y: -1300% }
+      34.85%, 36.35% { background-position-y: -1400% }
+      36.36%, 37.87% { background-position-y: -1500% }
+      37.88%, 53.02% { background-position-y: -1600% }
+      53.03%, 59.08% { background-position-y: -1700% }
+      59.09%, 60.6% { background-position-y: -1800% }
+      60.61%, 62.11% { background-position-y: -1900% }
+      62.12%, 63.63% { background-position-y: -2000% }
+      63.64%, 65.14% { background-position-y: -2100% }
+      65.15%, 66.66% { background-position-y: -2200% }
+      66.67%, 68.17% { background-position-y: -2300% }
+      68.18%, 69.69% { background-position-y: -2400% }
+      69.7%, 71.2% { background-position-y: -2500% }
+      71.21%, 72.72% { background-position-y: -2600% }
+      72.73%, 74.23% { background-position-y: -2700% }
+      74.24%, 75.75% { background-position-y: -2800% }
+      75.76%, 77.26% { background-position-y: -2900% }
+      77.27%, 78.78% { background-position-y: -3000% }
+      78.79%, 80.29% { background-position-y: -3100% }
+      80.3%, 81.81% { background-position-y: -3200% }
+      81.82%, 83.32% { background-position-y: -3300% }
+      83.33%, 84.84% { background-position-y: -3400% }
+      84.85%, 100% { background-position-y: -3500% }
+  }
+  .texture-hexcasting-textures-item-colorizer-pride_gay-png {
+    animation: texture-hexcasting-textures-item-colorizer-pride_gay-png 2.6s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/pride_gay.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-pride_gay-png {
+      0%, 19.22% { background-position-y: 0% }
+      19.23%, 26.91% { background-position-y: -100% }
+      26.92%, 28.84% { background-position-y: -200% }
+      28.85%, 30.76% { background-position-y: -300% }
+      30.77%, 32.68% { background-position-y: -400% }
+      32.69%, 34.61% { background-position-y: -500% }
+      34.62%, 36.53% { background-position-y: -600% }
+      36.54%, 38.45% { background-position-y: -700% }
+      38.46%, 40.37% { background-position-y: -800% }
+      40.38%, 42.3% { background-position-y: -900% }
+      42.31%, 44.22% { background-position-y: -1000% }
+      44.23%, 46.14% { background-position-y: -1100% }
+      46.15%, 48.07% { background-position-y: -1200% }
+      48.08%, 49.99% { background-position-y: -1300% }
+      50%, 51.91% { background-position-y: -1400% }
+      51.92%, 53.84% { background-position-y: -1500% }
+      53.85%, 55.76% { background-position-y: -1600% }
+      55.77%, 57.68% { background-position-y: -1700% }
+      57.69%, 59.61% { background-position-y: -1800% }
+      59.62%, 61.53% { background-position-y: -1900% }
+      61.54%, 63.45% { background-position-y: -2000% }
+      63.46%, 82.68% { background-position-y: -2100% }
+      82.69%, 84.61% { background-position-y: -2200% }
+      84.62%, 86.53% { background-position-y: -2300% }
+      86.54%, 88.45% { background-position-y: -2400% }
+      88.46%, 90.37% { background-position-y: -2500% }
+      90.38%, 92.3% { background-position-y: -2600% }
+      92.31%, 94.22% { background-position-y: -2700% }
+      94.23%, 96.14% { background-position-y: -2800% }
+      96.15%, 98.07% { background-position-y: -2900% }
+      98.08%, 100% { background-position-y: -3000% }
+  }
+  .texture-hexcasting-textures-item-colorizer-pride_genderfluid-png {
+    animation: texture-hexcasting-textures-item-colorizer-pride_genderfluid-png 2.6s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/pride_genderfluid.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-pride_genderfluid-png {
+      0%, 19.22% { background-position-y: 0% }
+      19.23%, 26.91% { background-position-y: -100% }
+      26.92%, 28.84% { background-position-y: -200% }
+      28.85%, 30.76% { background-position-y: -300% }
+      30.77%, 32.68% { background-position-y: -400% }
+      32.69%, 34.61% { background-position-y: -500% }
+      34.62%, 36.53% { background-position-y: -600% }
+      36.54%, 38.45% { background-position-y: -700% }
+      38.46%, 40.37% { background-position-y: -800% }
+      40.38%, 42.3% { background-position-y: -900% }
+      42.31%, 44.22% { background-position-y: -1000% }
+      44.23%, 46.14% { background-position-y: -1100% }
+      46.15%, 48.07% { background-position-y: -1200% }
+      48.08%, 49.99% { background-position-y: -1300% }
+      50%, 51.91% { background-position-y: -1400% }
+      51.92%, 53.84% { background-position-y: -1500% }
+      53.85%, 55.76% { background-position-y: -1600% }
+      55.77%, 57.68% { background-position-y: -1700% }
+      57.69%, 59.61% { background-position-y: -1800% }
+      59.62%, 61.53% { background-position-y: -1900% }
+      61.54%, 63.45% { background-position-y: -2000% }
+      63.46%, 82.68% { background-position-y: -2100% }
+      82.69%, 84.61% { background-position-y: -2200% }
+      84.62%, 86.53% { background-position-y: -2300% }
+      86.54%, 88.45% { background-position-y: -2400% }
+      88.46%, 90.37% { background-position-y: -2500% }
+      90.38%, 92.3% { background-position-y: -2600% }
+      92.31%, 94.22% { background-position-y: -2700% }
+      94.23%, 96.14% { background-position-y: -2800% }
+      96.15%, 98.07% { background-position-y: -2900% }
+      98.08%, 100% { background-position-y: -3000% }
+  }
+  .texture-hexcasting-textures-item-colorizer-pride_genderqueer-png {
+    animation: texture-hexcasting-textures-item-colorizer-pride_genderqueer-png 3.3s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/pride_genderqueer.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-pride_genderqueer-png {
+      0%, 15.14% { background-position-y: 0% }
+      15.15%, 16.66% { background-position-y: -100% }
+      16.67%, 18.17% { background-position-y: -200% }
+      18.18%, 19.69% { background-position-y: -300% }
+      19.7%, 21.2% { background-position-y: -400% }
+      21.21%, 22.72% { background-position-y: -500% }
+      22.73%, 24.23% { background-position-y: -600% }
+      24.24%, 25.75% { background-position-y: -700% }
+      25.76%, 27.26% { background-position-y: -800% }
+      27.27%, 28.78% { background-position-y: -900% }
+      28.79%, 30.29% { background-position-y: -1000% }
+      30.3%, 31.81% { background-position-y: -1100% }
+      31.82%, 33.32% { background-position-y: -1200% }
+      33.33%, 34.84% { background-position-y: -1300% }
+      34.85%, 36.35% { background-position-y: -1400% }
+      36.36%, 37.87% { background-position-y: -1500% }
+      37.88%, 53.02% { background-position-y: -1600% }
+      53.03%, 59.08% { background-position-y: -1700% }
+      59.09%, 60.6% { background-position-y: -1800% }
+      60.61%, 62.11% { background-position-y: -1900% }
+      62.12%, 63.63% { background-position-y: -2000% }
+      63.64%, 65.14% { background-position-y: -2100% }
+      65.15%, 66.66% { background-position-y: -2200% }
+      66.67%, 68.17% { background-position-y: -2300% }
+      68.18%, 69.69% { background-position-y: -2400% }
+      69.7%, 71.2% { background-position-y: -2500% }
+      71.21%, 72.72% { background-position-y: -2600% }
+      72.73%, 74.23% { background-position-y: -2700% }
+      74.24%, 75.75% { background-position-y: -2800% }
+      75.76%, 77.26% { background-position-y: -2900% }
+      77.27%, 78.78% { background-position-y: -3000% }
+      78.79%, 80.29% { background-position-y: -3100% }
+      80.3%, 81.81% { background-position-y: -3200% }
+      81.82%, 83.32% { background-position-y: -3300% }
+      83.33%, 84.84% { background-position-y: -3400% }
+      84.85%, 100% { background-position-y: -3500% }
+  }
+  .texture-hexcasting-textures-item-colorizer-pride_intersex-png {
+    animation: texture-hexcasting-textures-item-colorizer-pride_intersex-png 2.1s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/pride_intersex.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-pride_intersex-png {
+      0%, 23.8% { background-position-y: 0% }
+      23.81%, 26.18% { background-position-y: -100% }
+      26.19%, 28.56% { background-position-y: -200% }
+      28.57%, 30.94% { background-position-y: -300% }
+      30.95%, 33.32% { background-position-y: -400% }
+      33.33%, 35.7% { background-position-y: -500% }
+      35.71%, 38.09% { background-position-y: -600% }
+      38.1%, 40.47% { background-position-y: -700% }
+      40.48%, 42.85% { background-position-y: -800% }
+      42.86%, 45.23% { background-position-y: -900% }
+      45.24%, 47.61% { background-position-y: -1000% }
+      47.62%, 49.99% { background-position-y: -1100% }
+      50%, 52.37% { background-position-y: -1200% }
+      52.38%, 54.75% { background-position-y: -1300% }
+      54.76%, 57.13% { background-position-y: -1400% }
+      57.14%, 66.66% { background-position-y: -1500% }
+      66.67%, 69.04% { background-position-y: -1600% }
+      69.05%, 71.42% { background-position-y: -1700% }
+      71.43%, 73.8% { background-position-y: -1800% }
+      73.81%, 76.18% { background-position-y: -1900% }
+      76.19%, 78.56% { background-position-y: -2000% }
+      78.57%, 80.94% { background-position-y: -2100% }
+      80.95%, 83.32% { background-position-y: -2200% }
+      83.33%, 85.7% { background-position-y: -2300% }
+      85.71%, 88.09% { background-position-y: -2400% }
+      88.1%, 90.47% { background-position-y: -2500% }
+      90.48%, 92.85% { background-position-y: -2600% }
+      92.86%, 95.23% { background-position-y: -2700% }
+      95.24%, 97.61% { background-position-y: -2800% }
+      97.62%, 100% { background-position-y: -2900% }
+  }
+  .texture-hexcasting-textures-item-colorizer-pride_lesbian-png {
+    animation: texture-hexcasting-textures-item-colorizer-pride_lesbian-png 2.6s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/pride_lesbian.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-pride_lesbian-png {
+      0%, 19.22% { background-position-y: 0% }
+      19.23%, 26.91% { background-position-y: -100% }
+      26.92%, 28.84% { background-position-y: -200% }
+      28.85%, 30.76% { background-position-y: -300% }
+      30.77%, 32.68% { background-position-y: -400% }
+      32.69%, 34.61% { background-position-y: -500% }
+      34.62%, 36.53% { background-position-y: -600% }
+      36.54%, 38.45% { background-position-y: -700% }
+      38.46%, 40.37% { background-position-y: -800% }
+      40.38%, 42.3% { background-position-y: -900% }
+      42.31%, 44.22% { background-position-y: -1000% }
+      44.23%, 46.14% { background-position-y: -1100% }
+      46.15%, 48.07% { background-position-y: -1200% }
+      48.08%, 49.99% { background-position-y: -1300% }
+      50%, 51.91% { background-position-y: -1400% }
+      51.92%, 53.84% { background-position-y: -1500% }
+      53.85%, 55.76% { background-position-y: -1600% }
+      55.77%, 57.68% { background-position-y: -1700% }
+      57.69%, 59.61% { background-position-y: -1800% }
+      59.62%, 61.53% { background-position-y: -1900% }
+      61.54%, 63.45% { background-position-y: -2000% }
+      63.46%, 82.68% { background-position-y: -2100% }
+      82.69%, 84.61% { background-position-y: -2200% }
+      84.62%, 86.53% { background-position-y: -2300% }
+      86.54%, 88.45% { background-position-y: -2400% }
+      88.46%, 90.37% { background-position-y: -2500% }
+      90.38%, 92.3% { background-position-y: -2600% }
+      92.31%, 94.22% { background-position-y: -2700% }
+      94.23%, 96.14% { background-position-y: -2800% }
+      96.15%, 98.07% { background-position-y: -2900% }
+      98.08%, 100% { background-position-y: -3000% }
+  }
+  .texture-hexcasting-textures-item-colorizer-pride_nonbinary-png {
+    animation: texture-hexcasting-textures-item-colorizer-pride_nonbinary-png 2.95s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/pride_nonbinary.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-pride_nonbinary-png {
+      0%, 16.94% { background-position-y: 0% }
+      16.95%, 23.72% { background-position-y: -100% }
+      23.73%, 25.41% { background-position-y: -200% }
+      25.42%, 27.11% { background-position-y: -300% }
+      27.12%, 28.8% { background-position-y: -400% }
+      28.81%, 30.5% { background-position-y: -500% }
+      30.51%, 32.19% { background-position-y: -600% }
+      32.2%, 33.89% { background-position-y: -700% }
+      33.9%, 35.58% { background-position-y: -800% }
+      35.59%, 37.28% { background-position-y: -900% }
+      37.29%, 38.97% { background-position-y: -1000% }
+      38.98%, 40.67% { background-position-y: -1100% }
+      40.68%, 57.62% { background-position-y: -1200% }
+      57.63%, 59.31% { background-position-y: -1300% }
+      59.32%, 61.01% { background-position-y: -1400% }
+      61.02%, 62.7% { background-position-y: -1500% }
+      62.71%, 69.48% { background-position-y: -1600% }
+      69.49%, 71.18% { background-position-y: -1700% }
+      71.19%, 72.87% { background-position-y: -1800% }
+      72.88%, 74.57% { background-position-y: -1900% }
+      74.58%, 76.26% { background-position-y: -2000% }
+      76.27%, 77.96% { background-position-y: -2100% }
+      77.97%, 79.65% { background-position-y: -2200% }
+      79.66%, 86.43% { background-position-y: -2300% }
+      86.44%, 88.13% { background-position-y: -2400% }
+      88.14%, 89.82% { background-position-y: -2500% }
+      89.83%, 91.52% { background-position-y: -2600% }
+      91.53%, 93.21% { background-position-y: -2700% }
+      93.22%, 94.91% { background-position-y: -2800% }
+      94.92%, 96.6% { background-position-y: -2900% }
+      96.61%, 98.3% { background-position-y: -3000% }
+      98.31%, 100% { background-position-y: -3100% }
+  }
+  .texture-hexcasting-textures-item-colorizer-pride_pansexual-png {
+    animation: texture-hexcasting-textures-item-colorizer-pride_pansexual-png 3.3s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/pride_pansexual.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-pride_pansexual-png {
+      0%, 15.14% { background-position-y: 0% }
+      15.15%, 16.66% { background-position-y: -100% }
+      16.67%, 18.17% { background-position-y: -200% }
+      18.18%, 19.69% { background-position-y: -300% }
+      19.7%, 21.2% { background-position-y: -400% }
+      21.21%, 22.72% { background-position-y: -500% }
+      22.73%, 24.23% { background-position-y: -600% }
+      24.24%, 25.75% { background-position-y: -700% }
+      25.76%, 27.26% { background-position-y: -800% }
+      27.27%, 28.78% { background-position-y: -900% }
+      28.79%, 30.29% { background-position-y: -1000% }
+      30.3%, 31.81% { background-position-y: -1100% }
+      31.82%, 33.32% { background-position-y: -1200% }
+      33.33%, 34.84% { background-position-y: -1300% }
+      34.85%, 36.35% { background-position-y: -1400% }
+      36.36%, 37.87% { background-position-y: -1500% }
+      37.88%, 53.02% { background-position-y: -1600% }
+      53.03%, 59.08% { background-position-y: -1700% }
+      59.09%, 60.6% { background-position-y: -1800% }
+      60.61%, 62.11% { background-position-y: -1900% }
+      62.12%, 63.63% { background-position-y: -2000% }
+      63.64%, 65.14% { background-position-y: -2100% }
+      65.15%, 66.66% { background-position-y: -2200% }
+      66.67%, 68.17% { background-position-y: -2300% }
+      68.18%, 69.69% { background-position-y: -2400% }
+      69.7%, 71.2% { background-position-y: -2500% }
+      71.21%, 72.72% { background-position-y: -2600% }
+      72.73%, 74.23% { background-position-y: -2700% }
+      74.24%, 75.75% { background-position-y: -2800% }
+      75.76%, 77.26% { background-position-y: -2900% }
+      77.27%, 78.78% { background-position-y: -3000% }
+      78.79%, 80.29% { background-position-y: -3100% }
+      80.3%, 81.81% { background-position-y: -3200% }
+      81.82%, 83.32% { background-position-y: -3300% }
+      83.33%, 84.84% { background-position-y: -3400% }
+      84.85%, 100% { background-position-y: -3500% }
+  }
+  .texture-hexcasting-textures-item-colorizer-pride_plural-png {
+    animation: texture-hexcasting-textures-item-colorizer-pride_plural-png 2.95s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/pride_plural.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-pride_plural-png {
+      0%, 16.94% { background-position-y: 0% }
+      16.95%, 23.72% { background-position-y: -100% }
+      23.73%, 25.41% { background-position-y: -200% }
+      25.42%, 27.11% { background-position-y: -300% }
+      27.12%, 28.8% { background-position-y: -400% }
+      28.81%, 30.5% { background-position-y: -500% }
+      30.51%, 32.19% { background-position-y: -600% }
+      32.2%, 33.89% { background-position-y: -700% }
+      33.9%, 35.58% { background-position-y: -800% }
+      35.59%, 37.28% { background-position-y: -900% }
+      37.29%, 38.97% { background-position-y: -1000% }
+      38.98%, 40.67% { background-position-y: -1100% }
+      40.68%, 57.62% { background-position-y: -1200% }
+      57.63%, 59.31% { background-position-y: -1300% }
+      59.32%, 61.01% { background-position-y: -1400% }
+      61.02%, 62.7% { background-position-y: -1500% }
+      62.71%, 69.48% { background-position-y: -1600% }
+      69.49%, 71.18% { background-position-y: -1700% }
+      71.19%, 72.87% { background-position-y: -1800% }
+      72.88%, 74.57% { background-position-y: -1900% }
+      74.58%, 76.26% { background-position-y: -2000% }
+      76.27%, 77.96% { background-position-y: -2100% }
+      77.97%, 79.65% { background-position-y: -2200% }
+      79.66%, 86.43% { background-position-y: -2300% }
+      86.44%, 88.13% { background-position-y: -2400% }
+      88.14%, 89.82% { background-position-y: -2500% }
+      89.83%, 91.52% { background-position-y: -2600% }
+      91.53%, 93.21% { background-position-y: -2700% }
+      93.22%, 94.91% { background-position-y: -2800% }
+      94.92%, 96.6% { background-position-y: -2900% }
+      96.61%, 98.3% { background-position-y: -3000% }
+      98.31%, 100% { background-position-y: -3100% }
+  }
+  .texture-hexcasting-textures-item-colorizer-pride_transgender-png {
+    animation: texture-hexcasting-textures-item-colorizer-pride_transgender-png 3.3s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/pride_transgender.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-pride_transgender-png {
+      0%, 15.14% { background-position-y: 0% }
+      15.15%, 16.66% { background-position-y: -100% }
+      16.67%, 18.17% { background-position-y: -200% }
+      18.18%, 19.69% { background-position-y: -300% }
+      19.7%, 21.2% { background-position-y: -400% }
+      21.21%, 22.72% { background-position-y: -500% }
+      22.73%, 24.23% { background-position-y: -600% }
+      24.24%, 25.75% { background-position-y: -700% }
+      25.76%, 27.26% { background-position-y: -800% }
+      27.27%, 28.78% { background-position-y: -900% }
+      28.79%, 30.29% { background-position-y: -1000% }
+      30.3%, 31.81% { background-position-y: -1100% }
+      31.82%, 33.32% { background-position-y: -1200% }
+      33.33%, 34.84% { background-position-y: -1300% }
+      34.85%, 36.35% { background-position-y: -1400% }
+      36.36%, 37.87% { background-position-y: -1500% }
+      37.88%, 53.02% { background-position-y: -1600% }
+      53.03%, 59.08% { background-position-y: -1700% }
+      59.09%, 60.6% { background-position-y: -1800% }
+      60.61%, 62.11% { background-position-y: -1900% }
+      62.12%, 63.63% { background-position-y: -2000% }
+      63.64%, 65.14% { background-position-y: -2100% }
+      65.15%, 66.66% { background-position-y: -2200% }
+      66.67%, 68.17% { background-position-y: -2300% }
+      68.18%, 69.69% { background-position-y: -2400% }
+      69.7%, 71.2% { background-position-y: -2500% }
+      71.21%, 72.72% { background-position-y: -2600% }
+      72.73%, 74.23% { background-position-y: -2700% }
+      74.24%, 75.75% { background-position-y: -2800% }
+      75.76%, 77.26% { background-position-y: -2900% }
+      77.27%, 78.78% { background-position-y: -3000% }
+      78.79%, 80.29% { background-position-y: -3100% }
+      80.3%, 81.81% { background-position-y: -3200% }
+      81.82%, 83.32% { background-position-y: -3300% }
+      83.33%, 84.84% { background-position-y: -3400% }
+      84.85%, 100% { background-position-y: -3500% }
+  }
+  .texture-hexcasting-textures-item-colorizer-uuid-png {
+    animation: texture-hexcasting-textures-item-colorizer-uuid-png 2.05s linear infinite;
+    background-size: 100%;
+    background-image: url("https://raw.githubusercontent.com/FallingColors/HexMod/5831d9e2867f2369b8016aed83fbbd401fd7ad3d/Common/src/main/resources/assets/hexcasting/textures/item/colorizer/uuid.png");
+  }
+  @keyframes texture-hexcasting-textures-item-colorizer-uuid-png {
+      0%, 24.38% { background-position-y: 0% }
+      24.39%, 26.82% { background-position-y: -100% }
+      26.83%, 29.26% { background-position-y: -200% }
+      29.27%, 31.7% { background-position-y: -300% }
+      31.71%, 34.14% { background-position-y: -400% }
+      34.15%, 36.58% { background-position-y: -500% }
+      36.59%, 39.01% { background-position-y: -600% }
+      39.02%, 63.4% { background-position-y: -700% }
+      63.41%, 65.84% { background-position-y: -800% }
+      65.85%, 75.6% { background-position-y: -900% }
+      75.61%, 78.04% { background-position-y: -1000% }
+      78.05%, 80.48% { background-position-y: -1100% }
+      80.49%, 82.92% { background-position-y: -1200% }
+      82.93%, 85.36% { background-position-y: -1300% }
+      85.37%, 87.79% { background-position-y: -1400% }
+      87.8%, 90.23% { background-position-y: -1500% }
+      90.24%, 92.67% { background-position-y: -1600% }
+      92.68%, 95.11% { background-position-y: -1700% }
+      95.12%, 97.55% { background-position-y: -1800% }
+      97.56%, 100% { background-position-y: -1900% }
+  }
