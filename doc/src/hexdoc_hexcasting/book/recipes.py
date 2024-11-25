@@ -1,12 +1,17 @@
 from abc import ABC, abstractmethod
 from typing import Any, Literal, Self
 
-from hexdoc.core import IsVersion, ResourceLocation
+from hexdoc.core import IsVersion, ItemStack, ResourceLocation
 from hexdoc.minecraft.assets import ItemWithTexture, PNGTexture
 from hexdoc.minecraft.i18n import I18n, LocalizedStr
 from hexdoc.minecraft.recipe import ItemIngredient, ItemIngredientList, Recipe
 from hexdoc.model import HexdocModel, TypeTaggedTemplate
 from hexdoc.utils import NoValue, classproperty
+from hexdoc_hexcasting.utils.constants import (
+    MEDIA_CRYSTAL_UNIT,
+    MEDIA_DUST_UNIT,
+    MEDIA_SHARD_UNIT,
+)
 from pydantic import Field, PrivateAttr, ValidationInfo, model_validator
 
 # ingredients
@@ -139,15 +144,43 @@ class BrainsweepRecipe(Recipe, ABC, type=None):
         For example, `BrainsweepRecipe_0_11` returns `entityIn`.
         """
 
+    @property
+    @abstractmethod
+    def cost(self) -> int:
+        """Returns the cost of this recipe in raw media units."""
+
+    @property
+    def cost_items(self) -> list[ItemStack]:
+        """Returns the items to display for the recipe's cost."""
+
+        costs = [
+            ("hexcasting", "amethyst_dust", MEDIA_DUST_UNIT),
+            ("minecraft", "amethyst_shard", MEDIA_SHARD_UNIT),
+            ("hexcasting", "charged_amethyst", MEDIA_CRYSTAL_UNIT),
+        ]
+
+        return [
+            ItemStack(namespace, path, self.cost // media)
+            for namespace, path, media in costs
+            if self.cost % media == 0
+        ] or [
+            # fallback if nothing divides evenly
+            ItemStack("hexcasting", "amethyst_dust", self.cost // MEDIA_DUST_UNIT),
+        ]
+
 
 @IsVersion(">=1.20")
 class BrainsweepRecipe_0_11(BrainsweepRecipe, type="hexcasting:brainsweep"):
-    cost: int
+    cost_: int = Field(alias="cost")
     entityIn: BrainsweepeeIngredient
 
     @property
     def brainsweepee(self):
         return self.entityIn
+
+    @property
+    def cost(self):
+        return self.cost_
 
 
 @IsVersion("<1.20")
@@ -157,3 +190,7 @@ class BrainsweepRecipe_0_10(BrainsweepRecipe, type="hexcasting:brainsweep"):
     @property
     def brainsweepee(self):
         return self.villagerIn
+
+    @property
+    def cost(self):
+        return 10 * MEDIA_CRYSTAL_UNIT
