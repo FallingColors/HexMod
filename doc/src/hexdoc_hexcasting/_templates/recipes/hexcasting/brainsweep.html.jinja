@@ -34,6 +34,16 @@
         </div>
       {% endblock ingredient %}
 
+      {% block cost %}
+        <div class="flay-recipe-cost texture item-texture multi-textures cycle-textures">
+          {% for item in recipe.cost_items %}
+            <div class="texture item-texture {{ 'multi-texture-active' if loop.first }}">
+              {{ texture_macros.render_item(item|hexdoc_item, count=item.count, is_first=true) }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endblock cost %}
+
       {% block result %}
         <div class="flay-recipe-result">
           {{ texture_macros.render_item(recipe.result.name) }}
