@@ -5,11 +5,12 @@ import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
-import at.petrak.hexcasting.api.casting.getEntity
+import at.petrak.hexcasting.api.casting.getEntityOrBlockPos
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.casting.mishaps.MishapBadEntity
+import at.petrak.hexcasting.api.casting.mishaps.MishapBad
 import at.petrak.hexcasting.api.casting.mishaps.MishapOthersName
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.phys.Vec3
 
@@ -19,16 +20,18 @@ object OpTheCoolerWrite : SpellAction {
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
-        val target = args.getEntity(0, argc)
+        val target = args.getEntityOrBlockPos(0, argc)
         val datum = args[1]
 
-        env.assertEntityInRange(target)
+        target.map(env::assertEntityInRange, env::assertPosInRangeForEditing)
 
-        val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(target)
-            ?: throw MishapBadEntity.of(target, "iota.write")
+        val datumHolder = target.map(
+            IXplatAbstractions.INSTANCE::findDataHolder,
+            {pos -> IXplatAbstractions.INSTANCE.findDataHolder(pos, env.world)})
+            ?: throw MishapBad.of(target, "iota.write")
 
         if (!datumHolder.writeIota(datum, true))
-            throw MishapBadEntity.of(target, "iota.write")
+            throw MishapBad.of(target, "iota.write")
 
         // We pass null here so that even the own caster won't be allowed into a focus.
         // Otherwise, you could sentinel scout to people and remotely write their names into things using a cleric circle.
@@ -36,12 +39,13 @@ object OpTheCoolerWrite : SpellAction {
         if (trueName != null)
             throw MishapOthersName(trueName)
 
-        val burstPos = if (target is ItemEntity) {
-            // Special case these because the render is way above the entity
-            target.position().add(0.0, 3.0 / 8.0, 0.0)
-        } else {
-            target.position()
-        }
+        val burstPos = target.map({ent -> if (ent is ItemEntity) {
+                // Special case these because the render is way above the entity
+                ent.position().add(0.0, 3.0 / 8.0, 0.0)
+            } else {
+                ent.position()
+            }}, BlockPos::getCenter)
+
         return SpellAction.Result(
             Spell(datum, datumHolder),
             0,

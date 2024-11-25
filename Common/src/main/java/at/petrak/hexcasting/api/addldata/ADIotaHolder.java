@@ -34,4 +34,24 @@ public interface ADIotaHolder {
      * @return whether it is possible to write to this IotaHolder
      */
     boolean writeable();
+
+    // a helper for read-only holders
+    interface ADIotaHolderReadOnly extends ADIotaHolder{
+        default boolean writeIota(@Nullable Iota iota, boolean simulate){
+            return false;
+        }
+
+        default boolean writeable(){ return false; }
+    }
+
+    // wraps an iota in an iota holder
+    static ADIotaHolder ofStatic(Iota iota){
+        return new ADIotaHolderReadOnly(){
+            @Nullable
+            public CompoundTag readIotaTag(){ return IotaType.serialize(iota); }
+
+            @Nullable
+            public Iota readIota(ServerLevel world) { return iota; }
+        };
+    }
 }

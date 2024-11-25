@@ -19,6 +19,7 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
+import at.petrak.hexcasting.common.impl.HexAPIImpl;
 import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import com.mojang.authlib.GameProfile;
@@ -123,6 +124,11 @@ public interface IXplatAbstractions {
 
     @Nullable
     ADIotaHolder findDataHolder(Entity entity);
+
+    @Nullable
+    default ADIotaHolder findDataHolder(BlockPos pos, ServerLevel world){
+        return HexAPIImpl.getBlockyIotaHolder(world, pos);
+    }
 
     @Nullable
     ADHexHolder findHexHolder(ItemStack stack);

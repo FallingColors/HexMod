@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api;
 
+import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
@@ -8,15 +9,16 @@ import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.base.Suppliers;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
@@ -211,6 +213,26 @@ public interface HexAPI {
 
     default ArmorMaterial robesMaterial() {
         return DUMMY_ARMOR_MATERIAL;
+    }
+
+    @FunctionalInterface
+    interface IBlockyIotaProvider{
+        ADIotaHolder getIotaHolder(ServerLevel level, BlockPos pos);
+    }
+
+    /**
+     * Register's an iota holder provider for a block to be used with Chronicler's.
+     * <p>
+     * NOTE: should implement IBlockyIotaProvider on the block or ADIotaHolder on the block entity if possible.
+     * This method should only be used in cases where that's not feasible, such as an optional hex
+     * dependency or adding a provider to another mod's block.
+     * </p>
+     * @param blockID the resloc/id for the block
+     * @return if the holder was successfully registered
+     * @see IXplatAbstractions#findDataHolder(BlockPos, ServerLevel) 
+     */
+    default boolean registerBlockyIotaHolder(ResourceLocation blockID, IBlockyIotaProvider holder){
+        return false;
     }
 
     /**

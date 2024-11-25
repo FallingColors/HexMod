@@ -1,22 +1,27 @@
 package at.petrak.hexcasting.common.impl;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -144,5 +149,34 @@ public class HexAPIImpl implements HexAPI {
     @Override
     public ArmorMaterial robesMaterial() {
         return ARMOR_MATERIAL;
+    }
+
+
+    private static final ConcurrentMap<ResourceLocation, IBlockyIotaProvider> DIRECT_BLOCKY_IOTA_PROVIDER
+        = new ConcurrentHashMap<>();
+
+    @Override
+    public boolean registerBlockyIotaHolder(ResourceLocation blockID, IBlockyIotaProvider holder){
+        if(DIRECT_BLOCKY_IOTA_PROVIDER.get(blockID) != null){
+            HexAPI.LOGGER.warn("Attempted to register a blocky iota provider for already registered block: " + blockID);
+            return false;
+        }
+        DIRECT_BLOCKY_IOTA_PROVIDER.put(blockID, holder);
+        return true;
+    }
+
+    // properly exposed at IXplatAbstractions#findDataHolder(BlockPos, ServerLevel) for consistency
+    @Nullable
+    public static ADIotaHolder getBlockyIotaHolder(ServerLevel level, BlockPos pos){
+        Block block = level.getBlockState(pos).getBlock();
+        if(block instanceof IBlockyIotaProvider provider){
+            return provider.getIotaHolder(level, pos);
+        }
+        if(level.getBlockEntity(pos) instanceof ADIotaHolder holder){
+            return holder;
+        }
+        IBlockyIotaProvider provider = DIRECT_BLOCKY_IOTA_PROVIDER.get(BuiltInRegistries.BLOCK.getKey(block));
+        if(provider == null) return null;
+        return provider.getIotaHolder(level, pos);
     }
 }
