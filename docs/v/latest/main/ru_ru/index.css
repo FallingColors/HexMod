@@ -400,6 +400,11 @@ p.todo-note {
   top: 70px;
   left: 24px;
 }
+.flay-recipe-cost{
+  position: absolute;
+  top: 110px;
+  left: 24px;
+}
 /* entity chamber starts at top: 38px & left: 74px. it is 52px wide & 96px tall  */
 .flay-recipe-entity{
   position: absolute;
