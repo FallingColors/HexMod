@@ -70,106 +70,17 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
 
     @Override
     protected List<ItemStack> getUsableStacks(StackDiscoveryMode mode) {
-        return switch (mode) {
-            case QUERY -> {
-                var out = new ArrayList<ItemStack>();
-
-                var offhand = this.caster.getItemInHand(HexUtils.otherHand(this.castingHand));
-                if (!offhand.isEmpty()) {
-                    out.add(offhand);
-                }
-
-                // If we're casting from the main hand, try to pick from the slot one to the right of the selected slot
-                // Otherwise, scan the hotbar left to right
-                var anchorSlot = this.castingHand == InteractionHand.MAIN_HAND
-                    ? (this.caster.getInventory().selected + 1) % 9
-                    : 0;
-
-
-                for (int delta = 0; delta < 9; delta++) {
-                    var slot = (anchorSlot + delta) % 9;
-                    out.add(this.caster.getInventory().getItem(slot));
-                }
-
-                yield out;
-            }
-            case EXTRACTION -> {
-                // https://wiki.vg/Inventory is WRONG
-                // slots 0-8 are the hotbar
-                // for what purpose i cannot imagine
-                // http://redditpublic.com/images/b/b2/Items_slot_number.png looks right
-                // and offhand is 150 Inventory.java:464
-                var out = new ArrayList<ItemStack>();
-
-                // First, the inventory backwards
-                // We use inv.items here to get the main inventory, but not offhand or armor
-                Inventory inv = this.caster.getInventory();
-                for (int i = inv.items.size() - 1; i >= 0; i--) {
-                    if (i != inv.selected) {
-                        out.add(inv.items.get(i));
-                    }
-                }
-
-                // then the offhand, then the selected hand
-                out.addAll(inv.offhand);
-                out.add(inv.getSelected());
-
-                yield out;
-            }
-        };
+        return getUsableStacksForPlayer(mode, castingHand, caster);
     }
 
     @Override
     protected List<HeldItemInfo> getPrimaryStacks() {
-        var primaryItem = this.caster.getItemInHand(this.castingHand);
-
-        if (primaryItem.isEmpty())
-            primaryItem = ItemStack.EMPTY.copy();
-
-        return List.of(new HeldItemInfo(getAlternateItem(), this.getOtherHand()), new HeldItemInfo(primaryItem,
-            this.castingHand));
-    }
-
-    ItemStack getAlternateItem() {
-        var otherHand = HexUtils.otherHand(this.castingHand);
-        var stack = this.caster.getItemInHand(otherHand);
-        if (stack.isEmpty()) {
-            return ItemStack.EMPTY.copy();
-        } else {
-            return stack;
-        }
+        return getPrimaryStacksForPlayer(this.castingHand, this.caster);
     }
 
     @Override
     public boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand) {
-        if (caster == null)
-            return false;
-
-        if (hand != null && stackOk.test(caster.getItemInHand(hand))) {
-            caster.setItemInHand(hand, replaceWith);
-            return true;
-        }
-
-        Inventory inv = this.caster.getInventory();
-        for (int i = inv.items.size() - 1; i >= 0; i--) {
-            if (i != inv.selected) {
-                if (stackOk.test(inv.items.get(i))) {
-                    inv.setItem(i, replaceWith);
-                    return true;
-                }
-            }
-        }
-
-        if (stackOk.test(caster.getItemInHand(getOtherHand()))) {
-            caster.setItemInHand(getOtherHand(), replaceWith);
-            return true;
-        }
-        if (stackOk.test(caster.getItemInHand(getCastingHand()))) {
-            caster.setItemInHand(getCastingHand(), replaceWith);
-            return true;
-        }
-
-        return false;
+        return replaceItemForPlayer(stackOk, replaceWith, hand, this.caster);
     }
 
     @Override
@@ -178,12 +89,13 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         if (sentinel != null
             && sentinel.extendsRange()
             && this.caster.level().dimension() == sentinel.dimension()
-            && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS
+                // adding 0.00000000001 to avoid machine precision errors at specific angles
+                && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS + 0.00000000001
         ) {
             return true;
         }
 
-        return vec.distanceToSqr(this.caster.position()) <= AMBIT_RADIUS * AMBIT_RADIUS;
+        return vec.distanceToSqr(this.caster.position()) <= AMBIT_RADIUS * AMBIT_RADIUS + 0.00000000001;
     }
 
     @Override
@@ -194,13 +106,13 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     /**
      * Search the player's inventory for media ADs and use them.
      */
-    protected long extractMediaFromInventory(long costLeft, boolean allowOvercast) {
+    protected long extractMediaFromInventory(long costLeft, boolean allowOvercast, boolean simulate) {
         List<ADMediaHolder> sources = MediaHelper.scanPlayerForMediaStuff(this.caster);
 
         var startCost = costLeft;
 
         for (var source : sources) {
-            var found = MediaHelper.extractMedia(source, costLeft, false, false);
+            var found = MediaHelper.extractMedia(source, costLeft, false, simulate);
             costLeft -= found;
             if (costLeft <= 0) {
                 break;
@@ -210,24 +122,31 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         if (costLeft > 0 && allowOvercast) {
             double mediaToHealth = HexConfig.common().mediaToHealthRate();
             double healthToRemove = Math.max(costLeft / mediaToHealth, 0.5);
-            var mediaAbleToCastFromHP = this.caster.getHealth() * mediaToHealth;
+            if (simulate) {
+                long simulatedRemovedMedia = Mth.ceil(Math.min(this.caster.getHealth(), healthToRemove) * mediaToHealth);
+                costLeft -= simulatedRemovedMedia;
+            } else {
+                var mediaAbleToCastFromHP = this.caster.getHealth() * mediaToHealth;
 
-            Mishap.trulyHurt(this.caster, this.caster.damageSources().source(HexDamageTypes.OVERCAST), (float) healthToRemove);
+                Mishap.trulyHurt(this.caster, this.caster.damageSources().source(HexDamageTypes.OVERCAST), (float) healthToRemove);
 
-            var actuallyTaken = Mth.ceil(mediaAbleToCastFromHP - (this.caster.getHealth() * mediaToHealth));
+                var actuallyTaken = Mth.ceil(mediaAbleToCastFromHP - (this.caster.getHealth() * mediaToHealth));
 
-            HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.caster, actuallyTaken);
-            this.caster.awardStat(HexStatistics.MEDIA_OVERCAST, actuallyTaken);
+                HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.caster, actuallyTaken);
+                this.caster.awardStat(HexStatistics.MEDIA_OVERCAST, actuallyTaken);
 
-            costLeft -= actuallyTaken;
+                costLeft -= actuallyTaken;
+            }
         }
 
-        this.caster.awardStat(HexStatistics.MEDIA_USED, (int) (startCost - costLeft));
-        HexAdvancementTriggers.SPEND_MEDIA_TRIGGER.trigger(
-            this.caster,
-            startCost - costLeft,
-            costLeft < 0 ? -costLeft : 0
-        );
+        if (!simulate) {
+            this.caster.awardStat(HexStatistics.MEDIA_USED, (int) (startCost - costLeft));
+            HexAdvancementTriggers.SPEND_MEDIA_TRIGGER.trigger(
+                    this.caster,
+                    startCost - costLeft,
+                    costLeft < 0 ? -costLeft : 0
+            );
+        }
 
         return costLeft;
     }

@@ -18,14 +18,11 @@ import net.minecraft.world.item.ItemStack
  */
 sealed class OperatorSideEffect {
     /** Return whether to cancel all further [OperatorSideEffect] */
-    abstract fun performEffect(harness: CastingVM): Boolean
+    abstract fun performEffect(harness: CastingVM)
 
     data class RequiredEnlightenment(val awardStat: Boolean) : OperatorSideEffect() {
-        override fun performEffect(harness: CastingVM): Boolean {
+        override fun performEffect(harness: CastingVM) {
             harness.env.castingEntity?.sendSystemMessage("hexcasting.message.cant_great_spell".asTranslatedComponent)
-
-
-            return true
         }
     }
 
@@ -36,33 +33,28 @@ sealed class OperatorSideEffect {
         val awardStat: Boolean = true
     ) :
         OperatorSideEffect() {
-        override fun performEffect(harness: CastingVM): Boolean {
+        override fun performEffect(harness: CastingVM) {
             this.spell.cast(harness.env, harness.image)?.let { harness.image = it }
             if (awardStat)
                 (harness.env.castingEntity as? ServerPlayer)?.awardStat(HexStatistics.SPELLS_CAST)
-
-            return false
         }
     }
 
     data class ConsumeMedia(val amount: Long) : OperatorSideEffect() {
-        override fun performEffect(harness: CastingVM): Boolean {
-            val leftoverMedia = harness.env.extractMedia(this.amount)
-            return leftoverMedia > 0
+        override fun performEffect(harness: CastingVM) {
+            harness.env.extractMedia(this.amount, false)
         }
     }
 
     data class Particles(val spray: ParticleSpray) : OperatorSideEffect() {
-        override fun performEffect(harness: CastingVM): Boolean {
+        override fun performEffect(harness: CastingVM) {
             harness.env.produceParticles(this.spray, harness.env.pigment)
 //            this.spray.sprayParticles(harness.env.world, harness.env.colorizer)
-
-            return false
         }
     }
 
     data class DoMishap(val mishap: Mishap, val errorCtx: Mishap.Context) : OperatorSideEffect() {
-        override fun performEffect(harness: CastingVM): Boolean {
+        override fun performEffect(harness: CastingVM) {
             val spray = mishap.particleSpray(harness.env)
             val color = mishap.accentColor(harness.env, errorCtx)
             spray.sprayParticles(harness.env.world, color)
@@ -75,8 +67,6 @@ sealed class OperatorSideEffect {
             )
 
             harness.image = harness.image.copy(stack = mishap.executeReturnStack(harness.env, errorCtx, harness.image.stack.toMutableList()))
-
-            return true
         }
     }
 }

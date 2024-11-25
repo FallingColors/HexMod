@@ -15,12 +15,25 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.max;
+
 /**
  * This is a <i>wrapper</i> for {@link SpellList}.
  */
 public class ListIota extends Iota {
+    private final int depth;
+    private final int size;
+
     public ListIota(@NotNull SpellList list) {
         super(HexIotaTypes.LIST, list);
+        int maxChildDepth = 0;
+        int totalSize = 1;
+        for (Iota iota : list) {
+            totalSize += iota.size();
+            maxChildDepth = max(maxChildDepth, iota.depth());
+        }
+        depth = maxChildDepth + 1;
+        size = totalSize;
     }
 
     public ListIota(@NotNull List<Iota> list) {
@@ -78,6 +91,16 @@ public class ListIota extends Iota {
         return this.getList();
     }
 
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public int depth() {
+        return depth;
+    }
+
     public static IotaType<ListIota> TYPE = new IotaType<>() {
         @Nullable
         @Override
@@ -107,7 +130,10 @@ public class ListIota extends Iota {
 
                 out.append(IotaType.getDisplay(csub));
 
-                if (i < list.size() - 1) {
+                // only add a comma between 2 non-patterns (commas don't look good with Inline patterns)
+                // TODO: maybe add a config? maybe add a method on IotaType to allow it to opt out of commas
+                if (i < list.size() - 1 && (IotaType.getTypeFromTag(csub) != PatternIota.TYPE
+                        || IotaType.getTypeFromTag(HexUtils.downcast(list.get(i+1), CompoundTag.TYPE)) != PatternIota.TYPE)) {
                     out.append(", ");
                 }
             }

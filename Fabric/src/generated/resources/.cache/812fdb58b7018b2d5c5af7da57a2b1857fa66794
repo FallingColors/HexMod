@@ -1,4 +1,4 @@
-// 1.20.1	2024-08-27T12:42:38.115300691	Hex Casting/Tags for minecraft:block
+// 1.20.1	2024-11-19T11:30:28.20228007	Hex Casting/Tags for minecraft:block
 c72a147bc65d26424df199388969ebd11119aed3 data/hexcasting/tags/blocks/brainswept_circle_components.json
 357eddf3cee6f16725bed0701d57b2ca3097d74d data/minecraft/tags/blocks/mineable/shovel.json
 20183cd61968ff6548df2dde1100b6378d68d64b data/minecraft/tags/blocks/buttons.json
@@ -24,6 +24,7 @@ c562b4be24d0b6b13f3c65599d3bfa3bf2c4ce21 data/minecraft/tags/blocks/logs.json
 c562b4be24d0b6b13f3c65599d3bfa3bf2c4ce21 data/hexcasting/tags/blocks/edified_logs.json
 5bbfd513fd2eb2090b0c2d1ec33504deb79d53b9 data/minecraft/tags/blocks/slabs.json
 e5df19a1dc6eadf14cd9b0f0fe45a74330b745e9 data/minecraft/tags/blocks/planks.json
+4b84fc8b7976df220be382bdda66ecf25ceee559 data/create/tags/blocks/brittle.json
 281cb08b9b68ef049820c4f3f36b40820044681e data/minecraft/tags/blocks/stairs.json
 bdb90cee0e88e02f0b98f12d5dd212adfaca9afd data/hexcasting/tags/blocks/impeti.json
 9d18fb7a889031a704ca0e553600e1d6f8c3759d data/hexcasting/tags/blocks/directrices.json

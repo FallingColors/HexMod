@@ -123,7 +123,7 @@
     directrix: {
       empty: "Empty Directrix",
       redstone: "Mason Directrix",
-      boolean: "??? Directrix",
+      boolean: "Shepherd Directrix",
     },
     
     impetus: {
@@ -208,6 +208,47 @@
       bricks: "Quenched Allay Bricks",
       bricks_small: "Small Quenched Allay Bricks",
     },
+  },
+  
+  "effect.hexcasting": {
+    enlarge_grid: "Clarity",
+    shrink_grid: "Clouding",
+  },
+  
+  "item.minecraft.potion.effect": {
+    enlarge_grid: "Potion of Clarity",
+    enlarge_grid_long: "Potion of Clarity",
+    enlarge_grid_strong: "Potion of Clarity",
+    shrink_grid: "Potion of Clouding",
+    shrink_grid_long: "Potion of Clouding",
+    shrink_grid_strong: "Potion of Clouding",
+  },
+  
+  "item.minecraft.splash_potion.effect": {
+    enlarge_grid: "Splash Potion of Clarity",
+    enlarge_grid_long: "Splash Potion of Clarity",
+    enlarge_grid_strong: "Splash Potion of Clarity",
+    shrink_grid: "Splash Potion of Clouding",
+    shrink_grid_long: "Splash Potion of Clouding",
+    shrink_grid_strong: "Splash Potion of Clouding",
+  },
+  
+  "item.minecraft.lingering_potion.effect": {
+    enlarge_grid: "Lingering Potion of Clarity",
+    enlarge_grid_long: "Lingering Potion of Clarity",
+    enlarge_grid_strong: "Lingering Potion of Clarity",
+    shrink_grid: "Lingering Potion of Clouding",
+    shrink_grid_long: "Lingering Potion of Clouding",
+    shrink_grid_strong: "Lingering Potion of Clouding",
+  },
+  
+  "item.minecraft.tipped_arrow.effect": {
+    enlarge_grid: "Arrow of Clarity",
+    enlarge_grid_long: "Arrow of Clarity",
+    enlarge_grid_strong: "Arrow of Clarity",
+    shrink_grid: "Arrow of Clouding",
+    shrink_grid_long: "Arrow of Clouding",
+    shrink_grid_strong: "Arrow of Clouding",
   },
   
   "itemGroup.hexcasting": {
@@ -300,6 +341,10 @@
           "": "Grid Snap Threshold",
           "@Tooltip": "When using a staff, the distance from one dot you have to go to snap to the next dot, where 0.5 means 50% of the way (0.5-1)",
         },
+        clickingTogglesDrawing: {
+          "": "Clicking Toggles Drawing",
+          "@Tooltip": "Whether you click to start and stop drawing instead of clicking and dragging to draw",
+        },
       },
       
       server: {
@@ -348,6 +393,10 @@
     root: {
       "": "Hexcasting Research",
       desc: "Find and mine a concentrated form of media growing deep beneath the earth.",
+    },
+    creative_unlocker: {
+      "": "UNLIMITED POWAH",
+      "desc": "Found the creative debug item."
     },
     enlightenment: {
       "": "Achieve Enlightenment",
@@ -428,6 +477,14 @@
       "fail.badtype": "%s is not a mob",
       "fail.already": "%s is already empty",
     },
+  },
+  
+  // === Inline ! ===
+  "matcher.hexcasting.pattern": {
+    "title": "Hex Pattern",
+    "title.styled": "Hex Pattern <se,deaqq>",
+    "description": "Visual Hex Casting Patterns",
+    "example": "<ne,qaq><e,aa><ne,qaq><e,wa><e,wqaawdd><e,aawaawaa>"
   },
   
   hexcasting: {
@@ -549,6 +606,7 @@
       "scroll.scribble": "Scroll is scribbled",
       "impetus.fletcher.tick": "Fletcher Impetus ticks",
       "impetus.redstone.register": "Cleric Impetus dings",
+      "impetus.redstone.clear": "Cleric Impetus clears",
       "lore_fragment.read": "Read lore fragment",
       "flight.ambience": "Player flies",
       "flight.finish": "Flight ends",
@@ -604,7 +662,7 @@
         },
         
         append: "Integration Distillation",
-        unappend: "Derivation Distillation",
+        unappend: "Derivation Decomposition",
         index: "Selection Distillation",
         singleton: "Single's Purification",
         empty_list: "Vacant Reflection",
@@ -724,7 +782,7 @@
         erase: "Erase Item",
         create_water: "Create Water",
         destroy_water: "Destroy Liquid",
-        ignite: "Ignite Block",
+        ignite: "Ignite",
         extinguish: "Extinguish Area",
         conjure_block: "Conjure Block",
         conjure_light: "Conjure Light",
@@ -758,6 +816,7 @@
         flight: "Altiora",
         "flight/range": "Anchorite's Flight",
         "flight/time": "Wayfarer's Flight",
+        "flight/can_fly": "Aviator's Purification",
         
         lightning: "Summon Lightning",
         summon_rain: "Summon Rain",
@@ -905,6 +964,7 @@
       invalid_spell_datum_type: "Tried to use a value of invalid type as a SpellDatum: %s (class %s). This is a bug in the mod.",
       unknown: "threw an exception (%s). This is a bug in the mod.",
       stack_size: "Exceeded the size limit of the stack",
+      bad_caster: "Tried to execute a pattern that requires a greater mind",
       
       invalid_value: {
         "": "expected %s at index %s of the stack, but got %s",
@@ -924,6 +984,8 @@
             villager: "a villager",
             living: "a living entity",
           },
+          
+          entity_or_vector: "an entity or a vector",
           
           unknown: "(unknown, uh-oh, this is a bug)",
         },
@@ -1057,15 +1119,20 @@
       great_spells: {
         "": "Great Spells",
         desc: "The spells catalogued here are purported to be of legendary difficulty and power. \
-          They seem to have been recorded only sparsely (for good reason, the texts claim). \
+          They seem to have been recorded only $(l:items/scroll)sparsely/$ (for good reason, the texts claim). \
           It's probably just the ramblings of extinct traditionalists, though -- a pattern's a pattern.$(br2)\
           What could possibly go wrong?",
       },
+      creative_unlocker: {
+        "": "The Media Cube",
+        desc: "I have found a source of near limitless power, The Media Cube.",
+      }
     },
     // ^ categories
     
     entry: {
       media: "Media",
+      media_cube: "The Media Cube",
       geodes: "Geodes",
       couldnt_cast: "A Frustration",
       start_to_see: "WHAT DID I SEE",
@@ -1093,6 +1160,7 @@
       // why is this called "hexcasting"?
       hexcasting: "Casting Items",
       phials: "Phials of Media",
+      potions: "Hex Potions",
       pigments: "Pigments",
       
       edified: "Edified Trees",
@@ -1163,6 +1231,13 @@
     // ^ entries
     
     page: {
+      creative_unlocker: {
+        "1": "The $(#74b3f2)Media Cube/$ is a near-limitless source of power, acting as an infinite source of _media for whatever _Hexes I wish to cast. It also looks quite tasty. Eating it might perhaps reveal more about the world, possibly delving into spoiler territory...",
+        "2": "Additionally, it seems that by renaming a $(#74b3f2)Media Cube/$ at an Anvil, I should be able to utilize it to test and understand more about my _Hexes. If I have somehow acquired Creative power over the world, I might wish to turn that off before attempting any of the following.",
+        "3": "By renaming the $(#74b3f2)Media Cube/$ to 'debug media', I will be given feedback in the chat window about the amount of media consumed.",
+        // NOTE: The following feature documented is broken in the current implementation. It should be uncommented and the page in patchouli should be updated when the feature is fixed.
+        //"4": "By renaming the $(#74b3f2)Media Cube/$ to 'debug patterns', I will be given feedback in the chat window about the order patterns are ran."
+      },
       media: {
         "1": "_Media is a form of mental energy external to a mind. All living creatures generate trace amounts of _media when thinking about anything; after the thought is finished, the media is released into the environment.$(br2)The art of casting _Hexes is all about manipulating _media to do your bidding.",
         "2": "_Media can exert influences on other media-- the strength and type of influence can be manipulated by drawing _media out into patterns.$(p)Scholars of the art used a concentrated blob of _media on the end of a stick: by waving it in the air in precise configurations, they were able to manipulate enough _media with enough precision to influence the world itself, in the form of a _Hex.",
@@ -1431,6 +1506,12 @@
         desc: "$(italic)Drink the milk./$",
       },
       
+      potions: {
+        "1": "Peering through a $(l:items/lens)$(item)Scrying Lens/$ allows me to fit more patterns onto my casting grid. But what if I want to improve my casting even further? Alchemy has an answer.$(br2)By adding a pinch of Amethyst Dust to an $(item)Awkward Potion/$, I can create a brew that increases the size of my grid in much the same way as the Lens. I can even use both at once for the ultimate grid!",
+        "2": "The Potion of Clarity can be extended, strengthened, and modified like any other potion.$(br2)It can also be corrupted with a $(item)Fermented Spider Eye/$ to produce a variant with the opposite effect. This may be useful for dealing with enemy casters.",
+        "effects.header": "Clarity and Clouding",
+      },
+      
       pigments: {
         "1": "The old practitioners of my art sometimes identified themselves by a color, emblematic of them and their _Hexes. Although their names have faded, their colors remain. It seems a special kind of pigment, offered to Nature in the right way, would \"[...] paint one's thoughts in a manner pleasing to Nature, inducing a miraculous change in personal colour.\"",
         "2": "I'm not certain on the specifics, but I believe I have isolated the formulae for many different colors and blends of pigments. To apply a pigment, I hold it in one hand and cast $(l:patterns/spells/colorize)$(action)Internalize Pigment/$ with the other; this consumes the pigment.$(br2)The pigments seem to affect the color of the sparks of _media emitted when I cast a _Hex and my $(l:patterns/spells/sentinels)$(thing)sentinel/$, but I don't doubt that the color will show up elsewhere.",
@@ -1506,6 +1587,7 @@
         
         empty_directrix: "Firstly, a design for the cradle ... although, perhaps \"substrate\" would be more accurate a word. Without a mind guiding it, the output direction is determined by microscopic fluctuations in the _media wave and surroundings, making it effectively random.",
         directrix_redstone: "A $(l:greatwork/directrix)$(item)Mason Directrix/$ switches output side based on a redstone signal. Without a signal, the exit is the _media-color side; with a signal, the exit is the redstone-color side.",
+        directrix_boolean: "A $(l:greatwork/directrix)$(item)Shepherd Directrix/$ switches output side based on a boolean on the stack. A $(thing)True/$ makes the wave exit from the back, a $(thing)False/$ from the front."
       },
       
       akashiclib: {
@@ -1596,8 +1678,8 @@
         
         floor: "\"Floors\" a number, cutting off the fractional component and leaving an integer value. If passed a vector, instead floors each of its components.",
         ceil: "\"Ceilings\" a number, raising it to the next integer value if it has a fractional component. If passed a vector, instead ceils each of its components.",
-        construct_vec: "Combine three numbers at the top of the stack into a vector's X, Y, and Z components (top to bottom).",
-        deconstruct_vec: "Split a vector into its X, Y, and Z components (top to bottom).",
+        construct_vec: "Combine three numbers at the top of the stack into a vector's X, Y, and Z components (bottom to top).",
+        deconstruct_vec: "Split a vector into its X, Y, and Z components (bottom to top).",
         modulo: "Takes the modulus of two numbers. This is the amount $(italics)remaining/$ after division - for example, 5 %% 2 is 1, and 5 %% 3 is 2. When applied on vectors, performs the above operation elementwise.",
         coerce_axial: "For a vector, coerce it to its nearest axial direction, a unit vector. For a number, return the sign of the number; 1 if positive, -1 if negative. In both cases, zero is unaffected.",
         random: "Creates a random number between 0 and 1.",
@@ -1618,7 +1700,7 @@
         numlist: "Set operations are odd, in that some of them can accept two numbers or two lists, but not a combination thereof. Such arguments will be written as \"(num, num)|(list, list)\".$(br2)When numbers are used in those operations, they are being used as so-called binary \"bitsets\", lists of 1 and 0, true and false, \"on\" and \"off\".",
         
         "or.1": "Unifies two sets.",
-        "or.2": "As such:$(li)With two numbers at the top of the stack, combines them into a bitset containing every \"on\" bit in either bitset.$(li)With two lists, this creates a list of every element from the first list, plus every element from the second list that is not in the first list. This is similar to $(l:patterns/lists#hexcasting:add)$(action)Combination Distillation/$.",
+        "or.2": "As such:$(li)With two numbers at the top of the stack, combines them into a bitset containing every \"on\" bit in either bitset.$(li)With two lists, this creates a list of every element from the first list, plus every element from the second list that is not in the first list. This is somewhat similar to $(l:patterns/lists#hexcasting:add)$(action)Additive Distillation/$.",
         
         "and.1": "Takes the intersection of two sets.",
         "and.2": "As such:$(li)With two numbers at the top of the stack, combines them into a bitset containing every \"on\" bit present in $(italics)both/$ bitsets.$(li)With two lists, this creates a list of every element from the first list that is also in the second list.",
@@ -1678,7 +1760,7 @@
       },
       
       logic: {
-        bool_coerce: "Convert an argument to a boolean. The number $(thing)0/$, $(l:casting/influences)$(thing)Null/$, and the empty list become False; everything else becomes True.",
+        bool_coerce: "Convert an argument to a boolean. The number $(thing)0/$, $(l:casting/influences)$(thing)Null/$, False, and the empty list become False; everything else becomes True.",
         bool_to_number: "Convert a boolean to a number; True becomes $(thing)1/$, and False becomes $(thing)0/$.",
         not: "If the argument is True, return False; if it is False, return True.",
         or: "Returns True if at least one of the arguments are True; otherwise returns False.",
@@ -1749,11 +1831,11 @@
           "2": "If I draw another $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Introspection/$, it'll still be saved to the list, but I'll then have to draw $(italic)two/$ $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospections/$ to get back to normal casting.",
           "3": "Also, I can escape the special behavior of $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ by drawing a $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ before them, which will simply add them to the list without affecting which the number of $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospections/$ I need to return to casting.$(br2)If I draw two $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Considerations/$ in a row while $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)introspecting/$, it will add a single $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ to the list.",
         },
-        undo: "Finally, if I make a mistake while drawning patterns inside $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ I can draw $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ to remove the last pattern that I drew from the pattern list that is being constructed.",
+        undo: "Finally, if I make a mistake while drawing patterns inside $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ I can draw $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ to remove the last pattern that I drew from the pattern list that is being constructed.",
       },
       
       readwrite: {
-        "1": "This section deals with the storage of $(thing)Iotas/$ in a more permanent medium. Nearly any iota can be stored to a suitable item, such as a $(l:items/focus)$(item)Focus/$ or $(l:items/spellbook)$(item)Spellbook/$), and read back later. Certain items, such as an $(l:items/abacus)$(item)Abacus/$, can only be read from.$(br2)Iotas are usually read and written from the other hand, but it is also possible to read and write with an item when it is sitting on the ground as an item entity, or when in an item frame.",
+        "1": "This section deals with the storage of $(thing)Iotas/$ in a more permanent medium. Nearly any iota can be stored to a suitable item, such as a $(l:items/focus)$(item)Focus/$ or $(l:items/spellbook)$(item)Spellbook/$, and read back later. Certain items, such as an $(l:items/abacus)$(item)Abacus/$, can only be read from.$(br2)Iotas are usually read and written from the other hand, but it is also possible to read and write with an item when it is sitting on the ground as an item entity, or when in an item frame.",
         "2": "There may be other entities I can interact with in this way. For example, a $(l:items/scroll)$(item)Scroll/$ hung on the wall can have its pattern read off of it.$(br2)However, it seems I am unable to save a reference to another player, only me. I suppose an entity reference is similar to the idea of a True Name; perhaps Nature is helping to keep our Names out of the hands of enemies. If I want a friend to have my Name I can make a $(l:items/focus)$(item)Focus/$ for them.",
         read: "Copy the iota stored in the item in my other hand and add it to the stack.",
         write: "Remove the top iota from the stack, and save it into the item in my other hand.",
@@ -1830,7 +1912,7 @@
         conjure_light: "Conjure a magical light that softly glows with my pigment at the given position. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         bonemeal: "Encourage a plant or sapling at the target position to grow, as if $(item)Bonemeal/$ was applied. Costs a bit more than one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         edify: "Forcibly infuse _media into the sapling at the target position, causing it to grow into an $(l:items/edified)$(thing)Edified Tree/$. Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$.",
-        ignite: "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
+        ignite: "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied, or sets fire to a creature. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         extinguish: "Extinguish blocks in a large area. Costs about six $(l:items/amethyst)$(item)Amethyst Dust/$.",
       },
       
@@ -1869,9 +1951,9 @@
       },
       
       colorize: "I must be holding a $(l:items/pigments)$(item)Pigment/$ in my other hand to cast this spell. When I do, it will consume the dye and permanently change my mind's coloration (at least, until I cast the spell again). Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
-
+      
       cycle_variant: "Certain items I create seem oddly receptive to the influence of _media. By holding a $(l:items/hexcasting)$(item)Cypher/$, $(l:items/hexcasting)$(item)Trinket/$, $(l:items/hexcasting)$(item)Artifact/$, $(l:items/focus)$(item)Focus/$, or $(l:items/spellbook)$(item)Spellbook/$ in my other hand, I can use this spell to change the appearance of the item. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
-
+      
       flights: {
         "1": "Although it seems that true, limitless flight is out of my grasp, I have nonetheless found some methods of holding one in the sky, each with their respective drawbacks.$(br2)All forms produce a shimmer of excess _media; as the spell gets closer to ending, the sparks are shot through with more red and black.",
         "2": "Other forms of flight do exist, of course. For example, a combination of $(l:patterns/spells/basic#hexcasting:add_motion)$(action)Impulse/$ and $(l:patterns/spells/nadirs#hexcasting:potion/levitation)$(action)Blue Sun's Nadir/$ has been used since antiquity for a flight of sorts.$(br2)I've also heard tell of a thin membrane worn on the back that allows the ability to glide. From my research, I believe the Great spell $(l:patterns/great_spells/altiora)$(action)Altiora/$ may be used to mimic it.",
@@ -1881,6 +1963,10 @@
         
         "time.1": "A flight limited in its duration.",
         "time.2": "The second argument is an amount of time in seconds for which the spell is stable. After that time, the spell ends and I am dropped from the sky. $(br2)It is relatively expensive at about 1 $(l:items/amethyst)$(item)Charged Crystal/$ per second of flight; I believe it is best suited for travel.",
+        
+        // Putting this in this category instead of elsewhere -- see sentinel chapter also containing some reflections/nonspells
+        "can_fly.1": "Returns whether the given player is under the effects of $(l:patterns/spells/flight#hexcasting:flight/range)Anchorite's/$ or $(l:patterns/spells/flight#hexcasting:flight/time)Wayfarer's Flight/$.",
+        "can_fly.2": "Does not detect whether the player can fly by other means.$(br2)It is unclear to me what use this has. But I suppose its utility is in the eye of the beholder."
       },
       
       create_lava: {
@@ -1901,7 +1987,7 @@
       
       "teleport/great": {
         "1": "Far more powerful than $(l:patterns/spells/basic#hexcasting:blink)$(action)Blink/$, this spell lets me teleport nearly anywhere in the entire world! There does seem to be a limit, but it is $(italic)much/$ greater than the normal radius of influence I am used to.",
-        "2": "The entity will be teleported by the given vector, which is an offset from its given position. No matter the distance, it always seems to cost about ten $(l:items/amethyst)$(item)Charged Amethyst/$.$(br2)The transference is not perfect, and it seems when teleporting something as complex as a player, their inventory doesn't $(italic)quite/$ stay attached, and tends to splatter everywhere at the destination. In addition, the target will be forcibly removed from anything inanimate they are riding or sitting on ... but I've read scraps that suggest animals can come along for the ride, so to speak.",
+        "2": "The entity will be teleported by the given vector. Curiously, this vector seems to be an offset, not an absolute position in the world; for example, if I use $(l:patterns/consts#hexcasting:const/vec/x)$(action)Vector Reflection +X/$, the entity will end up precisely one block east of its original position. No matter the distance, it always seems to cost about ten $(l:items/amethyst)$(item)Charged Amethyst/$.$(br2)The transference is not perfect, and it seems when teleporting something as complex as a player, their inventory doesn't $(italic)quite/$ stay attached, and tends to splatter everywhere at the destination. In addition, the target will be forcibly removed from anything inanimate they are riding or sitting on ... but I've read scraps that suggest animals can come along for the ride, so to speak.",
       },
       
       zeniths: {
@@ -2025,7 +2111,7 @@
         "3": "Finally, if I find myself interested in the lore and stories of this world, I do not think any notes compiled while examining these interoperations should be considered as anything more than light trifles.",
         
         gravity: {
-          "1": "I have discovered actions to get and set an entity's gravity. I find them interesting, if slightly nauseating.$(br2)Interestingly, although $(l:patterns/great_spells/flight)$(action)Flight/$ is a great spell, and manipulates gravity similarly, these are not. It baffles me why... Perhaps the mod developer wanted players to have fun, for once.",
+          "1": "I have discovered actions to get and set an entity's gravity. I find them interesting, if slightly nauseating.$(br2)Interestingly, although the $(l:patterns/spells/flight)$(action)Flight/$ spells are limited in range or duration, and manipulate gravity similarly, these are not. It baffles me why... Perhaps the mod developer wanted players to have fun, for once.",
           get: "Get the main direction gravity pulls the given entity in, as a unit vector. For most entities, this will be down, <0, -1, 0>.",
           set: "Set the main direction gravity pulls the given entity in. The given vector will be coerced into the nearest axis, as per $(l:patterns/math#hexcasting:coerce_axial)$(action)Axial Purification/$. Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$.",
         },

@@ -19,6 +19,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -56,11 +57,14 @@ public abstract class CastingEnvironment {
 
     /**
      * Add a listener that will be called whenever a new CastingEnvironment is created (legacy).
+     *
      * @deprecated replaced by {@link #addCreateEventListener(BiConsumer)}
      */
     @Deprecated(since = "0.11.0-pre-660")
     public static void addCreateEventListener(Consumer<CastingEnvironment> listener) {
-        createEventListeners.add((env, data) -> {listener.accept(env);});
+        createEventListeners.add((env, data) -> {
+            listener.accept(env);
+        });
     }
 
     private boolean createEventTriggered = false;
@@ -76,7 +80,8 @@ public abstract class CastingEnvironment {
 
     protected final ServerLevel world;
 
-    protected Map<CastingEnvironmentComponent.Key<?>, @NotNull CastingEnvironmentComponent> componentMap = new HashMap<>();
+    protected Map<CastingEnvironmentComponent.Key<?>, @NotNull CastingEnvironmentComponent> componentMap =
+        new HashMap<>();
     private final List<PostExecution> postExecutions = new ArrayList<>();
 
     private final List<PostCast> postCasts = new ArrayList<>();
@@ -103,16 +108,20 @@ public abstract class CastingEnvironment {
      * <p>
      * Implementations should NOT rely on this in general, use the methods on this class instead.
      * This is mostly for spells (flight, etc)
+     *
      * @deprecated as of build 0.11.1-7-pre-619 you are recommended to use {@link #getCastingEntity}
      */
-    @Deprecated(since="0.11.1-7-pre-619")
+    @Deprecated(since = "0.11.1-7-pre-619")
     @Nullable
     public ServerPlayer getCaster() {
         return getCastingEntity() instanceof ServerPlayer sp ? sp : null;
-    };
+    }
+
+    ;
 
     /**
      * Gets the caster. Can be null if {@link #getCaster()} is also null
+     *
      * @return the entity casting
      */
     @Nullable
@@ -237,12 +246,12 @@ public abstract class CastingEnvironment {
      * If there was enough media found, it will return less or equal to zero; if there wasn't, it will be
      * positive.
      */
-    public long extractMedia(long cost) {
+    public long extractMedia(long cost, boolean simulate) {
         for (var extractMediaComponent : preMediaExtract)
-            cost = extractMediaComponent.onExtractMedia(cost);
-        cost = extractMediaEnvironment(cost);
+            cost = extractMediaComponent.onExtractMedia(cost, simulate);
+        cost = extractMediaEnvironment(cost, simulate);
         for (var extractMediaComponent : postMediaExtract)
-            cost = extractMediaComponent.onExtractMedia(cost);
+            cost = extractMediaComponent.onExtractMedia(cost, simulate);
         return cost;
     }
 
@@ -252,7 +261,7 @@ public abstract class CastingEnvironment {
      * If there was enough media found, it will return less or equal to zero; if there wasn't, it will be
      * positive.
      */
-    protected abstract long extractMediaEnvironment(long cost);
+    protected abstract long extractMediaEnvironment(long cost, boolean simulate);
 
     /**
      * Get if the vec is close enough, to the player or sentinel ...
@@ -298,7 +307,12 @@ public abstract class CastingEnvironment {
     }
 
     public final boolean isEntityInRange(Entity e) {
-        return (e instanceof Player && HexConfig.server().trueNameHasAmbit()) || (this.isVecInWorld(e.position()) && this.isVecInRange(e.position()));
+        return isEntityInRange(e, false);
+    }
+
+    public final boolean isEntityInRange(Entity e, boolean ignoreTruenameAmbit) {
+        boolean truenameCheat = !ignoreTruenameAmbit && (e instanceof Player && HexConfig.server().trueNameHasAmbit());
+        return truenameCheat || (this.isVecInWorld(e.position()) && this.isVecInRange(e.position()));
     }
 
     /**
@@ -360,10 +374,88 @@ public abstract class CastingEnvironment {
      */
     protected abstract List<ItemStack> getUsableStacks(StackDiscoveryMode mode);
 
+    protected List<ItemStack> getUsableStacksForPlayer(StackDiscoveryMode mode, @Nullable InteractionHand castingHand
+        , ServerPlayer caster) {
+        return switch (mode) {
+            case QUERY -> {
+                var out = new ArrayList<ItemStack>();
+
+                if (castingHand == null) {
+                    var mainhand = caster.getItemInHand(InteractionHand.MAIN_HAND);
+                    if (!mainhand.isEmpty()) {
+                        out.add(mainhand);
+                    }
+
+                    var offhand = caster.getItemInHand(InteractionHand.OFF_HAND);
+                    if (!offhand.isEmpty()) {
+                        out.add(offhand);
+                    }
+                } else {
+                    var offhand = caster.getItemInHand(HexUtils.otherHand(castingHand));
+                    if (!offhand.isEmpty()) {
+                        out.add(offhand);
+                    }
+                }
+
+                // If we're casting from the main hand, try to pick from the slot one to the right of the selected slot
+                // Otherwise, scan the hotbar left to right
+                var anchorSlot = castingHand != InteractionHand.OFF_HAND
+                    ? (caster.getInventory().selected + 1) % 9
+                    : 0;
+
+
+                for (int delta = 0; delta < 9; delta++) {
+                    var slot = (anchorSlot + delta) % 9;
+                    out.add(caster.getInventory().getItem(slot));
+                }
+
+                yield out;
+            }
+            case EXTRACTION -> {
+                // https://wiki.vg/Inventory is WRONG
+                // slots 0-8 are the hotbar
+                // for what purpose i cannot imagine
+                // http://redditpublic.com/images/b/b2/Items_slot_number.png looks right
+                // and offhand is 150 Inventory.java:464
+                var out = new ArrayList<ItemStack>();
+
+                // First, the inventory backwards
+                // We use inv.items here to get the main inventory, but not offhand or armor
+                Inventory inv = caster.getInventory();
+                for (int i = inv.items.size() - 1; i >= 0; i--) {
+                    if (i != inv.selected) {
+                        out.add(inv.items.get(i));
+                    }
+                }
+
+                // then the offhand, then the selected hand
+                out.addAll(inv.offhand);
+                out.add(inv.getSelected());
+
+                yield out;
+            }
+        };
+    }
+
     /**
      * Get the primary/secondary item stacks this env can use (i.e. main hand and offhand for the player).
      */
     protected abstract List<HeldItemInfo> getPrimaryStacks();
+
+    protected List<HeldItemInfo> getPrimaryStacksForPlayer(InteractionHand castingHand, ServerPlayer caster) {
+        var primaryItem = caster.getItemInHand(castingHand);
+
+        if (primaryItem.isEmpty())
+            primaryItem = ItemStack.EMPTY.copy();
+
+        var secondaryItem = caster.getItemInHand(HexUtils.otherHand(castingHand));
+
+        if (secondaryItem.isEmpty())
+            secondaryItem = ItemStack.EMPTY.copy();
+
+        return List.of(new HeldItemInfo(secondaryItem, HexUtils.otherHand(castingHand)), new HeldItemInfo(primaryItem,
+            castingHand));
+    }
 
     /**
      * Return the slot from which to take blocks and items.
@@ -459,9 +551,44 @@ public abstract class CastingEnvironment {
 
     /**
      * Attempt to replace the first stack found which matches the predicate with the stack to replace with.
+     *
      * @return whether it was successful.
      */
-    public abstract boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand);
+    public abstract boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith,
+        @Nullable InteractionHand hand);
+
+
+    public boolean replaceItemForPlayer(Predicate<ItemStack> stackOk, ItemStack replaceWith,
+        @Nullable InteractionHand hand, ServerPlayer caster) {
+        if (caster == null)
+            return false;
+
+        if (hand != null && stackOk.test(caster.getItemInHand(hand))) {
+            caster.setItemInHand(hand, replaceWith);
+            return true;
+        }
+
+        Inventory inv = caster.getInventory();
+        for (int i = inv.items.size() - 1; i >= 0; i--) {
+            if (i != inv.selected) {
+                if (stackOk.test(inv.items.get(i))) {
+                    inv.setItem(i, replaceWith);
+                    return true;
+                }
+            }
+        }
+
+        if (stackOk.test(caster.getItemInHand(getOtherHand()))) {
+            caster.setItemInHand(getOtherHand(), replaceWith);
+            return true;
+        }
+        if (stackOk.test(caster.getItemInHand(getCastingHand()))) {
+            caster.setItemInHand(getCastingHand(), replaceWith);
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * The order/mode stacks should be discovered in

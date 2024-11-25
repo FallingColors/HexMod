@@ -29,15 +29,15 @@ public interface CastingEnvironmentComponent {
          * remaining cost after deducting whatever cost source this component
          * is responsible for (should be &gt;= 0)
          */
-        long onExtractMedia(long cost);
+        long onExtractMedia(long cost, boolean simulate);
 
         /**
-         *  ExtractMedia component that extracts media BEFORE the call to {@link CastingEnvironment#extractMediaEnvironment(long)}
+         *  ExtractMedia component that extracts media BEFORE the call to {@link CastingEnvironment#extractMediaEnvironment(long, boolean)}
          */
         interface Pre extends ExtractMedia {}
 
         /**
-         *  ExtractMedia component that extracts media AFTER the call to {@link CastingEnvironment#extractMediaEnvironment(long)}
+         *  ExtractMedia component that extracts media AFTER the call to {@link CastingEnvironment#extractMediaEnvironment(long, boolean)}
          *  if the input is &lt;= 0 you should also probably return 0 (since media cost was already paid off)
          */
         interface Post extends ExtractMedia {}

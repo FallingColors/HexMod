@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughMedia
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 /**
@@ -27,6 +28,8 @@ interface ConstMediaAction : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
         val stack = image.stack.toMutableList()
 
+        if (env.extractMedia(this.mediaCost, true) > 0)
+            throw MishapNotEnoughMedia(this.mediaCost)
         if (this.argc > stack.size)
             throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)

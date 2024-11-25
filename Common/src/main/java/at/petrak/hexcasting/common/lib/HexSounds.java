@@ -42,6 +42,7 @@ public class HexSounds {
 
     public static final SoundEvent IMPETUS_LOOK_TICK = sound("impetus.fletcher.tick");
     public static final SoundEvent IMPETUS_REDSTONE_DING = sound("impetus.redstone.register");
+    public static final SoundEvent IMPETUS_REDSTONE_CLEAR = sound("impetus.redstone.clear");
 
     public static final SoundEvent READ_LORE_FRAGMENT = sound("lore_fragment.read");
 

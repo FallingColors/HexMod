@@ -132,7 +132,6 @@ object FabricHexInitializer : ModInitializer {
         HexAttributes.register(bind(BuiltInRegistries.ATTRIBUTE))
         HexMobEffects.register(bind(BuiltInRegistries.MOB_EFFECT))
         HexPotions.register(bind(BuiltInRegistries.POTION))
-        HexPotions.addRecipes()
 
         HexRecipeStuffRegistry.registerSerializers(bind(BuiltInRegistries.RECIPE_SERIALIZER))
         HexRecipeStuffRegistry.registerTypes(bind(BuiltInRegistries.RECIPE_TYPE))

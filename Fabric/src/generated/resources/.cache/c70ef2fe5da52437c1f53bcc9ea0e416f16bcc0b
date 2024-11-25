@@ -1,4 +1,4 @@
-// 1.20.1	2024-08-27T12:42:38.11755991	Hex Casting/Recipes
+// 1.20.1	2024-11-19T11:30:28.205075318	Hex Casting/Recipes
 f482a4349786388cc8f11d5550548f7d60265438 data/hexcasting/recipes/staff/mangrove.json
 b10d590e918e35b16578a8b739a1c4e7e2202e16 data/hexcasting/advancements/recipes/misc/dye_colorizer_cyan.json
 7aa3bf4a3d6fb92743b29dfe89d50537fefc0db9 data/hexcasting/advancements/recipes/misc/pride_colorizer_intersex.json
@@ -28,6 +28,7 @@ c3f7b03fe184ed5e54a8ae06d130adf507b7683d data/hexcasting/recipes/staff/bamboo.js
 fd2f25b0a71806c96af5a307fad76f66de6210a4 data/hexcasting/advancements/recipes/building_blocks/slate_block.json
 b1f8375aaf0d66035dee720ea59605f69fc0a154 data/hexcasting/recipes/edified_fence.json
 ae88fcdecbfbdd0a0fe778467421a3b32d7ed735 data/create/recipes/crushing/amethyst_cluster.json
+6ed61e03c51dc653cd66e643a6d33fe9105ff171 data/hexcasting/advancements/recipes/brainsweep/brainsweep/directrix_boolean.json
 8b7136c206b799a2e394aa02316b0509674ff64f data/hexcasting/advancements/recipes/tools/staff/bamboo.json
 fb852d8e4bcfa7b75f41a6ac7dc1e76b00d95fb1 data/hexcasting/advancements/recipes/misc/dye_colorizer_red.json
 5401828f85e709b5817ecc8464dc63e536a730dc data/hexcasting/recipes/staff/cherry.json
@@ -119,8 +120,8 @@ c2ef04b311251b4eb22320b2f5313c54533a9974 data/hexcasting/advancements/recipes/to
 8f8773a541bc6a4a6c55a23f4f98b5da4f61a031 data/hexcasting/recipes/scroll_paper.json
 bc729ac7cf84d29a99cd34d50c152c0b9d20bd7a data/hexcasting/advancements/recipes/brainsweep/brainsweep/akashic_record.json
 4a803e049915fd3c7144155ae3a1b05a917ea290 data/hexcasting/recipes/pride_colorizer_pansexual.json
-0654e70ed1ed8be20ae3dd9f4955cd14f9fa40d0 data/hexcasting/advancements/recipes/tools/staff/jungle.json
 8bea75fdc5e64c464dcf5f85166e767ff44e6dc2 data/hexcasting/advancements/recipes/misc/pride_colorizer_lesbian.json
+0654e70ed1ed8be20ae3dd9f4955cd14f9fa40d0 data/hexcasting/advancements/recipes/tools/staff/jungle.json
 5e98cec2084f0cfbb959c3ec39bd85a3369f443b data/hexcasting/advancements/recipes/tools/abacus.json
 0b172aef920da7ba63fe152903ce005c1f5df5f1 data/hexcasting/recipes/staff/acacia.json
 7e1a5a873d655e0efba80f22ae9b1de4f248e67a data/hexcasting/advancements/recipes/misc/decompose_quenched_shard/shard.json
@@ -137,6 +138,7 @@ eb9ebf77f0daa32f665a60888fcda19c940f0b2f data/hexcasting/advancements/recipes/mi
 7522be58b09554a3f1a54d5b2343c3eab01447a3 data/hexcasting/recipes/dye_colorizer_magenta.json
 ee5db13cbb33d9c62bcb1eb645e2c4bea97ad44a data/hexcasting/advancements/recipes/building_blocks/amethyst_dust_unpacking.json
 203b7035125390abb4ed77b3a4dca8f8f8f57bc5 data/hexcasting/recipes/dye_colorizer_light_gray.json
+00853ec1885c1f72674c07caf6fd04904e248f8f data/hexcasting/recipes/brainsweep/directrix_boolean.json
 f8ee073c1c03f1c11147e4801eeba1f86e5459ba data/hexcasting/recipes/dye_colorizer_blue.json
 a366ea3750adc0d336ab8f318c40baed3f9c3eb7 data/hexcasting/recipes/brainsweep/impetus_storedplayer.json
 51b047601368a103be166d907633b196d2d8a4e8 data/hexcasting/recipes/compat/farmersdelight/cutting/edified_log.json

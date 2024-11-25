@@ -37,7 +37,7 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
     }
 
     @Override
-    public long extractMediaEnvironment(long costLeft) {
+    public long extractMediaEnvironment(long costLeft, boolean simulate) {
         if (this.caster.isCreative())
             return 0;
 
@@ -52,11 +52,11 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
         // The contracts on the AD and on this function are different.
         // ADs return the amount extracted, this wants the amount left
         if (casterMediaHolder != null) {
-            long extracted = casterMediaHolder.withdrawMedia((int) costLeft, false);
+            long extracted = casterMediaHolder.withdrawMedia((int) costLeft, simulate);
             costLeft -= extracted;
         }
         if (canCastFromInv && costLeft > 0) {
-            costLeft = this.extractMediaFromInventory(costLeft, this.canOvercast());
+            costLeft = this.extractMediaFromInventory(costLeft, this.canOvercast(), simulate);
         }
 
         return costLeft;

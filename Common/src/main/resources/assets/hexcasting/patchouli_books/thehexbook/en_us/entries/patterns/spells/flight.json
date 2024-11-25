@@ -25,6 +25,15 @@
       "output": "",
       "text": "hexcasting.page.flights.time.1"
     },
-    "hexcasting.page.flights.time.2"
+    "hexcasting.page.flights.time.2",
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:flight/can_fly",
+      "anchor": "hexcasting:flight/can_fly",
+      "input": "entity",
+      "output": "boolean",
+      "text": "hexcasting.page.flights.can_fly.1"
+    },
+    "hexcasting.page.flights.can_fly.2"
   ]
 }

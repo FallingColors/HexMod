@@ -47,10 +47,13 @@ public class HexConfig {
 
         double gridSnapThreshold();
 
+        boolean clickingTogglesDrawing();
+
         boolean DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER = false;
         boolean DEFAULT_INVERT_SPELLBOOK_SCROLL = false;
         boolean DEFAULT_INVERT_ABACUS_SCROLL = false;
         double DEFAULT_GRID_SNAP_THRESHOLD = 0.5;
+        boolean DEFAULT_CLICKING_TOGGLES_DRAWING = false;
     }
 
     public interface ServerConfigAccess {
@@ -71,7 +74,7 @@ public class HexConfig {
 
         boolean trueNameHasAmbit();
 
-        int DEFAULT_MAX_OP_COUNT = 1_000_000;
+        int DEFAULT_MAX_OP_COUNT = 100_000;
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
         int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;
 

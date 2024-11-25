@@ -18,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static at.petrak.hexcasting.api.mod.HexConfig.anyMatchResLoc;
@@ -132,6 +133,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private boolean invertAbacusScrollDirection = DEFAULT_INVERT_SPELLBOOK_SCROLL;
         @ConfigEntry.Gui.Tooltip
         private double gridSnapThreshold = DEFAULT_GRID_SNAP_THRESHOLD;
+        @ConfigEntry.Gui.Tooltip
+        private boolean clickingTogglesDrawing = DEFAULT_CLICKING_TOGGLES_DRAWING;
 
         @Override
         public void validatePostLoad() throws ValidationException {
@@ -156,6 +159,11 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @Override
         public double gridSnapThreshold() {
             return gridSnapThreshold;
+        }
+
+        @Override
+        public boolean clickingTogglesDrawing() {
+             return clickingTogglesDrawing;
         }
     }
 
@@ -192,7 +200,12 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
 
         // TODO: hook this up to the config, change Jankery, test, also test scroll injects on fabric
         @ConfigEntry.Gui.Tooltip
-        private List<ResourceLocation> loreInjections = HexLootHandler.DEFAULT_LORE_INJECTS;
+        private List<String> loreInjectionsRaw = HexLootHandler.DEFAULT_LORE_INJECTS
+                .stream()
+                .map(ResourceLocation::toString)
+                .toList();
+        @ConfigEntry.Gui.Excluded
+        private transient List<ResourceLocation> loreInjections;
         @ConfigEntry.Gui.Tooltip
         private double loreChance = HexLootHandler.DEFAULT_LORE_CHANCE;
 
@@ -213,6 +226,16 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
 
             } catch (Exception e) {
                 throw new ValidationException("Bad parsing of scroll injects", e);
+            }
+
+            this.loreInjections = new ArrayList<>();
+            try {
+                for (var table : this.loreInjectionsRaw) {
+                    ResourceLocation loc = new ResourceLocation(table);
+                    this.loreInjections.add(loc);
+                }
+            } catch (Exception e) {
+                throw new ValidationException("Bad parsing of lore injects", e);
             }
 
             this.loreChance = Mth.clamp(this.loreChance, 0.0, 1.0);
