@@ -28,7 +28,7 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:read/entity",
       "anchor": "hexcasting:read/entity",
-      "input": "entity",
+      "input": "entity | vec",
       "output": "any",
       "text": "hexcasting.page.readwrite.read/entity"
     },
@@ -36,7 +36,7 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:write/entity",
       "anchor": "hexcasting:write/entity",
-      "input": "entity, any",
+      "input": "entity | vec, any",
       "output": "",
       "text": "hexcasting.page.readwrite.write/entity"
     },
@@ -52,7 +52,7 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:readable/entity",
       "anchor": "hexcasting:readable/entity",
-      "input": "entity",
+      "input": "entity | vec",
       "output": "bool",
       "text": "hexcasting.page.readwrite.readable/entity"
     },
@@ -68,7 +68,7 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:writable/entity",
       "anchor": "hexcasting:writable/entity",
-      "input": "entity",
+      "input": "entity | vec",
       "output": "bool",
       "text": "hexcasting.page.readwrite.writable/entity"
     },

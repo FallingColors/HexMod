@@ -1006,6 +1006,12 @@
         "": "Expected %s at %s, but got %s",
         sapling: "a sapling",
         replaceable: "somewhere to place a block",
+        iota: {
+          "": "a place to store iotas",
+          read: "a place to read iotas from",
+          write: "a place to write iotas to",
+          readonly: "a place that will accept %s",
+        }
       },
       
       "circle.bool_directrix": {
@@ -1788,12 +1794,12 @@
         "2": "There may be other entities I can interact with in this way. For example, a $(l:items/scroll)$(item)Scroll/$ hung on the wall can have its pattern read off of it.$(br2)However, it seems I am unable to save a reference to another player, only me. I suppose an entity reference is similar to the idea of a True Name; perhaps Nature is helping to keep our Names out of the hands of enemies. If I want a friend to have my Name I can make a $(l:items/focus)$(item)Focus/$ for them.",
         read: "Copy the iota stored in the item in my other hand and add it to the stack.",
         write: "Remove the top iota from the stack, and save it into the item in my other hand.",
-        "read/entity": "Like $(l:patterns/readwrite#hexcasting:read)$(action)Scribe's Reflection/$, but the iota is read out of an entity instead of my other hand.",
-        "write/entity": "Like $(l:patterns/readwrite#hexcasting:read)$(action)Scribe's Gambit/$, but the iota is written to an entity instead of my other hand.$(br2)Interestingly enough, it looks like I cannot write my own Name using this spell. I get a sense that I might be endangered if I could.",
+        "read/entity": "Like $(l:patterns/readwrite#hexcasting:read)$(action)Scribe's Reflection/$, but the iota is read out of an entity or block instead of my other hand.",
+        "write/entity": "Like $(l:patterns/readwrite#hexcasting:read)$(action)Scribe's Gambit/$, but the iota is written to an entity or block instead of my other hand.$(br2)Interestingly enough, it looks like I cannot write my own Name using this spell. I get a sense that I might be endangered if I could.",
         readable: "If the item in my other hand holds an iota I can read, returns True. Otherwise, returns False.",
-        "readable/entity": "Like $(l:patterns/readwrite#hexcasting:readable)$(action)Auditor's Reflection/$, but the readability of an entity is checked instead of my other hand.",
+        "readable/entity": "Like $(l:patterns/readwrite#hexcasting:readable)$(action)Auditor's Reflection/$, but the readability of an entity or block is checked instead of my other hand.",
         writable: "If I could save an iota into the item in my other hand, returns True. Otherwise, returns False.",
-        "writable/entity": "Like $(l:patterns/readwrite#hexcasting:writable)$(action)Assessor's Reflection/$, but the writability of an entity is checked instead of my other hand.",
+        "writable/entity": "Like $(l:patterns/readwrite#hexcasting:writable)$(action)Assessor's Reflection/$, but the writability of an entity or block is checked instead of my other hand.",
         "local.title": "The Ravenmind",
         local: "Items are not the only places I can store information, however. I am also able to store that information in the _media of the _Hex itself, much like the stack, but separate. Texts refer to this as the $(l:patterns/readwrite#hexcasting:local)$(thing)ravenmind/$. It holds a single iota, much like a $(l:items/focus)$(item)Focus/$, and begins with $(l:casting/influences)$(thing)Null/$ like the same. It is preserved between iterations of $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambit/$, but only lasts as long as the _Hex it's a part of. Once I stop casting, the value will be lost.",
         "write/local": "Removes the top iota from the stack, and saves it to my $(l:patterns/readwrite#hexcasting:local)$(thing)ravenmind/$, storing it there until I stop casting the _Hex.",

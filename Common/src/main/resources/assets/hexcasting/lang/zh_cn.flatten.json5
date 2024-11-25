@@ -992,6 +992,12 @@
         "": "本应在%2$s处接受%1$s，而实际接受了%3$s",
         sapling: "一个树苗",
         replaceable: "一个可放置方块的地方",
+        iota: {
+          "": "一个可以存储iota的地方",
+          read: "一个可以读出iota的地方",
+          write: "一个可以写入iota的地方",
+          readonly: "一个能够接受%s的地方",
+        }
       },
 
       "circle.bool_directrix": {
