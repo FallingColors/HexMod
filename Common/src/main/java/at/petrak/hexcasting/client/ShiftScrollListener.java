@@ -1,12 +1,11 @@
 package at.petrak.hexcasting.client;
 
+import at.petrak.hexcasting.api.item.ScrollableItem;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.msgs.MsgShiftScrollC2S;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.item.Item;
 
 public class ShiftScrollListener {
     private static double mainHandDelta = 0;
@@ -30,10 +29,10 @@ public class ShiftScrollListener {
                 return false;
             }
 
-            if (IsScrollableItem(player.getMainHandItem().getItem())) {
+            if (player.getMainHandItem().getItem() instanceof ScrollableItem) {
                 mainHandDelta += delta;
                 return true;
-            } else if (IsScrollableItem(player.getOffhandItem().getItem())) {
+            } else if (player.getOffhandItem().getItem() instanceof ScrollableItem) {
                 offHandDelta += delta;
                 return true;
             }
@@ -51,9 +50,5 @@ public class ShiftScrollListener {
             mainHandDelta = 0;
             offHandDelta = 0;
         }
-    }
-
-    private static boolean IsScrollableItem(Item item) {
-        return item == HexItems.SPELLBOOK || item == HexItems.ABACUS;
     }
 }

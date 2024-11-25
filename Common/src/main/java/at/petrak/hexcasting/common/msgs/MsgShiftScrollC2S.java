@@ -1,6 +1,8 @@
 package at.petrak.hexcasting.common.msgs;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.item.ScrollableItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.storage.ItemAbacus;
 import at.petrak.hexcasting.common.items.storage.ItemSpellbook;
@@ -61,6 +63,11 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
     private void handleForHand(ServerPlayer sender, InteractionHand hand, double delta) {
         if (delta != 0) {
             var stack = sender.getItemInHand(hand);
+
+            if(stack.getItem() instanceof ScrollableItem scrollable){
+                HexAPI.LOGGER.info("delta: " + delta);
+                scrollable.scroll(stack, 0, isCtrl, hand, sender);
+            }
 
             if (stack.getItem() == HexItems.SPELLBOOK) {
                 spellbook(sender, hand, stack, delta);

@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.items.storage;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
+import at.petrak.hexcasting.api.item.ScrollableItem;
 import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.ChatFormatting;
@@ -10,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +24,7 @@ import java.util.stream.Stream;
 
 import static at.petrak.hexcasting.common.items.storage.ItemFocus.NUM_VARIANTS;
 
-public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
+public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem, ScrollableItem {
     public static String TAG_SELECTED_PAGE = "page_idx";
     // this is a CompoundTag of string numerical keys to SpellData
     // it is 1-indexed, so that 0/0 can be the special case of "it is empty"
@@ -241,6 +243,10 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         }
 
         return idx;
+    }
+
+    public void scroll(ItemStack stack, int delta, boolean modified, InteractionHand hand, @Nullable Entity holder){
+
     }
 
     @Override
