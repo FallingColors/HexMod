@@ -15,8 +15,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.FormattedCharSequence;
 
 import javax.annotation.Nullable;
-import java.util.ArrayDeque;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -81,33 +79,13 @@ public abstract class IotaType<T extends Iota> {
     }
 
     private static boolean isTooLargeToSerialize(Iterable<Iota> examinee, int startingCount) {
-        // We don't recurse here, just a work queue (or work stack, if we liked.)
-        // Each element is a found sub-iota, and how deep it is.
-        //
-        // TODO: is it worth trying to cache the depth and size statically on a SpellList.
-        var listsToExamine = new ArrayDeque<>(Collections.singleton(new Pair<>(examinee, 0)));
-        int totalEltsFound = startingCount; // count the first list
-        while (!listsToExamine.isEmpty()) {
-            var iotaPair = listsToExamine.removeFirst();
-            var sublist = iotaPair.getFirst();
-            int depth = iotaPair.getSecond();
-            for (var iota : sublist) {
-                totalEltsFound += iota.size();
-                if (totalEltsFound >= HexIotaTypes.MAX_SERIALIZATION_TOTAL) {
-                    return true; // too bad
-                }
-                var subIotas = iota.subIotas();
-                if (subIotas != null) {
-                    if (depth + 1 >= HexIotaTypes.MAX_SERIALIZATION_DEPTH) {
-                        return true;
-                    }
-
-                    listsToExamine.addLast(new Pair<>(subIotas, depth + 1));
-                }
-            }
+        int totalSize = startingCount;
+        for (Iota iota : examinee) {
+            if (iota.depth() >= HexIotaTypes.MAX_SERIALIZATION_DEPTH)
+                return true;
+            totalSize += iota.size();
         }
-        // we made it!
-        return false;
+        return totalSize >= HexIotaTypes.MAX_SERIALIZATION_TOTAL;
     }
 
     /**

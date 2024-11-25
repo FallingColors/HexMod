@@ -96,6 +96,10 @@ public abstract class Iota {
         return 1;
     }
 
+    public int depth() {
+        return 1;
+    }
+
     public Component display() {
         return this.type.display(this.serialize());
     }
