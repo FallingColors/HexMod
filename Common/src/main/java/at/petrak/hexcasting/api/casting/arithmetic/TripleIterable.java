@@ -5,14 +5,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-public class TripleIterable<A,B,C,D> implements Iterable<D> {
+public class TripleIterable<A, B, C, D> implements Iterable<D> {
     private final Iterable<A> iterableA;
     private final Iterable<B> iterableB;
     private final Iterable<C> iterableC;
 
     private final TriFunction<A, B, C, D> map;
 
-    public TripleIterable(Iterable<A> iterableA, Iterable<B> iterableB, Iterable<C> iterableC, TriFunction<A, B, C, D> map) {
+    public TripleIterable(
+            Iterable<A> iterableA,
+            Iterable<B> iterableB,
+            Iterable<C> iterableC,
+            TriFunction<A, B, C, D> map) {
         this.iterableA = iterableA;
         this.iterableB = iterableB;
         this.iterableC = iterableC;

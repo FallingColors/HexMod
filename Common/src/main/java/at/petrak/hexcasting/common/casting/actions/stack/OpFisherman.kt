@@ -13,11 +13,14 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 
 object OpFisherman : Action {
-    override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
+    override fun operate(
+        env: CastingEnvironment,
+        image: CastingImage,
+        continuation: SpellContinuation
+    ): OperationResult {
         val stack = image.stack.toMutableList()
 
-        if (stack.size < 2)
-            throw MishapNotEnoughArgs(2, stack.size)
+        if (stack.size < 2) throw MishapNotEnoughArgs(2, stack.size)
 
         val depth = let {
             val x = stack.last()

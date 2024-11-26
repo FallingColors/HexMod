@@ -5,10 +5,12 @@ import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.phys.AABB
 
-/**
- * Optional field on a [CastingEnvironment] for the spell circle
- */
-data class SpellCircleContext(val impetusPos: BlockPos, val aabb: AABB, val activatorAlwaysInRange: Boolean) {
+/** Optional field on a [CastingEnvironment] for the spell circle */
+data class SpellCircleContext(
+    val impetusPos: BlockPos,
+    val aabb: AABB,
+    val activatorAlwaysInRange: Boolean
+) {
     fun serializeToNBT() = NBTBuilder {
         TAG_IMPETUS_X %= impetusPos.x
         TAG_IMPETUS_Y %= impetusPos.y
@@ -50,7 +52,8 @@ data class SpellCircleContext(val impetusPos: BlockPos, val aabb: AABB, val acti
 
             val playerAIR = tag.getBoolean(TAG_PLAYER_ALWAYS_IN_RANGE)
 
-            return SpellCircleContext(BlockPos(impX, impY, impZ), AABB(minX, minY, minZ, maxX, maxY, maxZ), playerAIR)
+            return SpellCircleContext(
+                BlockPos(impX, impY, impZ), AABB(minX, minY, minZ, maxX, maxY, maxZ), playerAIR)
         }
     }
 }

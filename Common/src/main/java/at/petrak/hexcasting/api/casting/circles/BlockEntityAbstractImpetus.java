@@ -7,7 +7,9 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker;
 import at.petrak.hexcasting.common.lib.HexItems;
+
 import com.mojang.datafixers.util.Pair;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,6 +30,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,39 +39,35 @@ import java.util.List;
 
 /**
  * Default impl for an impetus, not tecnically necessary but I'm exposing it for ease of use
- * <p>
- * This does assume a great deal so you might have to re-implement a lot of this yourself if you
+ *
+ * <p>This does assume a great deal so you might have to re-implement a lot of this yourself if you
  * wanna do something wild and new
  */
-public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implements WorldlyContainer {
+public abstract class BlockEntityAbstractImpetus extends HexBlockEntity
+        implements WorldlyContainer {
     private static final DecimalFormat DUST_AMOUNT = new DecimalFormat("###,###.##");
     private static final long MAX_CAPACITY = 9_000_000_000_000_000_000L;
 
-    public static final String
-        TAG_EXECUTION_STATE = "executor",
-        TAG_MEDIA = "media",
-        TAG_ERROR_MSG = "errorMsg",
-        TAG_ERROR_DISPLAY = "errorDisplay",
-        TAG_PIGMENT = "pigment";
+    public static final String TAG_EXECUTION_STATE = "executor",
+            TAG_MEDIA = "media",
+            TAG_ERROR_MSG = "errorMsg",
+            TAG_ERROR_DISPLAY = "errorDisplay",
+            TAG_PIGMENT = "pigment";
 
     // We might try to load the executor in loadModData when the level doesn't exist yet,
     // so save the tag and load it lazy
     @Nullable CompoundTag lazyExecutionState;
-    @Nullable
-    protected CircleExecutionState executionState;
+    @Nullable protected CircleExecutionState executionState;
 
     protected long media = 0;
 
     // these are null together
-    @Nullable
-    protected Component displayMsg = null;
-    @Nullable
-    protected ItemStack displayItem = null;
-    @Nullable
-    protected FrozenPigment pigment = null;
+    @Nullable protected Component displayMsg = null;
+    @Nullable protected ItemStack displayItem = null;
+    @Nullable protected FrozenPigment pigment = null;
 
-
-    public BlockEntityAbstractImpetus(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
+    public BlockEntityAbstractImpetus(
+            BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
         super(pType, pWorldPosition, pBlockState);
     }
 
@@ -104,16 +103,16 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     // Pull this out because we may need to call it both on startup and halfway thru
     public void postNoExits(BlockPos pos) {
         this.postDisplay(
-            Component.translatable("hexcasting.tooltip.circle.no_exit",
-                Component.literal(pos.toShortString()).withStyle(ChatFormatting.RED)),
-            new ItemStack(Items.OAK_SIGN));
+                Component.translatable(
+                        "hexcasting.tooltip.circle.no_exit",
+                        Component.literal(pos.toShortString()).withStyle(ChatFormatting.RED)),
+                new ItemStack(Items.OAK_SIGN));
     }
 
-    //region execution
+    // region execution
 
     public void tickExecution() {
-        if (this.level == null)
-            return;
+        if (this.level == null) return;
 
         this.setChanged();
 
@@ -128,38 +127,35 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             this.endExecution();
             this.executionState = null;
         } else
-            this.level.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(), state.getTickSpeed());
+            this.level.scheduleTick(
+                    this.getBlockPos(), this.getBlockState().getBlock(), state.getTickSpeed());
     }
 
     public void endExecution() {
-        if (this.executionState == null)
-            return;
+        if (this.executionState == null) return;
 
         this.executionState.endExecution(this);
     }
 
-    /**
-     * ONLY CALL THIS WHEN YOU KNOW THE WORLD EXISTS AND ON THE SERVER, lazy-loads it
-     */
+    /** ONLY CALL THIS WHEN YOU KNOW THE WORLD EXISTS AND ON THE SERVER, lazy-loads it */
     public @Nullable CircleExecutionState getExecutionState() {
         if (this.level == null) {
-            throw new IllegalStateException("didn't you read the doc comment, don't call this if the level is null");
+            throw new IllegalStateException(
+                    "didn't you read the doc comment, don't call this if the level is null");
         }
 
-        if (this.executionState != null)
-            return this.executionState;
+        if (this.executionState != null) return this.executionState;
 
         if (this.lazyExecutionState != null)
-            this.executionState = CircleExecutionState.load(this.lazyExecutionState, (ServerLevel) this.level);
+            this.executionState =
+                    CircleExecutionState.load(this.lazyExecutionState, (ServerLevel) this.level);
 
         return this.executionState;
     }
 
     public void startExecution(@Nullable ServerPlayer player) {
-        if (this.level == null)
-            return; // TODO: error here?
-        if (this.level.isClientSide)
-            return; // TODO: error here?
+        if (this.level == null) return; // TODO: error here?
+        if (this.level.isClientSide) return; // TODO: error here?
 
         if (this.executionState != null) {
             return;
@@ -168,13 +164,18 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         if (result.isErr()) {
             var errPos = result.unwrapErr();
             if (errPos == null) {
-                ICircleComponent.sfx(this.getBlockPos(), this.getBlockState(), this.level, null, false);
+                ICircleComponent.sfx(
+                        this.getBlockPos(), this.getBlockState(), this.level, null, false);
                 this.postNoExits(this.getBlockPos());
             } else {
-                ICircleComponent.sfx(errPos, this.level.getBlockState(errPos), this.level, null, false);
-                this.postDisplay(Component.translatable("hexcasting.tooltip.circle.no_closure",
-                        Component.literal(errPos.toShortString()).withStyle(ChatFormatting.RED)),
-                    new ItemStack(Items.LEAD));
+                ICircleComponent.sfx(
+                        errPos, this.level.getBlockState(errPos), this.level, null, false);
+                this.postDisplay(
+                        Component.translatable(
+                                "hexcasting.tooltip.circle.no_closure",
+                                Component.literal(errPos.toShortString())
+                                        .withStyle(ChatFormatting.RED)),
+                        new ItemStack(Items.LEAD));
             }
 
             return;
@@ -183,10 +184,13 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
         this.clearDisplay();
         var serverLevel = (ServerLevel) this.level;
-        serverLevel.scheduleTick(this.getBlockPos(), this.getBlockState().getBlock(),
-            this.executionState.getTickSpeed());
-        serverLevel.setBlockAndUpdate(this.getBlockPos(),
-            this.getBlockState().setValue(BlockCircleComponent.ENERGIZED, true));
+        serverLevel.scheduleTick(
+                this.getBlockPos(),
+                this.getBlockState().getBlock(),
+                this.executionState.getTickSpeed());
+        serverLevel.setBlockAndUpdate(
+                this.getBlockPos(),
+                this.getBlockState().setValue(BlockCircleComponent.ENERGIZED, true));
     }
 
     @Contract(pure = true)
@@ -222,9 +226,9 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         return new AABB(minX, minY, minZ, maxX + 1, maxY + 1, maxZ + 1);
     }
 
-    //endregion
+    // endregion
 
-    //region media handling
+    // region media handling
 
     public long getMedia() {
         return this.media;
@@ -267,12 +271,10 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         return Math.max(0, MAX_CAPACITY - this.media);
     }
 
-    //endregion
-
+    // endregion
 
     public FrozenPigment getPigment() {
-        if (pigment != null)
-            return pigment;
+        if (pigment != null) return pigment;
         if (executionState != null && executionState.casterPigment != null)
             return executionState.casterPigment;
         return FrozenPigment.DEFAULT.get();
@@ -297,8 +299,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             this.displayItem.save(itemTag);
             tag.put(TAG_ERROR_DISPLAY, itemTag);
         }
-        if (this.pigment != null)
-            tag.put(TAG_PIGMENT, this.pigment.serializeToNBT());
+        if (this.pigment != null) tag.put(TAG_PIGMENT, this.pigment.serializeToNBT());
     }
 
     @Override
@@ -314,7 +315,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             this.media = tag.getLong(TAG_MEDIA);
         }
 
-        if (tag.contains(TAG_ERROR_MSG, Tag.TAG_STRING) && tag.contains(TAG_ERROR_DISPLAY, Tag.TAG_COMPOUND)) {
+        if (tag.contains(TAG_ERROR_MSG, Tag.TAG_STRING)
+                && tag.contains(TAG_ERROR_DISPLAY, Tag.TAG_COMPOUND)) {
             var msg = Component.Serializer.fromJson(tag.getString(TAG_ERROR_MSG));
             var display = ItemStack.of(tag.getCompound(TAG_ERROR_DISPLAY));
             this.displayMsg = msg;
@@ -327,15 +329,24 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             this.pigment = FrozenPigment.fromNBT(tag.getCompound(TAG_PIGMENT));
     }
 
-    public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
-        BlockState state, BlockPos pos, Player observer, Level world, Direction hitFace) {
+    public void applyScryingLensOverlay(
+            List<Pair<ItemStack, Component>> lines,
+            BlockState state,
+            BlockPos pos,
+            Player observer,
+            Level world,
+            Direction hitFace) {
         if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
             if (beai.getMedia() < 0) {
-                lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), ItemCreativeUnlocker.infiniteMedia(world)));
+                lines.add(
+                        new Pair<>(
+                                new ItemStack(HexItems.AMETHYST_DUST),
+                                ItemCreativeUnlocker.infiniteMedia(world)));
             } else {
                 var dustCount = (float) beai.getMedia() / (float) MediaConstants.DUST_UNIT;
-                var dustCmp = Component.translatable("hexcasting.tooltip.media",
-                    DUST_AMOUNT.format(dustCount));
+                var dustCmp =
+                        Component.translatable(
+                                "hexcasting.tooltip.media", DUST_AMOUNT.format(dustCount));
                 lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), dustCmp));
             }
 
@@ -345,7 +356,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         }
     }
 
-    //region music
+    // region music
 
     protected int semitoneFromScale(int note) {
         var blockBelow = this.level.getBlockState(this.getBlockPos().below());
@@ -357,9 +368,12 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         } else if (blockBelow.is(Blocks.PISTON) || blockBelow.is(Blocks.STICKY_PISTON)) {
             scale = MIXOLYDIAN_SCALE;
         } else if (blockBelow.is(Blocks.BLUE_WOOL)
-            || blockBelow.is(Blocks.BLUE_CONCRETE) || blockBelow.is(Blocks.BLUE_CONCRETE_POWDER)
-            || blockBelow.is(Blocks.BLUE_TERRACOTTA) || blockBelow.is(Blocks.BLUE_GLAZED_TERRACOTTA)
-            || blockBelow.is(Blocks.BLUE_STAINED_GLASS) || blockBelow.is(Blocks.BLUE_STAINED_GLASS_PANE)) {
+                || blockBelow.is(Blocks.BLUE_CONCRETE)
+                || blockBelow.is(Blocks.BLUE_CONCRETE_POWDER)
+                || blockBelow.is(Blocks.BLUE_TERRACOTTA)
+                || blockBelow.is(Blocks.BLUE_GLAZED_TERRACOTTA)
+                || blockBelow.is(Blocks.BLUE_STAINED_GLASS)
+                || blockBelow.is(Blocks.BLUE_STAINED_GLASS_PANE)) {
             scale = BLUES_SCALE;
         } else if (blockBelow.is(Blocks.BONE_BLOCK)) {
             scale = BAD_TIME;
@@ -380,9 +394,9 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     private static final int[] BAD_TIME = {0, 0, 12, 7, 6, 5, 3, 0, 3, 5};
     private static final int[] SUSSY_BAKA = {5, 8, 10, 11, 10, 8, 5, 3, 7, 5};
 
-    //endregion
+    // endregion
 
-    //region item handler contract stuff
+    // region item handler contract stuff
     private static final int[] SLOTS = {0};
 
     @Override
@@ -454,5 +468,5 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         return mediamount > 0;
     }
 
-    //endregion
+    // endregion
 }

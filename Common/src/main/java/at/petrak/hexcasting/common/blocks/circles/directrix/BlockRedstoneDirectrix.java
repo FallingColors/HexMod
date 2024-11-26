@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.blocks.circles.directrix;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -18,7 +19,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.EnumSet;
@@ -32,20 +32,29 @@ public class BlockRedstoneDirectrix extends BlockCircleComponent {
 
     public BlockRedstoneDirectrix(Properties p_49795_) {
         super(p_49795_);
-        this.registerDefaultState(this.stateDefinition.any()
-            .setValue(REDSTONE_POWERED, false)
-            .setValue(ENERGIZED, false)
-            .setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(
+                this.stateDefinition
+                        .any()
+                        .setValue(REDSTONE_POWERED, false)
+                        .setValue(ENERGIZED, false)
+                        .setValue(FACING, Direction.NORTH));
     }
 
     @Override
-    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos,
-        BlockState bs, ServerLevel world) {
-        return new ControlFlow.Continue(imageIn, List.of(this.exitPositionFromDirection(pos, getRealFacing(bs))));
+    public ControlFlow acceptControlFlow(
+            CastingImage imageIn,
+            CircleCastEnv env,
+            Direction enterDir,
+            BlockPos pos,
+            BlockState bs,
+            ServerLevel world) {
+        return new ControlFlow.Continue(
+                imageIn, List.of(this.exitPositionFromDirection(pos, getRealFacing(bs))));
     }
 
     @Override
-    public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+    public boolean canEnterFromDirection(
+            Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
         return true;
     }
 
@@ -74,8 +83,13 @@ public class BlockRedstoneDirectrix extends BlockCircleComponent {
     }
 
     @Override
-    public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos,
-        boolean pIsMoving) {
+    public void neighborChanged(
+            BlockState pState,
+            Level pLevel,
+            BlockPos pPos,
+            Block pBlock,
+            BlockPos pFromPos,
+            boolean pIsMoving) {
         super.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);
 
         if (!pLevel.isClientSide) {
@@ -86,18 +100,24 @@ public class BlockRedstoneDirectrix extends BlockCircleComponent {
         }
     }
 
-
     @Override
     public void animateTick(BlockState bs, Level pLevel, BlockPos pos, RandomSource rand) {
         if (bs.getValue(REDSTONE_POWERED)) {
             for (int i = 0; i < 2; i++) {
                 var step = bs.getValue(FACING).step();
-                var center = Vec3.atCenterOf(pos).add(step.x() * 0.5, step.y() * 0.5, step.z() * 0.5);
+                var center =
+                        Vec3.atCenterOf(pos).add(step.x() * 0.5, step.y() * 0.5, step.z() * 0.5);
                 double x = center.x + (rand.nextDouble() - 0.5) * 0.5D;
                 double y = center.y + (rand.nextDouble() - 0.5) * 0.5D;
                 double z = center.z + (rand.nextDouble() - 0.5) * 0.5D;
-                pLevel.addParticle(DustParticleOptions.REDSTONE, x, y, z,
-                    step.x() * 0.1, step.y() * 0.1, step.z() * 0.1);
+                pLevel.addParticle(
+                        DustParticleOptions.REDSTONE,
+                        x,
+                        y,
+                        z,
+                        step.x() * 0.1,
+                        step.y() * 0.1,
+                        step.z() * 0.1);
             }
         }
     }
@@ -107,7 +127,6 @@ public class BlockRedstoneDirectrix extends BlockCircleComponent {
         super.createBlockStateDefinition(builder);
         builder.add(REDSTONE_POWERED, FACING);
     }
-
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {

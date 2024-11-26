@@ -15,9 +15,7 @@ public class HexBlockSetTypes {
 
     private static final List<BlockSetType> TYPES = new ArrayList<>();
 
-    public static final BlockSetType EDIFIED_WOOD = register(
-        new BlockSetType("edified_wood")
-    );
+    public static final BlockSetType EDIFIED_WOOD = register(new BlockSetType("edified_wood"));
 
     private static BlockSetType register(BlockSetType type) {
         TYPES.add(type);

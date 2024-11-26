@@ -16,6 +16,5 @@ class MishapDisallowedSpell(val type: String = "disallowed") : Mishap() {
         // NO-OP
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error(type)
+    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = error(type)
 }

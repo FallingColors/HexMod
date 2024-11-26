@@ -8,7 +8,11 @@ import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 object OpHalt : Action {
-    override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
+    override fun operate(
+        env: CastingEnvironment,
+        image: CastingImage,
+        continuation: SpellContinuation
+    ): OperationResult {
         var newStack = image.stack.toList()
 
         var done = false
@@ -20,7 +24,8 @@ object OpHalt : Action {
             newStack = newInfo.second
             newCont = newCont.next
         }
-        // if we hit no continuation boundaries (i.e. thoth/hermes exits), we've TOTALLY cleared the itinerary...
+        // if we hit no continuation boundaries (i.e. thoth/hermes exits), we've TOTALLY cleared the
+        // itinerary...
         if (!done) {
             // bomb the stack so we exit
             newStack = listOf()

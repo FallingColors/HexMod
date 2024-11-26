@@ -1,7 +1,9 @@
 package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
+
 import dev.onyxstudios.cca.api.v3.component.Component;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -22,7 +24,6 @@ public class CCPatterns implements Component {
     public CCPatterns(ServerPlayer owner) {
         this.owner = owner;
     }
-
 
     public List<ResolvedPattern> getPatterns() {
         return patterns;

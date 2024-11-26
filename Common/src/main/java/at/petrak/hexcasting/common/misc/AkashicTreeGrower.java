@@ -1,7 +1,9 @@
 package at.petrak.hexcasting.common.misc;
 
 import at.petrak.hexcasting.common.lib.HexConfiguredFeatures;
+
 import com.google.common.collect.Lists;
+
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
@@ -21,7 +23,8 @@ public class AkashicTreeGrower extends AbstractTreeGrower {
     }
 
     @Override
-    protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource pRandom, boolean pLargeHive) {
+    protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(
+            RandomSource pRandom, boolean pLargeHive) {
         return GROWERS.get(pRandom.nextInt(GROWERS.size()));
     }
 }

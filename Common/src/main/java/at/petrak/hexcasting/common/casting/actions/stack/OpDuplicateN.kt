@@ -15,7 +15,8 @@ object OpDuplicateN : ConstMediaAction {
 
         if (count > HexIotaTypes.MAX_SERIALIZATION_TOTAL) {
             // If we throw here, the message will point to us, which usually doesn't happen.
-            // So ensure that this check has no user-facing effects, just cap to MAX_SERIALIZATION_TOTAL,
+            // So ensure that this check has no user-facing effects, just cap to
+            // MAX_SERIALIZATION_TOTAL,
             // which will unconditionally trigger Too Many Iotas after we return.
             count = HexIotaTypes.MAX_SERIALIZATION_TOTAL
         }

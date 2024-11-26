@@ -15,7 +15,9 @@ import at.petrak.hexcasting.forge.datagen.xplat.HexBlockStatesAndModels;
 import at.petrak.hexcasting.forge.datagen.xplat.HexItemModels;
 import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import com.google.gson.JsonObject;
+
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
@@ -61,20 +63,20 @@ public class ForgeHexDataGenerators {
 
         // https://docs.minecraftforge.net/en/latest/datagen/server/datapackregistries/
         // https://github.com/MinecraftForge/MinecraftForge/pull/9580
-        var datapackProvider = new DatapackBuiltinEntriesProvider(
-            output,
-            lookup,
-            new RegistrySetBuilder()
-                .add(Registries.DAMAGE_TYPE, HexDamageTypes::bootstrap),
-            Set.of(HexAPI.MOD_ID)
-        );
+        var datapackProvider =
+                new DatapackBuiltinEntriesProvider(
+                        output,
+                        lookup,
+                        new RegistrySetBuilder()
+                                .add(Registries.DAMAGE_TYPE, HexDamageTypes::bootstrap),
+                        Set.of(HexAPI.MOD_ID));
         var datapackLookup = datapackProvider.getRegistryProvider();
 
         gen.addProvider(ev.includeClient(), new HexItemModels(output, efh));
         gen.addProvider(ev.includeClient(), new HexBlockStatesAndModels(output, efh));
-        gen.addProvider(ev.includeServer(), new AdvancementProvider(
-            output, lookup, List.of(new HexAdvancements())
-        ));
+        gen.addProvider(
+                ev.includeServer(),
+                new AdvancementProvider(output, lookup, List.of(new HexAdvancements())));
         gen.addProvider(ev.includeServer(), datapackProvider);
         gen.addProvider(ev.includeServer(), new HexDamageTypeTagProvider(output, datapackLookup));
     }
@@ -87,17 +89,26 @@ public class ForgeHexDataGenerators {
         var output = gen.getPackOutput();
         var lookup = ev.getLookupProvider();
         ExistingFileHelper efh = ev.getExistingFileHelper();
-        gen.addProvider(ev.includeServer(), new LootTableProvider(
-            output, Set.of(), List.of(new LootTableProvider.SubProviderEntry(HexLootTables::new, LootContextParamSets.ALL_PARAMS))
-        ));
-        gen.addProvider(ev.includeServer(), new HexplatRecipes(output, INGREDIENTS, ForgeHexConditionsBuilder::new));
+        gen.addProvider(
+                ev.includeServer(),
+                new LootTableProvider(
+                        output,
+                        Set.of(),
+                        List.of(
+                                new LootTableProvider.SubProviderEntry(
+                                        HexLootTables::new, LootContextParamSets.ALL_PARAMS))));
+        gen.addProvider(
+                ev.includeServer(),
+                new HexplatRecipes(output, INGREDIENTS, ForgeHexConditionsBuilder::new));
 
         // TODO: refactor?
         var xtags = IXplatAbstractions.INSTANCE.tags();
         var blockTagProvider = new HexBlockTagProvider(output, lookup, xtags);
         ((TagsProviderEFHSetter) blockTagProvider).setEFH(efh);
         gen.addProvider(ev.includeServer(), blockTagProvider);
-        var itemTagProvider = new HexItemTagProvider(output, lookup, blockTagProvider, IXplatAbstractions.INSTANCE.tags());
+        var itemTagProvider =
+                new HexItemTagProvider(
+                        output, lookup, blockTagProvider, IXplatAbstractions.INSTANCE.tags());
         ((TagsProviderEFHSetter) itemTagProvider).setEFH(efh);
         gen.addProvider(ev.includeServer(), itemTagProvider);
         var hexTagProvider = new HexActionTagProvider(output, lookup);
@@ -107,83 +118,89 @@ public class ForgeHexDataGenerators {
         gen.addProvider(ev.includeServer(), new ForgeHexLootModGen(output));
     }
 
-    private static final IXplatIngredients INGREDIENTS = new IXplatIngredients() {
-        @Override
-        public Ingredient glowstoneDust() {
-            return Ingredient.of(Tags.Items.DUSTS_GLOWSTONE);
-        }
+    private static final IXplatIngredients INGREDIENTS =
+            new IXplatIngredients() {
+                @Override
+                public Ingredient glowstoneDust() {
+                    return Ingredient.of(Tags.Items.DUSTS_GLOWSTONE);
+                }
 
-        @Override
-        public Ingredient leather() {
-            return Ingredient.of(Tags.Items.LEATHER);
-        }
+                @Override
+                public Ingredient leather() {
+                    return Ingredient.of(Tags.Items.LEATHER);
+                }
 
-        @Override
-        public Ingredient ironNugget() {
-            return Ingredient.of(Tags.Items.NUGGETS_IRON);
-        }
+                @Override
+                public Ingredient ironNugget() {
+                    return Ingredient.of(Tags.Items.NUGGETS_IRON);
+                }
 
-        @Override
-        public Ingredient goldNugget() {
-            return Ingredient.of(Tags.Items.NUGGETS_GOLD);
-        }
+                @Override
+                public Ingredient goldNugget() {
+                    return Ingredient.of(Tags.Items.NUGGETS_GOLD);
+                }
 
-        @Override
-        public Ingredient copperIngot() {
-            return Ingredient.of(Tags.Items.INGOTS_COPPER);
-        }
+                @Override
+                public Ingredient copperIngot() {
+                    return Ingredient.of(Tags.Items.INGOTS_COPPER);
+                }
 
-        @Override
-        public Ingredient ironIngot() {
-            return Ingredient.of(Tags.Items.INGOTS_IRON);
-        }
+                @Override
+                public Ingredient ironIngot() {
+                    return Ingredient.of(Tags.Items.INGOTS_IRON);
+                }
 
-        @Override
-        public Ingredient goldIngot() {
-            return Ingredient.of(Tags.Items.INGOTS_GOLD);
-        }
+                @Override
+                public Ingredient goldIngot() {
+                    return Ingredient.of(Tags.Items.INGOTS_GOLD);
+                }
 
-        @Override
-        public EnumMap<DyeColor, Ingredient> dyes() {
-            var out = new EnumMap<DyeColor, Ingredient>(DyeColor.class);
-            for (var col : DyeColor.values()) {
-                out.put(col, Ingredient.of(col.getTag()));
-            }
-            return out;
-        }
+                @Override
+                public EnumMap<DyeColor, Ingredient> dyes() {
+                    var out = new EnumMap<DyeColor, Ingredient>(DyeColor.class);
+                    for (var col : DyeColor.values()) {
+                        out.put(col, Ingredient.of(col.getTag()));
+                    }
+                    return out;
+                }
 
-        @Override
-        public Ingredient stick() {
-            return Ingredient.fromValues(Stream.of(
-                new Ingredient.ItemValue(new ItemStack(Items.STICK)),
-                new Ingredient.TagValue(ItemTags.create(new ResourceLocation("forge", "rods/wooden")))
-            ));
-        }
+                @Override
+                public Ingredient stick() {
+                    return Ingredient.fromValues(
+                            Stream.of(
+                                    new Ingredient.ItemValue(new ItemStack(Items.STICK)),
+                                    new Ingredient.TagValue(
+                                            ItemTags.create(
+                                                    new ResourceLocation(
+                                                            "forge", "rods/wooden")))));
+                }
 
-        @Override
-        public Ingredient whenModIngredient(Ingredient defaultIngredient, String modid, Ingredient modIngredient) {
-            return ForgeModConditionalIngredient.of(defaultIngredient, modid, modIngredient);
-        }
+                @Override
+                public Ingredient whenModIngredient(
+                        Ingredient defaultIngredient, String modid, Ingredient modIngredient) {
+                    return ForgeModConditionalIngredient.of(
+                            defaultIngredient, modid, modIngredient);
+                }
 
-        // https://github.com/vectorwing/FarmersDelight/blob/1.18.2/src/generated/resources/data/farmersdelight/recipes/cutting/amethyst_block.json
-        @Override
-        public FarmersDelightToolIngredient axeStrip() {
-            return () -> {
-                JsonObject object = new JsonObject();
-                object.addProperty("type", "farmersdelight:tool_action");
-                object.addProperty("action", ToolActions.AXE_STRIP.name());
-                return object;
+                // https://github.com/vectorwing/FarmersDelight/blob/1.18.2/src/generated/resources/data/farmersdelight/recipes/cutting/amethyst_block.json
+                @Override
+                public FarmersDelightToolIngredient axeStrip() {
+                    return () -> {
+                        JsonObject object = new JsonObject();
+                        object.addProperty("type", "farmersdelight:tool_action");
+                        object.addProperty("action", ToolActions.AXE_STRIP.name());
+                        return object;
+                    };
+                }
+
+                @Override
+                public FarmersDelightToolIngredient axeDig() {
+                    return () -> {
+                        JsonObject object = new JsonObject();
+                        object.addProperty("type", "farmersdelight:tool_action");
+                        object.addProperty("action", ToolActions.AXE_DIG.name());
+                        return object;
+                    };
+                }
             };
-        }
-
-        @Override
-        public FarmersDelightToolIngredient axeDig() {
-            return () -> {
-                JsonObject object = new JsonObject();
-                object.addProperty("type", "farmersdelight:tool_action");
-                object.addProperty("action", ToolActions.AXE_DIG.name());
-                return object;
-            };
-        }
-    };
 }

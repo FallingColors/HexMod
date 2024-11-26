@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
 import com.google.gson.JsonObject;
-import net.minecraft.core.Registry;
+
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -36,9 +36,9 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
     @Override
     public List<Component> getTooltip(boolean advanced) {
         return List.of(
-            this.entityType.getDescription(),
-            BrainsweepeeIngredient.getModNameComponent(BuiltInRegistries.ENTITY_TYPE.getKey(this.entityType).getNamespace())
-        );
+                this.entityType.getDescription(),
+                BrainsweepeeIngredient.getModNameComponent(
+                        BuiltInRegistries.ENTITY_TYPE.getKey(this.entityType).getNamespace()));
     }
 
     @Override
@@ -50,7 +50,8 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
     public JsonObject serialize() {
         var obj = new JsonObject();
         obj.addProperty("type", Type.ENTITY_TYPE.getSerializedName());
-        obj.addProperty("entityType", BuiltInRegistries.ENTITY_TYPE.getKey(this.entityType).toString());
+        obj.addProperty(
+                "entityType", BuiltInRegistries.ENTITY_TYPE.getKey(this.entityType).toString());
 
         return obj;
     }
@@ -81,9 +82,7 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
     @Override
     public String getSomeKindOfReasonableIDForEmi() {
         var resloc = BuiltInRegistries.ENTITY_TYPE.getKey(this.entityType);
-        return resloc.getNamespace()
-            + "//"
-            + resloc.getPath();
+        return resloc.getNamespace() + "//" + resloc.getPath();
     }
 
     @Override

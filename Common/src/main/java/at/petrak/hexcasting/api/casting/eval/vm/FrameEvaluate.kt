@@ -16,6 +16,7 @@ import net.minecraft.server.level.ServerLevel
 
 /**
  * A list of patterns to be evaluated in sequence.
+ *
  * @property list the *remaining* list of patterns to be evaluated
  * @property isMetacasting only for sound effects, if this is being cast from a hermes / iris
  */
@@ -31,10 +32,11 @@ data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : Cont
     ): CastResult {
         // If there are patterns left...
         return if (list.nonEmpty) {
-            val newCont = if (list.cdr.nonEmpty) { // yay TCO
-                // ...enqueue the evaluation of the rest of the patterns...
-                continuation.pushFrame(FrameEvaluate(list.cdr, this.isMetacasting))
-            } else continuation
+            val newCont =
+                if (list.cdr.nonEmpty) { // yay TCO
+                    // ...enqueue the evaluation of the rest of the patterns...
+                    continuation.pushFrame(FrameEvaluate(list.cdr, this.isMetacasting))
+                } else continuation
             // ...before evaluating the first one in the list.
             val update = harness.executeInner(list.car, level, newCont)
             if (this.isMetacasting && update.sound != HexEvalSounds.MISHAP) {
@@ -44,7 +46,13 @@ data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : Cont
             }
         } else {
             // If there are no patterns (e.g. empty Hermes), just return OK.
-            CastResult(ListIota(list), continuation, null, listOf(), ResolvedPatternType.EVALUATED, HexEvalSounds.HERMES)
+            CastResult(
+                ListIota(list),
+                continuation,
+                null,
+                listOf(),
+                ResolvedPatternType.EVALUATED,
+                HexEvalSounds.HERMES)
         }
     }
 
@@ -59,16 +67,18 @@ data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : Cont
 
     companion object {
         @JvmField
-        val TYPE: ContinuationFrame.Type<FrameEvaluate> = object : ContinuationFrame.Type<FrameEvaluate> {
-            override fun deserializeFromNBT(tag: CompoundTag, world: ServerLevel): FrameEvaluate {
-                return FrameEvaluate(
-                    HexIotaTypes.LIST.deserialize(
-                        tag.getList("patterns", Tag.TAG_COMPOUND),
-                        world
-                    )!!.list,
-                    tag.getBoolean("isMetacasting"))
+        val TYPE: ContinuationFrame.Type<FrameEvaluate> =
+            object : ContinuationFrame.Type<FrameEvaluate> {
+                override fun deserializeFromNBT(
+                    tag: CompoundTag,
+                    world: ServerLevel
+                ): FrameEvaluate {
+                    return FrameEvaluate(
+                        HexIotaTypes.LIST.deserialize(
+                                tag.getList("patterns", Tag.TAG_COMPOUND), world)!!
+                            .list,
+                        tag.getBoolean("isMetacasting"))
+                }
             }
-
-        }
     }
 }

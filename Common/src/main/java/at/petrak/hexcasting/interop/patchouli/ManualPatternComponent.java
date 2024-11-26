@@ -2,21 +2,22 @@ package at.petrak.hexcasting.interop.patchouli;
 
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
+
 import vazkii.patchouli.api.IVariable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-/**
- * Provide the pattern(s) manually
- */
+/** Provide the pattern(s) manually */
 public class ManualPatternComponent extends AbstractPatternComponent {
     @SerializedName("patterns")
     public String patternsRaw;
+
     @SerializedName("stroke_order")
     public String strokeOrderRaw;
 

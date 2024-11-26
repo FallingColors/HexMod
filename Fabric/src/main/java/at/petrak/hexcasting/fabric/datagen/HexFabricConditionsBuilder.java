@@ -1,7 +1,9 @@
 package at.petrak.hexcasting.fabric.datagen;
 
 import at.petrak.hexcasting.datagen.IXplatConditionsBuilder;
+
 import com.google.gson.JsonObject;
+
 import net.fabricmc.fabric.api.resource.conditions.v1.ConditionJsonProvider;
 import net.fabricmc.fabric.api.resource.conditions.v1.DefaultResourceConditions;
 import net.fabricmc.fabric.impl.datagen.FabricDataGenHelper;
@@ -11,6 +13,7 @@ import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,12 +37,14 @@ public class HexFabricConditionsBuilder implements IXplatConditionsBuilder {
 
     @Override
     public IXplatConditionsBuilder whenModMissing(String modid) {
-        conditions.add(DefaultResourceConditions.not(DefaultResourceConditions.allModsLoaded(modid)));
+        conditions.add(
+                DefaultResourceConditions.not(DefaultResourceConditions.allModsLoaded(modid)));
         return this;
     }
 
     @Override
-    public RecipeBuilder unlockedBy(@NotNull String string, @NotNull CriterionTriggerInstance criterionTriggerInstance) {
+    public RecipeBuilder unlockedBy(
+            @NotNull String string, @NotNull CriterionTriggerInstance criterionTriggerInstance) {
         return parent.unlockedBy(string, criterionTriggerInstance);
     }
 
@@ -55,41 +60,47 @@ public class HexFabricConditionsBuilder implements IXplatConditionsBuilder {
 
     @Override
     @SuppressWarnings("UnstableApiUsage")
-    public void save(@NotNull Consumer<FinishedRecipe> consumer, @NotNull ResourceLocation resourceLocation) {
-        Consumer<FinishedRecipe> withConditions = json -> {
-            FabricDataGenHelper.addConditions(json, conditions.toArray(new ConditionJsonProvider[0]));
+    public void save(
+            @NotNull Consumer<FinishedRecipe> consumer,
+            @NotNull ResourceLocation resourceLocation) {
+        Consumer<FinishedRecipe> withConditions =
+                json -> {
+                    FabricDataGenHelper.addConditions(
+                            json, conditions.toArray(new ConditionJsonProvider[0]));
 
-            consumer.accept(new FinishedRecipe() {
-                @Override
-                public void serializeRecipeData(@NotNull JsonObject jsonObject) {
-                    json.serializeRecipeData(jsonObject);
-                    ConditionJsonProvider[] conditions = FabricDataGenHelper.consumeConditions(json);
-                    ConditionJsonProvider.write(jsonObject, conditions);
-                }
+                    consumer.accept(
+                            new FinishedRecipe() {
+                                @Override
+                                public void serializeRecipeData(@NotNull JsonObject jsonObject) {
+                                    json.serializeRecipeData(jsonObject);
+                                    ConditionJsonProvider[] conditions =
+                                            FabricDataGenHelper.consumeConditions(json);
+                                    ConditionJsonProvider.write(jsonObject, conditions);
+                                }
 
-                @Override
-                public ResourceLocation getId() {
-                    return json.getId();
-                }
+                                @Override
+                                public ResourceLocation getId() {
+                                    return json.getId();
+                                }
 
-                @Override
-                public RecipeSerializer<?> getType() {
-                    return json.getType();
-                }
+                                @Override
+                                public RecipeSerializer<?> getType() {
+                                    return json.getType();
+                                }
 
-                @Nullable
-                @Override
-                public JsonObject serializeAdvancement() {
-                    return json.serializeAdvancement();
-                }
+                                @Nullable
+                                @Override
+                                public JsonObject serializeAdvancement() {
+                                    return json.serializeAdvancement();
+                                }
 
-                @Nullable
-                @Override
-                public ResourceLocation getAdvancementId() {
-                    return json.getAdvancementId();
-                }
-            });
-        };
+                                @Nullable
+                                @Override
+                                public ResourceLocation getAdvancementId() {
+                                    return json.getAdvancementId();
+                                }
+                            });
+                };
 
         parent.save(withConditions, resourceLocation);
     }

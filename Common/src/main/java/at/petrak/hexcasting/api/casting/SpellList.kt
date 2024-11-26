@@ -20,8 +20,10 @@ sealed class SpellList : Iterable<Iota> {
     class LList(val idx: Int, val list: List<Iota>) : SpellList() {
         override val nonEmpty: Boolean
             get() = idx < list.size
+
         override val car: Iota
             get() = list[idx]
+
         override val cdr: SpellList
             get() = LList(idx + 1, list)
 
@@ -69,9 +71,7 @@ sealed class SpellList : Iterable<Iota> {
 
     override fun iterator() = SpellListIterator(this)
 
-    /**
-     * Note this is O(n), probably.
-     */
+    /** Note this is O(n), probably. */
     fun size(): Int {
         var size = 0
         var ptr = this
@@ -84,6 +84,7 @@ sealed class SpellList : Iterable<Iota> {
 
     class SpellListIterator(var list: SpellList) : Iterator<Iota> {
         override fun hasNext() = list.nonEmpty
+
         override operator fun next(): Iota {
             val car = list.car
             list = list.cdr

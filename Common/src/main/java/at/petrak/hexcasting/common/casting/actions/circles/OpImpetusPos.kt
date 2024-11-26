@@ -11,8 +11,7 @@ object OpImpetusPos : ConstMediaAction {
     override val argc = 0
 
     override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
-        if (ctx !is CircleCastEnv)
-            throw MishapNoSpellCircle()
+        if (ctx !is CircleCastEnv) throw MishapNoSpellCircle()
 
         return ctx.circleState().impetusPos.asActionResult
     }

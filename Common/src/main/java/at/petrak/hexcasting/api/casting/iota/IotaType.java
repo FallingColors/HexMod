@@ -3,7 +3,7 @@ package at.petrak.hexcasting.api.casting.iota;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
-import com.mojang.datafixers.util.Pair;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.nbt.CompoundTag;
@@ -14,43 +14,40 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.FormattedCharSequence;
 
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
+
+import javax.annotation.Nullable;
 
 // Take notes from ForgeRegistryEntry
 public abstract class IotaType<T extends Iota> {
 
     /**
      * Spell datums are stored as such: {@code { "type": "modid:type", "datum": a_tag }}.
-     * <p>
-     * The {@code type} key is given when registering the spell datum type; this method
+     *
+     * <p>The {@code type} key is given when registering the spell datum type; this method
      * deserializes the tag associated with {@code "datum"}.
-     * <p>
-     * Returning {@code null} makes the resulting datum be {@link NullIota}.
-     * Throwing an exception raises a mishap.
+     *
+     * <p>Returning {@code null} makes the resulting datum be {@link NullIota}. Throwing an
+     * exception raises a mishap.
      */
     @Nullable
     public abstract T deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException;
 
     /**
-     * Get a display of this datum from the {@code data} tag, <i>without</i> the world.
-     * This is for use on the client.
+     * Get a display of this datum from the {@code data} tag, <i>without</i> the world. This is for
+     * use on the client.
      */
     public abstract Component display(Tag tag);
 
-    /**
-     * Get the color associated with this datum type.
-     */
+    /** Get the color associated with this datum type. */
     public abstract int color();
 
-    /**
-     * Get a display component that's the name of this iota type.
-     */
+    /** Get a display component that's the name of this iota type. */
     public Component typeName() {
         var key = HexIotaTypes.REGISTRY.getKey(this);
         return Component.translatable("hexcasting.iota." + key)
-            .withStyle(style -> style.withColor(TextColor.fromRgb(color())));
+                .withStyle(style -> style.withColor(TextColor.fromRgb(color())));
     }
 
     public static CompoundTag serialize(Iota iota) {
@@ -58,8 +55,10 @@ public abstract class IotaType<T extends Iota> {
         var typeId = HexIotaTypes.REGISTRY.getKey(type);
         if (typeId == null) {
             throw new IllegalStateException(
-                "Tried to serialize an unregistered iota type. Iota: " + iota
-                    + " ; Type" + type.getClass().getTypeName());
+                    "Tried to serialize an unregistered iota type. Iota: "
+                            + iota
+                            + " ; Type"
+                            + type.getClass().getTypeName());
         }
 
         // We check if it's too big on serialization; if it is we just return a garbage.
@@ -81,16 +80,15 @@ public abstract class IotaType<T extends Iota> {
     private static boolean isTooLargeToSerialize(Iterable<Iota> examinee, int startingCount) {
         int totalSize = startingCount;
         for (Iota iota : examinee) {
-            if (iota.depth() >= HexIotaTypes.MAX_SERIALIZATION_DEPTH)
-                return true;
+            if (iota.depth() >= HexIotaTypes.MAX_SERIALIZATION_DEPTH) return true;
             totalSize += iota.size();
         }
         return totalSize >= HexIotaTypes.MAX_SERIALIZATION_TOTAL;
     }
 
     /**
-     * This method attempts to find the type from the {@code type} key.
-     * See {@link IotaType#serialize(Iota)} for the storage format.
+     * This method attempts to find the type from the {@code type} key. See {@link
+     * IotaType#serialize(Iota)} for the storage format.
      *
      * @return {@code null} if it cannot get the type.
      */
@@ -108,10 +106,8 @@ public abstract class IotaType<T extends Iota> {
     }
 
     /**
-     * Attempt to deserialize an iota from a tag.
-     * <br>
-     * Iotas are saved as such:
-     * <code>
+     * Attempt to deserialize an iota from a tag. <br>
+     * Iotas are saved as such: <code>
      * {
      * "type": "hexcasting:atype",
      * "data": {...}
@@ -129,7 +125,8 @@ public abstract class IotaType<T extends Iota> {
         }
         Iota deserialized;
         try {
-            deserialized = Objects.requireNonNullElse(type.deserialize(data, world), new NullIota());
+            deserialized =
+                    Objects.requireNonNullElse(type.deserialize(data, world), new NullIota());
         } catch (IllegalArgumentException exn) {
             HexAPI.LOGGER.warn("Caught an exception deserializing an iota", exn);
             deserialized = new GarbageIota();
@@ -139,7 +136,7 @@ public abstract class IotaType<T extends Iota> {
 
     private static Component brokenIota() {
         return Component.translatable("hexcasting.spelldata.unknown")
-            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
+                .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
     }
 
     public static Component getDisplay(CompoundTag tag) {
@@ -154,7 +151,8 @@ public abstract class IotaType<T extends Iota> {
         return type.display(data);
     }
 
-    public static FormattedCharSequence getDisplayWithMaxWidth(CompoundTag tag, int maxWidth, Font font) {
+    public static FormattedCharSequence getDisplayWithMaxWidth(
+            CompoundTag tag, int maxWidth, Font font) {
         var type = getTypeFromTag(tag);
         if (type == null) {
             return brokenIota().getVisualOrderText();
@@ -165,14 +163,13 @@ public abstract class IotaType<T extends Iota> {
         }
         var display = type.display(data);
         var splitted = font.split(display, maxWidth - font.width("..."));
-        if (splitted.isEmpty())
-            return FormattedCharSequence.EMPTY;
-        else if (splitted.size() == 1)
-            return splitted.get(0);
+        if (splitted.isEmpty()) return FormattedCharSequence.EMPTY;
+        else if (splitted.size() == 1) return splitted.get(0);
         else {
             var first = splitted.get(0);
-            return FormattedCharSequence.fromPair(first,
-                Component.literal("...").withStyle(ChatFormatting.GRAY).getVisualOrderText());
+            return FormattedCharSequence.fromPair(
+                    first,
+                    Component.literal("...").withStyle(ChatFormatting.GRAY).getVisualOrderText());
         }
     }
 

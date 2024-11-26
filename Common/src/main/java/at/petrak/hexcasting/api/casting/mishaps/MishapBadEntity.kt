@@ -25,8 +25,7 @@ class MishapBadEntity(val entity: Entity, val wanted: Component) : Mishap() {
         @JvmStatic
         fun of(entity: Entity, stub: String): Mishap {
             val component = "hexcasting.mishap.bad_item.$stub".asTranslatedComponent
-            if (entity is ItemEntity)
-                return MishapBadItem(entity, component)
+            if (entity is ItemEntity) return MishapBadItem(entity, component)
             return MishapBadEntity(entity, component)
         }
     }

@@ -2,6 +2,7 @@ package at.petrak.hexcasting.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -20,8 +21,13 @@ public class MyOwnArmorModelWithBlackjackAndHookers extends HumanoidModel<Living
     // [VanillaCopy] ArmorStandArmorModel.setupAnim because armor stands are dumb
     // This fixes the armor "breathing" and helmets always facing south on armor stands
     @Override
-    public void setupAnim(LivingEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks,
-        float netHeadYaw, float headPitch) {
+    public void setupAnim(
+            LivingEntity entity,
+            float limbSwing,
+            float limbSwingAmount,
+            float ageInTicks,
+            float netHeadYaw,
+            float headPitch) {
         if (!(entity instanceof ArmorStand entityIn)) {
             super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
             return;
@@ -52,8 +58,15 @@ public class MyOwnArmorModelWithBlackjackAndHookers extends HumanoidModel<Living
     }
 
     @Override
-    public void renderToBuffer(PoseStack ms, VertexConsumer buffer, int light, int overlay, float r, float g, float b
-        , float a) {
+    public void renderToBuffer(
+            PoseStack ms,
+            VertexConsumer buffer,
+            int light,
+            int overlay,
+            float r,
+            float g,
+            float b,
+            float a) {
         setPartVisibility(slot);
         super.renderToBuffer(ms, buffer, light, overlay, r, g, b, a);
     }

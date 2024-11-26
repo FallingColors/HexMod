@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.casting.iota.EntityIota;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
+
 import org.jetbrains.annotations.Nullable;
 
 public class BlockRedstoneImpetus extends BlockAbstractImpetus {
@@ -41,15 +43,21 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-        BlockHitResult pHit) {
+    public InteractionResult use(
+            BlockState pState,
+            Level pLevel,
+            BlockPos pPos,
+            Player pPlayer,
+            InteractionHand pHand,
+            BlockHitResult pHit) {
         if (pLevel instanceof ServerLevel level
-            && level.getBlockEntity(pPos) instanceof BlockEntityRedstoneImpetus tile) {
+                && level.getBlockEntity(pPos) instanceof BlockEntityRedstoneImpetus tile) {
             var usedStack = pPlayer.getItemInHand(pHand);
             if (usedStack.isEmpty() && pPlayer.isDiscrete()) {
                 tile.clearPlayer();
                 tile.sync();
-                pLevel.playSound(null, pPos, HexSounds.IMPETUS_REDSTONE_CLEAR, SoundSource.BLOCKS, 1f, 1f);
+                pLevel.playSound(
+                        null, pPos, HexSounds.IMPETUS_REDSTONE_CLEAR, SoundSource.BLOCKS, 1f, 1f);
                 return InteractionResult.sidedSuccess(pLevel.isClientSide);
             } else {
                 var datumContainer = IXplatAbstractions.INSTANCE.findDataHolder(usedStack);
@@ -62,8 +70,13 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
                             tile.setPlayer(player.getGameProfile(), entity.getUUID());
                             tile.sync();
 
-                            pLevel.playSound(null, pPos, HexSounds.IMPETUS_REDSTONE_DING,
-                                SoundSource.BLOCKS, 1f, 1f);
+                            pLevel.playSound(
+                                    null,
+                                    pPos,
+                                    HexSounds.IMPETUS_REDSTONE_DING,
+                                    SoundSource.BLOCKS,
+                                    1f,
+                                    1f);
                             return InteractionResult.sidedSuccess(pLevel.isClientSide);
                         }
                     }
@@ -83,8 +96,13 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
     }
 
     @Override
-    public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos,
-        boolean pIsMoving) {
+    public void neighborChanged(
+            BlockState pState,
+            Level pLevel,
+            BlockPos pPos,
+            Block pBlock,
+            BlockPos pFromPos,
+            boolean pIsMoving) {
         super.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);
 
         if (pLevel instanceof ServerLevel slevel) {
@@ -94,7 +112,8 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
             if (prevPowered != isPowered) {
                 pLevel.setBlockAndUpdate(pPos, pState.setValue(POWERED, isPowered));
 
-                if (isPowered && pLevel.getBlockEntity(pPos) instanceof BlockEntityRedstoneImpetus tile) {
+                if (isPowered
+                        && pLevel.getBlockEntity(pPos) instanceof BlockEntityRedstoneImpetus tile) {
                     var player = tile.getStoredPlayer();
                     tile.startExecution(player);
                 }

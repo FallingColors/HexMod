@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.advancements;
 
 import com.google.gson.JsonObject;
+
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,11 +18,12 @@ public class SpendMediaTrigger extends SimpleCriterionTrigger<SpendMediaTrigger.
     }
 
     @Override
-    protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate,
-        DeserializationContext context) {
-        return new Instance(predicate,
-            MinMaxLongs.fromJson(json.get(TAG_MEDIA_SPENT)),
-            MinMaxLongs.fromJson(json.get(TAG_MEDIA_WASTED)));
+    protected Instance createInstance(
+            JsonObject json, ContextAwarePredicate predicate, DeserializationContext context) {
+        return new Instance(
+                predicate,
+                MinMaxLongs.fromJson(json.get(TAG_MEDIA_SPENT)),
+                MinMaxLongs.fromJson(json.get(TAG_MEDIA_WASTED)));
     }
 
     public void trigger(ServerPlayer player, long mediaSpent, long mediaWasted) {
@@ -32,8 +34,8 @@ public class SpendMediaTrigger extends SimpleCriterionTrigger<SpendMediaTrigger.
         protected final MinMaxLongs mediaSpent;
         protected final MinMaxLongs mediaWasted;
 
-        public Instance(ContextAwarePredicate predicate, MinMaxLongs mediaSpent,
-            MinMaxLongs mediaWasted) {
+        public Instance(
+                ContextAwarePredicate predicate, MinMaxLongs mediaSpent, MinMaxLongs mediaWasted) {
             super(SpendMediaTrigger.ID, predicate);
             this.mediaSpent = mediaSpent;
             this.mediaWasted = mediaWasted;

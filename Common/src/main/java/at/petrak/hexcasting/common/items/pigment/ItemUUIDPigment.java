@@ -4,8 +4,10 @@ import at.petrak.hexcasting.api.addldata.ADPigment;
 import at.petrak.hexcasting.api.item.PigmentItem;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
 import at.petrak.paucal.api.PaucalAPI;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
+
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -61,13 +63,13 @@ public class ItemUUIDPigment extends Item implements PigmentItem {
 
             var col1 = Color.HSBtoRGB(hue1, saturation1, brightness1);
             var col2 = Color.HSBtoRGB(hue2, saturation2, brightness2);
-            this.colors = new int[]{col1, col2};
+            this.colors = new int[] {col1, col2};
         }
-
 
         @Override
         protected int getRawColor(float time, Vec3 position) {
-            return ADPigment.morphBetweenColors(this.colors, new Vec3(0.1, 0.1, 0.1), time / 400, position);
+            return ADPigment.morphBetweenColors(
+                    this.colors, new Vec3(0.1, 0.1, 0.1), time / 400, position);
         }
     }
 }

@@ -4,9 +4,7 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * Uses axial coordinates as per https://www.redblobgames.com/grids/hexagons/
- */
+/** Uses axial coordinates as per https://www.redblobgames.com/grids/hexagons/ */
 data class HexCoord(val q: Int, val r: Int) {
     fun s(): Int = -this.q - this.r
 
@@ -17,7 +15,9 @@ data class HexCoord(val q: Int, val r: Int) {
     fun delta(x: HexCoord): HexCoord = HexCoord(this.q - x.q, this.r - x.r)
 
     operator fun plus(x: HexCoord) = this.shiftedBy(x)
+
     operator fun plus(d: HexDir) = this.shiftedBy(d)
+
     operator fun minus(x: HexCoord) = this.delta(x)
 
     fun distanceTo(x: HexCoord) =
@@ -56,7 +56,6 @@ data class HexCoord(val q: Int, val r: Int) {
     }
 
     companion object {
-        @JvmStatic
-        val Origin = HexCoord(0, 0)
+        @JvmStatic val Origin = HexCoord(0, 0)
     }
 }

@@ -5,9 +5,7 @@ import com.mojang.datafixers.util.Unit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-/**
- * I'm sick and tired of not having a result class god dammit
- */
+/** I'm sick and tired of not having a result class god dammit */
 public abstract sealed class Result<T, E> {
     public static final class Ok<T, E> extends Result<T, E> {
         public final T ok;
@@ -61,15 +59,14 @@ public abstract sealed class Result<T, E> {
 
     public void matchVoid(Consumer<T> okBranch, Consumer<E> errBranch) {
         this.match(
-            ok -> {
-                okBranch.accept(ok);
-                return Unit.INSTANCE;
-            },
-            err -> {
-                errBranch.accept(err);
-                return Unit.INSTANCE;
-            }
-        );
+                ok -> {
+                    okBranch.accept(ok);
+                    return Unit.INSTANCE;
+                },
+                err -> {
+                    errBranch.accept(err);
+                    return Unit.INSTANCE;
+                });
     }
 
     public <U> U collapse(Function<T, U> okBranch, Function<E, U> errBranch) {

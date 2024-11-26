@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.casting.arithmetic.operator
 
-import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator
 import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorBasic
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate
@@ -12,7 +11,7 @@ import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.DOUBLE
 import kotlin.math.log
 
 object OperatorLog : OperatorBasic(2, IotaMultiPredicate.all(IotaPredicate.ofType(DOUBLE))) {
-    override fun apply(iotas: Iterable<Iota>, env : CastingEnvironment): Iterable<Iota> {
+    override fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator().withIndex()
         val value = it.nextDouble(arity)
         val base = it.nextDouble(arity)

@@ -10,7 +10,9 @@ import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
+
 import com.mojang.datafixers.util.Pair;
+
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,6 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
 import org.jetbrains.annotations.Contract;
 
 import java.util.EnumSet;
@@ -31,44 +34,51 @@ import java.util.UUID;
 
 /**
  * Implement this on a block to make circles interact with it.
- * <p>
- * This is its own interface so you can have your blocks subclass something else, and to avoid enormous
- * files. The mod doesn't check for the interface on anything but blocks.
+ *
+ * <p>This is its own interface so you can have your blocks subclass something else, and to avoid
+ * enormous files. The mod doesn't check for the interface on anything but blocks.
  */
 public interface ICircleComponent {
     /**
      * The heart of the interface! Functionally modify the casting environment.
-     * <p>
-     * With the new update you can have the side effects happen inline. In fact, you have to have the side effects
-     * happen inline.
-     * <p>
-     * Also, return a list of directions that the control flow can exit this block in.
-     * The circle environment will mishap if not exactly 1 of the returned directions can be accepted from.
+     *
+     * <p>With the new update you can have the side effects happen inline. In fact, you have to have
+     * the side effects happen inline.
+     *
+     * <p>Also, return a list of directions that the control flow can exit this block in. The circle
+     * environment will mishap if not exactly 1 of the returned directions can be accepted from.
      */
-    ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos,
-        BlockState bs, ServerLevel world);
+    ControlFlow acceptControlFlow(
+            CastingImage imageIn,
+            CircleCastEnv env,
+            Direction enterDir,
+            BlockPos pos,
+            BlockState bs,
+            ServerLevel world);
 
     /**
-     * Can this component get transferred to from a block coming in from that direction, with the given normal?
+     * Can this component get transferred to from a block coming in from that direction, with the
+     * given normal?
      */
     @Contract(pure = true)
-    boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world);
+    boolean canEnterFromDirection(
+            Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world);
 
     /**
-     * This determines the directions the control flow <em>can</em> exit from. It's called at the beginning of execution
-     * to see if the circle actually forms a loop.
-     * <p>
-     * For most blocks, this should be the same as returned from {@link ICircleComponent#acceptControlFlow}
-     * Things like directrices might return otherwise. Whatever is returned when controlling flow must be a subset of
-     * this set.
+     * This determines the directions the control flow <em>can</em> exit from. It's called at the
+     * beginning of execution to see if the circle actually forms a loop.
+     *
+     * <p>For most blocks, this should be the same as returned from {@link
+     * ICircleComponent#acceptControlFlow} Things like directrices might return otherwise. Whatever
+     * is returned when controlling flow must be a subset of this set.
      */
     @Contract(pure = true)
     EnumSet<Direction> possibleExitDirections(BlockPos pos, BlockState bs, Level world);
 
     /**
-     * Given the current position and a direction, return a pair of the new position after a step
-     * in that direction, along with the direction (this is a helper function for creating
-     * {@link ICircleComponent.ControlFlow}s.
+     * Given the current position and a direction, return a pair of the new position after a step in
+     * that direction, along with the direction (this is a helper function for creating {@link
+     * ICircleComponent.ControlFlow}s.
      */
     @Contract(pure = true)
     default Pair<BlockPos, Direction> exitPositionFromDirection(BlockPos pos, Direction dir) {
@@ -76,37 +86,43 @@ public interface ICircleComponent {
     }
 
     /**
-     * Start the {@link ICircleComponent} at the given position glowing. Returns the new state
-     * of the given block.
-     * // TODO: determine if this should just be in
-     * {@link ICircleComponent#acceptControlFlow(CastingImage, CircleCastEnv, Direction, BlockPos, BlockState, ServerLevel)}.
+     * Start the {@link ICircleComponent} at the given position glowing. Returns the new state of
+     * the given block. // TODO: determine if this should just be in {@link
+     * ICircleComponent#acceptControlFlow(CastingImage, CircleCastEnv, Direction, BlockPos,
+     * BlockState, ServerLevel)}.
      */
     BlockState startEnergized(BlockPos pos, BlockState bs, Level world);
 
-    /**
-     * Returns whether the {@link ICircleComponent} at the given position is energized.
-     */
+    /** Returns whether the {@link ICircleComponent} at the given position is energized. */
     boolean isEnergized(BlockPos pos, BlockState bs, Level world);
 
     /**
-     * End the {@link ICircleComponent} at the given position glowing. Returns the new state of
-     * the given block.
+     * End the {@link ICircleComponent} at the given position glowing. Returns the new state of the
+     * given block.
      */
     BlockState endEnergized(BlockPos pos, BlockState bs, Level world);
 
-    static void sfx(BlockPos pos, BlockState bs, Level world, BlockEntityAbstractImpetus impetus, boolean success) {
+    static void sfx(
+            BlockPos pos,
+            BlockState bs,
+            Level world,
+            BlockEntityAbstractImpetus impetus,
+            boolean success) {
         Vec3 vpos;
         Vec3 vecOutDir;
         FrozenPigment colorizer;
 
         UUID activator = Util.NIL_UUID;
-        if (impetus != null && impetus.getExecutionState() != null && impetus.getExecutionState().caster != null)
+        if (impetus != null
+                && impetus.getExecutionState() != null
+                && impetus.getExecutionState().caster != null)
             activator = impetus.getExecutionState().caster;
 
         if (impetus == null || impetus.getExecutionState() == null)
-            colorizer = new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.RED)), activator);
-        else
-            colorizer = impetus.getPigment();
+            colorizer =
+                    new FrozenPigment(
+                            new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.RED)), activator);
+        else colorizer = impetus.getPigment();
 
         if (bs.getBlock() instanceof BlockCircleComponent bcc) {
             var outDir = bcc.normalDir(pos, bs, world);
@@ -120,11 +136,20 @@ public interface ICircleComponent {
         }
 
         if (world instanceof ServerLevel serverLevel) {
-            var spray = new ParticleSpray(vpos, vecOutDir.scale(success ? 1.0 : 1.5), success ? 0.1 : 0.5,
-                Mth.PI / (success ? 4 : 2), success ? 30 : 100);
-            spray.sprayParticles(serverLevel,
-                success ? colorizer : new FrozenPigment(new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.RED)),
-                    activator));
+            var spray =
+                    new ParticleSpray(
+                            vpos,
+                            vecOutDir.scale(success ? 1.0 : 1.5),
+                            success ? 0.1 : 0.5,
+                            Mth.PI / (success ? 4 : 2),
+                            success ? 30 : 100);
+            spray.sprayParticles(
+                    serverLevel,
+                    success
+                            ? colorizer
+                            : new FrozenPigment(
+                                    new ItemStack(HexItems.DYE_PIGMENTS.get(DyeColor.RED)),
+                                    activator));
         }
 
         var pitch = 1f;
@@ -142,12 +167,17 @@ public interface ICircleComponent {
         world.playSound(null, vpos.x, vpos.y, vpos.z, sound, SoundSource.BLOCKS, 1f, pitch);
     }
 
-    /**
-     * Helper function to "throw a mishap"
-     */
-    default void fakeThrowMishap(BlockPos pos, BlockState bs, CastingImage image, CircleCastEnv env, Mishap mishap) {
-        Mishap.Context errorCtx = new Mishap.Context(null,
-            bs.getBlock().getName().append(" (").append(Component.literal(pos.toShortString())).append(")"));
+    /** Helper function to "throw a mishap" */
+    default void fakeThrowMishap(
+            BlockPos pos, BlockState bs, CastingImage image, CircleCastEnv env, Mishap mishap) {
+        Mishap.Context errorCtx =
+                new Mishap.Context(
+                        null,
+                        bs.getBlock()
+                                .getName()
+                                .append(" (")
+                                .append(Component.literal(pos.toShortString()))
+                                .append(")"));
         var sideEffect = new OperatorSideEffect.DoMishap(mishap, errorCtx);
         var vm = new CastingVM(image, env);
         sideEffect.performEffect(vm);
@@ -164,7 +194,6 @@ public interface ICircleComponent {
             }
         }
 
-        public static final class Stop extends ControlFlow {
-        }
+        public static final class Stop extends ControlFlow {}
     }
 }

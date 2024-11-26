@@ -22,10 +22,8 @@ import net.minecraft.world.phys.Vec3
 
 object OpDestroyFluid : SpellAction {
     override val argc = 1
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
+
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
         val vecPos = args.getVec3(0, argc)
         val pos = BlockPos.containing(vecPos)
         env.assertPosInRangeForEditing(pos)
@@ -33,8 +31,7 @@ object OpDestroyFluid : SpellAction {
         return SpellAction.Result(
             Spell(pos),
             2 * MediaConstants.CRYSTAL_UNIT,
-            listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 3.0))
-        )
+            listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 3.0)))
     }
 
     const val MAX_DESTROY_COUNT = 1024
@@ -71,26 +68,23 @@ object OpDestroyFluid : SpellAction {
                     if (fluid != Fluids.EMPTY.defaultFluidState()) {
                         val blockstate = env.world.getBlockState(here)
                         if (IXplatAbstractions.INSTANCE.isBreakingAllowed(
-                                env.world,
-                                here,
-                                blockstate,
-                                env.castingEntity as? ServerPlayer
-                            )
-                        ) {
+                            env.world, here, blockstate, env.castingEntity as? ServerPlayer)) {
                             val success =
-                                if (blockstate.block is BucketPickup && !(blockstate.block as BucketPickup).pickupBlock(
-                                        env.world,
-                                        here,
-                                        blockstate
-                                    ).isEmpty
-                                ) {
+                                if (blockstate.block is BucketPickup &&
+                                    !(blockstate.block as BucketPickup)
+                                        .pickupBlock(env.world, here, blockstate)
+                                        .isEmpty) {
                                     true
                                 } else if (blockstate.block is LiquidBlock) {
                                     env.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3)
                                     true
-                                } else if (blockstate.tags.anyMatch { it == HexTags.Blocks.WATER_PLANTS }) {
+                                } else if (blockstate.tags.anyMatch {
+                                    it == HexTags.Blocks.WATER_PLANTS
+                                }) {
                                     val blockentity: BlockEntity? =
-                                        if (blockstate.hasBlockEntity()) env.world.getBlockEntity(here) else null
+                                        if (blockstate.hasBlockEntity())
+                                            env.world.getBlockEntity(here)
+                                        else null
                                     Block.dropResources(blockstate, env.world, here, blockentity)
                                     env.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3)
                                     true
@@ -108,8 +102,7 @@ object OpDestroyFluid : SpellAction {
                                     0.0,
                                     0.05,
                                     0.0,
-                                    0.0
-                                )
+                                    0.0)
                                 successes++
                                 for (dir in Direction.values()) {
                                     todo.add(here.relative(dir))
@@ -129,8 +122,7 @@ object OpDestroyFluid : SpellAction {
                     SoundEvents.FIRE_EXTINGUISH,
                     SoundSource.BLOCKS,
                     1.0f,
-                    0.95f
-                )
+                    0.95f)
             }
         }
     }

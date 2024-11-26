@@ -13,17 +13,14 @@ import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 
-/**
- * The state of a casting VM, containing the stack and all
- */
-data class CastingImage private constructor(
+/** The state of a casting VM, containing the stack and all */
+data class CastingImage
+private constructor(
     val stack: List<Iota>,
-
     val parenCount: Int,
     val parenthesized: List<ParenthesizedIota>,
     val escapeNext: Boolean,
     val opsConsumed: Long,
-
     val userData: CompoundTag
 ) {
     constructor() : this(listOf(), 0, listOf(), false, 0, CompoundTag())
@@ -35,9 +32,7 @@ data class CastingImage private constructor(
         }
     }
 
-    /**
-     * Returns an empty list if it's too complicated.
-     */
+    /** Returns an empty list if it's too complicated. */
     private fun Iterable<ParenthesizedIota>.serializeToNBT(): CompoundTag {
         val tag = CompoundTag()
 
@@ -52,24 +47,16 @@ data class CastingImage private constructor(
         return tag
     }
 
-    /**
-     * Return a copy of this with the given number of ops additionally exhausted
-     */
+    /** Return a copy of this with the given number of ops additionally exhausted */
     fun withUsedOps(count: Long) = this.copy(opsConsumed = this.opsConsumed + count)
 
-    /**
-     * Return a copy of this with 1 op used
-     */
+    /** Return a copy of this with 1 op used */
     fun withUsedOp() = this.withUsedOps(1)
 
-    /**
-     * Returns a copy of this with the [opsConsumed] replaced with [count].
-     */
+    /** Returns a copy of this with the [opsConsumed] replaced with [count]. */
     fun withOverriddenUsedOps(count: Long) = this.copy(opsConsumed = count)
 
-    /**
-     * Returns a copy of this with escape/paren-related fields cleared.
-     */
+    /** Returns a copy of this with escape/paren-related fields cleared. */
     fun withResetEscape() = this.copy(parenCount = 0, parenthesized = listOf(), escapeNext = false)
 
     fun serializeToNbt() = NBTBuilder {
@@ -101,19 +88,24 @@ data class CastingImage private constructor(
                     stack.add(datum)
                 }
 
-                val userData = if (tag.contains(TAG_USERDATA)) {
-                    tag.getCompound(TAG_USERDATA)
-                } else {
-                    CompoundTag()
-                }
+                val userData =
+                    if (tag.contains(TAG_USERDATA)) {
+                        tag.getCompound(TAG_USERDATA)
+                    } else {
+                        CompoundTag()
+                    }
 
                 val parenthesized = mutableListOf<ParenthesizedIota>()
                 val parenTag = tag.getCompound(TAG_PARENTHESIZED)
                 val parenIotasTag = parenTag.getList(TAG_IOTAS, Tag.TAG_COMPOUND)
                 val parenEscapedTag = parenTag.getByteArray(TAG_ESCAPED)
 
-                for ((subtag, isEscapedByte) in parenIotasTag.zipWithDefault(parenEscapedTag) { _ -> 0 }) {
-                    parenthesized.add(ParenthesizedIota(IotaType.deserialize(subtag.downcast(CompoundTag.TYPE), world), isEscapedByte != 0.toByte()))
+                for ((subtag, isEscapedByte) in
+                    parenIotasTag.zipWithDefault(parenEscapedTag) { _ -> 0 }) {
+                    parenthesized.add(
+                        ParenthesizedIota(
+                            IotaType.deserialize(subtag.downcast(CompoundTag.TYPE), world),
+                            isEscapedByte != 0.toByte()))
                 }
 
                 val parenCount = tag.getInt(TAG_PAREN_COUNT)

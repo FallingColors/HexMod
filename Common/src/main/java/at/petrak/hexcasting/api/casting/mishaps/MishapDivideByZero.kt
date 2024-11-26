@@ -11,7 +11,11 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.phys.Vec3
 
-class MishapDivideByZero(val operand1: Component, val operand2: Component, val suffix: String = "divide") : Mishap() {
+class MishapDivideByZero(
+    val operand1: Component,
+    val operand2: Component,
+    val suffix: String = "divide"
+) : Mishap() {
 
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.RED)
@@ -30,8 +34,10 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
         @JvmStatic
         fun of(operand1: Double, operand2: Double, suffix: String = "divide"): MishapDivideByZero {
             if (suffix == "exponent")
-                return MishapDivideByZero(translate(DoubleIota(operand1)), powerOf(DoubleIota(operand2)), suffix)
-            return MishapDivideByZero(translate(DoubleIota(operand1)), translate(DoubleIota(operand2)), suffix)
+                return MishapDivideByZero(
+                    translate(DoubleIota(operand1)), powerOf(DoubleIota(operand2)), suffix)
+            return MishapDivideByZero(
+                translate(DoubleIota(operand1)), translate(DoubleIota(operand2)), suffix)
         }
 
         @JvmStatic
@@ -45,9 +51,8 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
         fun tan(angle: Double): MishapDivideByZero {
             val translatedAngle = translate(DoubleIota(angle))
             return MishapDivideByZero(
-                    "$PREFIX.sin".asTranslatedComponent(translatedAngle),
-                    "$PREFIX.cos".asTranslatedComponent(translatedAngle)
-            )
+                "$PREFIX.sin".asTranslatedComponent(translatedAngle),
+                "$PREFIX.cos".asTranslatedComponent(translatedAngle))
         }
 
         @JvmStatic
@@ -55,8 +60,7 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
             val translatedAngle = translate(angle)
             return MishapDivideByZero(
                 "$PREFIX.sin".asTranslatedComponent(translatedAngle),
-                "$PREFIX.cos".asTranslatedComponent(translatedAngle)
-            )
+                "$PREFIX.cos".asTranslatedComponent(translatedAngle))
         }
 
         @JvmStatic
@@ -71,20 +75,21 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
         val zeroVector
             get() = "$PREFIX.zero.vec".asTranslatedComponent
 
-        @JvmStatic
-        fun powerOf(power: Component) = "$PREFIX.power".asTranslatedComponent(power)
+        @JvmStatic fun powerOf(power: Component) = "$PREFIX.power".asTranslatedComponent(power)
 
         @JvmStatic
-        fun powerOf(datum: Iota): Component = when {
-            datum is DoubleIota && datum.double == 0.0 -> zerothPower
-            else -> datum.display()
-        }
+        fun powerOf(datum: Iota): Component =
+            when {
+                datum is DoubleIota && datum.double == 0.0 -> zerothPower
+                else -> datum.display()
+            }
 
         @JvmStatic
-        fun translate(datum: Iota): Component = when {
-            datum is DoubleIota && datum.double == 0.0 -> zero
-            datum is Vec3Iota && datum.vec3 == Vec3.ZERO -> zeroVector
-            else -> datum.display()
-        }
+        fun translate(datum: Iota): Component =
+            when {
+                datum is DoubleIota && datum.double == 0.0 -> zero
+                datum is Vec3Iota && datum.vec3 == Vec3.ZERO -> zeroVector
+                else -> datum.display()
+            }
     }
 }

@@ -22,6 +22,7 @@ import at.petrak.hexcasting.common.msgs.MsgNewSpellPatternC2S
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
+import kotlin.math.*
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
@@ -34,10 +35,10 @@ import net.minecraft.util.FormattedCharSequence
 import net.minecraft.util.Mth
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.phys.Vec2
-import kotlin.math.*
 
 // TODO winfy: fix this class to use ExecutionClientView
-class GuiSpellcasting constructor(
+class GuiSpellcasting
+constructor(
     private val handOpenedWith: InteractionHand,
     private var patterns: MutableList<ResolvedPattern>,
     private var cachedStack: List<CompoundTag>,
@@ -70,11 +71,13 @@ class GuiSpellcasting constructor(
 
         // TODO this is the kinda hacky bit
         if (info.resolutionType == ResolvedPatternType.UNDONE) {
-            this.patterns.reversed().drop(1).firstOrNull { it.type == ResolvedPatternType.ESCAPED }?.let { it.type = ResolvedPatternType.UNDONE }
+            this.patterns
+                .reversed()
+                .drop(1)
+                .firstOrNull { it.type == ResolvedPatternType.ESCAPED }
+                ?.let { it.type = ResolvedPatternType.UNDONE }
             this.patterns.getOrNull(index)?.let { it.type = ResolvedPatternType.EVALUATED }
-        } else this.patterns.getOrNull(index)?.let {
-                it.type = info.resolutionType
-            }
+        } else this.patterns.getOrNull(index)?.let { it.type = info.resolutionType }
 
         this.cachedStack = info.stackDescs
         this.cachedRavenmind = info.ravenmind
@@ -85,22 +88,21 @@ class GuiSpellcasting constructor(
         val mc = Minecraft.getInstance()
         val width = (this.width * LHS_IOTAS_ALLOCATION).toInt()
         this.stackDescs =
-            this.cachedStack.map { IotaType.getDisplayWithMaxWidth(it, width, mc.font) }
+            this.cachedStack
+                .map { IotaType.getDisplayWithMaxWidth(it, width, mc.font) }
                 .asReversed()
-//        this.parenDescs = if (this.cachedParens.isNotEmpty())
-//            this.cachedParens.flatMap { HexIotaTypes.getDisplayWithMaxWidth(it, width, mc.font) }
-//        else if (this.parenCount > 0)
-//            listOf("...".gold.visualOrderText)
-//        else
-//            emptyList()
+        //        this.parenDescs = if (this.cachedParens.isNotEmpty())
+        //            this.cachedParens.flatMap { HexIotaTypes.getDisplayWithMaxWidth(it, width,
+        // mc.font) }
+        //        else if (this.parenCount > 0)
+        //            listOf("...".gold.visualOrderText)
+        //        else
+        //            emptyList()
         this.parenDescs = emptyList()
         this.ravenmind =
             this.cachedRavenmind?.let {
                 IotaType.getDisplayWithMaxWidth(
-                    it,
-                    (this.width * RHS_IOTAS_ALLOCATION).toInt(),
-                    mc.font
-                )
+                    it, (this.width * RHS_IOTAS_ALLOCATION).toInt(), mc.font)
             }
     }
 
@@ -122,8 +124,7 @@ class GuiSpellcasting constructor(
         val player = minecraft.player
         if (player != null) {
             val heldItem = player.getItemInHand(handOpenedWith)
-            if (heldItem.isEmpty || !heldItem.`is`(HexTags.Items.STAVES))
-                closeForReal()
+            if (heldItem.isEmpty || !heldItem.`is`(HexTags.Items.STAVES)) closeForReal()
         }
     }
 
@@ -132,10 +133,8 @@ class GuiSpellcasting constructor(
             return true
         }
         if (HexConfig.client().clickingTogglesDrawing()) {
-            return if (this.drawState is PatternDrawState.BetweenPatterns)
-                drawStart(mxOut, myOut)
-            else
-                drawEnd()
+            return if (this.drawState is PatternDrawState.BetweenPatterns) drawStart(mxOut, myOut)
+            else drawEnd()
         }
         return drawStart(mxOut, myOut)
     }
@@ -147,18 +146,19 @@ class GuiSpellcasting constructor(
             val coord = this.pxToCoord(Vec2(mx.toFloat(), my.toFloat()))
             if (!this.usedSpots.contains(coord)) {
                 this.drawState = PatternDrawState.JustStarted(coord)
-                Minecraft.getInstance().soundManager.play(
-                    SimpleSoundInstance(
-                        HexSounds.START_PATTERN,
-                        SoundSource.PLAYERS,
-                        0.25f,
-                        1f,
-                        randSrc,
-                        this.ambianceSoundInstance!!.x,
-                        this.ambianceSoundInstance!!.y,
-                        this.ambianceSoundInstance!!.z,
-                    )
-                )
+                Minecraft.getInstance()
+                    .soundManager
+                    .play(
+                        SimpleSoundInstance(
+                            HexSounds.START_PATTERN,
+                            SoundSource.PLAYERS,
+                            0.25f,
+                            1f,
+                            randSrc,
+                            this.ambianceSoundInstance!!.x,
+                            this.ambianceSoundInstance!!.y,
+                            this.ambianceSoundInstance!!.z,
+                        ))
             }
         }
 
@@ -168,16 +168,22 @@ class GuiSpellcasting constructor(
     override fun mouseMoved(mxOut: Double, myOut: Double) {
         super.mouseMoved(mxOut, myOut)
 
-        if (HexConfig.client().clickingTogglesDrawing() && this.drawState !is PatternDrawState.BetweenPatterns)
+        if (HexConfig.client().clickingTogglesDrawing() &&
+            this.drawState !is PatternDrawState.BetweenPatterns)
             drawMove(mxOut, myOut)
     }
 
-    override fun mouseDragged(mxOut: Double, myOut: Double, pButton: Int, pDragX: Double, pDragY: Double): Boolean {
+    override fun mouseDragged(
+        mxOut: Double,
+        myOut: Double,
+        pButton: Int,
+        pDragX: Double,
+        pDragY: Double
+    ): Boolean {
         if (super.mouseDragged(mxOut, myOut, pButton, pDragX, pDragY)) {
             return true
         }
-        if (HexConfig.client().clickingTogglesDrawing())
-            return false
+        if (HexConfig.client().clickingTogglesDrawing()) return false
         return drawMove(mxOut, myOut)
     }
 
@@ -185,16 +191,21 @@ class GuiSpellcasting constructor(
         val mx = Mth.clamp(mxOut, 0.0, this.width.toDouble())
         val my = Mth.clamp(myOut, 0.0, this.height.toDouble())
 
-        val anchorCoord = when (this.drawState) {
-            PatternDrawState.BetweenPatterns -> null
-            is PatternDrawState.JustStarted -> (this.drawState as PatternDrawState.JustStarted).start
-            is PatternDrawState.Drawing -> (this.drawState as PatternDrawState.Drawing).current
-        }
+        val anchorCoord =
+            when (this.drawState) {
+                PatternDrawState.BetweenPatterns -> null
+                is PatternDrawState.JustStarted ->
+                    (this.drawState as PatternDrawState.JustStarted).start
+                is PatternDrawState.Drawing -> (this.drawState as PatternDrawState.Drawing).current
+            }
         if (anchorCoord != null) {
             val anchor = this.coordToPx(anchorCoord)
             val mouse = Vec2(mx.toFloat(), my.toFloat())
             val snapDist =
-                this.hexSize() * this.hexSize() * 2.0 * Mth.clamp(HexConfig.client().gridSnapThreshold(), 0.5, 1.0)
+                this.hexSize() *
+                    this.hexSize() *
+                    2.0 *
+                    Mth.clamp(HexConfig.client().gridSnapThreshold(), 0.5, 1.0)
             if (anchor.distanceToSqr(mouse) >= snapDist) {
                 val delta = mouse.add(anchor.negated())
                 val angle = atan2(delta.y, delta.x)
@@ -235,18 +246,19 @@ class GuiSpellcasting constructor(
                 }
 
                 if (playSound) {
-                    Minecraft.getInstance().soundManager.play(
-                        SimpleSoundInstance(
-                            HexSounds.ADD_TO_PATTERN,
-                            SoundSource.PLAYERS,
-                            0.25f,
-                            1f + (Math.random().toFloat() - 0.5f) * 0.1f,
-                            randSrc,
-                            this.ambianceSoundInstance!!.x,
-                            this.ambianceSoundInstance!!.y,
-                            this.ambianceSoundInstance!!.z,
-                        )
-                    )
+                    Minecraft.getInstance()
+                        .soundManager
+                        .play(
+                            SimpleSoundInstance(
+                                HexSounds.ADD_TO_PATTERN,
+                                SoundSource.PLAYERS,
+                                0.25f,
+                                1f + (Math.random().toFloat() - 0.5f) * 0.1f,
+                                randSrc,
+                                this.ambianceSoundInstance!!.x,
+                                this.ambianceSoundInstance!!.y,
+                                this.ambianceSoundInstance!!.z,
+                            ))
                 }
             }
         }
@@ -258,8 +270,7 @@ class GuiSpellcasting constructor(
         if (super.mouseReleased(mx, my, pButton)) {
             return true
         }
-        if (HexConfig.client().clickingTogglesDrawing())
-            return false
+        if (HexConfig.client().clickingTogglesDrawing()) return false
         return drawEnd()
     }
 
@@ -279,12 +290,7 @@ class GuiSpellcasting constructor(
                 this.usedSpots.addAll(pat.positions(start))
 
                 IClientXplatAbstractions.INSTANCE.sendPacketToServer(
-                    MsgNewSpellPatternC2S(
-                        this.handOpenedWith,
-                        pat,
-                        this.patterns
-                    )
-                )
+                    MsgNewSpellPatternC2S(this.handOpenedWith, pat, this.patterns))
             }
         }
 
@@ -296,7 +302,8 @@ class GuiSpellcasting constructor(
 
         val mouseHandler = Minecraft.getInstance().mouseHandler
 
-        if (mouseHandler.accumulatedScroll != 0.0 && sign(pDelta) != sign(mouseHandler.accumulatedScroll)) {
+        if (mouseHandler.accumulatedScroll != 0.0 &&
+            sign(pDelta) != sign(mouseHandler.accumulatedScroll)) {
             mouseHandler.accumulatedScroll = 0.0
         }
 
@@ -314,10 +321,8 @@ class GuiSpellcasting constructor(
     }
 
     override fun onClose() {
-        if (drawState == PatternDrawState.BetweenPatterns)
-            closeForReal()
-        else
-            drawState = PatternDrawState.BetweenPatterns
+        if (drawState == PatternDrawState.BetweenPatterns) closeForReal()
+        else drawState = PatternDrawState.BetweenPatterns
     }
 
     fun closeForReal() {
@@ -325,7 +330,6 @@ class GuiSpellcasting constructor(
 
         super.onClose()
     }
-
 
     override fun render(graphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         super.render(graphics, pMouseX, pMouseY, pPartialTick)
@@ -351,13 +355,15 @@ class GuiSpellcasting constructor(
                 val dotPx = this.coordToPx(dotCoord)
                 val delta = dotPx.add(mousePos.negated()).length()
                 // when right on top of the cursor, 1.0
-                // when at the full radius, 0! this is so we don't have dots suddenly appear/disappear.
-                // we subtract size from delta so there's a little "island" of 100% bright points by the mouse
-                val scaledDist = Mth.clamp(
-                    1.0f - ((delta - this.hexSize()) / (radius.toFloat() * this.hexSize())),
-                    0f,
-                    1f
-                )
+                // when at the full radius, 0! this is so we don't have dots suddenly
+                // appear/disappear.
+                // we subtract size from delta so there's a little "island" of 100% bright points by
+                // the mouse
+                val scaledDist =
+                    Mth.clamp(
+                        1.0f - ((delta - this.hexSize()) / (radius.toFloat() * this.hexSize())),
+                        0f,
+                        1f)
                 drawSpot(
                     mat,
                     dotPx,
@@ -365,8 +371,7 @@ class GuiSpellcasting constructor(
                     Mth.lerp(scaledDist, 0.4f, 0.5f),
                     Mth.lerp(scaledDist, 0.8f, 1.0f),
                     Mth.lerp(scaledDist, 0.7f, 0.9f),
-                    scaledDist
-                )
+                    scaledDist)
             }
         }
         RenderSystem.defaultBlendFunc()
@@ -375,10 +380,7 @@ class GuiSpellcasting constructor(
             val (pat, origin, valid) = elts
             drawPatternFromPoints(
                 mat,
-                pat.toLines(
-                    this.hexSize(),
-                    this.coordToPx(origin)
-                ),
+                pat.toLines(this.hexSize(), this.coordToPx(origin)),
                 findDupIndices(pat.positions()),
                 true,
                 valid.color or (0xC8 shl 24),
@@ -386,8 +388,7 @@ class GuiSpellcasting constructor(
                 if (valid.success) 0.2f else 0.9f,
                 DEFAULT_READABILITY_OFFSET,
                 1f,
-                idx.toDouble()
-            )
+                idx.toDouble())
         }
 
         // Now draw the currently WIP pattern
@@ -408,8 +409,10 @@ class GuiSpellcasting constructor(
             }
 
             points.add(mousePos)
-            // Use the size of the patterns as the seed so that way when this one is added the zappies don't jump
-            drawPatternFromPoints(mat,
+            // Use the size of the patterns as the seed so that way when this one is added the
+            // zappies don't jump
+            drawPatternFromPoints(
+                mat,
                 points,
                 dupIndices,
                 false,
@@ -428,23 +431,24 @@ class GuiSpellcasting constructor(
         ps.pushPose()
         ps.translate(10.0, 10.0, 0.0)
 
-//        if (this.parenCount > 0) {
-//            val boxHeight = (this.parenDescs.size + 1f) * 10f
-//            RenderSystem.setShader(GameRenderer::getPositionColorShader)
-//            RenderSystem.defaultBlendFunc()
-//            drawBox(ps, 0f, 0f, (this.width * LHS_IOTAS_ALLOCATION + 5).toFloat(), boxHeight, 7.5f)
-//            ps.translate(0.0, 0.0, 1.0)
-//
-//            val time = ClientTickCounter.getTotal() * 0.16f
-//            val opacity = (Mth.map(cos(time), -1f, 1f, 200f, 255f)).toInt()
-//            val color = 0x00_ffffff or (opacity shl 24)
-//            RenderSystem.setShader { prevShader }
-//            for (desc in this.parenDescs) {
-//                font.draw(ps, desc, 10f, 7f, color)
-//                ps.translate(0.0, 10.0, 0.0)
-//            }
-//            ps.translate(0.0, 15.0, 0.0)
-//        }
+        //        if (this.parenCount > 0) {
+        //            val boxHeight = (this.parenDescs.size + 1f) * 10f
+        //            RenderSystem.setShader(GameRenderer::getPositionColorShader)
+        //            RenderSystem.defaultBlendFunc()
+        //            drawBox(ps, 0f, 0f, (this.width * LHS_IOTAS_ALLOCATION + 5).toFloat(),
+        // boxHeight, 7.5f)
+        //            ps.translate(0.0, 0.0, 1.0)
+        //
+        //            val time = ClientTickCounter.getTotal() * 0.16f
+        //            val opacity = (Mth.map(cos(time), -1f, 1f, 200f, 255f)).toInt()
+        //            val color = 0x00_ffffff or (opacity shl 24)
+        //            RenderSystem.setShader { prevShader }
+        //            for (desc in this.parenDescs) {
+        //                font.draw(ps, desc, 10f, 7f, color)
+        //                ps.translate(0.0, 10.0, 0.0)
+        //            }
+        //            ps.translate(0.0, 15.0, 0.0)
+        //        }
 
         if (this.stackDescs.isNotEmpty()) {
             val boxHeight = (this.stackDescs.size + 1f) * 10f
@@ -469,8 +473,11 @@ class GuiSpellcasting constructor(
             RenderSystem.setShader(GameRenderer::getPositionColorShader)
             RenderSystem.enableBlend()
             drawBox(
-                ps, 0f, 0f,
-                (this.width * RHS_IOTAS_ALLOCATION * addlScale).toFloat(), boxHeight * addlScale,
+                ps,
+                0f,
+                0f,
+                (this.width * RHS_IOTAS_ALLOCATION * addlScale).toFloat(),
+                boxHeight * addlScale,
             )
             ps.translate(5.0, 5.0, 1.0)
             ps.scale(addlScale, addlScale, 1f)
@@ -492,9 +499,11 @@ class GuiSpellcasting constructor(
 
     /** Distance between adjacent hex centers */
     fun hexSize(): Float {
-        val scaleModifier = Minecraft.getInstance().player!!.getAttributeValue(HexAttributes.GRID_ZOOM)
+        val scaleModifier =
+            Minecraft.getInstance().player!!.getAttributeValue(HexAttributes.GRID_ZOOM)
 
-        // Originally, we allowed 32 dots across. Assuming a 1920x1080 screen this allowed like 500-odd area.
+        // Originally, we allowed 32 dots across. Assuming a 1920x1080 screen this allowed like
+        // 500-odd area.
         // Let's be generous and give them 512.
         val baseScale = sqrt(this.width.toDouble() * this.height / 512.0)
         return (baseScale / scaleModifier).toFloat()
@@ -505,8 +514,8 @@ class GuiSpellcasting constructor(
     fun coordToPx(coord: HexCoord) =
         at.petrak.hexcasting.api.utils.coordToPx(coord, this.hexSize(), this.coordsOffset())
 
-    fun pxToCoord(px: Vec2) = at.petrak.hexcasting.api.utils.pxToCoord(px, this.hexSize(), this.coordsOffset())
-
+    fun pxToCoord(px: Vec2) =
+        at.petrak.hexcasting.api.utils.pxToCoord(px, this.hexSize(), this.coordsOffset())
 
     private sealed class PatternDrawState {
         /** We're waiting on the player to right-click again */
@@ -516,14 +525,22 @@ class GuiSpellcasting constructor(
         data class JustStarted(val start: HexCoord) : PatternDrawState()
 
         /** We've started drawing a pattern for real. */
-        data class Drawing(val start: HexCoord, var current: HexCoord, val wipPattern: HexPattern) : PatternDrawState()
+        data class Drawing(val start: HexCoord, var current: HexCoord, val wipPattern: HexPattern) :
+            PatternDrawState()
     }
 
     companion object {
         const val LHS_IOTAS_ALLOCATION = 0.7
         const val RHS_IOTAS_ALLOCATION = 0.15
 
-        fun drawBox(ps: PoseStack, x: Float, y: Float, w: Float, h: Float, leftMargin: Float = 2.5f) {
+        fun drawBox(
+            ps: PoseStack,
+            x: Float,
+            y: Float,
+            w: Float,
+            h: Float,
+            leftMargin: Float = 2.5f
+        ) {
             RenderSystem.setShader(GameRenderer::getPositionColorShader)
             RenderSystem.enableBlend()
             renderQuad(ps, x, y, w, h, 0x50_303030)

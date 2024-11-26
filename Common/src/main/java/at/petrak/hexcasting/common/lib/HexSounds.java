@@ -1,13 +1,13 @@
 package at.petrak.hexcasting.common.lib;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexSounds {
     public static void registerSounds(BiConsumer<SoundEvent, ResourceLocation> r) {

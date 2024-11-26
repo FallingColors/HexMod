@@ -3,11 +3,13 @@ package at.petrak.hexcasting.api.addldata;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
@@ -18,7 +20,8 @@ public abstract class ItemDelegatingEntityIotaHolder implements ADIotaHolder {
 
     private final Consumer<ItemStack> save;
 
-    public ItemDelegatingEntityIotaHolder(Supplier<ItemStack> stackSupplier, Consumer<ItemStack> save) {
+    public ItemDelegatingEntityIotaHolder(
+            Supplier<ItemStack> stackSupplier, Consumer<ItemStack> save) {
         this.stackSupplier = stackSupplier;
         this.save = save;
     }
@@ -60,12 +63,14 @@ public abstract class ItemDelegatingEntityIotaHolder implements ADIotaHolder {
 
     public static class ToItemEntity extends ItemDelegatingEntityIotaHolder {
         public ToItemEntity(ItemEntity entity) {
-            super(entity::getItem, stack -> {
-                // https://github.com/VazkiiMods/Botania/blob/e6d095ff5010074b45408d6cce8ee1e328af3383/Xplat/src/main/java/vazkii/botania/common/helper/EntityHelper.java#L16
-                entity.setItem(ItemStack.EMPTY);
-                entity.setItem(stack);
-                entity.setUnlimitedLifetime();
-            });
+            super(
+                    entity::getItem,
+                    stack -> {
+                        // https://github.com/VazkiiMods/Botania/blob/e6d095ff5010074b45408d6cce8ee1e328af3383/Xplat/src/main/java/vazkii/botania/common/helper/EntityHelper.java#L16
+                        entity.setItem(ItemStack.EMPTY);
+                        entity.setItem(stack);
+                        entity.setUnlimitedLifetime();
+                    });
         }
     }
 
@@ -77,8 +82,7 @@ public abstract class ItemDelegatingEntityIotaHolder implements ADIotaHolder {
 
     public static class ToWallScroll extends ItemDelegatingEntityIotaHolder {
         public ToWallScroll(EntityWallScroll entity) {
-            super(() -> entity.scroll.copy(), stack -> {
-            });
+            super(() -> entity.scroll.copy(), stack -> {});
         }
 
         @Override

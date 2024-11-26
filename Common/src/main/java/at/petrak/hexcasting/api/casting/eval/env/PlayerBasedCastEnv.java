@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.api.casting.eval.env;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
@@ -12,27 +14,24 @@ import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
-import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.common.lib.HexDamageTypes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
+
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     public static final double AMBIT_RADIUS = 32.0;
@@ -79,7 +78,8 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand) {
+    public boolean replaceItem(
+            Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand) {
         return replaceItemForPlayer(stackOk, replaceWith, hand, this.caster);
     }
 
@@ -87,26 +87,27 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     public boolean isVecInRangeEnvironment(Vec3 vec) {
         var sentinel = HexAPI.instance().getSentinel(this.caster);
         if (sentinel != null
-            && sentinel.extendsRange()
-            && this.caster.level().dimension() == sentinel.dimension()
+                && sentinel.extendsRange()
+                && this.caster.level().dimension() == sentinel.dimension()
                 // adding 0.00000000001 to avoid machine precision errors at specific angles
-                && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS + 0.00000000001
-        ) {
+                && vec.distanceToSqr(sentinel.position())
+                        <= SENTINEL_RADIUS * SENTINEL_RADIUS + 0.00000000001) {
             return true;
         }
 
-        return vec.distanceToSqr(this.caster.position()) <= AMBIT_RADIUS * AMBIT_RADIUS + 0.00000000001;
+        return vec.distanceToSqr(this.caster.position())
+                <= AMBIT_RADIUS * AMBIT_RADIUS + 0.00000000001;
     }
 
     @Override
     public boolean hasEditPermissionsAtEnvironment(BlockPos pos) {
-        return this.caster.gameMode.getGameModeForPlayer() != GameType.ADVENTURE && this.world.mayInteract(this.caster, pos);
+        return this.caster.gameMode.getGameModeForPlayer() != GameType.ADVENTURE
+                && this.world.mayInteract(this.caster, pos);
     }
 
-    /**
-     * Search the player's inventory for media ADs and use them.
-     */
-    protected long extractMediaFromInventory(long costLeft, boolean allowOvercast, boolean simulate) {
+    /** Search the player's inventory for media ADs and use them. */
+    protected long extractMediaFromInventory(
+            long costLeft, boolean allowOvercast, boolean simulate) {
         List<ADMediaHolder> sources = MediaHelper.scanPlayerForMediaStuff(this.caster);
 
         var startCost = costLeft;
@@ -123,14 +124,19 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
             double mediaToHealth = HexConfig.common().mediaToHealthRate();
             double healthToRemove = Math.max(costLeft / mediaToHealth, 0.5);
             if (simulate) {
-                long simulatedRemovedMedia = Mth.ceil(Math.min(this.caster.getHealth(), healthToRemove) * mediaToHealth);
+                long simulatedRemovedMedia =
+                        Mth.ceil(Math.min(this.caster.getHealth(), healthToRemove) * mediaToHealth);
                 costLeft -= simulatedRemovedMedia;
             } else {
                 var mediaAbleToCastFromHP = this.caster.getHealth() * mediaToHealth;
 
-                Mishap.trulyHurt(this.caster, this.caster.damageSources().source(HexDamageTypes.OVERCAST), (float) healthToRemove);
+                Mishap.trulyHurt(
+                        this.caster,
+                        this.caster.damageSources().source(HexDamageTypes.OVERCAST),
+                        (float) healthToRemove);
 
-                var actuallyTaken = Mth.ceil(mediaAbleToCastFromHP - (this.caster.getHealth() * mediaToHealth));
+                var actuallyTaken =
+                        Mth.ceil(mediaAbleToCastFromHP - (this.caster.getHealth() * mediaToHealth));
 
                 HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.caster, actuallyTaken);
                 this.caster.awardStat(HexStatistics.MEDIA_OVERCAST, actuallyTaken);
@@ -142,17 +148,15 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         if (!simulate) {
             this.caster.awardStat(HexStatistics.MEDIA_USED, (int) (startCost - costLeft));
             HexAdvancementTriggers.SPEND_MEDIA_TRIGGER.trigger(
-                    this.caster,
-                    startCost - costLeft,
-                    costLeft < 0 ? -costLeft : 0
-            );
+                    this.caster, startCost - costLeft, costLeft < 0 ? -costLeft : 0);
         }
 
         return costLeft;
     }
 
     protected boolean canOvercast() {
-        var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("y_u_no_cast_angy"));
+        var adv =
+                this.world.getServer().getAdvancements().getAdvancement(modLoc("y_u_no_cast_angy"));
         var advs = this.caster.getAdvancements();
         return advs.getOrStartProgress(adv).isDone();
     }

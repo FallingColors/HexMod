@@ -2,6 +2,7 @@ package at.petrak.hexcasting.datagen.recipe.builders;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
@@ -12,6 +13,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,7 +33,8 @@ public class CreateCrushingRecipeBuilder implements RecipeBuilder {
     private int processingTime = 100;
 
     @Override
-    public @NotNull CreateCrushingRecipeBuilder unlockedBy(@NotNull String name, @NotNull CriterionTriggerInstance trigger) {
+    public @NotNull CreateCrushingRecipeBuilder unlockedBy(
+            @NotNull String name, @NotNull CriterionTriggerInstance trigger) {
         return this;
     }
 
@@ -103,7 +106,9 @@ public class CreateCrushingRecipeBuilder implements RecipeBuilder {
     }
 
     @Override
-    public void save(@NotNull Consumer<FinishedRecipe> consumer, @NotNull ResourceLocation resourceLocation) {
+    public void save(
+            @NotNull Consumer<FinishedRecipe> consumer,
+            @NotNull ResourceLocation resourceLocation) {
         consumer.accept(new CrushingRecipe(resourceLocation));
     }
 
@@ -146,7 +151,8 @@ public class CreateCrushingRecipeBuilder implements RecipeBuilder {
 
         @Override
         public @NotNull RecipeSerializer<?> getType() {
-            return RecipeSerializer.SHAPELESS_RECIPE; // Irrelevant, we implement serialization ourselves
+            return RecipeSerializer
+                    .SHAPELESS_RECIPE; // Irrelevant, we implement serialization ourselves
         }
 
         @Override
@@ -159,5 +165,4 @@ public class CreateCrushingRecipeBuilder implements RecipeBuilder {
             return null;
         }
     }
-
 }

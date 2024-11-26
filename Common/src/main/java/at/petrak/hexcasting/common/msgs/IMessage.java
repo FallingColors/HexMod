@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.msgs;
 
 import io.netty.buffer.Unpooled;
+
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
@@ -16,9 +17,9 @@ public interface IMessage {
     void serialize(FriendlyByteBuf buf);
 
     /**
-     * Forge auto-assigns incrementing integers, Fabric requires us to declare an ID
-     * These are sent using vanilla's custom plugin channel system and thus are written to every single packet.
-     * So this ID tends to be more terse.
+     * Forge auto-assigns incrementing integers, Fabric requires us to declare an ID These are sent
+     * using vanilla's custom plugin channel system and thus are written to every single packet. So
+     * this ID tends to be more terse.
      */
     ResourceLocation getFabricId();
 }

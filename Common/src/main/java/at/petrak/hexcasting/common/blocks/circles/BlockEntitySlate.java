@@ -3,17 +3,18 @@ package at.petrak.hexcasting.common.blocks.circles;
 import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.state.BlockState;
+
 import org.jetbrains.annotations.Nullable;
 
 public class BlockEntitySlate extends HexBlockEntity {
     public static final String TAG_PATTERN = "pattern";
 
-    @Nullable
-    public HexPattern pattern;
+    @Nullable public HexPattern pattern;
 
     public BlockEntitySlate(BlockPos pos, BlockState state) {
         super(HexBlockEntities.SLATE_TILE, pos, state);
@@ -41,5 +42,4 @@ public class BlockEntitySlate extends HexBlockEntity {
             this.pattern = null;
         }
     }
-
 }

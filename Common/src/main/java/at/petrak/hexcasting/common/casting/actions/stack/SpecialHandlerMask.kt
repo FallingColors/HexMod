@@ -24,9 +24,13 @@ class SpecialHandlerMask(val mask: BooleanList) : SpecialHandler {
     }
 
     override fun getName(): Component {
-        val key = IXplatAbstractions.INSTANCE.specialHandlerRegistry.getResourceKey(HexSpecialHandlers.MASK).get()
+        val key =
+            IXplatAbstractions.INSTANCE.specialHandlerRegistry
+                .getResourceKey(HexSpecialHandlers.MASK)
+                .get()
         val fingerprint = mask.map { if (it) '-' else 'v' }.joinToString("")
-        return HexAPI.instance().getSpecialHandlerI18nKey(key)
+        return HexAPI.instance()
+            .getSpecialHandlerI18nKey(key)
             .asTranslatedComponent(fingerprint)
             .lightPurple
     }
@@ -38,8 +42,7 @@ class SpecialHandlerMask(val mask: BooleanList) : SpecialHandler {
         override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
             val out = ArrayList<Iota>(this.mask.size)
             for ((i, include) in this.mask.withIndex()) {
-                if (include)
-                    out.add(args[i])
+                if (include) out.add(args[i])
             }
             return out
         }
@@ -51,25 +54,25 @@ class SpecialHandlerMask(val mask: BooleanList) : SpecialHandler {
 
             var flatDir = pat.startDir
             if (pat.angles.isNotEmpty() && pat.angles[0] == HexAngle.LEFT_BACK) {
-                flatDir = directions[0].rotatedBy(HexAngle.LEFT);
+                flatDir = directions[0].rotatedBy(HexAngle.LEFT)
             }
 
             // TODO: we could probably definitely do this with a long to make it faster
             val mask = BooleanArrayList()
-            var i = 0;
+            var i = 0
             while (i < directions.size) {
                 // Angle with respect to the *start direction*
-                val angle = directions[i].angleFrom(flatDir);
+                val angle = directions[i].angleFrom(flatDir)
                 if (angle == HexAngle.FORWARD) {
                     mask.add(true)
                     i++
-                    continue;
+                    continue
                 }
                 if (i >= directions.size - 1) {
                     // then we're out of angles!
                     return null
                 }
-                val angle2 = directions[i + 1].angleFrom(flatDir);
+                val angle2 = directions[i + 1].angleFrom(flatDir)
                 if (angle == HexAngle.RIGHT && angle2 == HexAngle.LEFT) {
                     mask.add(false)
                     // skip both segments of the dip

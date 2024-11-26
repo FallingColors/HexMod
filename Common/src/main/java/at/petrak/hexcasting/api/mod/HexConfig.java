@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.mod;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.misc.MediaConstants;
+
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Tier;
@@ -35,7 +36,6 @@ public class HexConfig {
         int DEFAULT_CYPHER_COOLDOWN = 8;
         int DEFAULT_TRINKET_COOLDOWN = 5;
         int DEFAULT_ARTIFACT_COOLDOWN = 3;
-
     }
 
     public interface ClientConfigAccess {
@@ -57,7 +57,8 @@ public class HexConfig {
     }
 
     public interface ServerConfigAccess {
-        int opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort();
+        int
+                opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort();
 
         int maxOpCount();
 
@@ -69,7 +70,8 @@ public class HexConfig {
 
         boolean doVillagersTakeOffenseAtMindMurder();
 
-        // fun fact, although dimension keys are a RegistryHolder, they aren't a registry, so i can't do tags
+        // fun fact, although dimension keys are a RegistryHolder, they aren't a registry, so i
+        // can't do tags
         boolean canTeleportInThisDimension(ResourceKey<Level> dimension);
 
         boolean trueNameHasAmbit();
@@ -85,7 +87,8 @@ public class HexConfig {
         boolean DEFAULT_TRUE_NAME_HAS_AMBIT = true;
 
         default Tier opBreakHarvestLevel() {
-            return switch (this.opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort()) {
+            return switch (this
+                    .opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort()) {
                 case 0 -> Tiers.WOOD;
                 case 1 -> Tiers.STONE;
                 case 2 -> Tiers.IRON;
@@ -113,7 +116,8 @@ public class HexConfig {
         return !anyMatch(keys, key);
     }
 
-    public static boolean anyMatchResLoc(List<? extends ResourceLocation> keys, ResourceLocation key) {
+    public static boolean anyMatchResLoc(
+            List<? extends ResourceLocation> keys, ResourceLocation key) {
         return keys.stream().anyMatch(key::equals);
     }
 
@@ -136,24 +140,30 @@ public class HexConfig {
 
     public static void setCommon(CommonConfigAccess access) {
         if (common != null) {
-            HexAPI.LOGGER.warn("CommonConfigAccess was replaced! Old {} New {}",
-                common.getClass().getName(), access.getClass().getName());
+            HexAPI.LOGGER.warn(
+                    "CommonConfigAccess was replaced! Old {} New {}",
+                    common.getClass().getName(),
+                    access.getClass().getName());
         }
         common = access;
     }
 
     public static void setClient(ClientConfigAccess access) {
         if (client != null) {
-            HexAPI.LOGGER.warn("ClientConfigAccess was replaced! Old {} New {}",
-                client.getClass().getName(), access.getClass().getName());
+            HexAPI.LOGGER.warn(
+                    "ClientConfigAccess was replaced! Old {} New {}",
+                    client.getClass().getName(),
+                    access.getClass().getName());
         }
         client = access;
     }
 
     public static void setServer(ServerConfigAccess access) {
         if (server != null) {
-            HexAPI.LOGGER.warn("ServerConfigAccess was replaced! Old {} New {}",
-                server.getClass().getName(), access.getClass().getName());
+            HexAPI.LOGGER.warn(
+                    "ServerConfigAccess was replaced! Old {} New {}",
+                    server.getClass().getName(),
+                    access.getClass().getName());
         }
         server = access;
     }

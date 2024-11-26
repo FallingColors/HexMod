@@ -2,6 +2,7 @@ package at.petrak.hexcasting.fabric.cc;
 
 import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,8 +31,7 @@ public class CCBrainswept implements Component, AutoSyncedComponent {
     @Override
     public void applySyncPacket(FriendlyByteBuf buf) {
         AutoSyncedComponent.super.applySyncPacket(buf);
-        if (owner instanceof Mob mob && brainswept)
-            mob.removeFreeWill();
+        if (owner instanceof Mob mob && brainswept) mob.removeFreeWill();
     }
 
     @Override

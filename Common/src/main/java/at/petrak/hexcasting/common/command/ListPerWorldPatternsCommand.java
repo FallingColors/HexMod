@@ -10,7 +10,9 @@ import at.petrak.hexcasting.common.items.storage.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.server.ScrungledPatternsSave;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -27,32 +29,71 @@ import java.util.List;
 
 public class ListPerWorldPatternsCommand {
     public static void add(LiteralArgumentBuilder<CommandSourceStack> cmd) {
-        cmd.then(Commands.literal("perWorldPatterns")
-            .requires(dp -> dp.hasPermission(Commands.LEVEL_GAMEMASTERS))
-            .then(Commands.literal("list")
-                .executes(ctx -> list(ctx.getSource())))
-            .then(Commands.literal("give")
-                .then(Commands.argument("patternName", PatternResLocArgument.id())
-                    .executes(ctx ->
-                        giveOne(ctx.getSource(),
-                            getDefaultTarget(ctx.getSource()),
-                            ResourceLocationArgument.getId(ctx, "patternName"),
-                            PatternResLocArgument.getPattern(ctx, "patternName")))
-                    .then(Commands.argument("targets", EntityArgument.players())
-                        .executes(ctx ->
-                            giveOne(ctx.getSource(),
-                                EntityArgument.getPlayers(ctx, "targets"),
-                                ResourceLocationArgument.getId(ctx, "patternName"),
-                                PatternResLocArgument.getPattern(ctx, "patternName"))))))
-            .then(Commands.literal("giveAll")
-                .executes(ctx ->
-                    giveAll(ctx.getSource(),
-                        getDefaultTarget(ctx.getSource())))
-                .then(Commands.argument("targets", EntityArgument.players())
-                    .executes(ctx ->
-                        giveAll(ctx.getSource(),
-                            EntityArgument.getPlayers(ctx, "targets")))))
-        );
+        cmd.then(
+                Commands.literal("perWorldPatterns")
+                        .requires(dp -> dp.hasPermission(Commands.LEVEL_GAMEMASTERS))
+                        .then(Commands.literal("list").executes(ctx -> list(ctx.getSource())))
+                        .then(
+                                Commands.literal("give")
+                                        .then(
+                                                Commands.argument(
+                                                                "patternName",
+                                                                PatternResLocArgument.id())
+                                                        .executes(
+                                                                ctx ->
+                                                                        giveOne(
+                                                                                ctx.getSource(),
+                                                                                getDefaultTarget(
+                                                                                        ctx
+                                                                                                .getSource()),
+                                                                                ResourceLocationArgument
+                                                                                        .getId(
+                                                                                                ctx,
+                                                                                                "patternName"),
+                                                                                PatternResLocArgument
+                                                                                        .getPattern(
+                                                                                                ctx,
+                                                                                                "patternName")))
+                                                        .then(
+                                                                Commands.argument(
+                                                                                "targets",
+                                                                                EntityArgument
+                                                                                        .players())
+                                                                        .executes(
+                                                                                ctx ->
+                                                                                        giveOne(
+                                                                                                ctx
+                                                                                                        .getSource(),
+                                                                                                EntityArgument
+                                                                                                        .getPlayers(
+                                                                                                                ctx,
+                                                                                                                "targets"),
+                                                                                                ResourceLocationArgument
+                                                                                                        .getId(
+                                                                                                                ctx,
+                                                                                                                "patternName"),
+                                                                                                PatternResLocArgument
+                                                                                                        .getPattern(
+                                                                                                                ctx,
+                                                                                                                "patternName"))))))
+                        .then(
+                                Commands.literal("giveAll")
+                                        .executes(
+                                                ctx ->
+                                                        giveAll(
+                                                                ctx.getSource(),
+                                                                getDefaultTarget(ctx.getSource())))
+                                        .then(
+                                                Commands.argument(
+                                                                "targets", EntityArgument.players())
+                                                        .executes(
+                                                                ctx ->
+                                                                        giveAll(
+                                                                                ctx.getSource(),
+                                                                                EntityArgument
+                                                                                        .getPlayers(
+                                                                                                ctx,
+                                                                                                "targets"))))));
     }
 
     private static Collection<ServerPlayer> getDefaultTarget(CommandSourceStack source) {
@@ -65,19 +106,20 @@ public class ListPerWorldPatternsCommand {
     private static int list(CommandSourceStack source) {
 
         var keys = IXplatAbstractions.INSTANCE.getActionRegistry().registryKeySet();
-        var listing = keys
-            .stream()
-            .sorted((a, b) -> compareResLoc(a.location(), b.location()))
-            .toList();
+        var listing =
+                keys.stream().sorted((a, b) -> compareResLoc(a.location(), b.location())).toList();
 
         var ow = source.getLevel().getServer().overworld();
         source.sendSuccess(() -> Component.translatable("command.hexcasting.pats.listing"), false);
         for (var key : listing) {
             var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(key, ow);
 
-            source.sendSuccess(() -> Component.literal(key.location().toString())
-                .append(": ")
-                .append(new PatternIota(pat).display()), false);
+            source.sendSuccess(
+                    () ->
+                            Component.literal(key.location().toString())
+                                    .append(": ")
+                                    .append(new PatternIota(pat).display()),
+                    false);
         }
 
         return keys.size();
@@ -118,19 +160,26 @@ public class ListPerWorldPatternsCommand {
             }
 
             int finalCount = count;
-            source.sendSuccess(() ->
-                Component.translatable("command.hexcasting.pats.all",
-                    finalCount,
-                    targets.size() == 1 ? targets.iterator().next().getDisplayName() : targets.size()),
-                true);
+            source.sendSuccess(
+                    () ->
+                            Component.translatable(
+                                    "command.hexcasting.pats.all",
+                                    finalCount,
+                                    targets.size() == 1
+                                            ? targets.iterator().next().getDisplayName()
+                                            : targets.size()),
+                    true);
             return count;
         } else {
             return 0;
         }
     }
 
-    private static int giveOne(CommandSourceStack source, Collection<ServerPlayer> targets,
-        ResourceLocation patternName, HexPattern pat) {
+    private static int giveOne(
+            CommandSourceStack source,
+            Collection<ServerPlayer> targets,
+            ResourceLocation patternName,
+            HexPattern pat) {
         if (!targets.isEmpty()) {
             var tag = new CompoundTag();
             tag.putString(ItemScroll.TAG_OP_ID, patternName.toString());
@@ -139,13 +188,16 @@ public class ListPerWorldPatternsCommand {
             var stack = new ItemStack(HexItems.SCROLL_LARGE);
             stack.setTag(tag);
 
-            source.sendSuccess(() ->
-                Component.translatable(
-                    "command.hexcasting.pats.specific.success",
-                    stack.getDisplayName(),
-                    patternName,
-                    targets.size() == 1 ? targets.iterator().next().getDisplayName() : targets.size()),
-                true);
+            source.sendSuccess(
+                    () ->
+                            Component.translatable(
+                                    "command.hexcasting.pats.specific.success",
+                                    stack.getDisplayName(),
+                                    patternName,
+                                    targets.size() == 1
+                                            ? targets.iterator().next().getDisplayName()
+                                            : targets.size()),
+                    true);
 
             for (var player : targets) {
                 var stackEntity = player.drop(stack, false);

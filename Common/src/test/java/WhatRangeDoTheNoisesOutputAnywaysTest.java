@@ -1,6 +1,7 @@
 import net.minecraft.world.level.levelgen.SingleThreadedRandomSource;
 import net.minecraft.world.level.levelgen.synth.PerlinNoise;
 import net.minecraft.world.level.levelgen.synth.SimplexNoise;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -8,7 +9,8 @@ import java.util.List;
 public class WhatRangeDoTheNoisesOutputAnywaysTest {
     @Test
     public void test() {
-        var perlin = PerlinNoise.create(new SingleThreadedRandomSource(12345), List.of(0, 1, 2, 3, 4));
+        var perlin =
+                PerlinNoise.create(new SingleThreadedRandomSource(12345), List.of(0, 1, 2, 3, 4));
         var simplex = new SimplexNoise(new SingleThreadedRandomSource(12345));
 
         System.out.println("Perlin:");
@@ -24,7 +26,8 @@ public class WhatRangeDoTheNoisesOutputAnywaysTest {
 
     @Test
     public void perlinBounds() {
-        var perlin = PerlinNoise.create(new SingleThreadedRandomSource(12345), List.of(0, 1, 2, 3, 4));
+        var perlin =
+                PerlinNoise.create(new SingleThreadedRandomSource(12345), List.of(0, 1, 2, 3, 4));
         var min = Double.POSITIVE_INFINITY;
         var max = Double.NEGATIVE_INFINITY;
 

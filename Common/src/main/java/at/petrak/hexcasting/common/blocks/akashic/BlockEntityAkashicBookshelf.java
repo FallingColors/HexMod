@@ -6,9 +6,11 @@ import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.client.render.HexPatternPoints;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.state.BlockState;
+
 import org.jetbrains.annotations.Nullable;
 
 public class BlockEntityAkashicBookshelf extends HexBlockEntity {
@@ -18,7 +20,8 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
 
     // This is only not null if this stores any data.
     private HexPattern pattern = null;
-    // When the world is first loading we can sometimes try to deser this from nbt without the world existing yet.
+    // When the world is first loading we can sometimes try to deser this from nbt without the world
+    // existing yet.
     // We also need a way to display the iota to the client.
     // For both these cases we save just the tag of the iota.
     private CompoundTag iotaTag = null;

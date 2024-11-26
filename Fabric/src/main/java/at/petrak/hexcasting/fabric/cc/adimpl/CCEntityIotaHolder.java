@@ -2,8 +2,10 @@ package at.petrak.hexcasting.fabric.cc.adimpl;
 
 import at.petrak.hexcasting.api.addldata.ItemDelegatingEntityIotaHolder;
 import at.petrak.hexcasting.api.casting.iota.Iota;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +26,6 @@ public abstract class CCEntityIotaHolder implements CCIotaHolder {
         public Wrapper(ItemDelegatingEntityIotaHolder inner) {
             this.inner = inner;
         }
-
 
         @Override
         public @Nullable CompoundTag readIotaTag() {

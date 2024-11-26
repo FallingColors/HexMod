@@ -2,11 +2,13 @@ package at.petrak.hexcasting.common.recipe.ingredient;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -73,23 +75,21 @@ public class StateIngredientTagExcluding extends StateIngredientTag {
     @Override
     public List<ItemStack> getDisplayedStacks() {
         return getBlocks().stream()
-            .filter(b -> b.asItem() != Items.AIR)
-            .map(ItemStack::new)
-            .toList();
+                .filter(b -> b.asItem() != Items.AIR)
+                .map(ItemStack::new)
+                .toList();
     }
 
     @NotNull
     @Override
     protected List<Block> getBlocks() {
         return super.getBlocks().stream()
-            .filter(b -> isNotExcluded(b.defaultBlockState()))
-            .toList();
+                .filter(b -> isNotExcluded(b.defaultBlockState()))
+                .toList();
     }
 
     @Override
     public List<BlockState> getDisplayed() {
-        return super.getDisplayed().stream()
-            .filter(this::isNotExcluded)
-            .toList();
+        return super.getDisplayed().stream().filter(this::isNotExcluded).toList();
     }
 }

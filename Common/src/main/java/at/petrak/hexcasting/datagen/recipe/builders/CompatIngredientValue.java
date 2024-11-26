@@ -1,8 +1,10 @@
 package at.petrak.hexcasting.datagen.recipe.builders;
 
 import com.google.gson.JsonObject;
+
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -30,4 +32,3 @@ public class CompatIngredientValue implements Ingredient.Value {
         return new Ingredient(Stream.of(new CompatIngredientValue(itemName)));
     }
 }
-

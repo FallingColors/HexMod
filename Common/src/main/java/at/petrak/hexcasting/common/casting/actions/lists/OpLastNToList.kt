@@ -12,11 +12,14 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 object OpLastNToList : Action {
-    override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
+    override fun operate(
+        env: CastingEnvironment,
+        image: CastingImage,
+        continuation: SpellContinuation
+    ): OperationResult {
         val stack = image.stack.toMutableList()
 
-        if (stack.isEmpty())
-            throw MishapNotEnoughArgs(1, 0)
+        if (stack.isEmpty()) throw MishapNotEnoughArgs(1, 0)
         val yoinkCount = stack.takeLast(1).getPositiveIntUnderInclusive(0, stack.size - 1)
         stack.removeLast()
         val output = mutableListOf<Iota>()

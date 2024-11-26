@@ -10,7 +10,13 @@ import net.minecraft.world.phys.Vec3
  * @param fuzziness the radius of the sphere the particle might happen in (pos)
  * @param spread the max angle in radians the particle can move in, in relation to vel
  */
-data class ParticleSpray(val pos: Vec3, val vel: Vec3, val fuzziness: Double, val spread: Double, val count: Int = 20) {
+data class ParticleSpray(
+    val pos: Vec3,
+    val vel: Vec3,
+    val fuzziness: Double,
+    val spread: Double,
+    val count: Int = 20
+) {
     companion object {
         @JvmStatic
         fun burst(pos: Vec3, size: Double, count: Int = 20): ParticleSpray {
@@ -24,6 +30,7 @@ data class ParticleSpray(val pos: Vec3, val vel: Vec3, val fuzziness: Double, va
     }
 
     fun sprayParticles(world: ServerLevel, color: FrozenPigment) {
-        IXplatAbstractions.INSTANCE.sendPacketNear(this.pos, 128.0, world, MsgCastParticleS2C(this, color))
+        IXplatAbstractions.INSTANCE.sendPacketNear(
+            this.pos, 128.0, world, MsgCastParticleS2C(this, color))
     }
 }

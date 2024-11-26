@@ -2,8 +2,10 @@ package at.petrak.hexcasting.api.item;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
+
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,9 +13,9 @@ import java.util.List;
 
 /**
  * Items which can cast a packaged Hex can implement this interface.
- * <p>
- * On both the Forge and Fabric sides, the registry will be scanned for all items which implement this interface,
- * and the appropriate cap/CC will be attached.
+ *
+ * <p>On both the Forge and Fabric sides, the registry will be scanned for all items which implement
+ * this interface, and the appropriate cap/CC will be attached.
  */
 @ApiStatus.OverrideOnly
 public interface HexHolderItem extends MediaHolderItem {
@@ -29,5 +31,6 @@ public interface HexHolderItem extends MediaHolderItem {
 
     void clearHex(ItemStack stack);
 
-    @Nullable FrozenPigment getPigment(ItemStack stack);
+    @Nullable
+    FrozenPigment getPigment(ItemStack stack);
 }

@@ -6,7 +6,9 @@ import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import at.petrak.hexcasting.common.lib.HexBlocks;
+
 import com.mojang.datafixers.util.Pair;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,108 +31,141 @@ import java.util.function.UnaryOperator;
 public class ScryingLensOverlays {
     public static void addScryingLensStuff() {
         ScryingLensOverlayRegistry.addPredicateDisplayer(
-            (state, pos, observer, world, direction) -> state.getBlock() instanceof BlockAbstractImpetus,
-            (lines, state, pos, observer, world, direction) -> {
-                if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
-                    beai.applyScryingLensOverlay(lines, state, pos, observer, world, direction);
-                }
-            });
-
-        ScryingLensOverlayRegistry.addDisplayer(Blocks.NOTE_BLOCK,
-            (lines, state, pos, observer, world, direction) -> {
-                int note = state.getValue(NoteBlock.NOTE);
-
-                float rCol = Math.max(0.0F, Mth.sin((note / 24F + 0.0F) * Mth.TWO_PI) * 0.65F + 0.35F);
-                float gCol = Math.max(0.0F, Mth.sin((note / 24F + 0.33333334F) * Mth.TWO_PI) * 0.65F + 0.35F);
-                float bCol = Math.max(0.0F, Mth.sin((note / 24F + 0.6666667F) * Mth.TWO_PI) * 0.65F + 0.35F);
-
-                int noteColor = 0xFF_000000 | Mth.color(rCol, gCol, bCol);
-
-                var instrument = state.getValue(NoteBlock.INSTRUMENT);
-
-                lines.add(new Pair<>(
-                    new ItemStack(Items.MUSIC_DISC_CHIRP),
-                    Component.literal(String.valueOf(instrument.ordinal()))
-                        .withStyle(color(instrumentColor(instrument)))));
-                lines.add(new Pair<>(
-                    new ItemStack(Items.NOTE_BLOCK),
-                    Component.literal(String.valueOf(note))
-                        .withStyle(color(noteColor))));
-            });
-
-        ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_BOOKSHELF,
-            (lines, state, pos, observer, world, direction) -> {
-                if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
-                    var iotaTag = tile.getIotaTag();
-                    if (iotaTag != null) {
-                        var display = IotaType.getDisplay(iotaTag);
-                        lines.add(new Pair<>(new ItemStack(Items.BOOK), display));
+                (state, pos, observer, world, direction) ->
+                        state.getBlock() instanceof BlockAbstractImpetus,
+                (lines, state, pos, observer, world, direction) -> {
+                    if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
+                        beai.applyScryingLensOverlay(lines, state, pos, observer, world, direction);
                     }
-                }
-            });
+                });
 
-        ScryingLensOverlayRegistry.addDisplayer(Blocks.COMPARATOR,
-            (lines, state, pos, observer, world, direction) -> {
-                int comparatorValue = state.getAnalogOutputSignal(world, pos);
-                lines.add(new Pair<>(
-                    new ItemStack(Items.REDSTONE),
-                    Component.literal(comparatorValue == -1 ? "" : String.valueOf(comparatorValue))
-                        .withStyle(redstoneColor(comparatorValue))));
+        ScryingLensOverlayRegistry.addDisplayer(
+                Blocks.NOTE_BLOCK,
+                (lines, state, pos, observer, world, direction) -> {
+                    int note = state.getValue(NoteBlock.NOTE);
 
-                boolean compare = state.getValue(ComparatorBlock.MODE) == ComparatorMode.COMPARE;
+                    float rCol =
+                            Math.max(
+                                    0.0F,
+                                    Mth.sin((note / 24F + 0.0F) * Mth.TWO_PI) * 0.65F + 0.35F);
+                    float gCol =
+                            Math.max(
+                                    0.0F,
+                                    Mth.sin((note / 24F + 0.33333334F) * Mth.TWO_PI) * 0.65F
+                                            + 0.35F);
+                    float bCol =
+                            Math.max(
+                                    0.0F,
+                                    Mth.sin((note / 24F + 0.6666667F) * Mth.TWO_PI) * 0.65F
+                                            + 0.35F);
 
-                lines.add(new Pair<>(
-                    new ItemStack(Items.REDSTONE_TORCH),
-                    Component.literal(compare ? ">=" : "-")
-                        .withStyle(redstoneColor(compare ? 0 : 15))));
-            });
+                    int noteColor = 0xFF_000000 | Mth.color(rCol, gCol, bCol);
 
-        ScryingLensOverlayRegistry.addDisplayer(Blocks.POWERED_RAIL,
-            (lines, state, pos, observer, world, direction) -> {
-                int power = getPoweredRailStrength(world, pos, state);
-                lines.add(new Pair<>(
-                    new ItemStack(Items.POWERED_RAIL),
-                    Component.literal(String.valueOf(power))
-                        .withStyle(redstoneColor(power, 9))));
-            });
+                    var instrument = state.getValue(NoteBlock.INSTRUMENT);
 
-        ScryingLensOverlayRegistry.addDisplayer(Blocks.REPEATER,
-            (lines, state, pos, observer, world, direction) -> lines.add(new Pair<>(
-                new ItemStack(Items.CLOCK),
-                Component.literal(String.valueOf(state.getValue(RepeaterBlock.DELAY)))
-                    .withStyle(ChatFormatting.YELLOW))));
+                    lines.add(
+                            new Pair<>(
+                                    new ItemStack(Items.MUSIC_DISC_CHIRP),
+                                    Component.literal(String.valueOf(instrument.ordinal()))
+                                            .withStyle(color(instrumentColor(instrument)))));
+                    lines.add(
+                            new Pair<>(
+                                    new ItemStack(Items.NOTE_BLOCK),
+                                    Component.literal(String.valueOf(note))
+                                            .withStyle(color(noteColor))));
+                });
+
+        ScryingLensOverlayRegistry.addDisplayer(
+                HexBlocks.AKASHIC_BOOKSHELF,
+                (lines, state, pos, observer, world, direction) -> {
+                    if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
+                        var iotaTag = tile.getIotaTag();
+                        if (iotaTag != null) {
+                            var display = IotaType.getDisplay(iotaTag);
+                            lines.add(new Pair<>(new ItemStack(Items.BOOK), display));
+                        }
+                    }
+                });
+
+        ScryingLensOverlayRegistry.addDisplayer(
+                Blocks.COMPARATOR,
+                (lines, state, pos, observer, world, direction) -> {
+                    int comparatorValue = state.getAnalogOutputSignal(world, pos);
+                    lines.add(
+                            new Pair<>(
+                                    new ItemStack(Items.REDSTONE),
+                                    Component.literal(
+                                                    comparatorValue == -1
+                                                            ? ""
+                                                            : String.valueOf(comparatorValue))
+                                            .withStyle(redstoneColor(comparatorValue))));
+
+                    boolean compare =
+                            state.getValue(ComparatorBlock.MODE) == ComparatorMode.COMPARE;
+
+                    lines.add(
+                            new Pair<>(
+                                    new ItemStack(Items.REDSTONE_TORCH),
+                                    Component.literal(compare ? ">=" : "-")
+                                            .withStyle(redstoneColor(compare ? 0 : 15))));
+                });
+
+        ScryingLensOverlayRegistry.addDisplayer(
+                Blocks.POWERED_RAIL,
+                (lines, state, pos, observer, world, direction) -> {
+                    int power = getPoweredRailStrength(world, pos, state);
+                    lines.add(
+                            new Pair<>(
+                                    new ItemStack(Items.POWERED_RAIL),
+                                    Component.literal(String.valueOf(power))
+                                            .withStyle(redstoneColor(power, 9))));
+                });
+
+        ScryingLensOverlayRegistry.addDisplayer(
+                Blocks.REPEATER,
+                (lines, state, pos, observer, world, direction) ->
+                        lines.add(
+                                new Pair<>(
+                                        new ItemStack(Items.CLOCK),
+                                        Component.literal(
+                                                        String.valueOf(
+                                                                state.getValue(
+                                                                        RepeaterBlock.DELAY)))
+                                                .withStyle(ChatFormatting.YELLOW))));
 
         ScryingLensOverlayRegistry.addPredicateDisplayer(
-            (state, pos, observer, world, direction) -> state.isSignalSource() && !state.is(
-                Blocks.COMPARATOR),
-            (lines, state, pos, observer, world, direction) -> {
-                int signalStrength = 0;
-                if (state.getBlock() instanceof RedStoneWireBlock) {
-                    signalStrength = state.getValue(RedStoneWireBlock.POWER);
-                } else {
-                    for (Direction dir : Direction.values()) {
-                        signalStrength = Math.max(signalStrength, state.getSignal(world, pos, dir));
+                (state, pos, observer, world, direction) ->
+                        state.isSignalSource() && !state.is(Blocks.COMPARATOR),
+                (lines, state, pos, observer, world, direction) -> {
+                    int signalStrength = 0;
+                    if (state.getBlock() instanceof RedStoneWireBlock) {
+                        signalStrength = state.getValue(RedStoneWireBlock.POWER);
+                    } else {
+                        for (Direction dir : Direction.values()) {
+                            signalStrength =
+                                    Math.max(signalStrength, state.getSignal(world, pos, dir));
+                        }
                     }
-                }
 
-                lines.add(0, new Pair<>(
-                    new ItemStack(Items.REDSTONE),
-                    Component.literal(String.valueOf(signalStrength))
-                        .withStyle(redstoneColor(signalStrength))));
-            });
+                    lines.add(
+                            0,
+                            new Pair<>(
+                                    new ItemStack(Items.REDSTONE),
+                                    Component.literal(String.valueOf(signalStrength))
+                                            .withStyle(redstoneColor(signalStrength))));
+                });
     }
 
     private static int getPoweredRailStrength(Level level, BlockPos pos, BlockState state) {
-        if (level.hasNeighborSignal(pos))
-            return 9;
+        if (level.hasNeighborSignal(pos)) return 9;
         int positiveValue = findPoweredRailSignal(level, pos, state, true, 0);
         int negativeValue = findPoweredRailSignal(level, pos, state, false, 0);
         return Math.max(positiveValue, negativeValue);
     }
 
     // Copypasta from PoweredRailBlock.class
-    private static int findPoweredRailSignal(Level level, BlockPos pos, BlockState state, boolean travelPositive,
-        int depth) {
+    private static int findPoweredRailSignal(
+            Level level, BlockPos pos, BlockState state, boolean travelPositive, int depth) {
         if (depth >= 8) {
             return 0;
         } else {
@@ -199,20 +234,19 @@ public class ScryingLensOverlays {
                     shape = RailShape.NORTH_SOUTH;
             }
 
-            int power = getPowerFromRail(level, new BlockPos(x, y, z), travelPositive, depth,
-                shape);
+            int power =
+                    getPowerFromRail(level, new BlockPos(x, y, z), travelPositive, depth, shape);
 
             if (power > 0) {
                 return power;
             } else if (descending) {
-                return getPowerFromRail(level, new BlockPos(x, y - 1, z), travelPositive, depth,
-                    shape);
+                return getPowerFromRail(
+                        level, new BlockPos(x, y - 1, z), travelPositive, depth, shape);
             } else {
                 return 0;
             }
         }
     }
-
 
     private static UnaryOperator<Style> color(int color) {
         return (style) -> style.withColor(TextColor.fromRgb(color));
@@ -245,19 +279,27 @@ public class ScryingLensOverlays {
         };
     }
 
-    private static int getPowerFromRail(Level level, BlockPos pos, boolean travelPositive, int depth, RailShape shape) {
+    private static int getPowerFromRail(
+            Level level, BlockPos pos, boolean travelPositive, int depth, RailShape shape) {
         BlockState otherState = level.getBlockState(pos);
         if (!otherState.is(Blocks.POWERED_RAIL)) {
             return 0;
         } else {
             RailShape otherShape = otherState.getValue(PoweredRailBlock.SHAPE);
-            if (shape == RailShape.EAST_WEST && (otherShape == RailShape.NORTH_SOUTH || otherShape == RailShape.ASCENDING_NORTH || otherShape == RailShape.ASCENDING_SOUTH)) {
+            if (shape == RailShape.EAST_WEST
+                    && (otherShape == RailShape.NORTH_SOUTH
+                            || otherShape == RailShape.ASCENDING_NORTH
+                            || otherShape == RailShape.ASCENDING_SOUTH)) {
                 return 0;
-            } else if (shape == RailShape.NORTH_SOUTH && (otherShape == RailShape.EAST_WEST || otherShape == RailShape.ASCENDING_EAST || otherShape == RailShape.ASCENDING_WEST)) {
+            } else if (shape == RailShape.NORTH_SOUTH
+                    && (otherShape == RailShape.EAST_WEST
+                            || otherShape == RailShape.ASCENDING_EAST
+                            || otherShape == RailShape.ASCENDING_WEST)) {
                 return 0;
             } else if (otherState.getValue(PoweredRailBlock.POWERED)) {
-                return level.hasNeighborSignal(pos) ? 8 - depth : findPoweredRailSignal(level, pos, otherState,
-                    travelPositive, depth + 1);
+                return level.hasNeighborSignal(pos)
+                        ? 8 - depth
+                        : findPoweredRailSignal(level, pos, otherState, travelPositive, depth + 1);
             } else {
                 return 0;
             }

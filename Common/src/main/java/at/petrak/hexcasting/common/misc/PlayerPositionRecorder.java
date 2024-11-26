@@ -15,8 +15,7 @@ public final class PlayerPositionRecorder {
     public static void updateAllPlayers(ServerLevel world) {
         for (ServerPlayer player : world.players()) {
             var prev = LAST_POSITION_MAP.get(player);
-            if (prev != null)
-                LAST_SECOND_POSITION_MAP.put(player, prev);
+            if (prev != null) LAST_SECOND_POSITION_MAP.put(player, prev);
             LAST_POSITION_MAP.put(player, player.position());
         }
     }
@@ -25,11 +24,9 @@ public final class PlayerPositionRecorder {
         Vec3 vec = LAST_POSITION_MAP.get(player);
         Vec3 prev = LAST_SECOND_POSITION_MAP.get(player);
 
-        if (vec == null)
-            return Vec3.ZERO;
+        if (vec == null) return Vec3.ZERO;
 
-        if (prev == null)
-            return player.position().subtract(vec);
+        if (prev == null) return player.position().subtract(vec);
 
         return vec.subtract(prev);
     }

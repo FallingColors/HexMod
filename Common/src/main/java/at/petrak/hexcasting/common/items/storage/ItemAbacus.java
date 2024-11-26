@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -15,6 +16,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -27,8 +29,7 @@ public class ItemAbacus extends Item implements IotaHolderItem {
     }
 
     @Override
-    public @Nullable
-    CompoundTag readIotaTag(ItemStack stack) {
+    public @Nullable CompoundTag readIotaTag(ItemStack stack) {
         var datum = new DoubleIota(NBTHelper.getDouble(stack, TAG_VALUE));
         return IotaType.serialize(datum);
     }
@@ -49,7 +50,8 @@ public class ItemAbacus extends Item implements IotaHolderItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(
+            Level world, Player player, InteractionHand hand) {
         var stack = player.getItemInHand(hand);
         if (player.isShiftKeyDown()) {
             double oldNum = NBTHelper.getDouble(stack, TAG_VALUE);
@@ -70,8 +72,11 @@ public class ItemAbacus extends Item implements IotaHolderItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
-        TooltipFlag pIsAdvanced) {
+    public void appendHoverText(
+            ItemStack pStack,
+            @Nullable Level pLevel,
+            List<Component> pTooltipComponents,
+            TooltipFlag pIsAdvanced) {
         IotaHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
     }
 }

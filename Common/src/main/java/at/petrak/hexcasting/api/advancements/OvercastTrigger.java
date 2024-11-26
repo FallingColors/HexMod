@@ -1,7 +1,9 @@
 package at.petrak.hexcasting.api.advancements;
 
 import at.petrak.hexcasting.api.mod.HexConfig;
+
 import com.google.gson.JsonObject;
+
 import net.minecraft.advancements.critereon.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,7 +18,7 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
     private static final String TAG_HEALTH_USED = "health_used";
     // HEY KIDS DID YOYU KNOW THERE'S NOT A CRITERIA FOR HOW MUCH ***HEALTH*** AN ENTITY HAS
     private static final String TAG_HEALTH_LEFT =
-        "mojang_i_am_begging_and_crying_please_add_an_entity_health_criterion";
+            "mojang_i_am_begging_and_crying_please_add_an_entity_health_criterion";
 
     @Override
     public ResourceLocation getId() {
@@ -24,20 +26,24 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
     }
 
     @Override
-    protected Instance createInstance(JsonObject json, ContextAwarePredicate predicate,
-        DeserializationContext pContext) {
-        return new Instance(predicate,
-            MinMaxBounds.Ints.fromJson(json.get(TAG_MEDIA_GENERATED)),
-            MinMaxBounds.Doubles.fromJson(json.get(TAG_HEALTH_USED)),
-            MinMaxBounds.Doubles.fromJson(json.get(TAG_HEALTH_LEFT)));
+    protected Instance createInstance(
+            JsonObject json, ContextAwarePredicate predicate, DeserializationContext pContext) {
+        return new Instance(
+                predicate,
+                MinMaxBounds.Ints.fromJson(json.get(TAG_MEDIA_GENERATED)),
+                MinMaxBounds.Doubles.fromJson(json.get(TAG_HEALTH_USED)),
+                MinMaxBounds.Doubles.fromJson(json.get(TAG_HEALTH_LEFT)));
     }
 
     public void trigger(ServerPlayer player, int mediaGenerated) {
-        super.trigger(player, inst -> {
-            var mediaToHealth = HexConfig.common().mediaToHealthRate();
-            var healthUsed = mediaGenerated / mediaToHealth;
-            return inst.test(mediaGenerated, healthUsed / player.getMaxHealth(), player.getHealth());
-        });
+        super.trigger(
+                player,
+                inst -> {
+                    var mediaToHealth = HexConfig.common().mediaToHealthRate();
+                    var healthUsed = mediaGenerated / mediaToHealth;
+                    return inst.test(
+                            mediaGenerated, healthUsed / player.getMaxHealth(), player.getHealth());
+                });
     }
 
     public static class Instance extends AbstractCriterionTriggerInstance {
@@ -47,8 +53,11 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
         // DID YOU KNOW THERES ONE TO CHECK THE WORLD TIME, BUT NOT THE HEALTH!?
         protected final MinMaxBounds.Doubles healthLeft;
 
-        public Instance(ContextAwarePredicate predicate, MinMaxBounds.Ints mediaGenerated,
-            MinMaxBounds.Doubles healthUsed, MinMaxBounds.Doubles healthLeft) {
+        public Instance(
+                ContextAwarePredicate predicate,
+                MinMaxBounds.Ints mediaGenerated,
+                MinMaxBounds.Doubles healthUsed,
+                MinMaxBounds.Doubles healthLeft) {
             super(OvercastTrigger.ID, predicate);
             this.mediaGenerated = mediaGenerated;
             this.healthUsed = healthUsed;
@@ -78,9 +87,10 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
 
         private boolean test(int mediaGeneratedIn, double healthUsedIn, float healthLeftIn) {
             return this.mediaGenerated.matches(mediaGeneratedIn)
-                && this.healthUsed.matches(healthUsedIn)
-                // DID YOU KNOW ALL THE ENEITYT PREDICATES ARE HARD-CODED AND YOU CANT MAKE NEW ONES
-                && this.healthLeft.matches(healthLeftIn);
+                    && this.healthUsed.matches(healthUsedIn)
+                    // DID YOU KNOW ALL THE ENEITYT PREDICATES ARE HARD-CODED AND YOU CANT MAKE NEW
+                    // ONES
+                    && this.healthLeft.matches(healthLeftIn);
         }
     }
 }

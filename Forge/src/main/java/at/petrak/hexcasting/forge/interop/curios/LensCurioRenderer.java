@@ -1,8 +1,10 @@
 package at.petrak.hexcasting.forge.interop.curios;
 
 import at.petrak.hexcasting.api.HexAPI;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -15,11 +17,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 public class LensCurioRenderer implements ICurioRenderer {
-    public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(HexAPI.MOD_ID, "lens"), "lens");
+    public static final ModelLayerLocation LAYER =
+            new ModelLayerLocation(new ResourceLocation(HexAPI.MOD_ID, "lens"), "lens");
 
     private final HumanoidModel<LivingEntity> model;
 
@@ -28,11 +32,29 @@ public class LensCurioRenderer implements ICurioRenderer {
     }
 
     @Override
-    public <T extends LivingEntity, M extends EntityModel<T>> void render(ItemStack stack, SlotContext slotContext, PoseStack matrixStack, RenderLayerParent<T, M> renderLayerParent, MultiBufferSource renderTypeBuffer, int light, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+    public <T extends LivingEntity, M extends EntityModel<T>> void render(
+            ItemStack stack,
+            SlotContext slotContext,
+            PoseStack matrixStack,
+            RenderLayerParent<T, M> renderLayerParent,
+            MultiBufferSource renderTypeBuffer,
+            int light,
+            float limbSwing,
+            float limbSwingAmount,
+            float partialTicks,
+            float ageInTicks,
+            float netHeadYaw,
+            float headPitch) {
         // https://github.com/Creators-of-Create/Create/blob/ee33823ed0b5084af10ed131a1626ce71db4c07e/src/main/java/com/simibubi/create/compat/curios/GogglesCurioRenderer.java
 
         // Prepare values for transformation
-        model.setupAnim(slotContext.entity(), limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        model.setupAnim(
+                slotContext.entity(),
+                limbSwing,
+                limbSwingAmount,
+                ageInTicks,
+                netHeadYaw,
+                headPitch);
         model.prepareMobModel(slotContext.entity(), limbSwing, limbSwingAmount, partialTicks);
         ICurioRenderer.followHeadRotations(slotContext.entity(), model.head);
 
@@ -49,7 +71,16 @@ public class LensCurioRenderer implements ICurioRenderer {
 
         // Render
         var instance = Minecraft.getInstance();
-        instance.getItemRenderer().renderStatic(stack, ItemDisplayContext.HEAD, light, OverlayTexture.NO_OVERLAY, matrixStack, renderTypeBuffer, instance.level, 0);
+        instance.getItemRenderer()
+                .renderStatic(
+                        stack,
+                        ItemDisplayContext.HEAD,
+                        light,
+                        OverlayTexture.NO_OVERLAY,
+                        matrixStack,
+                        renderTypeBuffer,
+                        instance.level,
+                        0);
         matrixStack.popPose();
     }
 }

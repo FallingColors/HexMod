@@ -17,33 +17,25 @@ import net.minecraft.world.item.ItemStack
 
 object OpRecharge : SpellAction {
     override val argc = 1
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
+
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
         val entity = args.getItemEntity(0, argc)
 
-        val (handStack) = env.getHeldItemToOperateOn {
-            val media = IXplatAbstractions.INSTANCE.findMediaHolder(it)
-            media != null && media.canRecharge() && media.insertMedia(-1, true) != 0L
-        }
-            ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "rechargable") // TODO: hack
+        val (handStack) =
+            env.getHeldItemToOperateOn {
+                val media = IXplatAbstractions.INSTANCE.findMediaHolder(it)
+                media != null && media.canRecharge() && media.insertMedia(-1, true) != 0L
+            } ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "rechargable") // TODO: hack
 
         val media = IXplatAbstractions.INSTANCE.findMediaHolder(handStack)
 
         if (media == null || !media.canRecharge())
-            throw MishapBadOffhandItem.of(
-                handStack,
-                "rechargable"
-            )
+            throw MishapBadOffhandItem.of(handStack, "rechargable")
 
         env.assertEntityInRange(entity)
 
         if (!isMediaItem(entity.item)) {
-            throw MishapBadItem.of(
-                entity,
-                "media"
-            )
+            throw MishapBadItem.of(entity, "media")
         }
 
         // TODO: why did this code exist
@@ -55,8 +47,7 @@ object OpRecharge : SpellAction {
         return SpellAction.Result(
             Spell(entity, handStack),
             MediaConstants.SHARD_UNIT,
-            listOf(ParticleSpray.burst(entity.position(), 0.5))
-        )
+            listOf(ParticleSpray.burst(entity.position(), 0.5)))
     }
 
     private data class Spell(val itemEntity: ItemEntity, val stack: ItemStack) : RenderedSpell {
@@ -73,8 +64,7 @@ object OpRecharge : SpellAction {
                 media.insertMedia(mediaAmt, false)
 
                 itemEntity.item = entityStack
-                if (entityStack.isEmpty)
-                    itemEntity.kill()
+                if (entityStack.isEmpty) itemEntity.kill()
             }
         }
     }

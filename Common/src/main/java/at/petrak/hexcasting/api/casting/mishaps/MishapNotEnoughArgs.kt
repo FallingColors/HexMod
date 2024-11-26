@@ -15,8 +15,5 @@ class MishapNotEnoughArgs(val expected: Int, val got: Int) : Mishap() {
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        if (got == 0)
-            error("no_args", expected)
-        else
-            error("not_enough_args", expected, got)
+        if (got == 0) error("no_args", expected) else error("not_enough_args", expected, got)
 }

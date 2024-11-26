@@ -8,16 +8,17 @@ import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.misc.MediaConstants
+import java.util.function.Predicate
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.EntityHitResult
 import net.minecraft.world.phys.Vec3
-import java.util.function.Predicate
 
 object OpEntityRaycast : ConstMediaAction {
     override val argc = 2
     override val mediaCost: Long = MediaConstants.DUST_UNIT / 100
+
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val origin = args.getVec3(0, argc)
         val look = args.getVec3(1, argc)
@@ -25,15 +26,15 @@ object OpEntityRaycast : ConstMediaAction {
 
         env.assertVecInRange(origin)
 
-        val entityHitResult = getEntityHitResult(
-            env.castingEntity,
-            env.world,
-            origin,
-            endp,
-            AABB(origin, endp),
-            { true },
-            1_000_000.0
-        )
+        val entityHitResult =
+            getEntityHitResult(
+                env.castingEntity,
+                env.world,
+                origin,
+                endp,
+                AABB(origin, endp),
+                { true },
+                1_000_000.0)
 
         return if (entityHitResult != null && env.isEntityInRange(entityHitResult.entity)) {
             entityHitResult.entity.asActionResult
@@ -43,8 +44,14 @@ object OpEntityRaycast : ConstMediaAction {
     }
 
     fun getEntityHitResult(
-            entity: Entity?, level: Level, startPos: Vec3, endPos: Vec3,
-            aabb: AABB, isValid: Predicate<Entity>, maxSqrLength: Double): EntityHitResult? {
+        entity: Entity?,
+        level: Level,
+        startPos: Vec3,
+        endPos: Vec3,
+        aabb: AABB,
+        isValid: Predicate<Entity>,
+        maxSqrLength: Double
+    ): EntityHitResult? {
         var sqrLength = maxSqrLength
         var hitEntity: Entity? = null
         var hitPos: Vec3? = null

@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.casting.eval.env;
 
 import at.petrak.hexcasting.api.casting.circles.CircleExecutionState;
 import at.petrak.hexcasting.api.casting.eval.MishapEnvironment;
+
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
 
@@ -14,32 +15,20 @@ public class CircleMishapEnv extends MishapEnvironment {
     }
 
     @Override
-    public void yeetHeldItemsTowards(Vec3 targetPos) {
-
-    }
+    public void yeetHeldItemsTowards(Vec3 targetPos) {}
 
     @Override
-    public void dropHeldItems() {
-
-    }
+    public void dropHeldItems() {}
 
     @Override
-    public void drown() {
-
-    }
+    public void drown() {}
 
     @Override
-    public void damage(float healthProportion) {
-
-    }
+    public void damage(float healthProportion) {}
 
     @Override
-    public void removeXp(int amount) {
-
-    }
+    public void removeXp(int amount) {}
 
     @Override
-    public void blind(int ticks) {
-
-    }
+    public void blind(int ticks) {}
 }

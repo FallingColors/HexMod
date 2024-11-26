@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.addldata;
 
 import at.petrak.hexcasting.api.pigment.ColorProvider;
+
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
@@ -11,11 +12,13 @@ public interface ADPigment {
     ColorProvider provideColor(UUID owner);
 
     static int morphBetweenColors(int[] colors, Vec3 gradientDir, float time, Vec3 position) {
-        float fIdx = Mth.positiveModulo(time + (float) gradientDir.dot(position), 1f) * colors.length;
+        float fIdx =
+                Mth.positiveModulo(time + (float) gradientDir.dot(position), 1f) * colors.length;
 
         int baseIdx = Mth.floor(fIdx);
         float tRaw = fIdx - baseIdx;
-        float t = tRaw < 0.5 ? 4 * tRaw * tRaw * tRaw : (float) (1 - Math.pow(-2 * tRaw + 2, 3) / 2);
+        float t =
+                tRaw < 0.5 ? 4 * tRaw * tRaw * tRaw : (float) (1 - Math.pow(-2 * tRaw + 2, 3) / 2);
         int start = colors[baseIdx % colors.length];
         int end = colors[(baseIdx + 1) % colors.length];
 

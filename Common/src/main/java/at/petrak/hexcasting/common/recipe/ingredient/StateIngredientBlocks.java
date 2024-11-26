@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.recipe.ingredient;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.core.Registry;
+
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
@@ -11,12 +11,13 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nonnull;
 
 public class StateIngredientBlocks implements StateIngredient {
     protected final ImmutableSet<Block> blocks;
@@ -60,9 +61,9 @@ public class StateIngredientBlocks implements StateIngredient {
     @Override
     public List<ItemStack> getDisplayedStacks() {
         return blocks.stream()
-            .filter(b -> b.asItem() != Items.AIR)
-            .map(ItemStack::new)
-            .collect(Collectors.toList());
+                .filter(b -> b.asItem() != Items.AIR)
+                .map(ItemStack::new)
+                .collect(Collectors.toList());
     }
 
     @Override

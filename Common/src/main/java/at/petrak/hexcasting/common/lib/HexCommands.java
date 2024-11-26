@@ -4,7 +4,9 @@ import at.petrak.hexcasting.common.command.BrainsweepCommand;
 import at.petrak.hexcasting.common.command.ListPerWorldPatternsCommand;
 import at.petrak.hexcasting.common.command.PatternTexturesCommand;
 import at.petrak.hexcasting.common.command.RecalcPatternsCommand;
+
 import com.mojang.brigadier.CommandDispatcher;
+
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 

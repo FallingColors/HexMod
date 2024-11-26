@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.core.Registry;
+
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -19,9 +19,10 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.*;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
 
 public class StateIngredientHelper {
     public static StateIngredient of(Block block) {
@@ -51,16 +52,20 @@ public class StateIngredientHelper {
     public static StateIngredient deserialize(JsonObject object) {
         switch (GsonHelper.getAsString(object, "type")) {
             case "tag":
-                return new StateIngredientTag(new ResourceLocation(GsonHelper.getAsString(object, "tag")));
+                return new StateIngredientTag(
+                        new ResourceLocation(GsonHelper.getAsString(object, "tag")));
             case "block":
                 return new StateIngredientBlock(
-                        BuiltInRegistries.BLOCK.get(new ResourceLocation(GsonHelper.getAsString(object, "block"))));
+                        BuiltInRegistries.BLOCK.get(
+                                new ResourceLocation(GsonHelper.getAsString(object, "block"))));
             case "state":
                 return new StateIngredientBlockState(readBlockState(object));
             case "blocks":
                 List<Block> blocks = new ArrayList<>();
                 for (JsonElement element : GsonHelper.getAsJsonArray(object, "blocks")) {
-                    blocks.add(BuiltInRegistries.BLOCK.get(new ResourceLocation(element.getAsString())));
+                    blocks.add(
+                            BuiltInRegistries.BLOCK.get(
+                                    new ResourceLocation(element.getAsString())));
                 }
                 return new StateIngredientBlocks(blocks);
             case "tag_excluding":
@@ -76,8 +81,8 @@ public class StateIngredientHelper {
     }
 
     /**
-     * Deserializes a state ingredient, but removes air from its data,
-     * and returns null if the ingredient only matched air.
+     * Deserializes a state ingredient, but removes air from its data, and returns null if the
+     * ingredient only matched air.
      */
     @Nullable
     public static StateIngredient tryDeserialize(JsonObject object) {
@@ -125,9 +130,7 @@ public class StateIngredientHelper {
         }
     }
 
-    /**
-     * Writes data about the block state to the provided json object.
-     */
+    /** Writes data about the block state to the provided json object. */
     public static JsonObject serializeBlockState(BlockState state) {
         CompoundTag nbt = NbtUtils.writeBlockState(state);
         renameTag(nbt, "Name", "name");
@@ -136,11 +139,11 @@ public class StateIngredientHelper {
         return dyn.convert(JsonOps.INSTANCE).getValue().getAsJsonObject();
     }
 
-    /**
-     * Reads the block state from the provided json object.
-     */
+    /** Reads the block state from the provided json object. */
     public static BlockState readBlockState(JsonObject object) {
-        CompoundTag nbt = (CompoundTag) new Dynamic<>(JsonOps.INSTANCE, object).convert(NbtOps.INSTANCE).getValue();
+        CompoundTag nbt =
+                (CompoundTag)
+                        new Dynamic<>(JsonOps.INSTANCE, object).convert(NbtOps.INSTANCE).getValue();
         renameTag(nbt, "name", "Name");
         renameTag(nbt, "properties", "Properties");
         String name = nbt.getString("Name");

@@ -7,11 +7,16 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * An interface that mimics some methods of IForgeBlock.
- * Fabric implementation will use mixins to achieve the same effects.
+ * An interface that mimics some methods of IForgeBlock. Fabric implementation will use mixins to
+ * achieve the same effects.
  */
 public interface IForgeLikeBlock {
-    default boolean addLandingEffects(BlockState state, ServerLevel level, BlockPos pos, LivingEntity entity, int numberOfParticles) {
+    default boolean addLandingEffects(
+            BlockState state,
+            ServerLevel level,
+            BlockPos pos,
+            LivingEntity entity,
+            int numberOfParticles) {
         return false;
     }
 

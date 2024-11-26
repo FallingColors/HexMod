@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.recipe.ingredient;
 
-
 import com.google.gson.JsonObject;
+
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -26,9 +26,7 @@ public interface StateIngredient extends Predicate<BlockState> {
 
     List<ItemStack> getDisplayedStacks();
 
-    /**
-     * A description tooltip to display in areas like JEI recipes.
-     */
+    /** A description tooltip to display in areas like JEI recipes. */
     default List<Component> descriptionTooltip() {
         return Collections.emptyList();
     }

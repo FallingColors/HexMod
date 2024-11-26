@@ -3,7 +3,9 @@ package at.petrak.hexcasting.fabric.cc.adimpl;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
+
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
+
 import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Supplier;

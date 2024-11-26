@@ -25,12 +25,11 @@ abstract class Mishap : Throwable() {
 
     open fun particleSpray(ctx: CastingEnvironment): ParticleSpray {
         return ParticleSpray(
-            ctx.mishapSprayPos().add(0.0, 0.2, 0.0),
-            Vec3(0.0, 2.0, 0.0),
-            0.2, Math.PI / 4, 40)
+            ctx.mishapSprayPos().add(0.0, 0.2, 0.0), Vec3(0.0, 2.0, 0.0), 0.2, Math.PI / 4, 40)
     }
 
-    open fun resolutionType(ctx: CastingEnvironment): ResolvedPatternType = ResolvedPatternType.ERRORED
+    open fun resolutionType(ctx: CastingEnvironment): ResolvedPatternType =
+        ResolvedPatternType.ERRORED
 
     /**
      * Execute the actual effect, not any sfx.
@@ -41,17 +40,21 @@ abstract class Mishap : Throwable() {
 
     protected abstract fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component?
 
-    fun executeReturnStack(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>): List<Iota> {
+    fun executeReturnStack(
+        ctx: CastingEnvironment,
+        errorCtx: Context,
+        stack: MutableList<Iota>
+    ): List<Iota> {
         execute(ctx, errorCtx, stack)
         return stack
     }
 
-    /**
-     * Every error message should be prefixed with the name of the action...
-     */
+    /** Every error message should be prefixed with the name of the action... */
     fun errorMessageWithName(ctx: CastingEnvironment, errorCtx: Context): Component? {
         return if (errorCtx.name != null) {
-            "hexcasting.mishap".asTranslatedComponent(errorCtx.name, this.errorMessage(ctx, errorCtx) ?: return null)
+            "hexcasting.mishap"
+                .asTranslatedComponent(
+                    errorCtx.name, this.errorMessage(ctx, errorCtx) ?: return null)
         } else {
             this.errorMessage(ctx, errorCtx)
         }
@@ -60,10 +63,7 @@ abstract class Mishap : Throwable() {
     // Useful helper functions
 
     protected fun dyeColor(color: DyeColor): FrozenPigment =
-        FrozenPigment(
-            ItemStack(HexItems.DYE_PIGMENTS[color]!!),
-            Util.NIL_UUID
-        )
+        FrozenPigment(ItemStack(HexItems.DYE_PIGMENTS[color]!!), Util.NIL_UUID)
 
     protected fun error(stub: String, vararg args: Any): Component =
         "hexcasting.mishap.$stub".asTranslatedComponent(*args)
@@ -85,16 +85,12 @@ abstract class Mishap : Throwable() {
             val targetHealth = entity.health - amount
             if (entity.invulnerableTime > 10) {
                 val lastHurt = entity.lastHurt
-                if (lastHurt < amount)
-                    entity.invulnerableTime = 0
-                else
-                    entity.lastHurt -= amount
+                if (lastHurt < amount) entity.invulnerableTime = 0 else entity.lastHurt -= amount
             }
             if (!entity.hurt(source, amount) &&
                 !entity.isInvulnerableTo(source) &&
                 !entity.level().isClientSide &&
-                !entity.isDeadOrDying
-            ) {
+                !entity.isDeadOrDying) {
 
                 // Ok, if you REALLY don't want to play nice...
                 entity.health = targetHealth

@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.casting.arithmetic.operator.list
 
-import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator
 import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorBasic
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate
@@ -15,8 +14,7 @@ object OperatorUnCons : OperatorBasic(1, IotaMultiPredicate.all(IotaPredicate.of
     override fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator().withIndex()
         val list = it.nextList(arity)
-        if (list.nonEmpty)
-            return listOf(ListIota(list.cdr), list.car)
+        if (list.nonEmpty) return listOf(ListIota(list.cdr), list.car)
         return listOf(ListIota(list), NullIota())
     }
 }

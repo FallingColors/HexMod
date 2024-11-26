@@ -1,8 +1,13 @@
 package at.petrak.hexcasting.forge.interop.jei;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+import static at.petrak.hexcasting.client.render.RenderLib.renderEntity;
+
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
+
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
@@ -12,6 +17,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -20,13 +26,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
-import static at.petrak.hexcasting.client.render.RenderLib.renderEntity;
 
 public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecipe> {
     public static final ResourceLocation UID = modLoc("brainsweep");
@@ -37,7 +41,8 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
 
     public BrainsweepRecipeCategory(IGuiHelper guiHelper) {
         ResourceLocation location = modLoc("textures/gui/brainsweep_jei.png");
-        background = guiHelper.drawableBuilder(location, 0, 0, 118, 86).setTextureSize(128, 128).build();
+        background =
+                guiHelper.drawableBuilder(location, 0, 0, 118, 86).setTextureSize(128, 128).build();
         var brainsweep = modLoc("brainsweep");
         localizedName = Component.translatable("hexcasting.action." + brainsweep);
         icon = new PatternDrawable(brainsweep, 16, 16);
@@ -45,27 +50,26 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public @NotNull
-    Component getTitle() {
+    public @NotNull Component getTitle() {
         return localizedName;
     }
 
     @Override
-    public @NotNull
-    IDrawable getBackground() {
+    public @NotNull IDrawable getBackground() {
         return background;
     }
 
     @Override
-    public @NotNull
-    IDrawable getIcon() {
+    public @NotNull IDrawable getIcon() {
         return icon;
     }
 
     @Override
-    public @NotNull
-    List<Component> getTooltipStrings(@NotNull BrainsweepRecipe recipe,
-        @NotNull IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+    public @NotNull List<Component> getTooltipStrings(
+            @NotNull BrainsweepRecipe recipe,
+            @NotNull IRecipeSlotsView recipeSlotsView,
+            double mouseX,
+            double mouseY) {
         if (37 <= mouseX && mouseX <= 37 + 26 && 19 <= mouseY && mouseY <= 19 + 48) {
             Minecraft mc = Minecraft.getInstance();
             return recipe.entityIn().getTooltip(mc.options.advancedItemTooltips);
@@ -75,12 +79,16 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
     }
 
     @Override
-    public void draw(@NotNull BrainsweepRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull GuiGraphics graphics, double mouseX, double mouseY) {
+    public void draw(
+            @NotNull BrainsweepRecipe recipe,
+            @NotNull IRecipeSlotsView recipeSlotsView,
+            @NotNull GuiGraphics graphics,
+            double mouseX,
+            double mouseY) {
         ClientLevel level = Minecraft.getInstance().level;
         if (level != null) {
             var example = recipe.entityIn().exampleEntity(level);
-            if (example == null)
-                return;
+            if (example == null) return;
 
             RenderSystem.enableBlend();
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
@@ -89,17 +97,18 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
     }
 
     @Override
-    public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull BrainsweepRecipe recipe,
-        @NotNull IFocusGroup focuses) {
+    public void setRecipe(
+            @NotNull IRecipeLayoutBuilder builder,
+            @NotNull BrainsweepRecipe recipe,
+            @NotNull IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 12, 35)
-            .addItemStacks(recipe.blockIn().getDisplayedStacks());
+                .addItemStacks(recipe.blockIn().getDisplayedStacks());
         builder.addSlot(RecipeIngredientRole.OUTPUT, 87, 35)
-            .addItemStack(new ItemStack(recipe.result().getBlock()));
+                .addItemStack(new ItemStack(recipe.result().getBlock()));
     }
 
     @Override
-    public @NotNull
-    RecipeType<BrainsweepRecipe> getRecipeType() {
+    public @NotNull RecipeType<BrainsweepRecipe> getRecipeType() {
         return HexJEIPlugin.BRAINSWEEPING;
     }
 }

@@ -9,9 +9,7 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentUtils
 import net.minecraft.world.item.DyeColor
 
-/**
- * The value failed some kind of predicate.
- */
+/** The value failed some kind of predicate. */
 class MishapInvalidOperatorArgs(val perpetrators: List<Iota>) : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.GRAY)
@@ -24,19 +22,14 @@ class MishapInvalidOperatorArgs(val perpetrators: List<Iota>) : Mishap() {
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component {
         return if (perpetrators.size == 1) {
-            error(
-                "invalid_operator_args.one",
-                0,
-                perpetrators[0].display()
-            )
+            error("invalid_operator_args.one", 0, perpetrators[0].display())
         } else {
             error(
                 "invalid_operator_args.many",
                 perpetrators.size,
                 0,
                 perpetrators.lastIndex,
-                ComponentUtils.formatList(perpetrators.map { it.display() }, ", ".asTextComponent)
-            )
+                ComponentUtils.formatList(perpetrators.map { it.display() }, ", ".asTextComponent))
         }
     }
 }

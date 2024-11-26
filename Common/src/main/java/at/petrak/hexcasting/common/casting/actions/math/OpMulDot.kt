@@ -17,13 +17,13 @@ object OpMulDot : ConstMediaAction {
         return lhs.map(
             { lnum ->
                 rhs.map(
-                    { rnum -> (lnum * rnum).asActionResult }, { rvec -> rvec.scale(lnum).asActionResult }
-                )
-            }, { lvec ->
-            rhs.map(
-                { rnum -> lvec.scale(rnum).asActionResult }, { rvec -> lvec.dot(rvec).asActionResult }
-            )
-        })
-
+                    { rnum -> (lnum * rnum).asActionResult },
+                    { rvec -> rvec.scale(lnum).asActionResult })
+            },
+            { lvec ->
+                rhs.map(
+                    { rnum -> lvec.scale(rnum).asActionResult },
+                    { rvec -> lvec.dot(rvec).asActionResult })
+            })
     }
 }

@@ -1,4 +1,5 @@
 @file:JvmName("ClientAccessorWrappers")
+
 package at.petrak.hexcasting.client.ktxt
 
 import at.petrak.hexcasting.mixin.accessor.client.AccessorMouseHandler

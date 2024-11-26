@@ -20,39 +20,38 @@ import net.minecraft.world.phys.Vec3
 
 class OpConjureBlock(val light: Boolean) : SpellAction {
     override val argc = 1
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
+
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
         val vecPos = args.getVec3(0, argc)
         val pos = BlockPos.containing(vecPos)
         env.assertPosInRangeForEditing(pos)
 
-        val placeContext = DirectionalPlaceContext(env.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
+        val placeContext =
+            DirectionalPlaceContext(env.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
 
         val worldState = env.world.getBlockState(pos)
-        if (!worldState.canBeReplaced(placeContext))
-            throw MishapBadBlock.of(pos, "replaceable")
+        if (!worldState.canBeReplaced(placeContext)) throw MishapBadBlock.of(pos, "replaceable")
 
         return SpellAction.Result(
             Spell(pos, light),
             MediaConstants.DUST_UNIT,
-            listOf(ParticleSpray.cloud(Vec3.atCenterOf(pos), 1.0))
-        )
+            listOf(ParticleSpray.cloud(Vec3.atCenterOf(pos), 1.0)))
     }
 
     private data class Spell(val pos: BlockPos, val light: Boolean) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            if (!env.canEditBlockAt(pos))
-                return
+            if (!env.canEditBlockAt(pos)) return
 
-            val placeContext = DirectionalPlaceContext(env.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
+            val placeContext =
+                DirectionalPlaceContext(
+                    env.world, pos, Direction.DOWN, ItemStack.EMPTY, Direction.UP)
 
             val worldState = env.world.getBlockState(pos)
             if (worldState.canBeReplaced(placeContext)) {
                 val block = if (this.light) HexBlocks.CONJURED_LIGHT else HexBlocks.CONJURED_BLOCK
 
-                if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(env.world, pos, ItemStack(block), env.castingEntity as? ServerPlayer))
+                if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(
+                    env.world, pos, ItemStack(block), env.castingEntity as? ServerPlayer))
                     return
 
                 val state = block.getStateForPlacement(placeContext)

@@ -12,8 +12,7 @@ class MishapTooManyCloseParens : Mishap() {
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         // TODO this is a kinda shitty mishap
-        if (errorCtx.pattern != null)
-            stack.add(PatternIota(errorCtx.pattern))
+        if (errorCtx.pattern != null) stack.add(PatternIota(errorCtx.pattern))
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =

@@ -10,7 +10,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 public abstract class HexBlockEntity extends BlockEntity {
-    public HexBlockEntity(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
+    public HexBlockEntity(
+            BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
         super(pType, pWorldPosition, pBlockState);
     }
 
@@ -43,7 +44,7 @@ public abstract class HexBlockEntity extends BlockEntity {
 
     public void sync() {
         this.setChanged();
-        this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
+        this.level.sendBlockUpdated(
+                this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
     }
-
 }

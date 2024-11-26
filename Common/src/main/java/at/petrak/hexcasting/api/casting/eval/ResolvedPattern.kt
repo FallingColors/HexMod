@@ -3,11 +3,14 @@ package at.petrak.hexcasting.api.casting.eval
 import at.petrak.hexcasting.api.casting.math.HexCoord
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.utils.NBTBuilder
-import net.minecraft.nbt.CompoundTag
 import java.util.*
+import net.minecraft.nbt.CompoundTag
 
-
-data class ResolvedPattern(val pattern: HexPattern, val origin: HexCoord, var type: ResolvedPatternType) {
+data class ResolvedPattern(
+    val pattern: HexPattern,
+    val origin: HexCoord,
+    var type: ResolvedPatternType
+) {
     fun serializeToNBT() = NBTBuilder {
         "Pattern" %= pattern.serializeToNBT()
         "OriginQ" %= origin.q

@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.client.render;
 
-import net.minecraft.resources.ResourceLocation;
-
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
+import net.minecraft.resources.ResourceLocation;
 
 // *nothing* that changes can be looked at for changes
 public class GaslightingTracker {

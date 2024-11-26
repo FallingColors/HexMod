@@ -10,9 +10,7 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughMedia
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
-/**
- * A SimpleOperator that always costs the same amount of media.
- */
+/** A SimpleOperator that always costs the same amount of media. */
 interface ConstMediaAction : Action {
     val argc: Int
     val mediaCost: Long
@@ -25,19 +23,22 @@ interface ConstMediaAction : Action {
         return CostMediaActionResult(stack)
     }
 
-    override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
+    override fun operate(
+        env: CastingEnvironment,
+        image: CastingImage,
+        continuation: SpellContinuation
+    ): OperationResult {
         val stack = image.stack.toMutableList()
 
-        if (env.extractMedia(this.mediaCost, true) > 0)
-            throw MishapNotEnoughMedia(this.mediaCost)
-        if (this.argc > stack.size)
-            throw MishapNotEnoughArgs(this.argc, stack.size)
+        if (env.extractMedia(this.mediaCost, true) > 0) throw MishapNotEnoughMedia(this.mediaCost)
+        if (this.argc > stack.size) throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)
         repeat(this.argc) { stack.removeLast() }
         val result = this.executeWithOpCount(args, env)
         stack.addAll(result.resultStack)
 
-        val sideEffects = mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMedia(this.mediaCost))
+        val sideEffects =
+            mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMedia(this.mediaCost))
 
         val image2 = image.copy(stack = stack, opsConsumed = image.opsConsumed + result.opCount)
         return OperationResult(image2, sideEffects, continuation, HexEvalSounds.NORMAL_EXECUTE)

@@ -3,6 +3,7 @@ package at.petrak.hexcasting.xplat;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.client.ClientCastingStack;
 import at.petrak.hexcasting.common.msgs.IMessage;
+
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
@@ -25,7 +26,8 @@ public interface IClientXplatAbstractions {
 
     void initPlatformSpecific();
 
-    <T extends Entity> void registerEntityRenderer(EntityType<? extends T> type, EntityRendererProvider<T> renderer);
+    <T extends Entity> void registerEntityRenderer(
+            EntityType<? extends T> type, EntityRendererProvider<T> renderer);
 
     void registerItemProperty(Item item, ResourceLocation id, ItemPropertyFunction func);
 
@@ -43,9 +45,14 @@ public interface IClientXplatAbstractions {
     private static IClientXplatAbstractions find() {
         var providers = ServiceLoader.load(IClientXplatAbstractions.class).stream().toList();
         if (providers.size() != 1) {
-            var names = providers.stream().map(p -> p.type().getName()).collect(Collectors.joining(",", "[", "]"));
+            var names =
+                    providers.stream()
+                            .map(p -> p.type().getName())
+                            .collect(Collectors.joining(",", "[", "]"));
             throw new IllegalStateException(
-                "There should be exactly one IClientXplatAbstractions implementation on the classpath. Found: " + names);
+                    "There should be exactly one IClientXplatAbstractions implementation on the"
+                            + " classpath. Found: "
+                            + names);
         } else {
             var provider = providers.get(0);
             HexAPI.LOGGER.debug("Instantiating client xplat impl: " + provider.type().getName());

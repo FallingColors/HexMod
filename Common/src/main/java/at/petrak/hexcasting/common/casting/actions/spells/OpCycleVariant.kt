@@ -13,18 +13,15 @@ object OpCycleVariant : SpellAction {
     override val argc = 0
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
-        val (handStack) = env.getHeldItemToOperateOn {
-            IXplatAbstractions.INSTANCE.findVariantHolder(it) != null
-        } ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "variant") // TODO: hack
+        val (handStack) =
+            env.getHeldItemToOperateOn { IXplatAbstractions.INSTANCE.findVariantHolder(it) != null }
+                ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "variant") // TODO: hack
 
-        val variantHolder = IXplatAbstractions.INSTANCE.findVariantHolder(handStack)
-            ?: throw MishapBadOffhandItem.of(handStack, "variant")
+        val variantHolder =
+            IXplatAbstractions.INSTANCE.findVariantHolder(handStack)
+                ?: throw MishapBadOffhandItem.of(handStack, "variant")
 
-        return SpellAction.Result(
-            Spell(variantHolder),
-            0,
-            listOf()
-        )
+        return SpellAction.Result(Spell(variantHolder), 0, listOf())
     }
 
     private data class Spell(val variantHolder: ADVariantItem) : RenderedSpell {

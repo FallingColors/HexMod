@@ -13,7 +13,7 @@ import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.msgs.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import net.minecraft.network.chat.Component;
+
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -28,7 +28,6 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
 
     private final Set<HexPattern> castPatterns = new HashSet<>();
     private int soundsPlayed = 0;
-
 
     public StaffCastEnv(ServerPlayer caster, InteractionHand castingHand) {
         super(caster, castingHand);
@@ -48,8 +47,8 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
         var sound = result.getSound().sound();
         if (soundsPlayed < 100 && sound != null) { // TODO: Make configurable
             var soundPos = this.caster.position();
-            this.world.playSound(null, soundPos.x, soundPos.y, soundPos.z,
-                sound, SoundSource.PLAYERS, 1f, 1f);
+            this.world.playSound(
+                    null, soundPos.x, soundPos.y, soundPos.z, sound, SoundSource.PLAYERS, 1f, 1f);
             soundsPlayed++;
         }
     }
@@ -58,9 +57,9 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
     public void postCast(CastingImage image) {
         super.postCast(image);
 
-        var packet = new MsgNewSpiralPatternsS2C(
-            this.caster.getUUID(), castPatterns.stream().toList(), Integer.MAX_VALUE
-        );
+        var packet =
+                new MsgNewSpiralPatternsS2C(
+                        this.caster.getUUID(), castPatterns.stream().toList(), Integer.MAX_VALUE);
         IXplatAbstractions.INSTANCE.sendPacketToPlayer(this.caster, packet);
         IXplatAbstractions.INSTANCE.sendPacketTracking(this.caster, packet);
 
@@ -70,8 +69,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
 
     @Override
     public long extractMediaEnvironment(long cost, boolean simulate) {
-        if (this.caster.isCreative())
-            return 0;
+        if (this.caster.isCreative()) return 0;
 
         var canOvercast = this.canOvercast();
         return this.extractMediaFromInventory(cost, canOvercast, simulate);
@@ -98,8 +96,10 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
                 allPoints.addAll(pat.getPattern().positions(pat.getOrigin()));
             }
             var currentResolvedPattern = resolvedPatterns.get(resolvedPatterns.size() - 1);
-            var currentSpellPoints = currentResolvedPattern.getPattern()
-                .positions(currentResolvedPattern.getOrigin());
+            var currentSpellPoints =
+                    currentResolvedPattern
+                            .getPattern()
+                            .positions(currentResolvedPattern.getOrigin());
             if (currentSpellPoints.stream().anyMatch(allPoints::contains)) {
                 cheatedPatternOverlap = true;
             }
@@ -113,29 +113,36 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
 
         var vm = IXplatAbstractions.INSTANCE.getStaffcastVM(sender, msg.handUsed());
 
-        // TODO: do we reset the number of evals run via the staff? because each new pat is a new tick.
+        // TODO: do we reset the number of evals run via the staff? because each new pat is a new
+        // tick.
 
-        ExecutionClientView clientInfo = vm.queueExecuteAndWrapIota(new PatternIota(msg.pattern()), sender.serverLevel());
+        ExecutionClientView clientInfo =
+                vm.queueExecuteAndWrapIota(new PatternIota(msg.pattern()), sender.serverLevel());
 
         if (clientInfo.isStackClear()) {
             IXplatAbstractions.INSTANCE.setStaffcastImage(sender, null);
             IXplatAbstractions.INSTANCE.setPatterns(sender, List.of());
         } else {
-            IXplatAbstractions.INSTANCE.setStaffcastImage(sender, vm.getImage().withOverriddenUsedOps(0));
+            IXplatAbstractions.INSTANCE.setStaffcastImage(
+                    sender, vm.getImage().withOverriddenUsedOps(0));
             if (!resolvedPatterns.isEmpty()) {
-                resolvedPatterns.get(resolvedPatterns.size() - 1).setType(clientInfo.getResolutionType());
+                resolvedPatterns
+                        .get(resolvedPatterns.size() - 1)
+                        .setType(clientInfo.getResolutionType());
             }
             IXplatAbstractions.INSTANCE.setPatterns(sender, resolvedPatterns);
         }
 
-        IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender,
-            new MsgNewSpellPatternS2C(clientInfo, resolvedPatterns.size() - 1));
+        IXplatAbstractions.INSTANCE.sendPacketToPlayer(
+                sender, new MsgNewSpellPatternS2C(clientInfo, resolvedPatterns.size() - 1));
 
         IMessage packet;
         if (clientInfo.isStackClear()) {
             packet = new MsgClearSpiralPatternsS2C(sender.getUUID());
         } else {
-            packet = new MsgNewSpiralPatternsS2C(sender.getUUID(), List.of(msg.pattern()), Integer.MAX_VALUE);
+            packet =
+                    new MsgNewSpiralPatternsS2C(
+                            sender.getUUID(), List.of(msg.pattern()), Integer.MAX_VALUE);
         }
         IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender, packet);
         IXplatAbstractions.INSTANCE.sendPacketTracking(sender, packet);
@@ -144,7 +151,8 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
             // Somehow we lost spraying particles on each new pattern, so do it here
             // this also nicely prevents particle spam on trinkets
             new ParticleSpray(sender.position(), new Vec3(0.0, 1.5, 0.0), 0.4, Math.PI / 3, 30)
-                .sprayParticles(sender.serverLevel(), IXplatAbstractions.INSTANCE.getPigment(sender));
+                    .sprayParticles(
+                            sender.serverLevel(), IXplatAbstractions.INSTANCE.getPigment(sender));
         }
     }
 }

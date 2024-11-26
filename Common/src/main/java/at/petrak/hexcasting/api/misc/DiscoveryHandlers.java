@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 public class DiscoveryHandlers {
-    private static final List<BiFunction<Player, String, ItemStack>> DEBUG_DISCOVERER = new ArrayList<>();
+    private static final List<BiFunction<Player, String, ItemStack>> DEBUG_DISCOVERER =
+            new ArrayList<>();
 
     public static ItemStack findDebugItem(Player player, String type) {
         for (var discoverer : DEBUG_DISCOVERER) {

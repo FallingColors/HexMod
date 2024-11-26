@@ -16,8 +16,7 @@ object OpTan : ConstMediaAction {
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val angle = args.getDouble(0, argc)
-        if (cos(angle) == 0.0)
-            throw MishapDivideByZero.tan(args[0] as DoubleIota)
+        if (cos(angle) == 0.0) throw MishapDivideByZero.tan(args[0] as DoubleIota)
         return tan(angle).asActionResult
     }
 }

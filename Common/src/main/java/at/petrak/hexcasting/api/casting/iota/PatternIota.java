@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.api.casting.iota;
 
+import static at.petrak.hexcasting.api.utils.HexUtils.isOfTag;
+
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
@@ -21,6 +23,7 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.interop.inline.InlinePatternData;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -28,14 +31,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
-
-import static at.petrak.hexcasting.api.utils.HexUtils.isOfTag;
 
 public class PatternIota extends Iota {
     public PatternIota(@NotNull HexPattern pattern) {
@@ -58,8 +60,8 @@ public class PatternIota extends Iota {
     @Override
     public boolean toleratesOther(Iota that) {
         return typesMatch(this, that)
-            && that instanceof PatternIota piota
-            && this.getPattern().getAngles().equals(piota.getPattern().getAngles());
+                && that instanceof PatternIota piota
+                && this.getPattern().getAngles().equals(piota.getPattern().getAngles());
     }
 
     @Override
@@ -68,14 +70,17 @@ public class PatternIota extends Iota {
     }
 
     @Override
-    public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
+    public @NotNull CastResult execute(
+            CastingVM vm, ServerLevel world, SpellContinuation continuation) {
         Supplier<@Nullable Component> castedName = () -> null;
         try {
-            var lookup = PatternRegistryManifest.matchPattern(this.getPattern(), vm.getEnv(), false);
+            var lookup =
+                    PatternRegistryManifest.matchPattern(this.getPattern(), vm.getEnv(), false);
             vm.getEnv().precheckAction(lookup);
 
             Action action;
-            if (lookup instanceof PatternShapeMatch.Normal || lookup instanceof PatternShapeMatch.PerWorld) {
+            if (lookup instanceof PatternShapeMatch.Normal
+                    || lookup instanceof PatternShapeMatch.PerWorld) {
                 ResourceKey<ActionRegistryEntry> key;
                 if (lookup instanceof PatternShapeMatch.Normal normal) {
                     key = normal.key;
@@ -84,11 +89,17 @@ public class PatternIota extends Iota {
                     key = perWorld.key;
                 }
 
-                var reqsEnlightenment = isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), key,
-                        HexTags.Actions.REQUIRES_ENLIGHTENMENT);
+                var reqsEnlightenment =
+                        isOfTag(
+                                IXplatAbstractions.INSTANCE.getActionRegistry(),
+                                key,
+                                HexTags.Actions.REQUIRES_ENLIGHTENMENT);
 
                 castedName = () -> HexAPI.instance().getActionI18n(key, reqsEnlightenment);
-                action = Objects.requireNonNull(IXplatAbstractions.INSTANCE.getActionRegistry().get(key)).action();
+                action =
+                        Objects.requireNonNull(
+                                        IXplatAbstractions.INSTANCE.getActionRegistry().get(key))
+                                .action();
 
                 if (reqsEnlightenment && !vm.getEnv().isEnlightened()) {
                     // this gets caught down below
@@ -102,11 +113,7 @@ public class PatternIota extends Iota {
             } else throw new IllegalStateException();
 
             // do the actual calculation!!
-            var result = action.operate(
-                    vm.getEnv(),
-                    vm.getImage(),
-                    continuation
-            );
+            var result = action.operate(vm.getEnv(), vm.getImage(), continuation);
 
             if (result.getNewImage().getOpsConsumed() > vm.getEnv().maxOpCount()) {
                 throw new MishapEvalTooMuch();
@@ -117,21 +124,24 @@ public class PatternIota extends Iota {
             var sideEffects = result.getSideEffects();
 
             return new CastResult(
-                this,
-                cont2,
-                result.getNewImage(),
-                sideEffects,
-                ResolvedPatternType.EVALUATED,
-                result.getSound());
+                    this,
+                    cont2,
+                    result.getNewImage(),
+                    sideEffects,
+                    ResolvedPatternType.EVALUATED,
+                    result.getSound());
 
         } catch (Mishap mishap) {
             return new CastResult(
-                this,
-                continuation,
-                null,
-                List.of(new OperatorSideEffect.DoMishap(mishap, new Mishap.Context(this.getPattern(), castedName.get()))),
-                mishap.resolutionType(vm.getEnv()),
-                HexEvalSounds.MISHAP);
+                    this,
+                    continuation,
+                    null,
+                    List.of(
+                            new OperatorSideEffect.DoMishap(
+                                    mishap,
+                                    new Mishap.Context(this.getPattern(), castedName.get()))),
+                    mishap.resolutionType(vm.getEnv()),
+                    HexEvalSounds.MISHAP);
         }
     }
 
@@ -140,22 +150,24 @@ public class PatternIota extends Iota {
         return true;
     }
 
-    public static IotaType<PatternIota> TYPE = new IotaType<>() {
-        @Override
-        public PatternIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            return PatternIota.deserialize(tag);
-        }
+    public static IotaType<PatternIota> TYPE =
+            new IotaType<>() {
+                @Override
+                public PatternIota deserialize(Tag tag, ServerLevel world)
+                        throws IllegalArgumentException {
+                    return PatternIota.deserialize(tag);
+                }
 
-        @Override
-        public Component display(Tag tag) {
-            return PatternIota.display(PatternIota.deserialize(tag).getPattern());
-        }
+                @Override
+                public Component display(Tag tag) {
+                    return PatternIota.display(PatternIota.deserialize(tag).getPattern());
+                }
 
-        @Override
-        public int color() {
-            return 0xff_ffaa00;
-        }
-    };
+                @Override
+                public int color() {
+                    return 0xff_ffaa00;
+                }
+            };
 
     public static PatternIota deserialize(Tag tag) throws IllegalArgumentException {
         var patTag = HexUtils.downcast(tag, CompoundTag.TYPE);
@@ -165,11 +177,12 @@ public class PatternIota extends Iota {
 
     public static Component display(HexPattern pat) {
         Component text = (new InlinePatternData(pat)).asText(true);
-        return text.copy().withStyle(text.getStyle().applyTo(Style.EMPTY.withColor(ChatFormatting.WHITE)));
+        return text.copy()
+                .withStyle(text.getStyle().applyTo(Style.EMPTY.withColor(ChatFormatting.WHITE)));
     }
 
     // keep around just in case it's needed.
-    public static Component displayNonInline(HexPattern pat){
+    public static Component displayNonInline(HexPattern pat) {
         var bob = new StringBuilder();
         bob.append(pat.getStartDir());
 
@@ -178,7 +191,8 @@ public class PatternIota extends Iota {
             bob.append(" ");
             bob.append(sig);
         }
-        return Component.translatable("hexcasting.tooltip.pattern_iota",
+        return Component.translatable(
+                        "hexcasting.tooltip.pattern_iota",
                         Component.literal(bob.toString()).withStyle(ChatFormatting.WHITE))
                 .withStyle(ChatFormatting.GOLD);
     }

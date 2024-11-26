@@ -16,12 +16,8 @@ import net.minecraft.world.phys.Vec3
 class OpCreateSentinel(val extendsRange: Boolean) : SpellAction {
     override val argc = 1
 
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
-        if (env.castingEntity !is ServerPlayer)
-            throw MishapBadCaster()
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+        if (env.castingEntity !is ServerPlayer) throw MishapBadCaster()
 
         val target = args.getVec3(0, argc)
         env.assertVecInRange(target)
@@ -29,20 +25,14 @@ class OpCreateSentinel(val extendsRange: Boolean) : SpellAction {
         return SpellAction.Result(
             Spell(target, this.extendsRange),
             MediaConstants.DUST_UNIT * if (extendsRange) 2 else 1,
-            listOf(ParticleSpray.burst(target, 2.0))
-        )
+            listOf(ParticleSpray.burst(target, 2.0)))
     }
 
     private data class Spell(val target: Vec3, val extendsRange: Boolean) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
             IXplatAbstractions.INSTANCE.setSentinel(
                 env.castingEntity as? ServerPlayer,
-                Sentinel(
-                    extendsRange,
-                    target,
-                    env.world.dimension()
-                )
-            )
+                Sentinel(extendsRange, target, env.world.dimension()))
         }
     }
 }

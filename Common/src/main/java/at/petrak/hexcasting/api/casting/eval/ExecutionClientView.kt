@@ -2,9 +2,7 @@ package at.petrak.hexcasting.api.casting.eval
 
 import net.minecraft.nbt.CompoundTag
 
-/**
- * Information sent back to the client
- */
+/** Information sent back to the client */
 data class ExecutionClientView(
     val isStackClear: Boolean,
     val resolutionType: ResolvedPatternType,
@@ -14,4 +12,3 @@ data class ExecutionClientView(
     val stackDescs: List<CompoundTag>,
     val ravenmind: CompoundTag?,
 )
-

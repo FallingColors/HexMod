@@ -7,20 +7,21 @@ import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/**
- * An iota storing a continuation (in essence an execution state).
- */
+/** An iota storing a continuation (in essence an execution state). */
 public class ContinuationIota extends Iota {
-    public static final Component DISPLAY = Component.translatable("hexcasting.tooltip.jump_iota").withStyle(ChatFormatting.RED);
+    public static final Component DISPLAY =
+            Component.translatable("hexcasting.tooltip.jump_iota").withStyle(ChatFormatting.RED);
 
     public ContinuationIota(SpellContinuation cont) {
         super(HexIotaTypes.CONTINUATION, cont);
@@ -37,18 +38,26 @@ public class ContinuationIota extends Iota {
 
     @Override
     public boolean toleratesOther(Iota that) {
-        return typesMatch(this, that) && that instanceof ContinuationIota cont && cont.getContinuation().equals(getContinuation());
+        return typesMatch(this, that)
+                && that instanceof ContinuationIota cont
+                && cont.getContinuation().equals(getContinuation());
     }
 
     @Override
-    public @NotNull
-    Tag serialize() {
+    public @NotNull Tag serialize() {
         return getContinuation().serializeToNBT();
     }
 
     @Override
-    public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
-        return new CastResult(this, this.getContinuation(), vm.getImage(), List.of(), ResolvedPatternType.EVALUATED, HexEvalSounds.HERMES);
+    public @NotNull CastResult execute(
+            CastingVM vm, ServerLevel world, SpellContinuation continuation) {
+        return new CastResult(
+                this,
+                this.getContinuation(),
+                vm.getImage(),
+                List.of(),
+                ResolvedPatternType.EVALUATED,
+                HexEvalSounds.HERMES);
     }
 
     @Override
@@ -69,21 +78,23 @@ public class ContinuationIota extends Iota {
         return Math.min(size, 1);
     }
 
-    public static IotaType<ContinuationIota> TYPE = new IotaType<>() {
-        @Override
-        public @NotNull ContinuationIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            var compoundTag = HexUtils.downcast(tag, CompoundTag.TYPE);
-            return new ContinuationIota(SpellContinuation.fromNBT(compoundTag, world));
-        }
+    public static IotaType<ContinuationIota> TYPE =
+            new IotaType<>() {
+                @Override
+                public @NotNull ContinuationIota deserialize(Tag tag, ServerLevel world)
+                        throws IllegalArgumentException {
+                    var compoundTag = HexUtils.downcast(tag, CompoundTag.TYPE);
+                    return new ContinuationIota(SpellContinuation.fromNBT(compoundTag, world));
+                }
 
-        @Override
-        public Component display(Tag tag) {
-            return DISPLAY;
-        }
+                @Override
+                public Component display(Tag tag) {
+                    return DISPLAY;
+                }
 
-        @Override
-        public int color() {
-            return 0xff_cc0000;
-        }
-    };
+                @Override
+                public int color() {
+                    return 0xff_cc0000;
+                }
+            };
 }

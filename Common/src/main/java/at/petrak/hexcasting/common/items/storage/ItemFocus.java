@@ -1,10 +1,13 @@
 package at.petrak.hexcasting.common.items.storage;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -12,11 +15,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class ItemFocus extends Item implements IotaHolderItem, VariantItem {
     // 0 = no overlay
@@ -40,7 +42,8 @@ public class ItemFocus extends Item implements IotaHolderItem, VariantItem {
 
     @Override
     public String getDescriptionId(ItemStack stack) {
-        return super.getDescriptionId(stack) + (NBTHelper.getBoolean(stack, TAG_SEALED) ? ".sealed" : "");
+        return super.getDescriptionId(stack)
+                + (NBTHelper.getBoolean(stack, TAG_SEALED) ? ".sealed" : "");
     }
 
     @Override
@@ -64,8 +67,11 @@ public class ItemFocus extends Item implements IotaHolderItem, VariantItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
-        TooltipFlag pIsAdvanced) {
+    public void appendHoverText(
+            ItemStack pStack,
+            @Nullable Level pLevel,
+            List<Component> pTooltipComponents,
+            TooltipFlag pIsAdvanced) {
         IotaHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
     }
 
@@ -84,7 +90,6 @@ public class ItemFocus extends Item implements IotaHolderItem, VariantItem {
 
     @Override
     public void setVariant(ItemStack stack, int variant) {
-        if (!isSealed(stack))
-            NBTHelper.putInt(stack, TAG_VARIANT, clampVariant(variant));
+        if (!isSealed(stack)) NBTHelper.putInt(stack, TAG_VARIANT, clampVariant(variant));
     }
 }
