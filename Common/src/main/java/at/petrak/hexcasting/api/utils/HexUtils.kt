@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.world.InteractionHand
-import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import java.lang.ref.WeakReference
@@ -44,6 +43,7 @@ fun vecFromNBT(tag: LongArray): Vec3 = if (tag.size != 3) Vec3.ZERO else
         Double.fromBits(tag[1]),
         Double.fromBits(tag[2])
     )
+
 fun vecFromNBT(tag: CompoundTag): Vec3 {
     return if (!tag.contains("x") || !tag.contains("y") || !tag.contains("z"))
         Vec3.ZERO
@@ -282,13 +282,13 @@ fun <A> List<A>.zipWithDefault(array: ByteArray, default: (idx: Int) -> Byte): L
 
     return list
 }
-
-// Copy the impl from forge
-fun ItemStack.serializeToNBT(): CompoundTag {
-    val out = CompoundTag()
-    this.save(out)
-    return out
-}
+//
+//// Copy the impl from forge
+//fun ItemStack.serializeToNBT(): CompoundTag {
+//    val out = CompoundTag()
+//    this.save(out)
+//    return out
+//}
 
 @Suppress("UNCHECKED_CAST")
 @Throws(IllegalArgumentException::class)

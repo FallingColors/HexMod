@@ -28,15 +28,16 @@ import net.minecraft.world.phys.Vec3
 object OpTeleport : SpellAction {
     override val argc = 2
     override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
+        args: List<Iota>,
+        env: CastingEnvironment
     ): SpellAction.Result {
 
         val teleportee = args.getEntity(0, argc)
         val delta = args.getVec3(1, argc)
         env.assertEntityInRange(teleportee)
 
-        if (!teleportee.canChangeDimensions() || teleportee.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
+        // TODO: see todos on blink
+        if (!teleportee.canUsePortal(true) || teleportee.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
             throw MishapImmuneEntity(teleportee)
 
         val targetPos = teleportee.position().add(delta)

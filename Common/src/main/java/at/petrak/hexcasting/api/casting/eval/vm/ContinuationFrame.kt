@@ -63,7 +63,7 @@ interface ContinuationFrame {
             val type = getTypeFromTag(tag) ?: return FrameEvaluate(SpellList.LList(0, listOf()), false)
 
             return (tag.get(HexContinuationTypes.KEY_DATA) as? CompoundTag)?.let { type.deserializeFromNBT(it, world) }
-                    ?: FrameEvaluate(SpellList.LList(0, listOf()), false)
+                ?: FrameEvaluate(SpellList.LList(0, listOf()), false)
         }
 
         /**
@@ -75,7 +75,8 @@ interface ContinuationFrame {
             val typeId = HexContinuationTypes.REGISTRY.getKey(type)
                 ?: throw IllegalStateException(
                     "Tried to serialize an unregistered continuation type. Continuation: " + frame
-                        + " ; Type" + type.javaClass.typeName)
+                        + " ; Type" + type.javaClass.typeName
+                )
 
             val data = frame.serializeToNBT()
 
@@ -97,12 +98,9 @@ interface ContinuationFrame {
             }
 
             val typeKey = tag.getString(HexContinuationTypes.KEY_TYPE)
-            if (!ResourceLocation.isValidResourceLocation(typeKey)) {
-                return null
-            }
+            val typeLoc = ResourceLocation.tryParse(typeKey)
 
-            val typeLoc = ResourceLocation(typeKey)
-            return HexContinuationTypes.REGISTRY[typeLoc]
+            return typeLoc?.let { HexContinuationTypes.REGISTRY[it] }
         }
     }
 }

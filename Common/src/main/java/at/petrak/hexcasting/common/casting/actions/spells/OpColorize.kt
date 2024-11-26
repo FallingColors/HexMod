@@ -15,8 +15,8 @@ object OpColorize : SpellAction {
     override val argc = 0
 
     override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
+        args: List<Iota>,
+        env: CastingEnvironment
     ): SpellAction.Result {
         val (handStack) = env.getHeldItemToOperateOn(IXplatAbstractions.INSTANCE::isPigment)
             ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY, "colorizer") // TODO: hack
@@ -38,7 +38,7 @@ object OpColorize : SpellAction {
     private data class Spell(val stack: ItemStack) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
             val copy = stack.copy()
-            if (env.withdrawItem({ ItemStack.isSameItemSameTags(copy, it) }, 1, true))
+            if (env.withdrawItem({ ItemStack.isSameItemSameComponents(copy, it) }, 1, true))
                 env.setPigment(FrozenPigment(copy, env.castingEntity?.uuid ?: Util.NIL_UUID))
         }
     }

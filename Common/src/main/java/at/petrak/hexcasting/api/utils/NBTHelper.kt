@@ -1,5 +1,7 @@
 @file:JvmName("NBTHelper")
 
+// TODO this entire file needs to be HEAVILY refactored. also i need to understand components
+
 package at.petrak.hexcasting.api.utils
 
 import net.minecraft.nbt.*
@@ -115,9 +117,12 @@ fun CompoundTag.getList(key: String, objType: Byte): ListTag = getList(key, objT
 
 // Get-or-create
 
-fun CompoundTag.getOrCreateCompound(key: String): CompoundTag = getCompound(key) ?: CompoundTag().also { putCompound(key, it) }
+fun CompoundTag.getOrCreateCompound(key: String): CompoundTag =
+    getCompound(key) ?: CompoundTag().also { putCompound(key, it) }
+
 fun CompoundTag.getOrCreateList(key: String, objType: Byte) = getOrCreateList(key, objType.toInt())
-fun CompoundTag.getOrCreateList(key: String, objType: Int): ListTag = if (hasList(key, objType)) getList(key, objType) else ListTag().also { putList(key, it) }
+fun CompoundTag.getOrCreateList(key: String, objType: Int): ListTag =
+    if (hasList(key, objType)) getList(key, objType) else ListTag().also { putList(key, it) }
 
 // ================================================================================================================ Tag
 
@@ -136,10 +141,12 @@ val Tag.asLongArray: LongArray
             val array = this.asIntArray
             LongArray(array.size) { array[it].toLong() }
         }
+
         is ByteArrayTag -> {
             val array = this.asByteArray
             LongArray(array.size) { array[it].toLong() }
         }
+
         else -> LongArray(0)
     }
 
@@ -150,10 +157,12 @@ val Tag.asIntArray: IntArray
             val array = this.asLongArray
             IntArray(array.size) { array[it].toInt() }
         }
+
         is ByteArrayTag -> {
             val array = this.asByteArray
             IntArray(array.size) { array[it].toInt() }
         }
+
         else -> IntArray(0)
     }
 
@@ -164,10 +173,12 @@ val Tag.asByteArray: ByteArray
             val array = this.asLongArray
             ByteArray(array.size) { array[it].toByte() }
         }
+
         is IntArrayTag -> {
             val array = this.asIntArray
             ByteArray(array.size) { array[it].toByte() }
         }
+
         else -> ByteArray(0)
     }
 

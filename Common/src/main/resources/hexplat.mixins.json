@@ -11,6 +11,7 @@
     "MixinVillager",
     "MixinWitch",
     "accessor.AccessorAbstractArrow",
+    "accessor.AccessorDamageSource",
     "accessor.AccessorEntity",
     "accessor.AccessorLivingEntity",
     "accessor.AccessorLootTable",

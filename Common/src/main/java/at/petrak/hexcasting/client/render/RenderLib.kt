@@ -112,8 +112,10 @@ fun drawLineSeq(
         val normal = Vec2(-tangent.y, tangent.x)
 
         fun color(time: Float): Int =
-            FastColor.ARGB32.color(Mth.lerp(time, a1, a2).toInt(), Mth.lerp(time, r1, r2).toInt(),
-                Mth.lerp(time, g1, g2).toInt(), Mth.lerp(time, b1, b2).toInt())
+            FastColor.ARGB32.color(
+                Mth.lerp(time, a1, a2).toInt(), Mth.lerp(time, r1, r2).toInt(),
+                Mth.lerp(time, g1, g2).toInt(), Mth.lerp(time, b1, b2).toInt()
+            )
 
         val color1 = color(i.toFloat() / n)
         val color2 = color((i + 1f) / n)
@@ -220,7 +222,8 @@ fun drawPatternFromPoints(
     lastSegmentLenProportion: Float,
     seed: Double
 ) {
-    val zappyPts = makeZappy(points, dupIndices, 10, 2.5f, 0.1f, flowIrregular, readabilityOffset, lastSegmentLenProportion, seed)
+    val zappyPts =
+        makeZappy(points, dupIndices, 10, 2.5f, 0.1f, flowIrregular, readabilityOffset, lastSegmentLenProportion, seed)
     val nodes = if (drawLast) {
         points
     } else {
@@ -353,7 +356,13 @@ fun <T> findDupIndices(pts: Iterable<T>): Set<Int> {
  * include primitive drawing code...
  */
 fun drawSpot(mat: Matrix4f, point: Vec2, radius: Float, r: Float, g: Float, b: Float, a: Float) {
-    drawSpot(mat, point, radius, ARGB32.color((a*255).toInt(), (r*255).toInt(), (g*255).toInt(), (b*255).toInt()), VCDrawHelper.Basic(1f))
+    drawSpot(
+        mat,
+        point,
+        radius,
+        ARGB32.color((a * 255).toInt(), (r * 255).toInt(), (g * 255).toInt(), (b * 255).toInt()),
+        VCDrawHelper.Basic(1f)
+    )
 }
 
 fun drawSpot(mat: Matrix4f, point: Vec2, radius: Float, color: Int, vcHelper: VCDrawHelper) {
@@ -447,19 +456,14 @@ fun renderQuad(
 ) {
     val mat = ps.last().pose()
     val tess = Tesselator.getInstance()
-    val buf = tess.builder
-    buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR)
-    buf.vertex(mat, x, y, 0f)
-        .color(color)
-        .endVertex()
-    buf.vertex(mat, x, y + h, 0f)
-        .color(color)
-        .endVertex()
-    buf.vertex(mat, x + w, y + h, 0f)
-        .color(color)
-        .endVertex()
-    buf.vertex(mat, x + w, y, 0f)
-        .color(color)
-        .endVertex()
-    tess.end()
+    val buf = tess.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR)
+    buf.addVertex(mat, x, y, 0f)
+        .setColor(color)
+    buf.addVertex(mat, x, y + h, 0f)
+        .setColor(color)
+    buf.addVertex(mat, x + w, y + h, 0f)
+        .setColor(color)
+    buf.addVertex(mat, x + w, y, 0f)
+        .setColor(color)
+    buf.buildOrThrow()
 }

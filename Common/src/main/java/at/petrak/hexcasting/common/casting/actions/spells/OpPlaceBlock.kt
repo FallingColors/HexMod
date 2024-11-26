@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.mixin.accessor.AccessorUseOnContext
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -20,7 +21,6 @@ import net.minecraft.world.InteractionResult
 import net.minecraft.world.item.BlockItem
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.context.BlockPlaceContext
-import net.minecraft.world.item.context.UseOnContext
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.Vec3
 
@@ -40,7 +40,15 @@ object OpPlaceBlock : SpellAction {
         )
         val itemUseCtx = env
             .queryForMatchingStack { it.item is BlockItem }
-            ?.let { UseOnContext(env.world, env.castingEntity as? ServerPlayer, env.castingHand, it, blockHit) }
+            ?.let {
+                AccessorUseOnContext.`hex$new`(
+                    env.world,
+                    env.castingEntity as? ServerPlayer,
+                    env.castingHand,
+                    it,
+                    blockHit
+                )
+            }
             ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY, "placeable")
         val placeContext = BlockPlaceContext(itemUseCtx)
 
@@ -77,7 +85,13 @@ object OpPlaceBlock : SpellAction {
                     spoofedStack.count = 1
 
                     val itemUseCtx =
-                        UseOnContext(env.world, caster as? ServerPlayer, env.otherHand, spoofedStack, blockHit)
+                        AccessorUseOnContext.`hex$new`(
+                            env.world,
+                            caster as? ServerPlayer,
+                            env.otherHand,
+                            spoofedStack,
+                            blockHit
+                        )
                     val placeContext = BlockPlaceContext(itemUseCtx)
                     if (bstate.canBeReplaced(placeContext)) {
                         if (env.withdrawItem({ it == placeeStack }, 1, false)) {
