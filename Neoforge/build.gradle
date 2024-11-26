@@ -1,0 +1,132 @@
+architectury {
+    platformSetupLoomIde()
+    neoForge()
+}
+
+pkSubproj {
+    platform = "neoforge"
+    curseforgeJar = jar.archiveFile
+    curseforgeDependencies[]
+    modrinthJar = jar.archiveFile
+    modrinthDependencies[]
+}
+
+configurations {
+    common {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentNeoForge.extendsFrom common
+
+    // Files in this configuration will be bundled into your mod using the Shadow plugin.
+    // Don't use the `shadow` configuration from the plugin itself as it's meant for excluding files.
+    shadowBundle {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+repositories {
+    mavenCentral()
+
+    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
+    flatDir {
+        dir 'libs'
+    }
+
+    maven { url "https://maven.neoforged.net/releases/" }
+    // caelus elytra
+    maven { url = "https://maven.theillusivec4.top" }
+    // pehkui
+    maven { url = "https://jitpack.io" }
+
+    // EMI
+    maven { url = "https://maven.terraformersmc.com/releases/" }
+
+    maven {
+        name = 'Kotlin for Forge'
+        url = 'https://thedarkcolour.github.io/KotlinForForge/'
+        content { includeGroup "thedarkcolour" }
+    }
+
+    maven { url "https://maven.shedaniel.me/" }
+}
+
+dependencies {
+    neoForge "net.neoforged:neoforge:${neoforgeVersion}"
+    common(project(path: ':Common', configuration: 'namedElements')) { transitive false }
+    shadowBundle(project(path: ':Common', configuration: 'transformProductionNeoForge')) { transitive false }
+
+    implementation "thedarkcolour:kotlinforforge:$kotlinForForgeVersion"
+
+    implementation "at.petra-k.paucal:paucal:$paucalVersion+$minecraftVersion-common"
+    implementation "vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FORGE-SNAPSHOT"
+
+    implementation "top.theillusivec4.caelus:caelus-forge:$caelusVersion"
+
+    implementation("com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion")
+
+    // needed for inline to run
+    runtimeOnly("me.shedaniel.cloth:cloth-config-forge:$clothConfigVersion")
+
+    // Optional interop
+    implementation "dev.emi:emi-neoforge:${emiVersion}"
+
+    compileOnly("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion:api")
+    runtimeOnly("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion")
+
+    api("com.github.Virtuoel:Pehkui:${pehkuiVersion}-$minecraftVersion-forge")
+}
+
+def generatedResources = project(":Common").file("src/generated/resources")
+
+loom {
+    runs {
+        create("forgeXplatDatagen") {
+            data()
+            name "Forge Xplat Datagen"
+
+            vmArg("-Dhexcasting.xplat_datagen")
+
+            programArgs "--all", "--mod", project.modID
+            programArgs "--output", generatedResources.absolutePath
+            programArgs "--existing", file("src/main/resources").absolutePath
+            programArgs "--existing", generatedResources.absolutePath
+        }
+    }
+}
+
+//mixin {
+//    add sourceSets.main, "hexcasting.mixins.refmap.json"
+//    config "hexplat.mixins.json"
+//    config "hexcasting_forge.mixins.json"
+//}
+
+compileJava {
+    source(project(":Common").sourceSets.main.allSource)
+}
+compileKotlin {
+    source(project(":Common").sourceSets.main.kotlin)
+}
+compileTestKotlin {
+    source(project(":Common").sourceSets.main.kotlin)
+}
+
+sourceSets {
+    main.resources.srcDirs += ['src/generated/resources', '../Common/src/generated/resources']
+    main.kotlin.srcDirs += 'src/main/java'
+    test.kotlin.srcDirs += 'src/main/java'
+}
+
+processResources {
+    from project(":Common").sourceSets.main.resources
+    inputs.property "version", project.version
+
+    filesMatching("mods.toml") {
+        expand "version": project.version
+    }
+}
+
+jar.finalizedBy('reobfJar')

@@ -14,10 +14,15 @@ credits = "Falkory for textures; Wiresegal for lots of polish; Alwinfy for visua
 authors = "petrak@ (aka gamma-delta)"
 description = "Cast powerful Hexes on the fly by drawing patterns with a staff."
 
+[[mixins]]
+config = "hexplat.mixins.json"
+[[mixins]]
+config = "hexcasting_forge.mixins.json"
+
 [[dependencies.hexcasting]]
-modId = "forge"
+modId = "neoforge"
 mandatory = true
-versionRange = "[47,)"
+versionRange = "[81,)"
 ordering = "NONE"
 side = "BOTH"
 

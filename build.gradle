@@ -1,19 +1,18 @@
 plugins {
-    id 'java'
+    // used for something??
+    id 'dev.architectury.loom' version '1.7-SNAPSHOT' apply false
+    // used for multi-loader stuff, NOT for the archi API
+    id 'architectury-plugin' version '3.4-SNAPSHOT'
+
     id "org.jetbrains.kotlin.jvm"
-    id 'idea'
-    // This needs to be in the root
-    // https://github.com/FabricMC/fabric-loom/issues/612#issuecomment-1198444120
-    // Also it looks like property lookups don't work this early
-    id 'fabric-loom' version '1.8.9' apply false
 
     id "at.petra-k.pkpcpbp.PKPlugin" version "0.2.0-pre-103"
     id "at.petra-k.pkpcpbp.PKSubprojPlugin" version "0.2.0-pre-103" apply false
     id "at.petra-k.pkpcpbp.PKJson5Plugin" version "0.2.0-pre-103" apply false
 }
 
-repositories {
-    mavenCentral()
+architectury {
+    minecraft = project.minecraftVersion
 }
 
 pkpcpbp {
@@ -42,11 +41,48 @@ pkpcpbp {
 }
 
 subprojects {
+    apply plugin: 'dev.architectury.loom'
+    apply plugin: 'architectury-plugin'
     apply plugin: 'java'
     apply plugin: 'kotlin'
     apply plugin: 'maven-publish'
     apply plugin: "at.petra-k.pkpcpbp.PKSubprojPlugin"
     apply plugin: "at.petra-k.pkpcpbp.PKJson5Plugin"
+
+    loom {
+        silentMojangMappingsLicense() // heroes in a half-shell
+    }
+    dependencies {
+        minecraft "net.minecraft:minecraft:$rootProject.minecraftVersion"
+        mappings loom.officialMojangMappings()
+    }
+
+    sourceSets.main.kotlin.srcDirs += 'src/main/java'
+
+    if (project.path != ':Common') {
+        loom {
+            mods {
+                main { // to match the default mod generated for Forge
+                    sourceSet project.sourceSets.main
+                    sourceSet project(':Common').sourceSets.main
+                }
+            }
+        }
+    }
+
+    pkJson5 {
+        autoProcessJson5 = true
+        autoProcessJson5Flattening = true
+    }
+    processResources {
+        exclude '.cache'
+    }
+
+    java {
+        withSourcesJar()
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
 
     // Disables Gradle's custom module metadata from being published to maven. The
     // metadata includes mapped dependencies which are not reasonably consumable by
@@ -55,24 +91,13 @@ subprojects {
         enabled = false
     }
 
-    sourceSets.main.kotlin.srcDirs += 'src/main/java'
-
-    pkJson5 {
-        autoProcessJson5 = true
-        autoProcessJson5Flattening = true
-    }
-
-    processResources {
-        exclude '.cache'
-    }
-    java {
-        withSourcesJar()
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
 }
 
 allprojects {
+    architectury {
+        compileOnly()
+    }
+
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
             options.compilerArgs << "-Xmaxerrs" << "1000"
