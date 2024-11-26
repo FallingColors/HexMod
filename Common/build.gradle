@@ -26,6 +26,8 @@ repositories {
     maven { url "https://maven.shedaniel.me/" }
     // accessories
     maven { url 'https://maven.wispforest.io/releases' }
+    // EMI
+    maven { url = "https://maven.terraformersmc.com/releases/" }
 }
 
 dependencies {
@@ -37,7 +39,7 @@ dependencies {
 //    compileOnly "com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion"
 
     // === OPTIONAL DEPS ===
-    compileOnly "dev.emi:emi-api:${emiVersion}"
+    modCompileOnly "dev.emi:emi-xplat-intermediary:${emiVersion}:api"
     compileOnly "io.wispforest:accessories-common:$accessoriesVersion"
 
     // === OTHER STUFF ===
@@ -61,3 +63,6 @@ processResources {
         expand buildProps
     }
 }
+
+// it wants a task by this name to exist for some reason
+task("prepareWorkspace") {}

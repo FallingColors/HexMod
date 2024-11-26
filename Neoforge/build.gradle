@@ -76,7 +76,8 @@ dependencies {
 
     // === OPTIONAL DEPS ===
 
-    implementation "dev.emi:emi-neoforge:${emiVersion}"
+    compileOnly "dev.emi:emi-neoforge:${emiVersion}:api"
+    runtimeOnly "dev.emi:emi-neoforge:${emiVersion}"
     modImplementation "io.wispforest:accessories-neoforge:$accessoriesVersion"
 
     api("com.github.Virtuoel:Pehkui:${pehkuiVersion}-1.21-neoforge")
