@@ -209,4 +209,8 @@ processResources {
     }
 }
 
+sourcesJar {
+    from project(":Common").sourceSets.main.allSource
+}
+
 jar.finalizedBy('reobfJar')
