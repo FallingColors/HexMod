@@ -37,11 +37,12 @@ repositories {
     }
 
     maven { url "https://maven.neoforged.net/releases/" }
+    // paucal and patchi
+    maven { url = 'https://maven.blamejared.com' }
     // caelus elytra
     maven { url = "https://maven.theillusivec4.top" }
     // pehkui
     maven { url = "https://jitpack.io" }
-
     // EMI
     maven { url = "https://maven.terraformersmc.com/releases/" }
 
@@ -52,32 +53,39 @@ repositories {
     }
 
     maven { url "https://maven.shedaniel.me/" }
+    // accessories
+    maven { url 'https://maven.wispforest.io/releases' }
+    // sinytra connector or something?? accessories needs it
+    maven { url 'https://maven.su5ed.dev/releases' }
 }
 
 dependencies {
     neoForge "net.neoforged:neoforge:${neoforgeVersion}"
     common(project(path: ':Common', configuration: 'namedElements')) { transitive false }
     shadowBundle(project(path: ':Common', configuration: 'transformProductionNeoForge')) { transitive false }
-
     implementation "thedarkcolour:kotlinforforge:$kotlinForForgeVersion"
 
-    implementation "at.petra-k.paucal:paucal:$paucalVersion+$minecraftVersion-common"
-    implementation "vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FORGE-SNAPSHOT"
+    // === MANDATORY DEPS ===
 
+    implementation "at.petra-k:paucal:$paucalVersion+$minecraftVersion-common"
+    implementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-NEOFORGE-SNAPSHOT"
     implementation "top.theillusivec4.caelus:caelus-forge:$caelusVersion"
-
-    implementation("com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion")
-
+//    implementation("com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion")
     // needed for inline to run
     runtimeOnly("me.shedaniel.cloth:cloth-config-forge:$clothConfigVersion")
 
-    // Optional interop
+    // === OPTIONAL DEPS ===
+
     implementation "dev.emi:emi-neoforge:${emiVersion}"
+    modImplementation "io.wispforest:accessories-neoforge:$accessoriesVersion"
 
-    compileOnly("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion:api")
-    runtimeOnly("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion")
+    api("com.github.Virtuoel:Pehkui:${pehkuiVersion}-1.21-neoforge")
 
-    api("com.github.Virtuoel:Pehkui:${pehkuiVersion}-$minecraftVersion-forge")
+    // "Required due to issues with JIJ dependency resolving in arch or something"
+    // https://github.com/wisp-forest/accessories
+    forgeRuntimeLibrary("io.wispforest:endec:0.1.8")
+    forgeRuntimeLibrary("io.wispforest.endec:gson:0.1.5")
+    forgeRuntimeLibrary("io.wispforest.endec:netty:0.1.4")
 }
 
 def generatedResources = project(":Common").file("src/generated/resources")

@@ -95,7 +95,7 @@ subprojects {
 
 allprojects {
     architectury {
-        compileOnly()
+//        compileOnly()
     }
 
     gradle.projectsEvaluated {
