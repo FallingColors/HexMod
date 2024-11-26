@@ -1,13 +1,14 @@
 plugins {
-    id 'fabric-loom' version "1.6-SNAPSHOT"
-    id "at.petra-k.PKSubprojPlugin"
+    id 'fabric-loom' version "1.8.9"
 }
 
 pkSubproj {
-    platform "fabric"
-    curseforgeJar remapJar.archiveFile
+    platform = "fabric"
+    pkPublish = true
+
+    curseforgeJar = remapJar.archiveFile
     curseforgeDependencies[]
-    modrinthJar remapJar.archiveFile
+    modrinthJar = remapJar.archiveFile
     modrinthDependencies[]
 }
 

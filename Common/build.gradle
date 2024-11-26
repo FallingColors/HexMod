@@ -1,10 +1,10 @@
 plugins {
     id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT'
-    id "at.petra-k.PKSubprojPlugin"
 }
 
 pkSubproj {
-    platform "common"
+    platform = "common"
+    pkPublish = false
 }
 
 minecraft {

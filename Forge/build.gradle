@@ -16,18 +16,16 @@ buildscript {
 plugins {
     id "java"
     id "maven-publish"
-
-    id "at.petra-k.PKSubprojPlugin"
 }
 
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 pkSubproj {
-    platform "forge"
-    curseforgeJar jar.archiveFile
+    platform = "forge"
+    curseforgeJar = jar.archiveFile
     curseforgeDependencies[]
-    modrinthJar jar.archiveFile
+    modrinthJar = jar.archiveFile
     modrinthDependencies[]
 }
 
@@ -149,7 +147,7 @@ minecraft {
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             property 'hexcasting.xplat_datagen', 'true'
-            
+
             mods {
                 create(modID) {
                     source sourceSets.main
