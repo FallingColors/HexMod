@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.recipe.ingredient;
 
 import com.google.gson.JsonObject;
-import net.minecraft.core.Registry;
+
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;

@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.common.lib.HexItems;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -21,28 +22,30 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
 import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
 import java.util.EnumSet;
+
+import javax.annotation.Nonnull;
 
 // When on the floor or ceiling FACING is the direction the *bottom* of the pattern points
 // (or which way is "down").
 // When on the wall FACING is the direction of the *front* of the block
-public class BlockSlate extends BlockCircleComponent implements EntityBlock, SimpleWaterloggedBlock {
+public class BlockSlate extends BlockCircleComponent
+        implements EntityBlock, SimpleWaterloggedBlock {
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final EnumProperty<AttachFace> ATTACH_FACE = BlockStateProperties.ATTACH_FACE;
@@ -58,26 +61,35 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
     public BlockSlate(Properties p_53182_) {
         super(p_53182_);
         this.registerDefaultState(
-            this.stateDefinition.any()
-                .setValue(ENERGIZED, false)
-                .setValue(FACING, Direction.NORTH)
-                .setValue(WATERLOGGED, false));
+                this.stateDefinition
+                        .any()
+                        .setValue(ENERGIZED, false)
+                        .setValue(FACING, Direction.NORTH)
+                        .setValue(WATERLOGGED, false));
     }
 
     @Override
-    public boolean propagatesSkylightDown(BlockState state, @Nonnull BlockGetter reader, @Nonnull BlockPos pos) {
+    public boolean propagatesSkylightDown(
+            BlockState state, @Nonnull BlockGetter reader, @Nonnull BlockPos pos) {
         return !state.getValue(WATERLOGGED);
     }
 
     @Nonnull
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED)
+                ? Fluids.WATER.getSource(false)
+                : super.getFluidState(state);
     }
 
     @Override
-    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos,
-        BlockState bs, ServerLevel world) {
+    public ControlFlow acceptControlFlow(
+            CastingImage imageIn,
+            CircleCastEnv env,
+            Direction enterDir,
+            BlockPos pos,
+            BlockState bs,
+            ServerLevel world) {
         HexPattern pattern;
         if (world.getBlockEntity(pos) instanceof BlockEntitySlate tile) {
             pattern = tile.pattern;
@@ -90,8 +102,7 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
 
         var exitDirs = exitDirsSet.stream().map((dir) -> this.exitPositionFromDirection(pos, dir));
 
-        if (pattern == null)
-            return new ControlFlow.Continue(imageIn, exitDirs.toList());
+        if (pattern == null) return new ControlFlow.Continue(imageIn, exitDirs.toList());
 
         var vm = new CastingVM(imageIn, env);
 
@@ -104,7 +115,8 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
     }
 
     @Override
-    public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+    public boolean canEnterFromDirection(
+            Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
         var thisNormal = this.normalDir(pos, bs, world);
         return enterDir != thisNormal.getOpposite(); // && enterDir != thisNormal;
     }
@@ -114,13 +126,13 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
         var allDirs = EnumSet.allOf(Direction.class);
         var normal = this.normalDir(pos, bs, world);
         allDirs.remove(normal);
-//        allDirs.remove(normal.getOpposite());
+        //        allDirs.remove(normal.getOpposite());
         return allDirs;
     }
 
     @SoftImplement("forge")
-    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos,
-        Player player) {
+    public ItemStack getCloneItemStack(
+            BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof BlockEntitySlate slate) {
             ItemStack stack = new ItemStack(HexItems.SLATE);
@@ -154,17 +166,19 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
     }
 
     @Override
-    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+    public VoxelShape getShape(
+            BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return switch (pState.getValue(ATTACH_FACE)) {
             case FLOOR -> AABB_FLOOR;
             case CEILING -> AABB_CEILING;
-            case WALL -> switch (pState.getValue(FACING)) {
-                case NORTH -> AABB_NORTH_WALL;
-                case EAST -> AABB_EAST_WALL;
-                case SOUTH -> AABB_SOUTH_WALL;
-                // NORTH; up and down don't happen (but we need branches for them)
-                default -> AABB_WEST_WALL;
-            };
+            case WALL ->
+                    switch (pState.getValue(FACING)) {
+                        case NORTH -> AABB_NORTH_WALL;
+                        case EAST -> AABB_EAST_WALL;
+                        case SOUTH -> AABB_SOUTH_WALL;
+                            // NORTH; up and down don't happen (but we need branches for them)
+                        default -> AABB_WEST_WALL;
+                    };
         };
     }
 
@@ -182,16 +196,24 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
         for (Direction direction : pContext.getNearestLookingDirections()) {
             BlockState blockstate;
             if (direction.getAxis() == Direction.Axis.Y) {
-                blockstate = this.defaultBlockState()
-                    .setValue(ATTACH_FACE, direction == Direction.UP ? AttachFace.CEILING : AttachFace.FLOOR)
-                    .setValue(FACING, pContext.getHorizontalDirection().getOpposite());
+                blockstate =
+                        this.defaultBlockState()
+                                .setValue(
+                                        ATTACH_FACE,
+                                        direction == Direction.UP
+                                                ? AttachFace.CEILING
+                                                : AttachFace.FLOOR)
+                                .setValue(FACING, pContext.getHorizontalDirection().getOpposite());
             } else {
-                blockstate = this.defaultBlockState()
-                    .setValue(ATTACH_FACE, AttachFace.WALL)
-                    .setValue(FACING, direction.getOpposite());
+                blockstate =
+                        this.defaultBlockState()
+                                .setValue(ATTACH_FACE, AttachFace.WALL)
+                                .setValue(FACING, direction.getOpposite());
             }
-            blockstate = blockstate.setValue(WATERLOGGED,
-                fluidState.is(FluidTags.WATER) && fluidState.getAmount() == 8);
+            blockstate =
+                    blockstate.setValue(
+                            WATERLOGGED,
+                            fluidState.is(FluidTags.WATER) && fluidState.getAmount() == 8);
 
             if (blockstate.canSurvive(pContext.getLevel(), pContext.getClickedPos())) {
                 return blockstate;
@@ -208,21 +230,27 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
     }
 
     @Override
-    public BlockState updateShape(BlockState pState, Direction pFacing, BlockState pFacingState, LevelAccessor pLevel,
-        BlockPos pCurrentPos, BlockPos pFacingPos) {
+    public BlockState updateShape(
+            BlockState pState,
+            Direction pFacing,
+            BlockState pFacingState,
+            LevelAccessor pLevel,
+            BlockPos pCurrentPos,
+            BlockPos pFacingPos) {
         if (pState.getValue(WATERLOGGED)) {
             pLevel.scheduleTick(pCurrentPos, Fluids.WATER, Fluids.WATER.getTickDelay(pLevel));
         }
 
         return getConnectedDirection(pState).getOpposite() == pFacing
-            && !pState.canSurvive(pLevel, pCurrentPos) ?
-            pState.getFluidState().createLegacyBlock()
-            : super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
+                        && !pState.canSurvive(pLevel, pCurrentPos)
+                ? pState.getFluidState().createLegacyBlock()
+                : super.updateShape(pState, pFacing, pFacingState, pLevel, pCurrentPos, pFacingPos);
     }
 
     public static boolean canAttach(LevelReader pReader, BlockPos pPos, Direction pDirection) {
         BlockPos blockpos = pPos.relative(pDirection);
-        return pReader.getBlockState(blockpos).isFaceSturdy(pReader, blockpos, pDirection.getOpposite());
+        return pReader.getBlockState(blockpos)
+                .isFaceSturdy(pReader, blockpos, pDirection.getOpposite());
     }
 
     protected static Direction getConnectedDirection(BlockState pState) {

@@ -22,7 +22,6 @@ object OpAnd : ConstMediaAction {
             { list1 ->
                 val list2 = args.getList(1, argc)
                 list1.filter { x -> list2.any { Iota.tolerates(x, it) } }.asActionResult
-            }
-        )
+            })
     }
 }

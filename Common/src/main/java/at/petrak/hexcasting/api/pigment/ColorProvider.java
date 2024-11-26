@@ -1,13 +1,12 @@
 package at.petrak.hexcasting.api.pigment;
 
 import at.petrak.hexcasting.api.addldata.ADPigment;
+
 import net.minecraft.util.FastColor;
 import net.minecraft.world.phys.Vec3;
 
 public abstract class ColorProvider {
-    /**
-     * Implers, impl this function
-     */
+    /** Implers, impl this function */
     protected abstract int getRawColor(float time, Vec3 position);
 
     private static final int[] MINIMUM_LUMINANCE_COLOR_WHEEL = {
@@ -17,7 +16,7 @@ public abstract class ColorProvider {
     /**
      * Gets a color with a minimum luminance applied.
      *
-     * @param time     absolute world time in ticks
+     * @param time absolute world time in ticks
      * @param position a position for the icosahedron, a randomish number for particles.
      * @return an AARRGGBB color.
      */
@@ -27,11 +26,17 @@ public abstract class ColorProvider {
         var r = FastColor.ARGB32.red(raw);
         var g = FastColor.ARGB32.green(raw);
         var b = FastColor.ARGB32.blue(raw);
-        double luminance = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 0xFF; // Standard relative luminance calculation
+        double luminance =
+                (0.2126 * r + 0.7152 * g + 0.0722 * b)
+                        / 0xFF; // Standard relative luminance calculation
 
         if (luminance < 0.05) {
-            int rawMod = ADPigment.morphBetweenColors(MINIMUM_LUMINANCE_COLOR_WHEEL, new Vec3(0.1, 0.1, 0.1),
-                time / 20 / 20, position);
+            int rawMod =
+                    ADPigment.morphBetweenColors(
+                            MINIMUM_LUMINANCE_COLOR_WHEEL,
+                            new Vec3(0.1, 0.1, 0.1),
+                            time / 20 / 20,
+                            position);
 
             r += FastColor.ARGB32.red(rawMod);
             g += FastColor.ARGB32.green(rawMod);
@@ -41,10 +46,11 @@ public abstract class ColorProvider {
         return 0xff_000000 | (r << 16) | (g << 8) | b;
     }
 
-    public static final ColorProvider MISSING = new ColorProvider() {
-        @Override
-        protected int getRawColor(float time, Vec3 position) {
-            return 0xFF_ff00dc;
-        }
-    };
+    public static final ColorProvider MISSING =
+            new ColorProvider() {
+                @Override
+                protected int getRawColor(float time, Vec3 position) {
+                    return 0xFF_ff00dc;
+                }
+            };
 }

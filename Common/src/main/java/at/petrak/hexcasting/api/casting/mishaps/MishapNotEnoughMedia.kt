@@ -17,5 +17,6 @@ class MishapNotEnoughMedia(private val cost: Long) : Mishap() {
         env.extractMedia(cost, false)
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = "hexcasting.message.cant_overcast".asTranslatedComponent
+    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
+        "hexcasting.message.cant_overcast".asTranslatedComponent
 }

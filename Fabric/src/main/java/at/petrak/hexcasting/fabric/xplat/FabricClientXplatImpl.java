@@ -8,6 +8,7 @@ import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsApiInterop;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -28,6 +29,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
+
 import org.jetbrains.annotations.Nullable;
 
 public class FabricClientXplatImpl implements IClientXplatAbstractions {
@@ -49,21 +51,29 @@ public class FabricClientXplatImpl implements IClientXplatAbstractions {
     }
 
     @Override
-    public <T extends Entity> void registerEntityRenderer(EntityType<? extends T> type,
-        EntityRendererProvider<T> renderer) {
+    public <T extends Entity> void registerEntityRenderer(
+            EntityType<? extends T> type, EntityRendererProvider<T> renderer) {
         EntityRendererRegistry.register(type, renderer);
     }
 
     // suck it fabric trying to be "safe"
-    private record UnclampedClampedItemPropFunc(ItemPropertyFunction inner) implements ClampedItemPropertyFunction {
+    private record UnclampedClampedItemPropFunc(ItemPropertyFunction inner)
+            implements ClampedItemPropertyFunction {
         @Override
-        public float unclampedCall(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity,
-            int seed) {
+        public float unclampedCall(
+                ItemStack stack,
+                @Nullable ClientLevel level,
+                @Nullable LivingEntity entity,
+                int seed) {
             return inner.call(stack, level, entity, seed);
         }
 
         @Override
-        public float call(ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity, int seed) {
+        public float call(
+                ItemStack stack,
+                @Nullable ClientLevel level,
+                @Nullable LivingEntity entity,
+                int seed) {
             return this.unclampedCall(stack, level, entity, seed);
         }
     }

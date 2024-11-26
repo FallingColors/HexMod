@@ -9,16 +9,25 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext
 import net.minecraft.world.item.ItemStack
 
 @Suppress("UnstableApiUsage")
-class FabricImpetusStorage(val impetus: BlockEntityAbstractImpetus) : SingleSlotStorage<ItemVariant> {
+class FabricImpetusStorage(val impetus: BlockEntityAbstractImpetus) :
+    SingleSlotStorage<ItemVariant> {
     companion object {
         fun registerStorage() {
-            ItemStorage.SIDED.registerForBlocks({ _, _, _, blockEntity, _ ->
-                (blockEntity as? BlockEntityAbstractImpetus)?.let(::FabricImpetusStorage)
-            }, HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_REDSTONE)
+            ItemStorage.SIDED.registerForBlocks(
+                { _, _, _, blockEntity, _ ->
+                    (blockEntity as? BlockEntityAbstractImpetus)?.let(::FabricImpetusStorage)
+                },
+                HexBlocks.IMPETUS_RIGHTCLICK,
+                HexBlocks.IMPETUS_LOOK,
+                HexBlocks.IMPETUS_REDSTONE)
         }
     }
 
-    override fun insert(resource: ItemVariant, maxAmount: Long, transaction: TransactionContext): Long {
+    override fun insert(
+        resource: ItemVariant,
+        maxAmount: Long,
+        transaction: TransactionContext
+    ): Long {
         val stackCount = maxAmount / 64
         val remainder = (maxAmount % 64).toInt()
         var mediaToTake = impetus.remainingMediaCapacity()
@@ -57,7 +66,11 @@ class FabricImpetusStorage(val impetus: BlockEntityAbstractImpetus) : SingleSlot
 
     override fun supportsExtraction(): Boolean = false
 
-    override fun extract(resource: ItemVariant, maxAmount: Long, transaction: TransactionContext): Long = 0
+    override fun extract(
+        resource: ItemVariant,
+        maxAmount: Long,
+        transaction: TransactionContext
+    ): Long = 0
 
     override fun isResourceBlank(): Boolean = true
 

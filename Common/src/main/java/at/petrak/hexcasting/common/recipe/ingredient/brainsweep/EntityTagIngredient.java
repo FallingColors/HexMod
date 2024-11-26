@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
 import com.google.gson.JsonObject;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -33,10 +33,7 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
     }
 
     private static String tagKey(ResourceLocation tagLoc) {
-        return "tag."
-            + tagLoc.getNamespace()
-            + "."
-            + tagLoc.getPath().replace('/', '.');
+        return "tag." + tagLoc.getNamespace() + "." + tagLoc.getPath().replace('/', '.');
     }
 
     @Override
@@ -44,8 +41,8 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
         String key = tagKey(this.entityTypeTag.location());
         boolean moddersDidAGoodJob = I18n.exists(key);
         return moddersDidAGoodJob
-            ? Component.translatable(key)
-            : Component.literal("#" + this.entityTypeTag.location());
+                ? Component.translatable(key)
+                : Component.literal("#" + this.entityTypeTag.location());
     }
 
     @Override
@@ -55,9 +52,7 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
         boolean moddersDidAGoodJob = I18n.exists(key);
 
         var out = new ArrayList<Component>();
-        out.add(moddersDidAGoodJob
-            ? Component.translatable(key)
-            : Component.literal("#" + loc));
+        out.add(moddersDidAGoodJob ? Component.translatable(key) : Component.literal("#" + loc));
         if (advanced && moddersDidAGoodJob) {
             // Print it anyways
             out.add(Component.literal("#" + loc).withStyle(ChatFormatting.DARK_GRAY));
@@ -70,7 +65,8 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
 
     @Override
     public Entity exampleEntity(Level level) {
-        var someEntityTys = BuiltInRegistries.ENTITY_TYPE.getTagOrEmpty(this.entityTypeTag).iterator();
+        var someEntityTys =
+                BuiltInRegistries.ENTITY_TYPE.getTagOrEmpty(this.entityTypeTag).iterator();
         if (someEntityTys.hasNext()) {
             var someTy = someEntityTys.next();
             return someTy.value().create(level);
@@ -117,9 +113,7 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
     @Override
     public String getSomeKindOfReasonableIDForEmi() {
         var resloc = this.entityTypeTag.location();
-        return resloc.getNamespace()
-            + "//"
-            + resloc.getPath();
+        return resloc.getNamespace() + "//" + resloc.getPath();
     }
 
     @Override

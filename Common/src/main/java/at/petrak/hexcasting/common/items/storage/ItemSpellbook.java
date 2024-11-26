@@ -1,10 +1,13 @@
 package at.petrak.hexcasting.common.items.storage;
 
+import static at.petrak.hexcasting.common.items.storage.ItemFocus.NUM_VARIANTS;
+
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -15,12 +18,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.stream.Stream;
-
-import static at.petrak.hexcasting.common.items.storage.ItemFocus.NUM_VARIANTS;
 
 public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     public static String TAG_SELECTED_PAGE = "page_idx";
@@ -46,8 +48,11 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip,
-        TooltipFlag isAdvanced) {
+    public void appendHoverText(
+            ItemStack stack,
+            @Nullable Level level,
+            List<Component> tooltip,
+            TooltipFlag isAdvanced) {
         boolean sealed = isSealed(stack);
         boolean empty = false;
         if (NBTHelper.hasNumber(stack, TAG_SELECTED_PAGE)) {
@@ -55,16 +60,26 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
             int highest = highestPage(stack);
             if (highest != 0) {
                 if (sealed) {
-                    tooltip.add(Component.translatable("hexcasting.tooltip.spellbook.page.sealed",
-                            Component.literal(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
-                            Component.literal(String.valueOf(highest)).withStyle(ChatFormatting.WHITE),
-                            Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
-                        .withStyle(ChatFormatting.GRAY));
+                    tooltip.add(
+                            Component.translatable(
+                                            "hexcasting.tooltip.spellbook.page.sealed",
+                                            Component.literal(String.valueOf(pageIdx))
+                                                    .withStyle(ChatFormatting.WHITE),
+                                            Component.literal(String.valueOf(highest))
+                                                    .withStyle(ChatFormatting.WHITE),
+                                            Component.translatable(
+                                                            "hexcasting.tooltip.spellbook.sealed")
+                                                    .withStyle(ChatFormatting.GOLD))
+                                    .withStyle(ChatFormatting.GRAY));
                 } else {
-                    tooltip.add(Component.translatable("hexcasting.tooltip.spellbook.page",
-                            Component.literal(String.valueOf(pageIdx)).withStyle(ChatFormatting.WHITE),
-                            Component.literal(String.valueOf(highest)).withStyle(ChatFormatting.WHITE))
-                        .withStyle(ChatFormatting.GRAY));
+                    tooltip.add(
+                            Component.translatable(
+                                            "hexcasting.tooltip.spellbook.page",
+                                            Component.literal(String.valueOf(pageIdx))
+                                                    .withStyle(ChatFormatting.WHITE),
+                                            Component.literal(String.valueOf(highest))
+                                                    .withStyle(ChatFormatting.WHITE))
+                                    .withStyle(ChatFormatting.GRAY));
                 }
             } else {
                 empty = true;
@@ -77,16 +92,22 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
             boolean overridden = NBTHelper.hasString(stack, TAG_OVERRIDE_VISUALLY);
             if (sealed) {
                 if (overridden) {
-                    tooltip.add(Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(
-                        ChatFormatting.GOLD));
+                    tooltip.add(
+                            Component.translatable("hexcasting.tooltip.spellbook.sealed")
+                                    .withStyle(ChatFormatting.GOLD));
                 } else {
-                    tooltip.add(Component.translatable("hexcasting.tooltip.spellbook.empty.sealed",
-                            Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD))
-                        .withStyle(ChatFormatting.GRAY));
+                    tooltip.add(
+                            Component.translatable(
+                                            "hexcasting.tooltip.spellbook.empty.sealed",
+                                            Component.translatable(
+                                                            "hexcasting.tooltip.spellbook.sealed")
+                                                    .withStyle(ChatFormatting.GOLD))
+                                    .withStyle(ChatFormatting.GRAY));
                 }
             } else if (!overridden) {
                 tooltip.add(
-                    Component.translatable("hexcasting.tooltip.spellbook.empty").withStyle(ChatFormatting.GRAY));
+                        Component.translatable("hexcasting.tooltip.spellbook.empty")
+                                .withStyle(ChatFormatting.GRAY));
             }
         }
 
@@ -96,7 +117,8 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
+    public void inventoryTick(
+            ItemStack stack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
         int index = getPage(stack, 0);
         NBTHelper.putInt(stack, TAG_SELECTED_PAGE, index);
 
@@ -116,8 +138,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     }
 
     @Override
-    public @Nullable
-    CompoundTag readIotaTag(ItemStack stack) {
+    public @Nullable CompoundTag readIotaTag(ItemStack stack) {
         int idx = getPage(stack, 1);
         var key = String.valueOf(idx);
         var tag = NBTHelper.getCompound(stack, TAG_PAGES);
@@ -196,7 +217,6 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         } else {
             NBTHelper.putCompound(stack, TAG_SEALED, names);
         }
-
     }
 
     public static boolean isSealed(ItemStack stack) {
@@ -212,13 +232,17 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         if (tag == null) {
             return 0;
         }
-        return tag.getAllKeys().stream().flatMap(s -> {
-            try {
-                return Stream.of(Integer.parseInt(s));
-            } catch (NumberFormatException e) {
-                return Stream.empty();
-            }
-        }).max(Integer::compare).orElse(0);
+        return tag.getAllKeys().stream()
+                .flatMap(
+                        s -> {
+                            try {
+                                return Stream.of(Integer.parseInt(s));
+                            } catch (NumberFormatException e) {
+                                return Stream.empty();
+                            }
+                        })
+                .max(Integer::compare)
+                .orElse(0);
     }
 
     public static int rotatePageIdx(ItemStack stack, boolean increase) {
@@ -250,7 +274,6 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
 
     @Override
     public void setVariant(ItemStack stack, int variant) {
-        if (!isSealed(stack))
-            NBTHelper.putInt(stack, TAG_VARIANT, clampVariant(variant));
+        if (!isSealed(stack)) NBTHelper.putInt(stack, TAG_VARIANT, clampVariant(variant));
     }
 }

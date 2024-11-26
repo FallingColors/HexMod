@@ -1,9 +1,13 @@
 package at.petrak.hexcasting.common.msgs;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.env.StaffCastEnv;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+
 import io.netty.buffer.ByteBuf;
+
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -13,15 +17,13 @@ import net.minecraft.world.InteractionHand;
 import java.util.ArrayList;
 import java.util.List;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
-
 /**
- * Sent client->server when the player finishes drawing a pattern.
- * Server will send back a {@link MsgNewSpellPatternS2C} packet
+ * Sent client->server when the player finishes drawing a pattern. Server will send back a {@link
+ * MsgNewSpellPatternS2C} packet
  */
-public record MsgNewSpellPatternC2S(InteractionHand handUsed, HexPattern pattern,
-                                    List<ResolvedPattern> resolvedPatterns)
-    implements IMessage {
+public record MsgNewSpellPatternC2S(
+        InteractionHand handUsed, HexPattern pattern, List<ResolvedPattern> resolvedPatterns)
+        implements IMessage {
     public static final ResourceLocation ID = modLoc("pat_cs");
 
     @Override

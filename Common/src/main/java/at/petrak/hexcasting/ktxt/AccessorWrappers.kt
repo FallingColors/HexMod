@@ -1,4 +1,5 @@
 @file:JvmName("AccessorWrappers")
+
 package at.petrak.hexcasting.ktxt
 
 import at.petrak.hexcasting.mixin.accessor.AccessorEntity
@@ -21,20 +22,33 @@ var LivingEntity.lastHurt: Float
     get() = (this as AccessorLivingEntity).`hex$getLastHurt`()
     set(value) = (this as AccessorLivingEntity).`hex$setLastHurt`(value)
 
-fun LivingEntity.playHurtSound(source: DamageSource) = (this as AccessorLivingEntity).`hex$playHurtSound`(source)
-fun LivingEntity.checkTotemDeathProtection(source: DamageSource) = (this as AccessorLivingEntity).`hex$checkTotemDeathProtection`(source)
-val LivingEntity.deathSoundAccessor: SoundEvent? get() = (this as AccessorLivingEntity).`hex$getDeathSound`()
-val LivingEntity.soundVolumeAccessor get() = (this as AccessorLivingEntity).`hex$getSoundVolume`()
+fun LivingEntity.playHurtSound(source: DamageSource) =
+    (this as AccessorLivingEntity).`hex$playHurtSound`(source)
 
-fun LivingEntity.setHurtWithStamp(source: DamageSource, stamp: Long) = (this as AccessorLivingEntity).apply {
-    `hex$setLastDamageSource`(source)
-    `hex$setLastDamageStamp`(stamp)
-}
+fun LivingEntity.checkTotemDeathProtection(source: DamageSource) =
+    (this as AccessorLivingEntity).`hex$checkTotemDeathProtection`(source)
+
+val LivingEntity.deathSoundAccessor: SoundEvent?
+    get() = (this as AccessorLivingEntity).`hex$getDeathSound`()
+val LivingEntity.soundVolumeAccessor
+    get() = (this as AccessorLivingEntity).`hex$getSoundVolume`()
+
+fun LivingEntity.setHurtWithStamp(source: DamageSource, stamp: Long) =
+    (this as AccessorLivingEntity).apply {
+        `hex$setLastDamageSource`(source)
+        `hex$setLastDamageStamp`(stamp)
+    }
 
 fun Entity.markHurt() = (this as AccessorEntity).`hex$markHurt`()
 
-fun Villager.tellWitnessesThatIWasMurdered(murderer: Entity) = (this as AccessorVillager).`hex$tellWitnessesThatIWasMurdered`(murderer)
+fun Villager.tellWitnessesThatIWasMurdered(murderer: Entity) =
+    (this as AccessorVillager).`hex$tellWitnessesThatIWasMurdered`(murderer)
 
 @Suppress("FunctionName")
-fun UseOnContext(level: Level, player: Player?, hand: InteractionHand, stack: ItemStack, hitResult: BlockHitResult): UseOnContext =
-    AccessorUseOnContext.`hex$new`(level, player, hand, stack, hitResult)
+fun UseOnContext(
+    level: Level,
+    player: Player?,
+    hand: InteractionHand,
+    stack: ItemStack,
+    hitResult: BlockHitResult
+): UseOnContext = AccessorUseOnContext.`hex$new`(level, player, hand, stack, hitResult)

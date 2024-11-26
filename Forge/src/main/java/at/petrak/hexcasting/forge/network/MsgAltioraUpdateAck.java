@@ -1,15 +1,18 @@
 package at.petrak.hexcasting.forge.network;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import io.netty.buffer.ByteBuf;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
+import org.jetbrains.annotations.Nullable;
 
 public record MsgAltioraUpdateAck(@Nullable AltioraAbility altiora) implements IMessage {
     public static final ResourceLocation ID = modLoc("altiora");
@@ -39,14 +42,16 @@ public record MsgAltioraUpdateAck(@Nullable AltioraAbility altiora) implements I
     }
 
     public static void handle(MsgAltioraUpdateAck self) {
-        Minecraft.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                var player = Minecraft.getInstance().player;
-                if (player != null) {
-                    IXplatAbstractions.INSTANCE.setAltiora(player, self.altiora);
-                }
-            }
-        });
+        Minecraft.getInstance()
+                .execute(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                var player = Minecraft.getInstance().player;
+                                if (player != null) {
+                                    IXplatAbstractions.INSTANCE.setAltiora(player, self.altiora);
+                                }
+                            }
+                        });
     }
 }

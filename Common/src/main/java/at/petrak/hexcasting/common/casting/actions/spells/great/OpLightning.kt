@@ -16,10 +16,7 @@ import net.minecraft.world.phys.Vec3
 object OpLightning : SpellAction {
     override val argc = 1
 
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
         val target = args.getVec3(0, argc)
         env.assertVecInRange(target)
 
@@ -29,8 +26,7 @@ object OpLightning : SpellAction {
         return SpellAction.Result(
             Spell(target),
             3 * MediaConstants.SHARD_UNIT,
-            listOf(ParticleSpray(target.add(0.0, 2.0, 0.0), Vec3(0.0, -1.0, 0.0), 0.5, 0.1))
-        )
+            listOf(ParticleSpray(target.add(0.0, 2.0, 0.0), Vec3(0.0, -1.0, 0.0), 0.5, 0.1)))
     }
 
     private data class Spell(val target: Vec3) : RenderedSpell {
@@ -38,7 +34,8 @@ object OpLightning : SpellAction {
 
             val lightning = LightningBolt(EntityType.LIGHTNING_BOLT, env.world)
             lightning.setPosRaw(target.x, target.y, target.z)
-            env.world.addWithUUID(lightning) // why the hell is it called this it doesnt even involve a uuid
+            env.world.addWithUUID(
+                lightning) // why the hell is it called this it doesnt even involve a uuid
         }
     }
 }

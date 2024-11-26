@@ -19,10 +19,7 @@ import net.minecraft.sounds.SoundSource
 object OpAkashicWrite : SpellAction {
     override val argc = 3
 
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
         val pos = args.getBlockPos(0, argc)
         val key = args.getPattern(1, argc)
         val datum = args.get(2)
@@ -34,15 +31,12 @@ object OpAkashicWrite : SpellAction {
             throw MishapNoAkashicRecord(pos)
         }
 
-        val trueName = MishapOthersName.getTrueNameFromDatum(datum, env.castingEntity as? ServerPlayer)
-        if (trueName != null)
-            throw MishapOthersName(trueName)
+        val trueName =
+            MishapOthersName.getTrueNameFromDatum(datum, env.castingEntity as? ServerPlayer)
+        if (trueName != null) throw MishapOthersName(trueName)
 
         return SpellAction.Result(
-            Spell(record, pos, key, datum),
-            MediaConstants.DUST_UNIT,
-            listOf()
-        )
+            Spell(record, pos, key, datum), MediaConstants.DUST_UNIT, listOf())
     }
 
     private data class Spell(
@@ -50,15 +44,12 @@ object OpAkashicWrite : SpellAction {
         val recordPos: BlockPos,
         val key: HexPattern,
         val datum: Iota
-    ) :
-        RenderedSpell {
+    ) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
             record.addNewDatum(recordPos, env.world, key, datum)
 
             env.world.playSound(
-                null, recordPos, HexSounds.SCROLL_SCRIBBLE, SoundSource.BLOCKS,
-                1f, 0.8f
-            )
+                null, recordPos, HexSounds.SCROLL_SCRIBBLE, SoundSource.BLOCKS, 1f, 0.8f)
 
             // val colorizer = HexPlayerDataHelper.getColorizer(ctx.caster)
             // val normal = record.blockState.getValue(BlockAkashicBookshelf.FACING).normal

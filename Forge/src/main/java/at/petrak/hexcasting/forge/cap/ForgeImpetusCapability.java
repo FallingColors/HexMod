@@ -1,8 +1,10 @@
 package at.petrak.hexcasting.forge.cap;
 
 import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
+
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
+
 import org.jetbrains.annotations.NotNull;
 
 public record ForgeImpetusCapability(BlockEntityAbstractImpetus impetus) implements IItemHandler {
@@ -29,7 +31,8 @@ public record ForgeImpetusCapability(BlockEntityAbstractImpetus impetus) impleme
         if (!simulate) {
             impetus.insertMedia(stack);
         } else {
-            impetus.extractMediaFromInsertedItem(stack, false); // Media goes nowhere, since nothing is actually
+            impetus.extractMediaFromInsertedItem(
+                    stack, false); // Media goes nowhere, since nothing is actually
             // being done
         }
 

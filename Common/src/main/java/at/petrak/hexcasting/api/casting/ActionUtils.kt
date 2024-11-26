@@ -8,6 +8,10 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import com.mojang.datafixers.util.Either
+import java.util.function.DoubleUnaryOperator
+import kotlin.math.abs
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
@@ -17,10 +21,6 @@ import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.phys.Vec3
 import org.joml.Vector3f
-import java.util.function.DoubleUnaryOperator
-import kotlin.math.abs
-import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 
 fun List<Iota>.getDouble(idx: Int, argc: Int = 0): Double {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
@@ -83,8 +83,7 @@ fun List<Iota>.getItemEntity(idx: Int, argc: Int = 0): ItemEntity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
         val e = x.entity
-        if (e is ItemEntity)
-            return e
+        if (e is ItemEntity) return e
     }
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.item")
 }
@@ -93,8 +92,7 @@ fun List<Iota>.getPlayer(idx: Int, argc: Int = 0): ServerPlayer {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
         val e = x.entity
-        if (e is ServerPlayer)
-            return e
+        if (e is ServerPlayer) return e
     }
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.player")
 }
@@ -103,8 +101,7 @@ fun List<Iota>.getMob(idx: Int, argc: Int = 0): Mob {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
         val e = x.entity
-        if (e is Mob)
-            return e
+        if (e is Mob) return e
     }
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.mob")
 }
@@ -113,8 +110,7 @@ fun List<Iota>.getLivingEntityButNotArmorStand(idx: Int, argc: Int = 0): LivingE
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
         val e = x.entity
-        if (e is LivingEntity && e !is ArmorStand)
-            return e
+        if (e is LivingEntity && e !is ArmorStand) return e
     }
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.living")
 }
@@ -138,7 +134,8 @@ fun List<Iota>.getPositiveDoubleUnder(idx: Int, max: Double, argc: Int = 0): Dou
             return double
         }
     }
-    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "double.positive.less", max)
+    throw MishapInvalidIota.of(
+        x, if (argc == 0) idx else argc - (idx + 1), "double.positive.less", max)
 }
 
 fun List<Iota>.getPositiveDoubleUnderInclusive(idx: Int, max: Double, argc: Int = 0): Double {
@@ -149,7 +146,8 @@ fun List<Iota>.getPositiveDoubleUnderInclusive(idx: Int, max: Double, argc: Int 
             return double
         }
     }
-    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "double.positive.less.equal", max)
+    throw MishapInvalidIota.of(
+        x, if (argc == 0) idx else argc - (idx + 1), "double.positive.less.equal", max)
 }
 
 fun List<Iota>.getDoubleBetween(idx: Int, min: Double, max: Double, argc: Int = 0): Double {
@@ -160,7 +158,8 @@ fun List<Iota>.getDoubleBetween(idx: Int, min: Double, max: Double, argc: Int = 
             return double
         }
     }
-    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "double.between", min, max)
+    throw MishapInvalidIota.of(
+        x, if (argc == 0) idx else argc - (idx + 1), "double.between", min, max)
 }
 
 fun List<Iota>.getInt(idx: Int, argc: Int = 0): Int {
@@ -184,7 +183,8 @@ fun List<Iota>.getLong(idx: Int, argc: Int = 0): Long {
             return rounded
         }
     }
-    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int") // shh we're lying
+    throw MishapInvalidIota.of(
+        x, if (argc == 0) idx else argc - (idx + 1), "int") // shh we're lying
 }
 
 fun List<Iota>.getPositiveInt(idx: Int, argc: Int = 0): Int {
@@ -220,7 +220,8 @@ fun List<Iota>.getPositiveIntUnder(idx: Int, max: Int, argc: Int = 0): Int {
             return rounded
         }
     }
-    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.positive.less", max)
+    throw MishapInvalidIota.of(
+        x, if (argc == 0) idx else argc - (idx + 1), "int.positive.less", max)
 }
 
 fun List<Iota>.getPositiveIntUnderInclusive(idx: Int, max: Int, argc: Int = 0): Int {
@@ -232,7 +233,8 @@ fun List<Iota>.getPositiveIntUnderInclusive(idx: Int, max: Int, argc: Int = 0): 
             return rounded
         }
     }
-    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.positive.less.equal", max)
+    throw MishapInvalidIota.of(
+        x, if (argc == 0) idx else argc - (idx + 1), "int.positive.less.equal", max)
 }
 
 fun List<Iota>.getIntBetween(idx: Int, min: Int, max: Int, argc: Int = 0): Int {
@@ -261,11 +263,8 @@ fun List<Iota>.getNumOrVec(idx: Int, argc: Int = 0): Either<Double, Vec3> {
     return when (datum) {
         is DoubleIota -> Either.left(datum.double)
         is Vec3Iota -> Either.right(datum.vec3)
-        else -> throw MishapInvalidIota.of(
-            datum,
-            if (argc == 0) idx else argc - (idx + 1),
-            "numvec"
-        )
+        else ->
+            throw MishapInvalidIota.of(datum, if (argc == 0) idx else argc - (idx + 1), "numvec")
     }
 }
 
@@ -280,21 +279,19 @@ fun List<Iota>.getLongOrList(idx: Int, argc: Int = 0): Either<Long, SpellList> {
     } else if (datum is ListIota) {
         return Either.right(datum.list)
     }
-    throw MishapInvalidIota.of(
-        datum,
-        if (argc == 0) idx else argc - (idx + 1),
-        "numlist"
-    )
+    throw MishapInvalidIota.of(datum, if (argc == 0) idx else argc - (idx + 1), "numlist")
 }
 
 fun evaluatable(datum: Iota, reverseIdx: Int): Either<Iota, SpellList> =
     when (datum) {
         is ListIota -> Either.right(datum.list)
-        else -> if (datum.executable()) Either.left(datum) else throw MishapInvalidIota(
-            datum,
-            reverseIdx,
-            "hexcasting.mishap.invalid_value.evaluatable".asTranslatedComponent
-        )
+        else ->
+            if (datum.executable()) Either.left(datum)
+            else
+                throw MishapInvalidIota(
+                    datum,
+                    reverseIdx,
+                    "hexcasting.mishap.invalid_value.evaluatable".asTranslatedComponent)
     }
 
 fun Iota?.orNull() = this ?: NullIota()
@@ -305,19 +302,31 @@ fun Iota?.orNull() = this ?: NullIota()
 fun aplKinnie(operatee: Either<Double, Vec3>, fn: DoubleUnaryOperator): Iota =
     operatee.map(
         { num -> DoubleIota(fn.applyAsDouble(num)) },
-        { vec -> Vec3Iota(Vec3(fn.applyAsDouble(vec.x), fn.applyAsDouble(vec.y), fn.applyAsDouble(vec.z))) }
-    )
+        { vec ->
+            Vec3Iota(
+                Vec3(fn.applyAsDouble(vec.x), fn.applyAsDouble(vec.y), fn.applyAsDouble(vec.z)))
+        })
 
-inline val Boolean.asActionResult get() = listOf(BooleanIota(this))
-inline val Double.asActionResult get() = listOf(DoubleIota(this))
-inline val Number.asActionResult get() = listOf(DoubleIota(this.toDouble()))
+inline val Boolean.asActionResult
+    get() = listOf(BooleanIota(this))
+inline val Double.asActionResult
+    get() = listOf(DoubleIota(this))
+inline val Number.asActionResult
+    get() = listOf(DoubleIota(this.toDouble()))
 
-inline val SpellList.asActionResult get() = listOf(ListIota(this))
-inline val List<Iota>.asActionResult get() = listOf(ListIota(this))
+inline val SpellList.asActionResult
+    get() = listOf(ListIota(this))
+inline val List<Iota>.asActionResult
+    get() = listOf(ListIota(this))
 
-inline val BlockPos.asActionResult get() = listOf(Vec3Iota(Vec3.atCenterOf(this)))
-inline val Vector3f.asActionResult get() = listOf(Vec3Iota(Vec3(this)))
-inline val Vec3.asActionResult get() = listOf(Vec3Iota(this))
+inline val BlockPos.asActionResult
+    get() = listOf(Vec3Iota(Vec3.atCenterOf(this)))
+inline val Vector3f.asActionResult
+    get() = listOf(Vec3Iota(Vec3(this)))
+inline val Vec3.asActionResult
+    get() = listOf(Vec3Iota(this))
 
-inline val Entity?.asActionResult get() = listOf(if (this == null) NullIota() else EntityIota(this))
-inline val HexPattern.asActionResult get() = listOf(PatternIota(this))
+inline val Entity?.asActionResult
+    get() = listOf(if (this == null) NullIota() else EntityIota(this))
+inline val HexPattern.asActionResult
+    get() = listOf(PatternIota(this))

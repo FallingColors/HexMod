@@ -15,7 +15,11 @@ class MishapNoSpellCircle : Mishap() {
         dyeColor(DyeColor.LIGHT_BLUE)
 
     // FIXME: make me work with any entity and not just players
-    private inline fun dropAll(player: Player, stacks: MutableList<ItemStack>, filter: (ItemStack) -> Boolean = { true }) {
+    private inline fun dropAll(
+        player: Player,
+        stacks: MutableList<ItemStack>,
+        filter: (ItemStack) -> Boolean = { true }
+    ) {
         for (index in stacks.indices) {
             val item = stacks[index]
             if (!item.isEmpty && filter(item)) {
@@ -31,12 +35,9 @@ class MishapNoSpellCircle : Mishap() {
             // FIXME: handle null caster case
             dropAll(caster, caster.inventory.items)
             dropAll(caster, caster.inventory.offhand)
-            dropAll(caster, caster.inventory.armor) {
-                !EnchantmentHelper.hasBindingCurse(it)
-            }
+            dropAll(caster, caster.inventory.armor) { !EnchantmentHelper.hasBindingCurse(it) }
         }
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("no_spell_circle")
+    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = error("no_spell_circle")
 }

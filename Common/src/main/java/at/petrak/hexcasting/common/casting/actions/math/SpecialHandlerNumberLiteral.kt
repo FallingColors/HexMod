@@ -20,9 +20,14 @@ class SpecialHandlerNumberLiteral(val x: Double) : SpecialHandler {
     }
 
     override fun getName(): Component {
-        val key = IXplatAbstractions.INSTANCE.specialHandlerRegistry.getResourceKey(HexSpecialHandlers.NUMBER).get()
-        return HexAPI.instance().getSpecialHandlerI18nKey(key)
-            .asTranslatedComponent(Action.DOUBLE_FORMATTER.format(x)).lightPurple
+        val key =
+            IXplatAbstractions.INSTANCE.specialHandlerRegistry
+                .getResourceKey(HexSpecialHandlers.NUMBER)
+                .get()
+        return HexAPI.instance()
+            .getSpecialHandlerI18nKey(key)
+            .asTranslatedComponent(Action.DOUBLE_FORMATTER.format(x))
+            .lightPurple
     }
 
     class InnerAction(val x: Double) : ConstMediaAction {
@@ -34,31 +39,34 @@ class SpecialHandlerNumberLiteral(val x: Double) : SpecialHandler {
     }
 
     class Factory : SpecialHandler.Factory<SpecialHandlerNumberLiteral> {
-        override fun tryMatch(pat: HexPattern, env: CastingEnvironment): SpecialHandlerNumberLiteral? {
+        override fun tryMatch(
+            pat: HexPattern,
+            env: CastingEnvironment
+        ): SpecialHandlerNumberLiteral? {
             val sig = pat.anglesSignature()
             if (sig.startsWith("aqaa") || sig.startsWith("dedd")) {
-                val negate = sig.startsWith("dedd");
-                var accumulator = 0.0;
+                val negate = sig.startsWith("dedd")
+                var accumulator = 0.0
                 for (ch in sig.substring(4)) {
                     when (ch) {
                         'w' -> {
-                            accumulator += 1;
+                            accumulator += 1
                         }
 
                         'q' -> {
-                            accumulator += 5;
+                            accumulator += 5
                         }
 
                         'e' -> {
-                            accumulator += 10;
+                            accumulator += 10
                         }
 
                         'a' -> {
-                            accumulator *= 2;
+                            accumulator *= 2
                         }
 
                         'd' -> {
-                            accumulator /= 2;
+                            accumulator /= 2
                         }
                         // ok funny man
                         's' -> {}
@@ -66,13 +74,12 @@ class SpecialHandlerNumberLiteral(val x: Double) : SpecialHandler {
                     }
                 }
                 if (negate) {
-                    accumulator = -accumulator;
+                    accumulator = -accumulator
                 }
-                return SpecialHandlerNumberLiteral(accumulator);
+                return SpecialHandlerNumberLiteral(accumulator)
             } else {
-                return null;
+                return null
             }
         }
-
     }
 }

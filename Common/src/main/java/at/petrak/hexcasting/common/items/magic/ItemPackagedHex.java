@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.common.items.magic;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.eval.env.PackagedItemCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
@@ -11,6 +13,7 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.msgs.MsgNewSpiralPatternsS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -27,16 +30,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
-
-/**
- * Item that holds a list of patterns in it ready to be cast
- */
+/** Item that holds a list of patterns in it ready to be cast */
 public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHolderItem {
     public static final String TAG_PROGRAM = "patterns";
     public static final String TAG_PIGMENT = "pigment";
@@ -82,15 +82,15 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
     }
 
     @Override
-    public void writeHex(ItemStack stack, List<Iota> program, @Nullable FrozenPigment pigment, long media) {
+    public void writeHex(
+            ItemStack stack, List<Iota> program, @Nullable FrozenPigment pigment, long media) {
         ListTag patsTag = new ListTag();
         for (Iota pat : program) {
             patsTag.add(IotaType.serialize(pat));
         }
 
         NBTHelper.putList(stack, TAG_PROGRAM, patsTag);
-        if (pigment != null)
-            NBTHelper.putCompound(stack, TAG_PIGMENT, pigment.serializeToNBT());
+        if (pigment != null) NBTHelper.putCompound(stack, TAG_PIGMENT, pigment.serializeToNBT());
 
         withMedia(stack, media, media);
     }
@@ -106,13 +106,13 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
     @Override
     public @Nullable FrozenPigment getPigment(ItemStack stack) {
         var ctag = NBTHelper.getCompound(stack, TAG_PIGMENT);
-        if (ctag == null)
-            return null;
+        if (ctag == null) return null;
         return FrozenPigment.fromNBT(ctag);
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand usedHand) {
+    public InteractionResultHolder<ItemStack> use(
+            Level world, Player player, InteractionHand usedHand) {
         var stack = player.getItemInHand(usedHand);
         if (!hasHex(stack)) {
             return InteractionResultHolder.fail(stack);
@@ -131,10 +131,11 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         var harness = CastingVM.empty(ctx);
         var clientView = harness.queueExecuteAndWrapIotas(instrs, sPlayer.serverLevel());
 
-        var patterns = instrs.stream()
-                .filter(i -> i instanceof PatternIota)
-                .map(i -> ((PatternIota) i).getPattern())
-                .toList();
+        var patterns =
+                instrs.stream()
+                        .filter(i -> i instanceof PatternIota)
+                        .map(i -> ((PatternIota) i).getPattern())
+                        .toList();
         var packet = new MsgNewSpiralPatternsS2C(sPlayer.getUUID(), patterns, 140);
         IXplatAbstractions.INSTANCE.sendPacketToPlayer(sPlayer, packet);
         IXplatAbstractions.INSTANCE.sendPacketTracking(sPlayer, packet);
@@ -161,8 +162,16 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         var sound = ctx.getSound().sound();
         if (sound != null) {
             var soundPos = sPlayer.position();
-            sPlayer.level().playSound(null, soundPos.x, soundPos.y, soundPos.z,
-                    sound, SoundSource.PLAYERS, 1f, 1f);
+            sPlayer.level()
+                    .playSound(
+                            null,
+                            soundPos.x,
+                            soundPos.y,
+                            soundPos.z,
+                            sound,
+                            SoundSource.PLAYERS,
+                            1f,
+                            1f);
         }
 
         if (broken) {

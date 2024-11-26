@@ -3,7 +3,6 @@ package at.petrak.hexcasting.api.client
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import kotlin.math.min
 
-
 class ClientCastingStack {
     private var patterns = ArrayList<HexPatternRenderHolder>()
     private var toRemove = mutableSetOf<HexPatternRenderHolder>()
@@ -12,7 +11,9 @@ class ClientCastingStack {
 
     fun addPattern(pattern: HexPattern?, lifetime: Int) {
         if (pattern == null) return
-        if (patterns.stream().anyMatch { patternRenderHolder -> patternRenderHolder.pattern.hashCode() == pattern.hashCode() }) {
+        if (patterns.stream().anyMatch { patternRenderHolder ->
+            patternRenderHolder.pattern.hashCode() == pattern.hashCode()
+        }) {
             return
         }
         if (patterns.size > 100) {

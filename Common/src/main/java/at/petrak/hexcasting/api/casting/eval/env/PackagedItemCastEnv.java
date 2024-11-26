@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.msgs.MsgNewSpiralPatternsS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 
@@ -25,9 +26,9 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
         super.postExecution(result);
 
         if (result.component1() instanceof PatternIota patternIota) {
-            var packet = new MsgNewSpiralPatternsS2C(
-                    this.caster.getUUID(), List.of(patternIota.getPattern()), 140
-            );
+            var packet =
+                    new MsgNewSpiralPatternsS2C(
+                            this.caster.getUUID(), List.of(patternIota.getPattern()), 140);
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(this.caster, packet);
             IXplatAbstractions.INSTANCE.sendPacketTracking(this.caster, packet);
         }
@@ -38,13 +39,11 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
 
     @Override
     public long extractMediaEnvironment(long costLeft, boolean simulate) {
-        if (this.caster.isCreative())
-            return 0;
+        if (this.caster.isCreative()) return 0;
 
         var casterStack = this.caster.getItemInHand(this.castingHand);
         var casterHexHolder = IXplatAbstractions.INSTANCE.findHexHolder(casterStack);
-        if (casterHexHolder == null)
-            return costLeft;
+        if (casterHexHolder == null) return costLeft;
         var canCastFromInv = casterHexHolder.canDrawMediaFromInventory();
 
         var casterMediaHolder = IXplatAbstractions.INSTANCE.findMediaHolder(casterStack);
@@ -71,11 +70,9 @@ public class PackagedItemCastEnv extends PlayerBasedCastEnv {
     public FrozenPigment getPigment() {
         var casterStack = this.caster.getItemInHand(this.castingHand);
         var casterHexHolder = IXplatAbstractions.INSTANCE.findHexHolder(casterStack);
-        if (casterHexHolder == null)
-            return IXplatAbstractions.INSTANCE.getPigment(this.caster);
+        if (casterHexHolder == null) return IXplatAbstractions.INSTANCE.getPigment(this.caster);
         var hexHolderPigment = casterHexHolder.getPigment();
-        if (hexHolderPigment != null)
-            return hexHolderPigment;
+        if (hexHolderPigment != null) return hexHolderPigment;
         return IXplatAbstractions.INSTANCE.getPigment(this.caster);
     }
 

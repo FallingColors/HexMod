@@ -18,10 +18,7 @@ object OpBreakBlock : SpellAction {
     override val argc: Int
         get() = 1
 
-    override fun execute(
-        args: List<Iota>,
-        env: CastingEnvironment
-    ): SpellAction.Result {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
         val vecPos = args.getVec3(0, argc)
         val pos = BlockPos.containing(vecPos)
         env.assertPosInRangeForEditing(pos)
@@ -31,8 +28,7 @@ object OpBreakBlock : SpellAction {
         return SpellAction.Result(
             Spell(pos),
             if (isCheap) MediaConstants.DUST_UNIT / 100 else MediaConstants.DUST_UNIT / 8,
-            listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0))
-        )
+            listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0)))
     }
 
     private data class Spell(val pos: BlockPos) : RenderedSpell {
@@ -40,17 +36,13 @@ object OpBreakBlock : SpellAction {
             val blockstate = env.world.getBlockState(pos)
             val tier = HexConfig.server().opBreakHarvestLevel()
 
-            if (
-                !blockstate.isAir
-                && blockstate.getDestroySpeed(env.world, pos) >= 0f // fix being able to break bedrock &c
-                && IXplatAbstractions.INSTANCE.isCorrectTierForDrops(tier, blockstate)
-                && IXplatAbstractions.INSTANCE.isBreakingAllowed(
-                    env.world,
-                    pos,
-                    blockstate,
-                    env.castingEntity as? ServerPlayer
-                )
-            ) {
+            if (!blockstate.isAir &&
+                blockstate.getDestroySpeed(env.world, pos) >=
+                    0f // fix being able to break bedrock &c
+                &&
+                IXplatAbstractions.INSTANCE.isCorrectTierForDrops(tier, blockstate) &&
+                IXplatAbstractions.INSTANCE.isBreakingAllowed(
+                    env.world, pos, blockstate, env.castingEntity as? ServerPlayer)) {
                 env.world.destroyBlock(pos, true, env.castingEntity)
             }
         }

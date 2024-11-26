@@ -1,8 +1,7 @@
 package at.petrak.hexcasting.api.casting.arithmetic.engine;
 
 public class InvalidOperatorException extends RuntimeException {
-    public InvalidOperatorException() {
-    }
+    public InvalidOperatorException() {}
 
     public InvalidOperatorException(String s) {
         super(s);

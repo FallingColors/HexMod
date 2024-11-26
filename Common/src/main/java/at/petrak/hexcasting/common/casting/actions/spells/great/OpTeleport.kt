@@ -23,20 +23,20 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.phys.Vec3
 
-// TODO while we're making breaking changes I *really* want to have the vector in the entity's local space
+// TODO while we're making breaking changes I *really* want to have the vector in the entity's local
+// space
 // WRT its look vector
 object OpTeleport : SpellAction {
     override val argc = 2
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
+
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
 
         val teleportee = args.getEntity(0, argc)
         val delta = args.getVec3(1, argc)
         env.assertEntityInRange(teleportee)
 
-        if (!teleportee.canChangeDimensions() || teleportee.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
+        if (!teleportee.canChangeDimensions() ||
+            teleportee.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
             throw MishapImmuneEntity(teleportee)
 
         val targetPos = teleportee.position().add(delta)
@@ -52,8 +52,9 @@ object OpTeleport : SpellAction {
         return SpellAction.Result(
             Spell(teleportee, delta),
             10 * MediaConstants.CRYSTAL_UNIT,
-            listOf(ParticleSpray.cloud(targetMiddlePos, 2.0), ParticleSpray.burst(targetMiddlePos.add(delta), 2.0))
-        )
+            listOf(
+                ParticleSpray.cloud(targetMiddlePos, 2.0),
+                ParticleSpray.burst(targetMiddlePos.add(delta), 2.0)))
     }
 
     private data class Spell(val teleportee: Entity, val delta: Vec3) : RenderedSpell {
@@ -64,16 +65,18 @@ object OpTeleport : SpellAction {
 
             if (teleportee is ServerPlayer && teleportee == env.castingEntity) {
                 // Drop items conditionally, based on distance teleported.
-                // MOST IMPORTANT: Never drop main hand item, since if it's a trinket, it will get duplicated later.
+                // MOST IMPORTANT: Never drop main hand item, since if it's a trinket, it will get
+                // duplicated later.
 
                 val baseDropChance = distance / 10000.0
 
-                // Armor and hotbar items have a further reduced chance to be dropped since it's particularly annoying
-                // having to rearrange those. Also it makes sense for LORE REASONS probably, since the caster is more
+                // Armor and hotbar items have a further reduced chance to be dropped since it's
+                // particularly annoying
+                // having to rearrange those. Also it makes sense for LORE REASONS probably, since
+                // the caster is more
                 // aware of items they use often.
                 for (armorItem in teleportee.inventory.armor) {
-                    if (EnchantmentHelper.hasBindingCurse(armorItem))
-                        continue
+                    if (EnchantmentHelper.hasBindingCurse(armorItem)) continue
 
                     if (Math.random() < baseDropChance * 0.25) {
                         teleportee.drop(armorItem.copy(), true, false)
@@ -103,18 +106,21 @@ object OpTeleport : SpellAction {
         val playersToUpdate = mutableListOf<ServerPlayer>()
         val target = teleportee.position().add(delta)
 
-        val cannotTeleport = teleportee.passengers.any { it.type.`is`(HexTags.Entities.CANNOT_TELEPORT) }
-        if (cannotTeleport)
-            return
+        val cannotTeleport =
+            teleportee.passengers.any { it.type.`is`(HexTags.Entities.CANNOT_TELEPORT) }
+        if (cannotTeleport) return
 
         // A "sticky" entity teleports itself and its riders
         val sticky = teleportee.type.`is`(HexTags.Entities.STICKY_TELEPORTERS)
 
-        // TODO: this probably does funky things with stacks of passengers. I doubt this will come up in practice
+        // TODO: this probably does funky things with stacks of passengers. I doubt this will come
+        // up in practice
         // though
         if (sticky) {
             teleportee.stopRiding()
-            teleportee.indirectPassengers.filterIsInstance<ServerPlayer>().forEach(playersToUpdate::add)
+            teleportee.indirectPassengers
+                .filterIsInstance<ServerPlayer>()
+                .forEach(playersToUpdate::add)
             // this handles teleporting the passengers
             teleportee.teleportTo(target.x, target.y, target.z)
         } else {

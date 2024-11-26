@@ -5,23 +5,23 @@ package at.petrak.hexcasting.api.utils
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.addldata.ADMediaHolder
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import kotlin.math.roundToInt
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Mth
 import net.minecraft.world.item.ItemStack
-import kotlin.math.roundToInt
 
 fun isMediaItem(stack: ItemStack): Boolean {
     val mediaHolder = IXplatAbstractions.INSTANCE.findMediaHolder(stack) ?: return false
-    if (!mediaHolder.canProvide())
-        return false
+    if (!mediaHolder.canProvide()) return false
     return mediaHolder.withdrawMedia(-1, true) > 0
 }
 
 /**
- * Extract [cost] media from [stack]. If [cost] is less than zero, extract all media instead.
- * This may mutate [stack] (and may consume it) unless [simulate] is set.
+ * Extract [cost] media from [stack]. If [cost] is less than zero, extract all media instead. This
+ * may mutate [stack] (and may consume it) unless [simulate] is set.
  *
- * If [drainForBatteries] is true, this will only consider forms of media that can be used to make new batteries.
+ * If [drainForBatteries] is true, this will only consider forms of media that can be used to make
+ * new batteries.
  *
  * Return the amount of media extracted. This may be over [cost] if media is wasted.
  */
@@ -38,10 +38,11 @@ fun extractMedia(
 }
 
 /**
- * Extract [cost] media from [holder]. If [cost] is less than zero, extract all media instead.
- * This may mutate the stack underlying [holder] (and may consume it) unless [simulate] is set.
+ * Extract [cost] media from [holder]. If [cost] is less than zero, extract all media instead. This
+ * may mutate the stack underlying [holder] (and may consume it) unless [simulate] is set.
  *
- * If [drainForBatteries] is true, this will only consider forms of media that can be used to make new batteries.
+ * If [drainForBatteries] is true, this will only consider forms of media that can be used to make
+ * new batteries.
  *
  * Return the amount of media extracted. This may be over [cost] if media is wasted.
  */
@@ -51,15 +52,14 @@ fun extractMedia(
     drainForBatteries: Boolean = false,
     simulate: Boolean = false
 ): Long {
-    if (drainForBatteries && !holder.canConstructBattery())
-        return 0
+    if (drainForBatteries && !holder.canConstructBattery()) return 0
 
     return holder.withdrawMedia(cost, simulate)
 }
 
 /**
- * Convenience function to scan the player's inventory, curios, etc for media sources,
- * and then sorts them
+ * Convenience function to scan the player's inventory, curios, etc for media sources, and then
+ * sorts them
  */
 fun scanPlayerForMediaStuff(player: ServerPlayer): List<ADMediaHolder> {
     val sources = mutableListOf<ADMediaHolder>()
@@ -76,24 +76,23 @@ fun scanPlayerForMediaStuff(player: ServerPlayer): List<ADMediaHolder> {
     return sources
 }
 
-/**
- * Sorted from least important to most important
- */
+/** Sorted from least important to most important */
 fun compareMediaItem(aMedia: ADMediaHolder, bMedia: ADMediaHolder): Int {
     val priority = aMedia.consumptionPriority - bMedia.consumptionPriority
-    if (priority != 0)
-        return priority
+    if (priority != 0) return priority
 
     return (aMedia.withdrawMedia(-1, true) - bMedia.withdrawMedia(-1, true))
-            .coerceIn(Int.MIN_VALUE.toLong(), Int.MAX_VALUE.toLong()).toInt()
+        .coerceIn(Int.MIN_VALUE.toLong(), Int.MAX_VALUE.toLong())
+        .toInt()
 }
 
 fun mediaBarColor(media: Long, maxMedia: Long): Int {
-    val amt = if (maxMedia == 0L) {
-        0f
-    } else {
-        media.toFloat() / maxMedia.toFloat()
-    }
+    val amt =
+        if (maxMedia == 0L) {
+            0f
+        } else {
+            media.toFloat() / maxMedia.toFloat()
+        }
 
     val r = Mth.lerp(amt, 84f, 254f)
     val g = Mth.lerp(amt, 57f, 203f)
@@ -102,10 +101,11 @@ fun mediaBarColor(media: Long, maxMedia: Long): Int {
 }
 
 fun mediaBarWidth(media: Long, maxMedia: Long): Int {
-    val amt = if (maxMedia == 0L) {
-        0f
-    } else {
-        media.toFloat() / maxMedia.toFloat()
-    }
+    val amt =
+        if (maxMedia == 0L) {
+            0f
+        } else {
+            media.toFloat() / maxMedia.toFloat()
+        }
     return (13f * amt).roundToInt()
 }

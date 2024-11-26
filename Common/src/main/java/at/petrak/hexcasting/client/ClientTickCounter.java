@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.client.render.GaslightingTracker;
+
 import net.minecraft.client.Minecraft;
 
 public class ClientTickCounter {

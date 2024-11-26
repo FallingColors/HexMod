@@ -2,8 +2,10 @@ package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.utils.HexUtils;
+
 import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
@@ -13,11 +15,10 @@ import net.minecraft.world.entity.player.Player;
 import javax.annotation.Nullable;
 
 public class CCSentinel implements Component, AutoSyncedComponent {
-    public static final String
-        TAG_HAS_SENTINEL = "has_sentinel",
-        TAG_EXTENDS_RANGE = "extends_range",
-        TAG_POSITION = "position",
-        TAG_DIMENSION = "dimension";
+    public static final String TAG_HAS_SENTINEL = "has_sentinel",
+            TAG_EXTENDS_RANGE = "extends_range",
+            TAG_POSITION = "position",
+            TAG_DIMENSION = "dimension";
 
     private final Player owner;
     private @Nullable Sentinel sentinel = null;
@@ -41,8 +42,10 @@ public class CCSentinel implements Component, AutoSyncedComponent {
         if (hasSentinel) {
             var extendsRange = tag.getBoolean(TAG_EXTENDS_RANGE);
             var position = HexUtils.vecFromNBT(tag.getCompound(TAG_POSITION));
-            var dim = ResourceKey.create(Registries.DIMENSION,
-                new ResourceLocation(tag.getString(TAG_DIMENSION)));
+            var dim =
+                    ResourceKey.create(
+                            Registries.DIMENSION,
+                            new ResourceLocation(tag.getString(TAG_DIMENSION)));
             this.sentinel = new Sentinel(extendsRange, position, dim);
         } else {
             this.sentinel = null;

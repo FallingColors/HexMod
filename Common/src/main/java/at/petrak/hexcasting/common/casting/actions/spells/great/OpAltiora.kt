@@ -10,11 +10,11 @@ import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.player.AltioraAbility
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import kotlin.math.max
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.phys.Vec3
-import kotlin.math.max
 
 object OpAltiora : SpellAction {
     override val argc = 1
@@ -28,9 +28,7 @@ object OpAltiora : SpellAction {
             MediaConstants.CRYSTAL_UNIT,
             listOf(
                 ParticleSpray.burst(target.position(), 0.5),
-                ParticleSpray(target.position(), Vec3(0.0, 2.0, 0.0), 0.0, 0.1)
-            )
-        )
+                ParticleSpray(target.position(), Vec3(0.0, 2.0, 0.0), 0.0, 0.1)))
     }
 
     private data class Spell(val target: ServerPlayer) : RenderedSpell {
@@ -43,23 +41,45 @@ object OpAltiora : SpellAction {
         }
     }
 
-    // TODO: this sends a packet to the player every tick. I need to find out what the monotonically increasing time value is
+    // TODO: this sends a packet to the player every tick. I need to find out what the monotonically
+    // increasing time value is
     @JvmStatic
     fun checkPlayerCollision(player: ServerPlayer) {
-        val altiora = IXplatAbstractions.INSTANCE.getAltiora(player);
+        val altiora = IXplatAbstractions.INSTANCE.getAltiora(player)
         if (altiora != null) {
             if (altiora.gracePeriod == 0 && (player.onGround() || player.horizontalCollision)) {
                 IXplatAbstractions.INSTANCE.setAltiora(player, null)
-                player.level().playSound(null, player.x, player.y, player.z, HexSounds.FLIGHT_FINISH, SoundSource.PLAYERS, 2f, 1f)
+                player
+                    .level()
+                    .playSound(
+                        null,
+                        player.x,
+                        player.y,
+                        player.z,
+                        HexSounds.FLIGHT_FINISH,
+                        SoundSource.PLAYERS,
+                        2f,
+                        1f)
             } else {
                 val grace2 = max(altiora.gracePeriod - 1, 0)
                 IXplatAbstractions.INSTANCE.setAltiora(player, AltioraAbility(grace2))
 
                 if (player.level().random.nextFloat() < 0.02)
-                    player.level().playSound(null, player.x, player.y, player.z, HexSounds.FLIGHT_AMBIENCE, SoundSource.PLAYERS, 0.2f, 1f)
+                    player
+                        .level()
+                        .playSound(
+                            null,
+                            player.x,
+                            player.y,
+                            player.z,
+                            HexSounds.FLIGHT_AMBIENCE,
+                            SoundSource.PLAYERS,
+                            0.2f,
+                            1f)
 
                 val color = IXplatAbstractions.INSTANCE.getPigment(player)
-                ParticleSpray(player.position(), Vec3(0.0, -0.2, 0.0), 0.4, Math.PI * 0.5, count = 3)
+                ParticleSpray(
+                        player.position(), Vec3(0.0, -0.2, 0.0), 0.4, Math.PI * 0.5, count = 3)
                     .sprayParticles(player.serverLevel(), color)
             }
         }

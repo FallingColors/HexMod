@@ -13,26 +13,24 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 
-/**
- * Things that happen after a spell is cast.
- */
+/** Things that happen after a spell is cast. */
 sealed class OperatorSideEffect {
     /** Return whether to cancel all further [OperatorSideEffect] */
     abstract fun performEffect(harness: CastingVM)
 
     data class RequiredEnlightenment(val awardStat: Boolean) : OperatorSideEffect() {
         override fun performEffect(harness: CastingVM) {
-            harness.env.castingEntity?.sendSystemMessage("hexcasting.message.cant_great_spell".asTranslatedComponent)
+            harness.env.castingEntity?.sendSystemMessage(
+                "hexcasting.message.cant_great_spell".asTranslatedComponent)
         }
     }
 
-    /** Try to cast a spell  */
+    /** Try to cast a spell */
     data class AttemptSpell(
         val spell: RenderedSpell,
         val hasCastingSound: Boolean = true,
         val awardStat: Boolean = true
-    ) :
-        OperatorSideEffect() {
+    ) : OperatorSideEffect() {
         override fun performEffect(harness: CastingVM) {
             this.spell.cast(harness.env, harness.image)?.let { harness.image = it }
             if (awardStat)
@@ -49,7 +47,7 @@ sealed class OperatorSideEffect {
     data class Particles(val spray: ParticleSpray) : OperatorSideEffect() {
         override fun performEffect(harness: CastingVM) {
             harness.env.produceParticles(this.spray, harness.env.pigment)
-//            this.spray.sprayParticles(harness.env.world, harness.env.colorizer)
+            //            this.spray.sprayParticles(harness.env.world, harness.env.colorizer)
         }
     }
 
@@ -60,13 +58,13 @@ sealed class OperatorSideEffect {
             spray.sprayParticles(harness.env.world, color)
             spray.sprayParticles(
                 harness.env.world,
-                FrozenPigment(
-                    ItemStack(HexItems.DYE_PIGMENTS[DyeColor.RED]!!),
-                    Util.NIL_UUID
-                )
-            )
+                FrozenPigment(ItemStack(HexItems.DYE_PIGMENTS[DyeColor.RED]!!), Util.NIL_UUID))
 
-            harness.image = harness.image.copy(stack = mishap.executeReturnStack(harness.env, errorCtx, harness.image.stack.toMutableList()))
+            harness.image =
+                harness.image.copy(
+                    stack =
+                        mishap.executeReturnStack(
+                            harness.env, errorCtx, harness.image.stack.toMutableList()))
         }
     }
 }

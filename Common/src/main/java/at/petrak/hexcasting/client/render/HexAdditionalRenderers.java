@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.utils.QuaternionfUtils;
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.lib.HexAttributes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -14,6 +15,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.datafixers.util.Pair;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -27,6 +29,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+
 import org.joml.Vector3f;
 
 import java.util.List;
@@ -47,8 +50,8 @@ public class HexAdditionalRenderers {
         tryRenderScryingLensOverlay(graphics, partialTicks);
     }
 
-    private static void renderSentinel(Sentinel sentinel, LocalPlayer owner,
-        PoseStack ps, float partialTicks) {
+    private static void renderSentinel(
+            Sentinel sentinel, LocalPlayer owner, PoseStack ps, float partialTicks) {
         ps.pushPose();
 
         // zero vector is the player
@@ -56,9 +59,9 @@ public class HexAdditionalRenderers {
         var camera = mc.gameRenderer.getMainCamera();
         var playerPos = camera.getPosition();
         ps.translate(
-            sentinel.position().x - playerPos.x,
-            sentinel.position().y - playerPos.y,
-            sentinel.position().z - playerPos.z);
+                sentinel.position().x - playerPos.x,
+                sentinel.position().y - playerPos.y,
+                sentinel.position().z - playerPos.z);
 
         var time = ClientTickCounter.getTotal() / 2;
         var bobSpeed = 1f / 20;
@@ -73,7 +76,6 @@ public class HexAdditionalRenderers {
         float scale = 0.5f;
         ps.scale(scale, scale, scale);
 
-
         var tess = Tesselator.getInstance();
         var buf = tess.getBuilder();
         var neo = ps.last().pose();
@@ -81,25 +83,28 @@ public class HexAdditionalRenderers {
         RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
         RenderSystem.disableDepthTest();
         RenderSystem.disableCull();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.blendFunc(
+                GlStateManager.SourceFactor.SRC_ALPHA,
+                GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.lineWidth(5f);
 
         var pigment = IXplatAbstractions.INSTANCE.getPigment(owner);
         var colProvider = pigment.getColorProvider();
-        BiConsumer<float[], float[]> v = (l, r) -> {
-            int lcolor = colProvider.getColor(time, new Vec3(l[0], l[1], l[2])),
-                rcolor = colProvider.getColor(time, new Vec3(r[0], r[1], r[2]));
-            var normal = new Vector3f(r[0] - l[0], r[1] - l[1], r[2] - l[2]);
-            normal.normalize();
-            buf.vertex(neo, l[0], l[1], l[2])
-                .color(lcolor)
-                .normal(ps.last().normal(), normal.x(), normal.y(), normal.z())
-                .endVertex();
-            buf.vertex(neo, r[0], r[1], r[2])
-                .color(rcolor)
-                .normal(ps.last().normal(), -normal.x(), -normal.y(), -normal.z())
-                .endVertex();
-        };
+        BiConsumer<float[], float[]> v =
+                (l, r) -> {
+                    int lcolor = colProvider.getColor(time, new Vec3(l[0], l[1], l[2])),
+                            rcolor = colProvider.getColor(time, new Vec3(r[0], r[1], r[2]));
+                    var normal = new Vector3f(r[0] - l[0], r[1] - l[1], r[2] - l[2]);
+                    normal.normalize();
+                    buf.vertex(neo, l[0], l[1], l[2])
+                            .color(lcolor)
+                            .normal(ps.last().normal(), normal.x(), normal.y(), normal.z())
+                            .endVertex();
+                    buf.vertex(neo, r[0], r[1], r[2])
+                            .color(rcolor)
+                            .normal(ps.last().normal(), -normal.x(), -normal.y(), -normal.z())
+                            .endVertex();
+                };
 
         // Icosahedron inscribed inside the unit sphere
         buf.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL);
@@ -143,8 +148,8 @@ public class HexAdditionalRenderers {
                 var x = Mth.cos(theta) * Mth.cos(phi);
                 var y = Mth.sin(theta);
                 var z = Mth.cos(theta) * Mth.sin(phi);
-                TOP_RING[i] = new float[]{x, y, z};
-                BOTTOM_RING[i] = new float[]{-x, -y, -z};
+                TOP_RING[i] = new float[] {x, y, z};
+                BOTTOM_RING[i] = new float[] {-x, -y, -z};
             }
         }
     }
@@ -159,8 +164,7 @@ public class HexAdditionalRenderers {
             return;
         }
 
-        if (player.getAttributeValue(HexAttributes.SCRY_SIGHT) <= 0.0)
-            return;
+        if (player.getAttributeValue(HexAttributes.SCRY_SIGHT) <= 0.0) return;
 
         var hitRes = mc.hitResult;
         if (hitRes != null && hitRes.getType() == HitResult.Type.BLOCK) {
@@ -168,7 +172,8 @@ public class HexAdditionalRenderers {
             var pos = bhr.getBlockPos();
             var bs = level.getBlockState(pos);
 
-            var lines = ScryingLensOverlayRegistry.getLines(bs, pos, player, level, bhr.getDirection());
+            var lines =
+                    ScryingLensOverlayRegistry.getLines(bs, pos, player, level, bhr.getDirection());
 
             int totalHeight = 8;
             List<Pair<ItemStack, List<FormattedText>>> actualLines = Lists.newArrayList();

@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.block.circle;
 import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -27,18 +28,28 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
     public BlockAbstractImpetus(Properties p_49795_) {
         super(p_49795_);
         this.registerDefaultState(
-            this.stateDefinition.any().setValue(ENERGIZED, false).setValue(FACING, Direction.NORTH));
+                this.stateDefinition
+                        .any()
+                        .setValue(ENERGIZED, false)
+                        .setValue(FACING, Direction.NORTH));
     }
 
     @Override
-    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos,
-        BlockState bs, ServerLevel world) {
+    public ControlFlow acceptControlFlow(
+            CastingImage imageIn,
+            CircleCastEnv env,
+            Direction enterDir,
+            BlockPos pos,
+            BlockState bs,
+            ServerLevel world) {
         return new ControlFlow.Stop();
     }
 
     @Override
-    public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
-        // FACING is the direction media EXITS from, so we can't have media entering in that direction
+    public boolean canEnterFromDirection(
+            Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+        // FACING is the direction media EXITS from, so we can't have media entering in that
+        // direction
         // so, flip it
         return enterDir != bs.getValue(FACING).getOpposite();
     }
@@ -60,15 +71,21 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
 
     @Override
     public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        if (pLevel.getBlockEntity(pPos) instanceof BlockEntityAbstractImpetus tile && pState.getValue(ENERGIZED)) {
+        if (pLevel.getBlockEntity(pPos) instanceof BlockEntityAbstractImpetus tile
+                && pState.getValue(ENERGIZED)) {
             tile.tickExecution();
         }
     }
 
     @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+    public void onRemove(
+            BlockState pState,
+            Level pLevel,
+            BlockPos pPos,
+            BlockState pNewState,
+            boolean pIsMoving) {
         if (!pNewState.is(pState.getBlock())
-            && pLevel.getBlockEntity(pPos) instanceof BlockEntityAbstractImpetus impetus) {
+                && pLevel.getBlockEntity(pPos) instanceof BlockEntityAbstractImpetus impetus) {
             impetus.endExecution(); // TODO: Determine if this was important
             // TODO: Fix this, it should make all the glowy circle components stop glowing.
         }

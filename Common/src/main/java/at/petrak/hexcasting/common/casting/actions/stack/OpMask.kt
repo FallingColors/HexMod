@@ -13,8 +13,7 @@ class OpMask(val mask: BooleanList, val key: ResourceLocation) : ConstMediaActio
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val out = ArrayList<Iota>(this.mask.size)
         for ((i, include) in this.mask.withIndex()) {
-            if (include)
-                out.add(args[i])
+            if (include) out.add(args[i])
         }
         return out
     }

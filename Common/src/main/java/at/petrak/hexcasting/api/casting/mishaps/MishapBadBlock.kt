@@ -8,7 +8,6 @@ import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
-import net.minecraft.world.level.Explosion
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 
@@ -17,7 +16,8 @@ class MishapBadBlock(val pos: BlockPos, val expected: Component) : Mishap() {
         dyeColor(DyeColor.LIME)
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        ctx.world.explode(null, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, 0.25f, Level.ExplosionInteraction.NONE)
+        ctx.world.explode(
+            null, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, 0.25f, Level.ExplosionInteraction.NONE)
     }
 
     override fun particleSpray(ctx: CastingEnvironment) =

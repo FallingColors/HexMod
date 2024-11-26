@@ -4,21 +4,22 @@ import com.google.gson.JsonElement;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.BuiltInExceptionProvider;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.util.GsonHelper;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Function;
 
+import javax.annotation.Nullable;
+
 public class MinMaxLongs extends MinMaxBounds<Long> {
     public static final MinMaxLongs ANY = new MinMaxLongs(null, null);
-    @Nullable
-    private final Long minSq;
-    @Nullable
-    private final Long maxSq;
+    @Nullable private final Long minSq;
+    @Nullable private final Long maxSq;
 
-    private static MinMaxLongs create(StringReader reader, @Nullable Long min, @Nullable Long max) throws CommandSyntaxException {
+    private static MinMaxLongs create(StringReader reader, @Nullable Long min, @Nullable Long max)
+            throws CommandSyntaxException {
         if (min != null && max != null && min > max) {
             throw ERROR_SWAPPED.createWithContext(reader);
         } else {
@@ -77,9 +78,15 @@ public class MinMaxLongs extends MinMaxBounds<Long> {
         return fromReader(reader, (l) -> l);
     }
 
-    public static MinMaxLongs fromReader(StringReader reader, Function<Long, Long> map) throws CommandSyntaxException {
+    public static MinMaxLongs fromReader(StringReader reader, Function<Long, Long> map)
+            throws CommandSyntaxException {
         BuiltInExceptionProvider builtInExceptions = CommandSyntaxException.BUILT_IN_EXCEPTIONS;
         Objects.requireNonNull(builtInExceptions);
-        return fromReader(reader, MinMaxLongs::create, Long::parseLong, builtInExceptions::readerInvalidInt, map);
+        return fromReader(
+                reader,
+                MinMaxLongs::create,
+                Long::parseLong,
+                builtInExceptions::readerInvalidInt,
+                map);
     }
 }

@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.iota.BooleanIota;
 import at.petrak.hexcasting.api.casting.mishaps.circle.MishapBoolDirectrixEmptyStack;
 import at.petrak.hexcasting.api.casting.mishaps.circle.MishapBoolDirectrixNotBool;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -20,7 +21,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.PushReaction;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -34,42 +34,54 @@ public class BlockBooleanDirectrix extends BlockCircleComponent {
 
     public BlockBooleanDirectrix(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any()
-            .setValue(ENERGIZED, false)
-            .setValue(STATE, State.NEITHER)
-            .setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(
+                this.stateDefinition
+                        .any()
+                        .setValue(ENERGIZED, false)
+                        .setValue(STATE, State.NEITHER)
+                        .setValue(FACING, Direction.NORTH));
     }
 
     @Override
-    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos,
-        BlockState bs, ServerLevel world) {
+    public ControlFlow acceptControlFlow(
+            CastingImage imageIn,
+            CircleCastEnv env,
+            Direction enterDir,
+            BlockPos pos,
+            BlockState bs,
+            ServerLevel world) {
         var stack = new ArrayList<>(imageIn.getStack());
         if (stack.isEmpty()) {
-            this.fakeThrowMishap(pos, bs, imageIn, env,
-                new MishapBoolDirectrixEmptyStack(pos));
+            this.fakeThrowMishap(pos, bs, imageIn, env, new MishapBoolDirectrixEmptyStack(pos));
             return new ControlFlow.Stop();
         }
         var last = stack.remove(stack.size() - 1);
 
         if (!(last instanceof BooleanIota biota)) {
-            this.fakeThrowMishap(pos, bs, imageIn, env,
-                new MishapBoolDirectrixNotBool(last, pos));
+            this.fakeThrowMishap(pos, bs, imageIn, env, new MishapBoolDirectrixNotBool(last, pos));
             return new ControlFlow.Stop();
         }
 
-        world.setBlockAndUpdate(pos, bs.setValue(STATE, biota.getBool() ? State.TRUE : State.FALSE));
+        world.setBlockAndUpdate(
+                pos, bs.setValue(STATE, biota.getBool() ? State.TRUE : State.FALSE));
 
-        var outputDir = biota.getBool()
-            ? bs.getValue(FACING).getOpposite()
-            : bs.getValue(FACING);
-        var imageOut = imageIn.copy(stack, imageIn.getParenCount(), imageIn.getParenthesized(),
-            imageIn.getEscapeNext(), imageIn.getOpsConsumed(), imageIn.getUserData());
+        var outputDir = biota.getBool() ? bs.getValue(FACING).getOpposite() : bs.getValue(FACING);
+        var imageOut =
+                imageIn.copy(
+                        stack,
+                        imageIn.getParenCount(),
+                        imageIn.getParenthesized(),
+                        imageIn.getEscapeNext(),
+                        imageIn.getOpsConsumed(),
+                        imageIn.getUserData());
 
-        return new ControlFlow.Continue(imageOut, List.of(this.exitPositionFromDirection(pos, outputDir)));
+        return new ControlFlow.Continue(
+                imageOut, List.of(this.exitPositionFromDirection(pos, outputDir)));
     }
 
     @Override
-    public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+    public boolean canEnterFromDirection(
+            Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
         // No entering from the front, no entering from the back.
         return enterDir != bs.getValue(FACING).getOpposite() && enterDir != bs.getValue(FACING);
     }
@@ -101,7 +113,6 @@ public class BlockBooleanDirectrix extends BlockCircleComponent {
         super.createBlockStateDefinition(builder);
         builder.add(STATE, FACING);
     }
-
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {

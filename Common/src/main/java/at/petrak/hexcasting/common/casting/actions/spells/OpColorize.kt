@@ -14,25 +14,16 @@ import net.minecraft.world.item.ItemStack
 object OpColorize : SpellAction {
     override val argc = 0
 
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
-        val (handStack) = env.getHeldItemToOperateOn(IXplatAbstractions.INSTANCE::isPigment)
-            ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY, "colorizer") // TODO: hack
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+        val (handStack) =
+            env.getHeldItemToOperateOn(IXplatAbstractions.INSTANCE::isPigment)
+                ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY, "colorizer") // TODO: hack
 
         if (!IXplatAbstractions.INSTANCE.isPigment(handStack)) {
-            throw MishapBadOffhandItem.of(
-                handStack,
-                "colorizer"
-            )
+            throw MishapBadOffhandItem.of(handStack, "colorizer")
         }
 
-        return SpellAction.Result(
-            Spell(handStack),
-            MediaConstants.DUST_UNIT,
-            listOf()
-        )
+        return SpellAction.Result(Spell(handStack), MediaConstants.DUST_UNIT, listOf())
     }
 
     private data class Spell(val stack: ItemStack) : RenderedSpell {

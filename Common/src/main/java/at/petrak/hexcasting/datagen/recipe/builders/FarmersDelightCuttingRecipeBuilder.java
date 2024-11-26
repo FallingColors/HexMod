@@ -3,8 +3,8 @@ package at.petrak.hexcasting.datagen.recipe.builders;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
 import net.minecraft.advancements.CriterionTriggerInstance;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
@@ -16,6 +16,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,7 +31,8 @@ public class FarmersDelightCuttingRecipeBuilder implements RecipeBuilder {
     private SoundEvent sound;
 
     @Override
-    public FarmersDelightCuttingRecipeBuilder unlockedBy(String s, CriterionTriggerInstance criterionTriggerInstance) {
+    public FarmersDelightCuttingRecipeBuilder unlockedBy(
+            String s, CriterionTriggerInstance criterionTriggerInstance) {
         return this;
     }
 
@@ -150,7 +152,8 @@ public class FarmersDelightCuttingRecipeBuilder implements RecipeBuilder {
 
         @Override
         public @NotNull RecipeSerializer<?> getType() {
-            return RecipeSerializer.SHAPELESS_RECIPE; // Irrelevant, we implement serialization ourselves
+            return RecipeSerializer
+                    .SHAPELESS_RECIPE; // Irrelevant, we implement serialization ourselves
         }
 
         @Override

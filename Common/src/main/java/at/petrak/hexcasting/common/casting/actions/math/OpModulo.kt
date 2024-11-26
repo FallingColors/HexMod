@@ -15,8 +15,7 @@ object OpModulo : ConstMediaAction {
         // TODO: some wAckY vector operation to go in the vector x vector overload
         val l = args.getDouble(0, argc)
         val r = args.getDouble(1, argc)
-        if (r == 0.0)
-            throw MishapDivideByZero.of(args[0], args[1])
+        if (r == 0.0) throw MishapDivideByZero.of(args[0], args[1])
         return (l % r).asActionResult
     }
 }

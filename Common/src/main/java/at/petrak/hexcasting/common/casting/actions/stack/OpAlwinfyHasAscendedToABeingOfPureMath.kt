@@ -12,25 +12,24 @@ import it.unimi.dsi.fastutil.longs.LongArrayList
 
 // "lehmer code"
 object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
-    override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
+    override fun operate(
+        env: CastingEnvironment,
+        image: CastingImage,
+        continuation: SpellContinuation
+    ): OperationResult {
         val stack = image.stack.toMutableList()
 
-        if (stack.isEmpty())
-            throw MishapNotEnoughArgs(1, 0)
+        if (stack.isEmpty()) throw MishapNotEnoughArgs(1, 0)
 
         val code = stack.getPositiveLong(stack.lastIndex)
         stack.removeLast()
 
         val strides = LongArrayList()
         for (f in FactorialIter()) {
-            if (f <= code)
-                strides.add(f)
-            else
-                break
+            if (f <= code) strides.add(f) else break
         }
 
-        if (strides.size > stack.size)
-            throw MishapNotEnoughArgs(strides.size + 1, stack.size + 1)
+        if (strides.size > stack.size) throw MishapNotEnoughArgs(strides.size + 1, stack.size + 1)
         var editTarget = stack.subList(stack.size - strides.size, stack.size)
         val swap = editTarget.toMutableList()
         var radix = code
@@ -49,6 +48,7 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
     private class FactorialIter : Iterator<Long> {
         var acc = 1L
         var n = 1L
+
         override fun hasNext(): Boolean = true
 
         override fun next(): Long {

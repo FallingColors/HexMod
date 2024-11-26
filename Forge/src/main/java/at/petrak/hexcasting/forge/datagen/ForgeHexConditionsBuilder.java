@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.forge.datagen;
 
 import at.petrak.hexcasting.datagen.IXplatConditionsBuilder;
+
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
@@ -9,6 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.common.crafting.ConditionalRecipe;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,8 +39,8 @@ public class ForgeHexConditionsBuilder implements IXplatConditionsBuilder, ICond
     }
 
     @Override
-    public @NotNull RecipeBuilder unlockedBy(@NotNull String string,
-        @NotNull CriterionTriggerInstance criterionTriggerInstance) {
+    public @NotNull RecipeBuilder unlockedBy(
+            @NotNull String string, @NotNull CriterionTriggerInstance criterionTriggerInstance) {
         return parent.unlockedBy(string, criterionTriggerInstance);
     }
 
@@ -53,12 +55,15 @@ public class ForgeHexConditionsBuilder implements IXplatConditionsBuilder, ICond
     }
 
     @Override
-    public void save(@NotNull Consumer<FinishedRecipe> consumer, @NotNull ResourceLocation resourceLocation) {
+    public void save(
+            @NotNull Consumer<FinishedRecipe> consumer,
+            @NotNull ResourceLocation resourceLocation) {
         var conditionalBuilder = ConditionalRecipe.builder();
         for (ICondition condition : conditions) {
             conditionalBuilder.addCondition(condition);
         }
-        conditionalBuilder.addRecipe(recipeConsumer -> parent.save(recipeConsumer, resourceLocation))
-            .build(consumer, resourceLocation);
+        conditionalBuilder
+                .addRecipe(recipeConsumer -> parent.save(recipeConsumer, resourceLocation))
+                .build(consumer, resourceLocation);
     }
 }

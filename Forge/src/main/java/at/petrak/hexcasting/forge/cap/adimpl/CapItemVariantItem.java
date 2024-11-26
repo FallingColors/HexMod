@@ -2,9 +2,11 @@ package at.petrak.hexcasting.forge.cap.adimpl;
 
 import at.petrak.hexcasting.api.addldata.ADVariantItem;
 import at.petrak.hexcasting.api.item.VariantItem;
+
 import net.minecraft.world.item.ItemStack;
 
-public record CapItemVariantItem(VariantItem variantItem, ItemStack stack) implements ADVariantItem {
+public record CapItemVariantItem(VariantItem variantItem, ItemStack stack)
+        implements ADVariantItem {
     @Override
     public int numVariants() {
         return variantItem.numVariants();

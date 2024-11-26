@@ -21,22 +21,22 @@ object OpDivCross : ConstMediaAction {
             { lnum ->
                 rhs.map(
                     { rnum ->
-                        if (rnum == 0.0) throw theMishap // throw theMishap throw theMishap badumbadum
+                        if (rnum == 0.0)
+                            throw theMishap // throw theMishap throw theMishap badumbadum
                         (lnum / rnum).asActionResult
                     },
                     { rvec ->
                         if (rvec.x == 0.0 || rvec.y == 0.0 || rvec.z == 0.0) throw theMishap
                         Vec3(lnum / rvec.x, lnum / rvec.y, lnum / rvec.z).asActionResult
-                    }
-                )
-            }, { lvec ->
-            rhs.map(
-                { rnum ->
-                    if (lvec == Vec3.ZERO) throw theMishap
-                    lvec.scale(1.0 / rnum).asActionResult
-                },
-                { rvec -> lvec.cross(rvec).asActionResult }
-            )
-        })
+                    })
+            },
+            { lvec ->
+                rhs.map(
+                    { rnum ->
+                        if (lvec == Vec3.ZERO) throw theMishap
+                        lvec.scale(1.0 / rnum).asActionResult
+                    },
+                    { rvec -> lvec.cross(rvec).asActionResult })
+            })
     }
 }

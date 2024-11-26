@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.blocks.behavior;
 
 import at.petrak.hexcasting.common.lib.HexBlocks;
+
 import net.minecraft.world.level.block.Block;
 
 import java.util.HashMap;

@@ -17,14 +17,13 @@ object OpAdd : ConstMediaAction {
         return lhs.map(
             { lnum ->
                 rhs.map(
-                    { rnum -> (lnum + rnum).asActionResult }, { rvec -> rvec.add(lnum, lnum, lnum).asActionResult }
-                )
+                    { rnum -> (lnum + rnum).asActionResult },
+                    { rvec -> rvec.add(lnum, lnum, lnum).asActionResult })
             },
             { lvec ->
                 rhs.map(
-                    { rnum -> lvec.add(rnum, rnum, rnum).asActionResult }, { rvec -> lvec.add(rvec).asActionResult }
-                )
-            }
-        )
+                    { rnum -> lvec.add(rnum, rnum, rnum).asActionResult },
+                    { rvec -> lvec.add(rvec).asActionResult })
+            })
     }
 }

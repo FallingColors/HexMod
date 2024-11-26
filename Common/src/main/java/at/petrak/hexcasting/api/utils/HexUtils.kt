@@ -6,6 +6,13 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.math.HexCoord
+import java.lang.ref.WeakReference
+import java.util.*
+import kotlin.math.absoluteValue
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.roundToInt
+import kotlin.reflect.KProperty
 import net.minecraft.ChatFormatting
 import net.minecraft.core.Registry
 import net.minecraft.nbt.*
@@ -19,13 +26,6 @@ import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
-import java.lang.ref.WeakReference
-import java.util.*
-import kotlin.math.absoluteValue
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.roundToInt
-import kotlin.reflect.KProperty
 
 const val TAU = Math.PI * 2.0
 const val SQRT_3 = 1.7320508f
@@ -38,27 +38,25 @@ fun Vec3.serializeToNBT(): CompoundTag {
     return tag
 }
 
-fun vecFromNBT(tag: LongArray): Vec3 = if (tag.size != 3) Vec3.ZERO else
-    Vec3(
-        Double.fromBits(tag[0]),
-        Double.fromBits(tag[1]),
-        Double.fromBits(tag[2])
-    )
+fun vecFromNBT(tag: LongArray): Vec3 =
+    if (tag.size != 3) Vec3.ZERO
+    else Vec3(Double.fromBits(tag[0]), Double.fromBits(tag[1]), Double.fromBits(tag[2]))
+
 fun vecFromNBT(tag: CompoundTag): Vec3 {
-    return if (!tag.contains("x") || !tag.contains("y") || !tag.contains("z"))
-        Vec3.ZERO
-    else
-        Vec3(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z"))
+    return if (!tag.contains("x") || !tag.contains("y") || !tag.contains("z")) Vec3.ZERO
+    else Vec3(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z"))
 }
 
 fun Vec2.serializeToNBT(): LongArrayTag =
     LongArrayTag(longArrayOf(this.x.toDouble().toRawBits(), this.y.toDouble().toRawBits()))
 
-fun vec2FromNBT(tag: LongArray): Vec2 = if (tag.size != 2) Vec2.ZERO else
-    Vec2(
-        Double.fromBits(tag[0]).toFloat(),
-        Double.fromBits(tag[1]).toFloat(),
-    )
+fun vec2FromNBT(tag: LongArray): Vec2 =
+    if (tag.size != 2) Vec2.ZERO
+    else
+        Vec2(
+            Double.fromBits(tag[0]).toFloat(),
+            Double.fromBits(tag[1]).toFloat(),
+        )
 
 fun otherHand(hand: InteractionHand) =
     if (hand == InteractionHand.MAIN_HAND) InteractionHand.OFF_HAND else InteractionHand.MAIN_HAND
@@ -77,17 +75,13 @@ fun findCenter(points: List<Vec2>): Vec2 {
         maxX = max(maxX, pos.x)
         maxY = max(maxY, pos.y)
     }
-    return Vec2(
-        (minX + maxX) / 2f,
-        (minY + maxY) / 2f
-    )
+    return Vec2((minX + maxX) / 2f, (minY + maxY) / 2f)
 }
 
 fun coordToPx(coord: HexCoord, size: Float, offset: Vec2): Vec2 =
-    Vec2(
-        SQRT_3 * coord.q.toFloat() + SQRT_3 / 2.0f * coord.r.toFloat(),
-        1.5f * coord.r.toFloat()
-    ).scale(size).add(offset)
+    Vec2(SQRT_3 * coord.q.toFloat() + SQRT_3 / 2.0f * coord.r.toFloat(), 1.5f * coord.r.toFloat())
+        .scale(size)
+        .add(offset)
 
 fun pxToCoord(px: Vec2, size: Float, offset: Vec2): HexCoord {
     val offsetted = px.add(offset.negated())
@@ -98,10 +92,8 @@ fun pxToCoord(px: Vec2, size: Float, offset: Vec2): HexCoord {
     val r = rf.roundToInt()
     qf -= q
     rf -= r
-    return if (q.absoluteValue >= r.absoluteValue)
-        HexCoord(q + (qf + 0.5f * rf).roundToInt(), r)
-    else
-        HexCoord(q, r + (rf + 0.5 * qf).roundToInt())
+    return if (q.absoluteValue >= r.absoluteValue) HexCoord(q + (qf + 0.5f * rf).roundToInt(), r)
+    else HexCoord(q, r + (rf + 0.5 * qf).roundToInt())
 }
 
 @JvmOverloads
@@ -111,99 +103,156 @@ fun <T : Enum<T>> Array<T>.getSafe(key: String, default: T = this[0]): T {
 }
 
 @JvmOverloads
-fun <T : Enum<T>> Array<T>.getSafe(index: Byte, default: T = this[0]) = getSafe(index.toInt(), default)
+fun <T : Enum<T>> Array<T>.getSafe(index: Byte, default: T = this[0]) =
+    getSafe(index.toInt(), default)
 
 @JvmOverloads
-fun <T : Enum<T>> Array<T>.getSafe(index: Int, default: T = this[0]) = if (index in indices) this[index] else default
+fun <T : Enum<T>> Array<T>.getSafe(index: Int, default: T = this[0]) =
+    if (index in indices) this[index] else default
 
 fun String.withStyle(op: (Style) -> Style): MutableComponent = asTextComponent.withStyle(op)
+
 fun String.withStyle(style: Style): MutableComponent = asTextComponent.withStyle(style)
-fun String.withStyle(formatting: ChatFormatting): MutableComponent = asTextComponent.withStyle(formatting)
-fun String.withStyle(vararg formatting: ChatFormatting): MutableComponent = asTextComponent.withStyle(*formatting)
+
+fun String.withStyle(formatting: ChatFormatting): MutableComponent =
+    asTextComponent.withStyle(formatting)
+
+fun String.withStyle(vararg formatting: ChatFormatting): MutableComponent =
+    asTextComponent.withStyle(*formatting)
 
 infix fun String.styledWith(op: (Style) -> Style) = withStyle(op)
+
 infix fun String.styledWith(style: Style) = withStyle(style)
+
 infix fun String.styledWith(formatting: ChatFormatting) = withStyle(formatting)
 
 infix fun MutableComponent.styledWith(op: (Style) -> Style): MutableComponent = withStyle(op)
+
 infix fun MutableComponent.styledWith(style: Style): MutableComponent = withStyle(style)
-infix fun MutableComponent.styledWith(formatting: ChatFormatting): MutableComponent = withStyle(formatting)
 
-val String.black get() = this styledWith ChatFormatting.BLACK
-val MutableComponent.black get() = this styledWith ChatFormatting.BLACK
+infix fun MutableComponent.styledWith(formatting: ChatFormatting): MutableComponent =
+    withStyle(formatting)
 
-val String.darkBlue get() = this styledWith ChatFormatting.DARK_BLUE
-val MutableComponent.darkBlue get() = this styledWith ChatFormatting.DARK_BLUE
+val String.black
+    get() = this styledWith ChatFormatting.BLACK
+val MutableComponent.black
+    get() = this styledWith ChatFormatting.BLACK
 
-val String.darkGreen get() = this styledWith ChatFormatting.DARK_GREEN
-val MutableComponent.darkGreen get() = this styledWith ChatFormatting.DARK_GREEN
+val String.darkBlue
+    get() = this styledWith ChatFormatting.DARK_BLUE
+val MutableComponent.darkBlue
+    get() = this styledWith ChatFormatting.DARK_BLUE
 
-val String.darkAqua get() = this styledWith ChatFormatting.DARK_AQUA
-val MutableComponent.darkAqua get() = this styledWith ChatFormatting.DARK_AQUA
+val String.darkGreen
+    get() = this styledWith ChatFormatting.DARK_GREEN
+val MutableComponent.darkGreen
+    get() = this styledWith ChatFormatting.DARK_GREEN
 
-val String.darkRed get() = this styledWith ChatFormatting.DARK_RED
-val MutableComponent.darkRed get() = this styledWith ChatFormatting.DARK_RED
+val String.darkAqua
+    get() = this styledWith ChatFormatting.DARK_AQUA
+val MutableComponent.darkAqua
+    get() = this styledWith ChatFormatting.DARK_AQUA
 
-val String.darkPurple get() = this styledWith ChatFormatting.DARK_PURPLE
-val MutableComponent.darkPurple get() = this styledWith ChatFormatting.DARK_PURPLE
+val String.darkRed
+    get() = this styledWith ChatFormatting.DARK_RED
+val MutableComponent.darkRed
+    get() = this styledWith ChatFormatting.DARK_RED
 
-val String.gold get() = this styledWith ChatFormatting.GOLD
-val MutableComponent.gold get() = this styledWith ChatFormatting.GOLD
+val String.darkPurple
+    get() = this styledWith ChatFormatting.DARK_PURPLE
+val MutableComponent.darkPurple
+    get() = this styledWith ChatFormatting.DARK_PURPLE
 
-val String.gray get() = this styledWith ChatFormatting.GRAY
-val MutableComponent.gray get() = this styledWith ChatFormatting.GRAY
+val String.gold
+    get() = this styledWith ChatFormatting.GOLD
+val MutableComponent.gold
+    get() = this styledWith ChatFormatting.GOLD
 
-val String.darkGray get() = this styledWith ChatFormatting.DARK_GRAY
-val MutableComponent.darkGray get() = this styledWith ChatFormatting.DARK_GRAY
+val String.gray
+    get() = this styledWith ChatFormatting.GRAY
+val MutableComponent.gray
+    get() = this styledWith ChatFormatting.GRAY
 
-val String.blue get() = this styledWith ChatFormatting.BLUE
-val MutableComponent.blue get() = this styledWith ChatFormatting.BLUE
+val String.darkGray
+    get() = this styledWith ChatFormatting.DARK_GRAY
+val MutableComponent.darkGray
+    get() = this styledWith ChatFormatting.DARK_GRAY
 
-val String.green get() = this styledWith ChatFormatting.GREEN
-val MutableComponent.green get() = this styledWith ChatFormatting.GREEN
+val String.blue
+    get() = this styledWith ChatFormatting.BLUE
+val MutableComponent.blue
+    get() = this styledWith ChatFormatting.BLUE
 
-val String.aqua get() = this styledWith ChatFormatting.AQUA
-val MutableComponent.aqua get() = this styledWith ChatFormatting.AQUA
+val String.green
+    get() = this styledWith ChatFormatting.GREEN
+val MutableComponent.green
+    get() = this styledWith ChatFormatting.GREEN
 
-val String.red get() = this styledWith ChatFormatting.RED
-val MutableComponent.red get() = this styledWith ChatFormatting.RED
+val String.aqua
+    get() = this styledWith ChatFormatting.AQUA
+val MutableComponent.aqua
+    get() = this styledWith ChatFormatting.AQUA
 
-val String.lightPurple get() = this styledWith ChatFormatting.LIGHT_PURPLE
-val MutableComponent.lightPurple get() = this styledWith ChatFormatting.LIGHT_PURPLE
+val String.red
+    get() = this styledWith ChatFormatting.RED
+val MutableComponent.red
+    get() = this styledWith ChatFormatting.RED
 
-val String.yellow get() = this styledWith ChatFormatting.YELLOW
-val MutableComponent.yellow get() = this styledWith ChatFormatting.YELLOW
+val String.lightPurple
+    get() = this styledWith ChatFormatting.LIGHT_PURPLE
+val MutableComponent.lightPurple
+    get() = this styledWith ChatFormatting.LIGHT_PURPLE
 
-val String.white get() = this styledWith ChatFormatting.WHITE
-val MutableComponent.white get() = this styledWith ChatFormatting.WHITE
+val String.yellow
+    get() = this styledWith ChatFormatting.YELLOW
+val MutableComponent.yellow
+    get() = this styledWith ChatFormatting.YELLOW
 
-val String.obfuscated get() = this styledWith ChatFormatting.OBFUSCATED
-val MutableComponent.obfuscated get() = this styledWith ChatFormatting.OBFUSCATED
+val String.white
+    get() = this styledWith ChatFormatting.WHITE
+val MutableComponent.white
+    get() = this styledWith ChatFormatting.WHITE
 
-val String.bold get() = this styledWith ChatFormatting.BOLD
-val MutableComponent.bold get() = this styledWith ChatFormatting.BOLD
+val String.obfuscated
+    get() = this styledWith ChatFormatting.OBFUSCATED
+val MutableComponent.obfuscated
+    get() = this styledWith ChatFormatting.OBFUSCATED
 
-val String.strikethrough get() = this styledWith ChatFormatting.STRIKETHROUGH
-val MutableComponent.strikethrough get() = this styledWith ChatFormatting.STRIKETHROUGH
+val String.bold
+    get() = this styledWith ChatFormatting.BOLD
+val MutableComponent.bold
+    get() = this styledWith ChatFormatting.BOLD
 
-val String.underline get() = this styledWith ChatFormatting.UNDERLINE
-val MutableComponent.underline get() = this styledWith ChatFormatting.UNDERLINE
+val String.strikethrough
+    get() = this styledWith ChatFormatting.STRIKETHROUGH
+val MutableComponent.strikethrough
+    get() = this styledWith ChatFormatting.STRIKETHROUGH
 
-val String.italic get() = this styledWith ChatFormatting.ITALIC
-val MutableComponent.italic get() = this styledWith ChatFormatting.ITALIC
+val String.underline
+    get() = this styledWith ChatFormatting.UNDERLINE
+val MutableComponent.underline
+    get() = this styledWith ChatFormatting.UNDERLINE
+
+val String.italic
+    get() = this styledWith ChatFormatting.ITALIC
+val MutableComponent.italic
+    get() = this styledWith ChatFormatting.ITALIC
 
 operator fun MutableComponent.plusAssign(component: Component) {
     append(component)
 }
 
-val String.asTextComponent: MutableComponent get() = Component.literal(this)
-val String.asTranslatedComponent: MutableComponent get() = Component.translatable(this)
+val String.asTextComponent: MutableComponent
+    get() = Component.literal(this)
+val String.asTranslatedComponent: MutableComponent
+    get() = Component.translatable(this)
 
-fun String.asTranslatedComponent(vararg args: Any): MutableComponent = Component.translatable(this, *args)
+fun String.asTranslatedComponent(vararg args: Any): MutableComponent =
+    Component.translatable(this, *args)
 
 /**
- * Represents a value that the garbage collector is still allowed to collect.
- * To create an instance of a [WeakValue], use [weakReference] or [weakMapped].
+ * Represents a value that the garbage collector is still allowed to collect. To create an instance
+ * of a [WeakValue], use [weakReference] or [weakMapped].
  */
 interface WeakValue<T> {
     var value: T?
@@ -212,8 +261,8 @@ interface WeakValue<T> {
 /**
  * A weakly referenced value that relies directly on a [WeakReference].
  *
- * This means that if there are no other places where the contained object is referenced,
- * the reference will expire, and value contained within this reference will become null.
+ * This means that if there are no other places where the contained object is referenced, the
+ * reference will expire, and value contained within this reference will become null.
  */
 private class WeakReferencedValue<T>(var reference: WeakReference<T>?) : WeakValue<T> {
     override var value: T?
@@ -226,8 +275,9 @@ private class WeakReferencedValue<T>(var reference: WeakReference<T>?) : WeakVal
 /**
  * A weakly referenced value that relies on a [WeakHashMap].
  *
- * Unlike [WeakReferencedValue], it relies on the continued existence of something else (obtained by [keyGen]).
- * For example, this can be used to hold an entity, and have the reference expire when the world it's in is unloaded.
+ * Unlike [WeakReferencedValue], it relies on the continued existence of something else (obtained by
+ * [keyGen]). For example, this can be used to hold an entity, and have the reference expire when
+ * the world it's in is unloaded.
  */
 private class WeakMappedValue<K, T>(val keyGen: (T) -> K) : WeakValue<T> {
     val reference = WeakHashMap<K, T>()
@@ -240,12 +290,15 @@ private class WeakMappedValue<K, T>(val keyGen: (T) -> K) : WeakValue<T> {
 }
 
 /**
- * Creates a [WeakReferencedValue], the contents of which will expire when nothing else is referencing them.
+ * Creates a [WeakReferencedValue], the contents of which will expire when nothing else is
+ * referencing them.
  */
-fun <T> weakReference(value: T? = null): WeakValue<T> = WeakReferencedValue(value?.let { WeakReference(it) })
+fun <T> weakReference(value: T? = null): WeakValue<T> =
+    WeakReferencedValue(value?.let { WeakReference(it) })
 
 /**
- * Creates a [WeakMappedValue], the contents of which will expire when nothing else is referencing the value returned by [keyGen].
+ * Creates a [WeakMappedValue], the contents of which will expire when nothing else is referencing
+ * the value returned by [keyGen].
  */
 fun <T, K> weakMapped(keyGen: (T) -> K): WeakValue<T> = WeakMappedValue(keyGen)
 
@@ -258,14 +311,9 @@ inline operator fun <T> WeakValue<T>.setValue(thisRef: Any?, property: KProperty
     this.value = value
 }
 
-/**
- * Returns an empty list if it's too complicated.
- */
+/** Returns an empty list if it's too complicated. */
 fun Iterable<Iota>.serializeToNBT() =
-    if (IotaType.isTooLargeToSerialize(this))
-        ListTag()
-    else
-        ListIota(this.toList()).serialize()
+    if (IotaType.isTooLargeToSerialize(this)) ListTag() else ListIota(this.toList()).serialize()
 
 fun Iterable<Boolean>.serializeToNBT(): ByteArrayTag {
     val out = ByteArray(if (this is Collection<*>) this.size else 10)
@@ -297,12 +345,12 @@ fun <T : Tag> Tag.downcast(type: TagType<T>): T {
         return this as T
     } else {
         throw IllegalArgumentException(
-            "Expected this tag to be of type ${type.name}, but found ${this.type.name}."
-        )
+            "Expected this tag to be of type ${type.name}, but found ${this.type.name}.")
     }
 }
 
 const val ERROR_COLOR = 0xff_f800f8.toInt()
+
 fun <T> isOfTag(registry: Registry<T>, key: ResourceKey<T>, tag: TagKey<T>): Boolean {
     val maybeHolder = registry.getHolder(key)
     val holder = if (maybeHolder.isPresent) maybeHolder.get() else return false
@@ -310,6 +358,6 @@ fun <T> isOfTag(registry: Registry<T>, key: ResourceKey<T>, tag: TagKey<T>): Boo
 }
 
 fun <T> isOfTag(registry: Registry<T>, loc: ResourceLocation, tag: TagKey<T>): Boolean {
-    val key = ResourceKey.create(registry.key(), loc);
+    val key = ResourceKey.create(registry.key(), loc)
     return isOfTag(registry, key, tag)
 }

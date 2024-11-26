@@ -1,11 +1,15 @@
 package at.petrak.hexcasting.client.entity;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 import at.petrak.hexcasting.client.render.WorldlyPatternRenderHelpers;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -14,18 +18,23 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
-
 public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
-    private static final ResourceLocation PRISTINE_BG_LARGE = modLoc("textures/entity/scroll_large.png");
-    private static final ResourceLocation PRISTINE_BG_MEDIUM = modLoc("textures/entity/scroll_medium.png");
-    private static final ResourceLocation PRISTINE_BG_SMOL = modLoc("textures/block/scroll_paper.png");
-    private static final ResourceLocation ANCIENT_BG_LARGE = modLoc("textures/entity/scroll_ancient_large.png");
-    private static final ResourceLocation ANCIENT_BG_MEDIUM = modLoc("textures/entity/scroll_ancient_medium.png");
-    private static final ResourceLocation ANCIENT_BG_SMOL = modLoc("textures/block/ancient_scroll_paper.png");
+    private static final ResourceLocation PRISTINE_BG_LARGE =
+            modLoc("textures/entity/scroll_large.png");
+    private static final ResourceLocation PRISTINE_BG_MEDIUM =
+            modLoc("textures/entity/scroll_medium.png");
+    private static final ResourceLocation PRISTINE_BG_SMOL =
+            modLoc("textures/block/scroll_paper.png");
+    private static final ResourceLocation ANCIENT_BG_LARGE =
+            modLoc("textures/entity/scroll_ancient_large.png");
+    private static final ResourceLocation ANCIENT_BG_MEDIUM =
+            modLoc("textures/entity/scroll_ancient_medium.png");
+    private static final ResourceLocation ANCIENT_BG_SMOL =
+            modLoc("textures/block/ancient_scroll_paper.png");
 
     public WallScrollRenderer(EntityRendererProvider.Context p_174008_) {
         super(p_174008_);
@@ -33,8 +42,13 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
 
     // I do as the PaintingRenderer guides
     @Override
-    public void render(EntityWallScroll wallScroll, float yaw, float partialTicks, PoseStack ps,
-        MultiBufferSource bufSource, int packedLight) {
+    public void render(
+            EntityWallScroll wallScroll,
+            float yaw,
+            float partialTicks,
+            PoseStack ps,
+            MultiBufferSource bufSource,
+            int packedLight) {
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
@@ -95,8 +109,15 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
 
             ps.popPose();
 
-            if(wallScroll.pattern != null)
-                WorldlyPatternRenderHelpers.renderPatternForScroll(wallScroll.pattern, wallScroll, ps, bufSource, light, wallScroll.blockSize, wallScroll.getShowsStrokeOrder());
+            if (wallScroll.pattern != null)
+                WorldlyPatternRenderHelpers.renderPatternForScroll(
+                        wallScroll.pattern,
+                        wallScroll,
+                        ps,
+                        bufSource,
+                        light,
+                        wallScroll.blockSize,
+                        wallScroll.getShowsStrokeOrder());
         }
 
         ps.popPose();
@@ -124,12 +145,24 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
         }
     }
 
-    private static void vertex(Matrix4f mat, Matrix3f normal, int light, VertexConsumer verts, float x, float y,
-                               float z, float u,
-                               float v, float nx, float ny, float nz) {
+    private static void vertex(
+            Matrix4f mat,
+            Matrix3f normal,
+            int light,
+            VertexConsumer verts,
+            float x,
+            float y,
+            float z,
+            float u,
+            float v,
+            float nx,
+            float ny,
+            float nz) {
         verts.vertex(mat, x, y, z)
                 .color(0xffffffff)
-                .uv(u, v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light)
+                .uv(u, v)
+                .overlayCoords(OverlayTexture.NO_OVERLAY)
+                .uv2(light)
                 .normal(normal, nx, ny, nz)
                 .endVertex();
     }

@@ -16,32 +16,34 @@ import java.util.function.LongUnaryOperator
 import kotlin.math.roundToLong
 
 object BitwiseSetArithmetic : Arithmetic {
-    private val OPS = listOf(
-        AND,
-        OR,
-        XOR,
-        NOT
-    )
+    private val OPS = listOf(AND, OR, XOR, NOT)
 
     override fun arithName() = "bitwise_set_ops"
 
     override fun opTypes() = OPS
 
-    override fun getOperator(pattern: HexPattern): Operator = when (pattern) {
-        AND -> make2 { x, y -> x and y }
-        OR -> make2 { x, y -> x or y }
-        XOR -> make2 { x, y -> x xor y }
-        NOT -> make1 { x -> x.inv() }
-        else -> throw InvalidOperatorException("$pattern is not a valid operator in Arithmetic $this.")
-    }
+    override fun getOperator(pattern: HexPattern): Operator =
+        when (pattern) {
+            AND -> make2 { x, y -> x and y }
+            OR -> make2 { x, y -> x or y }
+            XOR -> make2 { x, y -> x xor y }
+            NOT -> make1 { x -> x.inv() }
+            else ->
+                throw InvalidOperatorException(
+                    "$pattern is not a valid operator in Arithmetic $this.")
+        }
 
-    private fun make1(op: LongUnaryOperator): OperatorUnary = OperatorUnary(DoubleArithmetic.ACCEPTS)
-        { i: Iota -> DoubleIota(op.applyAsLong(downcast(i, DOUBLE).double.roundToLong()).toDouble()) }
+    private fun make1(op: LongUnaryOperator): OperatorUnary =
+        OperatorUnary(DoubleArithmetic.ACCEPTS) { i: Iota ->
+            DoubleIota(op.applyAsLong(downcast(i, DOUBLE).double.roundToLong()).toDouble())
+        }
 
-    private fun make2(op: LongBinaryOperator): OperatorBinary = OperatorBinary(DoubleArithmetic.ACCEPTS)
-        { i: Iota, j: Iota -> DoubleIota(
+    private fun make2(op: LongBinaryOperator): OperatorBinary =
+        OperatorBinary(DoubleArithmetic.ACCEPTS) { i: Iota, j: Iota ->
+            DoubleIota(
                 op.applyAsLong(
-                    downcast(i, DOUBLE).double.roundToLong(),
-                    downcast(j, DOUBLE).double.roundToLong()
-                ).toDouble()) }
+                        downcast(i, DOUBLE).double.roundToLong(),
+                        downcast(j, DOUBLE).double.roundToLong())
+                    .toDouble())
+        }
 }

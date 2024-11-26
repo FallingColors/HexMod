@@ -13,7 +13,11 @@ import java.util.function.Consumer
 abstract class OperatorBasic(arity: Int, accepts: IotaMultiPredicate) : Operator(arity, accepts) {
 
     @Throws(Mishap::class)
-    override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
+    override fun operate(
+        env: CastingEnvironment,
+        image: CastingImage,
+        continuation: SpellContinuation
+    ): OperationResult {
         val stack = image.stack.toMutableList()
         val args = stack.takeLast(arity)
         repeat(arity) { stack.removeLast() }
@@ -26,14 +30,16 @@ abstract class OperatorBasic(arity: Int, accepts: IotaMultiPredicate) : Operator
     }
 
     /**
-     * / **
-     * The method called when this Operator is actually acting on the stack, for real.
-     * @param iotas An iterable of iotas with [Operator.arity] elements that satisfied [Operator.accepts].
+     * / ** The method called when this Operator is actually acting on the stack, for real.
+     *
+     * @param iotas An iterable of iotas with [Operator.arity] elements that satisfied
+     *   [Operator.accepts].
      * @param env The casting environment, to make use of if this operator needs it.
-     * @return the iotas that this operator will return to the stack (with the first element of the returned iterable being placed deepest into the stack, and the last element on top of the stack).
+     * @return the iotas that this operator will return to the stack (with the first element of the
+     *   returned iterable being placed deepest into the stack, and the last element on top of the
+     *   stack).
      * @throws Mishap if the Operator mishaps for any reason it will be passed up the chain.
      */
     @Throws(Mishap::class)
     abstract fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota>
-
 }

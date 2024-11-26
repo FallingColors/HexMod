@@ -6,19 +6,17 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 
-/**
- * A continuation during the execution of a spell.
- */
+/** A continuation during the execution of a spell. */
 sealed interface SpellContinuation {
     object Done : SpellContinuation
 
-    data class NotDone(val frame: ContinuationFrame, val next: SpellContinuation) : SpellContinuation
+    data class NotDone(val frame: ContinuationFrame, val next: SpellContinuation) :
+        SpellContinuation
 
     fun pushFrame(frame: ContinuationFrame): SpellContinuation = NotDone(frame, this)
 
-    fun serializeToNBT() = NBTBuilder {
-        TAG_FRAME %= list(getNBTFrames())
-    }
+    fun serializeToNBT() = NBTBuilder { TAG_FRAME %= list(getNBTFrames()) }
+
     fun getNBTFrames(): List<CompoundTag> {
         var self = this
         val frames = mutableListOf<CompoundTag>()
@@ -28,6 +26,7 @@ sealed interface SpellContinuation {
         }
         return frames
     }
+
     companion object {
         const val TAG_FRAME = "frame"
 

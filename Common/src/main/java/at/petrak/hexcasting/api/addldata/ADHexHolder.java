@@ -2,7 +2,9 @@ package at.petrak.hexcasting.api.addldata;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+
 import net.minecraft.server.level.ServerLevel;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -20,5 +22,6 @@ public interface ADHexHolder {
 
     void clearHex();
 
-    @Nullable FrozenPigment getPigment();
+    @Nullable
+    FrozenPigment getPigment();
 }

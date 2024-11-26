@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.blocks.circles.directrix;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -15,7 +16,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.PushReaction;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -27,22 +27,32 @@ public class BlockEmptyDirectrix extends BlockCircleComponent {
 
     public BlockEmptyDirectrix(Properties p_49795_) {
         super(p_49795_);
-        this.registerDefaultState(this.stateDefinition.any()
-            .setValue(ENERGIZED, false)
-            .setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(
+                this.stateDefinition
+                        .any()
+                        .setValue(ENERGIZED, false)
+                        .setValue(FACING, Direction.NORTH));
     }
 
     @Override
-    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos,
-        BlockState bs, ServerLevel world) {
-        var sign = world.random.nextBoolean()
-            ? bs.getValue(FACING)
-            : bs.getValue(FACING).getOpposite();
-        return new ControlFlow.Continue(imageIn, List.of(this.exitPositionFromDirection(pos, sign)));
+    public ControlFlow acceptControlFlow(
+            CastingImage imageIn,
+            CircleCastEnv env,
+            Direction enterDir,
+            BlockPos pos,
+            BlockState bs,
+            ServerLevel world) {
+        var sign =
+                world.random.nextBoolean()
+                        ? bs.getValue(FACING)
+                        : bs.getValue(FACING).getOpposite();
+        return new ControlFlow.Continue(
+                imageIn, List.of(this.exitPositionFromDirection(pos, sign)));
     }
 
     @Override
-    public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+    public boolean canEnterFromDirection(
+            Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
         return true;
     }
 

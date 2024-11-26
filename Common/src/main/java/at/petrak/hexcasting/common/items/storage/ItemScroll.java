@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.common.items.storage;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
@@ -10,6 +12,7 @@ import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import at.petrak.hexcasting.interop.inline.InlinePatternData;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -23,19 +26,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.gameevent.GameEvent;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
-
 /**
- * TAG_OP_ID and TAG_PATTERN: "Ancient Scroll of %s" (Great Spells)
- * <br>
- * TAG_PATTERN: "Scroll" (custom)
- * <br>
- * (none): "Empty Scroll"
- * <br>
+ * TAG_OP_ID and TAG_PATTERN: "Ancient Scroll of %s" (Great Spells) <br>
+ * TAG_PATTERN: "Scroll" (custom) <br>
+ * (none): "Empty Scroll" <br>
  * TAG_OP_ID: invalid
  */
 public class ItemScroll extends Item implements IotaHolderItem {
@@ -51,8 +50,7 @@ public class ItemScroll extends Item implements IotaHolderItem {
     }
 
     @Override
-    public @Nullable
-    CompoundTag readIotaTag(ItemStack stack) {
+    public @Nullable CompoundTag readIotaTag(ItemStack stack) {
         CompoundTag pattern = NBTHelper.getCompound(stack, TAG_PATTERN);
         if (pattern == null) {
             return null;
@@ -98,7 +96,9 @@ public class ItemScroll extends Item implements IotaHolderItem {
         var level = ctx.getLevel();
         var scrollStack = itemstack.copy();
         scrollStack.setCount(1);
-        var scrollEntity = new EntityWallScroll(level, posInFront, direction, scrollStack, false, this.blockSize);
+        var scrollEntity =
+                new EntityWallScroll(
+                        level, posInFront, direction, scrollStack, false, this.blockSize);
 
         // i guess
         var stackTag = itemstack.getTag();
@@ -121,8 +121,10 @@ public class ItemScroll extends Item implements IotaHolderItem {
     }
 
     // [VanillaCopy] of HangingEntityItem
-    protected boolean mayPlace(Player pPlayer, Direction pDirection, ItemStack pHangingEntityStack, BlockPos pPos) {
-        return !pDirection.getAxis().isVertical() && pPlayer.mayUseItemAt(pPos, pDirection, pHangingEntityStack);
+    protected boolean mayPlace(
+            Player pPlayer, Direction pDirection, ItemStack pHangingEntityStack, BlockPos pPos) {
+        return !pDirection.getAxis().isVertical()
+                && pPlayer.mayUseItemAt(pPos, pDirection, pHangingEntityStack);
     }
 
     @Override
@@ -130,14 +132,18 @@ public class ItemScroll extends Item implements IotaHolderItem {
         var descID = this.getDescriptionId(pStack);
         var ancientId = NBTHelper.getString(pStack, TAG_OP_ID);
         if (ancientId != null) {
-            return Component.translatable(descID + ".of",
-                Component.translatable("hexcasting.action." + ResourceLocation.tryParse(ancientId)));
+            return Component.translatable(
+                    descID + ".of",
+                    Component.translatable(
+                            "hexcasting.action." + ResourceLocation.tryParse(ancientId)));
         } else if (NBTHelper.hasCompound(pStack, TAG_PATTERN)) {
             var compound = NBTHelper.getCompound(pStack, ItemScroll.TAG_PATTERN);
             var patternLabel = Component.literal("");
             if (compound != null) {
                 var pattern = HexPattern.fromNBT(compound);
-                patternLabel = Component.literal(": ").append(new InlinePatternData(pattern).asText(false));
+                patternLabel =
+                        Component.literal(": ")
+                                .append(new InlinePatternData(pattern).asText(false));
             }
             return Component.translatable(descID).append(patternLabel);
         } else {
@@ -152,11 +158,12 @@ public class ItemScroll extends Item implements IotaHolderItem {
         var compound = NBTHelper.getCompound(stack, ItemScroll.TAG_PATTERN);
         if (compound != null) {
             var pattern = HexPattern.fromNBT(compound);
-            return Optional.of(new PatternTooltip(
-                pattern,
-                NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID)
-                    ? PatternTooltipComponent.ANCIENT_BG
-                    : PatternTooltipComponent.PRISTINE_BG));
+            return Optional.of(
+                    new PatternTooltip(
+                            pattern,
+                            NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID)
+                                    ? PatternTooltipComponent.ANCIENT_BG
+                                    : PatternTooltipComponent.PRISTINE_BG));
         }
 
         return Optional.empty();

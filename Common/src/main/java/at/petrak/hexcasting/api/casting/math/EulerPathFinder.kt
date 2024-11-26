@@ -5,12 +5,14 @@ import java.util.*
 import kotlin.random.Random
 
 object EulerPathFinder {
-    /**
-     * Find an alternative way to draw the given pattern, based on a random seed.
-     */
+    /** Find an alternative way to draw the given pattern, based on a random seed. */
     @JvmStatic
     @JvmOverloads
-    fun findAltDrawing(original: HexPattern, seed: Long, rule: (HexPattern) -> Boolean = { true }): HexPattern {
+    fun findAltDrawing(
+        original: HexPattern,
+        seed: Long,
+        rule: (HexPattern) -> Boolean = { true }
+    ): HexPattern {
         // http://www.graph-magics.com/articles/euler.php
 
         val rand = Random(seed)
@@ -36,13 +38,14 @@ object EulerPathFinder {
     private fun walkPath(original: HexPattern, rand: Random): HexPattern {
         val graph = toGraph(original)
         val oddNodes = graph.filter { (_, dirs) -> dirs.size % 2 == 1 }
-        var current: HexCoord = when (oddNodes.size) {
-            // An euler-walkable graph must have 0 odd nodes and start anywhere...
-            0 -> graph.keys.random(rand)
-            // or two, and start at one of them
-            2 -> oddNodes.keys.random(rand)
-            else -> throw IllegalStateException()
-        }
+        var current: HexCoord =
+            when (oddNodes.size) {
+                // An euler-walkable graph must have 0 odd nodes and start anywhere...
+                0 -> graph.keys.random(rand)
+                // or two, and start at one of them
+                2 -> oddNodes.keys.random(rand)
+                else -> throw IllegalStateException()
+            }
 
         val stack = Stack<HexCoord>()
         val out = mutableListOf<HexCoord>()
@@ -75,13 +78,17 @@ object EulerPathFinder {
         for (a in pat.angles) {
             // i hate kotlin
             graph.getOrPut(cursor) { EnumSet.noneOf(HexDir::class.java) }.add(compass)
-            graph.getOrPut(cursor + compass) { EnumSet.noneOf(HexDir::class.java) }.add(compass * HexAngle.BACK)
+            graph
+                .getOrPut(cursor + compass) { EnumSet.noneOf(HexDir::class.java) }
+                .add(compass * HexAngle.BACK)
 
             cursor += compass
             compass *= a
         }
         graph.getOrPut(cursor) { EnumSet.noneOf(HexDir::class.java) }.add(compass)
-        graph.getOrPut(cursor + compass) { EnumSet.noneOf(HexDir::class.java) }.add(compass * HexAngle.BACK)
+        graph
+            .getOrPut(cursor + compass) { EnumSet.noneOf(HexDir::class.java) }
+            .add(compass * HexAngle.BACK)
 
         return graph
     }

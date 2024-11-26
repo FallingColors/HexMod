@@ -1,19 +1,22 @@
 package at.petrak.hexcasting.client.gui;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.client.render.PatternColors;
 import at.petrak.hexcasting.client.render.PatternRenderer;
 import at.petrak.hexcasting.client.render.WorldlyPatternRenderHelpers;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
+
 import com.mojang.blaze3d.systems.RenderSystem;
+
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
-import org.jetbrains.annotations.Nullable;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
+import org.jetbrains.annotations.Nullable;
 
 // https://github.com/VazkiiMods/Botania/blob/95bd2d3fbc857b7c102687554e1d1b112f8af436/Xplat/src/main/java/vazkii/botania/client/gui/ManaBarTooltipComponent.java
 // yoink
@@ -49,7 +52,8 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
     public void renderImage(Font font, int mouseX, int mouseY, GuiGraphics graphics) {
         var ps = graphics.pose();
 
-        // far as i can tell "mouseX" and "mouseY" are actually the positions of the corner of the tooltip
+        // far as i can tell "mouseX" and "mouseY" are actually the positions of the corner of the
+        // tooltip
         ps.pushPose();
         ps.translate(mouseX, mouseY, 500);
         RenderSystem.enableBlend();
@@ -59,22 +63,33 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
         ps.translate(0, 0, 100);
         ps.scale(RENDER_SIZE, RENDER_SIZE, 1);
 
-        PatternRenderer.renderPattern(pattern, ps, WorldlyPatternRenderHelpers.READABLE_SCROLL_SETTINGS,
-                (PatternRenderer.shouldDoStrokeGradient() ? PatternColors.DEFAULT_GRADIENT_COLOR : PatternColors.DEFAULT_PATTERN_COLOR)
+        PatternRenderer.renderPattern(
+                pattern,
+                ps,
+                WorldlyPatternRenderHelpers.READABLE_SCROLL_SETTINGS,
+                (PatternRenderer.shouldDoStrokeGradient()
+                                ? PatternColors.DEFAULT_GRADIENT_COLOR
+                                : PatternColors.DEFAULT_PATTERN_COLOR)
                         .withDots(true, true),
-                0, 512);
+                0,
+                512);
 
         ps.popPose();
     }
 
     private static void renderBG(GuiGraphics graphics, ResourceLocation background) {
         graphics.blit(
-            background, // texture
-            0, 0, // x, y
-            (int) RENDER_SIZE, (int) RENDER_SIZE, // renderWidth, renderHeight
-            0f, 0f, // u, v (textureCoords)
-            TEXTURE_SIZE, TEXTURE_SIZE, // regionWidth, regionHeight (texture sample dimensions)
-            TEXTURE_SIZE, TEXTURE_SIZE); // textureWidth, textureHeight (total dimensions of texture)
+                background, // texture
+                0,
+                0, // x, y
+                (int) RENDER_SIZE,
+                (int) RENDER_SIZE, // renderWidth, renderHeight
+                0f,
+                0f, // u, v (textureCoords)
+                TEXTURE_SIZE,
+                TEXTURE_SIZE, // regionWidth, regionHeight (texture sample dimensions)
+                TEXTURE_SIZE,
+                TEXTURE_SIZE); // textureWidth, textureHeight (total dimensions of texture)
     }
 
     @Override

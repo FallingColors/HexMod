@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.api.casting.eval.env;
 
+import static at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv.SENTINEL_RADIUS;
+
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
@@ -13,6 +15,7 @@ import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -23,13 +26,12 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-
-import static at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv.SENTINEL_RADIUS;
 
 public class CircleCastEnv extends CastingEnvironment {
     protected final CircleExecutionState execState;
@@ -96,7 +98,8 @@ public class CircleCastEnv extends CastingEnvironment {
         if (imp != null) {
             for (var sideEffect : result.getSideEffects()) {
                 if (sideEffect instanceof OperatorSideEffect.DoMishap doMishap) {
-                    var msg = doMishap.getMishap().errorMessageWithName(this, doMishap.getErrorCtx());
+                    var msg =
+                            doMishap.getMishap().errorMessageWithName(this, doMishap.getErrorCtx());
                     if (msg != null) {
                         imp.postMishap(msg);
                     }
@@ -113,12 +116,10 @@ public class CircleCastEnv extends CastingEnvironment {
     @Override
     public long extractMediaEnvironment(long cost, boolean simulate) {
         var entity = this.getImpetus();
-        if (entity == null)
-            return cost;
+        if (entity == null) return cost;
 
         var mediaAvailable = entity.getMedia();
-        if (mediaAvailable < 0)
-            return 0;
+        if (mediaAvailable < 0) return 0;
 
         long mediaToTake = Math.min(cost, mediaAvailable);
         cost -= mediaToTake;
@@ -133,16 +134,17 @@ public class CircleCastEnv extends CastingEnvironment {
     public boolean isVecInRangeEnvironment(Vec3 vec) {
         var caster = this.execState.getCaster(this.world);
         if (caster != null) {
-            if (vec.distanceToSqr(caster.position()) <= caster.getBbHeight() * caster.getBbHeight()) {
+            if (vec.distanceToSqr(caster.position())
+                    <= caster.getBbHeight() * caster.getBbHeight()) {
                 return true;
             }
 
             var sentinel = HexAPI.instance().getSentinel(caster);
             if (sentinel != null
-                && sentinel.extendsRange()
-                && caster.level().dimension() == sentinel.dimension()
-                && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS + 0.00000000001
-            ) {
+                    && sentinel.extendsRange()
+                    && caster.level().dimension() == sentinel.dimension()
+                    && vec.distanceToSqr(sentinel.position())
+                            <= SENTINEL_RADIUS * SENTINEL_RADIUS + 0.00000000001) {
                 return true;
             }
         }
@@ -153,7 +155,7 @@ public class CircleCastEnv extends CastingEnvironment {
     @Override
     public boolean isEnlightened() {
         // have unbound circles be enlightened.
-        if(getCastingEntity() == null) return true;
+        if (getCastingEntity() == null) return true;
         return super.isEnlightened();
     }
 
@@ -170,8 +172,7 @@ public class CircleCastEnv extends CastingEnvironment {
     @Override
     // TODO: Could do something like get items in inventories adjacent to the circle?
     protected List<ItemStack> getUsableStacks(StackDiscoveryMode mode) {
-        if (this.getCaster() != null)
-            return getUsableStacksForPlayer(mode, null, this.getCaster());
+        if (this.getCaster() != null) return getUsableStacksForPlayer(mode, null, this.getCaster());
         return new ArrayList<>();
     }
 
@@ -185,7 +186,8 @@ public class CircleCastEnv extends CastingEnvironment {
 
     @Override
     // TODO: Adjacent inv!
-    public boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand) {
+    public boolean replaceItem(
+            Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand) {
         if (this.getCaster() != null)
             return replaceItemForPlayer(stackOk, replaceWith, hand, this.getCaster());
         return false;
@@ -194,16 +196,14 @@ public class CircleCastEnv extends CastingEnvironment {
     @Override
     public FrozenPigment getPigment() {
         var impetus = this.getImpetus();
-        if (impetus == null)
-            return FrozenPigment.DEFAULT.get();
+        if (impetus == null) return FrozenPigment.DEFAULT.get();
         return impetus.getPigment();
     }
 
     @Override
     public @Nullable FrozenPigment setPigment(@Nullable FrozenPigment pigment) {
         var impetus = this.getImpetus();
-        if (impetus == null)
-            return null;
+        if (impetus == null) return null;
         return impetus.setPigment(pigment);
     }
 
@@ -215,8 +215,7 @@ public class CircleCastEnv extends CastingEnvironment {
     @Override
     public void printMessage(Component message) {
         var impetus = getImpetus();
-        if (impetus == null)
-            return;
+        if (impetus == null) return;
         impetus.postPrint(message);
     }
 }

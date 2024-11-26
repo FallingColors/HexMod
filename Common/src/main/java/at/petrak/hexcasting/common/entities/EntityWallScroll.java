@@ -9,6 +9,7 @@ import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.common.msgs.MsgNewWallScrollS2C;
 import at.petrak.hexcasting.common.msgs.MsgRecalcWallScrollDisplayS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -31,16 +32,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
 import org.jetbrains.annotations.Nullable;
 
 public class EntityWallScroll extends HangingEntity {
-    private static final EntityDataAccessor<Boolean> SHOWS_STROKE_ORDER = SynchedEntityData.defineId(
-        EntityWallScroll.class,
-        EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> SHOWS_STROKE_ORDER =
+            SynchedEntityData.defineId(EntityWallScroll.class, EntityDataSerializers.BOOLEAN);
 
     public ItemStack scroll;
-    @Nullable
-    public HexPattern pattern;
+    @Nullable public HexPattern pattern;
     public boolean isAncient;
     public int blockSize;
 
@@ -48,8 +48,13 @@ public class EntityWallScroll extends HangingEntity {
         super(type, world);
     }
 
-    public EntityWallScroll(Level world, BlockPos pos, Direction dir, ItemStack scroll, boolean showStrokeOrder,
-        int blockSize) {
+    public EntityWallScroll(
+            Level world,
+            BlockPos pos,
+            Direction dir,
+            ItemStack scroll,
+            boolean showStrokeOrder,
+            int blockSize) {
         super(HexEntities.WALL_SCROLL, world, pos);
         this.setDirection(dir);
         this.blockSize = blockSize;
@@ -118,11 +123,15 @@ public class EntityWallScroll extends HangingEntity {
             }
             this.setShowsStrokeOrder(true);
 
-            pPlayer.level().playSound(pPlayer, this, HexSounds.SCROLL_DUST, SoundSource.PLAYERS, 1f, 1f);
+            pPlayer.level()
+                    .playSound(pPlayer, this, HexSounds.SCROLL_DUST, SoundSource.PLAYERS, 1f, 1f);
 
             if (pPlayer.level() instanceof ServerLevel slevel) {
-                IXplatAbstractions.INSTANCE.sendPacketNear(this.position(), 32.0, slevel,
-                    new MsgRecalcWallScrollDisplayS2C(this.getId(), true));
+                IXplatAbstractions.INSTANCE.sendPacketNear(
+                        this.position(),
+                        32.0,
+                        slevel,
+                        new MsgRecalcWallScrollDisplayS2C(this.getId(), true));
             } else {
                 // Beat the packet roundtrip to the punch to get a quicker visual
                 this.recalculateDisplay();
@@ -140,12 +149,21 @@ public class EntityWallScroll extends HangingEntity {
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return IXplatAbstractions.INSTANCE.toVanillaClientboundPacket(
-            new MsgNewWallScrollS2C(new ClientboundAddEntityPacket(this),
-                pos, direction, scroll, getShowsStrokeOrder(), blockSize));
+                new MsgNewWallScrollS2C(
+                        new ClientboundAddEntityPacket(this),
+                        pos,
+                        direction,
+                        scroll,
+                        getShowsStrokeOrder(),
+                        blockSize));
     }
 
-    public void readSpawnData(BlockPos pos, Direction dir, ItemStack scrollItem,
-        boolean showsStrokeOrder, int blockSize) {
+    public void readSpawnData(
+            BlockPos pos,
+            Direction dir,
+            ItemStack scrollItem,
+            boolean showsStrokeOrder,
+            int blockSize) {
         this.pos = pos;
         this.scroll = scrollItem;
         this.blockSize = blockSize;
@@ -187,9 +205,19 @@ public class EntityWallScroll extends HangingEntity {
     }
 
     @Override
-    public void lerpTo(double pX, double pY, double pZ, float pYaw, float pPitch, int pPosRotationIncrements,
-        boolean pTeleport) {
-        BlockPos blockpos = this.pos.offset((int) (pX - this.getX()), (int) (pY - this.getY()), (int) (pZ - this.getZ()));
+    public void lerpTo(
+            double pX,
+            double pY,
+            double pZ,
+            float pYaw,
+            float pPitch,
+            int pPosRotationIncrements,
+            boolean pTeleport) {
+        BlockPos blockpos =
+                this.pos.offset(
+                        (int) (pX - this.getX()),
+                        (int) (pY - this.getY()),
+                        (int) (pZ - this.getZ()));
         this.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
     }
 

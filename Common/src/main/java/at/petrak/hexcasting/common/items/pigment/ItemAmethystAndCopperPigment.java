@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.items.pigment;
 import at.petrak.hexcasting.api.addldata.ADPigment;
 import at.petrak.hexcasting.api.item.PigmentItem;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
+
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -32,7 +33,8 @@ public class ItemAmethystAndCopperPigment extends Item implements PigmentItem {
 
         @Override
         protected int getRawColor(float time, Vec3 position) {
-            return ADPigment.morphBetweenColors(COLORS, new Vec3(0.1, 0.1, 0.1), time / 600, position);
+            return ADPigment.morphBetweenColors(
+                    COLORS, new Vec3(0.1, 0.1, 0.1), time / 600, position);
         }
     }
 }

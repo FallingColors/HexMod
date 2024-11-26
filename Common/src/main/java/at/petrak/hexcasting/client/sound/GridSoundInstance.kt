@@ -12,10 +12,7 @@ import net.minecraft.world.phys.Vec3
 
 class GridSoundInstance(val player: Player) :
     AbstractTickableSoundInstance(
-        HexSounds.CASTING_AMBIANCE,
-        SoundSource.PLAYERS,
-        SoundInstance.createUnseededRandom()
-    ) {
+        HexSounds.CASTING_AMBIANCE, SoundSource.PLAYERS, SoundInstance.createUnseededRandom()) {
     var mousePosX: Double = 0.5
     var mousePosY: Double = 0.5
 
@@ -34,16 +31,17 @@ class GridSoundInstance(val player: Player) :
     override fun tick() {
         val minecraft = Minecraft.getInstance()
         val screen = minecraft.screen
-        if (screen !is GuiSpellcasting)
-            stop()
+        if (screen !is GuiSpellcasting) stop()
         else {
-            val horizontalPlanarVector = calculateVectorFromPitchAndYaw(player.xRot + 90, player.yRot)
+            val horizontalPlanarVector =
+                calculateVectorFromPitchAndYaw(player.xRot + 90, player.yRot)
             val verticalPlanarVector = calculateVectorFromPitchAndYaw(player.xRot, player.yRot + 90)
             val normalVector = calculateVectorFromPitchAndYaw(player.xRot, player.yRot)
-            val newPos = player.eyePosition
-                .add(normalVector)
-                .add(horizontalPlanarVector.scale(PAN_SCALE * 2 * (mousePosX - 0.5)))
-                .add(verticalPlanarVector.scale(PAN_SCALE * 2 * (mousePosY - 0.5)))
+            val newPos =
+                player.eyePosition
+                    .add(normalVector)
+                    .add(horizontalPlanarVector.scale(PAN_SCALE * 2 * (mousePosX - 0.5)))
+                    .add(verticalPlanarVector.scale(PAN_SCALE * 2 * (mousePosY - 0.5)))
             this.x = newPos.x
             this.y = newPos.y
             this.z = newPos.z
@@ -57,7 +55,8 @@ class GridSoundInstance(val player: Player) :
         val zComponent = Mth.sin(radiansYaw).toDouble()
         val azimuthHorizontal = Mth.cos(radiansPitch).toDouble()
         val azimuthVertical = Mth.sin(radiansPitch).toDouble()
-        return Vec3(zComponent * azimuthHorizontal, -azimuthVertical, xComponent * azimuthHorizontal)
+        return Vec3(
+            zComponent * azimuthHorizontal, -azimuthVertical, xComponent * azimuthHorizontal)
     }
 
     companion object {

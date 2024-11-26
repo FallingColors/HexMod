@@ -4,6 +4,7 @@ import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.blocks.entity.BlockEntityConjured;
 import at.petrak.hexcasting.xplat.IForgeLikeBlock;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,8 +43,8 @@ public class BlockConjured extends Block implements EntityBlock, IForgeLikeBlock
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState,
-        BlockEntityType<T> pBlockEntityType) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+            Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
         if (pLevel.isClientSide()) {
             return BlockConjured::tick;
         } else {
@@ -50,14 +52,19 @@ public class BlockConjured extends Block implements EntityBlock, IForgeLikeBlock
         }
     }
 
-    private static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T t) {
+    private static <T extends BlockEntity> void tick(
+            Level level, BlockPos blockPos, BlockState blockState, T t) {
         if (t instanceof BlockEntityConjured conjured) {
             conjured.particleEffect();
         }
     }
 
     @Override
-    public void stepOn(Level pLevel, @NotNull BlockPos pPos, @NotNull BlockState pState, @NotNull Entity pEntity) {
+    public void stepOn(
+            Level pLevel,
+            @NotNull BlockPos pPos,
+            @NotNull BlockState pState,
+            @NotNull Entity pEntity) {
         BlockEntity tile = pLevel.getBlockEntity(pPos);
         if (tile instanceof BlockEntityConjured bec) {
             bec.walkParticle(pEntity);
@@ -78,21 +85,25 @@ public class BlockConjured extends Block implements EntityBlock, IForgeLikeBlock
     }
 
     @Override
-    public void onPlace(@NotNull BlockState pState, Level pLevel, @NotNull BlockPos pPos, @NotNull BlockState pOldState,
-        boolean pIsMoving) {
+    public void onPlace(
+            @NotNull BlockState pState,
+            Level pLevel,
+            @NotNull BlockPos pPos,
+            @NotNull BlockState pOldState,
+            boolean pIsMoving) {
         pLevel.sendBlockUpdated(pPos, pState, pState, Block.UPDATE_CLIENTS);
         super.onPlace(pState, pLevel, pPos, pOldState, pIsMoving);
     }
 
     @Override
-    public boolean propagatesSkylightDown(@NotNull BlockState pState, @NotNull BlockGetter pLevel,
-        @NotNull BlockPos pPos) {
+    public boolean propagatesSkylightDown(
+            @NotNull BlockState pState, @NotNull BlockGetter pLevel, @NotNull BlockPos pPos) {
         return true;
     }
 
     @Override
-    public @NotNull VoxelShape getVisualShape(BlockState pState, BlockGetter pLevel, BlockPos pPos,
-        CollisionContext pContext) {
+    public @NotNull VoxelShape getVisualShape(
+            BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return Shapes.empty();
     }
 
@@ -107,20 +118,29 @@ public class BlockConjured extends Block implements EntityBlock, IForgeLikeBlock
     }
 
     @Override
-    protected void spawnDestroyParticles(Level pLevel, Player pPlayer, BlockPos pPos, BlockState pState) {
+    protected void spawnDestroyParticles(
+            Level pLevel, Player pPlayer, BlockPos pPos, BlockState pState) {
         // NO-OP
     }
 
-
     @SoftImplement("forge")
-    public boolean addLandingEffects(BlockState state1, ServerLevel worldserver, BlockPos pos, BlockState state2,
-        LivingEntity entity, int numberOfParticles) {
+    public boolean addLandingEffects(
+            BlockState state1,
+            ServerLevel worldserver,
+            BlockPos pos,
+            BlockState state2,
+            LivingEntity entity,
+            int numberOfParticles) {
         return addLandingEffects(state1, worldserver, pos, entity, numberOfParticles);
     }
 
     @Override
-    public boolean addLandingEffects(BlockState state, ServerLevel worldserver, BlockPos pos,
-        LivingEntity entity, int numberOfParticles) {
+    public boolean addLandingEffects(
+            BlockState state,
+            ServerLevel worldserver,
+            BlockPos pos,
+            LivingEntity entity,
+            int numberOfParticles) {
         BlockEntity tile = worldserver.getBlockEntity(pos);
         if (tile instanceof BlockEntityConjured bec) {
             bec.landParticle(entity, numberOfParticles);
@@ -128,4 +148,3 @@ public class BlockConjured extends Block implements EntityBlock, IForgeLikeBlock
         return true;
     }
 }
-

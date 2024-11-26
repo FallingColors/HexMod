@@ -4,6 +4,7 @@ import at.petrak.hexcasting.forge.network.MsgAltioraUpdateAck;
 import at.petrak.hexcasting.forge.network.MsgPigmentUpdateAck;
 import at.petrak.hexcasting.forge.network.MsgSentinelStatusUpdateAck;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -56,17 +57,18 @@ public class CapSyncers {
     }
 
     public static void syncSentinel(ServerPlayer player) {
-        IXplatAbstractions.INSTANCE.sendPacketToPlayer(player,
-            new MsgSentinelStatusUpdateAck(IXplatAbstractions.INSTANCE.getSentinel(player)));
+        IXplatAbstractions.INSTANCE.sendPacketToPlayer(
+                player,
+                new MsgSentinelStatusUpdateAck(IXplatAbstractions.INSTANCE.getSentinel(player)));
     }
 
     public static void syncPigment(ServerPlayer player) {
-        IXplatAbstractions.INSTANCE.sendPacketToPlayer(player,
-            new MsgPigmentUpdateAck(IXplatAbstractions.INSTANCE.getPigment(player)));
+        IXplatAbstractions.INSTANCE.sendPacketToPlayer(
+                player, new MsgPigmentUpdateAck(IXplatAbstractions.INSTANCE.getPigment(player)));
     }
 
     public static void syncAltiora(ServerPlayer player) {
-        IXplatAbstractions.INSTANCE.sendPacketToPlayer(player,
-            new MsgAltioraUpdateAck(IXplatAbstractions.INSTANCE.getAltiora(player)));
+        IXplatAbstractions.INSTANCE.sendPacketToPlayer(
+                player, new MsgAltioraUpdateAck(IXplatAbstractions.INSTANCE.getAltiora(player)));
     }
 }

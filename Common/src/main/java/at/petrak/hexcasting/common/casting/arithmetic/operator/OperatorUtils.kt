@@ -44,7 +44,8 @@ fun Iterator<IndexedValue<Iota>>.nextPositiveIntUnder(max: Int, argc: Int = 0): 
             return rounded
         }
     }
-    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.positive.less.equal", max)
+    throw MishapInvalidIota.of(
+        x, if (argc == 0) idx else argc - (idx + 1), "int.positive.less.equal", max)
 }
 
 fun Iterator<IndexedValue<Iota>>.nextPositiveIntUnderInclusive(max: Int, argc: Int = 0): Int {
@@ -56,12 +57,15 @@ fun Iterator<IndexedValue<Iota>>.nextPositiveIntUnderInclusive(max: Int, argc: I
             return rounded
         }
     }
-    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.positive.less.equal", max)
+    throw MishapInvalidIota.of(
+        x, if (argc == 0) idx else argc - (idx + 1), "int.positive.less.equal", max)
 }
 
 /**
- * Returns the double if it is between [min] and [max] (inclusive), and throws a mishap otherwise. [idx] should be
- * the double's index from the top of the stack (i.e. top iota has [idx]=0, second from the top has [idx]=1, etc.).
+ * Returns the double if it is between [min] and [max] (inclusive), and throws a mishap otherwise.
+ * [idx] should be the double's index from the top of the stack (i.e. top iota has [idx]=0, second
+ * from the top has [idx]=1, etc.).
  */
-fun Double.asDoubleBetween(min: Double, max: Double, idx: Int) = if (this in min .. max) this
+fun Double.asDoubleBetween(min: Double, max: Double, idx: Int) =
+    if (this in min..max) this
     else throw MishapInvalidIota.of(DoubleIota(this), idx, "double.between", min, max)

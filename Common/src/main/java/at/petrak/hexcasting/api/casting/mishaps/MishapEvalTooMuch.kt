@@ -13,6 +13,5 @@ class MishapEvalTooMuch : Mishap() {
         env.mishapEnvironment.drown()
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("eval_too_deep")
+    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = error("eval_too_deep")
 }

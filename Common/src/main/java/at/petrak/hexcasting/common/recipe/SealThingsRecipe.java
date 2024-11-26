@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.items.storage.ItemFocus;
 import at.petrak.hexcasting.common.items.storage.ItemSpellbook;
 import at.petrak.hexcasting.common.lib.HexItems;
+
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
@@ -14,6 +15,7 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.Level;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -22,15 +24,14 @@ public class SealThingsRecipe extends CustomRecipe {
     public final Sealee sealee;
 
     public static final SimpleCraftingRecipeSerializer<SealThingsRecipe> FOCUS_SERIALIZER =
-        new SimpleCraftingRecipeSerializer<>(SealThingsRecipe::focus);
+            new SimpleCraftingRecipeSerializer<>(SealThingsRecipe::focus);
     public static final SimpleCraftingRecipeSerializer<SealThingsRecipe> SPELLBOOK_SERIALIZER =
-        new SimpleCraftingRecipeSerializer<>(SealThingsRecipe::spellbook);
+            new SimpleCraftingRecipeSerializer<>(SealThingsRecipe::spellbook);
 
     public SealThingsRecipe(ResourceLocation id, CraftingBookCategory category, Sealee sealee) {
         super(id, category);
         this.sealee = sealee;
     }
-
 
     @Override
     public boolean canCraftInDimensions(int width, int height) {
@@ -103,12 +104,14 @@ public class SealThingsRecipe extends CustomRecipe {
 
         public boolean isCorrectSealee(ItemStack stack) {
             return switch (this) {
-                case FOCUS -> stack.is(HexItems.FOCUS)
-                    && HexItems.FOCUS.readIotaTag(stack) != null
-                    && !ItemFocus.isSealed(stack);
-                case SPELLBOOK -> stack.is(HexItems.SPELLBOOK)
-                    && HexItems.SPELLBOOK.readIotaTag(stack) != null
-                    && !ItemSpellbook.isSealed(stack);
+                case FOCUS ->
+                        stack.is(HexItems.FOCUS)
+                                && HexItems.FOCUS.readIotaTag(stack) != null
+                                && !ItemFocus.isSealed(stack);
+                case SPELLBOOK ->
+                        stack.is(HexItems.SPELLBOOK)
+                                && HexItems.SPELLBOOK.readIotaTag(stack) != null
+                                && !ItemSpellbook.isSealed(stack);
             };
         }
 
@@ -124,4 +127,3 @@ public class SealThingsRecipe extends CustomRecipe {
         }
     }
 }
-

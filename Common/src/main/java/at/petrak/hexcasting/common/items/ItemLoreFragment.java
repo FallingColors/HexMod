@@ -1,6 +1,9 @@
 package at.petrak.hexcasting.common.items;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 import at.petrak.hexcasting.common.lib.HexSounds;
+
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.network.chat.Component;
@@ -19,19 +22,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
-
 public class ItemLoreFragment extends Item {
-    public static final List<ResourceLocation> NAMES = List.of(new ResourceLocation[]{
-        modLoc("lore/cardamom1"),
-        modLoc("lore/cardamom2"),
-        modLoc("lore/cardamom3"),
-        modLoc("lore/cardamom4"),
-        modLoc("lore/cardamom5"),
-        modLoc("lore/experiment1"),
-        modLoc("lore/experiment2"),
-        modLoc("lore/inventory"),
-    });
+    public static final List<ResourceLocation> NAMES =
+            List.of(
+                    new ResourceLocation[] {
+                        modLoc("lore/cardamom1"),
+                        modLoc("lore/cardamom2"),
+                        modLoc("lore/cardamom3"),
+                        modLoc("lore/cardamom4"),
+                        modLoc("lore/cardamom5"),
+                        modLoc("lore/experiment1"),
+                        modLoc("lore/experiment2"),
+                        modLoc("lore/inventory"),
+                    });
 
     public static final String CRITEREON_KEY = "grant";
 
@@ -40,7 +43,8 @@ public class ItemLoreFragment extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
+    public InteractionResultHolder<ItemStack> use(
+            Level level, Player player, InteractionHand usedHand) {
         player.playSound(HexSounds.READ_LORE_FRAGMENT, 1f, 1f);
 
         var handStack = player.getItemInHand(usedHand);
@@ -65,10 +69,18 @@ public class ItemLoreFragment extends Item {
         }
 
         if (unfoundLore == null) {
-            splayer.displayClientMessage(Component.translatable("item.hexcasting.lore_fragment.all"), true);
+            splayer.displayClientMessage(
+                    Component.translatable("item.hexcasting.lore_fragment.all"), true);
             splayer.giveExperiencePoints(20);
-            level.playSound(null, player.position().x, player.position().y, player.position().z,
-                HexSounds.READ_LORE_FRAGMENT, SoundSource.PLAYERS, 1f, 1f);
+            level.playSound(
+                    null,
+                    player.position().x,
+                    player.position().y,
+                    player.position().z,
+                    HexSounds.READ_LORE_FRAGMENT,
+                    SoundSource.PLAYERS,
+                    1f,
+                    1f);
         } else {
             // et voila!
             splayer.getAdvancements().award(unfoundLore, CRITEREON_KEY);

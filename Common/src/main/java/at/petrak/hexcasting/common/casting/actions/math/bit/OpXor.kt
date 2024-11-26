@@ -22,16 +22,9 @@ object OpXor : ConstMediaAction {
             { list1 ->
                 val list2 = args.getList(1, argc)
                 val out =
-                    list1.filter { x1 ->
-                        list2.none {
-                            Iota.tolerates(
-                                x1,
-                                it
-                            )
-                        }
-                    } + list2.filter { x2 -> list1.none { Iota.tolerates(x2, it) } }
+                    list1.filter { x1 -> list2.none { Iota.tolerates(x1, it) } } +
+                        list2.filter { x2 -> list1.none { Iota.tolerates(x2, it) } }
                 out.asActionResult
-            }
-        )
+            })
     }
 }

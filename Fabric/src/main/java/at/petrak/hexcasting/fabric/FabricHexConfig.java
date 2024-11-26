@@ -1,18 +1,25 @@
 package at.petrak.hexcasting.fabric;
 
+import static at.petrak.hexcasting.api.mod.HexConfig.anyMatchResLoc;
+import static at.petrak.hexcasting.api.mod.HexConfig.noneMatch;
+
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import com.google.gson.GsonBuilder;
+
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
+
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -21,31 +28,33 @@ import net.minecraft.world.level.Level;
 import java.util.ArrayList;
 import java.util.List;
 
-import static at.petrak.hexcasting.api.mod.HexConfig.anyMatchResLoc;
-import static at.petrak.hexcasting.api.mod.HexConfig.noneMatch;
-
 @Config(name = HexAPI.MOD_ID)
 @Config.Gui.Background("minecraft:textures/block/calcite.png")
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
-
 public class FabricHexConfig extends PartitioningSerializer.GlobalData {
     @ConfigEntry.Category("common")
     @ConfigEntry.Gui.TransitiveObject
     public final Common common = new Common();
+
     @ConfigEntry.Category("client")
     @ConfigEntry.Gui.TransitiveObject
     public final Client client = new Client();
+
     @ConfigEntry.Category("server")
     @ConfigEntry.Gui.TransitiveObject
     public final Server server = new Server();
 
     public static FabricHexConfig setup() {
-        var gson = new GsonBuilder()
-            .setPrettyPrinting()
-            .registerTypeAdapter(ResourceLocation.class, new ResourceLocation.Serializer())
-            .create();
-        AutoConfig.register(FabricHexConfig.class, PartitioningSerializer.wrap((cfg, clazz) ->
-            new GsonConfigSerializer<>(cfg, clazz, gson)));
+        var gson =
+                new GsonBuilder()
+                        .setPrettyPrinting()
+                        .registerTypeAdapter(
+                                ResourceLocation.class, new ResourceLocation.Serializer())
+                        .create();
+        AutoConfig.register(
+                FabricHexConfig.class,
+                PartitioningSerializer.wrap(
+                        (cfg, clazz) -> new GsonConfigSerializer<>(cfg, clazz, gson)));
         var instance = AutoConfig.getConfigHolder(FabricHexConfig.class).getConfig();
 
         HexConfig.setCommon(instance.common);
@@ -54,7 +63,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             HexConfig.setClient(instance.client);
         }
         // but we care about the server on the *logical* server
-        // i believe this should Just Work without a guard? assuming we don't access it from the client ever
+        // i believe this should Just Work without a guard? assuming we don't access it from the
+        // client ever
         HexConfig.setServer(instance.server);
 
         return instance;
@@ -62,22 +72,17 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
 
     @Config(name = "common")
     public static final class Common implements HexConfig.CommonConfigAccess, ConfigData {
-        @ConfigEntry.Gui.Tooltip
-        private long dustMediaAmount = DEFAULT_DUST_MEDIA_AMOUNT;
-        @ConfigEntry.Gui.Tooltip
-        private long shardMediaAmount = DEFAULT_SHARD_MEDIA_AMOUNT;
+        @ConfigEntry.Gui.Tooltip private long dustMediaAmount = DEFAULT_DUST_MEDIA_AMOUNT;
+        @ConfigEntry.Gui.Tooltip private long shardMediaAmount = DEFAULT_SHARD_MEDIA_AMOUNT;
+
         @ConfigEntry.Gui.Tooltip
         private long chargedCrystalMediaAmount = DEFAULT_CHARGED_MEDIA_AMOUNT;
-        @ConfigEntry.Gui.Tooltip
-        private double mediaToHealthRate = DEFAULT_MEDIA_TO_HEALTH_RATE;
 
-        @ConfigEntry.Gui.Tooltip
-        private int cypherCooldown = DEFAULT_CYPHER_COOLDOWN;
-        @ConfigEntry.Gui.Tooltip
-        private int trinketCooldown = DEFAULT_TRINKET_COOLDOWN;
-        @ConfigEntry.Gui.Tooltip
-        private int artifactCooldown = DEFAULT_ARTIFACT_COOLDOWN;
+        @ConfigEntry.Gui.Tooltip private double mediaToHealthRate = DEFAULT_MEDIA_TO_HEALTH_RATE;
 
+        @ConfigEntry.Gui.Tooltip private int cypherCooldown = DEFAULT_CYPHER_COOLDOWN;
+        @ConfigEntry.Gui.Tooltip private int trinketCooldown = DEFAULT_TRINKET_COOLDOWN;
+        @ConfigEntry.Gui.Tooltip private int artifactCooldown = DEFAULT_ARTIFACT_COOLDOWN;
 
         @Override
         public void validatePostLoad() throws ValidationException {
@@ -127,12 +132,15 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
     public static final class Client implements HexConfig.ClientConfigAccess, ConfigData {
         @ConfigEntry.Gui.Tooltip
         private boolean ctrlTogglesOffStrokeOrder = DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER;
+
         @ConfigEntry.Gui.Tooltip
         private boolean invertSpellbookScrollDirection = DEFAULT_INVERT_SPELLBOOK_SCROLL;
+
         @ConfigEntry.Gui.Tooltip
         private boolean invertAbacusScrollDirection = DEFAULT_INVERT_SPELLBOOK_SCROLL;
-        @ConfigEntry.Gui.Tooltip
-        private double gridSnapThreshold = DEFAULT_GRID_SNAP_THRESHOLD;
+
+        @ConfigEntry.Gui.Tooltip private double gridSnapThreshold = DEFAULT_GRID_SNAP_THRESHOLD;
+
         @ConfigEntry.Gui.Tooltip
         private boolean clickingTogglesDrawing = DEFAULT_CLICKING_TOGGLES_DRAWING;
 
@@ -163,7 +171,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
 
         @Override
         public boolean clickingTogglesDrawing() {
-             return clickingTogglesDrawing;
+            return clickingTogglesDrawing;
         }
     }
 
@@ -172,43 +180,40 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.BoundedDiscrete(min = 0, max = 4)
         @ConfigEntry.Gui.Tooltip
         private int opBreakHarvestLevel = DEFAULT_OP_BREAK_HARVEST_LEVEL;
-        @ConfigEntry.Gui.Tooltip
-        private int maxOpCount = DEFAULT_MAX_OP_COUNT;
-        @ConfigEntry.Gui.Tooltip
-        private int maxSpellCircleLength = DEFAULT_MAX_SPELL_CIRCLE_LENGTH;
-        @ConfigEntry.Gui.Tooltip
-        private List<String> actionDenyList = List.of();
-        @ConfigEntry.Gui.Tooltip
-        private List<String> circleActionDenyList = List.of();
+
+        @ConfigEntry.Gui.Tooltip private int maxOpCount = DEFAULT_MAX_OP_COUNT;
+        @ConfigEntry.Gui.Tooltip private int maxSpellCircleLength = DEFAULT_MAX_SPELL_CIRCLE_LENGTH;
+        @ConfigEntry.Gui.Tooltip private List<String> actionDenyList = List.of();
+        @ConfigEntry.Gui.Tooltip private List<String> circleActionDenyList = List.of();
+
         @ConfigEntry.Gui.Tooltip
         private boolean villagersOffendedByMindMurder = DEFAULT_VILLAGERS_DISLIKE_MIND_MURDER;
+
         @ConfigEntry.Gui.Tooltip
         private boolean doesTrueNameHaveAmbit = DEFAULT_TRUE_NAME_HAS_AMBIT;
 
-
-        @ConfigEntry.Gui.Tooltip
-        private List<String> tpDimDenylist = DEFAULT_DIM_TP_DENYLIST;
+        @ConfigEntry.Gui.Tooltip private List<String> tpDimDenylist = DEFAULT_DIM_TP_DENYLIST;
 
         // ModMenu bad and doesn't like java objects in here so we do stupid string parsing
         @ConfigEntry.Gui.Tooltip
-        private List<String> scrollInjectionsRaw = HexLootHandler.DEFAULT_SCROLL_INJECTS
-            .stream()
-            .map(si -> si.injectee() + " " + si.countRange())
-            .toList();
+        private List<String> scrollInjectionsRaw =
+                HexLootHandler.DEFAULT_SCROLL_INJECTS.stream()
+                        .map(si -> si.injectee() + " " + si.countRange())
+                        .toList();
+
         @ConfigEntry.Gui.Excluded
         private transient Object2IntMap<ResourceLocation> scrollInjections;
 
-        // TODO: hook this up to the config, change Jankery, test, also test scroll injects on fabric
+        // TODO: hook this up to the config, change Jankery, test, also test scroll injects on
+        // fabric
         @ConfigEntry.Gui.Tooltip
-        private List<String> loreInjectionsRaw = HexLootHandler.DEFAULT_LORE_INJECTS
-                .stream()
-                .map(ResourceLocation::toString)
-                .toList();
-        @ConfigEntry.Gui.Excluded
-        private transient List<ResourceLocation> loreInjections;
-        @ConfigEntry.Gui.Tooltip
-        private double loreChance = HexLootHandler.DEFAULT_LORE_CHANCE;
+        private List<String> loreInjectionsRaw =
+                HexLootHandler.DEFAULT_LORE_INJECTS.stream()
+                        .map(ResourceLocation::toString)
+                        .toList();
 
+        @ConfigEntry.Gui.Excluded private transient List<ResourceLocation> loreInjections;
+        @ConfigEntry.Gui.Tooltip private double loreChance = HexLootHandler.DEFAULT_LORE_CHANCE;
 
         @Override
         public void validatePostLoad() throws ValidationException {
@@ -242,7 +247,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         }
 
         @Override
-        public int opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort() {
+        public int
+                opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort() {
             return opBreakHarvestLevel;
         }
 
@@ -281,9 +287,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             return doesTrueNameHaveAmbit;
         }
 
-        /**
-         * Returns -1 if none is found
-         */
+        /** Returns -1 if none is found */
         public int scrollRangeForLootTable(ResourceLocation lootTable) {
             return this.scrollInjections.getOrDefault(lootTable, -1);
         }

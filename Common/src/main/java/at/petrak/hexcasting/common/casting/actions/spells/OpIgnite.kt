@@ -26,10 +26,8 @@ import net.minecraft.world.phys.Vec3
 
 object OpIgnite : SpellAction {
     override val argc = 1
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
+
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
         when (val target = args[0]) {
             is EntityIota -> {
                 val entity = args.getEntity(0, argc)
@@ -37,8 +35,7 @@ object OpIgnite : SpellAction {
                 return SpellAction.Result(
                     EntitySpell(entity),
                     MediaConstants.DUST_UNIT,
-                    listOf(ParticleSpray.burst(entity.position(), 1.0))
-                )
+                    listOf(ParticleSpray.burst(entity.position(), 1.0)))
             }
             is Vec3Iota -> {
                 val block = args.getBlockPos(0, argc)
@@ -46,8 +43,7 @@ object OpIgnite : SpellAction {
                 return SpellAction.Result(
                     BlockSpell(block),
                     MediaConstants.DUST_UNIT,
-                    listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(block)), 1.0))
-                )
+                    listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(block)), 1.0)))
             }
             else -> throw MishapInvalidIota.ofType(target, 0, "entity_or_vector")
         }
@@ -62,16 +58,17 @@ object OpIgnite : SpellAction {
         }
 
         fun tryToClick(ctx: CastingEnvironment, pos: BlockPos, item: Item): Boolean {
-            return IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(item), ctx.castingEntity as? ServerPlayer) &&
-                item.useOn(
-                    UseOnContext(
-                        ctx.world,
-                        null,
-                        InteractionHand.MAIN_HAND,
-                        ItemStack(item),
-                        BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false)
-                    )
-                ).consumesAction()
+            return IXplatAbstractions.INSTANCE.isPlacingAllowed(
+                ctx.world, pos, ItemStack(item), ctx.castingEntity as? ServerPlayer) &&
+                item
+                    .useOn(
+                        UseOnContext(
+                            ctx.world,
+                            null,
+                            InteractionHand.MAIN_HAND,
+                            ItemStack(item),
+                            BlockHitResult(Vec3.atCenterOf(pos), Direction.UP, pos, false)))
+                    .consumesAction()
         }
     }
 

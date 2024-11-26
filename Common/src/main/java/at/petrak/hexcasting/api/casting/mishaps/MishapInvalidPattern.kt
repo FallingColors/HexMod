@@ -17,6 +17,5 @@ class MishapInvalidPattern : Mishap() {
         stack.add(GarbageIota())
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("invalid_pattern")
+    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = error("invalid_pattern")
 }

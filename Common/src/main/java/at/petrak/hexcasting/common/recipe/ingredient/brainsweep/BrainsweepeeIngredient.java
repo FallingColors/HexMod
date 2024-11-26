@@ -1,7 +1,9 @@
 package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import com.google.gson.JsonObject;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -10,6 +12,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -38,8 +41,8 @@ public abstract class BrainsweepeeIngredient {
 
     /**
      * For the benefit of showing to the client, return an example of the entity.
-     * <p>
-     * Can return null in case someone did something stupid with a recipe
+     *
+     * <p>Can return null in case someone did something stupid with a recipe
      */
     @Nullable
     public abstract Entity exampleEntity(Level level);

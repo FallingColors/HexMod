@@ -22,64 +22,53 @@ import net.minecraft.world.item.ItemStack
 object OpMakeBattery : SpellAction {
     override val argc = 1
 
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
         val entity = args.getItemEntity(0, argc)
 
-        val (handStack, hand) = env.getHeldItemToOperateOn { it.`is`(HexTags.Items.PHIAL_BASE) }
-            ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "bottle") // TODO: hack
+        val (handStack, hand) =
+            env.getHeldItemToOperateOn { it.`is`(HexTags.Items.PHIAL_BASE) }
+                ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "bottle") // TODO: hack
 
         if (!handStack.`is`(HexTags.Items.PHIAL_BASE)) {
-            throw MishapBadOffhandItem.of(
-                handStack,
-                "bottle"
-            )
+            throw MishapBadOffhandItem.of(handStack, "bottle")
         }
         if (handStack.count != 1) {
-            throw MishapBadOffhandItem.of(
-                handStack,
-                "only_one"
-            )
+            throw MishapBadOffhandItem.of(handStack, "only_one")
         }
 
         env.assertEntityInRange(entity)
 
-        if (!isMediaItem(entity.item) || extractMedia(
-                entity.item,
-                drainForBatteries = true,
-                simulate = true
-            ) <= 0
-        ) {
-            throw MishapBadItem.of(
-                entity,
-                "media_for_battery"
-            )
+        if (!isMediaItem(entity.item) ||
+            extractMedia(entity.item, drainForBatteries = true, simulate = true) <= 0) {
+            throw MishapBadItem.of(entity, "media_for_battery")
         }
 
         return SpellAction.Result(
             Spell(entity, handStack, hand),
             MediaConstants.CRYSTAL_UNIT,
-            listOf(ParticleSpray.burst(entity.position(), 0.5))
-        )
+            listOf(ParticleSpray.burst(entity.position(), 0.5)))
     }
 
-    private data class Spell(val itemEntity: ItemEntity, val handStack: ItemStack, val hand: InteractionHand?) : RenderedSpell {
+    private data class Spell(
+        val itemEntity: ItemEntity,
+        val handStack: ItemStack,
+        val hand: InteractionHand?
+    ) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            if (!itemEntity.isAlive)
-                return
+            if (!itemEntity.isAlive) return
 
             val entityStack = itemEntity.item.copy()
             val mediamount = extractMedia(entityStack, drainForBatteries = true)
             if (mediamount > 0) {
-                if (!env.replaceItem({ it == handStack }, ItemMediaHolder.withMedia(ItemStack(HexItems.BATTERY), mediamount, mediamount), hand))
+                if (!env.replaceItem(
+                    { it == handStack },
+                    ItemMediaHolder.withMedia(ItemStack(HexItems.BATTERY), mediamount, mediamount),
+                    hand))
                     return
             }
 
             itemEntity.item = entityStack
-            if (entityStack.isEmpty)
-                itemEntity.kill()
+            if (entityStack.isEmpty) itemEntity.kill()
         }
     }
 }

@@ -24,10 +24,8 @@ import net.minecraft.world.phys.Vec3
 
 object OpExtinguish : SpellAction {
     override val argc = 1
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
+
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
         // TODO: sho
         val vecPos = args.getVec3(0, argc)
         val pos = BlockPos.containing(vecPos)
@@ -36,8 +34,7 @@ object OpExtinguish : SpellAction {
         return SpellAction.Result(
             Spell(pos),
             MediaConstants.DUST_UNIT * 6,
-            listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0))
-        )
+            listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0)))
     }
 
     const val MAX_DESTROY_COUNT = 1024
@@ -57,17 +54,24 @@ object OpExtinguish : SpellAction {
                 if (env.canEditBlockAt(here) && distFromTarget < 10 * 10 && seen.add(here)) {
                     // never seen this pos in my life
                     val blockstate = env.world.getBlockState(here)
-                    if (IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, here, blockstate, env.castingEntity as? ServerPlayer)) {
+                    if (IXplatAbstractions.INSTANCE.isBreakingAllowed(
+                        env.world, here, blockstate, env.castingEntity as? ServerPlayer)) {
                         val success =
                             when (blockstate.block) {
                                 is BaseFireBlock -> {
-                                    env.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3); true
+                                    env.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3)
+                                    true
                                 }
 
                                 is CampfireBlock -> {
-                                    if (blockstate.getValue(CampfireBlock.LIT)) { // check if campfire is lit before putting it out
+                                    if (blockstate.getValue(
+                                        CampfireBlock
+                                            .LIT)) { // check if campfire is lit before putting it
+                                        // out
                                         val wilson =
-                                            Items.WOODEN_SHOVEL // summon shovel from the ether to do our bidding
+                                            Items
+                                                .WOODEN_SHOVEL // summon shovel from the ether to do
+                                        // our bidding
                                         val hereVec = Vec3.atCenterOf(here)
                                         wilson.useOn(
                                             UseOnContext(
@@ -75,20 +79,23 @@ object OpExtinguish : SpellAction {
                                                 null,
                                                 InteractionHand.MAIN_HAND,
                                                 ItemStack(wilson),
-                                                BlockHitResult(hereVec, Direction.UP, here, false)
-                                            )
-                                        ); true
+                                                BlockHitResult(hereVec, Direction.UP, here, false)))
+                                        true
                                     } else false
                                 }
 
                                 is AbstractCandleBlock -> {
-                                    if (blockstate.getValue(AbstractCandleBlock.LIT)) { // same check for candles
-                                        AbstractCandleBlock.extinguish(null, blockstate, env.world, here); true
+                                    if (blockstate.getValue(
+                                        AbstractCandleBlock.LIT)) { // same check for candles
+                                        AbstractCandleBlock.extinguish(
+                                            null, blockstate, env.world, here)
+                                        true
                                     } else false
                                 }
 
                                 is NetherPortalBlock -> {
-                                    env.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3); true
+                                    env.world.setBlock(here, Blocks.AIR.defaultBlockState(), 3)
+                                    true
                                 }
 
                                 else -> false
@@ -104,8 +111,7 @@ object OpExtinguish : SpellAction {
                                 0.0,
                                 0.05,
                                 0.0,
-                                0.0
-                            )
+                                0.0)
                             successes++
                         }
                         for (dir in Direction.values()) {
@@ -124,8 +130,7 @@ object OpExtinguish : SpellAction {
                     SoundEvents.FIRE_EXTINGUISH,
                     SoundSource.BLOCKS,
                     1.0f,
-                    0.95f
-                )
+                    0.95f)
             }
         }
     }

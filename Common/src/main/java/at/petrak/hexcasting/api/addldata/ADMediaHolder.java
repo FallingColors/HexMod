@@ -30,38 +30,32 @@ public interface ADMediaHolder {
     @ApiStatus.OverrideOnly
     void setMedia(long media);
 
-    /**
-     * Whether this media holder can have media inserted into it.
-     */
+    /** Whether this media holder can have media inserted into it. */
     boolean canRecharge();
 
-    /**
-     * Whether this media holder can be extracted from.
-     */
+    /** Whether this media holder can be extracted from. */
     boolean canProvide();
 
     /**
-     * The priority for this media holder to be selected when casting a hex. Higher priorities are taken first.
-     * <p>
-     * By default,
-     * * Charged Amethyst has priority 1000
-     * * Amethyst Shards have priority 2000
-     * * Amethyst Dust has priority 3000
-     * * Items which hold media have priority 4000
+     * The priority for this media holder to be selected when casting a hex. Higher priorities are
+     * taken first.
+     *
+     * <p>By default, * Charged Amethyst has priority 1000 * Amethyst Shards have priority 2000 *
+     * Amethyst Dust has priority 3000 * Items which hold media have priority 4000
      */
     int getConsumptionPriority();
 
-    /**
-     * Whether the media inside this media holder may be used to construct a battery.
-     */
+    /** Whether the media inside this media holder may be used to construct a battery. */
     boolean canConstructBattery();
 
     /**
-     * Withdraws media from the holder. Returns the amount of media extracted, which may be less or more than the cost.
-     * <p>
-     * Even if {@link ADMediaHolder#canProvide} is false, you can still withdraw media this way.
-     * <p>
-     * Withdrawing a negative amount will act as though you attempted to withdraw as much media as the holder contains.
+     * Withdraws media from the holder. Returns the amount of media extracted, which may be less or
+     * more than the cost.
+     *
+     * <p>Even if {@link ADMediaHolder#canProvide} is false, you can still withdraw media this way.
+     *
+     * <p>Withdrawing a negative amount will act as though you attempted to withdraw as much media
+     * as the holder contains.
      */
     default long withdrawMedia(long cost, boolean simulate) {
         var mediaHere = getMedia();
@@ -76,12 +70,13 @@ public interface ADMediaHolder {
     }
 
     /**
-     * Inserts media into the holder. Returns the amount of media inserted, which may be less than the requested amount.
-     * <p>
-     * Even if {@link ADMediaHolder#canRecharge} is false, you can still insert media this way.
-     * <p>
-     * Inserting a negative amount will act as though you attempted to insert exactly as much media as the holder was
-     * missing.
+     * Inserts media into the holder. Returns the amount of media inserted, which may be less than
+     * the requested amount.
+     *
+     * <p>Even if {@link ADMediaHolder#canRecharge} is false, you can still insert media this way.
+     *
+     * <p>Inserting a negative amount will act as though you attempted to insert exactly as much
+     * media as the holder was missing.
      */
     default long insertMedia(long amount, boolean simulate) {
         var mediaHere = getMedia();

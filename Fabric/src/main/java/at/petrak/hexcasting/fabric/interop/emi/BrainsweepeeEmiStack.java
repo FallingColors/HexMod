@@ -1,10 +1,15 @@
 package at.petrak.hexcasting.fabric.interop.emi;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+import static at.petrak.hexcasting.client.render.RenderLib.renderEntity;
+
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
+
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+
 import dev.emi.emi.api.stack.EmiStack;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -15,9 +20,6 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
-import static at.petrak.hexcasting.client.render.RenderLib.renderEntity;
 
 public class BrainsweepeeEmiStack extends EmiStack {
     public final BrainsweepeeIngredient ingredient;
@@ -66,9 +68,9 @@ public class BrainsweepeeEmiStack extends EmiStack {
     @Override
     public List<ClientTooltipComponent> getTooltip() {
         return getTooltipText().stream()
-            .map(Component::getVisualOrderText)
-            .map(ClientTooltipComponent::create)
-            .collect(Collectors.toList());
+                .map(Component::getVisualOrderText)
+                .map(ClientTooltipComponent::create)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -86,12 +88,21 @@ public class BrainsweepeeEmiStack extends EmiStack {
 
                 RenderSystem.enableBlend();
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-                renderEntity(graphics, example, level, x + 8, y + 16, ClientTickCounter.getTotal(), 8, 0, it -> it);
+                renderEntity(
+                        graphics,
+                        example,
+                        level,
+                        x + 8,
+                        y + 16,
+                        ClientTickCounter.getTotal(),
+                        8,
+                        0,
+                        it -> it);
             }
         }
 
-//		if ((flags & RENDER_REMAINDER) != 0) {
-//			EmiRender.renderRemainderIcon(this, poseStack, x, y);
-//		}
+        //		if ((flags & RENDER_REMAINDER) != 0) {
+        //			EmiRender.renderRemainderIcon(this, poseStack, x, y);
+        //		}
     }
 }

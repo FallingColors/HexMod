@@ -21,22 +21,20 @@ object OpAddMotion : SpellAction {
     val MAX_MOTION: Double = 8192.0
 
     override fun executeWithUserdata(
-            args: List<Iota>,
-            env: CastingEnvironment,
-            userData: CompoundTag
+        args: List<Iota>,
+        env: CastingEnvironment,
+        userData: CompoundTag
     ): SpellAction.Result {
         val target = args.getEntity(0, argc)
         val motion = args.getVec3(1, argc)
         env.assertEntityInRange(target)
 
         var motionForCost = motion.lengthSqr()
-        if (CastingImage.checkAndMarkGivenMotion(userData, target))
-            motionForCost++
+        if (CastingImage.checkAndMarkGivenMotion(userData, target)) motionForCost++
 
-        val shrunkMotion = if (motion.lengthSqr() > MAX_MOTION * MAX_MOTION)
-            motion.normalize().scale(MAX_MOTION)
-        else
-            motion
+        val shrunkMotion =
+            if (motion.lengthSqr() > MAX_MOTION * MAX_MOTION) motion.normalize().scale(MAX_MOTION)
+            else motion
         return SpellAction.Result(
             Spell(target, shrunkMotion),
             (motionForCost * MediaConstants.DUST_UNIT).toLong(),
@@ -45,9 +43,7 @@ object OpAddMotion : SpellAction {
                     target.position().add(0.0, target.eyeHeight / 2.0, 0.0),
                     motion.normalize(),
                     0.0,
-                    0.1
-                )
-            ),
+                    0.1)),
         )
     }
 

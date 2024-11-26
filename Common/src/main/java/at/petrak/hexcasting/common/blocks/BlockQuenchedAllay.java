@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.blocks;
 
 import at.petrak.hexcasting.common.blocks.entity.BlockEntityQuenchedAllay;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+
 import org.jetbrains.annotations.Nullable;
 
 public class BlockQuenchedAllay extends Block implements EntityBlock {
@@ -45,9 +47,21 @@ public class BlockQuenchedAllay extends Block implements EntityBlock {
 
             int count = rand.nextInt(10) / 4;
             for (int i = 0; i < count; i++) {
-                double pX = center.x + (dX == 0 ? Mth.nextDouble(rand, -0.5D, 0.5D) : (double) dX * 0.55D);
-                double pY = center.y + (dY == 0 ? Mth.nextDouble(rand, -0.5D, 0.5D) : (double) dY * 0.55D);
-                double pZ = center.z + (dZ == 0 ? Mth.nextDouble(rand, -0.5D, 0.5D) : (double) dZ * 0.55D);
+                double pX =
+                        center.x
+                                + (dX == 0
+                                        ? Mth.nextDouble(rand, -0.5D, 0.5D)
+                                        : (double) dX * 0.55D);
+                double pY =
+                        center.y
+                                + (dY == 0
+                                        ? Mth.nextDouble(rand, -0.5D, 0.5D)
+                                        : (double) dY * 0.55D);
+                double pZ =
+                        center.z
+                                + (dZ == 0
+                                        ? Mth.nextDouble(rand, -0.5D, 0.5D)
+                                        : (double) dZ * 0.55D);
                 double vPerp = Mth.nextDouble(rand, 0.0, 0.01);
                 double vX = vPerp * dX;
                 double vY = vPerp * dY;

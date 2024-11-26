@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.storage.ItemSpellbook;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
@@ -12,11 +13,12 @@ import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
+
 import org.jetbrains.annotations.NotNull;
 
 public class SealSpellbookRecipe extends ShapelessRecipe {
     public static final SimpleCraftingRecipeSerializer<SealSpellbookRecipe> SERIALIZER =
-        new SimpleCraftingRecipeSerializer<>(SealSpellbookRecipe::new);
+            new SimpleCraftingRecipeSerializer<>(SealSpellbookRecipe::new);
 
     private static ItemStack getSealedStack() {
         ItemStack output = new ItemStack(HexItems.SPELLBOOK);
@@ -27,7 +29,9 @@ public class SealSpellbookRecipe extends ShapelessRecipe {
 
     private static NonNullList<Ingredient> createIngredients() {
         NonNullList<Ingredient> ingredients = NonNullList.createWithCapacity(2);
-        ingredients.add(IXplatAbstractions.INSTANCE.getUnsealedIngredient(new ItemStack(HexItems.SPELLBOOK)));
+        ingredients.add(
+                IXplatAbstractions.INSTANCE.getUnsealedIngredient(
+                        new ItemStack(HexItems.SPELLBOOK)));
         ingredients.add(Ingredient.of(Items.HONEYCOMB));
         return ingredients;
     }
@@ -61,4 +65,3 @@ public class SealSpellbookRecipe extends ShapelessRecipe {
         return SERIALIZER;
     }
 }
-

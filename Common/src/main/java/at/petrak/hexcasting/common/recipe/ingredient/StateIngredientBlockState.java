@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.recipe.ingredient;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -11,8 +12,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 
-import javax.annotation.Nullable;
 import java.util.*;
+
+import javax.annotation.Nullable;
 
 public class StateIngredientBlockState implements StateIngredient {
     private final BlockState state;
@@ -66,7 +68,8 @@ public class StateIngredientBlockState implements StateIngredient {
             @SuppressWarnings({"unchecked", "rawtypes"})
             String name = ((Property) key).getName(entry.getValue());
 
-            tooltip.add(Component.literal(key.getName() + " = " + name).withStyle(ChatFormatting.GRAY));
+            tooltip.add(
+                    Component.literal(key.getName() + " = " + name).withStyle(ChatFormatting.GRAY));
         }
         return tooltip;
     }

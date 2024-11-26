@@ -5,13 +5,14 @@ import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.MathUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.math.RoundingMode;
@@ -48,16 +49,14 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
 
     @Override
     public long getMedia(ItemStack stack) {
-        if (NBTHelper.hasInt(stack, TAG_MEDIA))
-            return NBTHelper.getInt(stack, TAG_MEDIA);
+        if (NBTHelper.hasInt(stack, TAG_MEDIA)) return NBTHelper.getInt(stack, TAG_MEDIA);
 
         return NBTHelper.getLong(stack, TAG_MEDIA);
     }
 
     @Override
     public long getMaxMedia(ItemStack stack) {
-        if (NBTHelper.hasInt(stack, TAG_MAX_MEDIA))
-            return NBTHelper.getInt(stack, TAG_MAX_MEDIA);
+        if (NBTHelper.hasInt(stack, TAG_MAX_MEDIA)) return NBTHelper.getInt(stack, TAG_MAX_MEDIA);
 
         return NBTHelper.getLong(stack, TAG_MAX_MEDIA);
     }
@@ -92,8 +91,11 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
-        TooltipFlag pIsAdvanced) {
+    public void appendHoverText(
+            ItemStack pStack,
+            @Nullable Level pLevel,
+            List<Component> pTooltipComponents,
+            TooltipFlag pIsAdvanced) {
         var maxMedia = getMaxMedia(pStack);
         if (maxMedia > 0) {
             var media = getMedia(pStack);
@@ -101,17 +103,24 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
 
             var color = TextColor.fromRgb(MediaHelper.mediaBarColor(media, maxMedia));
 
-            var mediamount = Component.literal(DUST_AMOUNT.format(media / (float) MediaConstants.DUST_UNIT));
+            var mediamount =
+                    Component.literal(DUST_AMOUNT.format(media / (float) MediaConstants.DUST_UNIT));
             var percentFull = Component.literal(PERCENTAGE.format(100f * fullness) + "%");
-            var maxCapacity = Component.translatable("hexcasting.tooltip.media", DUST_AMOUNT.format(maxMedia / (float) MediaConstants.DUST_UNIT));
+            var maxCapacity =
+                    Component.translatable(
+                            "hexcasting.tooltip.media",
+                            DUST_AMOUNT.format(maxMedia / (float) MediaConstants.DUST_UNIT));
 
             mediamount.withStyle(style -> style.withColor(HEX_COLOR));
             maxCapacity.withStyle(style -> style.withColor(HEX_COLOR));
             percentFull.withStyle(style -> style.withColor(color));
 
             pTooltipComponents.add(
-                Component.translatable("hexcasting.tooltip.media_amount.advanced",
-                    mediamount, maxCapacity, percentFull));
+                    Component.translatable(
+                            "hexcasting.tooltip.media_amount.advanced",
+                            mediamount,
+                            maxCapacity,
+                            percentFull));
         }
 
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);

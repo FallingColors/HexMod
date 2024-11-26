@@ -2,7 +2,8 @@ package at.petrak.hexcasting.datagen.recipe.builders;
 
 import com.google.gson.JsonObject;
 
-public record CompatProcessingOutput(String name, int count, float chance) implements ProcessingOutput {
+public record CompatProcessingOutput(String name, int count, float chance)
+        implements ProcessingOutput {
     @Override
     public JsonObject serialize() {
         JsonObject json = new JsonObject();

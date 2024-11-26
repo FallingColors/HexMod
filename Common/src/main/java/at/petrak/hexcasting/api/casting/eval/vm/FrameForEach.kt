@@ -16,9 +16,10 @@ import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 
 /**
- * A frame representing all the state for a Thoth evaluation.
- * Pushed by an OpForEach.
- * @property first whether the input stack state is the first one (since we don't want to save the base-stack before any changes are made)
+ * A frame representing all the state for a Thoth evaluation. Pushed by an OpForEach.
+ *
+ * @property first whether the input stack state is the first one (since we don't want to save the
+ *   base-stack before any changes are made)
  * @property data list of *remaining* datums to ForEach over
  * @property code code to run per datum
  * @property baseStack the stack state at Thoth entry
@@ -31,7 +32,10 @@ data class FrameForEach(
     val acc: MutableList<Iota>
 ) : ContinuationFrame {
 
-    /** When halting, we add the stack state at halt to the stack accumulator, then return the original pre-Thoth stack, plus the accumulator. */
+    /**
+     * When halting, we add the stack state at halt to the stack accumulator, then return the
+     * original pre-Thoth stack, plus the accumulator.
+     */
     override fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>> {
         val newStack = baseStack?.toMutableList() ?: mutableListOf()
         acc.addAll(stack)
@@ -46,28 +50,31 @@ data class FrameForEach(
         harness: CastingVM
     ): CastResult {
         // If this isn't the very first Thoth step (i.e. no Thoth computations run yet)...
-        val stack = if (baseStack == null) {
-            // init stack to the harness stack...
-            harness.image.stack.toList()
-        } else {
-            // else save the stack to the accumulator and reuse the saved base stack.
-            acc.addAll(harness.image.stack)
-            baseStack
-        }
+        val stack =
+            if (baseStack == null) {
+                // init stack to the harness stack...
+                harness.image.stack.toList()
+            } else {
+                // else save the stack to the accumulator and reuse the saved base stack.
+                acc.addAll(harness.image.stack)
+                baseStack
+            }
 
         // If we still have data to process...
-        val (stackTop, newImage, newCont) = if (data.nonEmpty) {
-            // push the next datum to the top of the stack,
-            val cont2 = continuation
-                // put the next Thoth object back on the stack for the next Thoth cycle,
-                .pushFrame(FrameForEach(data.cdr, code, stack, acc))
-                // and prep the Thoth'd code block for evaluation.
-                .pushFrame(FrameEvaluate(code, true))
-            Triple(data.car, harness.image.withUsedOp(), cont2)
-        } else {
-            // Else, dump our final list onto the stack.
-            Triple(ListIota(acc), harness.image, continuation)
-        }
+        val (stackTop, newImage, newCont) =
+            if (data.nonEmpty) {
+                // push the next datum to the top of the stack,
+                val cont2 =
+                    continuation
+                        // put the next Thoth object back on the stack for the next Thoth cycle,
+                        .pushFrame(FrameForEach(data.cdr, code, stack, acc))
+                        // and prep the Thoth'd code block for evaluation.
+                        .pushFrame(FrameEvaluate(code, true))
+                Triple(data.car, harness.image.withUsedOp(), cont2)
+            } else {
+                // Else, dump our final list onto the stack.
+                Triple(ListIota(acc), harness.image, continuation)
+            }
         val tStack = stack.toMutableList()
         tStack.add(stackTop)
         return CastResult(
@@ -84,8 +91,7 @@ data class FrameForEach(
     override fun serializeToNBT() = NBTBuilder {
         "data" %= data.serializeToNBT()
         "code" %= code.serializeToNBT()
-        if (baseStack != null)
-            "base" %= baseStack.serializeToNBT()
+        if (baseStack != null) "base" %= baseStack.serializeToNBT()
         "accumulator" %= acc.serializeToNBT()
     }
 
@@ -95,22 +101,30 @@ data class FrameForEach(
 
     companion object {
         @JvmField
-        val TYPE: ContinuationFrame.Type<FrameForEach> = object : ContinuationFrame.Type<FrameForEach> {
-            override fun deserializeFromNBT(tag: CompoundTag, world: ServerLevel): FrameForEach {
-                return FrameForEach(
-                    HexIotaTypes.LIST.deserialize(tag.getList("data", Tag.TAG_COMPOUND), world)!!.list,
-                    HexIotaTypes.LIST.deserialize(tag.getList("code", Tag.TAG_COMPOUND), world)!!.list,
-                    if (tag.hasList("base", Tag.TAG_COMPOUND))
-                        HexIotaTypes.LIST.deserialize(tag.getList("base", Tag.TAG_COMPOUND), world)!!.list.toList()
-                    else
-                        null,
-                    HexIotaTypes.LIST.deserialize(
-                        tag.getList("accumulator", Tag.TAG_COMPOUND),
-                        world
-                    )!!.list.toMutableList()
-                )
+        val TYPE: ContinuationFrame.Type<FrameForEach> =
+            object : ContinuationFrame.Type<FrameForEach> {
+                override fun deserializeFromNBT(
+                    tag: CompoundTag,
+                    world: ServerLevel
+                ): FrameForEach {
+                    return FrameForEach(
+                        HexIotaTypes.LIST.deserialize(
+                                tag.getList("data", Tag.TAG_COMPOUND), world)!!
+                            .list,
+                        HexIotaTypes.LIST.deserialize(
+                                tag.getList("code", Tag.TAG_COMPOUND), world)!!
+                            .list,
+                        if (tag.hasList("base", Tag.TAG_COMPOUND))
+                            HexIotaTypes.LIST.deserialize(
+                                    tag.getList("base", Tag.TAG_COMPOUND), world)!!
+                                .list
+                                .toList()
+                        else null,
+                        HexIotaTypes.LIST.deserialize(
+                                tag.getList("accumulator", Tag.TAG_COMPOUND), world)!!
+                            .list
+                            .toMutableList())
+                }
             }
-
-        }
     }
 }

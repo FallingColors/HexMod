@@ -1,7 +1,10 @@
 package at.petrak.hexcasting.common.msgs;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -10,11 +13,15 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
-
 // https://github.com/VazkiiMods/Botania/blob/1.18.x/Xplat/src/main/java/vazkii/botania/network/clientbound/PacketSpawnDoppleganger.java
-public record MsgNewWallScrollS2C(ClientboundAddEntityPacket inner, BlockPos pos, Direction dir, ItemStack scrollItem,
-                                  boolean showsStrokeOrder, int blockSize) implements IMessage {
+public record MsgNewWallScrollS2C(
+        ClientboundAddEntityPacket inner,
+        BlockPos pos,
+        Direction dir,
+        ItemStack scrollItem,
+        boolean showsStrokeOrder,
+        int blockSize)
+        implements IMessage {
     public static final ResourceLocation ID = modLoc("wallscr");
 
     @Override
@@ -43,19 +50,25 @@ public record MsgNewWallScrollS2C(ClientboundAddEntityPacket inner, BlockPos pos
     }
 
     public static void handle(MsgNewWallScrollS2C self) {
-        Minecraft.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                var player = Minecraft.getInstance().player;
-                if (player != null) {
-                    player.connection.handleAddEntity(self.inner);
-                    var e = player.level().getEntity(self.inner.getId());
-                    if (e instanceof EntityWallScroll scroll) {
-                        scroll.readSpawnData(self.pos, self.dir, self.scrollItem, self.showsStrokeOrder,
-                            self.blockSize);
-                    }
-                }
-            }
-        });
+        Minecraft.getInstance()
+                .execute(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                var player = Minecraft.getInstance().player;
+                                if (player != null) {
+                                    player.connection.handleAddEntity(self.inner);
+                                    var e = player.level().getEntity(self.inner.getId());
+                                    if (e instanceof EntityWallScroll scroll) {
+                                        scroll.readSpawnData(
+                                                self.pos,
+                                                self.dir,
+                                                self.scrollItem,
+                                                self.showsStrokeOrder,
+                                                self.blockSize);
+                                    }
+                                }
+                            }
+                        });
     }
 }

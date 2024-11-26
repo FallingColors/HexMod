@@ -3,18 +3,21 @@ package at.petrak.hexcasting.client.particles;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
+
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.FastColor;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,8 +28,16 @@ public class ConjureParticle extends TextureSheetParticle {
 
     private final SpriteSet sprites;
 
-    ConjureParticle(ClientLevel pLevel, double x, double y, double z, double dx, double dy, double dz,
-        SpriteSet pSprites, int color) {
+    ConjureParticle(
+            ClientLevel pLevel,
+            double x,
+            double y,
+            double z,
+            double dx,
+            double dy,
+            double dz,
+            SpriteSet pSprites,
+            int color) {
         super(pLevel, x, y, z, dx, dy, dz);
         this.quadSize *= 0.9f;
         this.setParticleSpeed(dx, dy, dz);
@@ -81,10 +92,17 @@ public class ConjureParticle extends TextureSheetParticle {
 
         @Nullable
         @Override
-        public Particle createParticle(ConjureParticleOptions type, ClientLevel level,
-            double pX, double pY, double pZ,
-            double pXSpeed, double pYSpeed, double pZSpeed) {
-            return new ConjureParticle(level, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, this.sprite, type.color());
+        public Particle createParticle(
+                ConjureParticleOptions type,
+                ClientLevel level,
+                double pX,
+                double pY,
+                double pZ,
+                double pXSpeed,
+                double pYSpeed,
+                double pZSpeed) {
+            return new ConjureParticle(
+                    level, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed, this.sprite, type.color());
         }
     }
 
@@ -95,7 +113,8 @@ public class ConjureParticle extends TextureSheetParticle {
             Minecraft.getInstance().gameRenderer.lightTexture().turnOnLightLayer();
             RenderSystem.depthMask(false);
             RenderSystem.enableBlend();
-            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+            RenderSystem.blendFunc(
+                    GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
 
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
             var tex = texMan.getTexture(TextureAtlas.LOCATION_PARTICLES);
@@ -108,8 +127,9 @@ public class ConjureParticle extends TextureSheetParticle {
         public void end(Tesselator tess) {
             tess.end();
             IClientXplatAbstractions.INSTANCE.restoreLastFilter(
-                Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_PARTICLES)
-            );
+                    Minecraft.getInstance()
+                            .getTextureManager()
+                            .getTexture(TextureAtlas.LOCATION_PARTICLES));
             RenderSystem.disableBlend();
             RenderSystem.depthMask(true);
         }

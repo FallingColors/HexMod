@@ -20,22 +20,24 @@ interface SpellAction : Action {
 
     fun awardsCastingStat(ctx: CastingEnvironment): Boolean = true
 
-    fun execute(
-        args: List<Iota>,
-        env: CastingEnvironment
-    ): Result
+    fun execute(args: List<Iota>, env: CastingEnvironment): Result
 
     fun executeWithUserdata(
-        args: List<Iota>, env: CastingEnvironment, userData: CompoundTag
+        args: List<Iota>,
+        env: CastingEnvironment,
+        userData: CompoundTag
     ): Result {
         return this.execute(args, env)
     }
 
-    override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
+    override fun operate(
+        env: CastingEnvironment,
+        image: CastingImage,
+        continuation: SpellContinuation
+    ): OperationResult {
         val stack = image.stack.toMutableList()
 
-        if (this.argc > stack.size)
-            throw MishapNotEnoughArgs(this.argc, stack.size)
+        if (this.argc > stack.size) throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)
         for (_i in 0 until this.argc) stack.removeLast()
 
@@ -45,27 +47,29 @@ interface SpellAction : Action {
 
         val sideEffects = mutableListOf<OperatorSideEffect>()
 
-        if (env.extractMedia(result.cost, true) > 0)
-            throw MishapNotEnoughMedia(result.cost)
-        if (result.cost > 0)
-            sideEffects.add(OperatorSideEffect.ConsumeMedia(result.cost))
+        if (env.extractMedia(result.cost, true) > 0) throw MishapNotEnoughMedia(result.cost)
+        if (result.cost > 0) sideEffects.add(OperatorSideEffect.ConsumeMedia(result.cost))
 
         sideEffects.add(
             OperatorSideEffect.AttemptSpell(
-                result.effect,
-                this.hasCastingSound(env),
-                this.awardsCastingStat(env)
-            )
-        )
+                result.effect, this.hasCastingSound(env), this.awardsCastingStat(env)))
 
-        for (spray in result.particles)
-            sideEffects.add(OperatorSideEffect.Particles(spray))
+        for (spray in result.particles) sideEffects.add(OperatorSideEffect.Particles(spray))
 
-        val image2 = image.copy(stack = stack, opsConsumed = image.opsConsumed + result.opCount, userData = userDataMut)
+        val image2 =
+            image.copy(
+                stack = stack,
+                opsConsumed = image.opsConsumed + result.opCount,
+                userData = userDataMut)
 
         val sound = if (this.hasCastingSound(env)) HexEvalSounds.SPELL else HexEvalSounds.MUTE
         return OperationResult(image2, sideEffects, continuation, sound)
     }
 
-    data class Result(val effect: RenderedSpell, val cost: Long, val particles: List<ParticleSpray>, val opCount: Long = 1)
+    data class Result(
+        val effect: RenderedSpell,
+        val cost: Long,
+        val particles: List<ParticleSpray>,
+        val opCount: Long = 1
+    )
 }

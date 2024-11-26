@@ -13,12 +13,9 @@ import net.minecraft.server.level.ServerPlayer
 
 object OpDestroySentinel : SpellAction {
     override val argc = 0
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
-        if (env.castingEntity !is ServerPlayer)
-            throw MishapBadCaster()
+
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+        if (env.castingEntity !is ServerPlayer) throw MishapBadCaster()
 
         val sentinel = IXplatAbstractions.INSTANCE.getSentinel(env.castingEntity as? ServerPlayer)
 
@@ -27,13 +24,8 @@ object OpDestroySentinel : SpellAction {
         if (dim != null && dim != env.world.dimension())
             throw MishapLocationInWrongDimension(dim.location())
 
-        val particles = sentinel?.position?.let { listOf(ParticleSpray.cloud(it, 2.0)) }
-            ?: listOf()
-        return SpellAction.Result(
-            Spell,
-            MediaConstants.DUST_UNIT / 10,
-            particles
-        )
+        val particles = sentinel?.position?.let { listOf(ParticleSpray.cloud(it, 2.0)) } ?: listOf()
+        return SpellAction.Result(Spell, MediaConstants.DUST_UNIT / 10, particles)
     }
 
     private object Spell : RenderedSpell {

@@ -1,8 +1,10 @@
 package at.petrak.hexcasting.forge.mixin;
 
 import at.petrak.hexcasting.forge.datagen.TagsProviderEFHSetter;
+
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,25 +25,32 @@ public abstract class ForgeMixinTagsProvider implements TagsProviderEFHSetter {
         actualFileHelper = efh;
     }
 
-    @Redirect(method = "missing(Lnet/minecraft/tags/TagEntry;)Z", at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/data/tags/TagsProvider;existingFileHelper:Lnet/minecraftforge/common/data/ExistingFileHelper;",
-            opcode = Opcodes.GETFIELD),
+    @Redirect(
+            method = "missing(Lnet/minecraft/tags/TagEntry;)Z",
+            at =
+                    @At(
+                            value = "FIELD",
+                            target =
+                                    "Lnet/minecraft/data/tags/TagsProvider;existingFileHelper:Lnet/minecraftforge/common/data/ExistingFileHelper;",
+                            opcode = Opcodes.GETFIELD),
             remap = false)
     private ExistingFileHelper hex$missingRedirect(TagsProvider instance) {
-        if (actualFileHelper == null)
-            return existingFileHelper;
+        if (actualFileHelper == null) return existingFileHelper;
         return actualFileHelper;
     }
 
-    @Redirect(method = "lambda$getOrCreateRawBuilder$9(Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/tags/TagBuilder;", at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/data/tags/TagsProvider;existingFileHelper:Lnet/minecraftforge/common/data/ExistingFileHelper;",
-            opcode = Opcodes.GETFIELD),
+    @Redirect(
+            method =
+                    "lambda$getOrCreateRawBuilder$9(Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/tags/TagBuilder;",
+            at =
+                    @At(
+                            value = "FIELD",
+                            target =
+                                    "Lnet/minecraft/data/tags/TagsProvider;existingFileHelper:Lnet/minecraftforge/common/data/ExistingFileHelper;",
+                            opcode = Opcodes.GETFIELD),
             remap = false)
     private ExistingFileHelper hex$getOrCreateRawBuilderRedirect(TagsProvider instance) {
-        if (actualFileHelper == null)
-            return existingFileHelper;
+        if (actualFileHelper == null) return existingFileHelper;
         return actualFileHelper;
     }
 }

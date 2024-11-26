@@ -12,6 +12,10 @@ import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
 import com.mojang.math.Axis
+import kotlin.math.abs
+import kotlin.math.min
+import kotlin.math.roundToInt
+import kotlin.math.sin
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
@@ -25,15 +29,12 @@ import net.minecraft.world.level.levelgen.SingleThreadedRandomSource
 import net.minecraft.world.level.levelgen.synth.SimplexNoise
 import net.minecraft.world.phys.Vec2
 import org.joml.Matrix4f
-import kotlin.math.abs
-import kotlin.math.min
-import kotlin.math.roundToInt
-import kotlin.math.sin
 
 val NOISE: SimplexNoise = SimplexNoise(SingleThreadedRandomSource(9001L))
 
 // see the test; perlin noise seems to output almost exclusively between -0.5 and 0.5
-// i could probably impl this "properly" with some kind of exponent but it's faster and easier to divide
+// i could probably impl this "properly" with some kind of exponent but it's faster and easier to
+// divide
 fun getNoise(x: Double, y: Double, z: Double): Double =
     NOISE.getValue(x * 0.6, y * 0.6, z * 0.6) / 2.0
 
@@ -42,15 +43,7 @@ const val CAP_THETA = 180f / 10f
 const val DEFAULT_READABILITY_OFFSET = 0.2f
 const val DEFAULT_LAST_SEGMENT_LEN_PROP = 0.8f
 
-
-fun drawLineSeq(
-    mat: Matrix4f,
-    points: List<Vec2>,
-    width: Float,
-    z: Float,
-    tail: Int,
-    head: Int
-) {
+fun drawLineSeq(mat: Matrix4f, points: List<Vec2>, width: Float, z: Float, tail: Int, head: Int) {
     return drawLineSeq(mat, points, width, tail, head, VCDrawHelper.Basic(z))
 }
 
@@ -74,10 +67,9 @@ fun drawLineSeq(
     val b1 = FastColor.ARGB32.blue(tail).toFloat()
     val a = FastColor.ARGB32.alpha(tail)
     val a1 = a.toFloat()
-    val headSource = if (Screen.hasControlDown() != HexConfig.client().ctrlTogglesOffStrokeOrder())
-        head
-    else
-        tail
+    val headSource =
+        if (Screen.hasControlDown() != HexConfig.client().ctrlTogglesOffStrokeOrder()) head
+        else tail
     val r2 = FastColor.ARGB32.red(headSource).toFloat()
     val g2 = FastColor.ARGB32.green(headSource).toFloat()
     val b2 = FastColor.ARGB32.blue(headSource).toFloat()
@@ -95,7 +87,9 @@ fun drawLineSeq(
         val prev = p1.add(p0.negated())
         val next = p2.add(p1.negated())
         val angle =
-            Mth.atan2((prev.x * next.y - prev.y * next.x).toDouble(), (prev.x * next.x + prev.y * next.y).toDouble())
+            Mth.atan2(
+                    (prev.x * next.y - prev.y * next.x).toDouble(),
+                    (prev.x * next.x + prev.y * next.y).toDouble())
                 .toFloat()
         joinAngles[i - 1] = angle
         val clamp = prev.length().coerceAtMost(next.length()) / (width * 0.5f)
@@ -112,15 +106,19 @@ fun drawLineSeq(
         val normal = Vec2(-tangent.y, tangent.x)
 
         fun color(time: Float): Int =
-            FastColor.ARGB32.color(Mth.lerp(time, a1, a2).toInt(), Mth.lerp(time, r1, r2).toInt(),
-                Mth.lerp(time, g1, g2).toInt(), Mth.lerp(time, b1, b2).toInt())
+            FastColor.ARGB32.color(
+                Mth.lerp(time, a1, a2).toInt(),
+                Mth.lerp(time, r1, r2).toInt(),
+                Mth.lerp(time, g1, g2).toInt(),
+                Mth.lerp(time, b1, b2).toInt())
 
         val color1 = color(i.toFloat() / n)
         val color2 = color((i + 1f) / n)
         val jlow = joinOffsets[i]
         val jhigh = joinOffsets[i + 1]
         // Draw the line segment as a hexagon, sort of
-        // I can't imagine what the hell alwinfy is up to but this is implementing what TRIANGLE_FAN does
+        // I can't imagine what the hell alwinfy is up to but this is implementing what TRIANGLE_FAN
+        // does
         // using normal triangles so we can send the entire segment to the buffer at once
         val p1Down = p1.add(tangent.scale(Math.max(0f, jlow))).add(normal)
         val p1Up = p1.add(tangent.scale(Math.max(0f, -jlow))).add(normal.negated())
@@ -194,9 +192,9 @@ fun drawLineSeq(
         vcHelper.vcEndDrawer(vc)
     }
     drawCaps(ARGB32.color(a1.toInt(), r1.toInt(), g1.toInt(), b1.toInt()), points[0], points[1])
-    drawCaps(ARGB32.color(a2.toInt(), r2.toInt(), g2.toInt(), b2.toInt()), points[n - 1], points[n - 2])
+    drawCaps(
+        ARGB32.color(a2.toInt(), r2.toInt(), g2.toInt(), b2.toInt()), points[n - 1], points[n - 2])
 }
-
 
 fun rotate(vec: Vec2, theta: Float): Vec2 {
     val cos = Mth.cos(theta)
@@ -220,12 +218,23 @@ fun drawPatternFromPoints(
     lastSegmentLenProportion: Float,
     seed: Double
 ) {
-    val zappyPts = makeZappy(points, dupIndices, 10, 2.5f, 0.1f, flowIrregular, readabilityOffset, lastSegmentLenProportion, seed)
-    val nodes = if (drawLast) {
-        points
-    } else {
-        points.dropLast(1)
-    }
+    val zappyPts =
+        makeZappy(
+            points,
+            dupIndices,
+            10,
+            2.5f,
+            0.1f,
+            flowIrregular,
+            readabilityOffset,
+            lastSegmentLenProportion,
+            seed)
+    val nodes =
+        if (drawLast) {
+            points
+        } else {
+            points.dropLast(1)
+        }
     drawLineSeq(mat, zappyPts, 5f, 0f, tail, head)
     drawLineSeq(mat, zappyPts, 2f, 1f, screenCol(tail), screenCol(head))
     for (node in nodes) {
@@ -236,19 +245,26 @@ fun drawPatternFromPoints(
             dodge(FastColor.ARGB32.red(head)) / 255f,
             dodge(FastColor.ARGB32.green(head)) / 255f,
             dodge(FastColor.ARGB32.blue(head)) / 255f,
-            FastColor.ARGB32.alpha(head) / 255f
-        )
+            FastColor.ARGB32.alpha(head) / 255f)
     }
 }
 
 /**
  * Split up a sequence of linePoints with a lightning effect
+ *
  * @param hops: rough number of points to subdivide each segment into
  * @param speed: rate at which the lightning effect should move/shake/etc
  */
 fun makeZappy(
-    barePoints: List<Vec2>, dupIndices: Set<Int>?, hops: Int, variance: Float, speed: Float, flowIrregular: Float,
-    readabilityOffset: Float, lastSegmentLenProportion: Float, seed: Double
+    barePoints: List<Vec2>,
+    dupIndices: Set<Int>?,
+    hops: Int,
+    variance: Float,
+    speed: Float,
+    flowIrregular: Float,
+    readabilityOffset: Float,
+    lastSegmentLenProportion: Float,
+    seed: Double
 ): List<Vec2> {
     // Nothing in, nothing out
     if (barePoints.isEmpty()) {
@@ -271,9 +287,10 @@ fun makeZappy(
 
             // for a list of length n, there will be n-1 pairs,
             // and so the last index will be (n-1)-1
-            val maxJ = if (truncateLast && i == points.size - 2) {
-                (lastSegmentLenProportion * hops.toFloat()).roundToInt()
-            } else hops
+            val maxJ =
+                if (truncateLast && i == points.size - 2) {
+                    (lastSegmentLenProportion * hops.toFloat()).roundToInt()
+                } else hops
 
             for (j in 1..maxJ) {
                 val progress = j.toDouble() / (hops + 1)
@@ -283,16 +300,14 @@ fun makeZappy(
                 // (We use i, j (segment #, subsegment #) as seeds for the Perlin noise,
                 // and zSeed (i.e. time elapsed) to perturb the shape gradually over time)
                 val minorPerturb = getNoise(i.toDouble(), j.toDouble(), sin(zSeed)) * flowIrregular
-                val theta = (3 * getNoise(
-                    i + progress + minorPerturb - zSeed,
-                    1337.0,
-                    seed
-                ) * TAU).toFloat()
-                val r = (getNoise(
-                    i + progress - zSeed,
-                    69420.0,
-                    seed
-                ) * maxVariance * scaleVariance(progress)).toFloat()
+                val theta =
+                    (3 * getNoise(i + progress + minorPerturb - zSeed, 1337.0, seed) * TAU)
+                        .toFloat()
+                val r =
+                    (getNoise(i + progress - zSeed, 69420.0, seed) *
+                            maxVariance *
+                            scaleVariance(progress))
+                        .toFloat()
                 val randomHop = Vec2(r * Mth.cos(theta), r * Mth.sin(theta))
                 // Then record the new location.
                 zappyPts.add(pos.add(randomHop))
@@ -349,15 +364,20 @@ fun <T> findDupIndices(pts: Iterable<T>): Set<Int> {
 }
 
 /**
- * Draw a little circle, because Minecraft rendering code is a nightmare and doesn't
- * include primitive drawing code...
+ * Draw a little circle, because Minecraft rendering code is a nightmare and doesn't include
+ * primitive drawing code...
  */
 fun drawSpot(mat: Matrix4f, point: Vec2, radius: Float, r: Float, g: Float, b: Float, a: Float) {
-    drawSpot(mat, point, radius, ARGB32.color((a*255).toInt(), (r*255).toInt(), (g*255).toInt(), (b*255).toInt()), VCDrawHelper.Basic(1f))
+    drawSpot(
+        mat,
+        point,
+        radius,
+        ARGB32.color((a * 255).toInt(), (r * 255).toInt(), (g * 255).toInt(), (b * 255).toInt()),
+        VCDrawHelper.Basic(1f))
 }
 
 fun drawSpot(mat: Matrix4f, point: Vec2, radius: Float, color: Int, vcHelper: VCDrawHelper) {
-    var vc = vcHelper.vcSetupAndSupply(VertexFormat.Mode.TRIANGLE_FAN);
+    var vc = vcHelper.vcSetupAndSupply(VertexFormat.Mode.TRIANGLE_FAN)
     vcHelper.vertex(vc, color, point, mat)
 
     // https://github.com/not-fl3/macroquad/blob/master/src/shapes.rs#L98
@@ -384,12 +404,16 @@ fun screenCol(n: Int): Int {
 }
 
 fun screen(n: Int) = (n + 255) / 2
+
 fun dodge(n: Int) = n * 0.9f
 
-/**
- * Return the scale and dots formed by the pattern when centered.
- */
-fun getCenteredPattern(pattern: HexPattern, width: Float, height: Float, minSize: Float): Pair<Float, List<Vec2>> {
+/** Return the scale and dots formed by the pattern when centered. */
+fun getCenteredPattern(
+    pattern: HexPattern,
+    width: Float,
+    height: Float,
+    minSize: Float
+): Pair<Float, List<Vec2>> {
     // Do two passes: one with a random size to find a good COM and one with the real calculation
     val com1: Vec2 = pattern.getCenter(1f)
     val lines1: List<Vec2> = pattern.toLines(1f, Vec2.ZERO)
@@ -405,8 +429,7 @@ fun getCenteredPattern(pattern: HexPattern, width: Float, height: Float, minSize
             maxDy = dy
         }
     }
-    val scale =
-        min(minSize, min(width / 3f / maxDx, height / 3f / maxDy))
+    val scale = min(minSize, min(width / 3f / maxDx, height / 3f / maxDy))
     val com2: Vec2 = pattern.getCenter(scale)
     val lines2: List<Vec2> = pattern.toLines(scale, com2.negated())
     return scale to lines2
@@ -414,14 +437,20 @@ fun getCenteredPattern(pattern: HexPattern, width: Float, height: Float, minSize
 
 @JvmOverloads
 fun renderEntity(
-    graphics: GuiGraphics, entity: Entity, world: Level, x: Float, y: Float, rotation: Float,
-    renderScale: Float, offset: Float,
+    graphics: GuiGraphics,
+    entity: Entity,
+    world: Level,
+    x: Float,
+    y: Float,
+    rotation: Float,
+    renderScale: Float,
+    offset: Float,
     bufferTransformer: (MultiBufferSource) -> MultiBufferSource = { it -> it }
 ) {
     val rotation = if (Screen.hasShiftDown()) 0.0f else rotation
 
     // TODO: Figure out why this is here and whether removing it will break things
-//    entity.level = world
+    //    entity.level = world
     val ps = graphics.pose()
 
     ps.pushPose()
@@ -439,27 +468,15 @@ fun renderEntity(
     ps.popPose()
 }
 
-/**
- * Make sure you have the `PositionColorShader` set
- */
-fun renderQuad(
-    ps: PoseStack, x: Float, y: Float, w: Float, h: Float, color: Int
-) {
+/** Make sure you have the `PositionColorShader` set */
+fun renderQuad(ps: PoseStack, x: Float, y: Float, w: Float, h: Float, color: Int) {
     val mat = ps.last().pose()
     val tess = Tesselator.getInstance()
     val buf = tess.builder
     buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR)
-    buf.vertex(mat, x, y, 0f)
-        .color(color)
-        .endVertex()
-    buf.vertex(mat, x, y + h, 0f)
-        .color(color)
-        .endVertex()
-    buf.vertex(mat, x + w, y + h, 0f)
-        .color(color)
-        .endVertex()
-    buf.vertex(mat, x + w, y, 0f)
-        .color(color)
-        .endVertex()
+    buf.vertex(mat, x, y, 0f).color(color).endVertex()
+    buf.vertex(mat, x, y + h, 0f).color(color).endVertex()
+    buf.vertex(mat, x + w, y + h, 0f).color(color).endVertex()
+    buf.vertex(mat, x + w, y, 0f).color(color).endVertex()
     tess.end()
 }

@@ -1,12 +1,16 @@
 package at.petrak.hexcasting.forge.recipe;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -16,13 +20,13 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import net.minecraftforge.common.crafting.PartialNBTIngredient;
 import net.minecraftforge.registries.ForgeRegistries;
+
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
+import javax.annotation.Nullable;
 
 public class ForgeUnsealedIngredient extends AbstractIngredient {
     public static final ResourceLocation ID = modLoc("unsealed");
@@ -40,9 +44,7 @@ public class ForgeUnsealedIngredient extends AbstractIngredient {
         this.stack = stack;
     }
 
-    /**
-     * Creates a new ingredient matching the given stack
-     */
+    /** Creates a new ingredient matching the given stack */
     public static ForgeUnsealedIngredient of(ItemStack stack) {
         return new ForgeUnsealedIngredient(stack);
     }
@@ -52,7 +54,8 @@ public class ForgeUnsealedIngredient extends AbstractIngredient {
         if (input == null) {
             return false;
         }
-        if (this.stack.getItem() == input.getItem() && this.stack.getDamageValue() == input.getDamageValue()) {
+        if (this.stack.getItem() == input.getItem()
+                && this.stack.getDamageValue() == input.getDamageValue()) {
             ADIotaHolder holder = IXplatAbstractions.INSTANCE.findDataHolder(this.stack);
             if (holder != null) {
                 return holder.readIotaTag() != null && holder.writeIota(new NullIota(), true);
@@ -76,14 +79,16 @@ public class ForgeUnsealedIngredient extends AbstractIngredient {
     public @NotNull JsonElement toJson() {
         JsonObject json = new JsonObject();
         // TODO: should this be Partial or Strict
-        json.addProperty("type", Objects.toString(CraftingHelper.getID(PartialNBTIngredient.Serializer.INSTANCE)));
+        json.addProperty(
+                "type",
+                Objects.toString(CraftingHelper.getID(PartialNBTIngredient.Serializer.INSTANCE)));
         json.addProperty("item", Objects.toString(ForgeRegistries.ITEMS.getKey(stack.getItem())));
         return json;
     }
 
-
     public static class Serializer implements IIngredientSerializer<ForgeUnsealedIngredient> {
-        public static final ForgeUnsealedIngredient.Serializer INSTANCE = new ForgeUnsealedIngredient.Serializer();
+        public static final ForgeUnsealedIngredient.Serializer INSTANCE =
+                new ForgeUnsealedIngredient.Serializer();
 
         @Override
         public @NotNull ForgeUnsealedIngredient parse(FriendlyByteBuf buffer) {

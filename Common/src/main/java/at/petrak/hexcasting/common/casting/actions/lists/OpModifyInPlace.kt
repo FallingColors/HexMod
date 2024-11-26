@@ -10,6 +10,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 
 object OpModifyInPlace : ConstMediaAction {
     override val argc = 3
+
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val list = args.getList(0, argc)
         val index = args.getPositiveIntUnder(1, list.size(), argc)

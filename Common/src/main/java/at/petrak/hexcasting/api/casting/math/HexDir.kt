@@ -4,10 +4,14 @@ import at.petrak.hexcasting.api.utils.getSafe
 import com.mojang.serialization.Codec
 
 enum class HexDir {
-    NORTH_EAST, EAST, SOUTH_EAST, SOUTH_WEST, WEST, NORTH_WEST;
+    NORTH_EAST,
+    EAST,
+    SOUTH_EAST,
+    SOUTH_WEST,
+    WEST,
+    NORTH_WEST;
 
-    fun rotatedBy(a: HexAngle): HexDir =
-        values()[(this.ordinal + a.ordinal).mod(values().size)]
+    fun rotatedBy(a: HexAngle): HexDir = values()[(this.ordinal + a.ordinal).mod(values().size)]
 
     operator fun times(a: HexAngle) = this.rotatedBy(a)
 
@@ -27,10 +31,7 @@ enum class HexDir {
         }
 
     companion object {
-        val CODEC: Codec<HexDir> = Codec.STRING.xmap(
-            HexDir::fromString,
-            HexDir::name
-        )
+        val CODEC: Codec<HexDir> = Codec.STRING.xmap(HexDir::fromString, HexDir::name)
 
         @JvmStatic
         fun fromString(key: String): HexDir {

@@ -16,10 +16,8 @@ class MishapAlreadyBrainswept(val mob: Mob) : Mishap() {
         mob.hurt(mob.damageSources().source(HexDamageTypes.OVERCAST, ctx.castingEntity), mob.health)
     }
 
-    override fun particleSpray(ctx: CastingEnvironment) =
-        ParticleSpray.burst(mob.eyePosition, 1.0)
+    override fun particleSpray(ctx: CastingEnvironment) = ParticleSpray.burst(mob.eyePosition, 1.0)
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
         error("already_brainswept")
-
 }

@@ -4,8 +4,10 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
+
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -19,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -38,8 +41,7 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
         super(HexBlockEntities.IMPETUS_REDSTONE_TILE, pWorldPosition, pBlockState);
     }
 
-    protected @Nullable
-    GameProfile getPlayerName() {
+    protected @Nullable GameProfile getPlayerName() {
         if (this.level instanceof ServerLevel) {
             Player player = getStoredPlayer();
             if (player != null) {
@@ -93,10 +95,13 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
         }
     }
 
-    public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
-        BlockState state, BlockPos pos, Player observer,
-        Level world,
-        Direction hitFace) {
+    public void applyScryingLensOverlay(
+            List<Pair<ItemStack, Component>> lines,
+            BlockState state,
+            BlockPos pos,
+            Player observer,
+            Level world,
+            Direction hitFace) {
         super.applyScryingLensOverlay(lines, state, pos, observer, world, hitFace);
 
         var name = this.getPlayerName();
@@ -104,15 +109,23 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
             if (!name.equals(cachedDisplayProfile) || cachedDisplayStack == null) {
                 cachedDisplayProfile = name;
                 var head = new ItemStack(Items.PLAYER_HEAD);
-                NBTHelper.put(head, "SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), name));
+                NBTHelper.put(
+                        head, "SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), name));
                 head.getItem().verifyTagAfterLoad(head.getOrCreateTag());
                 cachedDisplayStack = head;
             }
-            lines.add(new Pair<>(cachedDisplayStack,
-                Component.translatable("hexcasting.tooltip.lens.impetus.redstone.bound", name.getName())));
+            lines.add(
+                    new Pair<>(
+                            cachedDisplayStack,
+                            Component.translatable(
+                                    "hexcasting.tooltip.lens.impetus.redstone.bound",
+                                    name.getName())));
         } else {
-            lines.add(new Pair<>(new ItemStack(Items.BARRIER),
-                Component.translatable("hexcasting.tooltip.lens.impetus.redstone.bound.none")));
+            lines.add(
+                    new Pair<>(
+                            new ItemStack(Items.BARRIER),
+                            Component.translatable(
+                                    "hexcasting.tooltip.lens.impetus.redstone.bound.none")));
         }
     }
 
@@ -123,7 +136,9 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
             tag.putUUID(TAG_STORED_PLAYER, this.storedPlayer);
         }
         if (this.storedPlayerProfile != null) {
-            tag.put(TAG_STORED_PLAYER_PROFILE, NbtUtils.writeGameProfile(new CompoundTag(), storedPlayerProfile));
+            tag.put(
+                    TAG_STORED_PLAYER_PROFILE,
+                    NbtUtils.writeGameProfile(new CompoundTag(), storedPlayerProfile));
         }
     }
 
@@ -136,7 +151,8 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
             this.storedPlayer = null;
         }
         if (tag.contains(TAG_STORED_PLAYER_PROFILE, Tag.TAG_COMPOUND)) {
-            this.storedPlayerProfile = NbtUtils.readGameProfile(tag.getCompound(TAG_STORED_PLAYER_PROFILE));
+            this.storedPlayerProfile =
+                    NbtUtils.readGameProfile(tag.getCompound(TAG_STORED_PLAYER_PROFILE));
         } else {
             this.storedPlayerProfile = null;
         }

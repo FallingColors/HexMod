@@ -5,12 +5,8 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.pigment.FrozenPigment
 import net.minecraft.world.item.DyeColor
 
-/**
- * The value was a naked iota without being Considered or Retrospected.
- */
-class MishapUnescapedValue(
-    val perpetrator: Iota
-) : Mishap() {
+/** The value was a naked iota without being Considered or Retrospected. */
+class MishapUnescapedValue(val perpetrator: Iota) : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.GRAY)
 

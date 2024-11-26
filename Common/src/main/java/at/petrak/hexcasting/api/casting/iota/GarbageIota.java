@@ -1,24 +1,28 @@
 package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
 /**
- * this is LITERALLY a copy of NullIota but I can't see how to do it any better, i hate java generics
+ * this is LITERALLY a copy of NullIota but I can't see how to do it any better, i hate java
+ * generics
  */
 public class GarbageIota extends Iota {
     private static final Object NULL_SUBSTITUTE = new Object();
 
-    public static final Component DISPLAY = Component.literal("arimfexendrapuse")
-        .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.OBFUSCATED);
+    public static final Component DISPLAY =
+            Component.literal("arimfexendrapuse")
+                    .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.OBFUSCATED);
 
     private static final Random RANDOM = new Random();
 
@@ -43,21 +47,23 @@ public class GarbageIota extends Iota {
         return new CompoundTag();
     }
 
-    public static IotaType<GarbageIota> TYPE = new IotaType<>() {
-        @Nullable
-        @Override
-        public GarbageIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            return new GarbageIota();
-        }
+    public static IotaType<GarbageIota> TYPE =
+            new IotaType<>() {
+                @Nullable
+                @Override
+                public GarbageIota deserialize(Tag tag, ServerLevel world)
+                        throws IllegalArgumentException {
+                    return new GarbageIota();
+                }
 
-        @Override
-        public Component display(Tag tag) {
-            return DISPLAY;
-        }
+                @Override
+                public Component display(Tag tag) {
+                    return DISPLAY;
+                }
 
-        @Override
-        public int color() {
-            return 0xff_505050;
-        }
-    };
+                @Override
+                public int color() {
+                    return 0xff_505050;
+                }
+            };
 }

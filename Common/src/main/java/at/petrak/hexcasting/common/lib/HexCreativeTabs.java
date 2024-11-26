@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.common.lib;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -8,8 +10,6 @@ import net.minecraft.world.item.ItemStack;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexCreativeTabs {
     public static void registerCreativeTabs(BiConsumer<CreativeModeTab, ResourceLocation> r) {
@@ -20,8 +20,11 @@ public class HexCreativeTabs {
 
     private static final Map<ResourceLocation, CreativeModeTab> TABS = new LinkedHashMap<>();
 
-    public static final CreativeModeTab HEX = register("hexcasting", CreativeModeTab.builder(CreativeModeTab.Row.TOP, 7)
-            .icon(() -> new ItemStack(HexItems.SPELLBOOK)));
+    public static final CreativeModeTab HEX =
+            register(
+                    "hexcasting",
+                    CreativeModeTab.builder(CreativeModeTab.Row.TOP, 7)
+                            .icon(() -> new ItemStack(HexItems.SPELLBOOK)));
 
     private static CreativeModeTab register(String name, CreativeModeTab.Builder tabBuilder) {
         var tab = tabBuilder.title(Component.translatable("itemGroup." + name)).build();

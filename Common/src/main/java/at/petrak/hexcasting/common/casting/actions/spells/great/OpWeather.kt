@@ -9,15 +9,11 @@ import at.petrak.hexcasting.api.misc.MediaConstants
 class OpWeather(val rain: Boolean) : SpellAction {
     override val argc = 0
 
-    override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
-    ): SpellAction.Result {
+    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
         return SpellAction.Result(
             Spell(rain),
             if (this.rain) MediaConstants.CRYSTAL_UNIT else MediaConstants.SHARD_UNIT,
-            listOf()
-        )
+            listOf())
     }
 
     private data class Spell(val rain: Boolean) : RenderedSpell {

@@ -1,16 +1,15 @@
 package at.petrak.hexcasting.forge.cap.adimpl;
 
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+
 import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Supplier;
 
-/**
- * Things that always hold a constant amount of media, like amethyst
- */
-public record CapStaticMediaHolder(Supplier<Long> baseWorth,
-                                   int consumptionPriority,
-                                   ItemStack stack) implements ADMediaHolder {
+/** Things that always hold a constant amount of media, like amethyst */
+public record CapStaticMediaHolder(
+        Supplier<Long> baseWorth, int consumptionPriority, ItemStack stack)
+        implements ADMediaHolder {
     @Override
     public long getMedia() {
         return baseWorth.get() * stack.getCount();

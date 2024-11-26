@@ -19,11 +19,13 @@ class MishapUnenlightened : Mishap() {
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         env.mishapEnvironment.dropHeldItems()
-        env.castingEntity?.sendSystemMessage("hexcasting.message.cant_great_spell".asTranslatedComponent)
+        env.castingEntity?.sendSystemMessage(
+            "hexcasting.message.cant_great_spell".asTranslatedComponent)
 
         // add some non-zero level of juice I guess
         val pos = env.mishapSprayPos()
-        env.world.playSound(null, pos.x, pos.y, pos.z, SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 0.5f, 0.7f)
+        env.world.playSound(
+            null, pos.x, pos.y, pos.z, SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 0.5f, 0.7f)
 
         val castingPlayer = env.castingEntity as? ServerPlayer
         if (castingPlayer != null) {

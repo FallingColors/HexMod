@@ -1,15 +1,13 @@
 package at.petrak.hexcasting.api.utils
 
+import kotlin.math.*
 import org.joml.Quaternionf
 import org.joml.Vector3f
-import kotlin.math.*
 
 object MathUtils {
     @JvmStatic
-    fun clamp(long: Long, min: Long, max: Long): Long
-        =    if (long <= min) min
-        else if (long >= max) max
-        else                  long
+    fun clamp(long: Long, min: Long, max: Long): Long =
+        if (long <= min) min else if (long >= max) max else long
 }
 
 object QuaternionfUtils {
@@ -19,7 +17,10 @@ object QuaternionfUtils {
 
     @JvmStatic
     fun fromXYZDegrees(vector3f: Vector3f): Quaternionf {
-        return fromXYZ(Math.toRadians(vector3f.x().toDouble()).toFloat(), Math.toRadians(vector3f.y().toDouble()).toFloat(), Math.toRadians(vector3f.z().toDouble()).toFloat())
+        return fromXYZ(
+            Math.toRadians(vector3f.x().toDouble()).toFloat(),
+            Math.toRadians(vector3f.y().toDouble()).toFloat(),
+            Math.toRadians(vector3f.z().toDouble()).toFloat())
     }
 
     @JvmStatic

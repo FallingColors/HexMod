@@ -5,6 +5,7 @@ import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
+
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -28,7 +29,7 @@ public class ForgeClientXplatImpl implements IClientXplatAbstractions {
     @Override
     public void setRenderLayer(Block block, RenderType type) {
         // For forge, handled in block models
-//        ItemBlockRenderTypes.setRenderLayer(block, type);
+        //        ItemBlockRenderTypes.setRenderLayer(block, type);
     }
 
     @Override
@@ -37,8 +38,8 @@ public class ForgeClientXplatImpl implements IClientXplatAbstractions {
     }
 
     @Override
-    public <T extends Entity> void registerEntityRenderer(EntityType<? extends T> type,
-        EntityRendererProvider<T> renderer) {
+    public <T extends Entity> void registerEntityRenderer(
+            EntityType<? extends T> type, EntityRendererProvider<T> renderer) {
         EntityRenderers.register(type, renderer);
     }
 
@@ -50,8 +51,7 @@ public class ForgeClientXplatImpl implements IClientXplatAbstractions {
     @Override
     public ClientCastingStack getClientCastingStack(Player player) {
         var maybeCap = player.getCapability(HexCapabilities.CLIENT_CASTING_STACK).resolve();
-        if (maybeCap.isEmpty())
-            return new ClientCastingStack(); // lie
+        if (maybeCap.isEmpty()) return new ClientCastingStack(); // lie
         return maybeCap.get().get();
     }
 
