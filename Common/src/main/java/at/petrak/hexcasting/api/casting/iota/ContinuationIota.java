@@ -58,15 +58,12 @@ public class ContinuationIota extends Iota {
 
     @Override
     public int size() {
-        var continuation = this.getContinuation();
-        var size = 0;
-        while (continuation instanceof SpellContinuation.NotDone notDone) {
-            size += 1;
-            size += notDone.component1().size();
-            continuation = notDone.component2();
-        }
+        return Math.min(this.getContinuation().size(), 1);
+    }
 
-        return Math.min(size, 1);
+    @Override
+    public int depth() {
+        return this.getContinuation().depth() + 1;
     }
 
     public static IotaType<ContinuationIota> TYPE = new IotaType<>() {

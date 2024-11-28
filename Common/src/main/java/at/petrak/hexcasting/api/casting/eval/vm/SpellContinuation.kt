@@ -5,16 +5,26 @@ import at.petrak.hexcasting.api.utils.getList
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
+import kotlin.math.max
 
 /**
  * A continuation during the execution of a spell.
  */
 sealed interface SpellContinuation {
-    object Done : SpellContinuation
+    object Done : SpellContinuation {
+        override fun size(): Int = 0
+        override fun depth(): Int = 0
+    }
 
-    data class NotDone(val frame: ContinuationFrame, val next: SpellContinuation) : SpellContinuation
+    data class NotDone(val frame: ContinuationFrame, val next: SpellContinuation) : SpellContinuation {
+        override fun size(): Int = frame.size() + next.size()
+        override fun depth(): Int = max(frame.depth(), next.depth())
+    }
 
     fun pushFrame(frame: ContinuationFrame): SpellContinuation = NotDone(frame, this)
+
+    fun size(): Int
+    fun depth(): Int
 
     fun serializeToNBT() = NBTBuilder {
         TAG_FRAME %= list(getNBTFrames())
