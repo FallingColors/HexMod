@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
+import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.utils.NBTBuilder
 import at.petrak.hexcasting.api.utils.getList
 import net.minecraft.nbt.CompoundTag
@@ -14,15 +15,28 @@ sealed interface SpellContinuation {
     object Done : SpellContinuation {
         override fun size(): Int = 0
         override fun depth(): Int = 0
+        override fun subIotas(): Iterable<Iota>? = null
     }
 
     data class NotDone(val frame: ContinuationFrame, val next: SpellContinuation) : SpellContinuation {
         override fun size(): Int = frame.size() + next.size()
         override fun depth(): Int = max(frame.depth(), next.depth())
+        override fun subIotas(): Iterable<Iota> {
+            val list: MutableList<Iterable<Iota>> = mutableListOf()
+            var current: SpellContinuation = this
+            while (current is NotDone) {
+                val subIotas = current.frame.subIotas()
+                if (subIotas != null)
+                    list.add(subIotas)
+                current = current.next
+            }
+            return list.flatten()
+        }
     }
 
     fun pushFrame(frame: ContinuationFrame): SpellContinuation = NotDone(frame, this)
 
+    fun subIotas(): Iterable<Iota>?
     fun size(): Int
     fun depth(): Int
 

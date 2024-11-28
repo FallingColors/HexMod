@@ -70,6 +70,7 @@ data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : Cont
 
     override fun size() = size
     override fun depth() = depth
+    override fun subIotas(): Iterable<Iota> = list
 
     override val type: ContinuationFrame.Type<*> = TYPE
 

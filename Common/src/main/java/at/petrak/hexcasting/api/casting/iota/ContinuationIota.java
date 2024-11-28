@@ -13,6 +13,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -54,6 +55,11 @@ public class ContinuationIota extends Iota {
     @Override
     public boolean executable() {
         return true;
+    }
+
+    @Override
+    public @Nullable Iterable<Iota> subIotas() {
+        return this.getContinuation().subIotas();
     }
 
     @Override

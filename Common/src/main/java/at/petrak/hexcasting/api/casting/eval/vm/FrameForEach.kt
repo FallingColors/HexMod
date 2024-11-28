@@ -120,6 +120,11 @@ data class FrameForEach(
 
     override fun size() = size
     override fun depth() = depth
+    override fun subIotas(): Iterable<Iota> =
+        if (baseStack != null)
+            listOf(data, code, acc, baseStack).flatten()
+        else
+            listOf(data, code, acc).flatten()
 
     override val type: ContinuationFrame.Type<*> = TYPE
 

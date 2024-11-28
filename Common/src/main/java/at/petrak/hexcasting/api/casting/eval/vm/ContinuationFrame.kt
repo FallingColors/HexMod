@@ -47,6 +47,7 @@ interface ContinuationFrame {
      */
     fun size(): Int
     fun depth(): Int
+    fun subIotas(): Iterable<Iota>?
 
     val type: Type<*>
 
