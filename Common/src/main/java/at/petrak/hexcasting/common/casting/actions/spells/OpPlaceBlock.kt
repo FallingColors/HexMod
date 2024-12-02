@@ -80,11 +80,11 @@ object OpPlaceBlock : SpellAction {
                         UseOnContext(env.world, caster as? ServerPlayer, env.otherHand, spoofedStack, blockHit)
                     val placeContext = BlockPlaceContext(itemUseCtx)
                     if (bstate.canBeReplaced(placeContext)) {
-                        if (env.withdrawItem({ it == placeeStack }, 1, false)) {
+                        if (env.withdrawItem({ ItemStack.isSameItemSameTags(it, placeeStack) }, 1, false)) {
                             val res = spoofedStack.useOn(placeContext)
 
                             if (res != InteractionResult.FAIL) {
-                                env.withdrawItem({ it == placeeStack }, 1, true)
+                                env.withdrawItem({ ItemStack.isSameItemSameTags(it, placeeStack) }, 1, true)
 
                                 env.world.playSound(
                                     caster as? ServerPlayer,
