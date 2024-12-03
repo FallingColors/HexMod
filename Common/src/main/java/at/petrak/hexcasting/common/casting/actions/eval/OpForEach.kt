@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.FrameForEach
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.getList
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.utils.Vec
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 object OpForEach : Action {
@@ -22,7 +23,7 @@ object OpForEach : Action {
         stack.removeLastOrNull()
         stack.removeLastOrNull()
 
-        val frame = FrameForEach(datums, instrs, null, mutableListOf())
+        val frame = FrameForEach(datums, instrs, null, Vec.empty())
         val image2 = image.withUsedOp().copy(stack = stack)
 
         return OperationResult(image2, listOf(), continuation.pushFrame(frame), HexEvalSounds.THOTH)
