@@ -586,6 +586,7 @@
           add_segment: "Adding line",
         },
         cast: {
+          fail: "Mishap crunches",
           normal: "Action hums",
           spell: "Spell boinks",
           hermes: "Hermes' twangs",
