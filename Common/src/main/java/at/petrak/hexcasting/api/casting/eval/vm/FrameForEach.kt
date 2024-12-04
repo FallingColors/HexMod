@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.utils.NBTBuilder
 import at.petrak.hexcasting.api.utils.getList
 import at.petrak.hexcasting.api.utils.hasList
 import at.petrak.hexcasting.api.utils.serializeToNBT
+import at.petrak.hexcasting.api.utils.Vec
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import net.minecraft.nbt.CompoundTag
@@ -28,14 +29,13 @@ data class FrameForEach(
     val data: SpellList,
     val code: SpellList,
     val baseStack: List<Iota>?,
-    val acc: MutableList<Iota>
+    val acc: Vec<Iota>
 ) : ContinuationFrame {
 
     /** When halting, we add the stack state at halt to the stack accumulator, then return the original pre-Thoth stack, plus the accumulator. */
     override fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>> {
         val newStack = baseStack?.toMutableList() ?: mutableListOf()
-        acc.addAll(stack)
-        newStack.add(ListIota(acc))
+        newStack.add(ListIota(acc.appendAll(stack).toList()))
         return true to newStack
     }
 
@@ -46,13 +46,12 @@ data class FrameForEach(
         harness: CastingVM
     ): CastResult {
         // If this isn't the very first Thoth step (i.e. no Thoth computations run yet)...
-        val stack = if (baseStack == null) {
+        val (stack, nextAcc) = if (baseStack == null) {
             // init stack to the harness stack...
-            harness.image.stack.toList()
+            harness.image.stack.toList() to acc
         } else {
             // else save the stack to the accumulator and reuse the saved base stack.
-            acc.addAll(harness.image.stack)
-            baseStack
+            baseStack to acc.appendAll(harness.image.stack)
         }
 
         // If we still have data to process...
@@ -60,13 +59,13 @@ data class FrameForEach(
             // push the next datum to the top of the stack,
             val cont2 = continuation
                 // put the next Thoth object back on the stack for the next Thoth cycle,
-                .pushFrame(FrameForEach(data.cdr, code, stack, acc))
+                .pushFrame(FrameForEach(data.cdr, code, stack, nextAcc))
                 // and prep the Thoth'd code block for evaluation.
                 .pushFrame(FrameEvaluate(code, true))
             Triple(data.car, harness.image.withUsedOp(), cont2)
         } else {
             // Else, dump our final list onto the stack.
-            Triple(ListIota(acc), harness.image, continuation)
+            Triple(ListIota(acc.toList()), harness.image, continuation)
         }
         val tStack = stack.toMutableList()
         tStack.add(stackTop)
@@ -86,10 +85,10 @@ data class FrameForEach(
         "code" %= code.serializeToNBT()
         if (baseStack != null)
             "base" %= baseStack.serializeToNBT()
-        "accumulator" %= acc.serializeToNBT()
+        "accumulator" %= acc.toList().serializeToNBT()
     }
 
-    override fun size() = data.size() + code.size() + acc.size + (baseStack?.size ?: 0)
+    override fun size() = data.size() + code.size() + acc.length + (baseStack?.size ?: 0)
 
     override val type: ContinuationFrame.Type<*> = TYPE
 
@@ -104,10 +103,10 @@ data class FrameForEach(
                         HexIotaTypes.LIST.deserialize(tag.getList("base", Tag.TAG_COMPOUND), world)!!.list.toList()
                     else
                         null,
-                    HexIotaTypes.LIST.deserialize(
+                    Vec.ofIterable(HexIotaTypes.LIST.deserialize(
                         tag.getList("accumulator", Tag.TAG_COMPOUND),
                         world
-                    )!!.list.toMutableList()
+                    )!!.list)
                 )
             }
 
