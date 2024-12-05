@@ -563,6 +563,7 @@
       media: "%d dust",
       media_amount: "Contains: %s (%s)",
       "media_amount.advanced": "Contains: %s/%s (%s)",
+      stored_hex: "Hex: ",
       
       list_contents: "[%s]",
       null_iota: "Null",
