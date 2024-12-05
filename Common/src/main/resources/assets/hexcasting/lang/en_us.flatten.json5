@@ -49,6 +49,7 @@
     
     thought_knot: "Thought-Knot",
     spellbook: "Spellbook",
+    ancient_cypher: "Ancient Cypher",
     cypher: "Cypher",
     trinket: "Trinket",
     artifact: "Artifact",
