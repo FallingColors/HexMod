@@ -1161,6 +1161,7 @@
       
       // why is this called "hexcasting"?
       hexcasting: "Casting Items",
+      ancient_cyphers: "Ancient Cyphers",
       phials: "Phials of Media",
       potions: "Hex Potions",
       pigments: "Pigments",
@@ -1477,7 +1478,7 @@
         "2": "Like a $(l:items/focus)$(item)Focus/$, there exists a simple method to prevent accidental overwriting. Crafting it with a $(item)Honeycomb/$ will lacquer the current page, preventing $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$ from modifying its contents. Also like a $(l:items/focus)$(item)Focus/$, using $(l:patterns/spells/hexcasting#hexcasting:erase)$(action)Erase Item/$ will remove the lacquer along with the page's contents.$(br2)I can also name each page individually in an anvil. Naming it will change only the name of the currently selected page, for easy browsing.",
         "crafting.desc": "$(italic)Wizards love words. Most of them read a great deal, and indeed one strong sign of a potential wizard is the inability to get to sleep without reading something first.",
       },
-      
+
       scroll: {
         "1": "A $(l:items/scroll)$(item)Scroll/$ is a convenient method of sharing a pattern with others. I can copy a pattern onto one with $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$, after which it will display in a tooltip.$(br2)I can also place them on the wall as decoration or edification, like a painting, in sizes from 1x1 to 3x3 blocks. Using $(l:items/amethyst)$(item)Amethyst Dust/$ on such a scroll will have it display the stroke order.",
         "2": "In addition, I can also find so-called $(l:items/scroll)$(item)Ancient Scrolls/$ in the dungeons and strongholds of the world. These contain the stroke order of $(thing)Great Spells/$, powerful magicks rumored to be too powerful for the hands and minds of mortals...$(br2)If those \"mortals\" couldn't cast them, I'm not sure they deserve to know them.",
@@ -1500,6 +1501,10 @@
         "5": "Each infusion spell requires an entity and a list of patterns on the stack. The entity must be a _media-holding item entity (i.e. $(l:items/amethyst)$(item)amethyst/$ crystals, dropped on the ground); the entity is consumed and forms the battery.$(br2)Usefully, it seems that the _media in the battery is not consumed in chunks as it is when casting with a $(l:items/staff)$(item)Staff/$-- rather, the _media \"melts down\" into one continuous pool. Thus, if I store a _Hex that only costs one $(l:items/amethyst)$(item)Amethyst Dust/$'s worth of media, a $(l:items/amethyst)$(item)Charged Crystal/$ used as the battery will allow me to cast it 10 times.",
         "crafting.desc": "$(italic)We have a saying in our field: \"Magic isn't\". It doesn't \"just work,\" it doesn't respond to your thoughts, you can't throw fireballs or create a roast dinner from thin air or turn a bunch of muggers into frogs and snails./$",
       },
+        ancient_cyphers: {
+        "1": "While adventuring, I've come across what appear to be $(l:items/hexcasting)$(item)Cyphers/$ created by the Hexcasters of the ancient past. These $(item)Ancient Cyphers/$ work just like the ones I can craft: they can't be recharged, and will break when their reserve of _Media runs out. However, unlike my own $(l:items/hexcasting)$(item)Cyphers/$, their decayed structure allows me to glimpse the _Hex stored within.",
+        "2": "These may be useful for learning new techniques - who better to teach me than ancient masters of the art?$(br2)Alternatively, I could erase the contents of one and store my own _Hex inside, creating a casting item that clearly displays its own function."
+      }
       
       phials: {
         "1": "I find it quite ... irritating, how Nature refuses to give me change for my work. If all I have on hand is $(l:items/amethyst)$(item)Charged Amethyst/$, even the tiniest $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation/$ will consume the entire crystal, wasting the remaining _media.$(br2)Fortunately, it seems I've found a way to somewhat allay this problem.",
