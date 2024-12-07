@@ -1,6 +1,7 @@
-// 1.20.1	2024-10-01T23:18:04.2255382	Tags for minecraft:item mod id vanilla
+// 1.20.1	2024-12-07T16:37:41.3941644	Tags for minecraft:item mod id vanilla
 2f5c5bd21580004c998765215166adaa72e0d96b data/forge/tags/items/dusts/amethyst.json
 873bab891e0827973ebfe9fedd352c95778d7fbe data/forge/tags/items/gems.json
+ed073c18319ea1ac0b632309ebceb60efd9df0a2 data/hexcasting/tags/items/amethyst_blocks.json
 c5aac196bf97183b43d794c6aac8e206f4b71e37 data/hexcasting/tags/items/brainswept_circle_components.json
 abaec2d0102fef5865ac638cf7c528a4d5b2a69b data/hexcasting/tags/items/directrices.json
 7e27f819889d2f0bca863b1cdb6d7d640ea21986 data/hexcasting/tags/items/edified_logs.json
@@ -8,7 +9,9 @@ abaec2d0102fef5865ac638cf7c528a4d5b2a69b data/hexcasting/tags/items/directrices.
 5b19052261719f95e2faedcb483d4c338e349524 data/hexcasting/tags/items/grants_root_advancement.json
 7f71f33b0bc9fde24deef080ab64707df38adfd6 data/hexcasting/tags/items/impeti.json
 7f7d5f6cc9b5cfb39d240fc901c4ae2d2037ec14 data/hexcasting/tags/items/phial_base.json
+f42874e197022a21f480985c2d428c97cbd1587b data/hexcasting/tags/items/quenched_allay_blocks.json
 d878c230cd5cb1b54fbe6e53f3ef71379d080c6f data/hexcasting/tags/items/seal_materials.json
+3fb3314ea83dfb5f322db1db779a6ededdc752c4 data/hexcasting/tags/items/slate_blocks.json
 884ac51896a0d5c395035ce7f77486c5d08f0e0d data/hexcasting/tags/items/staves.json
 841dfbe4970e9167b205e5aa2b0f0936c6b9af60 data/minecraft/tags/items/buttons.json
 cba96d2ff28087e7fd9807e5e80104f3befc2512 data/minecraft/tags/items/doors.json
