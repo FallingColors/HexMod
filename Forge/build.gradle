@@ -1,34 +1,34 @@
 buildscript {
     repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = "https://maven.minecraftforge.net" }
         maven {
-            url = 'https://repo.spongepowered.org/repository/maven-public/'
-            content { includeGroup "org.spongepowered" }
+            url = "https://repo.spongepowered.org/repository/maven-public/"
+            content { includeGroup("org.spongepowered") }
         }
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.0.+', changing: true
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+        classpath(group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "6.0.+", changing: true)
+        classpath("org.spongepowered:mixingradle:0.7-SNAPSHOT")
     }
 }
 
 plugins {
-    id "java"
-    id "maven-publish"
+    id("java")
+    id("maven-publish")
 
-    id "at.petra-k.PKSubprojPlugin"
+    id("at.petra-k.PKSubprojPlugin")
 }
 
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.spongepowered.mixin'
+apply(plugin: "net.minecraftforge.gradle")
+apply(plugin: "org.spongepowered.mixin")
 
 pkSubproj {
-    platform "forge"
-    curseforgeJar jar.archiveFile
-    curseforgeDependencies[]
-    modrinthJar jar.archiveFile
-    modrinthDependencies[]
+    platform("forge")
+    curseforgeJar(jar.archiveFile)
+    curseforgeDependencies([])
+    modrinthJar(jar.archiveFile)
+    modrinthDependencies([])
 }
 
 repositories {
@@ -36,7 +36,7 @@ repositories {
 
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
     flatDir {
-        dir 'libs'
+        dir("libs")
     }
 
     maven {
@@ -55,84 +55,84 @@ repositories {
     maven { url = "https://jitpack.io" }
 
     maven {
-        name = 'Kotlin for Forge'
-        url = 'https://thedarkcolour.github.io/KotlinForForge/'
-        content { includeGroup "thedarkcolour" }
+        name = "Kotlin for Forge"
+        url = "https://thedarkcolour.github.io/KotlinForForge/"
+        content { includeGroup("thedarkcolour") }
     }
 
-    maven { url "https://maven.shedaniel.me/" }
+    maven { url = "https://maven.shedaniel.me/" }
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
-    compileOnly project(":Common")
+    minecraft("net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}")
+    compileOnly(project(":Common"))
 
-    implementation "thedarkcolour:kotlinforforge:$kotlinForForgeVersion"
+    implementation("thedarkcolour:kotlinforforge:$kotlinForForgeVersion")
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
 
-    compileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
-    runtimeOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FORGE-SNAPSHOT")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FORGE-SNAPSHOT")
+    compileOnly(fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion"))
+    runtimeOnly(fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion"))
+    compileOnly(fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FORGE-SNAPSHOT"))
+    runtimeOnly(fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FORGE-SNAPSHOT"))
 
     // aughh
-    testCompileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
-    testCompileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FORGE-SNAPSHOT")
+    testCompileOnly(fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion"))
+    testCompileOnly(fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FORGE-SNAPSHOT"))
 
-    implementation fg.deobf("top.theillusivec4.caelus:caelus-forge:$caelusVersion")
+    implementation(fg.deobf("top.theillusivec4.caelus:caelus-forge:$caelusVersion"))
 
-    implementation fg.deobf("com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion")
+    implementation(fg.deobf("com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion"))
 
     // needed for inline to run
-    runtimeOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:$clothConfigVersion")
+    runtimeOnly(fg.deobf("me.shedaniel.cloth:cloth-config-forge:$clothConfigVersion"))
 
     // Optional interop
 
-    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-common-api:$jeiVersion")
-    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge-api:$jeiVersion")
-    runtimeOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge:$jeiVersion")
+    compileOnly(fg.deobf("mezz.jei:jei-$minecraftVersion-common-api:$jeiVersion"))
+    compileOnly(fg.deobf("mezz.jei:jei-$minecraftVersion-forge-api:$jeiVersion"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-$minecraftVersion-forge:$jeiVersion"))
 
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion:api")
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion")
+    compileOnly(fg.deobf("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion:api"))
+    runtimeOnly(fg.deobf("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion"))
 
-    api fg.deobf("com.github.Virtuoel:Pehkui:${pehkuiVersion}-$minecraftVersion-forge")
+    api(fg.deobf("com.github.Virtuoel:Pehkui:${pehkuiVersion}-$minecraftVersion-forge"))
 }
 
 minecraft {
-    mappings channel: 'official', version: minecraftVersion
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    mappings(channel: "official", version: minecraftVersion)
+    accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg")
 
-    if (project.hasProperty('forge_ats_enabled') && project.findProperty('forge_ats_enabled').toBoolean()) {
+    if (project.hasProperty("forge_ats_enabled") && project.findProperty("forge_ats_enabled").toBoolean()) {
         // This location is hardcoded in Forge and can not be changed.
         // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
-        accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-        project.logger.debug('Forge Access Transformers are enabled for this project.')
+        accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg")
+        project.logger.debug("Forge Access Transformers are enabled for this project.")
     }
 
     runs {
         client {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            workingDirectory(project.file("run"))
+            ideaModule("${rootProject.name}.${project.name}.main")
+            property("mixin.env.remapRefMap", "true")
+            property("mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg")
             mods {
                 create(modID) {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
+                    source(sourceSets.main)
+                    source(project(":Common").sourceSets.main)
                 }
             }
         }
 
         server {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            workingDirectory(project.file("run"))
+            ideaModule("${rootProject.name}.${project.name}.main")
+            property("mixin.env.remapRefMap", "true")
+            property("mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg")
             mods {
                 create(modID) {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
+                    source(sourceSets.main)
+                    source(project(":Common").sourceSets.main)
                 }
             }
         }
@@ -141,36 +141,36 @@ minecraft {
         data {}
 
         xplatDatagen {
-            parent minecraft.runs.data
+            parent(minecraft.runs.data)
 
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            args '--mod', modID, '--all', '--output', file('../Common/src/generated/resources/'), '--existing', file('../Common/src/main/resources/')
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            property 'hexcasting.xplat_datagen', 'true'
-            
+            workingDirectory(project.file("run"))
+            ideaModule("${rootProject.name}.${project.name}.main")
+            args("--mod", modID, "--all", "--output", file("../Common/src/generated/resources/"), "--existing", file("../Common/src/main/resources/"))
+            property("mixin.env.remapRefMap", "true")
+            property("mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg")
+            property("hexcasting.xplat_datagen", "true")
+
             mods {
                 create(modID) {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
+                    source(sourceSets.main)
+                    source(project(":Common").sourceSets.main)
                 }
             }
         }
 
         forgeDatagen {
-            parent minecraft.runs.data
+            parent(minecraft.runs.data)
 
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            args '--mod', modID, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            property 'hexcasting.forge_datagen', 'true'
+            workingDirectory(project.file("run"))
+            ideaModule("${rootProject.name}.${project.name}.main")
+            args("--mod", modID, "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources/"))
+            property("mixin.env.remapRefMap", "true")
+            property("mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg")
+            property("hexcasting.forge_datagen", "true")
             mods {
                 create(modID) {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
+                    source(sourceSets.main)
+                    source(project(":Common").sourceSets.main)
                 }
             }
         }
@@ -195,9 +195,9 @@ compileTestKotlin {
 }
 
 sourceSets {
-    main.resources.srcDirs += ['src/generated/resources', '../Common/src/generated/resources']
-    main.kotlin.srcDirs += 'src/main/java'
-    test.kotlin.srcDirs += 'src/main/java'
+    main.resources.srcDirs += ["src/generated/resources", "../Common/src/generated/resources"]
+    main.kotlin.srcDirs += "src/main/java"
+    test.kotlin.srcDirs += "src/main/java"
 }
 
 processResources {
@@ -209,4 +209,4 @@ processResources {
     }
 }
 
-jar.finalizedBy('reobfJar')
+jar.finalizedBy("reobfJar")

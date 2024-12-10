@@ -4,18 +4,18 @@ buildscript {
     }
 
     dependencies {
-        classpath group: 'com.diluv.schoomp', name: 'Schoomp', version: '1.2.6'
+        classpath(group: "com.diluv.schoomp", name: "Schoomp", version: "1.2.6")
     }
 }
 
 plugins {
-    id 'java'
-    id "org.jetbrains.kotlin.jvm"
-    id 'idea'
+    id("java")
+    id("org.jetbrains.kotlin.jvm")
+    id("idea")
     // This needs to be in the root
     // https://github.com/FabricMC/fabric-loom/issues/612#issuecomment-1198444120
     // Also it looks like property lookups don't work this early
-    id 'fabric-loom' version '1.6-SNAPSHOT' apply false
+    id("fabric-loom") version "1.6-SNAPSHOT" apply false
 
     id("at.petra-k.PKPlugin") version "0.1.0-pre-87"
     id("at.petra-k.PKSubprojPlugin") version "0.1.0-pre-87" apply false
@@ -32,24 +32,24 @@ pkpcpbp {
         modVersion(project.modVersion)
     }
     curseforgeInfo {
-        id 569849
-        stability "beta"
+        id(569849)
+        stability("beta")
         token(System.getenv("CURSEFORGE_TOKEN"))
     }
     modrinthInfo {
-        id "nTW3yKrm"
-        stability "beta"
+        id("nTW3yKrm")
+        stability("beta")
         token(System.getenv("MODRINTH_TOKEN"))
     }
 }
 
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'kotlin'
-    apply plugin: 'maven-publish'
+    apply(plugin: "java")
+    apply(plugin: "kotlin")
+    apply(plugin: "maven-publish")
 
     tasks.withType(JavaCompile).configureEach {
-        it.options.encoding = 'UTF-8'
+        it.options.encoding = "UTF-8"
         it.options.release = 17
     }
 
@@ -60,17 +60,17 @@ subprojects {
         enabled = false
     }
 
-    sourceSets.main.kotlin.srcDirs += 'src/main/java'
+    sourceSets.main.kotlin.srcDirs += "src/main/java"
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
     java.withSourcesJar()
     java.withJavadocJar()
 
     processResources {
-        exclude '.cache'
+        exclude(".cache")
     }
     sourcesJar {
-        duplicatesStrategy 'exclude'
+        duplicatesStrategy("exclude")
     }
 }
 
@@ -82,7 +82,7 @@ allprojects {
     }
 
     // disable most javadoc warnings
-    javadoc.options.addStringOption('Xdoclint:none', '-quiet')
+    javadoc.options.addStringOption("Xdoclint:none", "-quiet")
 }
 
 compileKotlin {
@@ -97,7 +97,7 @@ compileTestKotlin {
 }
 
 tasks.register("runAllDatagen") {
-    dependsOn ":Forge:runXplatDatagen"
-    dependsOn ":Forge:runForgeDatagen"
-    dependsOn ":Fabric:runDatagen"
+    dependsOn(":Forge:runXplatDatagen")
+    dependsOn(":Forge:runForgeDatagen")
+    dependsOn(":Fabric:runDatagen")
 }
