@@ -5,6 +5,7 @@ import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.forge.loot.ForgeHexAmethystLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexLoreLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexScrollLootMod;
+import at.petrak.hexcasting.forge.loot.ForgeHexCypherLootMod;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -30,6 +31,13 @@ public class ForgeHexLootModGen extends GlobalLootModifierProvider {
             add(name, new ForgeHexLoreLootMod(new LootItemCondition[]{
                 LootTableIdCondition.builder(injection).build(),
             }, HexLootHandler.DEFAULT_LORE_CHANCE));
+        }
+
+        for (var injection : HexLootHandler.DEFAULT_CYPHER_INJECTS) {
+            var name = "cypher/%s/%s".formatted(injection.getNamespace(), injection.getPath());
+            add(name, new ForgeHexCypherLootMod(new LootItemCondition[]{
+                LootTableIdCondition.builder(injection).build(),
+            }, HexLootHandler.DEFAULT_CYPHER_CHANCE));
         }
 
         add("amethyst_cluster", new ForgeHexAmethystLootMod(new LootItemCondition[]{

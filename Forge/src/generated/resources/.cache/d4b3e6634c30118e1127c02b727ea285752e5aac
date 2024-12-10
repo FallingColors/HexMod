@@ -1,6 +1,13 @@
-// 1.20.1	2023-12-24T17:58:56.8940231	Global Loot Modifiers : hexcasting
-fcf77123631746f3ee4e815183c0731c3ec206c9 data/forge/loot_modifiers/global_loot_modifiers.json
+// 1.20.1	2024-12-10T14:26:20.4114685	Global Loot Modifiers : hexcasting
+ff299d5fca3672c5ca0684cf9db095de2bae279f data/forge/loot_modifiers/global_loot_modifiers.json
 28ca895a27221312c2451f26646111a68aadbf6c data/hexcasting/loot_modifiers/amethyst_cluster.json
+f737195ec29d1aeaeeb3f852608411f501d41f29 data/hexcasting/loot_modifiers/cypher/minecraft/chests/abandoned_mineshaft.json
+b652b6779b09b8942f62e6572b4b6e0a53b502cb data/hexcasting/loot_modifiers/cypher/minecraft/chests/ancient_city.json
+067f2658aa5e993dcf212cca2aba1b77a8d383ca data/hexcasting/loot_modifiers/cypher/minecraft/chests/desert_pyramid.json
+d8acfcf0632259a171e1ac2c1ddb4b313f348fe5 data/hexcasting/loot_modifiers/cypher/minecraft/chests/jungle_temple.json
+78553a71f4c58b8d788c352b2dd7c78a0b7430fe data/hexcasting/loot_modifiers/cypher/minecraft/chests/nether_bridge.json
+a47f769191344b49b3a708d45636894062538bc8 data/hexcasting/loot_modifiers/cypher/minecraft/chests/simple_dungeon.json
+3a4aa612510b111b677e2c00231353b944c491d3 data/hexcasting/loot_modifiers/cypher/minecraft/chests/stronghold_corridor.json
 f98707c91dc8712409833df1e5da245e9b14ebfa data/hexcasting/loot_modifiers/lore/minecraft/chests/abandoned_mineshaft.json
 16b4bbb5358f2fcad31a8b796cdc3eef28caaf09 data/hexcasting/loot_modifiers/lore/minecraft/chests/pillager_outpost.json
 6d6a9fd35a8f4e94c7ae64bf8c130b40d0d7d0e4 data/hexcasting/loot_modifiers/lore/minecraft/chests/simple_dungeon.json

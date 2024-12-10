@@ -35,6 +35,10 @@ public class FabricHexLootModJankery {
         if (FabricHexInitializer.CONFIG.server.shouldInjectLore(id)) {
             addPool.accept(makeLoreAddPool(FabricHexInitializer.CONFIG.server.getLoreChance()));
         }
+
+        if (FabricHexInitializer.CONFIG.server.shouldInjectCyphers(id)) {
+            addPool.accept(makeCypherAddPool(FabricHexInitializer.CONFIG.server.getCypherChance()));
+        }
     }
 
     @NotNull
@@ -55,5 +59,12 @@ public class FabricHexLootModJankery {
             .when(LootItemRandomChanceCondition.randomChance((float) chance))
             .setRolls(ConstantValue.exactly(1))
             .add(LootItem.lootTableItem(HexItems.LORE_FRAGMENT));
+    }
+
+    private static LootPool.Builder makeCypherAddPool(double chance) {
+        return LootPool.lootPool()
+            .when(LootItemRandomChanceCondition.randomChance((float) chance))
+            .setRolls(ConstantValue.exactly(1))
+            .add(LootItem.lootTableItem(HexItems.ANCIENT_CYPHER));
     }
 }

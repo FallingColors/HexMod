@@ -61,12 +61,23 @@ public class HexLootHandler {
         new ResourceLocation("minecraft", "chests/village/village_taiga_house")
     );
 
+    public static final ImmutableList<ResourceLocation> DEFAULT_CYPHER_INJECTS = ImmutableList.of(
+        new ResourceLocation("minecraft", "chests/simple_dungeon"),
+        new ResourceLocation("minecraft", "chests/abandoned_mineshaft"),
+        new ResourceLocation("minecraft", "chests/stronghold_corridor"),
+        new ResourceLocation("minecraft", "chests/jungle_temple"),
+        new ResourceLocation("minecraft", "chests/desert_pyramid"),
+        new ResourceLocation("minecraft", "chests/ancient_city"),
+        new ResourceLocation("minecraft", "chests/nether_bridge")
+    );
+
     public static int getScrollCount(int range, RandomSource random) {
         return Math.max(random.nextIntBetweenInclusive(-range, range), 0);
     }
 
     public static final double DEFAULT_SHARD_MODIFICATION = -0.5;
     public static final double DEFAULT_LORE_CHANCE = 0.4;
+    public static final double DEFAULT_CYPHER_CHANCE = 0.3;
 
     public static final ResourceLocation TABLE_INJECT_AMETHYST_CLUSTER = modLoc("inject/amethyst_cluster");
 
