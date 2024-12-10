@@ -1,18 +1,21 @@
 pluginManagement {
     repositories {
+        mavenCentral()
         gradlePluginPortal()
         maven {
             name = "Fabric"
-            url = "https://maven.fabricmc.net/"
+            url = uri("https://maven.fabricmc.net/")
         }
         maven {
             name = "Sponge Snapshots"
-            url = "https://repo.spongepowered.org/repository/maven-public/"
+            url = uri("https://repo.spongepowered.org/repository/maven-public/")
         }
-        maven { url = "https://maven.blamejared.com" }
+        maven { url = uri("https://maven.blamejared.com") }
+        maven { url = uri("https://maven.minecraftforge.net") }
     }
 
     plugins {
+        val kotlinVersion: String by settings
         id("org.jetbrains.kotlin.jvm") version kotlinVersion
     }
 }

@@ -1,31 +1,54 @@
 plugins {
+    id("java")
+    id("kotlin")
+    id("maven-publish")
+
     id("fabric-loom") version "1.6-SNAPSHOT"
     id("at.petra-k.PKSubprojPlugin")
 }
 
+val modID: String by project
+val minecraftVersion: String by project
+val fabricLanguageKotlinVersion: String by project
+val fabricLoaderVersion: String by project
+val fabricVersion: String by project
+val jetbrainsAnnotationsVersion: String by project
+val paucalVersion: String by project
+val patchouliVersion: String by project
+val inlineVersion: String by project
+val cardinalComponentsVersion: String by project
+val serializationHooksVersion: String by project
+val clothConfigVersion: String by project
+val trinketsVersion: String by project
+val emiVersion: String by project
+val pehkuiVersion: String by project
+val modmenuVersion: String by project
+val lithiumVersion: String by project
+
 pkSubproj {
     platform("fabric")
-    curseforgeJar(remapJar.archiveFile)
-    curseforgeDependencies([])
-    modrinthJar(remapJar.archiveFile)
-    modrinthDependencies([])
+    curseforgeJar(tasks.remapJar.get().archiveFile)
+    curseforgeDependencies(listOf())
+    modrinthJar(tasks.remapJar.get().archiveFile)
+    modrinthDependencies(listOf())
 }
 
 loom {
+    @Suppress("UnstableApiUsage")
     mixin.defaultRefmapName = "hexcasting.mixins.refmap.json"
 
     accessWidenerPath = file("src/main/resources/fabricasting.accesswidener")
 
     runs {
-        client {
+        named("client") {
             client()
-            setConfigName("Fabric Client")
+            configName = "Fabric Client"
         }
-        server {
+        named("server") {
             server()
-            setConfigName("Fabric Server")
+            configName = "Fabric Server"
         }
-        datagen {
+        register("datagen") {
             client()
             vmArg("-Dfabric-api.datagen")
             vmArg("-Dfabric-api.datagen.modid=${modID}")
@@ -43,22 +66,22 @@ repositories {
     mavenCentral()
 
     // paucal and patchi
-    maven { url = "https://maven.blamejared.com" }
+    maven { url = uri("https://maven.blamejared.com") }
     // modmenu and clothconfig
-    maven { url = "https://maven.shedaniel.me/" }
-    maven { url = "https://maven.ladysnake.org/releases" }
+    maven { url = uri("https://maven.shedaniel.me/") }
+    maven { url = uri("https://maven.ladysnake.org/releases") }
     // Entity reach
-    maven { url = "https://maven.jamieswhiteshirt.com/libs-release/" }
-    maven { url = "https://mvn.devos.one/snapshots/" }
-    maven { url = "https://maven.terraformersmc.com/releases/" }
+    maven { url = uri("https://maven.jamieswhiteshirt.com/libs-release/") }
+    maven { url = uri("https://mvn.devos.one/snapshots/") }
+    maven { url = uri("https://maven.terraformersmc.com/releases/") }
     exclusiveContent {
         forRepository {
-            maven { url = "https://api.modrinth.com/maven" }
+            maven { url = uri("https://api.modrinth.com/maven") }
         }
         filter { includeGroup("maven.modrinth") }
     }
     // pehkui
-    maven { url = "https://jitpack.io" }
+    maven { url = uri("https://jitpack.io") }
 
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
     flatDir {
@@ -78,7 +101,7 @@ dependencies {
     testCompileOnly("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
     compileOnly("com.demonwav.mcdev:annotations:1.0")
 
-    implementation(group: "com.google.code.findbugs", name: "jsr305", version: "3.0.1")
+    implementation(group = "com.google.code.findbugs", name = "jsr305", version = "3.0.1")
     compileOnly(project(":Common"))
 
     modImplementation("at.petra-k.paucal:paucal-fabric-$minecraftVersion:$paucalVersion")
@@ -98,21 +121,24 @@ dependencies {
     // apparently the 1.18 version Just Works on 1.19
     modImplementation("${modID}:serialization-hooks:$serializationHooksVersion")
     include("${modID}:serialization-hooks:$serializationHooksVersion")
-    implementation(include("com.github.LlamaLad7:MixinExtras:0.1.1"))
+    "com.github.LlamaLad7:MixinExtras:0.1.1".also {
+        implementation(it)
+        include(it)
+    }
 
     // Optional integrations
 
     modApi("me.shedaniel.cloth:cloth-config-fabric:$clothConfigVersion") {
-        exclude(group: "net.fabricmc.fabric-api")
+        exclude(group = "net.fabricmc.fabric-api")
     }
 
     modImplementation("dev.emi:trinkets:$trinketsVersion")
     modImplementation("dev.emi:emi-fabric:${emiVersion}")
 
 //    modImplementation("maven.modrinth:gravity-api:$gravityApiVersion")
-    modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {
-        exclude(group: "net.fabricmc.fabric-api")
-    })
+    modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}") {
+        exclude(group = "net.fabricmc.fabric-api")
+    }
 
     // *Something* is including an old version of modmenu with a broken mixin
     // We can't figure out what it is
@@ -126,26 +152,34 @@ dependencies {
 //    modImplementation("maven.modrinth:phosphor:${phosphorVersion}")
 }
 
-tasks.withType(JavaCompile) {
-    source(project(":Common").sourceSets.main.allSource)
-}
-compileKotlin {
-    source(project(":Common").sourceSets.main.kotlin)
-}
-
-sourcesJar {
-    from(project(":Common").sourceSets.main.allJava)
-}
-
 sourceSets {
-    main.resources.srcDirs += ["src/generated/resources", "../Common/src/generated/resources"]
+    main {
+        resources {
+            srcDir(file("src/generated/resources"))
+            srcDir(project(":Common").file("src/generated/resources"))
+        }
+    }
 }
 
-processResources {
-    from(project(":Common").sourceSets.main.resources)
-    inputs.property("version", project.version)
+tasks {
+    withType<JavaCompile> {
+        source(project(":Common").sourceSets.main.get().allSource)
+    }
 
-    filesMatching("fabric.mod.json") {
-        expand("version": project.version)
+    compileKotlin {
+        source(project(":Common").sourceSets.main.get().kotlin)
+    }
+
+    sourcesJar {
+        from(project(":Common").sourceSets.main.get().allJava)
+    }
+
+    processResources {
+        from(project(":Common").sourceSets.main.get().resources)
+        inputs.property("version", version)
+
+        filesMatching("fabric.mod.json") {
+            expand("version" to version)
+        }
     }
 }

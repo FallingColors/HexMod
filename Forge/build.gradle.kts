@@ -1,34 +1,35 @@
-buildscript {
-    repositories {
-        maven { url = "https://maven.minecraftforge.net" }
-        maven {
-            url = "https://repo.spongepowered.org/repository/maven-public/"
-            content { includeGroup("org.spongepowered") }
-        }
-        mavenCentral()
-    }
-    dependencies {
-        classpath(group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "6.0.+", changing: true)
-        classpath("org.spongepowered:mixingradle:0.7-SNAPSHOT")
-    }
-}
-
 plugins {
     id("java")
+    id("kotlin")
     id("maven-publish")
 
     id("at.petra-k.PKSubprojPlugin")
+
+    id("net.minecraftforge.gradle") version "6.0.+"
+    id("org.spongepowered.mixin") version "0.7-SNAPSHOT"
 }
 
-apply(plugin: "net.minecraftforge.gradle")
-apply(plugin: "org.spongepowered.mixin")
+val modID: String by project
+val minecraftVersion: String by project
+val forgeVersion: String by project
+val kotlinForForgeVersion: String by project
+val paucalVersion: String by project
+val patchouliVersion: String by project
+val caelusVersion: String by project
+val inlineVersion: String by project
+val clothConfigVersion: String by project
+val jeiVersion: String by project
+val curiosVersion: String by project
+val pehkuiVersion: String by project
+@Suppress("PropertyName")
+val forge_ats_enabled: String? by project
 
 pkSubproj {
     platform("forge")
-    curseforgeJar(jar.archiveFile)
-    curseforgeDependencies([])
-    modrinthJar(jar.archiveFile)
-    modrinthDependencies([])
+    curseforgeJar(tasks.jar.get().archiveFile)
+    curseforgeDependencies(listOf())
+    modrinthJar(tasks.jar.get().archiveFile)
+    modrinthDependencies(listOf())
 }
 
 repositories {
@@ -42,25 +43,25 @@ repositories {
     maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
+        url = uri("https://dvs1.progwml6.com/files/maven/")
     }
     maven {
         // location of a maven mirror for JEI files, as a fallback
         name = "ModMaven"
-        url = "https://modmaven.dev"
+        url = uri("https://modmaven.dev")
     }
     // caelus elytra
-    maven { url = "https://maven.theillusivec4.top" }
+    maven { url = uri("https://maven.theillusivec4.top") }
     // pehkui
-    maven { url = "https://jitpack.io" }
+    maven { url = uri("https://jitpack.io") }
 
     maven {
         name = "Kotlin for Forge"
-        url = "https://thedarkcolour.github.io/KotlinForForge/"
+        url = uri("https://thedarkcolour.github.io/KotlinForForge/")
         content { includeGroup("thedarkcolour") }
     }
 
-    maven { url = "https://maven.shedaniel.me/" }
+    maven { url = uri("https://maven.shedaniel.me/") }
 }
 
 dependencies {
@@ -100,50 +101,50 @@ dependencies {
 }
 
 minecraft {
-    mappings(channel: "official", version: minecraftVersion)
-    accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg")
+    mappings("official", minecraftVersion)
+    accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
 
-    if (project.hasProperty("forge_ats_enabled") && project.findProperty("forge_ats_enabled").toBoolean()) {
+    if (forge_ats_enabled.toBoolean()) {
         // This location is hardcoded in Forge and can not be changed.
         // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
-        accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg")
+        accessTransformer(file("src/main/resources/META-INF/accesstransformer.cfg"))
         project.logger.debug("Forge Access Transformers are enabled for this project.")
     }
 
     runs {
-        client {
+        register("client") {
             workingDirectory(project.file("run"))
             ideaModule("${rootProject.name}.${project.name}.main")
             property("mixin.env.remapRefMap", "true")
             property("mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg")
             mods {
                 create(modID) {
-                    source(sourceSets.main)
-                    source(project(":Common").sourceSets.main)
+                    source(sourceSets.main.get())
+                    source(project(":Common").sourceSets.main.get())
                 }
             }
         }
 
-        server {
+        register("server") {
             workingDirectory(project.file("run"))
             ideaModule("${rootProject.name}.${project.name}.main")
             property("mixin.env.remapRefMap", "true")
             property("mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg")
             mods {
                 create(modID) {
-                    source(sourceSets.main)
-                    source(project(":Common").sourceSets.main)
+                    source(sourceSets.main.get())
+                    source(project(":Common").sourceSets.main.get())
                 }
             }
         }
 
         // We have to have a dummy data run to be parented from
-        data {}
+        register("data") {}
 
-        xplatDatagen {
-            parent(minecraft.runs.data)
+        register("xplatDatagen") {
+            parent(minecraft.runs.get("data"))
 
-            workingDirectory(project.file("run"))
+            workingDirectory(file("run"))
             ideaModule("${rootProject.name}.${project.name}.main")
             args("--mod", modID, "--all", "--output", file("../Common/src/generated/resources/"), "--existing", file("../Common/src/main/resources/"))
             property("mixin.env.remapRefMap", "true")
@@ -152,16 +153,16 @@ minecraft {
 
             mods {
                 create(modID) {
-                    source(sourceSets.main)
-                    source(project(":Common").sourceSets.main)
+                    source(sourceSets.main.get())
+                    source(project(":Common").sourceSets.main.get())
                 }
             }
         }
 
-        forgeDatagen {
-            parent(minecraft.runs.data)
+        register("forgeDatagen") {
+            parent(minecraft.runs.get("data"))
 
-            workingDirectory(project.file("run"))
+            workingDirectory(file("run"))
             ideaModule("${rootProject.name}.${project.name}.main")
             args("--mod", modID, "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources/"))
             property("mixin.env.remapRefMap", "true")
@@ -169,8 +170,8 @@ minecraft {
             property("hexcasting.forge_datagen", "true")
             mods {
                 create(modID) {
-                    source(sourceSets.main)
-                    source(project(":Common").sourceSets.main)
+                    source(sourceSets.main.get())
+                    source(project(":Common").sourceSets.main.get())
                 }
             }
         }
@@ -179,34 +180,53 @@ minecraft {
 
 
 mixin {
-    add sourceSets.main, "hexcasting.mixins.refmap.json"
-    config "hexplat.mixins.json"
-    config "hexcasting_forge.mixins.json"
-}
-
-compileJava {
-    source(project(":Common").sourceSets.main.allSource)
-}
-compileKotlin {
-    source(project(":Common").sourceSets.main.kotlin)
-}
-compileTestKotlin {
-    source(project(":Common").sourceSets.main.kotlin)
+    add(sourceSets.main.get(), "hexcasting.mixins.refmap.json")
+    config("hexplat.mixins.json")
+    config("hexcasting_forge.mixins.json")
 }
 
 sourceSets {
-    main.resources.srcDirs += ["src/generated/resources", "../Common/src/generated/resources"]
-    main.kotlin.srcDirs += "src/main/java"
-    test.kotlin.srcDirs += "src/main/java"
-}
+    main {
+        resources {
+            srcDir(file("src/generated/resources"))
+            srcDir(project(":Common").file("src/generated/resources"))
+        }
 
-processResources {
-    from project(":Common").sourceSets.main.resources
-    inputs.property "version", project.version
+        kotlin {
+            srcDir("src/main/java")
+        }
+    }
 
-    filesMatching("mods.toml") {
-        expand "version": project.version
+    test {
+        kotlin {
+            srcDir("src/main/java")
+        }
     }
 }
 
-jar.finalizedBy("reobfJar")
+tasks {
+    compileJava {
+        source(project(":Common").sourceSets.main.get().allSource)
+    }
+
+    compileKotlin {
+        source(project(":Common").sourceSets.main.get().kotlin)
+    }
+
+    compileTestKotlin {
+        source(project(":Common").sourceSets.main.get().kotlin)
+    }
+
+    processResources {
+        from(project(":Common").sourceSets.main.get().resources)
+        inputs.property("version", version)
+
+        filesMatching("mods.toml") {
+            expand("version" to version)
+        }
+    }
+
+    jar {
+        finalizedBy("reobfJar")
+    }
+}
