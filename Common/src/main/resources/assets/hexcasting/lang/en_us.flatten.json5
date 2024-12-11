@@ -46,10 +46,14 @@
       "": "Focus",
       sealed: "Sealed Focus",
     },
+
+    ancient_cypher: {
+      "": "Ancient Cypher",
+      preset: "Ancient Cypher: %s",
+    }
     
     thought_knot: "Thought-Knot",
     spellbook: "Spellbook",
-    ancient_cypher: "Ancient Cypher",
     cypher: "Cypher",
     trinket: "Trinket",
     artifact: "Artifact",

@@ -16,9 +16,27 @@ import java.util.List;
 
 public class ItemAncientCypher extends ItemCypher {
     public static final String TAG_PATTERNS = "patterns";
+    public static final String TAG_HEX_NAME = "hex_name";
 
     public ItemAncientCypher(Properties pProperties) {
         super(pProperties);
+    }
+
+    @Override
+    public void clearHex(ItemStack stack) {
+        super.clearHex(stack);
+        NBTHelper.remove(stack, TAG_HEX_NAME);
+    }
+
+    @Override
+    public Component getName(ItemStack pStack) {
+        var descID = this.getDescriptionId(pStack);
+        var hexName = NBTHelper.getString(pStack, TAG_HEX_NAME);
+        if (hexName != null) {
+            return Component.translatable(descID + ".preset", Component.translatable(hexName));
+        } else {
+            return Component.translatable(descID);
+        }
     }
 
     @Override
