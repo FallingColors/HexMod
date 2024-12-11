@@ -77,7 +77,7 @@ public class HexLootHandler {
 
     public static final double DEFAULT_SHARD_MODIFICATION = -0.5;
     public static final double DEFAULT_LORE_CHANCE = 0.4;
-    public static final double DEFAULT_CYPHER_CHANCE = 0.3;
+    public static final double DEFAULT_CYPHER_CHANCE = 0.4;
 
     public static final ResourceLocation TABLE_INJECT_AMETHYST_CLUSTER = modLoc("inject/amethyst_cluster");
 

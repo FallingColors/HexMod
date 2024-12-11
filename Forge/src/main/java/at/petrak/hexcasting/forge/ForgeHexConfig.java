@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraft.util.Mth;
 
 import java.util.List;
 
@@ -149,6 +150,8 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> someScrollTables;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> manyScrollTables;
 
+        private static ForgeConfigSpec.ConfigValue<List<? extends List<String>>> lootHexList;
+
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.push("Spells");
@@ -183,8 +186,13 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 .defineList("tpDimDenyList", DEFAULT_DIM_TP_DENYLIST, Server::isValidReslocArg);
 
             doesTrueNameHaveAmbit = builder.comment(
-                    "when false makes player reference iotas behave as normal entity reference iotas")
+                    "When false, makes player reference iotas behave as normal entity reference iotas")
                 .define("doesTrueNameHaveAmbit", DEFAULT_TRUE_NAME_HAS_AMBIT);
+
+            lootHexList = builder.comment(
+                    "List of preset hexes found in loot cyphers. First element is the name, other elements are the patterns." +
+                    "The default names use hardcoded translation keys, but custom ones should be human-readable.")
+                .defineList("lootHexList", DEFAULT_LOOT_HEX_LIST, Server::isValidReslocArg);
         }
 
         @Override
@@ -225,6 +233,12 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public boolean trueNameHasAmbit() {
             return doesTrueNameHaveAmbit.get();
+        }
+
+        @Override
+        public List<String> getRandomLootHex(int randint) {
+            var index = Mth.abs(randint) % lootHexList.get().size();
+            return lootHexList.get().get(index);
         }
 
         private static boolean isValidReslocArg(Object o) {

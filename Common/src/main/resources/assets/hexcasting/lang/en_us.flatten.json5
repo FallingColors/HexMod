@@ -381,11 +381,31 @@
           "": "Scroll Injection Weights",
           "@Tooltip": "Maps the names of loot tables to the amount of per-world patterns on scrolls should go in them. There's about a 50% chance to get any scrolls in a given chest marked here; once that is met, between 1 and that many scrolls are generated.",
         },
+        loreInjectionsRaw: {
+          "": "Lore Injection Sites",
+          "@Tooltip": "Lists the loot tables that lore fragments should be added to.",
+        },
+        loreChance: {
+          "": "Lore Fragment Chance",
+          "@Tooltip": "The chance for lore fragments to appear in any of the above loot tables.",
+        },
+        cypherInjectionsRaw: {
+          "": "Ancient Cypher Injection Sites",
+          "@Tooltip": "Lists the loot tables that ancient cyphers should be added to.",
+        },
+        cypherChance: {
+          "": "Ancient Cypher Chance",
+          "@Tooltip": "The chance for ancient cyphers to appear in any of the above loot tables.",
+        },
+        lootHexList: {
+          "": "Preset Loot Hex List",
+          "@Tooltip": "Lists the preset hexes that can be found in ancient cyphers. The first item in each list is the name of the hex, and the others are the patterns. The name is treated as a translation key if possible, but if you add your own they should be human-readable.",
+        },
         amethystShardModification: {
           "": "Amethyst Shard Drop Rate Change",
           "@Tooltip": "How much the number of amethyst shards dropped from clusters is increased/decreased.",
         },
-        
+
         // TODO: are these used anywhere??
         "fewScrollTables.@Tooltip": "Loot tables that a small number of Ancient Scrolls are injected into",
         "someScrollTables.@Tooltip": "Loot tables that a decent number of Ancient Scrolls are injected into",
@@ -504,6 +524,25 @@
       infinite_media: "Infinite",
     },
     
+    loot_hex: {
+      "shatter": "Shatter",
+      "kindle": "kindle",
+      "illuminate": "Illuminate",
+      "growth": "Growth",
+      "lunge": "Lunge",
+      "sidestep": "Sidestep",
+      "ascend": "Ascend",
+      "blink": "Blink",
+      "blastoff": "Blastoff",
+      "radar": "Radar",
+      "beckon": "Beckon",
+      "detonate": "Detonate",
+      "shockwave": "Shockwave",
+      "heat_wave": "Heat Wave",
+      "wither_wave": "Wither Wave",
+      "flight_zone": "Flight Zone",
+    }
+
     // TODO: post-eigengrau make these less anticlimactic
     message: {
       cant_overcast: "That Hex needed more media than I had... I should double-check my math.",

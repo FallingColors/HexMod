@@ -74,6 +74,9 @@ public class HexConfig {
 
         boolean trueNameHasAmbit();
 
+        // is passing the randint from LootContext.getRandom().nextInt() really necessary? or can it just use its own RNG
+        List<String> getRandomLootHex(int randint);
+
         int DEFAULT_MAX_OP_COUNT = 100_000;
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
         int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;
@@ -83,6 +86,25 @@ public class HexConfig {
         List<String> DEFAULT_DIM_TP_DENYLIST = List.of("twilightforest:twilight_forest");
 
         boolean DEFAULT_TRUE_NAME_HAS_AMBIT = true;
+
+        List<List<String>> DEFAULT_LOOT_HEX_LIST = List.of(
+            List.of("hexcasting.loot_hex.shatter","NORTH_EAST qaq","EAST aa","NORTH_EAST qaq","NORTH_EAST wa","EAST wqaawdd","EAST qaqqqqq"),
+            List.of("hexcasting.loot_hex.kindle","NORTH_EAST qaq","EAST aa","NORTH_EAST qaq","NORTH_EAST wa","EAST wqaawdd","SOUTH_EAST aaqawawa"),
+            List.of("hexcasting.loot_hex.illuminate","NORTH_EAST qaq","EAST aa","NORTH_EAST qaq","NORTH_EAST wa","EAST aadadaaw","EAST wqaawdd","NORTH_EAST ddqdd","EAST weddwaa","NORTH_EAST waaw","NORTH_EAST qqd"),
+            List.of("hexcasting.loot_hex.growth","NORTH_EAST qaq","EAST aa","NORTH_EAST qaq","NORTH_EAST wa","EAST aadadaaw","EAST wqaawdd","NORTH_EAST ddqdd","EAST weddwaa","NORTH_EAST waaw","SOUTH_EAST aqaaedwd","EAST aadaadaa","NORTH_EAST wqaqwawqaqw","NORTH_EAST wqaqwawqaqw","NORTH_EAST wqaqwawqaqw"),
+            List.of("hexcasting.loot_hex.lunge","NORTH_EAST qaq","EAST aadaa","NORTH_EAST wa","SOUTH_EAST aqaawa","SOUTH_EAST waqaw","SOUTH_WEST awqqqwaqw"),
+            List.of("hexcasting.loot_hex.sidestep","NORTH_EAST qaq","EAST aadaa","NORTH_EAST wa","NORTH_WEST eqqq","SOUTH_EAST aqaawd","SOUTH_EAST e","NORTH_WEST qqqqqew","SOUTH_WEST eeeeeqw","SOUTH_EAST awdd","NORTH_EAST wdedw","SOUTH_WEST awqqqwaqw"),
+            List.of("hexcasting.loot_hex.ascend","NORTH_EAST qaq","SOUTH_EAST aqaae","WEST qqqqqawwawawd"),
+            List.of("hexcasting.loot_hex.blink","NORTH_EAST qaq","EAST aadaa","EAST aa","NORTH_EAST qaq","NORTH_EAST wa","EAST wqaawdd","NORTH_EAST qaq","EAST aa","NORTH_WEST wddw","NORTH_EAST wqaqw","SOUTH_EAST aqaaw","NORTH_WEST wddw","SOUTH_WEST awqqqwaq"),
+            List.of("hexcasting.loot_hex.blastoff","NORTH_EAST qaq","NORTH_WEST qqqqqew","SOUTH_EAST aqaawaa","SOUTH_EAST waqaw","SOUTH_WEST awqqqwaqw"),
+            List.of("hexcasting.loot_hex.radar","WEST qqq","EAST aadaa","EAST aa","SOUTH_EAST aqaawa","SOUTH_WEST ewdqdwe","NORTH_EAST de","EAST eee","NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaaeaqq","SOUTH_EAST qqqqqwdeddwd","NORTH_EAST dadad"),
+            List.of("hexcasting.loot_hex.beckon","NORTH_EAST qaq","EAST aa","NORTH_EAST qaq","NORTH_EAST wa","EAST weaqa","EAST aadaa","EAST dd","NORTH_EAST qaq","EAST aa","EAST aawdd","NORTH_WEST wddw","EAST aadaa","NORTH_EAST wqaqw","NORTH_EAST wdedw","SOUTH_EAST aqaawa","SOUTH_EAST waqaw","SOUTH_WEST awqqqwaqw"),
+            List.of("hexcasting.loot_hex.detonate","NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaaedwd","EAST ddwddwdd"),
+            List.of("hexcasting.loot_hex.shockwave","NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaawaa","EAST aadaadaa","SOUTH_EAST aqawqadaq","SOUTH_EAST aqaaedwd","EAST aawaawaa","NORTH_EAST qqa","EAST qaqqqqq"),
+            List.of("hexcasting.loot_hex.heat_wave","WEST qqq","SOUTH_EAST aaqawawa","EAST eee","NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaae","SOUTH_EAST qqqqqwded","SOUTH_WEST aaqwqaa","SOUTH_EAST a","NORTH_EAST dadad"),
+            List.of("hexcasting.loot_hex.wither_wave","WEST qqq","SOUTH_EAST aqaae","SOUTH_EAST aqaaw","SOUTH_WEST qqqqqaewawawe","EAST eee","NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaae","SOUTH_EAST qqqqqwdeddwd","SOUTH_WEST aaqwqaa","SOUTH_EAST a","NORTH_EAST dadad"),
+            List.of("hexcasting.loot_hex.flight_zone","NORTH_EAST qaq","SOUTH_EAST aqaaq","SOUTH_WEST awawaawq")
+        );
 
         default Tier opBreakHarvestLevel() {
             return switch (this.opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort()) {

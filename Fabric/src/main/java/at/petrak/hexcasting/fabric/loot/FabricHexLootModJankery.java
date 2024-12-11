@@ -2,6 +2,7 @@ package at.petrak.hexcasting.fabric.loot;
 
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.loot.AddPerWorldPatternToScrollFunc;
+import at.petrak.hexcasting.common.loot.AddHexToAncientCypherFunc;
 import at.petrak.hexcasting.fabric.FabricHexInitializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
@@ -65,6 +66,7 @@ public class FabricHexLootModJankery {
         return LootPool.lootPool()
             .when(LootItemRandomChanceCondition.randomChance((float) chance))
             .setRolls(ConstantValue.exactly(1))
-            .add(LootItem.lootTableItem(HexItems.ANCIENT_CYPHER));
+            .add(LootItem.lootTableItem(HexItems.ANCIENT_CYPHER))
+            .apply(() -> new AddHexToAncientCypherFunc(new LootItemCondition[0]));
     }
 }

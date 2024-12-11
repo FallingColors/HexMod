@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.forge.loot;
 
 import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.loot.AddHexToAncientCypherFunc;
 import at.petrak.hexcasting.forge.lib.ForgeHexLootMods;
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
@@ -33,7 +34,9 @@ public class ForgeHexCypherLootMod extends LootModifier {
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot,
         LootContext context) {
         if (context.getRandom().nextDouble() < this.chance) {
-            generatedLoot.add(new ItemStack(HexItems.ANCIENT_CYPHER));
+            var newStack = new ItemStack(HexItems.ANCIENT_CYPHER);
+            AddHexToAncientCypherFunc.doStatic(newStack, context);
+            generatedLoot.add(newStack);
         }
         return generatedLoot;
     }
