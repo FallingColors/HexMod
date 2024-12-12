@@ -350,6 +350,10 @@
           "": "Clicking Toggles Drawing",
           "@Tooltip": "Whether you click to start and stop drawing instead of clicking and dragging to draw",
         },
+        alwaysShowListCommas: {
+          "": "Always Show List Commas",
+          "@Tooltip": "Whether all iota types should be comma-separated when displayed in lists (by default, pattern iotas do not use commas)",
+        },
       },
       
       server: {
