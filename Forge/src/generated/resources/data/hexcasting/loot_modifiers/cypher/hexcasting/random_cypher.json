@@ -1,10 +1,10 @@
 {
   "type": "hexcasting:inject_cyphers",
-  "chance": 0.4,
+  "chance": 1.0,
   "conditions": [
     {
       "condition": "forge:loot_table_id",
-      "loot_table_id": "minecraft:chests/abandoned_mineshaft"
+      "loot_table_id": "hexcasting:random_cypher"
     }
   ]
 }

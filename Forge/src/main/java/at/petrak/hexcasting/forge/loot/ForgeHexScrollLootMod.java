@@ -24,7 +24,7 @@ public class ForgeHexScrollLootMod extends LootModifier {
                 Codec.INT.fieldOf("countRange").forGetter(it -> it.countRange)
             ).apply(inst, ForgeHexScrollLootMod::new)
         ));
-
+    
     public final int countRange;
 
     public ForgeHexScrollLootMod(LootItemCondition[] conditionsIn, int countRange) {
@@ -35,7 +35,7 @@ public class ForgeHexScrollLootMod extends LootModifier {
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot,
         LootContext context) {
-        int count = HexLootHandler.getScrollCount(this.countRange, context.getRandom());
+        var count = this.countRange < 0 ? 1 : HexLootHandler.getScrollCount(this.countRange, context.getRandom());
         for (int i = 0; i < count; i++) {
             var newStack = new ItemStack(HexItems.SCROLL_LARGE);
             AddPerWorldPatternToScrollFunc.doStatic(newStack, context);

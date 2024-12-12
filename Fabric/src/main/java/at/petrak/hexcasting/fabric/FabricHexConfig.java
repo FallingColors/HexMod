@@ -306,10 +306,10 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         }
 
         /**
-         * Returns -1 if none is found
+         * Returns 0 if none is found
          */
         public int scrollRangeForLootTable(ResourceLocation lootTable) {
-            return this.scrollInjections.getOrDefault(lootTable, -1);
+            return this.scrollInjections.getOrDefault(lootTable, 0);
         }
 
         public boolean shouldInjectLore(ResourceLocation lootTable) {

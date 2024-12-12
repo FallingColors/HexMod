@@ -22,6 +22,7 @@ import static at.petrak.hexcasting.common.loot.HexLootHandler.TABLE_INJECT_AMETH
 
 public class FabricHexLootModJankery {
     public static final ResourceLocation FUNC_AMETHYST_SHARD_REDUCER = modLoc("amethyst_shard_reducer");
+    public static final ResourceLocation RANDOM_CYPHER_TABLE = modLoc("random_cypher");
 
     public static void lootLoad(ResourceLocation id, Consumer<LootPool.Builder> addPool) {
         if (id.equals(Blocks.AMETHYST_CLUSTER.getLootTable())) {
@@ -29,7 +30,7 @@ public class FabricHexLootModJankery {
         }
 
         int countRange = FabricHexInitializer.CONFIG.server.scrollRangeForLootTable(id);
-        if (countRange != -1) {
+        if (countRange != 0) {
             addPool.accept(makeScrollAddPool(countRange));
         }
 
@@ -38,7 +39,8 @@ public class FabricHexLootModJankery {
         }
 
         if (FabricHexInitializer.CONFIG.server.shouldInjectCyphers(id)) {
-            addPool.accept(makeCypherAddPool(FabricHexInitializer.CONFIG.server.getCypherChance()));
+            var chance = id.equals(RANDOM_CYPHER_TABLE) ? 1 : FabricHexInitializer.CONFIG.server.getCypherChance();
+            addPool.accept(makeCypherAddPool(chance));
         }
     }
 
@@ -50,7 +52,7 @@ public class FabricHexLootModJankery {
 
     private static LootPool.Builder makeScrollAddPool(int range) {
         return LootPool.lootPool()
-            .setRolls(UniformGenerator.between(-range, range))
+            .setRolls(range < 0 ? ConstantValue.exactly(1) : UniformGenerator.between(-range, range))
             .add(LootItem.lootTableItem(HexItems.SCROLL_LARGE))
             .apply(() -> new AddPerWorldPatternToScrollFunc(new LootItemCondition[0]));
     }

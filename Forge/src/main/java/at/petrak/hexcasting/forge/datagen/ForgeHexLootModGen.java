@@ -7,12 +7,17 @@ import at.petrak.hexcasting.forge.loot.ForgeHexLoreLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexScrollLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexCypherLootMod;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
 import net.minecraftforge.common.loot.LootTableIdCondition;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 public class ForgeHexLootModGen extends GlobalLootModifierProvider {
+    public static final ResourceLocation RANDOM_CYPHER_TABLE = modLoc("random_cypher");
+    
     public ForgeHexLootModGen(PackOutput output) {
         super(output, HexAPI.MOD_ID);
     }
@@ -37,7 +42,7 @@ public class ForgeHexLootModGen extends GlobalLootModifierProvider {
             var name = "cypher/%s/%s".formatted(injection.getNamespace(), injection.getPath());
             add(name, new ForgeHexCypherLootMod(new LootItemCondition[]{
                 LootTableIdCondition.builder(injection).build(),
-            }, HexLootHandler.DEFAULT_CYPHER_CHANCE));
+            }, injection.equals(RANDOM_CYPHER_TABLE) ? 1 : HexLootHandler.DEFAULT_CYPHER_CHANCE));
         }
 
         add("amethyst_cluster", new ForgeHexAmethystLootMod(new LootItemCondition[]{
