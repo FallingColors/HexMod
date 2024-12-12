@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.forge;
 
 import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.common.loot.HexLootHandler;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -192,7 +193,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             lootHexList = builder.comment(
                     "List of preset hexes found in loot cyphers. First element is the name, other elements are the patterns." +
                     "The default names use hardcoded translation keys, but custom ones should be human-readable.")
-                .defineList("lootHexList", DEFAULT_LOOT_HEX_LIST, Server::isValidReslocArg);
+                .defineList("lootHexList", HexLootHandler.DEFAULT_LOOT_HEXES, Server::isValidReslocArg);
         }
 
         @Override

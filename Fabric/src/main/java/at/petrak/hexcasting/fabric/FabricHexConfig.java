@@ -219,7 +219,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private double cypherChance = HexLootHandler.DEFAULT_CYPHER_CHANCE;
         @ConfigEntry.Gui.Tooltip
-        private List<List<String>> lootHexList = DEFAULT_LOOT_HEX_LIST;
+        private List<List<String>> lootHexList = HexLootHandler.DEFAULT_LOOT_HEXES;
 
 
         @Override
