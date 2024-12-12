@@ -22,15 +22,20 @@ import static at.petrak.hexcasting.common.loot.HexLootHandler.TABLE_INJECT_AMETH
 
 public class FabricHexLootModJankery {
     public static final ResourceLocation FUNC_AMETHYST_SHARD_REDUCER = modLoc("amethyst_shard_reducer");
+    public static final ResourceLocation RANDOM_SCROLL_TABLE = modLoc("random_scroll");
     public static final ResourceLocation RANDOM_CYPHER_TABLE = modLoc("random_cypher");
 
     public static void lootLoad(ResourceLocation id, Consumer<LootPool.Builder> addPool) {
         if (id.equals(Blocks.AMETHYST_CLUSTER.getLootTable())) {
             addPool.accept(makeAmethystInjectPool());
+        } else if (id.equals(RANDOM_SCROLL_TABLE)) {
+            addPool.accept(makeScrollAddPool(-1));
+        } else if (id.equals(RANDOM_CYPHER_TABLE)) {
+            addPool.accept(makeCypherAddPool(1));
         }
 
         int countRange = FabricHexInitializer.CONFIG.server.scrollRangeForLootTable(id);
-        if (countRange != 0) {
+        if (countRange != -1) {
             addPool.accept(makeScrollAddPool(countRange));
         }
 
@@ -39,8 +44,7 @@ public class FabricHexLootModJankery {
         }
 
         if (FabricHexInitializer.CONFIG.server.shouldInjectCyphers(id)) {
-            var chance = id.equals(RANDOM_CYPHER_TABLE) ? 1 : FabricHexInitializer.CONFIG.server.getCypherChance();
-            addPool.accept(makeCypherAddPool(chance));
+            addPool.accept(makeCypherAddPool(FabricHexInitializer.CONFIG.server.getCypherChance()));
         }
     }
 

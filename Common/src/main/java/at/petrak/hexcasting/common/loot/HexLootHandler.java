@@ -46,10 +46,9 @@ public class HexLootHandler {
 
         // if you manage to find one of these things you deserve a lot of scrolls
         new ScrollInjection(new ResourceLocation("minecraft", "chests/woodland_mansion"), 5),
-        new ScrollInjection(new ResourceLocation("minecraft", "chests/stronghold_library"), 5),
+        new ScrollInjection(new ResourceLocation("minecraft", "chests/stronghold_library"), 5)
 
-        // inject into our own (otherwise empty) table to spawn a guaranteed scroll
-        new ScrollInjection(new ResourceLocation("hexcasting","random_scroll"), -1)
+        // you can use the table hexcasting:random_scroll to get exactly 1 scroll and nothing else
     );
 
     public static final ImmutableList<ResourceLocation> DEFAULT_LORE_INJECTS = ImmutableList.of(
@@ -73,9 +72,8 @@ public class HexLootHandler {
         new ResourceLocation("minecraft", "chests/jungle_temple"),
         new ResourceLocation("minecraft", "chests/desert_pyramid"),
         new ResourceLocation("minecraft", "chests/ancient_city"),
-        new ResourceLocation("minecraft", "chests/nether_bridge"),
-        // this one is hardcoded to always give a cypher, just like random_scroll
-        new ResourceLocation("hexcasting", "random_cypher")
+        new ResourceLocation("minecraft", "chests/nether_bridge")
+        // you can use the table hexcasting:random_cypher to get exactly 1 cypher and nothing else
     );
 
     public static final ImmutableList<List<String>> DEFAULT_LOOT_HEXES = ImmutableList.of(
