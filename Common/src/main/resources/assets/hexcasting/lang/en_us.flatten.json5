@@ -50,7 +50,7 @@
     ancient_cypher: {
       "": "Ancient Cypher",
       preset: "Ancient Cypher: %s",
-    }
+    },
     
     thought_knot: "Thought-Knot",
     spellbook: "Spellbook",
@@ -544,7 +544,7 @@
       "heat_wave": "Heat Wave",
       "wither_wave": "Wither Wave",
       "flight_zone": "Flight Zone",
-    }
+    },
 
     // TODO: post-eigengrau make these less anticlimactic
     message: {
@@ -572,7 +572,7 @@
       scroll: {
         needs_purchase: "Purchase to show pattern",
         pattern_not_loaded: "Place in inventory to load pattern",
-      }
+      },
       
       abacus: {
         "": "%d",
@@ -1552,10 +1552,11 @@
         "5": "Each infusion spell requires an entity and a list of patterns on the stack. The entity must be a _media-holding item entity (i.e. $(l:items/amethyst)$(item)amethyst/$ crystals, dropped on the ground); the entity is consumed and forms the battery.$(br2)Usefully, it seems that the _media in the battery is not consumed in chunks as it is when casting with a $(l:items/staff)$(item)Staff/$-- rather, the _media \"melts down\" into one continuous pool. Thus, if I store a _Hex that only costs one $(l:items/amethyst)$(item)Amethyst Dust/$'s worth of media, a $(l:items/amethyst)$(item)Charged Crystal/$ used as the battery will allow me to cast it 10 times.",
         "crafting.desc": "$(italic)We have a saying in our field: \"Magic isn't\". It doesn't \"just work,\" it doesn't respond to your thoughts, you can't throw fireballs or create a roast dinner from thin air or turn a bunch of muggers into frogs and snails./$",
       },
-        ancient_cyphers: {
+
+      ancient_cyphers: {
         "1": "While adventuring, I've come across what appear to be $(l:items/hexcasting)$(item)Cyphers/$ created by the Hexcasters of the ancient past. These $(item)Ancient Cyphers/$ work just like the ones I can craft: they can't be recharged, and will break when their reserve of _Media runs out. However, unlike my own $(l:items/hexcasting)$(item)Cyphers/$, their decayed structure allows me to glimpse the _Hex stored within.",
         "2": "These may be useful for learning new techniques - who better to teach me than ancient masters of the art?$(br2)Alternatively, I could erase the contents of one and store my own _Hex inside, creating a casting item that clearly displays its own function."
-      }
+      },
       
       phials: {
         "1": "I find it quite ... irritating, how Nature refuses to give me change for my work. If all I have on hand is $(l:items/amethyst)$(item)Charged Amethyst/$, even the tiniest $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation/$ will consume the entire crystal, wasting the remaining _media.$(br2)Fortunately, it seems I've found a way to somewhat allay this problem.",
