@@ -17,6 +17,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
+import net.minecraft.util.RandomSource;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.ListTag;
@@ -45,27 +46,16 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
     /**
      * This doesn't actually have any params so extract behaviour out for the benefit of forge
      */
-    public static ItemStack doStatic(ItemStack stack, LootContext ctx) {
-        var rand = ctx.getRandom();
-
+    public static ItemStack doStatic(ItemStack stack, RandomSource rand) {
         var fullHex = HexConfig.server().getRandomLootHex(rand.nextInt());
         var patsTag = new ListTag();
         Registry<ActionRegistryEntry> regi = IXplatAbstractions.INSTANCE.getActionRegistry();
-        // first element is the name, rest are patterns
+        // skip first element since it's the name, not a pattern
         for (var patString : fullHex.subList(1,fullHex.size())){
             var pieces = patString.split(" ");
             var pat = HexPattern.fromAngles(pieces[1],HexDir.fromString(pieces[0]));
             patsTag.add(IotaType.serialize(new PatternIota(pat)));
         }
-
-        // Registry<ActionRegistryEntry> regi = IXplatAbstractions.INSTANCE.getActionRegistry();
-        // for (var pat : hexPatterns) {
-        //     //var key = ResourceKey.create(IXplatAbstractions.INSTANCE.getActionRegistry().key(), loc);
-        //     //var pat = regi.get(key).prototype();
-        //     //if (HexUtils.isOfTag(regi, key, HexTags.Actions.PER_WORLD_PATTERN))
-        //     //    pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(key, ctx.getLevel().getServer().overworld());
-        //     patsTag.add(IotaType.serialize(new PatternIota(pat)));
-        // }
         
         var tag = new CompoundTag();
         tag.putString(ItemAncientCypher.TAG_HEX_NAME, fullHex.get(0));
@@ -80,7 +70,7 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
 
     @Override
     protected ItemStack run(ItemStack stack, LootContext ctx) {
-        return doStatic(stack, ctx);
+        return doStatic(stack, ctx.getRandom());
     }
 
     @Override

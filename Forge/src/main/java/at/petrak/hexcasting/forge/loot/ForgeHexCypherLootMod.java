@@ -35,7 +35,7 @@ public class ForgeHexCypherLootMod extends LootModifier {
         LootContext context) {
         if (context.getRandom().nextDouble() < this.chance) {
             var newStack = new ItemStack(HexItems.ANCIENT_CYPHER);
-            AddHexToAncientCypherFunc.doStatic(newStack, context);
+            AddHexToAncientCypherFunc.doStatic(newStack, context.getRandom());
             generatedLoot.add(newStack);
         }
         return generatedLoot;

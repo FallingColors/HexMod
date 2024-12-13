@@ -38,7 +38,7 @@ public class ForgeHexScrollLootMod extends LootModifier {
         var count = this.countRange < 0 ? 1 : HexLootHandler.getScrollCount(this.countRange, context.getRandom());
         for (int i = 0; i < count; i++) {
             var newStack = new ItemStack(HexItems.SCROLL_LARGE);
-            AddPerWorldPatternToScrollFunc.doStatic(newStack, context);
+            AddPerWorldPatternToScrollFunc.doStatic(newStack, context.getRandom(), context.getLevel().getServer().overworld());
             generatedLoot.add(newStack);
         }
         return generatedLoot;
