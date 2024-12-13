@@ -1,29 +1,21 @@
 package at.petrak.hexcasting.common.loot;
 
-import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
-import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
-import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.items.magic.ItemAncientCypher;
 import at.petrak.hexcasting.common.lib.HexLootFunctions;
-import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.minecraft.util.RandomSource;
-import net.minecraft.core.Registry;
-import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
@@ -33,7 +25,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import java.util.ArrayList;
 
 /**
- * Add a random preset hex to the ancient cypher, and change the
+ * Add a random preset hex to the ancient cypher, and select a random variant.
  * <p>
  * The function itself is only used on Fabric but the behavior {@link AddHexToAncientCypherFunc#doStatic}
  * is used on both sides

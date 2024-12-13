@@ -144,24 +144,14 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     public static class Server implements HexConfig.ServerConfigAccess {
         private static ForgeConfigSpec.IntValue opBreakHarvestLevel;
         private static ForgeConfigSpec.IntValue maxOpCount;
-
         private static ForgeConfigSpec.IntValue maxSpellCircleLength;
-
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
-
         private static ForgeConfigSpec.BooleanValue villagersOffendedByMindMurder;
-
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> tpDimDenyList;
-
         private static ForgeConfigSpec.BooleanValue doesTrueNameHaveAmbit;
-
         private static ForgeConfigSpec.DoubleValue traderScrollChance;
-
-        private static ForgeConfigSpec.ConfigValue<List<? extends String>> fewScrollTables;
-        private static ForgeConfigSpec.ConfigValue<List<? extends String>> someScrollTables;
-        private static ForgeConfigSpec.ConfigValue<List<? extends String>> manyScrollTables;
-
+        // scroll/lore/cypher pools and chances should go here
         private static ForgeConfigSpec.ConfigValue<List<? extends List<String>>> lootHexList;
 
 
@@ -190,7 +180,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             traderScrollChance = builder.comment("The chance for wandering traders to sell an Ancient Scroll")
                 .defineInRange("traderScrollChance", DEFAULT_TRADER_SCROLL_CHANCE, 0.0, 1.0);
 
-            // scroll/lore/cypher pools and chances should go here
+            // builders for scroll/lore/cypher pools and chances should go here
 
             lootHexList = builder.comment(
                     "List of preset hexes found in loot cyphers. First element is the name, other elements are the patterns." +

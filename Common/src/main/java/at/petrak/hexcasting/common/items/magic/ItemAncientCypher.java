@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.items.magic;
 
-import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
@@ -54,7 +53,7 @@ public class ItemAncientCypher extends ItemCypher {
                 var iotaComponent = IotaType.getDisplay(iotaTagC).copy();
                 storedHex.append(iotaComponent.withStyle(ChatFormatting.DARK_PURPLE));
             }
-            pTooltipComponents.add(storedHex.withStyle(ChatFormatting.DARK_PURPLE));
+            pTooltipComponents.add(storedHex);
         }
     }
 }
