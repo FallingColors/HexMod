@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.Level;
+import net.minecraft.util.RandomSource;
 
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class HexConfig {
 
         double traderScrollChance();
 
-        List<String> getRandomLootHex(int randint);
+        List<String> getRandomLootHex(RandomSource rand);
 
         int DEFAULT_MAX_OP_COUNT = 100_000;
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;

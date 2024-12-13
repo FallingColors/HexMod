@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 
 import java.util.List;
 
@@ -250,8 +250,8 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         }
 
         @Override
-        public List<String> getRandomLootHex(int randint) {
-            var index = Mth.abs(randint) % lootHexList.get().size();
+        public List<String> getRandomLootHex(RandomSource rand) {
+            var index = rand.nextInt(lootHexList.get().size());
             return lootHexList.get().get(index);
         }
 

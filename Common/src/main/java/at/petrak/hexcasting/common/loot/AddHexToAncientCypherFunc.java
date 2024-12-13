@@ -39,7 +39,7 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
      * This doesn't actually have any params so extract behaviour out for the benefit of forge
      */
     public static ItemStack doStatic(ItemStack stack, RandomSource rand) {
-        var fullHex = HexConfig.server().getRandomLootHex(rand.nextInt());
+        var fullHex = HexConfig.server().getRandomLootHex(rand);
         var patsTag = new ListTag();
         // skip first element since it's the name, not a pattern
         for (var patString : fullHex.subList(1,fullHex.size())){

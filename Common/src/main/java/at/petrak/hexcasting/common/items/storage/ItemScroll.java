@@ -57,6 +57,7 @@ public class ItemScroll extends Item implements IotaHolderItem {
         this.blockSize = blockSize;
     }
 
+    // this produces a scroll that will load the correct pattern for your world once it ticks
     public static ItemStack withPerWorldPattern(ItemStack stack, String op_id) {
         Item item = stack.getItem();
         if (item instanceof ItemScroll)

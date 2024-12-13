@@ -15,6 +15,7 @@ import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 
@@ -340,8 +341,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             return cypherChance;
         }
 
-        public List<String> getRandomLootHex(int randint) {
-            var index = Mth.abs(randint) % this.lootHexList.size();
+        public List<String> getRandomLootHex(RandomSource rand) {
+            var index = rand.nextInt(this.lootHexList.size());
             return this.lootHexList.get(index);
         }
     }

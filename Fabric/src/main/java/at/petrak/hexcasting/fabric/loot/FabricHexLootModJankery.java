@@ -29,8 +29,10 @@ public class FabricHexLootModJankery {
         if (id.equals(Blocks.AMETHYST_CLUSTER.getLootTable())) {
             addPool.accept(makeAmethystInjectPool());
         } else if (id.equals(RANDOM_SCROLL_TABLE)) {
+            // -1 weight = guaranteed spawn
             addPool.accept(makeScrollAddPool(-1));
         } else if (id.equals(RANDOM_CYPHER_TABLE)) {
+            // 1 chance = guaranteed spawn
             addPool.accept(makeCypherAddPool(1));
         }
 

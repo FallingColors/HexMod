@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-// Adds ancient scrolls to the wandering trader's pool of offers
+// Adds ancient scrolls to the wandering trader by replacing one of the 5 junk trades
 @Mixin(WanderingTrader.class)
 public class MixinWanderingTrader {
 	@Inject(method = "updateTrades", at = @At("RETURN"))
