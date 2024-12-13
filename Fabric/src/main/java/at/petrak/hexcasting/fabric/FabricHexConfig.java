@@ -191,10 +191,11 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private boolean villagersOffendedByMindMurder = DEFAULT_VILLAGERS_DISLIKE_MIND_MURDER;
         @ConfigEntry.Gui.Tooltip
         private boolean doesTrueNameHaveAmbit = DEFAULT_TRUE_NAME_HAS_AMBIT;
-
-
         @ConfigEntry.Gui.Tooltip
         private List<String> tpDimDenylist = DEFAULT_DIM_TP_DENYLIST;
+        
+        @ConfigEntry.Gui.Tooltip
+        private double traderScrollChance = DEFAULT_TRADER_SCROLL_CHANCE;
 
         // ModMenu bad and doesn't like java objects in here so we do stupid string parsing
         @ConfigEntry.Gui.Tooltip
@@ -312,6 +313,10 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             return doesTrueNameHaveAmbit;
         }
 
+        public double traderScrollChance() {
+            return traderScrollChance;
+        }
+
         /**
          * Returns -1 if none is found
          */
@@ -323,7 +328,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             return anyMatchResLoc(this.loreInjections, lootTable);
         }
 
-        public double getLoreChance() {
+        public double loreChance() {
             return loreChance;
         }
 
@@ -331,7 +336,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             return anyMatchResLoc(this.cypherInjections, lootTable);
         }
 
-        public double getCypherChance() {
+        public double cypherChance() {
             return cypherChance;
         }
 

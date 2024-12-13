@@ -40,11 +40,11 @@ public class FabricHexLootModJankery {
         }
 
         if (FabricHexInitializer.CONFIG.server.shouldInjectLore(id)) {
-            addPool.accept(makeLoreAddPool(FabricHexInitializer.CONFIG.server.getLoreChance()));
+            addPool.accept(makeLoreAddPool(FabricHexInitializer.CONFIG.server.loreChance()));
         }
 
         if (FabricHexInitializer.CONFIG.server.shouldInjectCyphers(id)) {
-            addPool.accept(makeCypherAddPool(FabricHexInitializer.CONFIG.server.getCypherChance()));
+            addPool.accept(makeCypherAddPool(FabricHexInitializer.CONFIG.server.cypherChance()));
         }
     }
 

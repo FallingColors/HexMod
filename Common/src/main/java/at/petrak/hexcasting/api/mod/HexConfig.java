@@ -77,12 +77,15 @@ public class HexConfig {
 
         boolean trueNameHasAmbit();
 
-        // is passing the randint from LootContext.getRandom().nextInt() really necessary? or can it just use its own RNG
+        double traderScrollChance();
+
         List<String> getRandomLootHex(int randint);
 
         int DEFAULT_MAX_OP_COUNT = 100_000;
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
         int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;
+
+        double DEFAULT_TRADER_SCROLL_CHANCE = 0.4;
 
         boolean DEFAULT_VILLAGERS_DISLIKE_MIND_MURDER = true;
 

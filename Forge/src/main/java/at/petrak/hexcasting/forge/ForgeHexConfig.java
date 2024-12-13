@@ -156,6 +156,8 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
         private static ForgeConfigSpec.BooleanValue doesTrueNameHaveAmbit;
 
+        private static ForgeConfigSpec.DoubleValue traderScrollChance;
+
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> fewScrollTables;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> someScrollTables;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> manyScrollTables;
@@ -184,6 +186,18 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 .defineList("circleActionDenyList", List.of(), Server::isValidReslocArg);
             builder.pop();
 
+            builder.push("Loot");
+            traderScrollChance = builder.comment("The chance for wandering traders to sell an Ancient Scroll")
+                .defineInRange("traderScrollChance", DEFAULT_TRADER_SCROLL_CHANCE, 0.0, 1.0);
+
+            // scroll/lore/cypher pools and chances should go here
+
+            lootHexList = builder.comment(
+                    "List of preset hexes found in loot cyphers. First element is the name, other elements are the patterns." +
+                    "The default names use hardcoded translation keys, but custom ones should be human-readable.")
+                .defineList("lootHexList", HexLootHandler.DEFAULT_LOOT_HEXES, Server::isValidReslocArg);
+            builder.pop();
+
             actionDenyList = builder.comment(
                     "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
                 .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
@@ -198,11 +212,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             doesTrueNameHaveAmbit = builder.comment(
                     "When false, makes player reference iotas behave as normal entity reference iotas")
                 .define("doesTrueNameHaveAmbit", DEFAULT_TRUE_NAME_HAS_AMBIT);
-
-            lootHexList = builder.comment(
-                    "List of preset hexes found in loot cyphers. First element is the name, other elements are the patterns." +
-                    "The default names use hardcoded translation keys, but custom ones should be human-readable.")
-                .defineList("lootHexList", HexLootHandler.DEFAULT_LOOT_HEXES, Server::isValidReslocArg);
         }
 
         @Override
@@ -243,6 +252,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public boolean trueNameHasAmbit() {
             return doesTrueNameHaveAmbit.get();
+        }
+
+        @Override
+        public double traderScrollChance() {
+            return traderScrollChance.get();
         }
 
         @Override
