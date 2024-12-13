@@ -9,38 +9,45 @@ import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
+import at.petrak.hexcasting.common.loot.AddPerWorldPatternToScrollFunc;
 import at.petrak.hexcasting.interop.inline.InlinePatternData;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.List;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 /**
- * TAG_OP_ID and TAG_PATTERN: "Ancient Scroll of %s" (Great Spells)
+ * TAG_OP_ID and TAG_PATTERN: "Ancient Scroll of %s" (per-world pattern preloaded)
+ * <br>
+ * TAG_OP_ID: "Ancient Scroll of %s" (per-world pattern loaded on inv tick)
  * <br>
  * TAG_PATTERN: "Scroll" (custom)
  * <br>
  * (none): "Empty Scroll"
- * <br>
- * TAG_OP_ID: invalid
  */
 public class ItemScroll extends Item implements IotaHolderItem {
     public static final String TAG_OP_ID = "op_id";
     public static final String TAG_PATTERN = "pattern";
+    public static final String TAG_NEEDS_PURCHASE = "needs_purchase";
     public static final ResourceLocation ANCIENT_PREDICATE = modLoc("ancient");
 
     public final int blockSize;
@@ -48,6 +55,14 @@ public class ItemScroll extends Item implements IotaHolderItem {
     public ItemScroll(Properties pProperties, int blockSize) {
         super(pProperties);
         this.blockSize = blockSize;
+    }
+
+    public static ItemStack withPerWorldPattern(ItemStack stack, String op_id) {
+        Item item = stack.getItem();
+        if (item instanceof ItemScroll)
+            NBTHelper.putString(stack, TAG_OP_ID, op_id);
+
+        return stack;
     }
 
     @Override
@@ -133,7 +148,7 @@ public class ItemScroll extends Item implements IotaHolderItem {
             return Component.translatable(descID + ".of",
                 Component.translatable("hexcasting.action." + ResourceLocation.tryParse(ancientId)));
         } else if (NBTHelper.hasCompound(pStack, TAG_PATTERN)) {
-            var compound = NBTHelper.getCompound(pStack, ItemScroll.TAG_PATTERN);
+            var compound = NBTHelper.getCompound(pStack, TAG_PATTERN);
             var patternLabel = Component.literal("");
             if (compound != null) {
                 var pattern = HexPattern.fromNBT(compound);
@@ -145,16 +160,39 @@ public class ItemScroll extends Item implements IotaHolderItem {
         }
     }
 
-    // purposely no hover text
+    @Override
+    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
+        // the needs_purchase tag is used so you can't see the pattern on scrolls sold by a wandering trader
+        // once you put the scroll into your inventory, this removes the tag to reveal the pattern
+        if (NBTHelper.getBoolean(pStack, TAG_NEEDS_PURCHASE)) {
+            NBTHelper.remove(pStack, TAG_NEEDS_PURCHASE);
+        }
+        // if op_id is set but there's no stored pattern, load the pattern on inv tick
+        if (NBTHelper.hasString(pStack, TAG_OP_ID) && !NBTHelper.hasCompound(pStack, TAG_PATTERN) && pEntity.getServer() != null) {
+            AddPerWorldPatternToScrollFunc.doStatic(pStack, pLevel.getRandom(), pEntity.getServer().overworld());
+        }
+    }
+
+    @Override
+    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
+        TooltipFlag pIsAdvanced) {
+        if (NBTHelper.getBoolean(pStack, TAG_NEEDS_PURCHASE)) {
+            var needsPurchase = Component.translatable("hexcasting.tooltip.scroll.needs_purchase");
+            pTooltipComponents.add(needsPurchase.withStyle(ChatFormatting.GRAY));
+        } else if (NBTHelper.hasString(pStack, TAG_OP_ID) && !NBTHelper.hasCompound(pStack, TAG_PATTERN)) {
+            var notLoaded = Component.translatable("hexcasting.tooltip.scroll.pattern_not_loaded");
+            pTooltipComponents.add(notLoaded.withStyle(ChatFormatting.GRAY));
+        }
+    }
 
     @Override
     public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-        var compound = NBTHelper.getCompound(stack, ItemScroll.TAG_PATTERN);
-        if (compound != null) {
+        var compound = NBTHelper.getCompound(stack, TAG_PATTERN);
+        if (compound != null && !NBTHelper.getBoolean(stack, TAG_NEEDS_PURCHASE)) {
             var pattern = HexPattern.fromNBT(compound);
             return Optional.of(new PatternTooltip(
                 pattern,
-                NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID)
+                NBTHelper.hasString(stack, TAG_OP_ID)
                     ? PatternTooltipComponent.ANCIENT_BG
                     : PatternTooltipComponent.PRISTINE_BG));
         }

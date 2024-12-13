@@ -257,8 +257,8 @@
   },
   
   "itemGroup.hexcasting": {
-    "": "Hexcasting",
-    creative_tab: "Hexcasting",
+    main: "Hex Casting",
+    scrolls: "Hex Casting (Scrolls)",
   },
   
   "gui.hexcasting": {
@@ -573,6 +573,11 @@
         },
         sealed: "Sealed",
       },
+
+      scroll: {
+        needs_purchase: "Purchase to show pattern",
+        pattern_not_loaded: "Place in inventory to load pattern",
+      }
       
       abacus: {
         "": "%d",

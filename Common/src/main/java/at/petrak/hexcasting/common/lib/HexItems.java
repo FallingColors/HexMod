@@ -94,24 +94,67 @@ public class HexItems {
     public static final Supplier<ItemStack> BATTERY_DUST_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.DUST_UNIT * 64,
-            MediaConstants.DUST_UNIT * 64), HexCreativeTabs.HEX);
+            MediaConstants.DUST_UNIT * 64), HexCreativeTabs.MAIN);
     public static final Supplier<ItemStack> BATTERY_SHARD_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.SHARD_UNIT * 64,
-            MediaConstants.SHARD_UNIT * 64), HexCreativeTabs.HEX);
+            MediaConstants.SHARD_UNIT * 64), HexCreativeTabs.MAIN);
     public static final Supplier<ItemStack> BATTERY_CRYSTAL_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.CRYSTAL_UNIT * 64,
-            MediaConstants.CRYSTAL_UNIT * 64), HexCreativeTabs.HEX);
+            MediaConstants.CRYSTAL_UNIT * 64), HexCreativeTabs.MAIN);
     public static final Supplier<ItemStack> BATTERY_QUENCHED_SHARD_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.QUENCHED_SHARD_UNIT * 64,
-            MediaConstants.QUENCHED_SHARD_UNIT * 64), HexCreativeTabs.HEX);
-
+            MediaConstants.QUENCHED_SHARD_UNIT * 64), HexCreativeTabs.MAIN);
     public static final Supplier<ItemStack> BATTERY_QUENCHED_BLOCK_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.QUENCHED_BLOCK_UNIT * 64,
-            MediaConstants.QUENCHED_BLOCK_UNIT * 64), HexCreativeTabs.HEX);
+            MediaConstants.QUENCHED_BLOCK_UNIT * 64), HexCreativeTabs.MAIN);
+
+    public static final Supplier<ItemStack> SCROLL_LIGHTNING = addToTab(() -> ItemScroll.withPerWorldPattern(
+        new ItemStack(HexItems.SCROLL_LARGE),
+        "hexcasting:lightning"), HexCreativeTabs.SCROLLS);
+    public static final Supplier<ItemStack> SCROLL_FLIGHT = addToTab(() -> ItemScroll.withPerWorldPattern(
+        new ItemStack(HexItems.SCROLL_LARGE),
+        "hexcasting:flight"), HexCreativeTabs.SCROLLS);
+    public static final Supplier<ItemStack> SCROLL_CREATE_LAVA = addToTab(() -> ItemScroll.withPerWorldPattern(
+        new ItemStack(HexItems.SCROLL_LARGE),
+        "hexcasting:create_lava"), HexCreativeTabs.SCROLLS);
+    public static final Supplier<ItemStack> SCROLL_GREATER_TELEPORT = addToTab(() -> ItemScroll.withPerWorldPattern(
+        new ItemStack(HexItems.SCROLL_LARGE),
+        "hexcasting:teleport/great"), HexCreativeTabs.SCROLLS);
+    public static final Supplier<ItemStack> SCROLL_GREATER_SENTINEL = addToTab(() -> ItemScroll.withPerWorldPattern(
+        new ItemStack(HexItems.SCROLL_LARGE),
+        "hexcasting:sentinel/create/great"), HexCreativeTabs.SCROLLS);
+    public static final Supplier<ItemStack> SCROLL_DISPEL_RAIN = addToTab(() -> ItemScroll.withPerWorldPattern(
+        new ItemStack(HexItems.SCROLL_LARGE),
+        "hexcasting:dispel_rain"), HexCreativeTabs.SCROLLS);
+    public static final Supplier<ItemStack> SCROLL_SUMMON_RAIN = addToTab(() -> ItemScroll.withPerWorldPattern(
+        new ItemStack(HexItems.SCROLL_LARGE),
+        "hexcasting:summon_rain"), HexCreativeTabs.SCROLLS);
+    public static final Supplier<ItemStack> SCROLL_FLAY_MIND = addToTab(() -> ItemScroll.withPerWorldPattern(
+        new ItemStack(HexItems.SCROLL_LARGE),
+        "hexcasting:brainsweep"), HexCreativeTabs.SCROLLS);
+    public static final Supplier<ItemStack> SCROLL_CRAFT_PHIAL = addToTab(() -> ItemScroll.withPerWorldPattern(
+        new ItemStack(HexItems.SCROLL_LARGE),
+        "hexcasting:craft/battery"), HexCreativeTabs.SCROLLS);
+    public static final Supplier<ItemStack> SCROLL_WHITE_ZENITH = addToTab(() -> ItemScroll.withPerWorldPattern(
+        new ItemStack(HexItems.SCROLL_LARGE),
+        "hexcasting:potion/regeneration"), HexCreativeTabs.SCROLLS);
+    public static final Supplier<ItemStack> SCROLL_BLUE_ZENITH = addToTab(() -> ItemScroll.withPerWorldPattern(
+        new ItemStack(HexItems.SCROLL_LARGE),
+        "hexcasting:potion/night_vision"), HexCreativeTabs.SCROLLS);
+    public static final Supplier<ItemStack> SCROLL_BLACK_ZENITH = addToTab(() -> ItemScroll.withPerWorldPattern(
+        new ItemStack(HexItems.SCROLL_LARGE),
+        "hexcasting:potion/absorption"), HexCreativeTabs.SCROLLS);
+    public static final Supplier<ItemStack> SCROLL_RED_ZENITH = addToTab(() -> ItemScroll.withPerWorldPattern(
+        new ItemStack(HexItems.SCROLL_LARGE),
+        "hexcasting:potion/haste"), HexCreativeTabs.SCROLLS);
+    public static final Supplier<ItemStack> SCROLL_GREEN_ZENITH = addToTab(() -> ItemScroll.withPerWorldPattern(
+        new ItemStack(HexItems.SCROLL_LARGE),
+        "hexcasting:potion/strength"), HexCreativeTabs.SCROLLS);
+    
 
     public static final EnumMap<DyeColor, ItemDyePigment> DYE_PIGMENTS = Util.make(() -> {
         var out = new EnumMap<DyeColor, ItemDyePigment>(DyeColor.class);
@@ -172,7 +215,7 @@ public class HexItems {
     }
 
     private static <T extends Item> T make(String id, T item) {
-        return make(modLoc(id), item, HexCreativeTabs.HEX);
+        return make(modLoc(id), item, HexCreativeTabs.MAIN);
     }
 
     private static Supplier<ItemStack> addToTab(Supplier<ItemStack> stack, CreativeModeTab tab) {

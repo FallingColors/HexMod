@@ -8,8 +8,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.util.RandomSource;
 import net.minecraft.server.MinecraftServer;
 import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.loot.AddPerWorldPatternToScrollFunc;
+import at.petrak.hexcasting.common.items.storage.ItemScroll;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,6 +30,7 @@ public class MixinWanderingTrader {
         if (rand.nextFloat() < HexConfig.server().traderScrollChance() && self.getServer() != null) {
             ItemStack scroll = new ItemStack(HexItems.SCROLL_LARGE);
             AddPerWorldPatternToScrollFunc.doStatic(scroll, rand, self.getServer().overworld());
+            NBTHelper.putBoolean(scroll, ItemScroll.TAG_NEEDS_PURCHASE, true);
             offerList.set(rand.nextInt(5), new MerchantOffer(new ItemStack(Items.EMERALD, 12), scroll, 1, 1, 1));
         }
     }

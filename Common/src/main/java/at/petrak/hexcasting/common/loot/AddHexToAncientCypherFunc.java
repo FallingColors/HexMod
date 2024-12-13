@@ -49,7 +49,6 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
     public static ItemStack doStatic(ItemStack stack, RandomSource rand) {
         var fullHex = HexConfig.server().getRandomLootHex(rand.nextInt());
         var patsTag = new ListTag();
-        Registry<ActionRegistryEntry> regi = IXplatAbstractions.INSTANCE.getActionRegistry();
         // skip first element since it's the name, not a pattern
         for (var patString : fullHex.subList(1,fullHex.size())){
             var pieces = patString.split(" ");
