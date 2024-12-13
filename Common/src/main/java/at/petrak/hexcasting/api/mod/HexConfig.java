@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.level.Level;
+import net.minecraft.util.RandomSource;
 
 import java.util.List;
 
@@ -49,11 +50,14 @@ public class HexConfig {
 
         boolean clickingTogglesDrawing();
 
+        boolean alwaysShowListCommas();
+
         boolean DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER = false;
         boolean DEFAULT_INVERT_SPELLBOOK_SCROLL = false;
         boolean DEFAULT_INVERT_ABACUS_SCROLL = false;
         double DEFAULT_GRID_SNAP_THRESHOLD = 0.5;
         boolean DEFAULT_CLICKING_TOGGLES_DRAWING = false;
+        boolean DEFAULT_ALWAYS_SHOW_LIST_COMMAS = false;
     }
 
     public interface ServerConfigAccess {
@@ -74,9 +78,15 @@ public class HexConfig {
 
         boolean trueNameHasAmbit();
 
+        double traderScrollChance();
+
+        List<String> getRandomLootHex(RandomSource rand);
+
         int DEFAULT_MAX_OP_COUNT = 100_000;
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
         int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;
+
+        double DEFAULT_TRADER_SCROLL_CHANCE = 0.4;
 
         boolean DEFAULT_VILLAGERS_DISLIKE_MIND_MURDER = true;
 
