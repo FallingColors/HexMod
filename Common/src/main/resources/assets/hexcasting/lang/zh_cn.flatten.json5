@@ -164,7 +164,7 @@
     slate_amethyst_: {
       tiles: "板岩紫晶瓦",
       bricks: "板岩紫晶砖",
-      bricks_small: "板岩紫晶砖",
+      bricks_small: "板岩紫晶小型砖",
       pillar: "板岩紫晶柱",
     },
 
