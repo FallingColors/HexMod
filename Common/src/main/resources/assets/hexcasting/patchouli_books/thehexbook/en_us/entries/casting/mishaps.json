@@ -75,8 +75,8 @@
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.too_deep.title",
-      "text": "hexcasting.page.mishaps.too_deep"
+      "title": "hexcasting.page.mishaps.too_many_patterns.title",
+      "text": "hexcasting.page.mishaps.too_many_patterns"
     },
     {
       "type": "patchouli:text",

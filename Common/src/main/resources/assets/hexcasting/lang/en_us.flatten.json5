@@ -928,7 +928,7 @@
       wrong_dimension: "cannot see %s from %s",
       entity_too_far: "%s is out of range",
       immune_entity: "cannot alter %s",
-      eval_too_deep: "Recursively evaluated too deep",
+      eval_too_much: "Evaluated too many patterns",
       no_item: "needs %s but got nothing",
       "no_item.offhand": "needs %s in the other hand but got nothing",
       bad_entity: "needs %s but got %s",
@@ -1384,8 +1384,8 @@
         "retrospection.title": "Hasty Retrospection",
         retrospection: "I attempted to draw $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ without first drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$.$(br2)Causes orange sparks, and pushes the pattern for $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ to the stack as a pattern iota.",
         
-        "too_deep.title": "Delve Too Deep",
-        too_deep: "Evaluated too many spells with meta-evaluation from one spell.$(br2)Causes dark blue sparks, and chokes all the air out of me.",
+        "too_many_patterns.title": "Lost in Thought",
+        too_many_patterns: "I attempted to evaluate too many patterns in one _Hex. Often, this happens because I've accidentally created an infinite loop.$(br2)Causes dark blue sparks, and chokes all the air out of me.",
         
         "true_name.title": "Transgress Other",
         true_name: "I attempted to $(l:patterns/readwrite#hexcasting:write)$(action)save a reference/$ to another player to a permanent medium.$(br2)Causes black sparks, and robs me of my sight for approximately one minute.",
