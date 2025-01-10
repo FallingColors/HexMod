@@ -10,6 +10,7 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapEntityTooFarAway;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.common.lib.HexAttributes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -247,6 +248,9 @@ public abstract class CastingEnvironment {
      * positive.
      */
     public long extractMedia(long cost, boolean simulate) {
+        if (this.getCastingEntity() != null){
+            cost = (long) (cost * this.getCastingEntity().getAttributeValue(HexAttributes.MEDIA_CONSUMPTION_MODIFIER));
+        }
         for (var extractMediaComponent : preMediaExtract)
             cost = extractMediaComponent.onExtractMedia(cost, simulate);
         cost = extractMediaEnvironment(cost, simulate);
