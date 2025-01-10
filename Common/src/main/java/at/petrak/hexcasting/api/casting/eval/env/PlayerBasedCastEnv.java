@@ -71,6 +71,16 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
                 this.sendMishapMsgToPlayer(doMishap);
             }
         }
+        if (this.caster != null){
+            double ambitAttribute = this.caster.getAttributeValue(HexAttributes.AMBIT_RADIUS);
+            if (this.ambitRadius != ambitAttribute){
+                this.ambitRadius = ambitAttribute;
+            }
+            double sentinelAttribute = this.caster.getAttributeValue(HexAttributes.SENTINEL_RADIUS);
+            if (this.sentinelRadius != sentinelAttribute){
+                this.sentinelRadius = sentinelAttribute;
+            }
+        }
     }
 
     @Override
