@@ -46,7 +46,7 @@
       "": "Focus",
       sealed: "Sealed Focus",
     },
-    
+
     thought_knot: "Thought-Knot",
     spellbook: "Spellbook",
     cypher: "Cypher",
@@ -252,8 +252,8 @@
   },
   
   "itemGroup.hexcasting": {
-    "": "Hexcasting",
-    creative_tab: "Hexcasting",
+    main: "Hex Casting",
+    scrolls: "Hex Casting (Scrolls)",
   },
   
   "gui.hexcasting": {
@@ -372,6 +372,10 @@
           "": "Villagers Offended By Mind Murder",
           "@Tooltip": "Whether villagers should be angry at the player when other villagers are mindflayed",
         },
+        traderScrollChance: {
+          "": "Wandering Trader Scroll Chance",
+          "@Tooltip": "The chance for wandering traders to sell an Ancient Scroll",
+        },
         scrollInjectionsRaw: {
           "": "Scroll Injection Weights",
           "@Tooltip": "Maps the names of loot tables to the amount of per-world patterns on scrolls should go in them. There's about a 50% chance to get any scrolls in a given chest marked here; once that is met, between 1 and that many scrolls are generated.",
@@ -380,11 +384,6 @@
           "": "Amethyst Shard Drop Rate Change",
           "@Tooltip": "How much the number of amethyst shards dropped from clusters is increased/decreased.",
         },
-        
-        // TODO: are these used anywhere??
-        "fewScrollTables.@Tooltip": "Loot tables that a small number of Ancient Scrolls are injected into",
-        "someScrollTables.@Tooltip": "Loot tables that a decent number of Ancient Scrolls are injected into",
-        "manyScrollTables.@Tooltip": "Loot tables that a huge number of Ancient Scrolls are injected into",
       },
     },
   },
@@ -498,7 +497,7 @@
       all_media: "Entire contents",
       infinite_media: "Infinite",
     },
-    
+
     // TODO: post-eigengrau make these less anticlimactic
     message: {
       cant_overcast: "That Hex needed more media than I had... I should double-check my math.",
@@ -520,6 +519,11 @@
           sealed: "Empty (%s)",
         },
         sealed: "Sealed",
+      },
+
+      scroll: {
+        needs_purchase: "Purchase to show pattern",
+        pattern_not_loaded: "Place in inventory to load pattern",
       },
       
       abacus: {
@@ -1476,7 +1480,7 @@
         "2": "Like a $(l:items/focus)$(item)Focus/$, there exists a simple method to prevent accidental overwriting. Crafting it with a $(item)Honeycomb/$ will lacquer the current page, preventing $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$ from modifying its contents. Also like a $(l:items/focus)$(item)Focus/$, using $(l:patterns/spells/hexcasting#hexcasting:erase)$(action)Erase Item/$ will remove the lacquer along with the page's contents.$(br2)I can also name each page individually in an anvil. Naming it will change only the name of the currently selected page, for easy browsing.",
         "crafting.desc": "$(italic)Wizards love words. Most of them read a great deal, and indeed one strong sign of a potential wizard is the inability to get to sleep without reading something first.",
       },
-      
+
       scroll: {
         "1": "A $(l:items/scroll)$(item)Scroll/$ is a convenient method of sharing a pattern with others. I can copy a pattern onto one with $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$, after which it will display in a tooltip.$(br2)I can also place them on the wall as decoration or edification, like a painting, in sizes from 1x1 to 3x3 blocks. Using $(l:items/amethyst)$(item)Amethyst Dust/$ on such a scroll will have it display the stroke order.",
         "2": "In addition, I can also find so-called $(l:items/scroll)$(item)Ancient Scrolls/$ in the dungeons and strongholds of the world. These contain the stroke order of $(thing)Great Spells/$, powerful magicks rumored to be too powerful for the hands and minds of mortals...$(br2)If those \"mortals\" couldn't cast them, I'm not sure they deserve to know them.",
