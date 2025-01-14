@@ -615,8 +615,12 @@
     
     attributes: {
       grid_zoom: "Casting Grid Size",
+      media_consumption: "Media Consumption",
+      ambit_radius: "Player Ambit Radius",
+      sentinel_radius: "Sentinel Ambit Radius",
       // TODO: the +1 is kind of janky
       scry_sight: "Scrying Sight",
+      feeble_mind: "Feeble Mind"
     },
     
     // Action localizations
