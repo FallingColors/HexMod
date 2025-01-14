@@ -1,6 +1,9 @@
 package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.common.items.ItemLoreFragment;
@@ -14,6 +17,8 @@ import at.petrak.hexcasting.common.items.storage.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.base.Suppliers;
 import net.minecraft.Util;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodProperties;
@@ -35,6 +40,7 @@ public class HexItems {
     }
 
     public static void registerItemCreativeTab(CreativeModeTab.Output r, CreativeModeTab tab) {
+        if (tab == HexCreativeTabs.SCROLLS) generateScrollEntries();
         for (var item : ITEM_TABS.getOrDefault(tab, List.of())) {
             item.register(r);
         }
@@ -93,24 +99,23 @@ public class HexItems {
     public static final Supplier<ItemStack> BATTERY_DUST_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.DUST_UNIT * 64,
-            MediaConstants.DUST_UNIT * 64), HexCreativeTabs.HEX);
+            MediaConstants.DUST_UNIT * 64), HexCreativeTabs.MAIN);
     public static final Supplier<ItemStack> BATTERY_SHARD_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.SHARD_UNIT * 64,
-            MediaConstants.SHARD_UNIT * 64), HexCreativeTabs.HEX);
+            MediaConstants.SHARD_UNIT * 64), HexCreativeTabs.MAIN);
     public static final Supplier<ItemStack> BATTERY_CRYSTAL_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.CRYSTAL_UNIT * 64,
-            MediaConstants.CRYSTAL_UNIT * 64), HexCreativeTabs.HEX);
+            MediaConstants.CRYSTAL_UNIT * 64), HexCreativeTabs.MAIN);
     public static final Supplier<ItemStack> BATTERY_QUENCHED_SHARD_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.QUENCHED_SHARD_UNIT * 64,
-            MediaConstants.QUENCHED_SHARD_UNIT * 64), HexCreativeTabs.HEX);
-
+            MediaConstants.QUENCHED_SHARD_UNIT * 64), HexCreativeTabs.MAIN);
     public static final Supplier<ItemStack> BATTERY_QUENCHED_BLOCK_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.QUENCHED_BLOCK_UNIT * 64,
-            MediaConstants.QUENCHED_BLOCK_UNIT * 64), HexCreativeTabs.HEX);
+            MediaConstants.QUENCHED_BLOCK_UNIT * 64), HexCreativeTabs.MAIN);
 
     public static final EnumMap<DyeColor, ItemDyePigment> DYE_PIGMENTS = Util.make(() -> {
         var out = new EnumMap<DyeColor, ItemDyePigment>(DyeColor.class);
@@ -155,6 +160,21 @@ public class HexItems {
         return props().stacksTo(1);
     }
 
+    private static void generateScrollEntries() {
+        var keyList = new ArrayList<ResourceKey<ActionRegistryEntry>>();
+        Registry<ActionRegistryEntry> regi = IXplatAbstractions.INSTANCE.getActionRegistry();
+        for (var key : regi.registryKeySet())
+            if (HexUtils.isOfTag(regi, key, HexTags.Actions.PER_WORLD_PATTERN))
+                keyList.add(key);
+        keyList.sort( (a, b) -> a.location().compareTo(b.location()) );
+        for (var key : keyList) {
+            addToTab(() -> ItemScroll.withPerWorldPattern(
+                new ItemStack(HexItems.SCROLL_LARGE),
+                key.location().toString()
+            ),HexCreativeTabs.SCROLLS);
+        }
+    }
+
     private static <T extends Item> T make(ResourceLocation id, T item, @Nullable CreativeModeTab tab) {
         var old = ITEMS.put(id, item);
         if (old != null) {
@@ -171,7 +191,7 @@ public class HexItems {
     }
 
     private static <T extends Item> T make(String id, T item) {
-        return make(modLoc(id), item, HexCreativeTabs.HEX);
+        return make(modLoc(id), item, HexCreativeTabs.MAIN);
     }
 
     private static Supplier<ItemStack> addToTab(Supplier<ItemStack> stack, CreativeModeTab tab) {
