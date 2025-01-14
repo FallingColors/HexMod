@@ -164,7 +164,7 @@
     slate_amethyst_: {
       tiles: "板岩紫晶瓦",
       bricks: "板岩紫晶砖",
-      bricks_small: "板岩紫晶砖",
+      bricks_small: "板岩紫晶小型砖",
       pillar: "板岩紫晶柱",
     },
 
@@ -268,7 +268,7 @@
   },
 
   "tag.item.hexcasting": {
-    brainswept_circle_components: "剥离意识环组件",
+    brainswept_circle_components: "剥离意识所得法术环组件",
     directrices: "导向石",
     grants_root_advancement: "给予根进度",
     impeti: "促动石",
@@ -606,6 +606,7 @@
       "scroll.scribble": "卷轴：被涂写",
       "impetus.fletcher.tick": "制箭师促动石：咔哒",
       "impetus.redstone.register": "牧师促动石：叮~",
+      "impetus.redstone.clear": "牧师促动石：清空",
       "lore_fragment.read": "故事残卷：被阅读",
       "flight.ambience": "玩家：飞翔",
       "flight.finish": "飞翔结束",
@@ -815,6 +816,7 @@
         flight: "翱翔",
         "flight/range": "隐士之飞行",
         "flight/time": "旅者之飞行",
+        "flight/can_fly": "飞行员之纯化",
 
         lightning: "召雷",
         summon_rain: "召雨",
@@ -1598,8 +1600,8 @@
       quenching_allays: {
         "1": "$(l)它们就是小块媒质。/$我怎么没早点发现呢？它们——我是一堆血肉再加上一小点……是被赐予了一小点的思维，但悦灵是能维持自稳的媒质集群，再被按到一小点血肉上去。所有东西就都说得通了——它们对媒质的趋向性，它们对音乐的种种反应，$(l)我现在理解了/$，$(l)但/$为何前人$(l)没有/$？",
         "2": "理解这点后，唯一$(l)正确/$的选择就是去征服它们奇异的意识——它们奇异的自我——也是它们的全部、一个意识、一个自我、一段尾声。它们的性状似乎揭示了某些东西。我能……我能使用它们压缩$(media)媒质/$，将两束思维叠放在一起，形体与认知，多与一。$(br2)这个过程不知怎么的会自行产生$(media)媒质/$。这是怎么回事？也许——也许是$(l)我/$的缘故，是完成这项任务的过程——",
-        "3": "它不重要。我不重要。它们不重要，重要的只有功用。这就是了。$(br2)这肯定相当痛苦。",
-        "4": "所得的产物十分脆弱。直接破坏会将其打碎成碎片，$(thing)时运/$则能增加产量……如果需要获得方块本身，那要有精准采集才行。$(br2)产生的碎片相当于将 3 个$(l:items/amethyst)$(item)充能紫水晶/$拼在一起。方块则相当于 4 个碎片。",
+        "3": "它不重要。我不重要。它们不重要，重要的只有功用。这就是了。$(br2)这肯定相当痛苦。$(br2)十份$(l:items/amethyst)$(item)紫水晶粉/$，就是启动如此恶劣仪式的代价。",
+        "4": "所得的产物十分脆弱。直接破坏会将其打碎成碎片，$(thing)时运/$则能增加产量……如果需要获得方块本身，那要有精准采集才行。$(br2)产生的碎片相当于 3 个$(l:items/amethyst)$(item)充能紫水晶/$拼在一起。方块则相当于 4 个碎片。",
         "5": "它们变幻莫测，好像会在我的手中不断变形闪烁，若是给予它们来自另一种$(media)媒质/$形态的引导，它们便会变成对应的形态，且$(media)媒质/$总量前后不变。",
       },
 
@@ -1961,6 +1963,10 @@
 
         "time.1": "受时间限制的飞行法术。",
         "time.2": "第二参数代表持续时间（以秒计），在此限制内，法术能保持稳定。持续时间超过限制就会结束该法术，滞空的物体会直接坠向地面。$(br2)此法术相对较昂贵，每秒持续时间消耗大约 1 个$(l:items/amethyst)$(item)充能紫水晶/$。我觉得它极其适合长途旅行。",
+
+        // Putting this in this category instead of elsewhere -- see sentinel chapter also containing some reflections/nonspells
+        "can_fly.1": "检查玩家是否处于$(l:patterns/spells/flight#hexcasting:flight/range)隐士之飞行/$或$(l:patterns/spells/flight#hexcasting:flight/time)旅者之飞行/$的影响之下。",
+        "can_fly.2": "不会检查玩家是否能以其他方式飞行。$(br2)我不太清楚这个图案有什么用途，但我相信，愿意用它的人自会清楚。"
       },
 
       create_lava: {
