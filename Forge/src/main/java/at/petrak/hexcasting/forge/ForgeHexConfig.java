@@ -133,17 +133,13 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     public static class Server implements HexConfig.ServerConfigAccess {
         private static ForgeConfigSpec.IntValue opBreakHarvestLevel;
         private static ForgeConfigSpec.IntValue maxOpCount;
-
         private static ForgeConfigSpec.IntValue maxSpellCircleLength;
-
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
-
         private static ForgeConfigSpec.BooleanValue villagersOffendedByMindMurder;
-
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> tpDimDenyList;
-
         private static ForgeConfigSpec.BooleanValue doesTrueNameHaveAmbit;
+        private static ForgeConfigSpec.DoubleValue traderScrollChance;
 
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> fewScrollTables;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> someScrollTables;
@@ -170,6 +166,10 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                         " will result in a mishap. For example: hexcasting:get_caster will prevent Mind's Reflection.")
                 .defineList("circleActionDenyList", List.of(), Server::isValidReslocArg);
             builder.pop();
+
+            builder.push("Loot");
+            traderScrollChance = builder.comment("The chance for wandering traders to sell an Ancient Scroll")
+                .defineInRange("traderScrollChance", DEFAULT_TRADER_SCROLL_CHANCE, 0.0, 1.0);
 
             actionDenyList = builder.comment(
                     "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
@@ -225,6 +225,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public boolean trueNameHasAmbit() {
             return doesTrueNameHaveAmbit.get();
+        }
+
+        @Override
+        public double traderScrollChance() {
+            return traderScrollChance.get();
         }
 
         private static boolean isValidReslocArg(Object o) {
