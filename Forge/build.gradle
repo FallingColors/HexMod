@@ -26,9 +26,13 @@ apply plugin: 'org.spongepowered.mixin'
 pkSubproj {
     platform "forge"
     curseforgeJar jar.archiveFile
-    curseforgeDependencies[]
+    curseforgeDependencies[
+            "paucal", "patchouli", "caelus", "inline"
+    ]
     modrinthJar jar.archiveFile
-    modrinthDependencies[]
+    modrinthDependencies[
+            "paucal", "patchouli", "caelus", "inline"
+    ]
 }
 
 repositories {
@@ -149,7 +153,7 @@ minecraft {
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             property 'hexcasting.xplat_datagen', 'true'
-            
+
             mods {
                 create(modID) {
                     source sourceSets.main

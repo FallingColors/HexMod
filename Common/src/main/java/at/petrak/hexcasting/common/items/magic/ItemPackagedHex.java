@@ -128,8 +128,8 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         }
         var sPlayer = (ServerPlayer) player;
         var ctx = new PackagedItemCastEnv(sPlayer, usedHand);
-        var harness = CastingVM.empty(ctx);
-        var clientView = harness.queueExecuteAndWrapIotas(instrs, sPlayer.serverLevel());
+        var vm = CastingVM.empty(ctx);
+        var clientView = vm.queueExecuteAndWrapIotas(instrs, sPlayer.serverLevel());
 
         var patterns = instrs.stream()
                 .filter(i -> i instanceof PatternIota)

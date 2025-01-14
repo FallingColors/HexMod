@@ -14,5 +14,5 @@ class MishapEvalTooMuch : Mishap() {
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("eval_too_deep")
+        error("eval_too_much")
 }

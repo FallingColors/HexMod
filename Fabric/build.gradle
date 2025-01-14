@@ -6,9 +6,15 @@ plugins {
 pkSubproj {
     platform "fabric"
     curseforgeJar remapJar.archiveFile
-    curseforgeDependencies[]
+    curseforgeDependencies[
+            "paucal", "patchouli", "fabric-language-kotlin", "inline", "cloth-config",
+            "cardinal-components-api", "fabric-api"
+    ]
     modrinthJar remapJar.archiveFile
-    modrinthDependencies[]
+    modrinthDependencies[
+            "paucal", "patchouli", "fabric-language-kotlin", "inline", "cloth-config",
+            "cardinal-components-api", "fabric-api"
+    ]
 }
 
 loom {
