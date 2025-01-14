@@ -37,9 +37,9 @@ public class ItemStaff extends Item {
         }
 
         if (!world.isClientSide() && player instanceof ServerPlayer serverPlayer) {
-            var harness = IXplatAbstractions.INSTANCE.getStaffcastVM(serverPlayer, hand);
+            var vm = IXplatAbstractions.INSTANCE.getStaffcastVM(serverPlayer, hand);
             var patterns = IXplatAbstractions.INSTANCE.getPatternsSavedInUi(serverPlayer);
-            var descs = harness.generateDescs();
+            var descs = vm.generateDescs();
 
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(serverPlayer,
                 new MsgOpenSpellGuiS2C(hand, patterns, descs.getFirst(), descs.getSecond(),

@@ -925,7 +925,7 @@
       wrong_dimension: "无法在%2$s中影响到%1$s",
       entity_too_far: "%s超出影响范围",
       immune_entity: "无法影响到%s",
-      eval_too_deep: "递归深度过大",
+      eval_too_much: "递归深度过大",
       no_item: "需要%s，而实际无对应物品",
       "no_item.offhand": "需要在另一只手里持有%s，而实际无对应物品",
       bad_entity: "需要%s，而实际接受了%s",
@@ -1381,8 +1381,8 @@
         "retrospection.title": "反思过急",
         retrospection: "试图在绘制$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$前绘制$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$。$(br2)产生橙色火花，并压入一个$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$对应的图案。",
 
-        "too_deep.title": "钻研过深",
-        too_deep: "在一个法术内以元运行方式运行过多法术。$(br2)产生暗蓝色火花，并使我窒息。",
+        "too_many_patterns.title": "钻研过深",
+        too_many_patterns: "在一个法术内以元运行方式运行过多法术。$(br2)产生暗蓝色火花，并使我窒息。",
 
         "true_name.title": "违犯他人",
         true_name: "试图在某种永久性媒介中$(l:patterns/readwrite#hexcasting:write)$(action)存储/$代表另一位玩家的 iota。$(br2)产生黑色火花，并致盲大约一分钟。",
