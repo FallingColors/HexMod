@@ -1,10 +1,12 @@
 package at.petrak.hexcasting.forge;
 
 import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.common.loot.HexLootHandler;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraft.util.RandomSource;
 
 import java.util.List;
 
@@ -148,6 +150,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> fewScrollTables;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> someScrollTables;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> manyScrollTables;
+        private static ForgeConfigSpec.ConfigValue<List<? extends List<String>>> lootHexList;
 
 
         public Server(ForgeConfigSpec.Builder builder) {
@@ -170,6 +173,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                         " will result in a mishap. For example: hexcasting:get_caster will prevent Mind's Reflection.")
                 .defineList("circleActionDenyList", List.of(), Server::isValidReslocArg);
             builder.pop();
+
+            lootHexList = builder.comment(
+                    "List of preset hexes found in loot cyphers. First element is the name, other elements are the patterns." +
+                    "The default names use hardcoded translation keys, but custom ones should be human-readable.")
+                .defineList("lootHexList", HexLootHandler.DEFAULT_LOOT_HEXES, Server::isValidReslocArg);
 
             actionDenyList = builder.comment(
                     "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
@@ -225,6 +233,12 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public boolean trueNameHasAmbit() {
             return doesTrueNameHaveAmbit.get();
+        }
+
+        @Override
+        public List<String> getRandomLootHex(RandomSource rand) {
+            var index = rand.nextInt(lootHexList.get().size());
+            return lootHexList.get().get(index);
         }
 
         private static boolean isValidReslocArg(Object o) {
