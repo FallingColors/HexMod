@@ -45,6 +45,8 @@ public class HexLootHandler {
         // if you manage to find one of these things you deserve a lot of scrolls
         new ScrollInjection(new ResourceLocation("minecraft", "chests/woodland_mansion"), 5),
         new ScrollInjection(new ResourceLocation("minecraft", "chests/stronghold_library"), 5)
+
+        // you can use the table hexcasting:random_scroll to get exactly 1 scroll and nothing else
     );
 
     public static final ImmutableList<ResourceLocation> DEFAULT_LORE_INJECTS = ImmutableList.of(
@@ -69,6 +71,7 @@ public class HexLootHandler {
         new ResourceLocation("minecraft", "chests/desert_pyramid"),
         new ResourceLocation("minecraft", "chests/ancient_city"),
         new ResourceLocation("minecraft", "chests/nether_bridge")
+        // you can use the table hexcasting:random_cypher to get exactly 1 cypher and nothing else
     );
 
     public static int getScrollCount(int range, RandomSource random) {
