@@ -212,6 +212,47 @@
     },
   },
 
+  "effect.hexcasting": {
+    enlarge_grid: "Ясность",
+    shrink_grid: "Туманность",
+  },
+  
+  "item.minecraft.potion.effect": {
+    enlarge_grid: "Зелье ясности",
+    enlarge_grid_long: "Зелье ясности",
+    enlarge_grid_strong: "Зелье ясности",
+    shrink_grid: "Зелье туманности",
+    shrink_grid_long: "Зелье туманности",
+    shrink_grid_strong: "Зелье туманности",
+  },
+  
+  "item.minecraft.splash_potion.effect": {
+    enlarge_grid: "Взрывное зелье ясности",
+    enlarge_grid_long: "Взрывное зелье ясности",
+    enlarge_grid_strong: "Взрывное зелье ясности",
+    shrink_grid: "Взрывное зелье туманности",
+    shrink_grid_long: "Взрывное зелье туманности",
+    shrink_grid_strong: "Взрывное зелье туманности",
+  },
+  
+  "item.minecraft.lingering_potion.effect": {
+    enlarge_grid: "Оседающее зелье ясности",
+    enlarge_grid_long: "Оседающее зелье ясности",
+    enlarge_grid_strong: "Оседающее зелье ясности",
+    shrink_grid: "Оседающее зелье туманности",
+    shrink_grid_long: "Оседающее зелье туманности",
+    shrink_grid_strong: "Оседающее зелье туманности",
+  },
+  
+  "item.minecraft.tipped_arrow.effect": {
+    enlarge_grid: "Стрела ясности",
+    enlarge_grid_long: "Стрела ясности",
+    enlarge_grid_strong: "Стрела ясности",
+    shrink_grid: "Стрела туманности",
+    shrink_grid_long: "Стрела туманности",
+    shrink_grid_strong: "Стрела туманности",
+  },
+
   "itemGroup.hexcasting": {
     "": "Hexcasting",
     creative_tab: "Hexcasting",
