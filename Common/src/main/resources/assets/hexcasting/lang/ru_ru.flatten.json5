@@ -1075,7 +1075,7 @@
     category: {
       basics: {
         "": "Приступая к работе",
-        desc: "Практикующие это искусство разыгрывали свои так называемые Заклинания рисуя странные руны в воздухе с помощью $(l:items/staff)$(item)Staff/$ -- \
+        desc: "Практикующие это искусство разыгрывали свои так называемые Заклинания рисуя странные руны в воздухе с помощью $(l:items/staff)$(item)посохов/$ -- \
           или создавая $(l:items/hexcasting)$(item)могущественные магические предметы/$ что бы исполнять руны с их помощью. \
           Как я мог бы сделать то же самое?",
       },
@@ -1098,7 +1098,7 @@
       },
 
       lore: {
-        "": "Лор",
+        "": "История",
         desc: "Я обнаружил несколько писем и текстов, не имеющих прямого отношения к моему искусству. \
           Но я думаю, что, возможно, смогу по ним угадать кое-что из истории мира. Дай-ка посмотрю...",
       },
@@ -1110,7 +1110,7 @@
       
       patterns: {
         "": "Руны",
-        desc: "Список всех обнаруженных мной руны, а также то, что они делают.",
+        desc: "Список всех обнаруженных мною рун, а также то, что они делают.",
       },
       spells: {
         "": "Продвинутые Руны",
@@ -1138,19 +1138,19 @@
       start_to_see: "ЧТО Я ВИДЕЛ!",
       "101": "Рунные заклинания: начало",
       vectors: "Учебник по векторам",
-      mishaps: "Неудачи",
+      mishaps: "Провалы",
       stack: "Стек",
       naming: "Наименование",
       influences: "Влияние",
-      mishaps2: "Просвещённые неудачи",
+      mishaps2: "Просвещённые провалы",
       amethyst: "Аметист",
       
       staff: "Посох",
-      lens: "Линза Прозрения",
+      lens: "Линза прозрения",
       jeweler_hammer: "Ювелирный молоток",
       
       thought_knot: "Узел мысли",
-      focus: "Focus",
+      focus: "Талисман",
       abacus: "Cчеты",
       spellbook: "Книга Заклинаний",
       
@@ -1158,28 +1158,28 @@
       slate: "Плитки",
       
       // why is this called "hexcasting"?
-      hexcasting: "Предметы для Заклинаний",
+      hexcasting: "Предметы для заклинаний",
       phials: "Сосуд мысли",
-      potions: "Хекс Зелья",
+      potions: "Хекс зелья",
       pigments: "Пигмент",
       
-      edified: "Деревья Созидания",
-      decoration: "Декоративные Блоки",
+      edified: "Деревья созидания",
+      decoration: "Декоративные блоки",
       
       the_work: "Работа",
-      brainsweeping: "Об очистке разума",
-      spellcircles: "Круги Заклинаний",
+      brainsweeping: "О краже разума",
+      spellcircles: "Круги заклинаний",
       impetus: "Инициатор",
       directrix: "Направитель",
       akashiclib: "Библиотеки Акаши",
-      quenching_allays: "Погашенные Тихони",
-      fanciful_staves: "Красивые Посохи",
+      quenching_allays: "Погашенные тихони",
+      fanciful_staves: "Красивые посохи",
       
       // and the actions
-      readers_guide: "Как Читать Этот Раздел",
+      readers_guide: "Как читать этот раздел",
       // ops
       basics_pattern: "Базовые руны",
-      numbers: "Числа в Рунах",
+      numbers: "Числа в рунах",
       math: "Математика",
       advanced_math: "Продвинутая математика",
       sets: "Множества",
@@ -1188,24 +1188,24 @@
       logic: "Логические операторы",
       entities: "Сущности",
       lists: "Манипулирование списками",
-      patterns_as_iotas: "Escaping Patterns",
-      readwrite: "Чтение и Запись",
+      patterns_as_iotas: "Экранирующие руны",
+      readwrite: "Чтение и запись",
       meta: "Meta-Evaluation",
-      circle_patterns: "Руны для Кругов Заклинаний",
+      circle_patterns: "Руны для кругов заклинаний",
       akashic_patterns: "Руны Акаши",
       
       // spells
-      itempicking: "Работа с Предметами",
+      itempicking: "Работа с предметами",
       basic_spell: "Базовые заклинания",
       blockworks: "Манипулирование блоками",
       nadirs: "Надир",
-      hexcasting_spell: "Создание Исполняющих Предметов",
+      hexcasting_spell: "Создание исполняющих предметов",
       sentinels: "Часовые",
       // internalize pigment uses the action name
       flights: "Полет",
       
       // great spells usually use the action name
-      weather_manip: "Манипуляция Погодой",
+      weather_manip: "Манипуляция погодой",
       zeniths: "Зенит",
       
       lore: {
@@ -1214,8 +1214,8 @@
         cardamom3: "Кардамом Стайлз, #3",
         cardamom4: "Кардамом Стайлз, #4",
         cardamom5: "Кардамом Стайлз, #5",
-        experiment1: "Заметки по Инцидентам Wooleye",
-        experiment2: "Записи Интервью Wooleye",
+        experiment1: "Заметки по инцидентам Wooleye",
+        experiment2: "Записи интервью Wooleye",
         inventory: "Журнал восстановления #72",
       },
       
