@@ -1,17 +1,20 @@
-// 1.20.1	2024-11-19T11:29:21.178009391	Tags for minecraft:block mod id vanilla
+// 1.20.1	2024-12-07T16:37:41.3901664	Tags for minecraft:block mod id vanilla
 ebad584d48ab5cb9c28edcfa78c87f9497f56cd0 data/create/tags/blocks/brittle.json
+ed073c18319ea1ac0b632309ebceb60efd9df0a2 data/hexcasting/tags/blocks/amethyst_blocks.json
 c5aac196bf97183b43d794c6aac8e206f4b71e37 data/hexcasting/tags/blocks/brainswept_circle_components.json
 0ac2f0afe13705ae24edcb339a5e1e2cdcfe51cf data/hexcasting/tags/blocks/cheap_to_break_block.json
 abaec2d0102fef5865ac638cf7c528a4d5b2a69b data/hexcasting/tags/blocks/directrices.json
 7e27f819889d2f0bca863b1cdb6d7d640ea21986 data/hexcasting/tags/blocks/edified_logs.json
 86828f8056bfdfdd2aff10d7a9dbc6c269c25b8a data/hexcasting/tags/blocks/edified_planks.json
 7f71f33b0bc9fde24deef080ab64707df38adfd6 data/hexcasting/tags/blocks/impeti.json
+f42874e197022a21f480985c2d428c97cbd1587b data/hexcasting/tags/blocks/quenched_allay_blocks.json
+3fb3314ea83dfb5f322db1db779a6ededdc752c4 data/hexcasting/tags/blocks/slate_blocks.json
 4c0d52b1123dd3df794bd9fb8c7f501c6ff500f8 data/hexcasting/tags/blocks/water_plants.json
 841dfbe4970e9167b205e5aa2b0f0936c6b9af60 data/minecraft/tags/blocks/buttons.json
 8b7d16a34235e6062e47f6b3a3a08be760a3bb85 data/minecraft/tags/blocks/crystal_sound_blocks.json
 cba96d2ff28087e7fd9807e5e80104f3befc2512 data/minecraft/tags/blocks/doors.json
-d57d93d193fada6e232bde266430a155fa6e1707 data/minecraft/tags/blocks/fence_gates.json
 c460821db89b3d3f95a0fb336b6b6625da65ec37 data/minecraft/tags/blocks/fences.json
+d57d93d193fada6e232bde266430a155fa6e1707 data/minecraft/tags/blocks/fence_gates.json
 6312e44ef31d2401dddbd46c4d3eda03da6e2db3 data/minecraft/tags/blocks/leaves.json
 7e27f819889d2f0bca863b1cdb6d7d640ea21986 data/minecraft/tags/blocks/logs.json
 7e27f819889d2f0bca863b1cdb6d7d640ea21986 data/minecraft/tags/blocks/logs_that_burn.json
