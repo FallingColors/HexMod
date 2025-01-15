@@ -4,50 +4,50 @@
     book: "Рунный блокнот",
     
     staff: {
-      oak: "Дубовый Посох",
-      spruce: "Еловый Посох",
-      birch: "Посох из Берёзы",
-      jungle: "Посох из Тропического дерева",
-      acacia: "Посох из Акации",
-      dark_oak: "Посох из Тёмного Дуба",
-      crimson: "Багровый Посох",
-      warped: "Искаженный Посох",
-      mangrove: "Посох из Мангровых зарослей",
-      cherry: "Вишнёвый Посох",
-      bamboo: "Бамбуковый Посох",
-      edified: "Посох Созидания",
-      quenched: "Погашенный Посох",
-      mindsplice: "Посох Разума",
+      oak: "Дубовый посох",
+      spruce: "Еловый посох",
+      birch: "Посох из берёзы",
+      jungle: "Посох из тропического дерева",
+      acacia: "Посох из акации",
+      dark_oak: "Посох из тёмного дуба",
+      crimson: "Багровый посох",
+      warped: "Искаженный посох",
+      mangrove: "Посох из мангровых зарослей",
+      cherry: "Вишнёвый посох",
+      bamboo: "Бамбуковый посох",
+      edified: "Посох созидания",
+      quenched: "Погашенный посох",
+      mindsplice: "Посох разума",
     },
     
-    amethyst_dust: "Аметистовая Пыль",
-    charged_amethyst: "Заряженный Аметист",
-    quenched_allay_shard: "Осколок Погашенного Сплава",
+    amethyst_dust: "Аметистовая пыль",
+    charged_amethyst: "Заряженный аметист",
+    quenched_allay_shard: "Осколок погашенного сплава",
 
     scroll_small: {
-      "": "Малый Свиток",
+      "": "Малый свиток",
       of: "Как вы получили этот свиток %s",
-      empty: "Пустой Малый Свиток",
+      empty: "Пустой малый свиток",
     },
 
     scroll_medium: {
       "": "Свиток",
       of: "Как вы получили этот свиток %s",
-      empty: "Пустой Свиток",
+      empty: "Пустой свиток",
     },
 
     scroll: {
-      "": "Большой Свиток",
+      "": "Большой свиток",
       of: "Древний свиток %s",
-      empty: "Пустой Большой Свиток",
+      empty: "Пустой большой свиток",
     },
 
     focus: {
       "": "Талисман",
-      sealed: "Запечатанный Талисман",
+      sealed: "Запечатанный талисман",
     },
 
-    thought_knot: "Узел Мыслей",
+    thought_knot: "Узел мыслей",
     spellbook: "Книга заклинаний",
     cypher: "Побрякушка",
     trinket: "Штуковина",
@@ -55,49 +55,49 @@
     battery: "Сосуд мысли",
     lens: "Линза прозрения",
     abacus: "Рунные счеты",
-    jeweler_hammer: "Ювелирный Молоток",
+    jeweler_hammer: "Ювелирный молоток",
     sub_sandwich: "ЗубоДробительный бутерброд",
 
     dye_colorizer_: {
-      white: "Белый Пигмент",
-      orange: "Оранжевый Пигмент",
-      magenta: "Пурпурный Пигмент",
-      light_blue: "Светло-голубой Пигмент",
-      yellow: "Желтый Пигмент",
-      lime: "Лаймовый Пигмент",
-      pink: "Розовый Пигмент",
-      gray: "Серый Пигмент",
-      light_gray: "Светло-Серый Пигмент",
-      cyan: "Циановый Пигмент",
-      purple: "Фиолетовый Пигмент",
-      blue: "Синий Пигмент",
-      brown: "Коричневый Пигмент",
-      green: "Зелёный Пигмент",
-      red: "Красный Пигмент",
-      black: "Черный Пигмент",
+      white: "Белый пигмент",
+      orange: "Оранжевый пигмент",
+      magenta: "Пурпурный пигмент",
+      light_blue: "Светло-голубой пигмент",
+      yellow: "Желтый пигмент",
+      lime: "Лаймовый пигмент",
+      pink: "Розовый пигмент",
+      gray: "Серый пигмент",
+      light_gray: "Светло-Серый пигмент",
+      cyan: "Циановый пигмент",
+      purple: "Фиолетовый пигмент",
+      blue: "Синий пигмент",
+      brown: "Коричневый пигмент",
+      green: "Зелёный пигмент",
+      red: "Красный пигмент",
+      black: "Черный пигмент",
     },
 
     pride_colorizer_: {
-      agender: "Agender Пигмент",
-      aroace: "Aroace Пигмент",
-      aromantic: "Aromantic Пигмент",
-      asexual: "Asexual Пигмент",
-      bisexual: "Bisexual Пигмент",
-      demiboy: "Demiboy Пигмент",
-      demigirl: "Demigirl Пигмент",
-      gay: "Gay Пигмент",
-      genderfluid: "Genderfluid Пигмент",
-      genderqueer: "Genderqueer Пигмент",
-      intersex: "Intersex Пигмент",
-      lesbian: "Lesbian Пигмент",
-      nonbinary: "Non-Binary Пигмент",
-      pansexual: "Pansexual Пигмент",
-      plural: "Plural Пигмент",
-      transgender: "Transgender Пигмент",
+      agender: "Agender пигмент",
+      aroace: "Aroace пигмент",
+      aromantic: "Aromantic пигмент",
+      asexual: "Asexual пигмент",
+      bisexual: "Bisexual пигмент",
+      demiboy: "Demiboy пигмент",
+      demigirl: "Demigirl пигмент",
+      gay: "Gay пигмент",
+      genderfluid: "Genderfluid пигмент",
+      genderqueer: "Genderqueer пигмент",
+      intersex: "Intersex пигмент",
+      lesbian: "Lesbian пигмент",
+      nonbinary: "Non-Binary пигмент",
+      pansexual: "Pansexual пигмент",
+      plural: "Plural пигмент",
+      transgender: "Transgender пигмент",
     },
 
-    uuid_colorizer: "Пигмент Души",
-    default_colorizer: "Чистый Пигмент",
+    uuid_colorizer: "Пигмент души",
+    default_colorizer: "Чистый пигмент",
 
     creative_unlocker: {
       "": "Медиакуб",
@@ -113,21 +113,21 @@
   },
   
   "entity.hexcasting": {
-    wall_scroll: "Висящий Свиток",
+    wall_scroll: "Висящий свиток",
   },
   
   "block.hexcasting": {
-    conjured_light: "Магический Свет",
-    conjured_block: "Магический Блок",
+    conjured_light: "Магический свет",
+    conjured_block: "Магический блок",
 
     directrix: {
       empty: "Пустой Направитель",
       redstone: "Направитель Каменщика",
-      boolean: "Логический Направитель",
+      boolean: "Направитель Пастуха",
     },
 
     impetus: {
-      empty: "Пустой Инициатор",
+      empty: "Пустой инициатор",
       rightclick: "Инициатор Инструментальщика",
       look: "Инициатор Лучника",
       redstone: "Инициатор Священника",
@@ -135,30 +135,30 @@
 
     akashic_: {
       record: "Запись Акаши",
-      bookshelf: "Книжная Полка Акаши",
+      bookshelf: "Книжная полка Акаши",
       connector: "Лигатура Акаши",
     },
 
     slate: {
       "": "Скрижаль",
-      blank: "Пустая Скрижаль",
-      written: "Начертанная Скрижаль",
+      blank: "Пустая скрижаль",
+      written: "Начертанная скрижаль",
     },
 
     slate_: {
-      block: "Блок Скрижалей",
-      tiles: "Плитка из Скражалей",
-      bricks: "Кирпичи из Скрижалей",
-      bricks_small: "Маленькие кирпичи из Скрижалей",
-      pillar: "Колонна из Скрижалей",
+      block: "Блок скрижалей",
+      tiles: "Плитка из скражалей",
+      bricks: "Кирпичи из скрижалей",
+      bricks_small: "Маленькие кирпичи из скрижалей",
+      pillar: "Колонна из скрижалей",
     },
 
     amethyst_: {
-      dust_block: "Блок Аметистовой Пыли",
-      tiles: "Аметистовая Плитка",
-      bricks: "Аметистовые Кирпичи",
-      bricks_small: "Маленькие Аметистовые Кирпичи",
-      pillar: "Аметистовая Колонна",
+      dust_block: "Блок аметистовой пыли",
+      tiles: "Аметистовая плитка",
+      bricks: "Аметистовые кирпичи",
+      bricks_small: "Маленькие аметистовые кирпичи",
+      pillar: "Аметистовая колонна",
     },
     
     slate_amethyst_: {
@@ -170,43 +170,43 @@
 
     scroll_paper: "Бумага для свитков",
     ancient_scroll_paper: "Древняя бумага для свитков",
-    scroll_paper_lantern: "Бумажный Фонарь",
-    ancient_scroll_paper_lantern: "Древний Бумажный Фонарь",
-    amethyst_sconce: "Аметистовый Подсвечник",
+    scroll_paper_lantern: "Бумажный фонарь",
+    ancient_scroll_paper_lantern: "Древний бумажный фонарь",
+    amethyst_sconce: "Аметистовый подсвечник",
 
     edified_: {
-      log: "Бревно Созидания",
-      log_amethyst: "Аметистовое Бревно Созидания",
-      log_aventurine: "Авантюриновое Бревно Созидания",
-      log_citrine: "Цитриновое Бревно Созидания",
-      log_purple: "Фиолетовое Бревно Созидания",
-      wood: "Древесина Созидания",
-      planks: "Доски Созидания",
-      panel: "Панель Созидания",
-      tile: "Плитка Созидания",
-      door: "Дверь Созидания",
-      trapdoor: "Люк Созидания",
-      stairs: "Лестница Созидания",
-      slab: "Плита Созидания",
-      button: "Кнопка Созидания",
-      pressure_plate: "Нажимная Плита Созидания",
-      fence: "Ограда Созидания",
-      fence_gate: "Ворота Созидания",
+      log: "Бревно созидания",
+      log_amethyst: "Аметистовое бревно созидания",
+      log_aventurine: "Авантюриновое бревно созидания",
+      log_citrine: "Цитриновое бревно созидания",
+      log_purple: "Фиолетовое бревно созидания",
+      wood: "Древесина созидания",
+      planks: "Доски созидания",
+      panel: "Панель созидания",
+      tile: "Плитка созидания",
+      door: "Дверь созидания",
+      trapdoor: "Люк созидания",
+      stairs: "Лестница созидания",
+      slab: "Плита созидания",
+      button: "Кнопка созидания",
+      pressure_plate: "Нажимная плита созидания",
+      fence: "Ограда созидания",
+      fence_gate: "Ворота созидания",
     },
 
-    stripped_edified_log: "Обтесанное Бревно Созидания",
-    stripped_edified_wood: "Обтесанная Древесина Созидания",
+    stripped_edified_log: "Обтесанное бревно созидания",
+    stripped_edified_wood: "Обтесанная древесина созидания",
 
-    amethyst_edified_leaves: "Аметистовые Листья Созидания",
-    aventurine_edified_leaves: "Авентюриновые Листья Созидания",
-    citrine_edified_leaves: "Цитриновые Листья Созидания",
+    amethyst_edified_leaves: "Аметистовые листья созидания",
+    aventurine_edified_leaves: "Авентюриновые листья созидания",
+    citrine_edified_leaves: "Цитриновые листья созидания",
 
-    quenched_allay: "Погашенный Сплав",
+    quenched_allay: "Погашенный сплав",
     
     quenched_allay_: {
-      tiles: "Плитка из Погашенного Сплава",
-      bricks: "Кирпичи из Погашенного Сплава",
-      bricks_small: "Малые Кирпичи из Погашенного Сплава",
+      tiles: "Плитка из погашенного сплава",
+      bricks: "Кирпичи из погашенного сплава",
+      bricks_small: "Малые кирпичи из погашенного сплава",
     },
   },
 
@@ -262,25 +262,25 @@
   
   "tag.hexcasting": {
     staves: "Посохи",
-    edified_logs: "Брёвна Созидания",
-    edified_planks: "Доски Созидания",
-    phial_base: "Пустой Сосуд",
+    edified_logs: "Брёвна созидания",
+    edified_planks: "Доски созидания",
+    phial_base: "Пустой сосуд",
   },
 
   "tag.item.hexcasting": {
-    brainswept_circle_components: "Компоненты Круга Очистки Разума",
+    brainswept_circle_components: "Компоненты круга очистки разума",
     directrices: "Направители",
-    grants_root_advancement: "Засчитывает Основное Достижение",
+    grants_root_advancement: "Засчитывает основное достижение",
     impeti: "Инициаторы",
     seal_materials: "Запечатанные материалы",
   },
   
   "emi.category.hexcasting": {
-    brainsweep: "Очистка Разума",
+    brainsweep: "Очистка разума",
     "craft.battery": "Создать пузырь мыслей",
-    edify: "Саженец Созидания",
-    villager_leveling: "Уровень Торговли",
-    villager_profession: "Профессия Жителя",
+    edify: "Саженец созидания",
+    villager_leveling: "Уровень торговли",
+    villager_profession: "Профессия жителя",
   },
   
   "text.autoconfig.hexcasting": {
@@ -395,7 +395,7 @@
       desc: "Найдите и добудьте концентрированную форму мыслей, растущих глубоко под землей.",
     },
     creative_unlocker: {
-      "": "UNLIMITED POWAH",
+      "": "БЕЗГРАНИЧНАЯ ВЛАААСТЬ",
       "desc": "Найден предмет креативной отладки."
     },
     enlightenment: {
@@ -419,7 +419,7 @@
       desc: "Пусть природа заберет частичку твоего разума в качестве платы за колдовство. Что может случиться, если ты позволишь ей сделать больше?",
     },
     lore: {
-      "": "История Рунных Заклинаний",
+      "": "История рунных заклинаний",
       desc: "Прочитать фрагмент истории",
     },
     "lore/": {
@@ -443,8 +443,8 @@
         "": "Кардамом Стайлз #4",
         desc: "Письмо Кардамон Стайлз своему отцу, #4",
       },
-      experiment1: "Заметки по Инцидентам Wooleye",
-      experiment2: "Записи Интервью Wooleye",
+      experiment1: "Заметки по инцидентам Wooleye",
+      experiment2: "Записи интервью Wooleye",
       inventory: "Журнал восстановления 72",
     },
   },
@@ -458,8 +458,8 @@
 
   "death.attack.hexcasting": {
     overcast: {
-      "": "Разум %s был полноценно поглощён как оплата заклинания",
-      player: "%Разум %s был полноценно поглощён как оплата заклинания, пока тот боролся с %s",
+      "": "Разум %s был полностью поглощён как оплата заклинания",
+      player: "Разум %s был полностью поглощён как оплата заклинания, пока тот боролся с %s",
     },
   },
 
@@ -491,8 +491,8 @@
     "pattern.unknown": "Неизвестная руна %s",
     
     debug: {
-      media_withdrawn: "%s - Поглощенно мысли: %s",
-      "media_withdrawn.with_dust": "%s - Поглощенно мысли: %s (%s в пыли)",
+      media_withdrawn: "%s - Поглощено мысли: %s",
+      "media_withdrawn.with_dust": "%s - Поглощено мысли: %s (%s в пыли)",
       media_inserted: "%s - Добавлено мысли: %s",
       "media_inserted.with_dust": "%s - Добавлено мысли: %s (%s в пыли)",
       all_media: "Полное содержимое",
@@ -548,7 +548,7 @@
           "bookshelf.location": "Запись на %s",
           "record.count": {
             "": "%s йоты хранящиеся",
-            single: "%s iota хранящаяся",
+            single: "%s йота хранящаяся",
           },
         },
       },
@@ -620,11 +620,10 @@
     },
     
     // Action localizations
-    
     action: {
       "hexcasting:": {
         "const/": {
-          "null": "Отражение ничта",
+          "null": "Отражение пустоты",
           "true": "Отражение истины",
           "false": "Отражение лжи",
 
