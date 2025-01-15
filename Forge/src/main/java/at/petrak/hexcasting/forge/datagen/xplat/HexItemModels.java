@@ -119,6 +119,7 @@ public class HexItemModels extends PaucalItemModelProvider {
         buildSealableIotaHolder(HexItems.FOCUS, "focus", HexItems.FOCUS.numVariants());
         buildSealableIotaHolder(HexItems.SPELLBOOK, "spellbook", HexItems.SPELLBOOK.numVariants());
 
+        buildPackagedSpell(HexItems.ANCIENT_CYPHER, "ancient_cypher", HexItems.ANCIENT_CYPHER.numVariants());
         buildPackagedSpell(HexItems.CYPHER, "cypher", HexItems.CYPHER.numVariants());
         buildPackagedSpell(HexItems.TRINKET, "trinket", HexItems.TRINKET.numVariants());
         buildPackagedSpell(HexItems.ARTIFACT, "artifact", HexItems.ARTIFACT.numVariants());
