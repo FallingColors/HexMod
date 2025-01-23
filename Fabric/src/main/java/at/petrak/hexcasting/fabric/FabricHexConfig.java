@@ -215,6 +215,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         public void validatePostLoad() throws ValidationException {
             this.maxOpCount = Math.max(this.maxOpCount, 0);
             this.maxSpellCircleLength = Math.max(this.maxSpellCircleLength, 4);
+            this.traderScrollChance = Mth.clamp(this.traderScrollChance, 0.0, 1.0);
 
             this.scrollInjections = new Object2IntOpenHashMap<>();
             try {
