@@ -1972,7 +1972,7 @@
         conjure_light: "Conjure a magical light that softly glows with my pigment at the given position. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         bonemeal: "Encourage a plant or sapling at the target position to grow, as if $(item)Bonemeal/$ was applied. Costs a bit more than one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         edify: "Forcibly infuse _media into the sapling at the target position, causing it to grow into an $(l:items/edified)$(thing)Edified Tree/$. Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$.",
-        ignite: "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied, or sets fire to a creature. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
+        ignite: "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied, or set fire to an entity. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         extinguish: "Extinguish blocks in a large area. Costs about six $(l:items/amethyst)$(item)Amethyst Dust/$.",
       },
       
@@ -2022,7 +2022,7 @@
         "range.2": "The second argument is a horizontal radius, in meters, in which the spell is stable. Moving outside of that radius will end the spell, dropping me out of the sky. As long as I stay inside the safe zone, however, the spell lasts indefinitely. An additional shimmer of _media marks the origin point of the safe zone. $(br2)Costs about 1 $(l:items/amethyst)$(item)Amethyst Dust/$ per meter of safety.",
         
         "time.1": "A flight limited in its duration.",
-        "time.2": "The second argument is an amount of time in seconds for which the spell is stable. After that time, the spell ends and I am dropped from the sky. $(br2)It is relatively expensive at about 1 $(l:items/amethyst)$(item)Charged Crystal/$ per second of flight; I believe it is best suited for travel.",
+        "time.2": "The second argument is an amount of time in seconds for which the spell is stable. After that time, the spell ends and I am dropped from the sky. $(br2)It is relatively expensive at about 1 $(l:items/amethyst)$(item)Amethyst Shard/$ per second of flight; I believe it is best suited for travel.",
         
         // Putting this in this category instead of elsewhere -- see sentinel chapter also containing some reflections/nonspells
         "can_fly.1": "Returns whether the given player is under the effects of $(l:patterns/spells/flight#hexcasting:flight/range)Anchorite's/$ or $(l:patterns/spells/flight#hexcasting:flight/time)Wayfarer's Flight/$.",
