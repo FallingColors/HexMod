@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "hexcasting:slate_block",
+    "hexcasting:slate_bricks",
+    "hexcasting:slate_bricks_small",
+    "hexcasting:slate_tiles",
+    "hexcasting:slate_pillar"
+  ]
+}
