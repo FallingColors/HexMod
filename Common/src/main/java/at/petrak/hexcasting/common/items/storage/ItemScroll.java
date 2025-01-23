@@ -9,14 +9,16 @@ import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
-import at.petrak.hexcasting.common.loot.AddPerWorldPatternToScrollFunc;
+import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.interop.inline.InlinePatternData;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -170,7 +172,12 @@ public class ItemScroll extends Item implements IotaHolderItem {
         }
         // if op_id is set but there's no stored pattern, load the pattern on inv tick
         if (NBTHelper.hasString(pStack, TAG_OP_ID) && !NBTHelper.hasCompound(pStack, TAG_PATTERN) && pEntity.getServer() != null) {
-            AddPerWorldPatternToScrollFunc.doStatic(pStack, pLevel.getRandom(), pEntity.getServer().overworld());
+            var patternKey = ResourceKey.create(
+                IXplatAbstractions.INSTANCE.getActionRegistry().key(), 
+                ResourceLocation.tryParse(NBTHelper.getString(pStack, TAG_OP_ID))
+            );
+            var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(patternKey, pEntity.getServer().overworld());
+            NBTHelper.put(pStack, TAG_PATTERN, pat.serializeToNBT());
         }
     }
 

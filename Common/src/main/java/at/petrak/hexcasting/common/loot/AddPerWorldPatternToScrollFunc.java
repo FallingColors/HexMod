@@ -40,24 +40,16 @@ public class AddPerWorldPatternToScrollFunc extends LootItemConditionalFunction 
      * This doesn't actually have any params so extract behaviour out for the benefit of forge
      */
     public static ItemStack doStatic(ItemStack stack, RandomSource rand, ServerLevel overworld) {
-        ResourceKey patternKey;
-        if (NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID)) {
-            patternKey = ResourceKey.create(
-                IXplatAbstractions.INSTANCE.getActionRegistry().key(), 
-                ResourceLocation.tryParse(NBTHelper.getString(stack, ItemScroll.TAG_OP_ID))
-            );
-        } else {
-            var perWorldKeys = new ArrayList<ResourceKey<ActionRegistryEntry>>();
-            Registry<ActionRegistryEntry> regi = IXplatAbstractions.INSTANCE.getActionRegistry();
-            for (var key : regi.registryKeySet()) {
-                if (HexUtils.isOfTag(regi, key, HexTags.Actions.PER_WORLD_PATTERN)) {
-                    perWorldKeys.add(key);
-                }
+        var perWorldKeys = new ArrayList<ResourceKey<ActionRegistryEntry>>();
+        Registry<ActionRegistryEntry> regi = IXplatAbstractions.INSTANCE.getActionRegistry();
+        for (var key : regi.registryKeySet()) {
+            if (HexUtils.isOfTag(regi, key, HexTags.Actions.PER_WORLD_PATTERN)) {
+                perWorldKeys.add(key);
             }
-            patternKey = perWorldKeys.get(rand.nextInt(perWorldKeys.size()));
-            NBTHelper.putString(stack, ItemScroll.TAG_OP_ID, patternKey.location().toString());
         }
+        var patternKey = perWorldKeys.get(rand.nextInt(perWorldKeys.size()));
         var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(patternKey, overworld);
+        NBTHelper.putString(stack, ItemScroll.TAG_OP_ID, patternKey.location().toString());
         NBTHelper.put(stack, ItemScroll.TAG_PATTERN, pat.serializeToNBT());
         return stack;
     }
