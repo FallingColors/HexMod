@@ -1,4 +1,4 @@
-// 1.20.1	2024-12-12T01:28:26.4893103	Hex Casting/Recipes
+// 1.20.1	2025-01-23T15:50:44.4089311	Hex Casting/Recipes
 1d1e73244fb3da633d8a5f84bad93c6022a94368 data\hexcasting\advancements\recipes\misc\pride_colorizer_demiboy.json
 49e706193bb57a957091e419bd0d8aa58135da1f data\hexcasting\recipes\dye_colorizer_green.json
 071e5875b13b60aac33bc97e408d2ca710ac5d02 data\hexcasting\advancements\recipes\building_blocks\stonecutting\amethyst_tiles.json
@@ -108,8 +108,8 @@ c3f7b03fe184ed5e54a8ae06d130adf507b7683d data\hexcasting\recipes\staff\bamboo.js
 b10d590e918e35b16578a8b739a1c4e7e2202e16 data\hexcasting\advancements\recipes\misc\dye_colorizer_cyan.json
 0e792d49c81d2164e827d1bdedaa0fa358dfc437 data\hexcasting\advancements\recipes\misc\pride_colorizer_aromantic.json
 afb422ad4a918ee0161bf077f09475bb1da2b4eb data\hexcasting\recipes\amethyst_dust_unpacking.json
-011f8daf15148d4b77686c6d382d8f5c288a333d data\hexcasting\advancements\recipes\building_blocks\ancient_scroll_paper.json
 98c0843e6a83b91820f1c720e206295eec20ff95 data\hexcasting\recipes\ancient_scroll_paper.json
+011f8daf15148d4b77686c6d382d8f5c288a333d data\hexcasting\advancements\recipes\building_blocks\ancient_scroll_paper.json
 9b7c5220fbaf3e84fa9e81eae322eed5d37b22d3 data\hexcasting\recipes\pride_colorizer_transgender.json
 a1f9df0537c0ef33a1164cf94e8ff4b1094f889f data\hexcasting\advancements\recipes\tools\staff\warped.json
 54335e0004423899ad37763a1d8456cc0a6e72a7 data\hexcasting\advancements\recipes\misc\decompose_quenched_shard\charged.json
@@ -211,8 +211,8 @@ b6e762c198b9632defd7f8b11287702abecd681d data\hexcasting\recipes\staff\mindsplic
 170af3c83a45f9550827cc48e4bb5a621d06d685 data\hexcasting\advancements\recipes\misc\pride_colorizer_transgender.json
 7f2f29981df2ca4464ee0250180e670f5331f65b data\hexcasting\recipes\dye_colorizer_pink.json
 61e53f02baefd31308e99407d56403dfc18e36e1 data\hexcasting\recipes\akashic_connector.json
-7aa3bf4a3d6fb92743b29dfe89d50537fefc0db9 data\hexcasting\advancements\recipes\misc\pride_colorizer_intersex.json
 eb9ebf77f0daa32f665a60888fcda19c940f0b2f data\hexcasting\advancements\recipes\misc\pride_colorizer_demigirl.json
+7aa3bf4a3d6fb92743b29dfe89d50537fefc0db9 data\hexcasting\advancements\recipes\misc\pride_colorizer_intersex.json
 410bfde90cb977db3f13814e94484fa11fca7cfc data\hexcasting\recipes\thought_knot.json
 55ea553a96e1d6a54385890f7c48fe7b2bed6871 data\hexcasting\advancements\recipes\tools\trinket.json
 e765ee2bd324240e8ed3d625be431de3281f0070 data\hexcasting\recipes\dye_colorizer_gray.json
