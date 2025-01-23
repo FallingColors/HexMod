@@ -17,10 +17,13 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
+import net.minecraft.network.chat.Component
 import java.util.function.Predicate;
 
 // TODO: How to handle in circles
-class OpMakePackagedSpell<T : ItemPackagedHex>(val isValid: Predicate<ItemStack>, val expectedType: T, val cost: Long) : SpellAction {
+class OpMakePackagedSpell(val isValid: Predicate<ItemStack>, val expectedTypeDesc: Component, val cost: Long) : SpellAction {
+    constructor(itemType: ItemPackagedHex, cost: Long) : this({s -> s.`is`(itemType)}, itemType.description, cost) {}
+    
     override val argc = 2
     override fun execute(
             args: List<Iota>,
@@ -33,11 +36,11 @@ class OpMakePackagedSpell<T : ItemPackagedHex>(val isValid: Predicate<ItemStack>
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)
             isValid.test(it) && hexHolder != null && !hexHolder.hasHex()
         }
-            ?: throw MishapBadOffhandItem(ItemStack.EMPTY.copy(), expectedType.description) // TODO: hack
+            ?: throw MishapBadOffhandItem(ItemStack.EMPTY.copy(), expectedTypeDesc) // TODO: hack
 
         val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(handStack)
         if (!isValid.test(handStack)) {
-            throw MishapBadOffhandItem(handStack, expectedType.description)
+            throw MishapBadOffhandItem(handStack, expectedTypeDesc)
         } else if (hexHolder == null || hexHolder.hasHex()) {
             throw MishapBadOffhandItem.of(handStack, "iota.write")
         }
