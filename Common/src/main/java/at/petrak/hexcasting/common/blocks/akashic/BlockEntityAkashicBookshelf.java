@@ -1,17 +1,20 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
+import at.petrak.hexcasting.api.addldata.ADIotaHolder.ADIotaHolderReadOnly;
 import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.client.render.HexPatternPoints;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockEntityAkashicBookshelf extends HexBlockEntity {
+public class BlockEntityAkashicBookshelf extends HexBlockEntity implements ADIotaHolderReadOnly {
     public static final String TAG_PATTERN = "pattern";
     public static final String TAG_IOTA = "iota";
     public static final String TAG_DUMMY = "dummy";
@@ -88,5 +91,21 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
             this.pattern = null;
             this.iotaTag = null;
         }
+    }
+
+    @Override
+    public CompoundTag readIotaTag(){
+        if(pattern == null){
+            return IotaType.serialize(emptyIota());
+        }
+        return IotaType.serialize(new PatternIota(pattern));
+    }
+
+    @Override
+    public Iota readIota(ServerLevel world) {
+        if(pattern == null){
+            return emptyIota();
+        }
+        return new PatternIota(pattern);
     }
 }
