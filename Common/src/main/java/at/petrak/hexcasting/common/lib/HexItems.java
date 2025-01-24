@@ -99,23 +99,23 @@ public class HexItems {
     public static final Supplier<ItemStack> BATTERY_DUST_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.DUST_UNIT * 64,
-            MediaConstants.DUST_UNIT * 64), HexCreativeTabs.MAIN);
+            MediaConstants.DUST_UNIT * 64), HexCreativeTabs.HEX);
     public static final Supplier<ItemStack> BATTERY_SHARD_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.SHARD_UNIT * 64,
-            MediaConstants.SHARD_UNIT * 64), HexCreativeTabs.MAIN);
+            MediaConstants.SHARD_UNIT * 64), HexCreativeTabs.HEX);
     public static final Supplier<ItemStack> BATTERY_CRYSTAL_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.CRYSTAL_UNIT * 64,
-            MediaConstants.CRYSTAL_UNIT * 64), HexCreativeTabs.MAIN);
+            MediaConstants.CRYSTAL_UNIT * 64), HexCreativeTabs.HEX);
     public static final Supplier<ItemStack> BATTERY_QUENCHED_SHARD_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.QUENCHED_SHARD_UNIT * 64,
-            MediaConstants.QUENCHED_SHARD_UNIT * 64), HexCreativeTabs.MAIN);
+            MediaConstants.QUENCHED_SHARD_UNIT * 64), HexCreativeTabs.HEX);
     public static final Supplier<ItemStack> BATTERY_QUENCHED_BLOCK_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.QUENCHED_BLOCK_UNIT * 64,
-            MediaConstants.QUENCHED_BLOCK_UNIT * 64), HexCreativeTabs.MAIN);
+            MediaConstants.QUENCHED_BLOCK_UNIT * 64), HexCreativeTabs.HEX);
 
     public static final EnumMap<DyeColor, ItemDyePigment> DYE_PIGMENTS = Util.make(() -> {
         var out = new EnumMap<DyeColor, ItemDyePigment>(DyeColor.class);
@@ -191,7 +191,7 @@ public class HexItems {
     }
 
     private static <T extends Item> T make(String id, T item) {
-        return make(modLoc(id), item, HexCreativeTabs.MAIN);
+        return make(modLoc(id), item, HexCreativeTabs.HEX);
     }
 
     private static Supplier<ItemStack> addToTab(Supplier<ItemStack> stack, CreativeModeTab tab) {

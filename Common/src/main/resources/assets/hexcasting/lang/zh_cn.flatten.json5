@@ -252,8 +252,8 @@
   },
 
   "itemGroup.hexcasting": {
-    "": "咒法学",
-    creative_tab: "咒法学",
+    hexcasting: "咒法学",
+    scrolls: "咒法学",
   },
 
   "gui.hexcasting": {

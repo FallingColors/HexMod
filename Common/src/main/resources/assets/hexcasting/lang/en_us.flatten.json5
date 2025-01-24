@@ -252,7 +252,7 @@
   },
   
   "itemGroup.hexcasting": {
-    main: "Hex Casting",
+    hexcasting: "Hex Casting",
     scrolls: "Hex Casting (Scrolls)",
   },
   

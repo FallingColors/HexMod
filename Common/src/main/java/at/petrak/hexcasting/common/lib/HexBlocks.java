@@ -296,14 +296,14 @@ public class HexBlocks {
         return block;
     }
     private static <T extends Block> T blockItem(String name, T block) {
-        return blockItem(name, block, HexItems.props(), HexCreativeTabs.MAIN);
+        return blockItem(name, block, HexItems.props(), HexCreativeTabs.HEX);
     }
 
     private static <T extends Block> T blockItem(String name, T block, @Nullable CreativeModeTab tab) {
         return blockItem(name, block, HexItems.props(), tab);
     }
     private static <T extends Block> T blockItem(String name, T block, Item.Properties props) {
-        return blockItem(name, block, props, HexCreativeTabs.MAIN);
+        return blockItem(name, block, props, HexCreativeTabs.HEX);
     }
 
     private static <T extends Block> T blockItem(String name, T block, Item.Properties props, @Nullable CreativeModeTab tab) {
