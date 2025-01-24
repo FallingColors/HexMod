@@ -397,10 +397,6 @@
           "": "Ancient Cypher Chance",
           "@Tooltip": "The chance for ancient cyphers to appear in any of the above loot tables.",
         },
-        lootHexList: {
-          "": "Preset Loot Hex List",
-          "@Tooltip": "Lists the preset hexes that can be found in ancient cyphers. The first item in each list is the name of the hex, and the others are the patterns. The name is treated as a translation key if possible, but if you add your own they should be human-readable.",
-        },
         amethystShardModification: {
           "": "Amethyst Shard Drop Rate Change",
           "@Tooltip": "How much the number of amethyst shards dropped from clusters is increased/decreased.",

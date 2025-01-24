@@ -219,8 +219,6 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private transient List<ResourceLocation> cypherInjections;
         @ConfigEntry.Gui.Tooltip
         private double cypherChance = HexLootHandler.DEFAULT_CYPHER_CHANCE;
-        @ConfigEntry.Gui.Tooltip
-        private List<List<String>> lootHexList = HexLootHandler.DEFAULT_LOOT_HEXES;
 
 
         @Override
@@ -327,11 +325,6 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
 
         public double cypherChance() {
             return cypherChance;
-        }
-
-        public List<String> getRandomLootHex(RandomSource rand) {
-            var index = rand.nextInt(this.lootHexList.size());
-            return this.lootHexList.get(index);
         }
     }
 }
