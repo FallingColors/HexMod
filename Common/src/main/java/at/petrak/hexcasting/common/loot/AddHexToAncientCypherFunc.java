@@ -22,7 +22,8 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
-import java.util.ArrayList;
+import java.util.List;
+import com.mojang.datafixers.util.Pair;
 
 /**
  * Add a random preset hex to the ancient cypher, and select a random variant.
@@ -39,17 +40,17 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
      * This doesn't actually have any params so extract behaviour out for the benefit of forge
      */
     public static ItemStack doStatic(ItemStack stack, RandomSource rand) {
-        var fullHex = HexConfig.server().getRandomLootHex(rand);
+        var hex = LOOT_HEXES.get(rand.nextInt(16));
         var patsTag = new ListTag();
         // skip first element since it's the name, not a pattern
-        for (var patString : fullHex.subList(1,fullHex.size())){
+        for (var patString : hex.getSecond()){
             var pieces = patString.split(" ");
             var pat = HexPattern.fromAngles(pieces[1],HexDir.fromString(pieces[0]));
             patsTag.add(IotaType.serialize(new PatternIota(pat)));
         }
         
         var tag = new CompoundTag();
-        tag.putString(ItemAncientCypher.TAG_HEX_NAME, fullHex.get(0));
+        tag.putString(ItemAncientCypher.TAG_HEX_NAME, hex.getFirst());
         tag.putLong(ItemAncientCypher.TAG_MEDIA, 32*MediaConstants.SHARD_UNIT);
         tag.putLong(ItemAncientCypher.TAG_MAX_MEDIA, 32*MediaConstants.SHARD_UNIT);
         tag.putInt(VariantItem.TAG_VARIANT, rand.nextInt(8));
@@ -81,4 +82,24 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
             return new AddHexToAncientCypherFunc(conditions);
         }
     }
+
+    // TODO: make this datapackable
+    private static final List<Pair<String, String[]>> LOOT_HEXES = List.of(
+        new Pair<>("hexcasting.loot_hex.shatter", new String[] {"NORTH_EAST qaq","EAST aa","NORTH_EAST qaq","NORTH_EAST wa","EAST wqaawdd","EAST qaqqqqq"}),
+        new Pair<>("hexcasting.loot_hex.kindle", new String[] {"NORTH_EAST qaq","EAST aa","NORTH_EAST qaq","NORTH_EAST wa","EAST wqaawdd","SOUTH_EAST aaqawawa"}),
+        new Pair<>("hexcasting.loot_hex.illuminate", new String[] {"NORTH_EAST qaq","EAST aa","NORTH_EAST qaq","NORTH_EAST wa","EAST aadadaaw","EAST wqaawdd","NORTH_EAST ddqdd","EAST weddwaa","NORTH_EAST waaw","NORTH_EAST qqd"}),
+        new Pair<>("hexcasting.loot_hex.growth", new String[] {"NORTH_EAST qaq","EAST aa","NORTH_EAST qaq","NORTH_EAST wa","EAST aadadaaw","EAST wqaawdd","NORTH_EAST ddqdd","EAST weddwaa","NORTH_EAST waaw","SOUTH_EAST aqaaedwd","EAST aadaadaa","NORTH_EAST wqaqwawqaqw","NORTH_EAST wqaqwawqaqw","NORTH_EAST wqaqwawqaqw"}),
+        new Pair<>("hexcasting.loot_hex.lunge", new String[] {"NORTH_EAST qaq","EAST aadaa","NORTH_EAST wa","SOUTH_EAST aqaawa","SOUTH_EAST waqaw","SOUTH_WEST awqqqwaqw"}),
+        new Pair<>("hexcasting.loot_hex.sidestep", new String[] {"NORTH_EAST qaq","EAST aadaa","NORTH_EAST wa","NORTH_WEST eqqq","SOUTH_EAST aqaawd","SOUTH_EAST e","NORTH_WEST qqqqqew","SOUTH_WEST eeeeeqw","SOUTH_EAST awdd","NORTH_EAST wdedw","SOUTH_WEST awqqqwaqw"}),
+        new Pair<>("hexcasting.loot_hex.ascend", new String[] {"NORTH_EAST qaq","SOUTH_EAST aqaae","WEST qqqqqawwawawd"}),
+        new Pair<>("hexcasting.loot_hex.blink", new String[] {"NORTH_EAST qaq","EAST aadaa","EAST aa","NORTH_EAST qaq","NORTH_EAST wa","EAST wqaawdd","NORTH_EAST qaq","EAST aa","NORTH_WEST wddw","NORTH_EAST wqaqw","SOUTH_EAST aqaaw","NORTH_WEST wddw","SOUTH_WEST awqqqwaq"}),
+        new Pair<>("hexcasting.loot_hex.blastoff", new String[] {"NORTH_EAST qaq","NORTH_WEST qqqqqew","SOUTH_EAST aqaawaa","SOUTH_EAST waqaw","SOUTH_WEST awqqqwaqw"}),
+        new Pair<>("hexcasting.loot_hex.radar", new String[] {"WEST qqq","EAST aadaa","EAST aa","SOUTH_EAST aqaawa","SOUTH_WEST ewdqdwe","NORTH_EAST de","EAST eee","NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaaeaqq","SOUTH_EAST qqqqqwdeddwd","NORTH_EAST dadad"}),
+        new Pair<>("hexcasting.loot_hex.beckon", new String[] {"NORTH_EAST qaq","EAST aa","NORTH_EAST qaq","NORTH_EAST wa","EAST weaqa","EAST aadaa","EAST dd","NORTH_EAST qaq","EAST aa","EAST aawdd","NORTH_WEST wddw","EAST aadaa","NORTH_EAST wqaqw","NORTH_EAST wdedw","SOUTH_EAST aqaawa","SOUTH_EAST waqaw","SOUTH_WEST awqqqwaqw"}),
+        new Pair<>("hexcasting.loot_hex.detonate", new String[] {"NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaaedwd","EAST ddwddwdd"}),
+        new Pair<>("hexcasting.loot_hex.shockwave", new String[] {"NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaawaa","EAST aadaadaa","SOUTH_EAST aqawqadaq","SOUTH_EAST aqaaedwd","EAST aawaawaa","NORTH_EAST qqa","EAST qaqqqqq"}),
+        new Pair<>("hexcasting.loot_hex.heat_wave", new String[] {"WEST qqq","SOUTH_EAST aaqawawa","EAST eee","NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaae","SOUTH_EAST qqqqqwded","SOUTH_WEST aaqwqaa","SOUTH_EAST a","NORTH_EAST dadad"}),
+        new Pair<>("hexcasting.loot_hex.wither_wave", new String[] {"WEST qqq","SOUTH_EAST aqaae","SOUTH_EAST aqaaw","SOUTH_WEST qqqqqaewawawe","EAST eee","NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaae","SOUTH_EAST qqqqqwdeddwd","SOUTH_WEST aaqwqaa","SOUTH_EAST a","NORTH_EAST dadad"}),
+        new Pair<>("hexcasting.loot_hex.flight_zone", new String[] {"NORTH_EAST qaq","SOUTH_EAST aqaaq","SOUTH_WEST awawaawq"})
+    );
 }
