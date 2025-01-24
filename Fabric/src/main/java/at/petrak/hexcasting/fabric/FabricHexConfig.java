@@ -15,6 +15,7 @@ import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 
@@ -209,6 +210,16 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private double loreChance = HexLootHandler.DEFAULT_LORE_CHANCE;
 
+        @ConfigEntry.Gui.Tooltip
+        private List<String> cypherInjectionsRaw = HexLootHandler.DEFAULT_CYPHER_INJECTS
+                .stream()
+                .map(ResourceLocation::toString)
+                .toList();
+        @ConfigEntry.Gui.Excluded
+        private transient List<ResourceLocation> cypherInjections;
+        @ConfigEntry.Gui.Tooltip
+        private double cypherChance = HexLootHandler.DEFAULT_CYPHER_CHANCE;
+
 
         @Override
         public void validatePostLoad() throws ValidationException {
@@ -239,6 +250,18 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             }
 
             this.loreChance = Mth.clamp(this.loreChance, 0.0, 1.0);
+
+            this.cypherInjections = new ArrayList<>();
+            try {
+                for (var table : this.cypherInjectionsRaw) {
+                    ResourceLocation loc = new ResourceLocation(table);
+                    this.cypherInjections.add(loc);
+                }
+            } catch (Exception e) {
+                throw new ValidationException("Bad parsing of cypher injects", e);
+            }
+
+            this.cypherChance = Mth.clamp(this.cypherChance, 0.0, 1.0);
         }
 
         @Override
@@ -292,8 +315,16 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             return anyMatchResLoc(this.loreInjections, lootTable);
         }
 
-        public double getLoreChance() {
+        public double loreChance() {
             return loreChance;
+        }
+
+        public boolean shouldInjectCyphers(ResourceLocation lootTable) {
+            return anyMatchResLoc(this.cypherInjections, lootTable);
+        }
+
+        public double cypherChance() {
+            return cypherChance;
         }
     }
 }

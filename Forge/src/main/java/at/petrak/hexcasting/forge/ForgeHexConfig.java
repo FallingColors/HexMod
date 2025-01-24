@@ -1,10 +1,12 @@
 package at.petrak.hexcasting.forge;
 
 import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.common.loot.HexLootHandler;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraft.util.RandomSource;
 
 import java.util.List;
 
