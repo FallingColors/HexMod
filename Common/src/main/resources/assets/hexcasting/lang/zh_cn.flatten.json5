@@ -252,8 +252,8 @@
   },
 
   "itemGroup.hexcasting": {
-    "": "咒法学",
-    creative_tab: "咒法学",
+    hexcasting: "咒法学",
+    scrolls: "咒法学",
   },
 
   "gui.hexcasting": {
@@ -380,11 +380,6 @@
           "": "紫水晶碎片掉落率变化量",
           "@Tooltip": "采掘紫水晶簇时紫水晶碎片掉落数量相较原版的改变量",
         },
-
-        // TODO: are these used anywhere??
-        "option.server.fewScrollTables.@Tooltip": "会额外生成较少数量卷轴的战利品表",
-        "option.server.someScrollTables.@Tooltip": "会额外生成中等数量卷轴的战利品表",
-        "option.server.manyScrollTables.@Tooltip": "会额外生成较大数量卷轴的战利品表",
       },
     },
   },
