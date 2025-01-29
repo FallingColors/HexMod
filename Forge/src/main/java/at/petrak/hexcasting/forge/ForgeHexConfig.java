@@ -137,6 +137,8 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.IntValue maxSpellCircleLength;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
+
+        private static ForgeConfigSpec.BooleanValue greaterTeleportSplatsItems;
         private static ForgeConfigSpec.BooleanValue villagersOffendedByMindMurder;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> tpDimDenyList;
         private static ForgeConfigSpec.BooleanValue doesTrueNameHaveAmbit;
@@ -176,6 +178,10 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                     "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
                 .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
 
+            greaterTeleportSplatsItems = builder.comment(
+                    "Should greater teleport splat players inventory?"
+            ).define("greaterTeleportSplatsItems", DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS);
+
             villagersOffendedByMindMurder = builder.comment(
                     "Should villagers take offense when you flay the mind of their fellow villagers?")
                 .define("villagersOffendedByMindMurder", true);
@@ -212,6 +218,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         public boolean isActionAllowedInCircles(ResourceLocation actionID) {
             return noneMatch(circleActionDenyList.get(), actionID);
         }
+
+        @Override
+        public boolean doesGreaterTeleportSplatItems() { return greaterTeleportSplatsItems.get(); }
 
         @Override
         public boolean doVillagersTakeOffenseAtMindMurder() {
