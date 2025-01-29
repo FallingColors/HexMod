@@ -373,6 +373,10 @@
           "": "Circle Action Deny List",
           "@Tooltip": "Resource locations of disallowed actions within circles. Trying to cast one of these from a circle will result in a mishap.",
         },
+        greaterTeleportSplatsItems: {
+          "": "Greater Teleport Splats Items",
+          "@Tooltip": "Whether items should fly out of the player's inventory when using Greater Teleport"
+        },
         villagersOffendedByMindMurder: {
           "": "Villagers Offended By Mind Murder",
           "@Tooltip": "Whether villagers should be angry at the player when other villagers are mindflayed",
