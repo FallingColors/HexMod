@@ -21,7 +21,7 @@ public class HexCreativeTabs {
 
     private static final Map<ResourceLocation, CreativeModeTab> TABS = new LinkedHashMap<>();
 
-    public static final CreativeModeTab MAIN = register("main", CreativeModeTab.builder(CreativeModeTab.Row.TOP, 7)
+    public static final CreativeModeTab MAIN = register("hexcasting", CreativeModeTab.builder(CreativeModeTab.Row.TOP, 7)
             .icon(() -> new ItemStack(HexItems.SPELLBOOK)));
 
     public static final CreativeModeTab SCROLLS = register("scrolls", CreativeModeTab.builder(CreativeModeTab.Row.TOP, 7)

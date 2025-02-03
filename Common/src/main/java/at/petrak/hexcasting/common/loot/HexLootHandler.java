@@ -4,8 +4,6 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 
-import java.util.List;
-
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 // https://github.com/VazkiiMods/Botania/blob/1.18.x/Xplat/src/main/java/vazkii/botania/common/loot/LootHandler.java
@@ -73,6 +71,7 @@ public class HexLootHandler {
         new ResourceLocation("minecraft", "chests/desert_pyramid"),
         new ResourceLocation("minecraft", "chests/ancient_city"),
         new ResourceLocation("minecraft", "chests/nether_bridge")
+        // you can use the table hexcasting:random_cypher to get exactly 1 cypher and nothing else
     );
 
     public static int getScrollCount(int range, RandomSource random) {
