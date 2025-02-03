@@ -1945,7 +1945,7 @@
         "1": "$(italic)去吧！现在一切都已完成，$(br)只须留着一个人作哨卫。/$$(br2)$(l:patterns/spells/sentinels)$(thing)哨卫/$是一种能被$(hex)咒术/$召唤出的神秘力量，就和亲人或是侍卫一样。对我而言，它是一个旋转着的几何体，而其他人看不见它。",
         "2": "它有些有趣的性质：$(li)它似乎不可被触摸，没人摸得到它。$(li)只有我的$(hex)咒术/$才能与之交互。$(li)一旦召唤，在被驱除前它都将留在原位。$(li)只要我离它足够近，我就能透过方块看见它。",
 
-        "sentinel/create": "在给定位置召唤哨卫$(l:patterns/spells/sentinels)$(thing)哨卫/$。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
+        "sentinel/create": "在给定位置召唤$(l:patterns/spells/sentinels)$(thing)哨卫/$。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
         "sentinel/destroy": "将我的$(l:patterns/spells/sentinels)$(thing)哨卫/$从世界中驱除出去。消耗极少量$(media)媒质/$。",
         "sentinel/get_pos": "将我的$(l:patterns/spells/sentinels)$(thing)哨卫/$的位置加到栈中，若并未召唤则加入一个 $(l:casting/influences)$(thing)Null/$。消耗极少量$(media)媒质/$。",
         "sentinel/wayfind": "将栈顶的位置向量变为从我的位置指向$(l:patterns/spells/sentinels)$(thing)哨卫/$的单位向量，若并未召唤则变为 $(l:casting/influences)$(thing)Null/$。消耗极少量$(media)媒质/$。",
