@@ -40,9 +40,8 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
      * This doesn't actually have any params so extract behaviour out for the benefit of forge
      */
     public static ItemStack doStatic(ItemStack stack, RandomSource rand) {
-        var hex = LOOT_HEXES.get(rand.nextInt(16));
+        var hex = LOOT_HEXES.get(rand.nextInt(LOOT_HEXES.size()));
         var patsTag = new ListTag();
-        // skip first element since it's the name, not a pattern
         for (var patString : hex.getSecond()){
             var pieces = patString.split(" ");
             var pat = HexPattern.fromAngles(pieces[1],HexDir.fromString(pieces[0]));
