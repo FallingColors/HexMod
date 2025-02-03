@@ -211,8 +211,8 @@
   },
 
   "itemGroup.hexcasting": {
-    "": "Hexcasting",
-    creative_tab: "Hexcasting",
+    hexcasting: "Hex Casting",
+    scrolls: "Hex Casting (Scrolls)",
   },
 
   "gui.hexcasting": {
@@ -335,11 +335,6 @@
           "": "Amethyst Shard Drop Rate Change",
           "@Tooltip": "How much the number of amethyst shards dropped from clusters is increased/decreased.",
         },
-
-        // TODO: are these used anywhere??
-        "fewScrollTables.@Tooltip": "Loot tables that a small number of Ancient Scrolls are injected into",
-        "someScrollTables.@Tooltip": "Loot tables that a decent number of Ancient Scrolls are injected into",
-        "manyScrollTables.@Tooltip": "Loot tables that a huge number of Ancient Scrolls are injected into",
       },
     },
   },
