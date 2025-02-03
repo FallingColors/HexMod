@@ -1,4 +1,4 @@
-// 1.20.1	2024-12-12T01:28:26.4883123	Hex Casting/Tags for minecraft:item
+// 1.20.1	2025-02-03T18:26:54.5110333	Hex Casting/Tags for minecraft:item
 e5df19a1dc6eadf14cd9b0f0fe45a74330b745e9 data\minecraft\tags\items\planks.json
 c562b4be24d0b6b13f3c65599d3bfa3bf2c4ce21 data\minecraft\tags\items\logs.json
 20183cd61968ff6548df2dde1100b6378d68d64b data\minecraft\tags\items\wooden_buttons.json
@@ -11,8 +11,8 @@ fdb48f194d7937ab6b423fa4b90a4d438bf6dd90 data\minecraft\tags\items\wooden_doors.
 c562b4be24d0b6b13f3c65599d3bfa3bf2c4ce21 data\hexcasting\tags\items\edified_logs.json
 c72a147bc65d26424df199388969ebd11119aed3 data\hexcasting\tags\items\brainswept_circle_components.json
 30780136e6469a01369d7e278998edb6d7f6a16b data\hexcasting\tags\items\staves.json
-5216ba5c57db29b8dee9aebc63a2e3b17c97dc17 data\minecraft\tags\items\wooden_trapdoors.json
 5bbfd513fd2eb2090b0c2d1ec33504deb79d53b9 data\minecraft\tags\items\wooden_slabs.json
+5216ba5c57db29b8dee9aebc63a2e3b17c97dc17 data\minecraft\tags\items\wooden_trapdoors.json
 9d18fb7a889031a704ca0e553600e1d6f8c3759d data\hexcasting\tags\items\directrices.json
 e186f43ed06770e698c886691f91b2c6acdb5a2a data\hexcasting\tags\items\seal_materials.json
 5928bad07d3872bb60f29ef4f3c885c8e1967c20 data\hexcasting\tags\items\phial_base.json
