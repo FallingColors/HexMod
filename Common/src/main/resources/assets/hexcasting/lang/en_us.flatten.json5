@@ -1128,16 +1128,12 @@
           It's probably just the ramblings of extinct traditionalists, though -- a pattern's a pattern.$(br2)\
           What could possibly go wrong?",
       },
-      creative_unlocker: {
-        "": "The Media Cube",
-        desc: "I have found a source of near limitless power, The Media Cube.",
-      }
     },
     // ^ categories
     
     entry: {
       media: "Media",
-      media_cube: "The Media Cube",
+      creative_unlocker: "The Media Cube",
       geodes: "Geodes",
       couldnt_cast: "A Frustration",
       start_to_see: "WHAT DID I SEE",

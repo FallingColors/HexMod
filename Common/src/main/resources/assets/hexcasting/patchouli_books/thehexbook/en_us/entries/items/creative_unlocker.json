@@ -1,10 +1,10 @@
 {
-  "name": "hexcasting.entry.media_cube",
+  "name": "hexcasting.entry.creative_unlocker",
   "icon": "hexcasting:creative_unlocker",
-  "category": "hexcasting:creative_unlocker",
-  "sortnum": 0,
-  "priority": true,
+  "category": "hexcasting:items",
+  "sortnum": 99,
   "advancement": "hexcasting:creative_unlocker",
+  "secret": true,
   "pages": [
     {
       "type": "patchouli:text",
