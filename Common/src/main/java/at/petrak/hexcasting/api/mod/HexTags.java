@@ -24,6 +24,10 @@ public class HexTags {
         public static final TagKey<Item> DIRECTRICES = create("directrices");
         public static final TagKey<Item> MINDFLAYED_CIRCLE_COMPONENTS = create("brainswept_circle_components");
 
+        public static final TagKey<Item> SLATE_BLOCKS = create("slate_blocks");
+        public static final TagKey<Item> AMETHYST_BLOCKS = create("amethyst_blocks");
+        public static final TagKey<Item> QUENCHED_ALLAY_BLOCKS = create("quenched_allay_blocks");
+
         public static TagKey<Item> create(String name) {
             return create(modLoc(name));
         }
@@ -37,10 +41,13 @@ public class HexTags {
         public static final TagKey<Block> EDIFIED_LOGS = create("edified_logs");
         public static final TagKey<Block> EDIFIED_PLANKS = create("edified_planks");
 
-
         public static final TagKey<Block> IMPETI = create("impeti");
         public static final TagKey<Block> DIRECTRICES = create("directrices");
         public static final TagKey<Block> MINDFLAYED_CIRCLE_COMPONENTS = create("brainswept_circle_components");
+
+        public static final TagKey<Block> SLATE_BLOCKS = create("slate_blocks");
+        public static final TagKey<Block> AMETHYST_BLOCKS = create("amethyst_blocks");
+        public static final TagKey<Block> QUENCHED_ALLAY_BLOCKS = create("quenched_allay_blocks");
 
         // Used to determine what blocks should be replaced with air by OpDestroyFluid
         public static final TagKey<Block> WATER_PLANTS = create("water_plants");
