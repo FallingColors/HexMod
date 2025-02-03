@@ -1,4 +1,4 @@
-// 1.20.1	2023-12-24T17:59:13.7584156	Item Models: hexcasting
+// 1.20.1	2024-12-10T14:26:44.916295	Item Models: hexcasting
 2fc68dcd6d73da3deaa6a33240dd9160a2b79592 assets/hexcasting/models/block/deco/quenched_allay_bricks_0.json
 d59af7a48b20b210240b26115fb172d6202f9254 assets/hexcasting/models/block/deco/quenched_allay_bricks_1.json
 a62eeebbca2d145c22f25725bd848ed4d673cefa assets/hexcasting/models/block/deco/quenched_allay_bricks_2.json
@@ -19,6 +19,22 @@ f2156b3a7041cf99891b528393db64c6b9ca1a4f assets/hexcasting/models/item/abacus.js
 19730853397b109cfedd0c3bbda83d5de6cd15b9 assets/hexcasting/models/item/akashic_record.json
 8c735feff09d46d00ed681311f46f61a50cfdc9b assets/hexcasting/models/item/amethyst_dust.json
 fbb8706993fbc3246c56b9f3eb274ff8968b70f8 assets/hexcasting/models/item/amethyst_pillar.json
+533a859174052a332de069b2ffeaf0106d132b9a assets/hexcasting/models/item/ancient_cypher.json
+71a7968e43fbb872ee52315a3ee738d0b3fd1a69 assets/hexcasting/models/item/ancient_cypher_0_filled.json
+0f0c627d7ed0e8a7e3666ca80ddc13b280d6ce9f assets/hexcasting/models/item/ancient_cypher_1.json
+097b8ecfb34df710ca4b396d3a5df7722ecc3596 assets/hexcasting/models/item/ancient_cypher_1_filled.json
+9fdde927e7e8b06221aef34a6a6b22d0b790f297 assets/hexcasting/models/item/ancient_cypher_2.json
+93257ad393b751931539a5641d4430a4631e95f9 assets/hexcasting/models/item/ancient_cypher_2_filled.json
+4af6234e24031ee0989282c8435fe07e85b02771 assets/hexcasting/models/item/ancient_cypher_3.json
+41760f3c89d8dc94c515b0ab8220ecf996710a3c assets/hexcasting/models/item/ancient_cypher_3_filled.json
+4df83ae775400ca2d480bfb3621abcf58d4d7352 assets/hexcasting/models/item/ancient_cypher_4.json
+d21eb7093c0231015808a8b51b27857da1748431 assets/hexcasting/models/item/ancient_cypher_4_filled.json
+e2b4e2ac4ad4fa4b490e1774a565a26fb840c474 assets/hexcasting/models/item/ancient_cypher_5.json
+4555e5de80047ffa4e72a4a98eb51437a95e7291 assets/hexcasting/models/item/ancient_cypher_5_filled.json
+420840b5761fcddbdd10186f3127bc7589badc46 assets/hexcasting/models/item/ancient_cypher_6.json
+55c08581a2e8c7134d63b38226bddafff0fba3ae assets/hexcasting/models/item/ancient_cypher_6_filled.json
+2731192f0c7a9a8d45ba4fcd8d1de60bade0b49e assets/hexcasting/models/item/ancient_cypher_7.json
+7ba3015d79601f1c8238dbac4a45e525e3589f16 assets/hexcasting/models/item/ancient_cypher_7_filled.json
 87e7ee44cdd0808a3dd72babfd1db716df2bcdfe assets/hexcasting/models/item/artifact.json
 1cd1b4d002d1a9a044ceab7cca842e4a2b7bd2f4 assets/hexcasting/models/item/artifact_0_filled.json
 4709e65d8e74cf45b3ba014bdf70373728cccc78 assets/hexcasting/models/item/artifact_1.json

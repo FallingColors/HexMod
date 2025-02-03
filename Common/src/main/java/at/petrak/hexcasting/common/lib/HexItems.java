@@ -80,6 +80,7 @@ public class HexItems {
     public static final ItemFocus FOCUS = make("focus", new ItemFocus(unstackable()));
     public static final ItemSpellbook SPELLBOOK = make("spellbook", new ItemSpellbook(unstackable()));
 
+    public static final ItemCypher ANCIENT_CYPHER = make("ancient_cypher", new ItemAncientCypher(unstackable()));
     public static final ItemCypher CYPHER = make("cypher", new ItemCypher(unstackable()));
     public static final ItemTrinket TRINKET = make("trinket", new ItemTrinket(unstackable().rarity(Rarity.UNCOMMON)));
     public static final ItemArtifact ARTIFACT = make("artifact", new ItemArtifact(unstackable().rarity(Rarity.RARE)));

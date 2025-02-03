@@ -47,6 +47,11 @@
       sealed: "Sealed Focus",
     },
 
+    ancient_cypher: {
+      "": "Ancient Cypher",
+      preset: "Ancient Cypher: %s",
+    },
+    
     thought_knot: "Thought-Knot",
     spellbook: "Spellbook",
     cypher: "Cypher",
@@ -380,6 +385,22 @@
           "": "Scroll Injection Weights",
           "@Tooltip": "Maps the names of loot tables to the amount of per-world patterns on scrolls should go in them. There's about a 50% chance to get any scrolls in a given chest marked here; once that is met, between 1 and that many scrolls are generated.",
         },
+        loreInjectionsRaw: {
+          "": "Lore Injection Sites",
+          "@Tooltip": "Lists the loot tables that lore fragments should be added to.",
+        },
+        loreChance: {
+          "": "Lore Fragment Chance",
+          "@Tooltip": "The chance for lore fragments to appear in any of the above loot tables.",
+        },
+        cypherInjectionsRaw: {
+          "": "Ancient Cypher Injection Sites",
+          "@Tooltip": "Lists the loot tables that ancient cyphers should be added to.",
+        },
+        cypherChance: {
+          "": "Ancient Cypher Chance",
+          "@Tooltip": "The chance for ancient cyphers to appear in any of the above loot tables.",
+        },
         amethystShardModification: {
           "": "Amethyst Shard Drop Rate Change",
           "@Tooltip": "How much the number of amethyst shards dropped from clusters is increased/decreased.",
@@ -497,6 +518,25 @@
       all_media: "Entire contents",
       infinite_media: "Infinite",
     },
+    
+    loot_hex: {
+      "shatter": "Shatter",
+      "kindle": "Kindle",
+      "illuminate": "Illuminate",
+      "growth": "Growth",
+      "lunge": "Lunge",
+      "sidestep": "Sidestep",
+      "ascend": "Ascend",
+      "blink": "Blink",
+      "blastoff": "Blastoff",
+      "radar": "Radar",
+      "beckon": "Beckon",
+      "detonate": "Detonate",
+      "shockwave": "Shockwave",
+      "heat_wave": "Heat Wave",
+      "wither_wave": "Wither Wave",
+      "flight_zone": "Flight Zone",
+    },
 
     // TODO: post-eigengrau make these less anticlimactic
     message: {
@@ -566,6 +606,7 @@
       media: "%d dust",
       media_amount: "Contains: %s (%s)",
       "media_amount.advanced": "Contains: %s/%s (%s)",
+      stored_hex: "Hex: ",
       
       list_contents: "[%s]",
       null_iota: "Null",
@@ -619,8 +660,12 @@
     
     attributes: {
       grid_zoom: "Casting Grid Size",
+      media_consumption: "Media Consumption",
+      ambit_radius: "Player Ambit Radius",
+      sentinel_radius: "Sentinel Ambit Radius",
       // TODO: the +1 is kind of janky
       scry_sight: "Scrying Sight",
+      feeble_mind: "Feeble Mind"
     },
     
     // Action localizations
@@ -1164,6 +1209,7 @@
       
       // why is this called "hexcasting"?
       hexcasting: "Casting Items",
+      ancient_cyphers: "Ancient Cyphers",
       phials: "Phials of Media",
       potions: "Hex Potions",
       pigments: "Pigments",
@@ -1502,6 +1548,11 @@
         "4": "$(l:items/hexcasting)$(item)Artifacts/$ are the most powerful of all-- after their _media is depleted, they can use $(l:items/amethyst)$(item)Amethyst/$ from the holder's inventory to pay for the _Hex, just as I do when casting with a $(l:items/staff)$(item)Staff/$. Of course, this also means the spell might consume their mind if there's not enough $(l:items/amethyst)$(item)Amethyst/$.$(br2)Once I've made an empty magic item in a mundane crafting bench, I infuse the _Hex into it using (what else but) a spell appropriate to the item. $(l:patterns/spells/hexcasting)I've catalogued the patterns here./$",
         "5": "Each infusion spell requires an entity and a list of patterns on the stack. The entity must be a _media-holding item entity (i.e. $(l:items/amethyst)$(item)amethyst/$ crystals, dropped on the ground); the entity is consumed and forms the battery.$(br2)Usefully, it seems that the _media in the battery is not consumed in chunks as it is when casting with a $(l:items/staff)$(item)Staff/$-- rather, the _media \"melts down\" into one continuous pool. Thus, if I store a _Hex that only costs one $(l:items/amethyst)$(item)Amethyst Dust/$'s worth of media, a $(l:items/amethyst)$(item)Charged Crystal/$ used as the battery will allow me to cast it 10 times.",
         "crafting.desc": "$(italic)We have a saying in our field: \"Magic isn't\". It doesn't \"just work,\" it doesn't respond to your thoughts, you can't throw fireballs or create a roast dinner from thin air or turn a bunch of muggers into frogs and snails./$",
+      },
+
+      ancient_cyphers: {
+        "1": "While adventuring, I've come across what appear to be $(l:items/hexcasting)$(item)Cyphers/$ created by the Hexcasters of the ancient past. These $(item)Ancient Cyphers/$ work just like the ones I can craft: they can't be recharged, and will break when their reserve of _Media runs out. However, unlike my own $(l:items/hexcasting)$(item)Cyphers/$, their decayed structure allows me to glimpse the _Hex stored within.",
+        "2": "These may be useful for learning new techniques - who better to teach me than ancient masters of the art?$(br2)Alternatively, I could erase the contents of one and store my own _Hex inside, creating a casting item that clearly displays its own function."
       },
       
       phials: {
