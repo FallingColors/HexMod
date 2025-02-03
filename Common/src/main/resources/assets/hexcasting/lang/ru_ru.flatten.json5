@@ -211,8 +211,8 @@
   },
 
   "itemGroup.hexcasting": {
-    "": "Hexcasting",
-    creative_tab: "Hexcasting",
+    hexcasting: "Hex Casting",
+    scrolls: "Hex Casting (Scrolls)",
   },
 
   "gui.hexcasting": {

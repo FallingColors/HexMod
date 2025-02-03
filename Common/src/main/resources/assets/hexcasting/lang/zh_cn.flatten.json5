@@ -252,8 +252,8 @@
   },
 
   "itemGroup.hexcasting": {
-    "": "咒法学",
-    creative_tab: "咒法学",
+    hexcasting: "咒法学",
+    scrolls: "咒法学",
   },
 
   "gui.hexcasting": {
@@ -581,6 +581,7 @@
           add_segment: "绘制线段",
         },
         cast: {
+          fail: "事故：轰鸣",
           normal: "操作：嗡鸣",
           spell: "法术：施放",
           hermes: "赫尔墨斯之策略：鸣响",
@@ -922,7 +923,7 @@
       wrong_dimension: "无法在%2$s中影响到%1$s",
       entity_too_far: "%s超出影响范围",
       immune_entity: "无法影响到%s",
-      eval_too_much: "递归深度过大",
+      eval_too_much: "运行了过多图案",
       no_item: "需要%s，而实际无对应物品",
       "no_item.offhand": "需要在另一只手里持有%s，而实际无对应物品",
       bad_entity: "需要%s，而实际接受了%s",
@@ -1378,8 +1379,8 @@
         "retrospection.title": "反思过急",
         retrospection: "试图在绘制$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$前绘制$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$。$(br2)产生橙色火花，并压入一个$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$对应的图案。",
 
-        "too_many_patterns.title": "钻研过深",
-        too_many_patterns: "在一个法术内以元运行方式运行过多法术。$(br2)产生暗蓝色火花，并使我窒息。",
+        "too_many_patterns.title": "陷入沉思",
+        too_many_patterns: "在单个$(hex)咒术/$试图运行过多图案，通常是因为不小心制造了死循环。$(br2)产生暗蓝色火花，并使我窒息。",
 
         "true_name.title": "违犯他人",
         true_name: "试图在某种永久性媒介中$(l:patterns/readwrite#hexcasting:write)$(action)存储/$代表另一位玩家的 iota。$(br2)产生黑色火花，并致盲大约一分钟。",
@@ -1552,7 +1553,7 @@
 
       spellcircles: {
         "1": "我终于知道$(l:items/slate)$(item)石板/$的用途了。早已遗落的卓伟结构。镌刻其上的图案会按顺序自动运行。思维和能量在其中穿梭，一个接一个接一个接一个接一个穿梭穿梭穿梭——我不能我不能我不能跟着它的思维应该去理解。",
-        "2": "我需要$(l:greatwork/impetus)$(item)促动石/$作为一种自我维持的$(media)媒质/$波源来启动仪式。而产生的波就会随着$(l:items/slate)$(item)石板/$或是其他和这种波亲和性好的方块穿梭，一个接一个地收集碰到的图案。当波最终回到$(l:greatwork/impetus)$(item)促动石/$处时，所有碰到的图案就会按顺序运行。$(br2)$(media)媒质/$流出任何方块的方向必须唯一而确定，否则法术环会在分叉处失效。",
+        "2": "我需要$(l:greatwork/impetus)$(item)促动石/$作为一种自我维持的$(media)媒质/$波源来启动仪式。产生的波会随着$(l:items/slate)$(item)石板/$或是其他合适的方块穿梭，运行它碰到的图案。$(br2)如果波无法回到$(l:greatwork/impetus)$(item)促动石/$处，施法会立即失败。而且，波流出任何方块的方向必须唯一而确定，否则法术环会在分叉处失效。",
         "3": "因此，法术“环”必须是一个封闭的图形，凹多边形和凸多边形均可，方向也随意。实际上，借助某些其他方块，法术环可在所有三个维度上随意排布。这种性质可能没什么大用，但我必须给大脑一点刺激，好让研究继续下去。",
         "4": "真是精妙。法术环不会从我的物品栏或我的意识中汲取$(media)媒质/$，而是要通过漏斗（或类似装置）向$(l:greatwork/impetus)$(item)促动石/$提供晶态的$(media)媒质/$。$(br2)$(l:items/lens)$(item)探知透镜/$能以紫水晶粉为单位显示$(l:greatwork/impetus)$(item)促动石/$中的$(media)媒质/$量。",
         "5": "然而，用法术环施放的法术有一个限制：它无法影响环外的事物。也即，它无法影响到能将整个法术环包起的最小长方体外的事物（有凹进部分的法术环仍能影响凹进部分内的事物）。",
@@ -1939,7 +1940,7 @@
         "1": "$(italic)去吧！现在一切都已完成，$(br)只须留着一个人作哨卫。/$$(br2)$(l:patterns/spells/sentinels)$(thing)哨卫/$是一种能被$(hex)咒术/$召唤出的神秘力量，就和亲人或是侍卫一样。对我而言，它是一个旋转着的几何体，而其他人看不见它。",
         "2": "它有些有趣的性质：$(li)它似乎不可被触摸，没人摸得到它。$(li)只有我的$(hex)咒术/$才能与之交互。$(li)一旦召唤，在被驱除前它都将留在原位。$(li)只要我离它足够近，我就能透过方块看见它。",
 
-        "sentinel/create": "在给定位置召唤哨卫$(l:patterns/spells/sentinels)$(thing)哨卫/$。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
+        "sentinel/create": "在给定位置召唤$(l:patterns/spells/sentinels)$(thing)哨卫/$。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
         "sentinel/destroy": "将我的$(l:patterns/spells/sentinels)$(thing)哨卫/$从世界中驱除出去。消耗极少量$(media)媒质/$。",
         "sentinel/get_pos": "将我的$(l:patterns/spells/sentinels)$(thing)哨卫/$的位置加到栈中，若并未召唤则加入一个 $(l:casting/influences)$(thing)Null/$。消耗极少量$(media)媒质/$。",
         "sentinel/wayfind": "将栈顶的位置向量变为从我的位置指向$(l:patterns/spells/sentinels)$(thing)哨卫/$的单位向量，若并未召唤则变为 $(l:casting/influences)$(thing)Null/$。消耗极少量$(media)媒质/$。",

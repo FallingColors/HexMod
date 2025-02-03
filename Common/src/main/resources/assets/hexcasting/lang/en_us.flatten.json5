@@ -257,7 +257,7 @@
   },
   
   "itemGroup.hexcasting": {
-    main: "Hex Casting",
+    hexcasting: "Hex Casting",
     scrolls: "Hex Casting (Scrolls)",
   },
   
@@ -404,10 +404,6 @@
         cypherChance: {
           "": "Ancient Cypher Chance",
           "@Tooltip": "The chance for ancient cyphers to appear in any of the above loot tables.",
-        },
-        lootHexList: {
-          "": "Preset Loot Hex List",
-          "@Tooltip": "Lists the preset hexes that can be found in ancient cyphers. The first item in each list is the name of the hex, and the others are the patterns. The name is treated as a translation key if possible, but if you add your own they should be human-readable.",
         },
         amethystShardModification: {
           "": "Amethyst Shard Drop Rate Change",
@@ -668,8 +664,12 @@
     
     attributes: {
       grid_zoom: "Casting Grid Size",
+      media_consumption: "Media Consumption",
+      ambit_radius: "Player Ambit Radius",
+      sentinel_radius: "Sentinel Ambit Radius",
       // TODO: the +1 is kind of janky
       scry_sight: "Scrying Sight",
+      feeble_mind: "Feeble Mind"
     },
     
     // Action localizations

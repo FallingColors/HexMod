@@ -227,14 +227,13 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private transient List<ResourceLocation> cypherInjections;
         @ConfigEntry.Gui.Tooltip
         private double cypherChance = HexLootHandler.DEFAULT_CYPHER_CHANCE;
-        @ConfigEntry.Gui.Tooltip
-        private List<List<String>> lootHexList = HexLootHandler.DEFAULT_LOOT_HEXES;
 
 
         @Override
         public void validatePostLoad() throws ValidationException {
             this.maxOpCount = Math.max(this.maxOpCount, 0);
             this.maxSpellCircleLength = Math.max(this.maxSpellCircleLength, 4);
+            this.traderScrollChance = Mth.clamp(this.traderScrollChance, 0.0, 1.0);
 
             this.scrollInjections = new Object2IntOpenHashMap<>();
             try {
@@ -339,11 +338,6 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
 
         public double cypherChance() {
             return cypherChance;
-        }
-
-        public List<String> getRandomLootHex(RandomSource rand) {
-            var index = rand.nextInt(this.lootHexList.size());
-            return this.lootHexList.get(index);
         }
     }
 }

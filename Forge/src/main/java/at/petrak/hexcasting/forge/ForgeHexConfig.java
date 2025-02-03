@@ -152,7 +152,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.BooleanValue doesTrueNameHaveAmbit;
         private static ForgeConfigSpec.DoubleValue traderScrollChance;
         // scroll/lore/cypher pools and chances should go here
-        private static ForgeConfigSpec.ConfigValue<List<? extends List<String>>> lootHexList;
 
 
         public Server(ForgeConfigSpec.Builder builder) {
@@ -182,10 +181,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
             // builders for scroll/lore/cypher pools and chances should go here
 
-            lootHexList = builder.comment(
-                    "List of preset hexes found in loot cyphers. First element is the name, other elements are the patterns." +
-                    "The default names use hardcoded translation keys, but custom ones should be human-readable.")
-                .defineList("lootHexList", HexLootHandler.DEFAULT_LOOT_HEXES, Server::isValidReslocArg);
             builder.pop();
 
             actionDenyList = builder.comment(
@@ -247,12 +242,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public double traderScrollChance() {
             return traderScrollChance.get();
-        }
-
-        @Override
-        public List<String> getRandomLootHex(RandomSource rand) {
-            var index = rand.nextInt(lootHexList.get().size());
-            return lootHexList.get().get(index);
         }
 
         private static boolean isValidReslocArg(Object o) {
