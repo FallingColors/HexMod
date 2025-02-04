@@ -13,7 +13,12 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
 import net.minecraftforge.common.loot.LootTableIdCondition;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 public class ForgeHexLootModGen extends GlobalLootModifierProvider {
+    public static final ResourceLocation RANDOM_SCROLL_TABLE = modLoc("random_scroll");
+    public static final ResourceLocation RANDOM_CYPHER_TABLE = modLoc("random_cypher");
+    
     public ForgeHexLootModGen(PackOutput output) {
         super(output, HexAPI.MOD_ID);
     }
@@ -40,6 +45,14 @@ public class ForgeHexLootModGen extends GlobalLootModifierProvider {
                 LootTableIdCondition.builder(injection).build()
             }, HexLootHandler.DEFAULT_CYPHER_CHANCE));
         }
+
+        add("scroll/hexcasting/random_scroll", new ForgeHexScrollLootMod(new LootItemCondition[]{
+            LootTableIdCondition.builder(RANDOM_SCROLL_TABLE).build()
+        }, -1));  // -1 weight = guaranteed spawn
+
+        add("cypher/hexcasting/random_cypher", new ForgeHexCypherLootMod(new LootItemCondition[]{
+            LootTableIdCondition.builder(RANDOM_CYPHER_TABLE).build()
+        }, 1));  // 1 chance = guaranteed spawn
 
         add("amethyst_cluster", new ForgeHexAmethystLootMod(new LootItemCondition[]{
             LootTableIdCondition.builder(Blocks.AMETHYST_CLUSTER.getLootTable()).build()
