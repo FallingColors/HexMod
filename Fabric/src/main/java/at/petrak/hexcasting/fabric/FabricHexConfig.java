@@ -182,6 +182,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private List<String> circleActionDenyList = List.of();
         @ConfigEntry.Gui.Tooltip
+        private boolean greaterTeleportSplatsItems = DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS;
+        @ConfigEntry.Gui.Tooltip
         private boolean villagersOffendedByMindMurder = DEFAULT_VILLAGERS_DISLIKE_MIND_MURDER;
         @ConfigEntry.Gui.Tooltip
         private boolean doesTrueNameHaveAmbit = DEFAULT_TRUE_NAME_HAS_AMBIT;
@@ -290,6 +292,9 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         public boolean isActionAllowedInCircles(ResourceLocation actionID) {
             return noneMatch(circleActionDenyList, actionID);
         }
+
+        @Override
+        public boolean doesGreaterTeleportSplatItems() { return greaterTeleportSplatsItems; }
 
         @Override
         public boolean doVillagersTakeOffenseAtMindMurder() {
