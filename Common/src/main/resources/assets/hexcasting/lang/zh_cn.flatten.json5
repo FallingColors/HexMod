@@ -47,6 +47,11 @@
       sealed: "密封核心",
     },
 
+    ancient_cypher: {
+      "": "远古杂件",
+      preset: "远古杂件：%s",
+    },
+
     thought_knot: "结念绳",
     spellbook: "法术书",
     cypher: "杂件",
@@ -253,7 +258,7 @@
 
   "itemGroup.hexcasting": {
     hexcasting: "咒法学",
-    scrolls: "咒法学",
+    scrolls: "咒法学丨卷轴",
   },
 
   "gui.hexcasting": {
@@ -368,13 +373,37 @@
           "": "法术环禁用操作列表",
           "@Tooltip": "法术环中被禁用操作的资源位置；试图执行此类操作会导致事故",
         },
+        greaterTeleportSplatsItems: {
+          "": "卓越传送散落物品",
+          "@Tooltip": "使用卓越传送时，玩家物品栏中的物品是否会飞出"
+        },
         villagersOffendedByMindMurder: {
           "": "村民会被意识剥除冒犯",
           "@Tooltip": "村民是否会在其他村民被剥离意识时感到气愤",
         },
+        traderScrollChance: {
+          "": "流浪商人交易卷轴概率",
+          "@Tooltip": "流浪商人出售远古卷轴的概率",
+        },
         scrollInjectionsRaw: {
           "": "卷轴战利品权重",
           "@Tooltip": "将战利品表名与卷轴生成数量期望一一对应并罗列。在下列所有战利品表中生成卷轴的概率约50%，生成时会放入1到对应期望个数的卷轴。",
+        },
+        loreInjectionsRaw: {
+          "": "故事残卷战利品位置",
+          "@Tooltip": "应加入故事残卷的战利品表列表。",
+        },
+        loreChance: {
+          "": "故事残卷出现概率",
+          "@Tooltip": "上述战利品表中故事残卷出现的概率。",
+        },
+        cypherInjectionsRaw: {
+          "": "远古杂件战利品位置",
+          "@Tooltip": "应加入远古杂件的战利品表列表。",
+        },
+        cypherChance: {
+          "": "远古杂件出现概率",
+          "@Tooltip": "上述战利品表中远古杂件出现的概率。",
         },
         amethystShardModification: {
           "": "紫水晶碎片掉落率变化量",
@@ -494,6 +523,25 @@
       "infinite_media": "无限",
     },
 
+    loot_hex: {
+      "shatter": "粉碎",
+      "kindle": "燃焰",
+      "illuminate": "耀明",
+      "growth": "生长",
+      "lunge": "猛冲",
+      "sidestep": "侧闪",
+      "ascend": "升空",
+      "blink": "闪现",
+      "blastoff": "起飞",
+      "radar": "雷达",
+      "beckon": "召来",
+      "detonate": "引爆",
+      "shockwave": "冲击波",
+      "heat_wave": "热浪",
+      "wither_wave": "凋零波纹",
+      "flight_zone": "飞行区",
+    },
+
     // TODO: post-eigengrau make these less anticlimactic
     message: {
       "cant_overcast": "这个咒术需求的媒质量比我有的还多……我应该再算几遍。",
@@ -515,6 +563,11 @@
           sealed: "空白（%s）",
         },
         sealed: "已密封",
+      },
+
+      scroll: {
+        needs_purchase: "购买以显示图案",
+        pattern_not_loaded: "放入物品栏以加载图案",
       },
 
       abacus: {
@@ -557,6 +610,7 @@
       media: "%d 紫水晶粉",
       media_amount: "含有：%s（%s）",
       "media_amount.advanced": "含有：%s/%s（%s）",
+      stored_hex: "咒术：",
 
       list_contents: "[%s]",
       null_iota: "NULL",
@@ -610,8 +664,12 @@
 
     attributes: {
       grid_zoom: "咒术网格大小",
+      media_consumption: "媒质消耗",
+      ambit_radius: "玩家影响范围半径",
+      sentinel_radius: "哨卫影响范围半径",
       // TODO: the +1 is kind of janky
-      scry_sight: "探知视觉"
+      scry_sight: "探知视觉",
+      feeble_mind: "孱弱意识"
     },
 
     // Action localizations
@@ -1155,6 +1213,7 @@
 
       // why is this called "hexcasting"?
       hexcasting: "施法物品",
+      ancient_cyphers: "远古杂件",
       phials: "媒质之瓶",
       potions: "咒术药水",
       pigments: "染色剂",
@@ -1495,6 +1554,11 @@
         "crafting.desc": "$(italic)我们常说一句话，“魔法从不……”。它从不“就是行得通”，它不会随你操控。你不能光靠所谓魔法扔个火球，烧顿晚饭，或是把一帮劫匪变成青蛙和蜗牛。/$",
       },
 
+      ancient_cyphers: {
+        "1": "在四处探险的过程中，我找到了一些$(l:items/hexcasting)$(item)杂件/$，似乎是古代的咒术师们制造后残存至今的。这些$(item)远古杂件/$的功能和我自己制作的基本一致：都不可再充能，其中$(media)媒质/$耗尽后也都会碎掉。两者间的不同点则在于：搜刮到的$(l:items/hexcasting)$(item)杂件/$的结构已经残破，我可以借此窥探其中的$(hex)咒术/$。",
+        "2": "这些物件大概很适合用来学新技巧——若要在授业解惑方面将古代的大师们排第二，就没人能称第一了。$(br2)此外，还可清除其中的$(hex)咒术/$换成我自己写的，如此就得到了能显示自身功能的施法物品。"
+      },
+
       phials: {
         "1": "我觉得……自然不愿意给我的研究留些余量的做法，令人非常不快。如果我手头只有$(l:items/amethyst)$(item)充能紫水晶/$，就算是最为基础的$(l:patterns/basics#hexcasting:raycast)$(action)弓箭手之馏化/$也会消耗一整块水晶，没利用的$(media)媒质/$就被浪费了。$(br2)幸运的是，我找到了一种解决问题的方法。",
         "2": "我找到了记载着一种注入了$(media)媒质/$的$(item)玻璃瓶/$的卷轴。施放$(hex)咒术/$时，法术会从这种试剂瓶中汲取$(media)媒质/$。液态的$(media)媒质/$便于按量使用，不会有媒质被浪费。它就和$(l:items/hexcasting)$(item)缀品/$的内部电池差不多，也一样可以用$(l:patterns/spells/hexcasting#hexcasting:recharge)$(action)重新充能/$补充媒质。",
@@ -1809,7 +1873,7 @@
         index_of: "移除栈顶元素，并将栈顶列表变为该元素在其中第一次出现的位置（从 0 开始）。若没有出现过则返回 -1。",
         remove_from: "移除栈顶的数，而后移除栈顶列表中下标为该数（就是被移除的那个数）的元素。",
         replace: "移除栈顶元素和栈顶的数，而后将栈顶列表中下标为该数（就是被移除的那个数）变为该元素。若该数越界则不进行操作。",
-        last_n_list: "移除$(italic)所给数/$个元素，并将这些元素加入列表并将该列表压入栈顶。",
+        last_n_list: "移除$(italic)所给数/$个元素，将这些元素加入列表并将该列表压入栈顶。",
         splat: "移除栈顶列表，而后将其中元素全部压入栈顶。",
         construct: "移除栈顶元素，将其加到栈顶列表的开头。",
         deconstruct: "移除栈顶列表中的第一个元素，并将该元素压入栈顶。",
