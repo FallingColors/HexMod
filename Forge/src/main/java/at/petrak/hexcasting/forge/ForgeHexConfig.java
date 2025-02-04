@@ -179,7 +179,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
 
             greaterTeleportSplatsItems = builder.comment(
-                    "Should greater teleport splat players inventory?"
+                    "Should items fly out of the player's inventory when using Greater Teleport?"
             ).define("greaterTeleportSplatsItems", DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS);
 
             villagersOffendedByMindMurder = builder.comment(
