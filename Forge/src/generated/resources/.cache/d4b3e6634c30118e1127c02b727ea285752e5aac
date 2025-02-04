@@ -1,6 +1,7 @@
-// 1.20.1	2025-01-23T15:52:03.6220728	Global Loot Modifiers : hexcasting
-ff299d5fca3672c5ca0684cf9db095de2bae279f data/forge/loot_modifiers/global_loot_modifiers.json
+// 1.20.1	2025-02-03T19:55:20.3505171	Global Loot Modifiers : hexcasting
+aea957ba78a93cace2c9959df83ed396b66d732f data/forge/loot_modifiers/global_loot_modifiers.json
 28ca895a27221312c2451f26646111a68aadbf6c data/hexcasting/loot_modifiers/amethyst_cluster.json
+5dd05e6f8f0e406b529bc209b393410553584fdf data/hexcasting/loot_modifiers/cypher/hexcasting/random_cypher.json
 009da1f70c3aaaa4f8474eb08217821638d8c02c data/hexcasting/loot_modifiers/cypher/minecraft/chests/abandoned_mineshaft.json
 27481d7099d4914cd97e4ed7da8fd69327bb376a data/hexcasting/loot_modifiers/cypher/minecraft/chests/ancient_city.json
 9cc4deb22f8d70d600587a48f2a1243a8040cb94 data/hexcasting/loot_modifiers/cypher/minecraft/chests/desert_pyramid.json
@@ -18,6 +19,7 @@ d1b282c57a8f5d1a37f3b87fbdba408b2a1b1415 data/hexcasting/loot_modifiers/lore/min
 e52b9cba9d685a2ca7ea7db629c7c0990f12be26 data/hexcasting/loot_modifiers/lore/minecraft/chests/village/village_snowy_house.json
 a59a9c55b02b76c0e3f6a2ee4fa7bcf3ab538595 data/hexcasting/loot_modifiers/lore/minecraft/chests/village/village_taiga_house.json
 348688be7af2a3ea62c605428c958e62e449252d data/hexcasting/loot_modifiers/lore/minecraft/chests/woodland_mansion.json
+479260c4206a3f664f5077a7c43e3ac93e3fdc87 data/hexcasting/loot_modifiers/scroll/hexcasting/random_scroll.json
 a89a9e3113b83c6eb978f101aad42a6b37e7c1d8 data/hexcasting/loot_modifiers/scroll/minecraft/chests/abandoned_mineshaft.json
 bfac0ff9e84cd974ccfb47edc9dce78476470103 data/hexcasting/loot_modifiers/scroll/minecraft/chests/ancient_city.json
 0fcb299789a1b0162ab81a025a06b1aab5eb504b data/hexcasting/loot_modifiers/scroll/minecraft/chests/bastion_other.json
