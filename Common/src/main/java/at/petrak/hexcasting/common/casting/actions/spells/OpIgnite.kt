@@ -4,12 +4,8 @@ import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
-import at.petrak.hexcasting.api.casting.getBlockPos
-import at.petrak.hexcasting.api.casting.getEntity
-import at.petrak.hexcasting.api.casting.iota.EntityIota
+import at.petrak.hexcasting.api.casting.getEntityOrBlockPos
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.casting.iota.Vec3Iota
-import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.ktxt.UseOnContext
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -18,6 +14,7 @@ import net.minecraft.core.Direction
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
@@ -30,27 +27,22 @@ object OpIgnite : SpellAction {
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
-        when (val target = args[0]) {
-            is EntityIota -> {
-                val entity = args.getEntity(0, argc)
-                env.assertEntityInRange(entity)
-                return SpellAction.Result(
-                    EntitySpell(entity),
-                    MediaConstants.DUST_UNIT,
-                    listOf(ParticleSpray.burst(entity.position(), 1.0))
-                )
-            }
-            is Vec3Iota -> {
-                val block = args.getBlockPos(0, argc)
-                env.assertPosInRangeForEditing(block)
-                return SpellAction.Result(
-                    BlockSpell(block),
-                    MediaConstants.DUST_UNIT,
-                    listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(block)), 1.0))
-                )
-            }
-            else -> throw MishapInvalidIota.ofType(target, 0, "entity_or_vector")
-        }
+        val target = args.getEntityOrBlockPos(0, argc)
+
+        target.map(env::assertEntityInRange, env::assertPosInRange)
+
+        val burstPos = target.map({ent -> if (ent is ItemEntity) {
+            // Special case these because the render is way above the entity
+            ent.position().add(0.0, 3.0 / 8.0, 0.0)
+        } else {
+            ent.position()
+        }}, BlockPos::getCenter)
+
+        return SpellAction.Result(
+            target.map(OpIgnite::EntitySpell, OpIgnite::BlockSpell),
+            MediaConstants.DUST_UNIT,
+            listOf(ParticleSpray.burst(burstPos, 1.0))
+        )
     }
 
     private data class BlockSpell(val pos: BlockPos) : RenderedSpell {
