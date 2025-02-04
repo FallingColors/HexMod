@@ -12,6 +12,7 @@ import net.minecraft.nbt.ListTag
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
+import kotlin.math.max
 
 /**
  * The state of a casting VM, containing the stack and all
@@ -34,6 +35,27 @@ data class CastingImage private constructor(
             const val TAG_ESCAPED = "escaped"
         }
     }
+
+    private val size: Int
+    private val depth: Int
+
+    init {
+        var maxChildDepth = 0
+        var totalSize = 1
+        for (iota in stack) {
+            totalSize += iota.size()
+            maxChildDepth = max(maxChildDepth, iota.depth())
+        }
+        for (iota in parenthesized) {
+            totalSize += iota.iota.size()
+            maxChildDepth = max(maxChildDepth, iota.iota.depth())
+        }
+        depth = maxChildDepth
+        size = totalSize
+    }
+
+    fun size(): Int = size
+    fun depth(): Int = depth
 
     /**
      * Returns an empty list if it's too complicated.
