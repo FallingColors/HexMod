@@ -175,6 +175,10 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     protected boolean canOvercast() {
+        //bad deployer, no more infinite bloodcasting for you
+        if (this.caster.getClass() != ServerPlayer.class){
+            return false;
+        }
         var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("y_u_no_cast_angy"));
         var advs = this.caster.getAdvancements();
         return advs.getOrStartProgress(adv).isDone();
