@@ -253,7 +253,7 @@
 
   "itemGroup.hexcasting": {
     hexcasting: "Hex Casting",
-    scrolls: "Hex Casting (Scrolls)",
+    scrolls: "Hex Casting (Свитки)",
   },
 
   "gui.hexcasting": {
