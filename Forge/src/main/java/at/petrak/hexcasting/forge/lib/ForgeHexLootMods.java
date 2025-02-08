@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.forge.loot.ForgeHexAmethystLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexLoreLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexScrollLootMod;
+import at.petrak.hexcasting.forge.loot.ForgeHexCypherLootMod;
 import com.mojang.serialization.Codec;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.registries.DeferredRegister;
@@ -18,6 +19,8 @@ public class ForgeHexLootMods {
         "inject_scrolls", ForgeHexScrollLootMod.CODEC);
     public static final RegistryObject<Codec<ForgeHexLoreLootMod>> INJECT_LORE = REGISTRY.register(
         "inject_lore", ForgeHexLoreLootMod.CODEC);
+    public static final RegistryObject<Codec<ForgeHexCypherLootMod>> INJECT_CYPHERS = REGISTRY.register(
+        "inject_cyphers", ForgeHexCypherLootMod.CODEC);
     public static final RegistryObject<Codec<ForgeHexAmethystLootMod>> AMETHYST = REGISTRY.register(
         "amethyst_cluster", ForgeHexAmethystLootMod.CODEC);
 }

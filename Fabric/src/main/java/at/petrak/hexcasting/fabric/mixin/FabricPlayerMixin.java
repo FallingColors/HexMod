@@ -22,5 +22,9 @@ public abstract class FabricPlayerMixin extends LivingEntity {
         var out = cir.getReturnValue();
         out.add(HexAttributes.GRID_ZOOM);
         out.add(HexAttributes.SCRY_SIGHT);
+        out.add(HexAttributes.FEEBLE_MIND);
+        out.add(HexAttributes.MEDIA_CONSUMPTION_MODIFIER);
+        out.add(HexAttributes.AMBIT_RADIUS);
+        out.add(HexAttributes.SENTINEL_RADIUS);
     }
 }

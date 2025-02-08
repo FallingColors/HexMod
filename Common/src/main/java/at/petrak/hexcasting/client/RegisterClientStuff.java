@@ -63,6 +63,7 @@ public class RegisterClientStuff {
             ItemSpellbook::isSealed);
         registerVariantOverrides(HexItems.FOCUS, HexItems.FOCUS::getVariant);
         registerVariantOverrides(HexItems.SPELLBOOK, HexItems.SPELLBOOK::getVariant);
+        registerVariantOverrides(HexItems.ANCIENT_CYPHER, HexItems.ANCIENT_CYPHER::getVariant);
         registerVariantOverrides(HexItems.CYPHER, HexItems.CYPHER::getVariant);
         registerVariantOverrides(HexItems.TRINKET, HexItems.TRINKET::getVariant);
         registerVariantOverrides(HexItems.ARTIFACT, HexItems.ARTIFACT::getVariant);
@@ -75,6 +76,7 @@ public class RegisterClientStuff {
                 }
             });
 
+        registerPackagedSpellOverrides(HexItems.ANCIENT_CYPHER);
         registerPackagedSpellOverrides(HexItems.CYPHER);
         registerPackagedSpellOverrides(HexItems.TRINKET);
         registerPackagedSpellOverrides(HexItems.ARTIFACT);

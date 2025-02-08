@@ -122,7 +122,7 @@ class GuiSpellcasting constructor(
         val player = minecraft.player
         if (player != null) {
             val heldItem = player.getItemInHand(handOpenedWith)
-            if (heldItem.isEmpty || !heldItem.`is`(HexTags.Items.STAVES))
+            if (heldItem.isEmpty || !heldItem.`is`(HexTags.Items.STAVES) || player.getAttributeValue(HexAttributes.FEEBLE_MIND) > 0)
                 closeForReal()
         }
     }
