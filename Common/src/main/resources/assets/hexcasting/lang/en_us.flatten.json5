@@ -523,7 +523,7 @@
       infinite_media: "Infinite",
     },
     
-    loot_hex: {
+    "loot_hex.hexcasting:": {
       "shatter": "Shatter",
       "kindle": "Kindle",
       "illuminate": "Illuminate",
