@@ -1481,6 +1481,9 @@
         
         "no_record.title": "Lack Akashic Record",
         no_record: "Tried to access an $(l:greatwork/akashiclib)$(item)Akashic Record/$ at a location where there isn't one.$(br2)Causes purple sparks, and steals away some of my experience.",
+
+        "bad_shepherd.title": "Improper Shepherding",
+        bad_shepherd: "Tried to activate a $(l:greatwork/directrix)$(item)Shepherd Directrix/$ without a boolean on the top of the stack.$(br2)Causes red and white sparks, and forcibly ejects the Shepherd Directrix from the circle. This doesn't destroy it, thankfully, but I should make sure to go pick it up and replace it where it belongs.",
       },
       
       
