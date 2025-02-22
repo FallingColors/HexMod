@@ -987,7 +987,7 @@
       bad_entity: "needs %s but got %s",
       bad_brainsweep: "The %s rejected the being's mind",
       already_brainswept: "The mind has already been used",
-      no_spell_circle: "%s requires a spell circle",
+      no_spell_circle: "requires a spell circle",
       others_name: "Tried to invade the privacy of %s's soul",
       "others_name.self": "Tried to divulge my Name too recklessly",
       
