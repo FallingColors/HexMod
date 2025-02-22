@@ -1481,6 +1481,9 @@
         
         "no_record.title": "Lack Akashic Record",
         no_record: "Tried to access an $(l:greatwork/akashiclib)$(item)Akashic Record/$ at a location where there isn't one.$(br2)Causes purple sparks, and steals away some of my experience.",
+
+        "bad_shepherd.title": "Improper Shepherding",
+        bad_shepherd: "Tried to activate a $(l:greatwork/directrix)$(item)Shepherd Directrix/$ without a boolean on the top of the stack.$(br2)Causes red and white sparks, and forcibly ejects the Shepherd Directrix from the circle. This doesn't destroy it, thankfully, but I should make sure to go pick it up and replace it where it belongs.",
       },
       
       
@@ -1647,7 +1650,7 @@
         
         empty_directrix: "Firstly, a design for the cradle ... although, perhaps \"substrate\" would be more accurate a word. Without a mind guiding it, the output direction is determined by microscopic fluctuations in the _media wave and surroundings, making it effectively random.",
         directrix_redstone: "A $(l:greatwork/directrix)$(item)Mason Directrix/$ switches output side based on a redstone signal. Without a signal, the exit is the _media-color side; with a signal, the exit is the redstone-color side.",
-        directrix_boolean: "A $(l:greatwork/directrix)$(item)Shepherd Directrix/$ switches output side based on a boolean on the stack. A $(thing)True/$ makes the wave exit from the back, a $(thing)False/$ from the front."
+        directrix_boolean: "A $(l:greatwork/directrix)$(item)Shepherd Directrix/$ switches output side based on a boolean on the stack. A $(thing)True/$ makes the wave exit from the back, a $(thing)False/$ from the front. Failing to provide a boolean at all will cause a mishap."
       },
       
       akashiclib: {
