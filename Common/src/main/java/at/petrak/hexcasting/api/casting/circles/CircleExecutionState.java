@@ -29,22 +29,22 @@ import java.util.*;
  */
 public class CircleExecutionState {
     public static final String
-            TAG_IMPETUS_POS = "impetus_pos",
-            TAG_IMPETUS_DIR = "impetus_dir",
-            TAG_KNOWN_POSITIONS = "known_positions",
-            TAG_REACHED_POSITIONS = "reached_positions",
-            TAG_CURRENT_POS = "current_pos",
-            TAG_ENTERED_FROM = "entered_from",
-            TAG_IMAGE = "image",
-            TAG_CASTER = "caster",
-            TAG_PIGMENT = "pigment",
-            TAG_REACHED_NUMBER = "reached_slate";
+        TAG_IMPETUS_POS = "impetus_pos",
+        TAG_IMPETUS_DIR = "impetus_dir",
+        TAG_KNOWN_POSITIONS = "known_positions",
+        TAG_REACHED_POSITIONS = "reached_positions",
+        TAG_CURRENT_POS = "current_pos",
+        TAG_ENTERED_FROM = "entered_from",
+        TAG_IMAGE = "image",
+        TAG_CASTER = "caster",
+        TAG_PIGMENT = "pigment",
+        TAG_REACHED_NUMBER = "reached_slate";
 
     public final BlockPos impetusPos;
     public final Direction impetusDir;
     // Does contain the starting impetus
     public final Set<BlockPos> knownPositions;
-    public final Set<BlockPos> reachedPositions;
+    public final HashSet<BlockPos> reachedPositions;
     public BlockPos currentPos;
     public Direction enteredFrom;
     public CastingImage currentImage;
@@ -56,7 +56,7 @@ public class CircleExecutionState {
 
 
     protected CircleExecutionState(BlockPos impetusPos, Direction impetusDir, Set<BlockPos> knownPositions,
-                                   Set<BlockPos> reachedPositions, BlockPos currentPos, Direction enteredFrom,
+                                   HashSet<BlockPos> reachedPositions, BlockPos currentPos, Direction enteredFrom,
                                    CastingImage currentImage, @Nullable UUID caster, @Nullable FrozenPigment casterPigment, Integer reachedSlate) {
         this.impetusPos = impetusPos;
         this.impetusDir = impetusDir;
