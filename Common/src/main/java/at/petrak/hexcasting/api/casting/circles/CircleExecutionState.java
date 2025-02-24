@@ -50,6 +50,7 @@ public class CircleExecutionState {
     public CastingImage currentImage;
     public @Nullable UUID caster;
     public @Nullable FrozenPigment casterPigment;
+    // This controls the speed of the current slate
     public Integer reachedNumber;
 
     public final AABB bounds;
@@ -57,7 +58,7 @@ public class CircleExecutionState {
 
     protected CircleExecutionState(BlockPos impetusPos, Direction impetusDir, Set<BlockPos> knownPositions,
        HashSet<BlockPos> reachedPositions, BlockPos currentPos, Direction enteredFrom,
-       CastingImage currentImage, @Nullable UUID caster, @Nullable FrozenPigment casterPigment, Integer reachedSlate) {
+       CastingImage currentImage, @Nullable UUID caster, @Nullable FrozenPigment casterPigment, @Nullable Integer reachedNumber) {
         this.impetusPos = impetusPos;
         this.impetusDir = impetusDir;
         this.knownPositions = knownPositions;
@@ -67,7 +68,7 @@ public class CircleExecutionState {
         this.currentImage = currentImage;
         this.caster = caster;
         this.casterPigment = casterPigment;
-        this.reachedNumber = reachedSlate;
+        this.reachedNumber = reachedNumber;
 
         this.bounds = BlockEntityAbstractImpetus.getBounds(new ArrayList<>(this.knownPositions));
     }
@@ -189,7 +190,9 @@ public class CircleExecutionState {
 
         if (this.casterPigment != null)
             out.put(TAG_PIGMENT, this.casterPigment.serializeToNBT());
-        out.putInt(TAG_REACHED_NUMBER, this.reachedNumber);
+
+        if (this.reachedNumber != null)
+            out.putInt(TAG_REACHED_NUMBER, this.reachedNumber);
         return out;
     }
 
