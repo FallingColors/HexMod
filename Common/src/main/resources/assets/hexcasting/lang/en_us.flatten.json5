@@ -1722,7 +1722,7 @@
         numvec: "Many mathematical operations function on both numbers and vectors. Such arguments are written as \"num|vec\".",
         
         "add.1": "Perform addition.",
-        "add.2": "As such:$(li)With two numbers at the top of the stack, combines them into their sum.$(li)With a number and a vector, removes the number from the stack and adds it to each element of the vector.$(li)With two vectors, combines them by summing corresponding components into a new vector (i.e. [1, 2, 3] + [0, 4, -1] = [1, 6, 2]).",
+        "add.2": "As such:$(li)With two numbers at the top of the stack, combines them into their sum.$(li)With a number and a vector, removes the number from the stack and adds it to each element of the vector.$(li)With two vectors, combines them by summing corresponding components into a new vector (i.e. (1, 2, 3) + (0, 4, -1) = (1, 6, 2)).",
         
         "sub.1": "Perform subtraction.",
         "sub.2": "As such:$(li)With two numbers at the top of the stack, combines them into their difference.$(li)With a number and a vector, removes the number from the stack and subtracts it from each element of the vector.$(li)With two vectors, combines them by subtracting each component.$(br2)In all cases, the top of the stack or its components are subtracted $(italic)from/$ the second-from-the-top.",
@@ -1781,10 +1781,10 @@
         "false": "Adds $(thing)False/$ to the top of the stack.",
         
         "vec/": {
-          x: "The left-hand counter-clockwise pattern adds [1, 0, 0] to the stack; the right-hand clockwise pattern adds [-1, 0, 0].",
-          y: "The left-hand counter-clockwise pattern adds [0, 1, 0] to the stack; the right-hand clockwise pattern adds [0, -1, 0].",
-          z: "The left-hand counter-clockwise pattern adds [0, 0, 1]; the right-hand clockwise pattern adds [0, 0, -1].",
-          "0": "Adds [0, 0, 0] to the stack.",
+          x: "The left-hand counter-clockwise pattern adds (1, 0, 0) to the stack; the right-hand clockwise pattern adds (-1, 0, 0).",
+          y: "The left-hand counter-clockwise pattern adds (0, 1, 0) to the stack; the right-hand clockwise pattern adds (0, -1, 0).",
+          z: "The left-hand counter-clockwise pattern adds (0, 0, 1); the right-hand clockwise pattern adds (0, 0, -1).",
+          "0": "Adds (0, 0, 0) to the stack.",
         },
         
         "double/": {
