@@ -565,6 +565,11 @@
         sealed: "Запечатанный",
       },
 
+      scroll: {
+        needs_purchase: "Купите, чтобы увидеть руны",
+        pattern_not_loaded: "Поместите в инвентарь, чтобы загрузить руны",
+      },
+
       abacus: {
         "": "%d",
         reset: "Сбросить до 0",
@@ -606,6 +611,7 @@
       media_amount: "Содержит: %s (%s)",
       "media_amount.advanced": "Содержит: %s/%s (%s)",
 	  stored_hex: "Заговор:",
+
       list_contents: "[%s]",
       null_iota: "Ничто",
       jump_iota: "[Прыжок]",
@@ -658,8 +664,12 @@
     
     attributes: {
       grid_zoom: "Размер сетки заклинания",
+      media_consumption: "Потребление мысли",
+      ambit_radius: "Радиус действия игрока",
+      sentinel_radius: "Радиус действия часового",
       // TODO: the +1 is kind of janky
       scry_sight: "Магический взгляд",
+      feeble_mind: "Слабоумие"
     },
     
     // Action localizations
