@@ -24,6 +24,6 @@ object OpAkashicRead : ConstMediaAction {
         }
 
         val datum = record.lookupPattern(pos, key, env.world)
-        return listOf(datum ?: NullIota())
+        return listOf(datum ?: NullIota.INSTANCE)
     }
 }

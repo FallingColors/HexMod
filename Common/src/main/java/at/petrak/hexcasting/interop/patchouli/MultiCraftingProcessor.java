@@ -16,6 +16,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
@@ -32,10 +34,10 @@ public class MultiCraftingProcessor implements IComponentProcessor {
 
     @Override
     public void setup(Level level, IVariableProvider vars) {
-        List<String> names = vars.get("recipes").asStream().map(IVariable::asString).collect(Collectors.toList());
+        List<String> names = vars.get("recipes", level.registryAccess()).asStream(level.registryAccess()).map(IVariable::asString).toList();
         this.recipes = new ArrayList<>();
         for (String name : names) {
-            CraftingRecipe recipe = PatchouliUtils.getRecipe(RecipeType.CRAFTING, new ResourceLocation(name));
+            CraftingRecipe recipe = PatchouliUtils.getRecipe(RecipeType.CRAFTING, ResourceLocation.parse(name));
             if (recipe != null) {
                 recipes.add(recipe);
                 if (shapeless) {
@@ -55,13 +57,13 @@ public class MultiCraftingProcessor implements IComponentProcessor {
     }
 
     @Override
-    public IVariable process(Level level, String key) {
+    public @Nullable IVariable process(Level level, String key) {
         if (recipes.isEmpty()) {
             return null;
         }
         if (key.equals("heading")) {
             if (!hasCustomHeading) {
-                return IVariable.from(recipes.get(0).getResultItem(level.registryAccess()).getHoverName());
+                return IVariable.from(recipes.getFirst().getResultItem(level.registryAccess()).getHoverName(), level.registryAccess());
             }
             return null;
         }
@@ -85,14 +87,17 @@ public class MultiCraftingProcessor implements IComponentProcessor {
                     ingredients.add(list.size() > index ? list.get(index) : Ingredient.EMPTY);
                 }
             }
-            return PatchouliUtils.interweaveIngredients(ingredients, longestIngredientSize);
+            return PatchouliUtils.interweaveIngredients(ingredients, longestIngredientSize, level.registryAccess());
         }
         if (key.equals("output")) {
             return IVariable.wrapList(
-                recipes.stream().map(recipe -> recipe.getResultItem(level.registryAccess())).map(IVariable::from).collect(Collectors.toList()));
+                recipes.stream()
+                        .map(recipe -> recipe.getResultItem(level.registryAccess()))
+                        .map(v -> IVariable.from(v, level.registryAccess()))
+                        .collect(Collectors.toList()), level.registryAccess());
         }
         if (key.equals("shapeless")) {
-            return IVariable.wrap(shapeless);
+            return IVariable.wrap(shapeless, level.registryAccess());
         }
         return null;
     }

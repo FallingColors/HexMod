@@ -24,8 +24,9 @@ public class HexCreativeTabs {
     public static final CreativeModeTab HEX = register("hexcasting", CreativeModeTab.builder(CreativeModeTab.Row.TOP, 7)
             .icon(() -> new ItemStack(HexItems.SPELLBOOK)));
 
+    // TODO port: check creative tab icon display
     public static final CreativeModeTab SCROLLS = register("scrolls", CreativeModeTab.builder(CreativeModeTab.Row.TOP, 7)
-            .icon(() -> ItemScroll.withPerWorldPattern(new ItemStack(HexItems.SCROLL_LARGE),"")));
+            .icon(() -> new ItemStack(HexItems.SCROLL_LARGE)));
 
     private static CreativeModeTab register(String name, CreativeModeTab.Builder tabBuilder) {
         var tab = tabBuilder.title(Component.translatable("itemGroup.hexcasting." + name)).build();

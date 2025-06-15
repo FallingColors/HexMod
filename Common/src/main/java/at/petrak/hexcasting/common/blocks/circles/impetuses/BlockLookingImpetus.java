@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
+import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -14,6 +15,11 @@ public class BlockLookingImpetus extends BlockAbstractImpetus {
 
     public BlockLookingImpetus(Properties p_49795_) {
         super(p_49795_);
+    }
+
+    @Override
+    public BlockEntityType<? extends BlockEntityAbstractImpetus> getBlockEntityType() {
+        return HexBlockEntities.IMPETUS_LOOK_TILE;
     }
 
     @Nullable

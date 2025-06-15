@@ -6,21 +6,23 @@ import at.petrak.hexcasting.forge.loot.ForgeHexLoreLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexScrollLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexCypherLootMod;
 import com.mojang.serialization.Codec;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.core.registries.Registries;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 public class ForgeHexLootMods {
-    public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> REGISTRY = DeferredRegister.create(
-        ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, HexAPI.MOD_ID);
+    public static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> REGISTRY = DeferredRegister.create(
+        NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, HexAPI.MOD_ID);
 
-    public static final RegistryObject<Codec<ForgeHexScrollLootMod>> INJECT_SCROLLS = REGISTRY.register(
+    public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<ForgeHexScrollLootMod>> INJECT_SCROLLS = REGISTRY.register(
         "inject_scrolls", ForgeHexScrollLootMod.CODEC);
-    public static final RegistryObject<Codec<ForgeHexLoreLootMod>> INJECT_LORE = REGISTRY.register(
+    public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<ForgeHexLoreLootMod>> INJECT_LORE = REGISTRY.register(
         "inject_lore", ForgeHexLoreLootMod.CODEC);
-    public static final RegistryObject<Codec<ForgeHexCypherLootMod>> INJECT_CYPHERS = REGISTRY.register(
+    public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<ForgeHexCypherLootMod>> INJECT_CYPHERS = REGISTRY.register(
         "inject_cyphers", ForgeHexCypherLootMod.CODEC);
-    public static final RegistryObject<Codec<ForgeHexAmethystLootMod>> AMETHYST = REGISTRY.register(
+    public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<ForgeHexAmethystLootMod>> AMETHYST = REGISTRY.register(
         "amethyst_cluster", ForgeHexAmethystLootMod.CODEC);
 }

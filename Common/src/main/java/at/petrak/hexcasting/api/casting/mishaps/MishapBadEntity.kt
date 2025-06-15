@@ -19,7 +19,7 @@ class MishapBadEntity(val entity: Entity, val wanted: Component) : Mishap() {
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("bad_entity", wanted, entity.displayName!!.plainCopy().aqua)
+        error("bad_entity", wanted, entity.displayName?.plainCopy()?.aqua ?: entity.type.description.plainCopy().aqua)
 
     companion object {
         @JvmStatic

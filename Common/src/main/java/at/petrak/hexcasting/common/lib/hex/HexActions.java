@@ -423,7 +423,7 @@ public class HexActions {
     // == Consts ==
 
     public static final ActionRegistryEntry CONST$NULL = make("const/null",
-        new ActionRegistryEntry(HexPattern.fromAngles("d", HexDir.EAST), Action.makeConstantOp(new NullIota())));
+        new ActionRegistryEntry(HexPattern.fromAngles("d", HexDir.EAST), Action.makeConstantOp(NullIota.INSTANCE)));
 
     public static final ActionRegistryEntry CONST$TRUE = make("const/true",
         new ActionRegistryEntry(HexPattern.fromAngles("aqae",

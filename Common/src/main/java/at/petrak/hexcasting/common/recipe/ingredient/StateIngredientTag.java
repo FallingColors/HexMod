@@ -2,10 +2,15 @@ package at.petrak.hexcasting.common.recipe.ingredient;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
@@ -23,9 +28,14 @@ import java.util.stream.StreamSupport;
 public class StateIngredientTag extends StateIngredientBlocks {
 	private final TagKey<Block> tag;
 
-	public StateIngredientTag(ResourceLocation tag) {
+	public StateIngredientTag(TagKey<Block> tag) {
 		super(ImmutableSet.of());
-		this.tag = TagKey.create(Registries.BLOCK, tag);
+		this.tag = tag;
+	}
+
+	@Override
+	public StateIngredientType<?> getType() {
+		return StateIngredients.TAG;
 	}
 
 	public Stream<Block> resolve() {
@@ -48,14 +58,6 @@ public class StateIngredientTag extends StateIngredientBlocks {
 	}
 
 	@Override
-	public JsonObject serialize() {
-		JsonObject object = new JsonObject();
-		object.addProperty("type", "tag");
-		object.addProperty("tag", tag.location().toString());
-		return object;
-	}
-
-	@Override
 	public List<ItemStack> getDisplayedStacks() {
 		return resolve()
 			.filter(b -> b.asItem() != Items.AIR)
@@ -74,8 +76,8 @@ public class StateIngredientTag extends StateIngredientBlocks {
 		return resolve().map(Block::defaultBlockState).collect(Collectors.toList());
 	}
 
-	public ResourceLocation getTagId() {
-		return tag.location();
+	public TagKey<Block> getTag() {
+		return tag;
 	}
 
 	@Override
@@ -97,5 +99,26 @@ public class StateIngredientTag extends StateIngredientBlocks {
 	@Override
 	public String toString() {
 		return "StateIngredientTag{" + tag + "}";
+	}
+
+
+	public static class Type implements StateIngredientType<StateIngredientTag> {
+		public static final MapCodec<StateIngredientTag> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+				TagKey.hashedCodec(Registries.BLOCK).fieldOf("tag").forGetter(StateIngredientTag::getTag)
+		).apply(instance, StateIngredientTag::new));
+		public static final StreamCodec<RegistryFriendlyByteBuf, StateIngredientTag> STREAM_CODEC = StreamCodec.composite(
+				ResourceLocation.STREAM_CODEC.map(id -> TagKey.create(Registries.BLOCK, id), TagKey::location), StateIngredientTag::getTag,
+				StateIngredientTag::new
+		);
+
+		@Override
+		public MapCodec<StateIngredientTag> codec() {
+			return CODEC;
+		}
+
+		@Override
+		public StreamCodec<RegistryFriendlyByteBuf, StateIngredientTag> streamCodec() {
+			return STREAM_CODEC;
+		}
 	}
 }

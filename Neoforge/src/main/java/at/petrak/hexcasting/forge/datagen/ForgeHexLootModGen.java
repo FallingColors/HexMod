@@ -6,16 +6,19 @@ import at.petrak.hexcasting.forge.loot.ForgeHexAmethystLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexLoreLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexScrollLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexCypherLootMod;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.data.GlobalLootModifierProvider;
-import net.minecraftforge.common.loot.LootTableIdCondition;
+import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
+import net.neoforged.neoforge.common.loot.LootTableIdCondition;
+
+import java.util.concurrent.CompletableFuture;
 
 public class ForgeHexLootModGen extends GlobalLootModifierProvider {
-    public ForgeHexLootModGen(PackOutput output) {
-        super(output, HexAPI.MOD_ID);
+    public ForgeHexLootModGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, registries, HexAPI.MOD_ID);
     }
 
     @Override
@@ -42,7 +45,7 @@ public class ForgeHexLootModGen extends GlobalLootModifierProvider {
         }
 
         add("amethyst_cluster", new ForgeHexAmethystLootMod(new LootItemCondition[]{
-            LootTableIdCondition.builder(Blocks.AMETHYST_CLUSTER.getLootTable()).build()
+            LootTableIdCondition.builder(Blocks.AMETHYST_CLUSTER.getLootTable().location()).build()
         }, HexLootHandler.DEFAULT_SHARD_MODIFICATION));
     }
 }

@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -18,11 +19,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 public class ForgeClientXplatImpl implements IClientXplatAbstractions {
     @Override
-    public void sendPacketToServer(IMessage packet) {
-        ForgePacketHandler.getNetwork().sendToServer(packet);
+    public void sendPacketToServer(CustomPacketPayload packet) {
+        PacketDistributor.sendToServer(packet);
     }
 
     @Override
@@ -49,10 +51,10 @@ public class ForgeClientXplatImpl implements IClientXplatAbstractions {
 
     @Override
     public ClientCastingStack getClientCastingStack(Player player) {
-        var maybeCap = player.getCapability(HexCapabilities.CLIENT_CASTING_STACK).resolve();
-        if (maybeCap.isEmpty())
+        var clientCastingStack = player.getCapability(HexCapabilities.Entity.CLIENT_CASTING_STACK);
+        if (clientCastingStack == null)
             return new ClientCastingStack(); // lie
-        return maybeCap.get().get();
+        return clientCastingStack.provide();
     }
 
     @Override

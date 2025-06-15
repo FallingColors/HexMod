@@ -18,6 +18,7 @@ import at.petrak.hexcasting.common.lib.HexAttributes;
 import at.petrak.hexcasting.common.lib.HexDamageTypes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -48,8 +49,8 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         super(caster.serverLevel());
         this.caster = caster;
         this.castingHand = castingHand;
-        this.ambitRadius = caster.getAttributeValue(HexAttributes.AMBIT_RADIUS);
-        this.sentinelRadius = caster.getAttributeValue(HexAttributes.SENTINEL_RADIUS);
+        this.ambitRadius = caster.getAttributeValue(Holder.direct(HexAttributes.AMBIT_RADIUS));
+        this.sentinelRadius = caster.getAttributeValue(Holder.direct(HexAttributes.SENTINEL_RADIUS));
     }
 
     @Override
@@ -72,11 +73,11 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
             }
         }
         if (this.caster != null){
-            double ambitAttribute = this.caster.getAttributeValue(HexAttributes.AMBIT_RADIUS);
+            double ambitAttribute = this.caster.getAttributeValue(Holder.direct(HexAttributes.AMBIT_RADIUS));
             if (this.ambitRadius != ambitAttribute){
                 this.ambitRadius = ambitAttribute;
             }
-            double sentinelAttribute = this.caster.getAttributeValue(HexAttributes.SENTINEL_RADIUS);
+            double sentinelAttribute = this.caster.getAttributeValue(Holder.direct(HexAttributes.SENTINEL_RADIUS));
             if (this.sentinelRadius != sentinelAttribute){
                 this.sentinelRadius = sentinelAttribute;
             }
@@ -175,9 +176,12 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     protected boolean canOvercast() {
-        var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("y_u_no_cast_angy"));
-        var advs = this.caster.getAdvancements();
-        return advs.getOrStartProgress(adv).isDone();
+        var adv = this.world.getServer().getAdvancements().get(modLoc("y_u_no_cast_angy"));
+        if(adv != null) {
+            var advs = this.caster.getAdvancements();
+            return advs.getOrStartProgress(adv).isDone();
+        }
+        return false;
     }
 
     @Override

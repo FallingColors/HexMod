@@ -3,6 +3,7 @@ package at.petrak.hexcasting.client.gui
 import at.petrak.hexcasting.api.casting.eval.ExecutionClientView
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
+import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.math.HexAngle
 import at.petrak.hexcasting.api.casting.math.HexCoord
@@ -28,7 +29,9 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.resources.sounds.SoundInstance
+import net.minecraft.core.Holder
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.FormattedCharSequence
 import net.minecraft.util.Mth
@@ -40,7 +43,7 @@ import kotlin.math.*
 class GuiSpellcasting constructor(
     private val handOpenedWith: InteractionHand,
     private var patterns: MutableList<ResolvedPattern>,
-    private var cachedStack: List<CompoundTag>,
+    private var cachedStack: List<Iota>,
     private var cachedRavenmind: CompoundTag?,
     private var parenCount: Int,
 ) : Screen("gui.hexcasting.spellcasting".asTranslatedComponent) {
@@ -85,7 +88,7 @@ class GuiSpellcasting constructor(
         val mc = Minecraft.getInstance()
         val width = (this.width * LHS_IOTAS_ALLOCATION).toInt()
         this.stackDescs =
-            this.cachedStack.map { IotaType.getDisplayWithMaxWidth(it, width, mc.font) }
+            this.cachedStack.map { it.displayWithMaxWidth(width, mc.font) }
                 .asReversed()
 //        this.parenDescs = if (this.cachedParens.isNotEmpty())
 //            this.cachedParens.flatMap { HexIotaTypes.getDisplayWithMaxWidth(it, width, mc.font) }
@@ -96,8 +99,8 @@ class GuiSpellcasting constructor(
         this.parenDescs = emptyList()
         this.ravenmind =
             this.cachedRavenmind?.let {
-                IotaType.getDisplayWithMaxWidth(
-                    it,
+                val iota = IotaType.TYPED_CODEC.parse(NbtOps.INSTANCE, it).getOrThrow()
+                iota.displayWithMaxWidth(
                     (this.width * RHS_IOTAS_ALLOCATION).toInt(),
                     mc.font
                 )
@@ -122,7 +125,7 @@ class GuiSpellcasting constructor(
         val player = minecraft.player
         if (player != null) {
             val heldItem = player.getItemInHand(handOpenedWith)
-            if (heldItem.isEmpty || !heldItem.`is`(HexTags.Items.STAVES) || player.getAttributeValue(HexAttributes.FEEBLE_MIND) > 0)
+            if (heldItem.isEmpty || !heldItem.`is`(HexTags.Items.STAVES) || player.getAttributeValue(Holder.direct(HexAttributes.FEEBLE_MIND)) > 0)
                 closeForReal()
         }
     }
@@ -291,16 +294,16 @@ class GuiSpellcasting constructor(
         return false
     }
 
-    override fun mouseScrolled(pMouseX: Double, pMouseY: Double, pDelta: Double): Boolean {
-        super.mouseScrolled(pMouseX, pMouseY, pDelta)
+    override fun mouseScrolled(mouseX: Double, mouseY: Double, scrollX: Double, scrollY: Double): Boolean {
+        super.mouseScrolled(mouseX, mouseY, scrollX, scrollY)
 
         val mouseHandler = Minecraft.getInstance().mouseHandler
 
-        if (mouseHandler.accumulatedScroll != 0.0 && sign(pDelta) != sign(mouseHandler.accumulatedScroll)) {
+        if (mouseHandler.accumulatedScroll != 0.0 && sign(scrollY) != sign(mouseHandler.accumulatedScroll)) {
             mouseHandler.accumulatedScroll = 0.0
         }
 
-        mouseHandler.accumulatedScroll += pDelta
+        mouseHandler.accumulatedScroll += scrollY
         val accumulation: Int = mouseHandler.accumulatedScroll.toInt()
         if (accumulation == 0) {
             return true
@@ -308,7 +311,7 @@ class GuiSpellcasting constructor(
 
         mouseHandler.accumulatedScroll -= accumulation.toDouble()
 
-        ShiftScrollListener.onScroll(pDelta, false)
+        ShiftScrollListener.onScroll(scrollY, false)
 
         return true
     }
@@ -492,7 +495,7 @@ class GuiSpellcasting constructor(
 
     /** Distance between adjacent hex centers */
     fun hexSize(): Float {
-        val scaleModifier = Minecraft.getInstance().player!!.getAttributeValue(HexAttributes.GRID_ZOOM)
+        val scaleModifier = Minecraft.getInstance().player!!.getAttributeValue(Holder.direct(HexAttributes.GRID_ZOOM))
 
         // Originally, we allowed 32 dots across. Assuming a 1920x1080 screen this allowed like 500-odd area.
         // Let's be generous and give them 512.

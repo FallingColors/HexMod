@@ -20,16 +20,17 @@ interface SpellAction : Action {
 
     fun awardsCastingStat(ctx: CastingEnvironment): Boolean = true
 
+    fun executeWithUserdata(
+        args: List<Iota>,
+        env: CastingEnvironment,
+        userData: CompoundTag
+    ): Result =
+        execute(args, env)
+
     fun execute(
         args: List<Iota>,
         env: CastingEnvironment
     ): Result
-
-    fun executeWithUserdata(
-        args: List<Iota>, env: CastingEnvironment, userData: CompoundTag
-    ): Result {
-        return this.execute(args, env)
-    }
 
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
         val stack = image.stack.toMutableList()

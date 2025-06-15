@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -49,11 +50,11 @@ public class ItemLoreFragment extends Item {
             return InteractionResultHolder.success(handStack);
         }
 
-        Advancement unfoundLore = null;
+        AdvancementHolder unfoundLore = null;
         var shuffled = new ArrayList<>(NAMES);
         Collections.shuffle(shuffled);
         for (var advID : shuffled) {
-            var adv = splayer.server.getAdvancements().getAdvancement(advID);
+            var adv = splayer.server.getAdvancements().get(advID);
             if (adv == null) {
                 continue; // uh oh
             }

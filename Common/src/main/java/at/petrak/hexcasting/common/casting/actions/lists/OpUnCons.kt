@@ -14,6 +14,6 @@ object OpUnCons : ConstMediaAction {
         if (list.nonEmpty) {
             return listOf(ListIota(list.cdr), list.car)
         }
-        return listOf(args[0], NullIota())
+        return listOf(args[0], NullIota.INSTANCE)
     }
 }

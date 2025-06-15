@@ -19,17 +19,8 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 @ParametersAreNonnullByDefault
 public class HexIotaTypes {
     public static final Registry<IotaType<?>> REGISTRY = IXplatAbstractions.INSTANCE.getIotaTypeRegistry();
-    public static final String
-        KEY_TYPE = HexAPI.MOD_ID + ":type",
-        KEY_DATA = HexAPI.MOD_ID + ":data";
     public static final int MAX_SERIALIZATION_DEPTH = 256;
     public static final int MAX_SERIALIZATION_TOTAL = 1024;
-
-    public static void registerTypes(BiConsumer<IotaType<?>, ResourceLocation> r) {
-        for (var e : TYPES.entrySet()) {
-            r.accept(e.getValue(), e.getKey());
-        }
-    }
 
     private static final Map<ResourceLocation, IotaType<?>> TYPES = new LinkedHashMap<>();
 
@@ -42,6 +33,12 @@ public class HexIotaTypes {
     public static final IotaType<GarbageIota> GARBAGE = type("garbage", GarbageIota.TYPE);
     public static final IotaType<Vec3Iota> VEC3 = type("vec3", Vec3Iota.TYPE);
     public static final IotaType<ContinuationIota> CONTINUATION = type("continuation", ContinuationIota.TYPE);
+
+    public static void registerTypes(BiConsumer<IotaType<?>, ResourceLocation> r) {
+        for (var e : TYPES.entrySet()) {
+            r.accept(e.getValue(), e.getKey());
+        }
+    }
 
 
     private static <U extends Iota, T extends IotaType<U>> T type(String name, T type) {

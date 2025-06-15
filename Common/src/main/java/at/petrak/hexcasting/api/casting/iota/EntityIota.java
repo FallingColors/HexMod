@@ -1,36 +1,96 @@
 package at.petrak.hexcasting.api.casting.iota;
 
-import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.samsthenerd.inline.api.InlineAPI;
 import com.samsthenerd.inline.api.data.EntityInlineData;
 import com.samsthenerd.inline.api.data.PlayerHeadData;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.component.ResolvableProfile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
+import java.util.Optional;
+import java.util.UUID;
+
 public class EntityIota extends Iota {
+    private final UUID entityId;
+    @Nullable
+    private WeakReference<Entity> cachedEntity;
+    @Nullable
+    private Component entityName;
+
     public EntityIota(@NotNull Entity e) {
-        super(HexIotaTypes.ENTITY, e);
+        this(e.getUUID(), getEntityNameWithInline(e));
+        this.cachedEntity = new WeakReference<>(e);
     }
 
-    public Entity getEntity() {
-        return (Entity) this.payload;
+    public EntityIota(UUID entityId, @Nullable Component entityName) {
+        super(() -> HexIotaTypes.ENTITY);
+        this.entityId = entityId;
+        this.entityName = entityName;
+    }
+
+    public UUID getEntityId() {
+        return entityId;
+    }
+
+    @Nullable
+    public Entity getOrFindEntity(ServerLevel level) {
+        // First, let's try to get it from weak reference
+        var entity = getCachedEntity();
+        if (entity != null)
+            return entity;
+        // Now let's try to fetch it from the world
+        entity = level.getEntity(entityId);
+        // Store in weak reference
+        if (entity != null)
+            cachedEntity = new WeakReference<>(entity);
+        return entity;
+    }
+
+    @Nullable
+    public Entity getCachedEntity() {
+        if (cachedEntity != null)
+            if (!cachedEntity.refersTo(null))
+                return cachedEntity.get();
+            else
+                cachedEntity = null; // Clear weakref
+        return null;
+    }
+
+    public @Nullable Component getEntityName() {
+        var ent = getCachedEntity();
+        if(ent != null) {
+            var name = ent.getName();
+            this.entityName = name;
+            return name;
+        }
+
+        return getCachedEntityName();
+    }
+
+    public @Nullable Component getCachedEntityName() {
+        return entityName;
     }
 
     @Override
     public boolean toleratesOther(Iota that) {
         return typesMatch(this, that)
-            && that instanceof EntityIota dent
-            && this.getEntity() == dent.getEntity();
+                && that instanceof EntityIota dent
+                && this.getEntityId() == dent.getEntityId();
     }
 
     @Override
@@ -39,63 +99,49 @@ public class EntityIota extends Iota {
     }
 
     @Override
-    public @NotNull
-    Tag serialize() {
-        var out = new CompoundTag();
-        out.putUUID("uuid", this.getEntity().getUUID());
-        out.putString("name", Component.Serializer.toJson(getEntityNameWithInline(true)));
-        return out;
+    public Component display() {
+        var name = getCachedEntityName();
+        return name != null ? name.copy().withStyle(ChatFormatting.AQUA) : Component.translatable("hexcasting.spelldata.entity.whoknows");
     }
 
     @Override
-    public Component display() {
-        return getEntityNameWithInline(false).copy().withStyle(ChatFormatting.AQUA);
+    public int hashCode() {
+        return entityId.hashCode();
     }
 
-    private Component getEntityNameWithInline(boolean fearSerializer){
-        MutableComponent baseName = this.getEntity().getName().copy();
-        Component inlineEnt = null;
-        if(this.getEntity() instanceof Player player){
-            inlineEnt = new PlayerHeadData(player.getGameProfile()).asText(!fearSerializer);
+    private static Component getEntityNameWithInline(Entity entity) {
+        MutableComponent baseName = entity.getName().copy();
+        Component inlineEnt;
+        if(entity instanceof Player player){
+            inlineEnt = new PlayerHeadData(new ResolvableProfile(player.getGameProfile())).asText(false);
             inlineEnt = inlineEnt.plainCopy().withStyle(InlineAPI.INSTANCE.withSizeModifier(inlineEnt.getStyle(), 1.5));
-        } else{
-            if(fearSerializer){ // we don't want to have to serialize an entity just to display it
-                inlineEnt = EntityInlineData.fromType(this.getEntity().getType()).asText(!fearSerializer);
-            } else {
-                inlineEnt = EntityInlineData.fromEntity(this.getEntity()).asText(!fearSerializer);
-            }
+        } else {
+            inlineEnt = EntityInlineData.fromType(entity.getType()).asText(false);
         }
         return baseName.append(Component.literal(": ")).append(inlineEnt);
     }
 
     public static IotaType<EntityIota> TYPE = new IotaType<>() {
-        @Nullable
+        public static final MapCodec<EntityIota> CODEC = RecordCodecBuilder.mapCodec(inst ->
+                inst.group(
+                        UUIDUtil.CODEC.fieldOf("entityId").forGetter(EntityIota::getEntityId),
+                        ComponentSerialization.CODEC.optionalFieldOf("entityName").forGetter(iota -> Optional.ofNullable(iota.getEntityName()))
+                ).apply(inst, (a, b) -> new EntityIota(a, b.orElse(null))));
+        public static final StreamCodec<RegistryFriendlyByteBuf, EntityIota> STREAM_CODEC =
+                StreamCodec.composite(
+                        UUIDUtil.STREAM_CODEC, EntityIota::getEntityId,
+                        ByteBufCodecs.optional(ComponentSerialization.STREAM_CODEC), iota -> Optional.ofNullable(iota.getEntityName()),
+                        (a, b) -> new EntityIota(a, b.orElse(null))
+                );
+
         @Override
-        public EntityIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            var ctag = HexUtils.downcast(tag, CompoundTag.TYPE);
-            Tag uuidTag = ctag.get("uuid");
-            if (uuidTag == null) {
-                return null;
-            }
-            var uuid = NbtUtils.loadUUID(uuidTag);
-            var entity = world.getEntity(uuid);
-            if (entity == null) {
-                return null;
-            }
-            return new EntityIota(entity);
+        public MapCodec<EntityIota> codec() {
+            return CODEC;
         }
 
         @Override
-        public Component display(Tag tag) {
-            if (!(tag instanceof CompoundTag ctag)) {
-                return Component.translatable("hexcasting.spelldata.entity.whoknows");
-            }
-            if (!ctag.contains("name", Tag.TAG_STRING)) {
-                return Component.translatable("hexcasting.spelldata.entity.whoknows");
-            }
-            var nameJson = ctag.getString("name");
-//            return Component.literal(nameJson);
-            return Component.Serializer.fromJsonLenient(nameJson).withStyle(ChatFormatting.AQUA);
+        public StreamCodec<RegistryFriendlyByteBuf, EntityIota> streamCodec() {
+            return STREAM_CODEC;
         }
 
         @Override

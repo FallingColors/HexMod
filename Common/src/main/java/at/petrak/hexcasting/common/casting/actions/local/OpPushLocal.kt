@@ -10,6 +10,8 @@ import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
+import net.minecraft.nbt.NbtOps
+import net.minecraft.nbt.Tag
 
 object OpPushLocal : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
@@ -22,7 +24,7 @@ object OpPushLocal : Action {
         if (newLocal.type == HexIotaTypes.NULL)
             image.userData.remove(HexAPI.RAVENMIND_USERDATA)
          else
-            image.userData.put(HexAPI.RAVENMIND_USERDATA, IotaType.serialize(newLocal))
+            image.userData.put(HexAPI.RAVENMIND_USERDATA, IotaType.TYPED_CODEC.encodeStart(NbtOps.INSTANCE, newLocal).getOrThrow())
 
         val image2 = image.withUsedOp().copy(stack = stack)
         return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)

@@ -2,6 +2,10 @@ architectury {
     common([/*"fabric", */"neoforge"])
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/hexplat.accesswidener")
+}
+
 pkSubproj {
     platform = "common"
     pkPublish = false
@@ -36,17 +40,16 @@ dependencies {
     // We depend on Fabric Loader here to use the Fabric @Environment annotations,
     // which get remapped to the correct annotations on each platform.
     // Do NOT use other classes from Fabric Loader.
-    //modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
 
-    compileOnly "at.petra-k:paucal:$paucalVersion+$minecraftVersion-common"
+    modCompileOnly "at.petra-k:paucal:$paucalVersion+$minecraftVersion-common"
     // i do not know why the xplat and mod jars are in different coordinates
-    compileOnly "vazkii.patchouli:Patchouli-xplat:1.21-$patchouliVersion-SNAPSHOT"
-    // inline isn't out for 1.21 yet shaking my sm my shaking smh head
-//    compileOnly "com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion"
+    modCompileOnly "vazkii.patchouli:Patchouli-xplat:1.21-$patchouliVersion-SNAPSHOT"
+    modCompileOnly "com.samsthenerd.inline:inline-common:1.21.1-1.2.2-74"
 
     // === OPTIONAL DEPS ===
     modCompileOnly "dev.emi:emi-xplat-intermediary:${emiVersion}:api"
-    compileOnly "io.wispforest:accessories-common:$accessoriesVersion"
+    modCompileOnly "io.wispforest:accessories-common:$accessoriesVersion"
 
     // === OTHER STUFF ===
     compileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"

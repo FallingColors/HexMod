@@ -23,11 +23,10 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.io.IOException;
 import java.util.function.Function;
@@ -48,37 +47,34 @@ public class ForgeHexClientInitializer {
                 (colorizer, block) -> GLOBAL_BLOCK_COLORS.register(colorizer, block));
         });
 
-        var evBus = MinecraftForge.EVENT_BUS;
+        var evBus = NeoForge.EVENT_BUS;
 
         evBus.addListener((ClientPlayerNetworkEvent.LoggingIn e) ->
             PatternRegistryManifest.processRegistry(null));
 
+        // TODO port: check if gametimedelta is the right one
         evBus.addListener((RenderLevelStageEvent e) -> {
             if (e.getStage().equals(RenderLevelStageEvent.Stage.AFTER_PARTICLES)) {
-                HexAdditionalRenderers.overlayLevel(e.getPoseStack(), e.getPartialTick());
+                HexAdditionalRenderers.overlayLevel(e.getPoseStack(), e.getPartialTick().getGameTimeDeltaTicks());
             }
         });
 
         evBus.addListener((RenderGuiEvent.Post e) -> {
-            HexAdditionalRenderers.overlayGui(e.getGuiGraphics(), e.getPartialTick());
+            HexAdditionalRenderers.overlayGui(e.getGuiGraphics(), e.getPartialTick().getGameTimeDeltaTicks());
         });
 
-
-        evBus.addListener((TickEvent.RenderTickEvent e) -> {
-            if (e.phase == TickEvent.Phase.START) {
-                ClientTickCounter.renderTickStart(e.renderTickTime);
-            }
+        //TODO port: maybe replace with DeltaTracker from Mojang?
+        evBus.addListener((RenderFrameEvent.Pre e) -> {
+            ClientTickCounter.renderTickStart(e.getPartialTick().getGameTimeDeltaTicks());
         });
 
-        evBus.addListener((TickEvent.ClientTickEvent e) -> {
-            if (e.phase == TickEvent.Phase.END) {
-                ClientTickCounter.clientTickEnd();
-                ShiftScrollListener.clientTickEnd();
-            }
+        evBus.addListener((ClientTickEvent.Post e) -> {
+            ClientTickCounter.clientTickEnd();
+            ShiftScrollListener.clientTickEnd();
         });
 
         evBus.addListener((InputEvent.MouseScrollingEvent e) -> {
-            var cancel = ShiftScrollListener.onScrollInGameplay(e.getScrollDelta());
+            var cancel = ShiftScrollListener.onScrollInGameplay(e.getScrollDeltaY());
             e.setCanceled(cancel);
         });
 

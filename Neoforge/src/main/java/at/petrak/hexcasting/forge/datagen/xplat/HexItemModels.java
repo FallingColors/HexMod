@@ -13,35 +13,37 @@ import at.petrak.hexcasting.common.items.storage.ItemSlate;
 import at.petrak.hexcasting.common.items.storage.ItemThoughtKnot;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.paucal.api.forge.datagen.PaucalItemModelProvider;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.data.DataGenerator;
+import at.petrak.paucal.forge.api.datagen.PaucalItemModelProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
 
 public class HexItemModels extends PaucalItemModelProvider {
+
     public HexItemModels(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, HexAPI.MOD_ID, existingFileHelper);
     }
 
     private static final String[] PHIAL_SIZES = {"small", "medium", "large", "larger", "largest"};
 
-    private static String getPath(Item item) {
-        return Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(item)).getPath();
+    // TODO port: maybe consider using registry lookup? But it's completable future... Not sure
+    private String getPath(Item item) {
+        return Objects.requireNonNull(BuiltInRegistries.ITEM.getKey(item)).getPath();
     }
 
-    private static String getPath(Block block) {
-        return Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)).getPath();
+    private String getPath(Block block) {
+        return Objects.requireNonNull(BuiltInRegistries.BLOCK.getKey(block)).getPath();
     }
 
     @Override
@@ -55,11 +57,11 @@ public class HexItemModels extends PaucalItemModelProvider {
         simpleItem(HexItems.LORE_FRAGMENT);
 
         singleTexture(getPath(HexBlocks.CONJURED_BLOCK),
-            new ResourceLocation("item/generated"),
-            "layer0", new ResourceLocation("item/amethyst_shard"));
+            ResourceLocation.withDefaultNamespace("item/generated"),
+            "layer0", ResourceLocation.withDefaultNamespace("item/amethyst_shard"));
         singleTexture(getPath(HexBlocks.CONJURED_LIGHT),
-            new ResourceLocation("item/generated"),
-            "layer0", new ResourceLocation("item/amethyst_shard"));
+            ResourceLocation.withDefaultNamespace("item/generated"),
+            "layer0", ResourceLocation.withDefaultNamespace("item/amethyst_shard"));
 
         for (var age : new String[]{"pristine", "ancient"}) {
             for (var size : new String[]{"small", "medium", "large"}) {
@@ -78,9 +80,9 @@ public class HexItemModels extends PaucalItemModelProvider {
             .translation(-2.5f, 0f, -8f)
             .scale(0.4f);
 
-        singleTexture("old_staff", new ResourceLocation("item/handheld_rod"),
+        singleTexture("old_staff", ResourceLocation.withDefaultNamespace("item/handheld_rod"),
             "layer0", modLoc("item/staff/old"));
-        singleTexture("cherry_staff", new ResourceLocation("item/handheld_rod"),
+        singleTexture("cherry_staff", ResourceLocation.withDefaultNamespace("item/handheld_rod"),
             "layer0", modLoc("item/staff/cherry"));
 
         buildStaff(HexItems.STAFF_OAK, "oak");
@@ -99,10 +101,10 @@ public class HexItemModels extends PaucalItemModelProvider {
 
         // again, doesn't like paths with slashes in them, so we do it manually
         buildFourVariantGaslight("item/staff/quenched", "item/staff/quenched", (name, path) ->
-            singleTexture(path.getPath(), new ResourceLocation("item/handheld_rod"),
+            singleTexture(path.getPath(), ResourceLocation.withDefaultNamespace("item/handheld_rod"),
                 "layer0", modLoc(path.getPath())));
         buildFourVariantGaslight(getPath(HexItems.QUENCHED_SHARD), "item/quenched_shard", (name, path) ->
-            singleTexture(path.getPath(), new ResourceLocation("item/handheld"),
+            singleTexture(path.getPath(), ResourceLocation.withDefaultNamespace("item/handheld"),
                 "layer0", modLoc(path.getPath())));
         buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY), "block/quenched_allay", (name, path) ->
             cubeAll(path.getPath(), path));
@@ -130,7 +132,7 @@ public class HexItemModels extends PaucalItemModelProvider {
                 String name = "phial_" + PHIAL_SIZES[size] + "_" + fill;
                 singleTexture(
                     name,
-                    new ResourceLocation("item/generated"),
+                    ResourceLocation.withDefaultNamespace("item/generated"),
                     "layer0", modLoc("item/phial/" + name));
 
                 float fillProp = (float) fill / maxFill;
@@ -144,17 +146,17 @@ public class HexItemModels extends PaucalItemModelProvider {
 
         for (var dye : DyeColor.values()) {
             singleTexture(getPath(HexItems.DYE_PIGMENTS.get(dye)),
-                new ResourceLocation("item/generated"),
+                ResourceLocation.withDefaultNamespace("item/generated"),
                 "layer0", modLoc("item/colorizer/dye_" + dye.getName()));
         }
         for (var type : ItemPridePigment.Type.values()) {
             singleTexture(getPath(HexItems.PRIDE_PIGMENTS.get(type)),
-                new ResourceLocation("item/generated"),
+                ResourceLocation.withDefaultNamespace("item/generated"),
                 "layer0", modLoc("item/colorizer/pride_" + type.getName()));
         }
-        singleTexture(getPath(HexItems.UUID_PIGMENT), new ResourceLocation("item/generated"),
+        singleTexture(getPath(HexItems.UUID_PIGMENT), ResourceLocation.withDefaultNamespace("item/generated"),
             "layer0", modLoc("item/colorizer/uuid"));
-        singleTexture(getPath(HexItems.DEFAULT_PIGMENT), new ResourceLocation("item/generated"),
+        singleTexture(getPath(HexItems.DEFAULT_PIGMENT), ResourceLocation.withDefaultNamespace("item/generated"),
             "layer0", modLoc("item/colorizer/uuid"));
 
         simpleItem(modLoc("slate_blank"));
@@ -205,16 +207,16 @@ public class HexItemModels extends PaucalItemModelProvider {
         getBuilder(getPath(HexBlocks.EDIFIED_SLAB)).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_slab")));
         getBuilder(getPath(HexBlocks.EDIFIED_BUTTON)).parent(
-                new ModelFile.UncheckedModelFile(new ResourceLocation("block/button_inventory")))
+                new ModelFile.UncheckedModelFile(ResourceLocation.withDefaultNamespace("block/button_inventory")))
             .texture("texture", modLoc("block/edified_planks"));
         getBuilder(getPath(HexBlocks.EDIFIED_PRESSURE_PLATE))
             .parent(new ModelFile.UncheckedModelFile(modLoc("block/edified_pressure_plate")));
     }
 
     private void buildThoughtKnot() {
-        var unwritten = singleTexture("thought_knot", new ResourceLocation("item/generated"),
+        var unwritten = singleTexture("thought_knot", ResourceLocation.withDefaultNamespace("item/generated"),
             "layer0", modLoc("item/thought_knot"));
-        var written = withExistingParent("thought_knot_written", new ResourceLocation("item/generated"))
+        var written = withExistingParent("thought_knot_written", ResourceLocation.withDefaultNamespace("item/generated"))
             .texture("layer0", modLoc("item/thought_knot"))
             .texture("layer1", modLoc("item/thought_knot_overlay"));
         getBuilder("thought_knot")
@@ -228,14 +230,14 @@ public class HexItemModels extends PaucalItemModelProvider {
         var name = getPath(item);
         var builder = getBuilder(name);
         for (int i = 0; i < numVariants; i++) {
-            var plain = i == 0 ? singleTexture(name, new ResourceLocation("item/generated"),
+            var plain = i == 0 ? singleTexture(name, ResourceLocation.withDefaultNamespace("item/generated"),
                     "layer0", modLoc("item/cad/" + i + "_" + stub + "_empty"))
-                    : withExistingParent(name + "_" + i, new ResourceLocation("item/generated"))
+                    : withExistingParent(name + "_" + i, ResourceLocation.withDefaultNamespace("item/generated"))
                     .texture("layer0", modLoc("item/cad/" + i + "_" + stub + "_empty"));
-            var unsealed = withExistingParent(name + "_" + i + "_filled", new ResourceLocation("item/generated"))
+            var unsealed = withExistingParent(name + "_" + i + "_filled", ResourceLocation.withDefaultNamespace("item/generated"))
                     .texture("layer0", modLoc("item/cad/" + i + "_" + stub + "_filled"))
                     .texture("layer1", modLoc("item/cad/" + i + "_" + stub + "_filled_overlay"));
-            var sealed = withExistingParent(name + "_" + i + "_sealed", new ResourceLocation("item/generated"))
+            var sealed = withExistingParent(name + "_" + i + "_sealed", ResourceLocation.withDefaultNamespace("item/generated"))
                     .texture("layer0", modLoc("item/cad/" + i + "_" + stub + "_sealed"))
                     .texture("layer1", modLoc("item/cad/" + i + "_" + stub + "_sealed_overlay"));
             builder.override().predicate(ItemFocus.VARIANT_PRED, i).predicate(ItemFocus.OVERLAY_PRED, 0f)
@@ -258,7 +260,7 @@ public class HexItemModels extends PaucalItemModelProvider {
     }
 
     private void buildStaff(Item item, String name) {
-        singleTexture("item/" + getPath(item), new ResourceLocation("item/handheld_rod"),
+        singleTexture("item/" + getPath(item), ResourceLocation.withDefaultNamespace("item/handheld_rod"),
             "layer0", modLoc("item/staff/" + name));
         getBuilder(getPath(item))
             .override()
@@ -276,11 +278,11 @@ public class HexItemModels extends PaucalItemModelProvider {
         var name = getPath(item);
         var builder = getBuilder(name);
         for (int i = 0; i < numVariants; i++) {
-            var plain = i == 0 ? singleTexture(name, new ResourceLocation("item/generated"),
+            var plain = i == 0 ? singleTexture(name, ResourceLocation.withDefaultNamespace("item/generated"),
                     "layer0", modLoc("item/cad/" + i + "_" + stub))
-                    : withExistingParent(name + "_" + i, new ResourceLocation("item/generated"))
+                    : withExistingParent(name + "_" + i, ResourceLocation.withDefaultNamespace("item/generated"))
                     .texture("layer0", modLoc("item/cad/" + i + "_" + stub));
-            var filled = withExistingParent(name + "_" + i + "_filled", new ResourceLocation("item/generated"))
+            var filled = withExistingParent(name + "_" + i + "_filled", ResourceLocation.withDefaultNamespace("item/generated"))
                 .texture("layer0", modLoc("item/cad/" + i + "_" + stub))
                 .texture("layer1", modLoc("item/cad/" + i + "_" + stub + "_overlay"));
             builder.override().predicate(ItemFocus.VARIANT_PRED, i).predicate(ItemPackagedHex.HAS_PATTERNS_PRED, -0.01f)

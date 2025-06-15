@@ -15,8 +15,6 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * On forge: these are setup in ForgeHexInit
  * On fabric: it's a mixin
- * <p>
- * TODO how to do this in 1.21
  */
 public class HexAttributes {
     public static void register(BiConsumer<Attribute, ResourceLocation> r) {

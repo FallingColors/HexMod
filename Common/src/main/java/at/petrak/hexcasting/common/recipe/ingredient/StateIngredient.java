@@ -15,14 +15,13 @@ import java.util.function.Predicate;
 // https://github.com/VazkiiMods/Botania/blob/1.18.x/Common/src/main/java/vazkii/botania/api/recipe/StateIngredient.java
 // good artists copy and all
 public interface StateIngredient extends Predicate<BlockState> {
+
+    StateIngredientType<?> getType();
+
     @Override
     boolean test(BlockState state);
 
     BlockState pick(Random random);
-
-    JsonObject serialize();
-
-    void write(FriendlyByteBuf buffer);
 
     List<ItemStack> getDisplayedStacks();
 

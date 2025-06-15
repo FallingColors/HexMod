@@ -58,4 +58,9 @@ class ClientCastingStack {
         patterns.removeAll(toRemove)
         toRemove.clear()
     }
+
+    fun interface Provider {
+
+        fun provide(): ClientCastingStack
+    }
 }

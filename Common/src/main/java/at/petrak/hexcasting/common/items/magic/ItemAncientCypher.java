@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.ChatFormatting;
@@ -14,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class ItemAncientCypher extends ItemCypher {
-    public static final String TAG_PATTERNS = "patterns";
     public static final String TAG_HEX_NAME = "hex_name";
 
     public ItemAncientCypher(Properties pProperties) {
@@ -24,13 +24,13 @@ public class ItemAncientCypher extends ItemCypher {
     @Override
     public void clearHex(ItemStack stack) {
         super.clearHex(stack);
-        NBTHelper.remove(stack, TAG_HEX_NAME);
+        stack.remove(HexDataComponents.HEX_NAME);
     }
 
     @Override
-    public Component getName(ItemStack pStack) {
-        var descID = this.getDescriptionId(pStack);
-        var hexName = NBTHelper.getString(pStack, TAG_HEX_NAME);
+    public Component getName(ItemStack stack) {
+        var descID = this.getDescriptionId(stack);
+        var hexName = stack.get(HexDataComponents.HEX_NAME);
         if (hexName != null) {
             return Component.translatable(descID + ".preset", Component.translatable(hexName));
         } else {
@@ -39,21 +39,21 @@ public class ItemAncientCypher extends ItemCypher {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
-        TooltipFlag pIsAdvanced) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         // display media fullness as usual
-        super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+
+        var patterns = stack.get(HexDataComponents.PATTERNS);
 
         // also show contained spell
-        var patternsTag = NBTHelper.getList(pStack, TAG_PATTERNS, Tag.TAG_COMPOUND);
-        if (patternsTag != null) {
+        if(patterns != null) {
             var storedHex = Component.translatable("hexcasting.tooltip.stored_hex");
-            for (var iotaTag : patternsTag) {
-                var iotaTagC = NBTHelper.getAsCompound(iotaTag);
-                var iotaComponent = IotaType.getDisplay(iotaTagC).copy();
-                storedHex.append(iotaComponent.withStyle(ChatFormatting.DARK_PURPLE));
+
+            for(var iota : patterns) {
+                storedHex.append(iota.display().plainCopy().withStyle(ChatFormatting.DARK_PURPLE));
             }
-            pTooltipComponents.add(storedHex);
+
+            tooltipComponents.add(storedHex);
         }
     }
 }

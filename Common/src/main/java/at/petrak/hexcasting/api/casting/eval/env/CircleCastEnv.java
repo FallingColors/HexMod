@@ -15,6 +15,7 @@ import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.lib.HexAttributes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -132,7 +133,7 @@ public class CircleCastEnv extends CastingEnvironment {
     public boolean isVecInRangeEnvironment(Vec3 vec) {
         var caster = this.execState.getCaster(this.world);
         if (caster != null) {
-            double sentinelRadius = caster.getAttributeValue(HexAttributes.SENTINEL_RADIUS);
+            double sentinelRadius = caster.getAttributeValue(Holder.direct(HexAttributes.SENTINEL_RADIUS));
             if (vec.distanceToSqr(caster.position()) <= caster.getBbHeight() * caster.getBbHeight()) {
                 return true;
             }

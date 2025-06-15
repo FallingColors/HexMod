@@ -1,31 +1,28 @@
 package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Random;
+import net.minecraft.network.codec.StreamCodec;
 
 /**
  * this is LITERALLY a copy of NullIota but I can't see how to do it any better, i hate java generics
  */
 public class GarbageIota extends Iota {
+    public static final GarbageIota INSTANCE = new GarbageIota();
+
     private static final Object NULL_SUBSTITUTE = new Object();
 
     public static final Component DISPLAY = Component.literal("arimfexendrapuse")
         .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.OBFUSCATED);
 
-    private static final Random RANDOM = new Random();
-
-    public GarbageIota() {
+    private GarbageIota() {
         // We have to pass *something* here, but there's nothing that actually needs to go there,
         // so we just do this i guess
-        super(HexIotaTypes.GARBAGE, NULL_SUBSTITUTE);
+        super(() -> HexIotaTypes.GARBAGE);
     }
 
     @Override
@@ -39,20 +36,28 @@ public class GarbageIota extends Iota {
     }
 
     @Override
-    public @NotNull Tag serialize() {
-        return new CompoundTag();
+    public int hashCode() {
+        return NULL_SUBSTITUTE.hashCode();
+    }
+
+    @Override
+    public Component display() {
+        return DISPLAY;
     }
 
     public static IotaType<GarbageIota> TYPE = new IotaType<>() {
-        @Nullable
+        public static final MapCodec<GarbageIota> CODEC = MapCodec.unit(GarbageIota.INSTANCE);
+        public static final StreamCodec<RegistryFriendlyByteBuf, GarbageIota> STREAM_CODEC =
+                StreamCodec.unit(GarbageIota.INSTANCE);
+
         @Override
-        public GarbageIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            return new GarbageIota();
+        public MapCodec<GarbageIota> codec() {
+            return CODEC;
         }
 
         @Override
-        public Component display(Tag tag) {
-            return DISPLAY;
+        public StreamCodec<RegistryFriendlyByteBuf, GarbageIota> streamCodec() {
+            return STREAM_CODEC;
         }
 
         @Override

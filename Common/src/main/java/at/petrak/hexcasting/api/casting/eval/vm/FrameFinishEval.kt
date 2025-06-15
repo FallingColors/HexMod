@@ -6,7 +6,10 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.utils.NBTBuilder
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
+import com.mojang.serialization.MapCodec
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerLevel
 
 /**
@@ -24,7 +27,7 @@ object FrameFinishEval : ContinuationFrame {
         harness: CastingVM
     ): CastResult {
         return CastResult(
-            NullIota(),
+            NullIota.INSTANCE,
             continuation,
             null,
             listOf(),
@@ -33,13 +36,19 @@ object FrameFinishEval : ContinuationFrame {
         )
     }
 
-    override fun serializeToNBT() = CompoundTag()
-
     override fun size() = 0
 
     @JvmField
     val TYPE: ContinuationFrame.Type<FrameFinishEval> = object : ContinuationFrame.Type<FrameFinishEval> {
-        override fun deserializeFromNBT(tag: CompoundTag, world: ServerLevel) = FrameFinishEval
+        val CODEC = MapCodec.unit(FrameFinishEval)
+        val STREAM_CODEC = StreamCodec.unit<RegistryFriendlyByteBuf, FrameFinishEval>(FrameFinishEval)
+
+        override fun codec(): MapCodec<FrameFinishEval> =
+            CODEC
+
+        override fun streamCodec(): StreamCodec<RegistryFriendlyByteBuf, FrameFinishEval> =
+            STREAM_CODEC
+
     }
 
     override val type = TYPE

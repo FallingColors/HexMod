@@ -21,8 +21,12 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -40,14 +44,15 @@ public class HexItems {
     }
 
     public static void registerItemCreativeTab(CreativeModeTab.Output r, CreativeModeTab tab) {
-        if (tab == HexCreativeTabs.SCROLLS) generateScrollEntries();
-        for (var item : ITEM_TABS.getOrDefault(tab, List.of())) {
+        if (tab == HexCreativeTabs.SCROLLS)
+            generateScrollEntries(r);
+        for (var item : ITEM_TABS.getOrDefault(tab, Collections.emptySet())) {
             item.register(r);
         }
     }
 
     private static final Map<ResourceLocation, Item> ITEMS = new LinkedHashMap<>(); // preserve insertion order
-    private static final Map<CreativeModeTab, List<TabEntry>> ITEM_TABS = new LinkedHashMap<>();
+    private static final Map<CreativeModeTab, Set<TabEntry>> ITEM_TABS = new LinkedHashMap<>();
 
 
     public static final Item AMETHYST_DUST = make("amethyst_dust", new Item(props()));
@@ -86,7 +91,19 @@ public class HexItems {
     public static final ItemArtifact ARTIFACT = make("artifact", new ItemArtifact(unstackable().rarity(Rarity.RARE)));
 
     public static final ItemJewelerHammer JEWELER_HAMMER = make("jeweler_hammer",
-        new ItemJewelerHammer(Tiers.IRON, 0, -2.8F, props().stacksTo(1).defaultDurability(Tiers.DIAMOND.getUses())));
+        new ItemJewelerHammer(Tiers.IRON, props()
+                .stacksTo(1)
+                .durability(Tiers.DIAMOND.getUses())
+                .attributes(ItemAttributeModifiers.builder()
+                        .add(Attributes.ATTACK_SPEED, new AttributeModifier(
+                                modLoc("jeweler_hammer_speed"),
+                                -2.8,
+                                AttributeModifier.Operation.ADD_VALUE
+                        ), EquipmentSlotGroup.ANY)
+                        .build()
+                )
+        )
+    );
 
     public static final ItemScroll SCROLL_SMOL = make("scroll_small", new ItemScroll(props(), 1));
     public static final ItemScroll SCROLL_MEDIUM = make("scroll_medium", new ItemScroll(props(), 2));
@@ -140,7 +157,7 @@ public class HexItems {
 
     // BUFF SANDVICH
     public static final Item SUBMARINE_SANDWICH = make("sub_sandwich",
-        new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationMod(1.2f).build())));
+        new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationModifier(1.2f).build())));
 
     public static final ItemLoreFragment LORE_FRAGMENT = make("lore_fragment",
         new ItemLoreFragment(unstackable()
@@ -149,7 +166,7 @@ public class HexItems {
     public static final ItemCreativeUnlocker CREATIVE_UNLOCKER = make("creative_unlocker",
         new ItemCreativeUnlocker(unstackable()
             .rarity(Rarity.EPIC)
-            .food(new FoodProperties.Builder().nutrition(20).saturationMod(1f).alwaysEat().build())));
+            .food(new FoodProperties.Builder().nutrition(20).saturationModifier(1f).alwaysEdible().build())));
 
     //
 
@@ -161,18 +178,18 @@ public class HexItems {
         return props().stacksTo(1);
     }
 
-    private static void generateScrollEntries() {
+    private static void generateScrollEntries(CreativeModeTab.Output r) {
         var keyList = new ArrayList<ResourceKey<ActionRegistryEntry>>();
         Registry<ActionRegistryEntry> regi = IXplatAbstractions.INSTANCE.getActionRegistry();
         for (var key : regi.registryKeySet())
             if (HexUtils.isOfTag(regi, key, HexTags.Actions.PER_WORLD_PATTERN))
                 keyList.add(key);
-        keyList.sort( (a, b) -> a.location().compareTo(b.location()) );
+        keyList.sort(Comparator.comparing(ResourceKey::location));
         for (var key : keyList) {
-            addToTab(() -> ItemScroll.withPerWorldPattern(
-                new ItemStack(HexItems.SCROLL_LARGE),
-                key.location().toString()
-            ),HexCreativeTabs.SCROLLS);
+            r.accept(ItemScroll.withPerWorldPattern(
+                    new ItemStack(HexItems.SCROLL_LARGE),
+                    key
+            ));
         }
     }
 
@@ -182,7 +199,7 @@ public class HexItems {
             throw new IllegalArgumentException("Typo? Duplicate id " + id);
         }
         if (tab != null) {
-            ITEM_TABS.computeIfAbsent(tab, t -> new ArrayList<>()).add(new TabEntry.ItemEntry(item));
+            ITEM_TABS.computeIfAbsent(tab, t -> new HashSet<>()).add(new TabEntry.ItemEntry(item));
         }
         return item;
     }
@@ -197,12 +214,15 @@ public class HexItems {
 
     private static Supplier<ItemStack> addToTab(Supplier<ItemStack> stack, CreativeModeTab tab) {
         var memoised = Suppliers.memoize(stack::get);
-        ITEM_TABS.computeIfAbsent(tab, t -> new ArrayList<>()).add(new TabEntry.StackEntry(memoised));
+        ITEM_TABS.computeIfAbsent(tab, t -> new HashSet<>()).add(new TabEntry.StackEntry(memoised));
         return memoised;
     }
 
     private static abstract class TabEntry {
         abstract void register(CreativeModeTab.Output r);
+
+        @Override
+        public abstract int hashCode();
 
         static class ItemEntry extends TabEntry {
             private final Item item;
@@ -214,6 +234,11 @@ public class HexItems {
             @Override
             void register(CreativeModeTab.Output r) {
                 r.accept(item);
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hashCode(item);
             }
         }
 
@@ -227,6 +252,11 @@ public class HexItems {
             @Override
             void register(CreativeModeTab.Output r) {
                 r.accept(stack.get());
+            }
+
+            @Override
+            public int hashCode() {
+                return Objects.hashCode(stack);
             }
         }
     }

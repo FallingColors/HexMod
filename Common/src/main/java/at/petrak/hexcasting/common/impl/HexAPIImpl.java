@@ -21,6 +21,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Consumer;
@@ -96,50 +97,15 @@ public class HexAPIImpl implements HexAPI {
         return IXplatAbstractions.INSTANCE.getPigment(player);
     }
 
-    ArmorMaterial ARMOR_MATERIAL = new ArmorMaterial() {
-
-        @Override
-        public int getDurabilityForType(ArmorItem.Type type) {
-            return 0;
-        }
-
-        @Override
-        public int getDefenseForType(ArmorItem.Type type) {
-            return 0;
-        }
-
-        @Override
-        public int getEnchantmentValue() {
-            return 0;
-        }
-
-        @NotNull
-        @Override
-        public SoundEvent getEquipSound() {
-            return SoundEvents.ARMOR_EQUIP_LEATHER;
-        }
-
-        @NotNull
-        @Override
-        public Ingredient getRepairIngredient() {
-            return Ingredient.EMPTY;
-        }
-
-        @Override
-        public String getName() {
-            return "robes";
-        }
-
-        @Override
-        public float getToughness() {
-            return 0;
-        }
-
-        @Override
-        public float getKnockbackResistance() {
-            return 0;
-        }
-    };
+    ArmorMaterial ARMOR_MATERIAL = new ArmorMaterial(
+            Collections.emptyMap(),
+            0,
+            SoundEvents.ARMOR_EQUIP_LEATHER,
+            () -> Ingredient.EMPTY,
+            Collections.emptyList(), // TODO check textures. If not - use robes here from original code
+            0,
+            0
+    );
 
     @Override
     public ArmorMaterial robesMaterial() {

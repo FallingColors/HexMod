@@ -8,6 +8,9 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.phys.Vec2
 
 /**
@@ -73,12 +76,6 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
     fun finalDir(): HexDir =
         this.angles.fold(this.startDir) { acc, angle -> acc * angle }
 
-
-    fun serializeToNBT() = NBTBuilder {
-        TAG_START_DIR %= byte(startDir.ordinal)
-        TAG_ANGLES %= byteArray(angles.map(HexAngle::ordinal))
-    }
-
     // Terrible shorthand method for easy matching
     fun anglesSignature(): String {
         return buildString {
@@ -126,28 +123,19 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
     }
 
     companion object {
-        const val TAG_START_DIR = "start_dir"
-        const val TAG_ANGLES = "angles"
-
         @JvmField
         val CODEC: Codec<HexPattern> = RecordCodecBuilder.create({instance -> instance.group(
-            Codec.STRING.fieldOf(TAG_START_DIR).forGetter(HexPattern::anglesSignature),
-            HexDir.CODEC.fieldOf(TAG_ANGLES).forGetter(HexPattern::startDir)
+            Codec.STRING.fieldOf("start_dir").forGetter(HexPattern::anglesSignature),
+            HexDir.CODEC.fieldOf("angles").forGetter(HexPattern::startDir)
         ).apply(instance, HexPattern::fromAngles)
         })
 
-        @JvmStatic
-        fun isPattern(tag: CompoundTag): Boolean {
-            return tag.contains(TAG_START_DIR, Tag.TAG_ANY_NUMERIC.toInt())
-                && tag.contains(TAG_ANGLES, Tag.TAG_BYTE_ARRAY.toInt())
-        }
-
-        @JvmStatic
-        fun fromNBT(tag: CompoundTag): HexPattern {
-            val startDir = HexDir.values().getSafe(tag.getByte(TAG_START_DIR))
-            val angles = tag.getByteArray(TAG_ANGLES).map(HexAngle.values()::getSafe)
-            return HexPattern(startDir, angles.toMutableList())
-        }
+        @JvmField
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, HexPattern> = StreamCodec.composite(
+            ByteBufCodecs.STRING_UTF8, HexPattern::anglesSignature,
+            HexDir.STREAM_CODEC, HexPattern::startDir,
+            HexPattern::fromAngles
+        )
 
         @JvmStatic
         fun fromAngles(signature: String, startDir: HexDir): HexPattern {

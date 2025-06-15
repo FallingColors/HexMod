@@ -4,16 +4,17 @@ import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.ListIota
-import at.petrak.hexcasting.api.utils.NBTBuilder
-import at.petrak.hexcasting.api.utils.getList
-import at.petrak.hexcasting.api.utils.hasList
-import at.petrak.hexcasting.api.utils.serializeToNBT
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.Tag
+import com.mojang.serialization.MapCodec
+import com.mojang.serialization.codecs.RecordCodecBuilder
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerLevel
+import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * A frame representing all the state for a Thoth evaluation.
@@ -81,14 +82,6 @@ data class FrameForEach(
         )
     }
 
-    override fun serializeToNBT() = NBTBuilder {
-        "data" %= data.serializeToNBT()
-        "code" %= code.serializeToNBT()
-        if (baseStack != null)
-            "base" %= baseStack.serializeToNBT()
-        "accumulator" %= acc.serializeToNBT()
-    }
-
     override fun size() = data.size() + code.size() + acc.size + (baseStack?.size ?: 0)
 
     override val type: ContinuationFrame.Type<*> = TYPE
@@ -96,21 +89,33 @@ data class FrameForEach(
     companion object {
         @JvmField
         val TYPE: ContinuationFrame.Type<FrameForEach> = object : ContinuationFrame.Type<FrameForEach> {
-            override fun deserializeFromNBT(tag: CompoundTag, world: ServerLevel): FrameForEach {
-                return FrameForEach(
-                    HexIotaTypes.LIST.deserialize(tag.getList("data", Tag.TAG_COMPOUND), world)!!.list,
-                    HexIotaTypes.LIST.deserialize(tag.getList("code", Tag.TAG_COMPOUND), world)!!.list,
-                    if (tag.hasList("base", Tag.TAG_COMPOUND))
-                        HexIotaTypes.LIST.deserialize(tag.getList("base", Tag.TAG_COMPOUND), world)!!.list.toList()
-                    else
-                        null,
-                    HexIotaTypes.LIST.deserialize(
-                        tag.getList("accumulator", Tag.TAG_COMPOUND),
-                        world
-                    )!!.list.toMutableList()
-                )
+            val CODEC = RecordCodecBuilder.mapCodec<FrameForEach> { inst ->
+                inst.group(
+                    SpellList.CODEC.fieldOf("data").forGetter { it.data },
+                    SpellList.CODEC.fieldOf("code").forGetter { it.code },
+                    IotaType.TYPED_CODEC.listOf().optionalFieldOf("base").forGetter { Optional.ofNullable(it.baseStack) },
+                    IotaType.TYPED_CODEC.listOf().fieldOf("accumulator").forGetter { it.acc }
+                ).apply(inst) { a, b, c, d ->
+                    FrameForEach(a, b, c.getOrNull(), d)
+                }
+            }
+            val STREAM_CODEC = StreamCodec.composite(
+                SpellList.STREAM_CODEC, FrameForEach::data,
+                SpellList.STREAM_CODEC, FrameForEach::code,
+                ByteBufCodecs.optional(IotaType.TYPED_STREAM_CODEC
+                    .apply(ByteBufCodecs.list())), { Optional.ofNullable(it.baseStack) },
+                IotaType.TYPED_STREAM_CODEC
+                    .apply(ByteBufCodecs.list()), FrameForEach::acc
+            ) { a, b, c, d ->
+                FrameForEach(a, b, c.getOrNull(), d)
             }
 
+
+            override fun codec(): MapCodec<FrameForEach> =
+                CODEC
+
+            override fun streamCodec(): StreamCodec<RegistryFriendlyByteBuf, FrameForEach> =
+                STREAM_CODEC
         }
     }
 }

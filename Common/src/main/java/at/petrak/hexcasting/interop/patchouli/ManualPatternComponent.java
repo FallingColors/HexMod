@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.math.HexPattern;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.core.HolderLookup;
 import vazkii.patchouli.api.IVariable;
 
 import java.util.ArrayList;
@@ -21,11 +22,12 @@ public class ManualPatternComponent extends AbstractPatternComponent {
     public String strokeOrderRaw;
 
     protected transient boolean strokeOrder;
+    private transient HolderLookup.RegistryLookup.Provider registries;
 
     @Override
     public List<HexPattern> getPatterns(UnaryOperator<IVariable> lookup) {
         this.strokeOrder = lookup.apply(IVariable.wrap(this.strokeOrderRaw)).asBoolean(true);
-        var patsRaw = lookup.apply(IVariable.wrap(patternsRaw)).asListOrSingleton();
+        var patsRaw = lookup.apply(IVariable.wrap(patternsRaw)).asListOrSingleton(registries);
 
         var out = new ArrayList<HexPattern>();
         for (var ivar : patsRaw) {
@@ -46,9 +48,10 @@ public class ManualPatternComponent extends AbstractPatternComponent {
     }
 
     @Override
-    public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
+    public void onVariablesAvailable(UnaryOperator<IVariable> lookup, HolderLookup.RegistryLookup.Provider registries) {
         this.strokeOrder = IVariable.wrap(this.strokeOrderRaw).asBoolean(true);
+        this.registries = registries;
 
-        super.onVariablesAvailable(lookup);
+        super.onVariablesAvailable(lookup, registries);
     }
 }
