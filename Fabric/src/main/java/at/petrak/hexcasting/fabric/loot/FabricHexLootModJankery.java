@@ -2,6 +2,7 @@ package at.petrak.hexcasting.fabric.loot;
 
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.loot.AddPerWorldPatternToScrollFunc;
+import at.petrak.hexcasting.common.loot.AddHexToAncientCypherFunc;
 import at.petrak.hexcasting.fabric.FabricHexInitializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
@@ -33,7 +34,11 @@ public class FabricHexLootModJankery {
         }
 
         if (FabricHexInitializer.CONFIG.server.shouldInjectLore(id)) {
-            addPool.accept(makeLoreAddPool(FabricHexInitializer.CONFIG.server.getLoreChance()));
+            addPool.accept(makeLoreAddPool(FabricHexInitializer.CONFIG.server.loreChance()));
+        }
+
+        if (FabricHexInitializer.CONFIG.server.shouldInjectCyphers(id)) {
+            addPool.accept(makeCypherAddPool(FabricHexInitializer.CONFIG.server.cypherChance()));
         }
     }
 
@@ -55,5 +60,13 @@ public class FabricHexLootModJankery {
             .when(LootItemRandomChanceCondition.randomChance((float) chance))
             .setRolls(ConstantValue.exactly(1))
             .add(LootItem.lootTableItem(HexItems.LORE_FRAGMENT));
+    }
+
+    private static LootPool.Builder makeCypherAddPool(double chance) {
+        return LootPool.lootPool()
+            .when(LootItemRandomChanceCondition.randomChance((float) chance))
+            .setRolls(ConstantValue.exactly(1))
+            .add(LootItem.lootTableItem(HexItems.ANCIENT_CYPHER))
+            .apply(() -> new AddHexToAncientCypherFunc(new LootItemCondition[0]));
     }
 }

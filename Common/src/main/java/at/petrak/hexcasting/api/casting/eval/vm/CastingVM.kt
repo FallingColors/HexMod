@@ -64,7 +64,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 }
             }
 
-            // Then write all pertinent data back to the harness for the next iteration.
+            // Then write all pertinent data back to the VM for the next iteration.
             if (image2.newData != null) {
                 this.image = image2.newData
             }

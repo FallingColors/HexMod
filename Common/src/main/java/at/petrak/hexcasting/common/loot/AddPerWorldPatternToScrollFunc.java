@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.loot;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.items.storage.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexLootFunctions;
@@ -10,9 +11,12 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
+import net.minecraft.util.RandomSource;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
@@ -35,8 +39,7 @@ public class AddPerWorldPatternToScrollFunc extends LootItemConditionalFunction 
     /**
      * This doesn't actually have any params so extract behaviour out for the benefit of forge
      */
-    public static ItemStack doStatic(ItemStack stack, LootContext ctx) {
-        var rand = ctx.getRandom();
+    public static ItemStack doStatic(ItemStack stack, RandomSource rand, ServerLevel overworld) {
         var perWorldKeys = new ArrayList<ResourceKey<ActionRegistryEntry>>();
         Registry<ActionRegistryEntry> regi = IXplatAbstractions.INSTANCE.getActionRegistry();
         for (var key : regi.registryKeySet()) {
@@ -44,21 +47,16 @@ public class AddPerWorldPatternToScrollFunc extends LootItemConditionalFunction 
                 perWorldKeys.add(key);
             }
         }
-        var key = perWorldKeys.get(rand.nextInt(perWorldKeys.size()));
-
-        var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(key, ctx.getLevel().getServer().overworld());
-        var tag = new CompoundTag();
-        tag.putString(ItemScroll.TAG_OP_ID, key.location().toString());
-        tag.put(ItemScroll.TAG_PATTERN, pat.serializeToNBT());
-
-        stack.getOrCreateTag().merge(tag);
-
+        var patternKey = perWorldKeys.get(rand.nextInt(perWorldKeys.size()));
+        var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(patternKey, overworld);
+        NBTHelper.putString(stack, ItemScroll.TAG_OP_ID, patternKey.location().toString());
+        NBTHelper.put(stack, ItemScroll.TAG_PATTERN, pat.serializeToNBT());
         return stack;
     }
 
     @Override
     protected ItemStack run(ItemStack stack, LootContext ctx) {
-        return doStatic(stack, ctx);
+        return doStatic(stack, ctx.getRandom(), ctx.getLevel().getServer().overworld());
     }
 
     @Override

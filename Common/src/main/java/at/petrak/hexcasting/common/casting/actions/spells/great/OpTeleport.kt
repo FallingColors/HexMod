@@ -63,7 +63,7 @@ object OpTeleport : SpellAction {
 
             teleportRespectSticky(teleportee, delta, env.world)
 
-            if (teleportee is ServerPlayer && teleportee == env.castingEntity) {
+            if (HexConfig.server().doesGreaterTeleportSplatItems() && teleportee is ServerPlayer && teleportee == env.castingEntity) {
                 // Drop items conditionally, based on distance teleported.
                 // MOST IMPORTANT: Never drop main hand item, since if it's a trinket, it will get duplicated later.
 

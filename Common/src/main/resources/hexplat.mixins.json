@@ -9,6 +9,7 @@
     "MixinMob",
     "MixinRaider",
     "MixinVillager",
+    "MixinWanderingTrader",
     "MixinWitch",
     "accessor.AccessorAbstractArrow",
     "accessor.AccessorDamageSource",

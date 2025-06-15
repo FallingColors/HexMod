@@ -5,7 +5,9 @@ import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.forge.loot.ForgeHexAmethystLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexLoreLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexScrollLootMod;
+import at.petrak.hexcasting.forge.loot.ForgeHexCypherLootMod;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.data.GlobalLootModifierProvider;
@@ -28,13 +30,19 @@ public class ForgeHexLootModGen extends GlobalLootModifierProvider {
         for (var injection : HexLootHandler.DEFAULT_LORE_INJECTS) {
             var name = "lore/%s/%s".formatted(injection.getNamespace(), injection.getPath());
             add(name, new ForgeHexLoreLootMod(new LootItemCondition[]{
-                LootTableIdCondition.builder(injection).build(),
+                LootTableIdCondition.builder(injection).build()
             }, HexLootHandler.DEFAULT_LORE_CHANCE));
+        }
+
+        for (var injection : HexLootHandler.DEFAULT_CYPHER_INJECTS) {
+            var name = "cypher/%s/%s".formatted(injection.getNamespace(), injection.getPath());
+            add(name, new ForgeHexCypherLootMod(new LootItemCondition[]{
+                LootTableIdCondition.builder(injection).build()
+            }, HexLootHandler.DEFAULT_CYPHER_CHANCE));
         }
 
         add("amethyst_cluster", new ForgeHexAmethystLootMod(new LootItemCondition[]{
             LootTableIdCondition.builder(Blocks.AMETHYST_CLUSTER.getLootTable()).build()
         }, HexLootHandler.DEFAULT_SHARD_MODIFICATION));
-
     }
 }
