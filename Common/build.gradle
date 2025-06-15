@@ -1,5 +1,5 @@
 architectury {
-    common(["fabric", "neoforge"])
+    common([/*"fabric", */"neoforge"])
 }
 
 pkSubproj {
@@ -9,6 +9,7 @@ pkSubproj {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 
     maven { url 'https://maven.blamejared.com' }
 
@@ -32,6 +33,11 @@ repositories {
 
 dependencies {
     // === MANDATORY DEPS ===
+    // We depend on Fabric Loader here to use the Fabric @Environment annotations,
+    // which get remapped to the correct annotations on each platform.
+    // Do NOT use other classes from Fabric Loader.
+    //modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+
     compileOnly "at.petra-k:paucal:$paucalVersion+$minecraftVersion-common"
     // i do not know why the xplat and mod jars are in different coordinates
     compileOnly "vazkii.patchouli:Patchouli-xplat:1.21-$patchouliVersion-SNAPSHOT"

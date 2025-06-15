@@ -1,3 +1,7 @@
+plugins {
+    id 'com.gradleup.shadow'
+}
+
 architectury {
     platformSetupLoomIde()
     neoForge()
@@ -30,6 +34,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
     flatDir {
@@ -138,4 +143,11 @@ processResources {
     }
 }
 
-jar.finalizedBy('reobfJar')
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
+}
+
+remapJar {
+    inputFile.set shadowJar.archiveFile
+}
