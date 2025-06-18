@@ -17,8 +17,10 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.InteractionHand;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -27,6 +29,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  */
 public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> patterns,
                                  List<Iota> stack,
+                                 @Nullable
                                  CompoundTag ravenmind,
                                  int parenCount
 )
@@ -40,7 +43,10 @@ public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> pat
             ), MsgOpenSpellGuiS2C::hand,
             ResolvedPattern.STREAM_CODEC.apply(ByteBufCodecs.list()), MsgOpenSpellGuiS2C::patterns,
             IotaType.TYPED_STREAM_CODEC.apply(ByteBufCodecs.list()), MsgOpenSpellGuiS2C::stack,
-            ByteBufCodecs.COMPOUND_TAG, MsgOpenSpellGuiS2C::ravenmind,
+            ByteBufCodecs.optional(ByteBufCodecs.COMPOUND_TAG).map(
+                    opt -> opt.orElse(null),
+                    Optional::ofNullable
+            ), MsgOpenSpellGuiS2C::ravenmind,
             ByteBufCodecs.VAR_INT, MsgOpenSpellGuiS2C::parenCount,
             MsgOpenSpellGuiS2C::new
     );

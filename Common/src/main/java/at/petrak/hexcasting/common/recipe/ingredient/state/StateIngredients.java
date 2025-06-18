@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.recipe.ingredient;
+package at.petrak.hexcasting.common.recipe.ingredient.state;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.lib.HexRegistries;

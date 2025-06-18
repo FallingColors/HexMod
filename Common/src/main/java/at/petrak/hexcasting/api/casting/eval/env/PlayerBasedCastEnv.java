@@ -49,8 +49,8 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         super(caster.serverLevel());
         this.caster = caster;
         this.castingHand = castingHand;
-        this.ambitRadius = caster.getAttributeValue(Holder.direct(HexAttributes.AMBIT_RADIUS));
-        this.sentinelRadius = caster.getAttributeValue(Holder.direct(HexAttributes.SENTINEL_RADIUS));
+        this.ambitRadius = caster.getAttributeValue(HexAttributes.AMBIT_RADIUS);
+        this.sentinelRadius = caster.getAttributeValue(HexAttributes.SENTINEL_RADIUS);
     }
 
     @Override
@@ -73,11 +73,11 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
             }
         }
         if (this.caster != null){
-            double ambitAttribute = this.caster.getAttributeValue(Holder.direct(HexAttributes.AMBIT_RADIUS));
+            double ambitAttribute = this.caster.getAttributeValue(HexAttributes.AMBIT_RADIUS);
             if (this.ambitRadius != ambitAttribute){
                 this.ambitRadius = ambitAttribute;
             }
-            double sentinelAttribute = this.caster.getAttributeValue(Holder.direct(HexAttributes.SENTINEL_RADIUS));
+            double sentinelAttribute = this.caster.getAttributeValue(HexAttributes.SENTINEL_RADIUS);
             if (this.sentinelRadius != sentinelAttribute){
                 this.sentinelRadius = sentinelAttribute;
             }

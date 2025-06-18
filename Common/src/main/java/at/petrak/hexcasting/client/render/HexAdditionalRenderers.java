@@ -159,7 +159,7 @@ public class HexAdditionalRenderers {
             return;
         }
 
-        if (player.getAttributeValue(Holder.direct(HexAttributes.SCRY_SIGHT)) <= 0.0 || player.getAttributeValue(Holder.direct(HexAttributes.FEEBLE_MIND)) > 0)
+        if (player.getAttributeValue(HexAttributes.SCRY_SIGHT) <= 0.0 || player.getAttributeValue(HexAttributes.FEEBLE_MIND) > 0)
             return;
 
         var hitRes = mc.hitResult;

@@ -12,14 +12,11 @@
     "MixinWanderingTrader",
     "MixinWitch",
     "accessor.AccessorAbstractArrow",
-    "accessor.AccessorDamageSource",
     "accessor.AccessorEntity",
     "accessor.AccessorLivingEntity",
     "accessor.AccessorLootTable",
-    "accessor.AccessorPotionBrewing",
     "accessor.AccessorUseOnContext",
-    "accessor.AccessorVillager",
-    "accessor.CriteriaTriggersAccessor"
+    "accessor.AccessorVillager"
   ],
   "client": [
     "accessor.client.AccessorBlockEntityRenderDispatcher",

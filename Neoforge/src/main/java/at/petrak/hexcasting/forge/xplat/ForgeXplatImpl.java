@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.forge.xplat;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
@@ -22,7 +23,7 @@ import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexRegistries;
-import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientType;
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredientType;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredientType;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
@@ -32,6 +33,7 @@ import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.xplat.IXplatRegister;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
 import com.illusivesoulworks.caelus.api.CaelusApi;
@@ -84,6 +86,7 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 import org.jetbrains.annotations.Nullable;
 import virtuoel.pehkui.api.ScaleTypes;
@@ -95,6 +98,12 @@ import java.util.function.BiFunction;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class ForgeXplatImpl implements IXplatAbstractions {
+
+    @Override
+    public <B> IXplatRegister<B> createRegistar(ResourceKey<Registry<B>> registryKey) {
+        return new ForgeRegister<>(DeferredRegister.create(registryKey, HexAPI.MOD_ID));
+    }
+
     @Override
     public Platform platform() {
         return Platform.FORGE;

@@ -5,10 +5,10 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.item.Items;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -32,6 +32,12 @@ public class HexPotions {
         new Potion("shrink_grid_long", new MobEffectInstance(Holder.direct(HexMobEffects.SHRINK_GRID), 9600)));
     public static final Potion SHRINK_GRID_STRONG = make("shrink_grid_strong",
         new Potion("shrink_grid_strong", new MobEffectInstance(Holder.direct(HexMobEffects.SHRINK_GRID), 1800, 1)));
+
+    public static void registerPotions(BiConsumer<Potion, ResourceLocation> r) {
+        for (var e : POTIONS.entrySet()) {
+            r.accept(e.getValue(), e.getKey());
+        }
+    }
 
     public static void addRecipes(PotionBrewing.Builder builder, RegistryAccess registryAccess) {
         var potionRegistry = registryAccess.registryOrThrow(Registries.POTION);

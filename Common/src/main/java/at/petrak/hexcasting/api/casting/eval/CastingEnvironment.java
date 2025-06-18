@@ -250,7 +250,7 @@ public abstract class CastingEnvironment {
      */
     public long extractMedia(long cost, boolean simulate) {
         if (this.getCastingEntity() != null){
-            cost = (long) (cost * this.getCastingEntity().getAttributeValue(Holder.direct(HexAttributes.MEDIA_CONSUMPTION_MODIFIER)));
+            cost = (long) (cost * this.getCastingEntity().getAttributeValue(HexAttributes.MEDIA_CONSUMPTION_MODIFIER));
         }
         for (var extractMediaComponent : preMediaExtract)
             cost = extractMediaComponent.onExtractMedia(cost, simulate);

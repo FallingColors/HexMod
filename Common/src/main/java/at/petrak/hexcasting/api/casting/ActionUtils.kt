@@ -99,40 +99,40 @@ fun List<Iota>.getBool(idx: Int, argc: Int = 0): Boolean {
 
 // Helpers
 
-fun List<Iota>.getItemEntity(idx: Int, argc: Int = 0): ItemEntity {
+fun List<Iota>.getItemEntity(level: ServerLevel, idx: Int, argc: Int = 0): ItemEntity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = TODO("replace entity references")
+        val e = x.getOrFindEntity(level) ?: throw MishapEntityUnavailable(x.entityId, x.cachedEntityName)
         if (e is ItemEntity)
             return e
     }
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.item")
 }
 
-fun List<Iota>.getPlayer(idx: Int, argc: Int = 0): ServerPlayer {
+fun List<Iota>.getPlayer(level: ServerLevel, idx: Int, argc: Int = 0): ServerPlayer {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = TODO("replace entity references")
+        val e = x.getOrFindEntity(level) ?: throw MishapEntityUnavailable(x.entityId, x.cachedEntityName)
         if (e is ServerPlayer)
             return e
     }
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.player")
 }
 
-fun List<Iota>.getMob(idx: Int, argc: Int = 0): Mob {
+fun List<Iota>.getMob(level: ServerLevel, idx: Int, argc: Int = 0): Mob {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = TODO("replace entity references")
+        val e = x.getOrFindEntity(level) ?: throw MishapEntityUnavailable(x.entityId, x.cachedEntityName)
         if (e is Mob)
             return e
     }
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.mob")
 }
 
-fun List<Iota>.getLivingEntityButNotArmorStand(idx: Int, argc: Int = 0): LivingEntity {
+fun List<Iota>.getLivingEntityButNotArmorStand(level: ServerLevel, idx: Int, argc: Int = 0): LivingEntity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = TODO("replace entity references")
+        val e = x.getOrFindEntity(level) ?: throw MishapEntityUnavailable(x.entityId, x.cachedEntityName)
         if (e is LivingEntity && e !is ArmorStand)
             return e
     }

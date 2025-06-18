@@ -44,23 +44,23 @@ public class ItemLens extends Item implements HexBaubleItem { // Wearable,
     }
 
     @Override
-    public ItemAttributeModifiers getDefaultAttributeModifiers() {
+    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
         return ItemAttributeModifiers.builder()
-                .add(Holder.direct(HexAttributes.GRID_ZOOM), GRID_ZOOM, EquipmentSlotGroup.HEAD)
-                .add(Holder.direct(HexAttributes.GRID_ZOOM), GRID_ZOOM, EquipmentSlotGroup.MAINHAND)
-                .add(Holder.direct(HexAttributes.GRID_ZOOM), GRID_ZOOM, EquipmentSlotGroup.OFFHAND)
+                .add(HexAttributes.GRID_ZOOM, GRID_ZOOM, EquipmentSlotGroup.HEAD)
+                .add(HexAttributes.GRID_ZOOM, GRID_ZOOM, EquipmentSlotGroup.MAINHAND)
+                .add(HexAttributes.GRID_ZOOM, GRID_ZOOM, EquipmentSlotGroup.OFFHAND)
 
-                .add(Holder.direct(HexAttributes.SCRY_SIGHT), SCRY_SIGHT, EquipmentSlotGroup.HEAD)
-                .add(Holder.direct(HexAttributes.SCRY_SIGHT), SCRY_SIGHT, EquipmentSlotGroup.MAINHAND)
-                .add(Holder.direct(HexAttributes.SCRY_SIGHT), SCRY_SIGHT, EquipmentSlotGroup.OFFHAND)
+                .add(HexAttributes.SCRY_SIGHT, SCRY_SIGHT, EquipmentSlotGroup.HEAD)
+                .add(HexAttributes.SCRY_SIGHT, SCRY_SIGHT, EquipmentSlotGroup.MAINHAND)
+                .add(HexAttributes.SCRY_SIGHT, SCRY_SIGHT, EquipmentSlotGroup.OFFHAND)
                 .build();
     }
 
     @Override
     public Multimap<Holder<Attribute>, AttributeModifier> getHexBaubleAttrs(ItemStack stack) {
         HashMultimap<Holder<Attribute>, AttributeModifier> out = HashMultimap.create();
-        out.put(Holder.direct(HexAttributes.GRID_ZOOM), GRID_ZOOM);
-        out.put(Holder.direct(HexAttributes.SCRY_SIGHT), SCRY_SIGHT);
+        out.put(HexAttributes.GRID_ZOOM, GRID_ZOOM);
+        out.put(HexAttributes.SCRY_SIGHT, SCRY_SIGHT);
         return out;
     }
 

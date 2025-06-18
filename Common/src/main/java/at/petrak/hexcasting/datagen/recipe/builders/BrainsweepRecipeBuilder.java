@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.datagen.recipe.builders;
 
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
-import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
@@ -59,6 +59,6 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
 		this.criteria.forEach(advancement::addCriterion);
 
 		var recipe = new BrainsweepRecipe(blockIn, entityIn, mediaCost, result);
-		recipeOutput.accept(id.withPrefix("recipes/brainsweep/"), recipe, advancement.build(id.withPrefix("recipes/")));
+		recipeOutput.accept(id.withPrefix("brainsweep/"), recipe, advancement.build(id.withPrefix("recipes/brainsweep/")));
 	}
 }

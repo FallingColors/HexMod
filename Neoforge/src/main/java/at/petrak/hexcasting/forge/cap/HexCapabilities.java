@@ -1,11 +1,8 @@
 package at.petrak.hexcasting.forge.cap;
 
 import at.petrak.hexcasting.api.addldata.*;
-import at.petrak.hexcasting.api.client.ClientCastingStack;
 import net.neoforged.neoforge.capabilities.EntityCapability;
 import net.neoforged.neoforge.capabilities.ItemCapability;
-
-import java.util.function.Supplier;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -25,6 +22,5 @@ public final class HexCapabilities {
         public static final EntityCapability<ADHexHolder, Void> STORED_HEX = EntityCapability.createVoid(modLoc("hex_holder"), ADHexHolder.class);
         public static final EntityCapability<ADVariantItem, Void> VARIANT_ITEM = EntityCapability.createVoid(modLoc("variant"), ADVariantItem.class);
         public static final EntityCapability<ADPigment, Void> COLOR = EntityCapability.createVoid(modLoc("color"), ADPigment.class);
-        public static final EntityCapability<ClientCastingStack.Provider, Void> CLIENT_CASTING_STACK = EntityCapability.createVoid(modLoc("client_casting"), ClientCastingStack.Provider.class);
     }
 }

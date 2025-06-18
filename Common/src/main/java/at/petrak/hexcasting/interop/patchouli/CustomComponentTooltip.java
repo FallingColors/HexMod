@@ -45,5 +45,6 @@ public class CustomComponentTooltip implements ICustomComponent {
     @Override
     public void onVariablesAvailable(UnaryOperator<IVariable> lookup, HolderLookup.Provider registries) {
         tooltipVar = lookup.apply(tooltipReference);
+        this.registries = registries;
     }
 }

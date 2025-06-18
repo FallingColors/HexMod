@@ -21,11 +21,10 @@ public class HexCreativeTabs {
 
     private static final Map<ResourceLocation, CreativeModeTab> TABS = new LinkedHashMap<>();
 
-    public static final CreativeModeTab HEX = register("hexcasting", CreativeModeTab.builder(CreativeModeTab.Row.TOP, 7)
+    public static final CreativeModeTab HEX = register("hexcasting", CreativeModeTab.builder()
             .icon(() -> new ItemStack(HexItems.SPELLBOOK)));
 
-    // TODO port: check creative tab icon display
-    public static final CreativeModeTab SCROLLS = register("scrolls", CreativeModeTab.builder(CreativeModeTab.Row.TOP, 7)
+    public static final CreativeModeTab SCROLLS = register("scrolls", CreativeModeTab.builder()
             .icon(() -> new ItemStack(HexItems.SCROLL_LARGE)));
 
     private static CreativeModeTab register(String name, CreativeModeTab.Builder tabBuilder) {

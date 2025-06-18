@@ -21,10 +21,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class ItemAbacus extends Item implements IotaHolderItem {
-    public static final String TAG_VALUE = "value";
 
     public ItemAbacus(Properties pProperties) {
         super(pProperties);
+    }
+
+    @Override
+    public @Nullable Iota readIota(ItemStack stack) {
+        return new DoubleIota(stack.getOrDefault(HexDataComponents.ABACUS_VALUE, 0.0));
     }
 
     @Override

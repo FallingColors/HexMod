@@ -10,26 +10,21 @@ import at.petrak.hexcasting.common.items.pigment.ItemPridePigment;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.SealThingsRecipe;
-import at.petrak.hexcasting.common.recipe.ingredient.StateIngredients;
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredients;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.EntityTypeIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.VillagerIngredient;
 import at.petrak.hexcasting.datagen.HexAdvancements;
 import at.petrak.hexcasting.datagen.IXplatConditionsBuilder;
 import at.petrak.hexcasting.datagen.IXplatIngredients;
 import at.petrak.hexcasting.datagen.recipe.builders.BrainsweepRecipeBuilder;
-import at.petrak.hexcasting.datagen.recipe.builders.CompatIngredientValue;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.Criterion;
-import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -48,7 +43,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -444,50 +438,50 @@ public class HexplatRecipes extends RecipeProvider {
             new VillagerIngredient(null, null, 3),
             Blocks.BUDDING_AMETHYST.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
-            .save(recipes, modLoc("brainsweep/budding_amethyst"));
+            .save(recipes, modLoc("budding_amethyst"));
 
         new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.IMPETUS_EMPTY),
             new VillagerIngredient(VillagerProfession.TOOLSMITH, null, 2),
             HexBlocks.IMPETUS_RIGHTCLICK.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
-            .save(recipes, modLoc("brainsweep/impetus_rightclick"));
+            .save(recipes, modLoc("impetus_rightclick"));
 
         new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.IMPETUS_EMPTY),
             new VillagerIngredient(VillagerProfession.FLETCHER, null, 2),
             HexBlocks.IMPETUS_LOOK.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
-            .save(recipes, modLoc("brainsweep/impetus_look"));
+            .save(recipes, modLoc("impetus_look"));
 
         new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.IMPETUS_EMPTY),
             new VillagerIngredient(VillagerProfession.CLERIC, null, 2),
             HexBlocks.IMPETUS_REDSTONE.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
-            .save(recipes, modLoc("brainsweep/impetus_storedplayer"));
+            .save(recipes, modLoc("impetus_storedplayer"));
 
         new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.EMPTY_DIRECTRIX),
             new VillagerIngredient(VillagerProfession.MASON, null, 1),
             HexBlocks.DIRECTRIX_REDSTONE.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
-            .save(recipes, modLoc("brainsweep/directrix_redstone"));
+            .save(recipes, modLoc("directrix_redstone"));
 
         new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.EMPTY_DIRECTRIX),
                 new VillagerIngredient(VillagerProfession.SHEPHERD, null, 1),
                 HexBlocks.DIRECTRIX_BOOLEAN.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
                 .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
-                .save(recipes, modLoc("brainsweep/directrix_boolean"));
+                .save(recipes, modLoc("directrix_boolean"));
 
         new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.AKASHIC_LIGATURE),
             new VillagerIngredient(VillagerProfession.LIBRARIAN, null, 5),
             HexBlocks.AKASHIC_RECORD.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
-            .save(recipes, modLoc("brainsweep/akashic_record"));
+            .save(recipes, modLoc("akashic_record"));
 
         // Temporary tests
         new BrainsweepRecipeBuilder(StateIngredients.of(Blocks.AMETHYST_BLOCK),
             new EntityTypeIngredient(EntityType.ALLAY),
             HexBlocks.QUENCHED_ALLAY.defaultBlockState(), MediaConstants.CRYSTAL_UNIT)
             .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
-            .save(recipes, modLoc("brainsweep/quench_allay"));
+            .save(recipes, modLoc("quench_allay"));
 
         // Create compat
         /*this.conditions.apply(new CreateCrushingRecipeBuilder()

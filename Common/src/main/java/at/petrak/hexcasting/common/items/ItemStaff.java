@@ -28,7 +28,7 @@ public class ItemStaff extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        if (player.getAttributeValue(Holder.direct(HexAttributes.FEEBLE_MIND)) > 0){
+        if (player.getAttributeValue(HexAttributes.FEEBLE_MIND) > 0){
             return InteractionResultHolder.fail(player.getItemInHand(hand));
         }
         if (player.isShiftKeyDown()) {
@@ -50,8 +50,6 @@ public class ItemStaff extends Item {
             CompoundTag ravenmind = null;
             if(userData.contains(HexAPI.RAVENMIND_USERDATA))
                 ravenmind = userData.getCompound(HexAPI.RAVENMIND_USERDATA);
-            else
-                ravenmind = new CompoundTag();
 
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(serverPlayer,
                 new MsgOpenSpellGuiS2C(hand, patterns, vm.getImage().getStack(), ravenmind,

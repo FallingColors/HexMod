@@ -1,23 +1,18 @@
 package at.petrak.hexcasting.common.recipe;
 
-import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
-import at.petrak.hexcasting.common.recipe.ingredient.StateIngredients;
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredient;
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredients;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredients;
-import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeInput;

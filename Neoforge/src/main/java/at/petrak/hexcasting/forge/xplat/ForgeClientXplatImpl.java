@@ -1,9 +1,7 @@
 package at.petrak.hexcasting.forge.xplat;
 
 import at.petrak.hexcasting.api.client.ClientCastingStack;
-import at.petrak.hexcasting.common.msgs.IMessage;
-import at.petrak.hexcasting.forge.cap.HexCapabilities;
-import at.petrak.hexcasting.forge.network.ForgePacketHandler;
+import at.petrak.hexcasting.forge.lib.ForgeHexAttachments;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -51,10 +49,7 @@ public class ForgeClientXplatImpl implements IClientXplatAbstractions {
 
     @Override
     public ClientCastingStack getClientCastingStack(Player player) {
-        var clientCastingStack = player.getCapability(HexCapabilities.Entity.CLIENT_CASTING_STACK);
-        if (clientCastingStack == null)
-            return new ClientCastingStack(); // lie
-        return clientCastingStack.provide();
+        return player.getData(ForgeHexAttachments.CLIENT_CASTING_STACK);
     }
 
     @Override

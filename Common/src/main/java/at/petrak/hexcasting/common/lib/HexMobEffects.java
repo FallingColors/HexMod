@@ -25,11 +25,11 @@ public class HexMobEffects {
 
     public static final MobEffect ENLARGE_GRID = make("enlarge_grid",
         new HexMobEffect(MobEffectCategory.BENEFICIAL, 0xc875ff))
-        .addAttributeModifier(Holder.direct(HexAttributes.GRID_ZOOM), HexAPI.modLoc("enlarge_grid"),
+        .addAttributeModifier(HexAttributes.GRID_ZOOM, HexAPI.modLoc("enlarge_grid"),
             0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     public static final MobEffect SHRINK_GRID = make("shrink_grid",
         new HexMobEffect(MobEffectCategory.HARMFUL, 0xc0e660))
-        .addAttributeModifier(Holder.direct(HexAttributes.GRID_ZOOM), HexAPI.modLoc("shrink_grid"),
+        .addAttributeModifier(HexAttributes.GRID_ZOOM, HexAPI.modLoc("shrink_grid"),
             -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 
 

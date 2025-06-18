@@ -29,7 +29,7 @@ class OpMakePackagedSpell(val isValid: Predicate<ItemStack>, val expectedTypeDes
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
-        val entity = args.getItemEntity(0, argc)
+        val entity = args.getItemEntity(env.world, 0, argc)
         val patterns = args.getList(1, argc).toList()
 
         val (handStack) = env.getHeldItemToOperateOn {

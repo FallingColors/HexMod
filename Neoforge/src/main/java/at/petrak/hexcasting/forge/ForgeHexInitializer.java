@@ -13,30 +13,23 @@ import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.lib.*;
 import at.petrak.hexcasting.common.lib.hex.*;
-import at.petrak.hexcasting.common.misc.AkashicTreeGrower;
-import at.petrak.hexcasting.common.misc.BrainsweepingEvents;
-import at.petrak.hexcasting.common.misc.PlayerPositionRecorder;
-import at.petrak.hexcasting.common.misc.RegisterMisc;
+import at.petrak.hexcasting.common.misc.*;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
-import at.petrak.hexcasting.common.recipe.ingredient.StateIngredients;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredients;
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredients;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.ForgeCapabilityHandler;
-import at.petrak.hexcasting.forge.cap.adimpl.CapClientCastingStack;
 import at.petrak.hexcasting.forge.datagen.ForgeHexDataGenerators;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.forge.interop.curios.CuriosRenderers;
 import at.petrak.hexcasting.forge.lib.ForgeHexArgumentTypeRegistry;
+import at.petrak.hexcasting.forge.lib.ForgeHexAttachments;
 import at.petrak.hexcasting.forge.lib.ForgeHexIngredientTypes;
 import at.petrak.hexcasting.forge.lib.ForgeHexLootMods;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
-import at.petrak.hexcasting.forge.recipe.ForgeModConditionalIngredient;
-import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import net.minecraft.core.Holder;
-import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -47,15 +40,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -133,8 +123,10 @@ public class ForgeHexInitializer {
         bind(Registries.RECIPE_TYPE, HexRecipeStuffRegistry::registerTypes);
 
         bind(Registries.ENTITY_TYPE, HexEntities::registerEntities);
-        bind(Registries.ATTRIBUTE, HexAttributes::register);
+        // Testing out new registration system
+        HexAttributes.register();
         bind(Registries.MOB_EFFECT, HexMobEffects::register);
+        bind(Registries.POTION, HexPotions::registerPotions);
         bind(Registries.PARTICLE_TYPE, HexParticles::registerParticles);
 
         bind(Registries.TRIGGER_TYPE, HexAdvancementTriggers::registerTriggers);
@@ -151,6 +143,7 @@ public class ForgeHexInitializer {
         ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
         ForgeHexLootMods.REGISTRY.register(getModEventBus());
         ForgeHexIngredientTypes.INGREDIENT_TYPES.register(getModEventBus());
+        ForgeHexAttachments.register();
 
         RegisterMisc.register();
     }
@@ -160,9 +153,6 @@ public class ForgeHexInitializer {
         getModEventBus().addListener((RegisterEvent event) -> {
             if (registry.equals(event.getRegistryKey())) {
                 source.accept((t, rl) -> {
-                    if(t == null)
-                        System.out.println("OBJ " + rl + " is null! (" + registry + ")");
-
                     event.register(registry, rl, () -> t);
                 });
             }
@@ -207,8 +197,6 @@ public class ForgeHexInitializer {
                     Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, id, lift));
             }
         });
-
-        evBus.register(CapClientCastingStack.class);
 
         evBus.addListener((PlayerInteractEvent.EntityInteract evt) -> {
             var res = BrainsweepingEvents.interactWithBrainswept(
@@ -283,12 +271,12 @@ public class ForgeHexInitializer {
         evBus.register(CapSyncers.class);
 
         modBus.addListener((EntityAttributeModificationEvent e) -> {
-            e.add(EntityType.PLAYER, Holder.direct(HexAttributes.GRID_ZOOM));
-            e.add(EntityType.PLAYER, Holder.direct(HexAttributes.SCRY_SIGHT));
-            e.add(EntityType.PLAYER, Holder.direct(HexAttributes.FEEBLE_MIND));
-            e.add(EntityType.PLAYER, Holder.direct(HexAttributes.MEDIA_CONSUMPTION_MODIFIER));
-            e.add(EntityType.PLAYER, Holder.direct(HexAttributes.AMBIT_RADIUS));
-            e.add(EntityType.PLAYER, Holder.direct(HexAttributes.SENTINEL_RADIUS));
+            e.add(EntityType.PLAYER, HexAttributes.GRID_ZOOM);
+            e.add(EntityType.PLAYER, HexAttributes.SCRY_SIGHT);
+            e.add(EntityType.PLAYER, HexAttributes.FEEBLE_MIND);
+            e.add(EntityType.PLAYER, HexAttributes.MEDIA_CONSUMPTION_MODIFIER);
+            e.add(EntityType.PLAYER, HexAttributes.AMBIT_RADIUS);
+            e.add(EntityType.PLAYER, HexAttributes.SENTINEL_RADIUS);
         });
 
         if (ModList.get().isLoaded(HexInterop.Forge.CURIOS_API_ID)) {
@@ -299,7 +287,7 @@ public class ForgeHexInitializer {
     }
 
     // aaaauughhg
-    private static IEventBus getModEventBus() {
+    public static IEventBus getModEventBus() {
         return KotlinModLoadingContext.Companion.get().getKEventBus();
     }
 }

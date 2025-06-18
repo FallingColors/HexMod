@@ -190,7 +190,7 @@ public class HexBlocks {
     public static final BlockAkashicBookshelf AKASHIC_BOOKSHELF = blockItem("akashic_bookshelf",
         new BlockAkashicBookshelf(akashicWoodyHard()
             .lightLevel(bs -> (bs.getValue(BlockAkashicBookshelf.HAS_BOOKS)) ? 4 : 0)));
-    public static final BlockAkashicLigature AKASHIC_LIGATURE = blockItem("akashic_ligature",
+    public static final BlockAkashicLigature AKASHIC_LIGATURE = blockItem("akashic_connector",
         new BlockAkashicLigature(akashicWoodyHard().lightLevel(bs -> 4)));
 
     public static final BlockQuenchedAllay QUENCHED_ALLAY = blockItem("quenched_allay", new BlockQuenchedAllay(quenched()));

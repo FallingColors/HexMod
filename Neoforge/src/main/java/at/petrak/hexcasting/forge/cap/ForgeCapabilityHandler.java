@@ -46,7 +46,6 @@ public class ForgeCapabilityHandler {
                 CuriosApiInterop.registerCap(evt, item);
         }
 
-        // TODO port: amethyst is static, holders aren't. Modifiable media amount. UPD: I don't remember why I left that comment
         evt.registerItem(
                 HexCapabilities.Item.MEDIA,
                 (stack, ctx) -> new CapStaticMediaHolder(HexConfig.common()::dustMediaAmount, ADMediaHolder.AMETHYST_DUST_PRIORITY, stack),
@@ -95,13 +94,7 @@ public class ForgeCapabilityHandler {
                 HexEntities.WALL_SCROLL,
                 (ent, ctx) -> new ItemDelegatingEntityIotaHolder.ToWallScroll(ent)
         );
-        evt.registerEntity(
-                HexCapabilities.Entity.CLIENT_CASTING_STACK,
-                EntityType.PLAYER,
-                (player, ctx) -> new CapClientCastingStack(player, new ClientCastingStack())
-        );
 
-        // TODO port: maybe use tag or impetus registry
         for(Block block : BuiltInRegistries.BLOCK) {
             if(block instanceof BlockAbstractImpetus imBlock) {
                 evt.registerBlockEntity(

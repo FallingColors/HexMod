@@ -456,5 +456,4 @@ fun renderQuad(
         .setColor(color)
     buf.addVertex(mat, x + w, y, 0f)
         .setColor(color)
-    // TODO port: test rendering works
 }
