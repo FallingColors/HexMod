@@ -74,7 +74,7 @@ public class EntityIota extends Iota {
     public @Nullable Component getEntityName() {
         var ent = getCachedEntity();
         if(ent != null) {
-            var name = ent.getName();
+            var name = getEntityNameWithInline(ent);
             this.entityName = name;
             return name;
         }
