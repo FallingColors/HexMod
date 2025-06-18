@@ -46,13 +46,13 @@ public class HexItems {
     public static void registerItemCreativeTab(CreativeModeTab.Output r, CreativeModeTab tab) {
         if (tab == HexCreativeTabs.SCROLLS)
             generateScrollEntries(r);
-        for (var item : ITEM_TABS.getOrDefault(tab, Collections.emptySet())) {
+        for (var item : ITEM_TABS.getOrDefault(tab, Collections.emptyList())) {
             item.register(r);
         }
     }
 
     private static final Map<ResourceLocation, Item> ITEMS = new LinkedHashMap<>(); // preserve insertion order
-    private static final Map<CreativeModeTab, Set<TabEntry>> ITEM_TABS = new LinkedHashMap<>();
+    private static final Map<CreativeModeTab, List<TabEntry>> ITEM_TABS = new LinkedHashMap<>();
 
 
     public static final Item AMETHYST_DUST = make("amethyst_dust", new Item(props()));
@@ -77,8 +77,8 @@ public class HexItems {
     public static final ItemStaff STAFF_MINDSPLICE = make("staff/mindsplice", new ItemStaff(unstackable()));
 
     public static final ItemLens SCRYING_LENS = make("lens", new ItemLens(
-        IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
-            .stacksTo(1)));
+            IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
+                    .stacksTo(1)));
 
     public static final ItemAbacus ABACUS = make("abacus", new ItemAbacus(unstackable()));
     public static final ItemThoughtKnot THOUGHT_KNOT = make("thought_knot", new ItemThoughtKnot(unstackable()));
@@ -91,18 +91,18 @@ public class HexItems {
     public static final ItemArtifact ARTIFACT = make("artifact", new ItemArtifact(unstackable().rarity(Rarity.RARE)));
 
     public static final ItemJewelerHammer JEWELER_HAMMER = make("jeweler_hammer",
-        new ItemJewelerHammer(Tiers.IRON, props()
-                .stacksTo(1)
-                .durability(Tiers.DIAMOND.getUses())
-                .attributes(ItemAttributeModifiers.builder()
-                        .add(Attributes.ATTACK_SPEED, new AttributeModifier(
-                                modLoc("jeweler_hammer_speed"),
-                                -2.8,
-                                AttributeModifier.Operation.ADD_VALUE
-                        ), EquipmentSlotGroup.ANY)
-                        .build()
-                )
-        )
+            new ItemJewelerHammer(Tiers.IRON, props()
+                    .stacksTo(1)
+                    .durability(Tiers.DIAMOND.getUses())
+                    .attributes(ItemAttributeModifiers.builder()
+                            .add(Attributes.ATTACK_SPEED, new AttributeModifier(
+                                    modLoc("jeweler_hammer_speed"),
+                                    -2.8,
+                                    AttributeModifier.Operation.ADD_VALUE
+                            ), EquipmentSlotGroup.ANY)
+                            .build()
+                    )
+            )
     );
 
     public static final ItemScroll SCROLL_SMOL = make("scroll_small", new ItemScroll(props(), 1));
@@ -112,7 +112,7 @@ public class HexItems {
     public static final ItemSlate SLATE = make("slate", new ItemSlate(HexBlocks.SLATE, props()));
 
     public static final ItemMediaBattery BATTERY = make("battery",
-        new ItemMediaBattery(unstackable()), null);
+            new ItemMediaBattery(unstackable()), null);
 
     public static final Supplier<ItemStack> BATTERY_DUST_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
@@ -146,27 +146,27 @@ public class HexItems {
         var out = new EnumMap<ItemPridePigment.Type, ItemPridePigment>(ItemPridePigment.Type.class);
         for (var politicsInMyVidya : ItemPridePigment.Type.values()) {
             out.put(politicsInMyVidya, make("pride_colorizer_" + politicsInMyVidya.getName(),
-                new ItemPridePigment(politicsInMyVidya, unstackable())));
+                    new ItemPridePigment(politicsInMyVidya, unstackable())));
         }
         return out;
     });
 
     public static final Item UUID_PIGMENT = make("uuid_colorizer", new ItemUUIDPigment(unstackable()));
     public static final Item DEFAULT_PIGMENT = make("default_colorizer",
-        new ItemAmethystAndCopperPigment(unstackable()));
+            new ItemAmethystAndCopperPigment(unstackable()));
 
     // BUFF SANDVICH
     public static final Item SUBMARINE_SANDWICH = make("sub_sandwich",
-        new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationModifier(1.2f).build())));
+            new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationModifier(1.2f).build())));
 
     public static final ItemLoreFragment LORE_FRAGMENT = make("lore_fragment",
-        new ItemLoreFragment(unstackable()
-            .rarity(Rarity.RARE)));
+            new ItemLoreFragment(unstackable()
+                    .rarity(Rarity.RARE)));
 
     public static final ItemCreativeUnlocker CREATIVE_UNLOCKER = make("creative_unlocker",
-        new ItemCreativeUnlocker(unstackable()
-            .rarity(Rarity.EPIC)
-            .food(new FoodProperties.Builder().nutrition(20).saturationModifier(1f).alwaysEdible().build())));
+            new ItemCreativeUnlocker(unstackable()
+                    .rarity(Rarity.EPIC)
+                    .food(new FoodProperties.Builder().nutrition(20).saturationModifier(1f).alwaysEdible().build())));
 
     //
 
@@ -199,7 +199,7 @@ public class HexItems {
             throw new IllegalArgumentException("Typo? Duplicate id " + id);
         }
         if (tab != null) {
-            ITEM_TABS.computeIfAbsent(tab, t -> new HashSet<>()).add(new TabEntry.ItemEntry(item));
+            ITEM_TABS.computeIfAbsent(tab, t -> new ArrayList<>()).add(new TabEntry.ItemEntry(item));
         }
         return item;
     }
@@ -214,15 +214,12 @@ public class HexItems {
 
     private static Supplier<ItemStack> addToTab(Supplier<ItemStack> stack, CreativeModeTab tab) {
         var memoised = Suppliers.memoize(stack::get);
-        ITEM_TABS.computeIfAbsent(tab, t -> new HashSet<>()).add(new TabEntry.StackEntry(memoised));
+        ITEM_TABS.computeIfAbsent(tab, t -> new ArrayList<>()).add(new TabEntry.StackEntry(memoised));
         return memoised;
     }
 
     private static abstract class TabEntry {
         abstract void register(CreativeModeTab.Output r);
-
-        @Override
-        public abstract int hashCode();
 
         static class ItemEntry extends TabEntry {
             private final Item item;
@@ -234,11 +231,6 @@ public class HexItems {
             @Override
             void register(CreativeModeTab.Output r) {
                 r.accept(item);
-            }
-
-            @Override
-            public int hashCode() {
-                return Objects.hashCode(item);
             }
         }
 
@@ -252,11 +244,6 @@ public class HexItems {
             @Override
             void register(CreativeModeTab.Output r) {
                 r.accept(stack.get());
-            }
-
-            @Override
-            public int hashCode() {
-                return Objects.hashCode(stack);
             }
         }
     }
