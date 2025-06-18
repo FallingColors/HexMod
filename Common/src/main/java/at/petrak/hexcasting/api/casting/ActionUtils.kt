@@ -4,11 +4,13 @@ package at.petrak.hexcasting.api.casting
 
 import at.petrak.hexcasting.api.casting.iota.*
 import at.petrak.hexcasting.api.casting.math.HexPattern
+import at.petrak.hexcasting.api.casting.mishaps.MishapEntityUnavailable
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import com.mojang.datafixers.util.Either
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
@@ -32,10 +34,28 @@ fun List<Iota>.getDouble(idx: Int, argc: Int = 0): Double {
     }
 }
 
-fun List<Iota>.getEntity(idx: Int, argc: Int = 0): Entity {
+fun List<Iota>.getEntity(level: ServerLevel, idx: Int, argc: Int = 0): Entity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        return x.entity
+        return x.getOrFindEntity(level) ?: throw MishapEntityUnavailable(x.entityId, x.cachedEntityName)
+    } else {
+        throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity")
+    }
+}
+
+fun List<Iota>.getOrFindEntity(level: ServerLevel, idx: Int, argc: Int = 0): Entity? {
+    val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
+    if (x is EntityIota) {
+        return x.getOrFindEntity(level)
+    } else {
+        throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity")
+    }
+}
+
+fun List<Iota>.getCachedEntity(idx: Int, argc: Int = 0): Entity? {
+    val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
+    if (x is EntityIota) {
+        return x.cachedEntity;
     } else {
         throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity")
     }
@@ -79,40 +99,40 @@ fun List<Iota>.getBool(idx: Int, argc: Int = 0): Boolean {
 
 // Helpers
 
-fun List<Iota>.getItemEntity(idx: Int, argc: Int = 0): ItemEntity {
+fun List<Iota>.getItemEntity(level: ServerLevel, idx: Int, argc: Int = 0): ItemEntity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = x.entity
+        val e = x.getOrFindEntity(level) ?: throw MishapEntityUnavailable(x.entityId, x.cachedEntityName)
         if (e is ItemEntity)
             return e
     }
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.item")
 }
 
-fun List<Iota>.getPlayer(idx: Int, argc: Int = 0): ServerPlayer {
+fun List<Iota>.getPlayer(level: ServerLevel, idx: Int, argc: Int = 0): ServerPlayer {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = x.entity
+        val e = x.getOrFindEntity(level) ?: throw MishapEntityUnavailable(x.entityId, x.cachedEntityName)
         if (e is ServerPlayer)
             return e
     }
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.player")
 }
 
-fun List<Iota>.getMob(idx: Int, argc: Int = 0): Mob {
+fun List<Iota>.getMob(level: ServerLevel, idx: Int, argc: Int = 0): Mob {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = x.entity
+        val e = x.getOrFindEntity(level) ?: throw MishapEntityUnavailable(x.entityId, x.cachedEntityName)
         if (e is Mob)
             return e
     }
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.mob")
 }
 
-fun List<Iota>.getLivingEntityButNotArmorStand(idx: Int, argc: Int = 0): LivingEntity {
+fun List<Iota>.getLivingEntityButNotArmorStand(level: ServerLevel, idx: Int, argc: Int = 0): LivingEntity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = x.entity
+        val e = x.getOrFindEntity(level) ?: throw MishapEntityUnavailable(x.entityId, x.cachedEntityName)
         if (e is LivingEntity && e !is ArmorStand)
             return e
     }
@@ -297,7 +317,7 @@ fun evaluatable(datum: Iota, reverseIdx: Int): Either<Iota, SpellList> =
         )
     }
 
-fun Iota?.orNull() = this ?: NullIota()
+fun Iota?.orNull() = this ?: NullIota.INSTANCE
 
 // TODO do we make this work on lists
 // there should probably be some way to abstract function application over lists, vecs, and numbers,
@@ -319,5 +339,5 @@ inline val BlockPos.asActionResult get() = listOf(Vec3Iota(Vec3.atCenterOf(this)
 inline val Vector3f.asActionResult get() = listOf(Vec3Iota(Vec3(this)))
 inline val Vec3.asActionResult get() = listOf(Vec3Iota(this))
 
-inline val Entity?.asActionResult get() = listOf(if (this == null) NullIota() else EntityIota(this))
+inline val Entity?.asActionResult get() = listOf(if (this == null) NullIota.INSTANCE else EntityIota(this))
 inline val HexPattern.asActionResult get() = listOf(PatternIota(this))

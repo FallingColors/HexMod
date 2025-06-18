@@ -1,10 +1,12 @@
-package at.petrak.hexcasting.common.recipe.ingredient;
+package at.petrak.hexcasting.common.recipe.ingredient.state;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -22,6 +24,11 @@ public class StateIngredientBlockState implements StateIngredient {
     }
 
     @Override
+    public StateIngredientType<?> getType() {
+        return StateIngredients.BLOCK_STATE;
+    }
+
+    @Override
     public boolean test(BlockState blockState) {
         return this.state == blockState;
     }
@@ -29,19 +36,6 @@ public class StateIngredientBlockState implements StateIngredient {
     @Override
     public BlockState pick(Random random) {
         return state;
-    }
-
-    @Override
-    public JsonObject serialize() {
-        JsonObject object = StateIngredientHelper.serializeBlockState(state);
-        object.addProperty("type", "state");
-        return object;
-    }
-
-    @Override
-    public void write(FriendlyByteBuf buffer) {
-        buffer.writeVarInt(2);
-        buffer.writeVarInt(Block.getId(state));
     }
 
     @Override
@@ -56,7 +50,7 @@ public class StateIngredientBlockState implements StateIngredient {
     @Nullable
     @Override
     public List<Component> descriptionTooltip() {
-        ImmutableMap<Property<?>, Comparable<?>> map = state.getValues();
+        Map<Property<?>, Comparable<?>> map = state.getValues();
         if (map.isEmpty()) {
             return StateIngredient.super.descriptionTooltip();
         }
@@ -99,5 +93,26 @@ public class StateIngredientBlockState implements StateIngredient {
     @Override
     public String toString() {
         return "StateIngredientBlockState{" + state + "}";
+    }
+
+
+    public static class Type implements StateIngredientType<StateIngredientBlockState> {
+        public static final MapCodec<StateIngredientBlockState> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                BlockState.CODEC.fieldOf("state").forGetter(StateIngredientBlockState::getState)
+        ).apply(instance, StateIngredientBlockState::new));
+        public static final StreamCodec<RegistryFriendlyByteBuf, StateIngredientBlockState> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.VAR_INT.map(Block::stateById, Block::getId), StateIngredientBlockState::getState,
+                StateIngredientBlockState::new
+        );
+
+        @Override
+        public MapCodec<StateIngredientBlockState> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, StateIngredientBlockState> streamCodec() {
+            return STREAM_CODEC;
+        }
     }
 }

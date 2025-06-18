@@ -14,6 +14,7 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.msgs.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -131,7 +132,7 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
         IXplatAbstractions.INSTANCE.sendPacketToPlayer(sender,
             new MsgNewSpellPatternS2C(clientInfo, resolvedPatterns.size() - 1));
 
-        IMessage packet;
+        CustomPacketPayload packet;
         if (clientInfo.isStackClear()) {
             packet = new MsgClearSpiralPatternsS2C(sender.getUUID());
         } else {

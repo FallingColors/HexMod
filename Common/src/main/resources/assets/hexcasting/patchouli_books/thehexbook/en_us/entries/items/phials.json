@@ -21,7 +21,7 @@
     {
       "type": "patchouli:spotlight",
       "text": "hexcasting.page.phials.desc",
-      "item": "hexcasting:battery{\"hexcasting:media\":640000,\"hexcasting:start_media\":640000}",
+      "item": "hexcasting:battery[hexcasting:media=640000,hexcasting:start_media=640000]",
       "link_recipe": true
     }
   ]

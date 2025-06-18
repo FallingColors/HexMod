@@ -1,6 +1,9 @@
 package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.common.items.ItemLoreFragment;
@@ -14,10 +17,16 @@ import at.petrak.hexcasting.common.items.storage.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.base.Suppliers;
 import net.minecraft.Util;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -35,7 +44,9 @@ public class HexItems {
     }
 
     public static void registerItemCreativeTab(CreativeModeTab.Output r, CreativeModeTab tab) {
-        for (var item : ITEM_TABS.getOrDefault(tab, List.of())) {
+        if (tab == HexCreativeTabs.SCROLLS)
+            generateScrollEntries(r);
+        for (var item : ITEM_TABS.getOrDefault(tab, Collections.emptyList())) {
             item.register(r);
         }
     }
@@ -66,20 +77,33 @@ public class HexItems {
     public static final ItemStaff STAFF_MINDSPLICE = make("staff/mindsplice", new ItemStaff(unstackable()));
 
     public static final ItemLens SCRYING_LENS = make("lens", new ItemLens(
-        IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
-            .stacksTo(1)));
+            IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
+                    .stacksTo(1)));
 
     public static final ItemAbacus ABACUS = make("abacus", new ItemAbacus(unstackable()));
     public static final ItemThoughtKnot THOUGHT_KNOT = make("thought_knot", new ItemThoughtKnot(unstackable()));
     public static final ItemFocus FOCUS = make("focus", new ItemFocus(unstackable()));
     public static final ItemSpellbook SPELLBOOK = make("spellbook", new ItemSpellbook(unstackable()));
 
+    public static final ItemCypher ANCIENT_CYPHER = make("ancient_cypher", new ItemAncientCypher(unstackable()));
     public static final ItemCypher CYPHER = make("cypher", new ItemCypher(unstackable()));
     public static final ItemTrinket TRINKET = make("trinket", new ItemTrinket(unstackable().rarity(Rarity.UNCOMMON)));
     public static final ItemArtifact ARTIFACT = make("artifact", new ItemArtifact(unstackable().rarity(Rarity.RARE)));
 
     public static final ItemJewelerHammer JEWELER_HAMMER = make("jeweler_hammer",
-        new ItemJewelerHammer(Tiers.IRON, 0, -2.8F, props().stacksTo(1).defaultDurability(Tiers.DIAMOND.getUses())));
+            new ItemJewelerHammer(Tiers.IRON, props()
+                    .stacksTo(1)
+                    .durability(Tiers.DIAMOND.getUses())
+                    .attributes(ItemAttributeModifiers.builder()
+                            .add(Attributes.ATTACK_SPEED, new AttributeModifier(
+                                    modLoc("jeweler_hammer_speed"),
+                                    -2.8,
+                                    AttributeModifier.Operation.ADD_VALUE
+                            ), EquipmentSlotGroup.ANY)
+                            .build()
+                    )
+            )
+    );
 
     public static final ItemScroll SCROLL_SMOL = make("scroll_small", new ItemScroll(props(), 1));
     public static final ItemScroll SCROLL_MEDIUM = make("scroll_medium", new ItemScroll(props(), 2));
@@ -88,7 +112,7 @@ public class HexItems {
     public static final ItemSlate SLATE = make("slate", new ItemSlate(HexBlocks.SLATE, props()));
 
     public static final ItemMediaBattery BATTERY = make("battery",
-        new ItemMediaBattery(unstackable()), null);
+            new ItemMediaBattery(unstackable()), null);
 
     public static final Supplier<ItemStack> BATTERY_DUST_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
@@ -106,7 +130,6 @@ public class HexItems {
             new ItemStack(HexItems.BATTERY),
             MediaConstants.QUENCHED_SHARD_UNIT * 64,
             MediaConstants.QUENCHED_SHARD_UNIT * 64), HexCreativeTabs.HEX);
-
     public static final Supplier<ItemStack> BATTERY_QUENCHED_BLOCK_STACK = addToTab(() -> ItemMediaBattery.withMedia(
             new ItemStack(HexItems.BATTERY),
             MediaConstants.QUENCHED_BLOCK_UNIT * 64,
@@ -123,27 +146,27 @@ public class HexItems {
         var out = new EnumMap<ItemPridePigment.Type, ItemPridePigment>(ItemPridePigment.Type.class);
         for (var politicsInMyVidya : ItemPridePigment.Type.values()) {
             out.put(politicsInMyVidya, make("pride_colorizer_" + politicsInMyVidya.getName(),
-                new ItemPridePigment(politicsInMyVidya, unstackable())));
+                    new ItemPridePigment(politicsInMyVidya, unstackable())));
         }
         return out;
     });
 
     public static final Item UUID_PIGMENT = make("uuid_colorizer", new ItemUUIDPigment(unstackable()));
     public static final Item DEFAULT_PIGMENT = make("default_colorizer",
-        new ItemAmethystAndCopperPigment(unstackable()));
+            new ItemAmethystAndCopperPigment(unstackable()));
 
     // BUFF SANDVICH
     public static final Item SUBMARINE_SANDWICH = make("sub_sandwich",
-        new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationMod(1.2f).build())));
+            new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationModifier(1.2f).build())));
 
     public static final ItemLoreFragment LORE_FRAGMENT = make("lore_fragment",
-        new ItemLoreFragment(unstackable()
-            .rarity(Rarity.RARE)));
+            new ItemLoreFragment(unstackable()
+                    .rarity(Rarity.RARE)));
 
     public static final ItemCreativeUnlocker CREATIVE_UNLOCKER = make("creative_unlocker",
-        new ItemCreativeUnlocker(unstackable()
-            .rarity(Rarity.EPIC)
-            .food(new FoodProperties.Builder().nutrition(20).saturationMod(1f).alwaysEat().build())));
+            new ItemCreativeUnlocker(unstackable()
+                    .rarity(Rarity.EPIC)
+                    .food(new FoodProperties.Builder().nutrition(20).saturationModifier(1f).alwaysEdible().build())));
 
     //
 
@@ -153,6 +176,21 @@ public class HexItems {
 
     public static Item.Properties unstackable() {
         return props().stacksTo(1);
+    }
+
+    private static void generateScrollEntries(CreativeModeTab.Output r) {
+        var keyList = new ArrayList<ResourceKey<ActionRegistryEntry>>();
+        Registry<ActionRegistryEntry> regi = IXplatAbstractions.INSTANCE.getActionRegistry();
+        for (var key : regi.registryKeySet())
+            if (HexUtils.isOfTag(regi, key, HexTags.Actions.PER_WORLD_PATTERN))
+                keyList.add(key);
+        keyList.sort(Comparator.comparing(ResourceKey::location));
+        for (var key : keyList) {
+            r.accept(ItemScroll.withPerWorldPattern(
+                    new ItemStack(HexItems.SCROLL_LARGE),
+                    key
+            ));
+        }
     }
 
     private static <T extends Item> T make(ResourceLocation id, T item, @Nullable CreativeModeTab tab) {

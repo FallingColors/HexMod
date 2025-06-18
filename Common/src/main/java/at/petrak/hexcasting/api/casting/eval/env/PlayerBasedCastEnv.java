@@ -14,9 +14,11 @@ import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
+import at.petrak.hexcasting.common.lib.HexAttributes;
 import at.petrak.hexcasting.common.lib.HexDamageTypes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -35,8 +37,10 @@ import java.util.function.Predicate;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public abstract class PlayerBasedCastEnv extends CastingEnvironment {
-    public static final double AMBIT_RADIUS = 32.0;
-    public static final double SENTINEL_RADIUS = 16.0;
+    public static final double DEFAULT_AMBIT_RADIUS = 32.0;
+    private double ambitRadius;
+    public static final double DEFAULT_SENTINEL_RADIUS = 16.0;
+    private double sentinelRadius;
 
     protected final ServerPlayer caster;
     protected final InteractionHand castingHand;
@@ -45,6 +49,8 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         super(caster.serverLevel());
         this.caster = caster;
         this.castingHand = castingHand;
+        this.ambitRadius = caster.getAttributeValue(HexAttributes.AMBIT_RADIUS);
+        this.sentinelRadius = caster.getAttributeValue(HexAttributes.SENTINEL_RADIUS);
     }
 
     @Override
@@ -66,6 +72,16 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
                 this.sendMishapMsgToPlayer(doMishap);
             }
         }
+        if (this.caster != null){
+            double ambitAttribute = this.caster.getAttributeValue(HexAttributes.AMBIT_RADIUS);
+            if (this.ambitRadius != ambitAttribute){
+                this.ambitRadius = ambitAttribute;
+            }
+            double sentinelAttribute = this.caster.getAttributeValue(HexAttributes.SENTINEL_RADIUS);
+            if (this.sentinelRadius != sentinelAttribute){
+                this.sentinelRadius = sentinelAttribute;
+            }
+        }
     }
 
     @Override
@@ -76,6 +92,14 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     @Override
     protected List<HeldItemInfo> getPrimaryStacks() {
         return getPrimaryStacksForPlayer(this.castingHand, this.caster);
+    }
+
+    public double getAmbitRadius() {
+        return this.ambitRadius;
+    }
+
+    public double getSentinelRadius(){
+        return this.sentinelRadius;
     }
 
     @Override
@@ -90,12 +114,12 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
             && sentinel.extendsRange()
             && this.caster.level().dimension() == sentinel.dimension()
                 // adding 0.00000000001 to avoid machine precision errors at specific angles
-                && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS + 0.00000000001
+                && vec.distanceToSqr(sentinel.position()) <= sentinelRadius * sentinelRadius + 0.00000000001
         ) {
             return true;
         }
 
-        return vec.distanceToSqr(this.caster.position()) <= AMBIT_RADIUS * AMBIT_RADIUS + 0.00000000001;
+        return vec.distanceToSqr(this.caster.position()) <= ambitRadius * ambitRadius + 0.00000000001;
     }
 
     @Override
@@ -152,9 +176,12 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     protected boolean canOvercast() {
-        var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("y_u_no_cast_angy"));
-        var advs = this.caster.getAdvancements();
-        return advs.getOrStartProgress(adv).isDone();
+        var adv = this.world.getServer().getAdvancements().get(modLoc("y_u_no_cast_angy"));
+        if(adv != null) {
+            var advs = this.caster.getAdvancements();
+            return advs.getOrStartProgress(adv).isDone();
+        }
+        return false;
     }
 
     @Override

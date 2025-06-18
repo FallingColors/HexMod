@@ -1,7 +1,7 @@
 {
   "name": "hexcasting.entry.zeniths",
   "category": "hexcasting:patterns/great_spells",
-  "icon": "minecraft:potion{Potion:'minecraft:regeneration'}",
+  "icon": "minecraft:potion[minecraft:potion_contents={potion:\"minecraft:regeneration\"}]",
   "advancement": "hexcasting:root",
   "sortnum": 4,
   "read_by_default": true,

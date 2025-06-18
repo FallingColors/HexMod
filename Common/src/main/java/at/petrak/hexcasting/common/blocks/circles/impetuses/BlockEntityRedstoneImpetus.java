@@ -8,15 +8,20 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -31,15 +36,14 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
     private GameProfile storedPlayerProfile = null;
     private UUID storedPlayer = null;
 
-    private GameProfile cachedDisplayProfile = null;
+    private ResolvableProfile cachedDisplayProfile = null;
     private ItemStack cachedDisplayStack = null;
 
     public BlockEntityRedstoneImpetus(BlockPos pWorldPosition, BlockState pBlockState) {
         super(HexBlockEntities.IMPETUS_REDSTONE_TILE, pWorldPosition, pBlockState);
     }
 
-    protected @Nullable
-    GameProfile getPlayerName() {
+    protected @Nullable GameProfile getPlayerName() {
         if (this.level instanceof ServerLevel) {
             Player player = getStoredPlayer();
             if (player != null) {
@@ -61,6 +65,7 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
         this.storedPlayer = null;
     }
 
+    //TODO port: test player profiles
     public void updatePlayerProfile() {
         ServerPlayer player = getStoredPlayer();
         if (player != null) {
@@ -99,17 +104,18 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
         Direction hitFace) {
         super.applyScryingLensOverlay(lines, state, pos, observer, world, hitFace);
 
-        var name = this.getPlayerName();
-        if (name != null) {
-            if (!name.equals(cachedDisplayProfile) || cachedDisplayStack == null) {
-                cachedDisplayProfile = name;
+        var plProfile = this.getPlayerName();
+        if (plProfile != null) {
+            var resolvableProfile = new ResolvableProfile(plProfile);
+            if (!plProfile.equals(resolvableProfile) || cachedDisplayStack == null) {
+                cachedDisplayProfile = resolvableProfile;
                 var head = new ItemStack(Items.PLAYER_HEAD);
-                NBTHelper.put(head, "SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), name));
-                head.getItem().verifyTagAfterLoad(head.getOrCreateTag());
+                head.set(DataComponents.PROFILE, resolvableProfile);
+                head.getItem().verifyComponentsAfterLoad(head);
                 cachedDisplayStack = head;
             }
             lines.add(new Pair<>(cachedDisplayStack,
-                Component.translatable("hexcasting.tooltip.lens.impetus.redstone.bound", name.getName())));
+                Component.translatable("hexcasting.tooltip.lens.impetus.redstone.bound", plProfile.getName())));
         } else {
             lines.add(new Pair<>(new ItemStack(Items.BARRIER),
                 Component.translatable("hexcasting.tooltip.lens.impetus.redstone.bound.none")));
@@ -117,26 +123,26 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
     }
 
     @Override
-    protected void saveModData(CompoundTag tag) {
-        super.saveModData(tag);
+    protected void saveModData(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveModData(tag, registries);
         if (this.storedPlayer != null) {
             tag.putUUID(TAG_STORED_PLAYER, this.storedPlayer);
         }
         if (this.storedPlayerProfile != null) {
-            tag.put(TAG_STORED_PLAYER_PROFILE, NbtUtils.writeGameProfile(new CompoundTag(), storedPlayerProfile));
+            tag.put(TAG_STORED_PLAYER_PROFILE, ExtraCodecs.GAME_PROFILE.encodeStart(NbtOps.INSTANCE, storedPlayerProfile).getOrThrow());
         }
     }
 
     @Override
-    protected void loadModData(CompoundTag tag) {
-        super.loadModData(tag);
+    protected void loadModData(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadModData(tag, registries);
         if (tag.contains(TAG_STORED_PLAYER, Tag.TAG_INT_ARRAY)) {
             this.storedPlayer = tag.getUUID(TAG_STORED_PLAYER);
         } else {
             this.storedPlayer = null;
         }
         if (tag.contains(TAG_STORED_PLAYER_PROFILE, Tag.TAG_COMPOUND)) {
-            this.storedPlayerProfile = NbtUtils.readGameProfile(tag.getCompound(TAG_STORED_PLAYER_PROFILE));
+            this.storedPlayerProfile = ExtraCodecs.GAME_PROFILE.parse(NbtOps.INSTANCE, tag.getCompound(TAG_STORED_PLAYER_PROFILE)).getOrThrow();
         } else {
             this.storedPlayerProfile = null;
         }

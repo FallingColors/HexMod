@@ -1,16 +1,25 @@
 package at.petrak.hexcasting.common.msgs;
 
+import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.storage.ItemAbacus;
 import at.petrak.hexcasting.common.items.storage.ItemSpellbook;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -25,30 +34,21 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  * or scrolls in the spellcasting UI.
  */
 public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boolean isCtrl, boolean invertSpellbook,
-                                boolean invertAbacus) implements IMessage {
-    public static final ResourceLocation ID = modLoc("scroll");
+                                boolean invertAbacus) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<MsgShiftScrollC2S> TYPE = new CustomPacketPayload.Type<>(HexAPI.modLoc("scroll"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, MsgShiftScrollC2S> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.DOUBLE, MsgShiftScrollC2S::mainHandDelta,
+            ByteBufCodecs.DOUBLE, MsgShiftScrollC2S::offHandDelta,
+            ByteBufCodecs.BOOL, MsgShiftScrollC2S::isCtrl,
+            ByteBufCodecs.BOOL, MsgShiftScrollC2S::invertSpellbook,
+            ByteBufCodecs.BOOL, MsgShiftScrollC2S::invertAbacus,
+            MsgShiftScrollC2S::new
+    );
 
     @Override
-    public ResourceLocation getFabricId() {
-        return ID;
-    }
-
-    public static MsgShiftScrollC2S deserialize(ByteBuf buffer) {
-        var buf = new FriendlyByteBuf(buffer);
-        var mainHandDelta = buf.readDouble();
-        var offHandDelta = buf.readDouble();
-        var isCtrl = buf.readBoolean();
-        var invertSpellbook = buf.readBoolean();
-        var invertAbacus = buf.readBoolean();
-        return new MsgShiftScrollC2S(mainHandDelta, offHandDelta, isCtrl, invertSpellbook, invertAbacus);
-    }
-
-    public void serialize(FriendlyByteBuf buf) {
-        buf.writeDouble(this.mainHandDelta);
-        buf.writeDouble(this.offHandDelta);
-        buf.writeBoolean(this.isCtrl);
-        buf.writeBoolean(this.invertSpellbook);
-        buf.writeBoolean(this.invertAbacus);
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
     public void handle(MinecraftServer server, ServerPlayer sender) {
@@ -82,19 +82,19 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         var sealed = ItemSpellbook.isSealed(stack);
 
         MutableComponent component;
-        if (hand == InteractionHand.OFF_HAND && stack.hasCustomHoverName()) {
+        if (hand == InteractionHand.OFF_HAND && stack.has(DataComponents.CUSTOM_NAME)) {
             if (sealed) {
                 component = Component.translatable("hexcasting.tooltip.spellbook.page_with_name.sealed",
                     Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
                     Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-                    Component.literal("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC)
+                    Component.literal("").withStyle(stack.getRarity().getStyleModifier()).withStyle(ChatFormatting.ITALIC)
                         .append(stack.getHoverName()),
                     Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
             } else {
                 component = Component.translatable("hexcasting.tooltip.spellbook.page_with_name",
                     Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
                     Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-                    Component.literal("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC)
+                    Component.literal("").withStyle(stack.getRarity().getStyleModifier()).withStyle(ChatFormatting.ITALIC)
                         .append(stack.getHoverName()));
             }
 
@@ -120,7 +120,9 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         }
 
         var increase = delta < 0;
-        double num = NBTHelper.getDouble(stack, ItemAbacus.TAG_VALUE);
+        Double num = stack.get(HexDataComponents.ABACUS_VALUE);
+        if(num == null)
+            num = 0.0;
 
         double shiftDelta;
         float pitch;
@@ -135,16 +137,16 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         int scale = Math.max((int) Math.floor(Math.abs(delta)), 1);
 
         num += scale * shiftDelta * (increase ? 1 : -1);
-        NBTHelper.putDouble(stack, ItemAbacus.TAG_VALUE, num);
+        stack.set(HexDataComponents.ABACUS_VALUE, num);
 
         pitch *= (increase ? 1.05f : 0.95f);
         pitch += (Math.random() - 0.5) * 0.1;
         sender.level().playSound(null, sender.getX(), sender.getY(), sender.getZ(),
             HexSounds.ABACUS, SoundSource.PLAYERS, 0.5f, pitch);
 
-        var datumTag = HexItems.ABACUS.readIotaTag(stack);
-        if (datumTag != null) {
-            var popup = IotaType.getDisplay(datumTag);
+        var datum = HexItems.ABACUS.readIota(stack);
+        if (datum != null) {
+            var popup = datum.display();
             sender.displayClientMessage(
                 Component.translatable("hexcasting.tooltip.abacus", popup).withStyle(ChatFormatting.GREEN), true);
         }

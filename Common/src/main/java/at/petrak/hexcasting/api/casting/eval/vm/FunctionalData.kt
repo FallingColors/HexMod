@@ -3,7 +3,7 @@ package at.petrak.hexcasting.api.casting.eval.vm
 import at.petrak.hexcasting.api.casting.iota.Iota
 
 /**
- * A change to the data in a CastHarness after a pattern is drawn.
+ * A change to the data in a CastingVM after a pattern is drawn.
  */
 data class FunctionalData(
     val stack: List<Iota>,

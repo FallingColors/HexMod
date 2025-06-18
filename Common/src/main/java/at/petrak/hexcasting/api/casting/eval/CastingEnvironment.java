@@ -10,7 +10,9 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapEntityTooFarAway;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.common.lib.HexAttributes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -229,7 +231,7 @@ public abstract class CastingEnvironment {
      * Return whether this env can cast great spells.
      */
     public boolean isEnlightened() {
-        var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("enlightenment"));
+        var adv = this.world.getServer().getAdvancements().get(modLoc("enlightenment"));
         if (adv == null)
             return false;
 
@@ -247,6 +249,9 @@ public abstract class CastingEnvironment {
      * positive.
      */
     public long extractMedia(long cost, boolean simulate) {
+        if (this.getCastingEntity() != null){
+            cost = (long) (cost * this.getCastingEntity().getAttributeValue(HexAttributes.MEDIA_CONSUMPTION_MODIFIER));
+        }
         for (var extractMediaComponent : preMediaExtract)
             cost = extractMediaComponent.onExtractMedia(cost, simulate);
         cost = extractMediaEnvironment(cost, simulate);

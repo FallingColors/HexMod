@@ -1,8 +1,13 @@
-package at.petrak.hexcasting.common.recipe.ingredient;
+package at.petrak.hexcasting.common.recipe.ingredient.state;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -16,9 +21,14 @@ import java.util.Random;
 public class StateIngredientTagExcluding extends StateIngredientTag {
     private final List<StateIngredient> excludes;
 
-    public StateIngredientTagExcluding(ResourceLocation id, Collection<StateIngredient> excludes) {
-        super(id);
+    public StateIngredientTagExcluding(TagKey<Block> tag, Collection<StateIngredient> excludes) {
+        super(tag);
         this.excludes = List.copyOf(excludes);
+    }
+
+    @Override
+    public StateIngredientType<?> getType() {
+        return StateIngredients.TAG_EXCLUDING;
     }
 
     @Override
@@ -58,19 +68,6 @@ public class StateIngredientTagExcluding extends StateIngredientTag {
     }
 
     @Override
-    public JsonObject serialize() {
-        JsonObject object = new JsonObject();
-        object.addProperty("type", "tag_excluding");
-        object.addProperty("tag", getTagId().toString());
-        JsonArray array = new JsonArray();
-        for (StateIngredient exclude : excludes) {
-            array.add(exclude.serialize());
-        }
-        object.add("exclude", array);
-        return object;
-    }
-
-    @Override
     public List<ItemStack> getDisplayedStacks() {
         return getBlocks().stream()
             .filter(b -> b.asItem() != Items.AIR)
@@ -91,5 +88,31 @@ public class StateIngredientTagExcluding extends StateIngredientTag {
         return super.getDisplayed().stream()
             .filter(this::isNotExcluded)
             .toList();
+    }
+
+    public List<StateIngredient> getExcludes() {
+        return excludes;
+    }
+
+    public static class Type implements StateIngredientType<StateIngredientTagExcluding> {
+        public static final MapCodec<StateIngredientTagExcluding> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                TagKey.hashedCodec(Registries.BLOCK).fieldOf("tag").forGetter(StateIngredientTagExcluding::getTag),
+                StateIngredients.TYPED_CODEC.listOf().fieldOf("excludes").forGetter(StateIngredientTagExcluding::getExcludes)
+        ).apply(instance, StateIngredientTagExcluding::new));
+        public static final StreamCodec<RegistryFriendlyByteBuf, StateIngredientTagExcluding> STREAM_CODEC = StreamCodec.composite(
+                ResourceLocation.STREAM_CODEC.map(id -> TagKey.create(Registries.BLOCK, id), TagKey::location), StateIngredientTagExcluding::getTag,
+                StateIngredients.TYPED_STREAM_CODEC.apply(ByteBufCodecs.list()), StateIngredientTagExcluding::getExcludes,
+                StateIngredientTagExcluding::new
+        );
+
+        @Override
+        public MapCodec<StateIngredientTagExcluding> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, StateIngredientTagExcluding> streamCodec() {
+            return STREAM_CODEC;
+        }
     }
 }

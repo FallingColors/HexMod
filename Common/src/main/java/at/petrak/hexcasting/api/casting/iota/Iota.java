@@ -11,27 +11,34 @@ import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapUnescapedValue;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.mojang.serialization.Codec;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.Font;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 public abstract class Iota {
     @NotNull
-    protected final Object payload;
-    @NotNull
-    protected final IotaType<?> type;
+    protected final Supplier<IotaType<? extends Iota>> type;
 
-    protected Iota(@NotNull IotaType<?> type, @NotNull Object payload) {
+    protected Iota(@NotNull Supplier<IotaType<? extends Iota>> type) {
         this.type = type;
-        this.payload = payload;
     }
 
-    public @NotNull IotaType<?> getType() {
-        return this.type;
+    public @NotNull IotaType<? extends Iota> getType() {
+        return this.type.get();
     }
 
     abstract public boolean isTruthy();
@@ -40,13 +47,6 @@ public abstract class Iota {
      * Compare this to another object, within a tolerance.
      */
     abstract protected boolean toleratesOther(Iota that);
-
-    /**
-     * Serialize this under the {@code data} tag.
-     * <p>
-     * You probably don't want to call this directly; use {@link IotaType#serialize}.
-     */
-    abstract public @NotNull Tag serialize();
 
     /**
      * This method is called when this iota is executed (i.e. Hermes is run on a list containing it, unescaped).
@@ -100,8 +100,19 @@ public abstract class Iota {
         return 1;
     }
 
-    public Component display() {
-        return this.type.display(this.serialize());
+    public abstract Component display();
+
+    public FormattedCharSequence displayWithMaxWidth(int maxWidth, Font font) {
+        var splitted = font.split(display(), maxWidth - font.width("..."));
+        if (splitted.isEmpty())
+            return FormattedCharSequence.EMPTY;
+        else if (splitted.size() == 1)
+            return splitted.getFirst();
+        else {
+            var first = splitted.getFirst();
+            return FormattedCharSequence.fromPair(first,
+                    Component.literal("...").withStyle(ChatFormatting.GRAY).getVisualOrderText());
+        }
     }
 
     /**
@@ -121,7 +132,13 @@ public abstract class Iota {
     }
 
     @Override
-    public int hashCode() {
-        return payload.hashCode();
+    public abstract int hashCode();
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Iota io) {
+            return tolerates(this, io);
+        }
+        return false;
     }
 }

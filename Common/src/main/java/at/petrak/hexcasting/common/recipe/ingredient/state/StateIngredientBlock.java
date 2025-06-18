@@ -1,9 +1,12 @@
-package at.petrak.hexcasting.common.recipe.ingredient;
+package at.petrak.hexcasting.common.recipe.ingredient.state;
 
-import com.google.gson.JsonObject;
-import net.minecraft.core.Registry;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -21,6 +24,11 @@ public class StateIngredientBlock implements StateIngredient {
     }
 
     @Override
+    public StateIngredientType<?> getType() {
+        return StateIngredients.BLOCK_TYPE;
+    }
+
+    @Override
     public boolean test(BlockState blockState) {
         return block == blockState.getBlock();
     }
@@ -28,20 +36,6 @@ public class StateIngredientBlock implements StateIngredient {
     @Override
     public BlockState pick(Random random) {
         return block.defaultBlockState();
-    }
-
-    @Override
-    public JsonObject serialize() {
-        JsonObject object = new JsonObject();
-        object.addProperty("type", "block");
-        object.addProperty("block", BuiltInRegistries.BLOCK.getKey(block).toString());
-        return object;
-    }
-
-    @Override
-    public void write(FriendlyByteBuf buffer) {
-        buffer.writeVarInt(1);
-        buffer.writeVarInt(BuiltInRegistries.BLOCK.getId(block));
     }
 
     @Override
@@ -80,5 +74,26 @@ public class StateIngredientBlock implements StateIngredient {
     @Override
     public String toString() {
         return "StateIngredientBlock{" + block + "}";
+    }
+
+
+    public static class Type implements StateIngredientType<StateIngredientBlock> {
+        public static final MapCodec<StateIngredientBlock> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                BuiltInRegistries.BLOCK.byNameCodec().fieldOf("block").forGetter(StateIngredientBlock::getBlock)
+        ).apply(instance, StateIngredientBlock::new));
+        public static final StreamCodec<RegistryFriendlyByteBuf, StateIngredientBlock> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.registry(Registries.BLOCK), StateIngredientBlock::getBlock,
+                StateIngredientBlock::new
+        );
+
+        @Override
+        public MapCodec<StateIngredientBlock> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, StateIngredientBlock> streamCodec() {
+            return STREAM_CODEC;
+        }
     }
 }

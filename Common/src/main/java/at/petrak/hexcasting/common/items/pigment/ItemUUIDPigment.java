@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.addldata.ADPigment;
 import at.petrak.hexcasting.api.item.PigmentItem;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
 import at.petrak.paucal.api.PaucalAPI;
+import at.petrak.paucal.xplat.common.ContributorsManifest;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import net.minecraft.world.item.Item;
@@ -28,7 +29,7 @@ public class ItemUUIDPigment extends Item implements PigmentItem {
         private final int[] colors;
 
         MyColorProvider(UUID owner) {
-            var contributor = PaucalAPI.instance().getContributor(owner);
+            var contributor = ContributorsManifest.getContributor(owner);
             if (contributor != null) {
                 var colorList = contributor.otherVals().getAsJsonArray("hexcasting:colorizer");
                 if (colorList != null) {

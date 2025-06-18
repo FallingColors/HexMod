@@ -67,6 +67,8 @@ public class HexConfig {
 
         boolean isActionAllowedInCircles(ResourceLocation actionID);
 
+        boolean doesGreaterTeleportSplatItems();
+
         boolean doVillagersTakeOffenseAtMindMurder();
 
         // fun fact, although dimension keys are a RegistryHolder, they aren't a registry, so i can't do tags
@@ -74,9 +76,14 @@ public class HexConfig {
 
         boolean trueNameHasAmbit();
 
+        double traderScrollChance();
+
         int DEFAULT_MAX_OP_COUNT = 100_000;
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
         int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;
+
+        double DEFAULT_TRADER_SCROLL_CHANCE = 0.2;
+        boolean DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS = true;
 
         boolean DEFAULT_VILLAGERS_DISLIKE_MIND_MURDER = true;
 
@@ -99,11 +106,9 @@ public class HexConfig {
     // Simple extensions for resource location configs
     public static boolean anyMatch(List<? extends String> keys, ResourceLocation key) {
         for (String s : keys) {
-            if (ResourceLocation.isValidResourceLocation(s)) {
-                var rl = new ResourceLocation(s);
-                if (rl.equals(key)) {
-                    return true;
-                }
+            var rl = ResourceLocation.tryParse(s);
+            if (rl != null && rl.equals(key)) {
+                return true;
             }
         }
         return false;

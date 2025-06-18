@@ -2,9 +2,9 @@ package at.petrak.hexcasting.datagen.recipe.builders;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.advancements.CriterionTriggerInstance;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.data.recipes.RecipeBuilder;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +31,7 @@ public class CreateCrushingRecipeBuilder implements RecipeBuilder {
     private int processingTime = 100;
 
     @Override
-    public @NotNull CreateCrushingRecipeBuilder unlockedBy(@NotNull String name, @NotNull CriterionTriggerInstance trigger) {
+    public RecipeBuilder unlockedBy(String name, Criterion<?> criterion) {
         return this;
     }
 
@@ -76,7 +76,7 @@ public class CreateCrushingRecipeBuilder implements RecipeBuilder {
     }
 
     public CreateCrushingRecipeBuilder withOutput(ItemStack output, float chance) {
-        this.results.add(new ItemProcessingOutput(output, chance));
+        //this.results.add(new ItemProcessingOutput(output, chance));
         return this;
     }
 
@@ -93,7 +93,7 @@ public class CreateCrushingRecipeBuilder implements RecipeBuilder {
     }
 
     public CreateCrushingRecipeBuilder withOutput(float chance, String name, int count) {
-        this.results.add(new CompatProcessingOutput(name, count, chance));
+        //this.results.add(new CompatProcessingOutput(name, count, chance));
         return this;
     }
 
@@ -103,61 +103,7 @@ public class CreateCrushingRecipeBuilder implements RecipeBuilder {
     }
 
     @Override
-    public void save(@NotNull Consumer<FinishedRecipe> consumer, @NotNull ResourceLocation resourceLocation) {
-        consumer.accept(new CrushingRecipe(resourceLocation));
+    public void save(RecipeOutput recipeOutput, ResourceLocation id) {
+
     }
-
-    public class CrushingRecipe implements FinishedRecipe {
-
-        private final ResourceLocation id;
-
-        public CrushingRecipe(ResourceLocation id) {
-            this.id = id;
-        }
-
-        @Override
-        public void serializeRecipeData(@NotNull JsonObject json) {
-            json.addProperty("type", "create:crushing");
-
-            if (!group.isEmpty()) {
-                json.addProperty("group", group);
-            }
-
-            JsonArray jsonIngredients = new JsonArray();
-            JsonArray jsonOutputs = new JsonArray();
-
-            jsonIngredients.add(input.toJson());
-
-            results.forEach(o -> jsonOutputs.add(o.serialize()));
-
-            json.add("ingredients", jsonIngredients);
-            json.add("results", jsonOutputs);
-
-            int processingDuration = processingTime;
-            if (processingDuration > 0) {
-                json.addProperty("processingTime", processingDuration);
-            }
-        }
-
-        @Override
-        public @NotNull ResourceLocation getId() {
-            return id;
-        }
-
-        @Override
-        public @NotNull RecipeSerializer<?> getType() {
-            return RecipeSerializer.SHAPELESS_RECIPE; // Irrelevant, we implement serialization ourselves
-        }
-
-        @Override
-        public JsonObject serializeAdvancement() {
-            return null;
-        }
-
-        @Override
-        public ResourceLocation getAdvancementId() {
-            return null;
-        }
-    }
-
 }

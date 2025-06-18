@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.forge.xplat;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
@@ -22,31 +23,29 @@ import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexRegistries;
-import at.petrak.hexcasting.common.lib.hex.HexContinuationTypes;
-import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
-import at.petrak.hexcasting.common.msgs.IMessage;
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredientType;
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredientType;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
-import at.petrak.hexcasting.forge.mixin.ForgeAccessorBuiltInRegistries;
-import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.xplat.IXplatRegister;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
-import com.google.common.base.Suppliers;
+import com.illusivesoulworks.caelus.api.CaelusApi;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -72,35 +71,39 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.*;
-import net.minecraftforge.common.loot.CanToolPerformAction;
-import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLLoader;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.loot.CanItemPerformAbility;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.RegistryBuilder;
 import org.jetbrains.annotations.Nullable;
-import top.theillusivec4.caelus.api.CaelusApi;
 import virtuoel.pehkui.api.ScaleTypes;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
-import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
 
 public class ForgeXplatImpl implements IXplatAbstractions {
+
+    @Override
+    public <B> IXplatRegister<B> createRegistar(ResourceKey<Registry<B>> registryKey) {
+        return new ForgeRegister<>(DeferredRegister.create(registryKey, HexAPI.MOD_ID));
+    }
+
     @Override
     public Platform platform() {
         return Platform.FORGE;
@@ -133,8 +136,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         mob.getPersistentData().putBoolean(TAG_BRAINSWEPT, true);
 
         if (mob.level() instanceof ServerLevel) {
-            ForgePacketHandler.getNetwork()
-                .send(PacketDistributor.TRACKING_ENTITY.with(() -> mob), MsgBrainsweepAck.of(mob));
+            PacketDistributor.sendToPlayersTrackingEntity(mob, MsgBrainsweepAck.of(mob));
         }
     }
 
@@ -166,15 +168,17 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         }
 
         // The elytra ability is done with an event on fabric
-        var elytraing = CaelusApi.getInstance().getFlightAttribute();
+        // TODO port: added null check, test if still works
+        var elytraing = CaelusApi.getInstance().getFallFlyingAttribute();
         var inst = player.getAttributes().getInstance(elytraing);
         if (altiora != null) {
-            if (inst.getModifier(ALTIORA_ATTRIBUTE_ID) == null) {
-                inst.addTransientModifier(new AttributeModifier(ALTIORA_ATTRIBUTE_ID, "Altiora", 1.0,
-                    AttributeModifier.Operation.ADDITION));
+            if (inst != null && !inst.hasModifier(ALTIORA_ATTRIBUTE_ID)) {
+                inst.addTransientModifier(new AttributeModifier(ALTIORA_ATTRIBUTE_ID, 1.0,
+                    AttributeModifier.Operation.ADD_VALUE));
             }
         } else {
-            inst.removeModifier(ALTIORA_ATTRIBUTE_ID);
+            if(inst != null)
+                inst.removeModifier(ALTIORA_ATTRIBUTE_ID);
         }
 
         if (player instanceof ServerPlayer serverPlayer) {
@@ -188,7 +192,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
         CompoundTag tag = player.getPersistentData();
         if (pigment != null)
-            tag.put(TAG_PIGMENT, pigment.serializeToNBT());
+            tag.put(TAG_PIGMENT, FrozenPigment.CODEC.encodeStart(NbtOps.INSTANCE, pigment).getOrThrow());
         else
             tag.remove(TAG_PIGMENT);
 
@@ -220,16 +224,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public void setStaffcastImage(ServerPlayer player, @Nullable CastingImage image) {
-        player.getPersistentData().put(TAG_HARNESS, image == null ? new CompoundTag() : image.serializeToNbt());
+        player.getPersistentData().put(TAG_VM, image == null ? new CompoundTag() : CastingImage.getCODEC().encodeStart(NbtOps.INSTANCE, image).getOrThrow());
     }
 
     @Override
     public void setPatterns(ServerPlayer player, List<ResolvedPattern> patterns) {
-        var listTag = new ListTag();
-        for (ResolvedPattern pattern : patterns) {
-            listTag.add(pattern.serializeToNBT());
-        }
-        player.getPersistentData().put(TAG_PATTERNS, listTag);
+        player.getPersistentData().put(TAG_PATTERNS, ResolvedPattern.CODEC.listOf().encodeStart(NbtOps.INSTANCE, patterns).getOrThrow());
     }
 
     @Override
@@ -246,7 +246,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             var origin = HexUtils.vecFromNBT(tag.getCompound(TAG_FLIGHT_ORIGIN));
             var radius = tag.getDouble(TAG_FLIGHT_RADIUS);
             var dimension = ResourceKey.create(Registries.DIMENSION,
-                new ResourceLocation(tag.getString(TAG_FLIGHT_DIMENSION)));
+                ResourceLocation.parse(tag.getString(TAG_FLIGHT_DIMENSION)));
             return new FlightAbility(timeLeft, dimension, origin, radius);
         }
         return null;
@@ -265,9 +265,10 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public FrozenPigment getPigment(Player player) {
-        return FrozenPigment.fromNBT(player.getPersistentData().getCompound(TAG_PIGMENT));
+        return FrozenPigment.CODEC.parse(NbtOps.INSTANCE, player.getPersistentData().getCompound(TAG_PIGMENT)).getOrThrow();
     }
 
+    //TODO port: replace with codec?
     @Override
     public Sentinel getSentinel(Player player) {
         CompoundTag tag = player.getPersistentData();
@@ -277,112 +278,88 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         }
         var extendsRange = tag.getBoolean(TAG_SENTINEL_GREATER);
         var position = HexUtils.vecFromNBT(tag.getCompound(TAG_SENTINEL_POSITION));
-        var dimension = ResourceKey.create(Registries.DIMENSION,
-            new ResourceLocation(tag.getString(TAG_SENTINEL_DIMENSION)));
+        var dimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(tag.getString(TAG_SENTINEL_DIMENSION)));
 
         return new Sentinel(extendsRange, position, dimension);
     }
 
     @Override
     public CastingVM getStaffcastVM(ServerPlayer player, InteractionHand hand) {
-        // This is always from a staff because we don't need to load the harness when casting from item
+        // This is always from a staff because we don't need to load the VM when casting from item
         var ctx = new StaffCastEnv(player, hand);
-        return new CastingVM(CastingImage.loadFromNbt(player.getPersistentData().getCompound(TAG_HARNESS),
-            player.serverLevel()), ctx);
+        return new CastingVM(CastingImage.getCODEC().parse(NbtOps.INSTANCE, player.getPersistentData().getCompound(TAG_VM)).getOrThrow(), ctx);
     }
 
     @Override
     public List<ResolvedPattern> getPatternsSavedInUi(ServerPlayer player) {
-        ListTag patternsTag = player.getPersistentData().getList(TAG_PATTERNS, Tag.TAG_COMPOUND);
-
-        List<ResolvedPattern> patterns = new ArrayList<>(patternsTag.size());
-
-        for (int i = 0; i < patternsTag.size(); i++) {
-            patterns.add(ResolvedPattern.fromNBT(patternsTag.getCompound(i)));
-        }
-        return patterns;
+        return ResolvedPattern.CODEC.listOf().parse(NbtOps.INSTANCE, player.getPersistentData().getList(TAG_PATTERNS, Tag.TAG_COMPOUND)).getOrThrow();
     }
 
     @Override
     public void clearCastingData(ServerPlayer player) {
-        player.getPersistentData().remove(TAG_HARNESS);
+        player.getPersistentData().remove(TAG_VM);
         player.getPersistentData().remove(TAG_PATTERNS);
     }
 
     @Override
     public @Nullable
     ADMediaHolder findMediaHolder(ItemStack stack) {
-        var maybeCap = stack.getCapability(HexCapabilities.MEDIA).resolve();
-        return maybeCap.orElse(null);
-    }
-
-    @Override
-    public @Nullable ADMediaHolder findMediaHolder(ServerPlayer player) {
-        var maybeCap = player.getCapability(HexCapabilities.MEDIA).resolve();
-        return maybeCap.orElse(null);
+        return stack.getCapability(HexCapabilities.Item.MEDIA);
     }
 
     @Override
     public @Nullable
     ADIotaHolder findDataHolder(ItemStack stack) {
-        var maybeCap = stack.getCapability(HexCapabilities.IOTA).resolve();
-        return maybeCap.orElse(null);
+        return stack.getCapability(HexCapabilities.Item.IOTA);
     }
 
     @Override
     public @Nullable ADIotaHolder findDataHolder(Entity entity) {
-        var maybeCap = entity.getCapability(HexCapabilities.IOTA).resolve();
-        return maybeCap.orElse(null);
+        return entity.getCapability(HexCapabilities.Entity.IOTA);
     }
 
     @Override
     public @Nullable
     ADHexHolder findHexHolder(ItemStack stack) {
-        var maybeCap = stack.getCapability(HexCapabilities.STORED_HEX).resolve();
-        return maybeCap.orElse(null);
+        return stack.getCapability(HexCapabilities.Item.STORED_HEX);
     }
 
     @Override
     public @Nullable ADVariantItem findVariantHolder(ItemStack stack) {
-        var maybeCap = stack.getCapability(HexCapabilities.VARIANT_ITEM).resolve();
-        return maybeCap.orElse(null);
+        return stack.getCapability(HexCapabilities.Item.VARIANT_ITEM);
     }
 
     @Override
     public boolean isPigment(ItemStack stack) {
-        return stack.getCapability(HexCapabilities.COLOR).isPresent();
+        return stack.getCapability(HexCapabilities.Item.COLOR) != null;
     }
 
     @Override
     public ColorProvider getColorProvider(FrozenPigment pigment) {
-        var maybePigment = pigment.item().getCapability(HexCapabilities.COLOR).resolve();
-        if (maybePigment.isPresent()) {
-            return maybePigment.get().provideColor(pigment.owner());
-        }
-        return ColorProvider.MISSING;
+        var adPigment = pigment.item().getCapability(HexCapabilities.Item.COLOR);
+        return adPigment != null ? adPigment.provideColor(pigment.owner()) : ColorProvider.MISSING;
     }
 
     @Override
-    public void sendPacketToPlayer(ServerPlayer target, IMessage packet) {
-        ForgePacketHandler.getNetwork().send(PacketDistributor.PLAYER.with(() -> target), packet);
+    public void sendPacketToPlayer(ServerPlayer target, CustomPacketPayload packet) {
+        PacketDistributor.sendToPlayer(target, packet);
     }
 
     @Override
-    public void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, IMessage packet) {
-        ForgePacketHandler.getNetwork().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(
-            pos.x, pos.y, pos.z, radius * radius, dimension.dimension()
-        )), packet);
+    public void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, CustomPacketPayload packet) {
+        PacketDistributor.sendToPlayersNear(dimension, null, pos.x, pos.y, pos.z, radius, packet);
     }
 
     @Override
-    public void sendPacketTracking(Entity entity, IMessage packet) {
-        ForgePacketHandler.getNetwork().send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), packet);
+    public void sendPacketTracking(Entity entity, CustomPacketPayload packet) {
+        PacketDistributor.sendToPlayersTrackingEntity(entity, packet);
     }
 
     @Override
-    public Packet<ClientGamePacketListener> toVanillaClientboundPacket(IMessage message) {
+    public Packet<ClientGamePacketListener> toVanillaClientboundPacket(CustomPacketPayload message) {
+        // TODO port: test cast
         //noinspection unchecked
-        return (Packet<ClientGamePacketListener>) ForgePacketHandler.getNetwork().toVanillaPacket(message, NetworkDirection.PLAY_TO_CLIENT);
+        return (Packet<ClientGamePacketListener>) (Object) message.toVanillaClientbound();
     }
 
     @Override
@@ -393,19 +370,19 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, Fluid fluid) {
-        Optional<IFluidHandler> handler = FluidUtil.getFluidHandler(level, pos, Direction.UP).resolve();
+        Optional<IFluidHandler> handler = FluidUtil.getFluidHandler(level, pos, Direction.UP);
         return handler.isPresent() &&
-            handler.get().fill(new FluidStack(fluid, FluidType.BUCKET_VOLUME), EXECUTE) > 0;
+            handler.get().fill(new FluidStack(fluid, FluidType.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE) > 0;
     }
 
     @Override
     public boolean drainAllFluid(Level level, BlockPos pos) {
-        Optional<IFluidHandler> handler = FluidUtil.getFluidHandler(level, pos, Direction.UP).resolve();
+        Optional<IFluidHandler> handler = FluidUtil.getFluidHandler(level, pos, Direction.UP);
         if (handler.isPresent()) {
             boolean any = false;
             IFluidHandler pool = handler.get();
             for (int i = 0; i < pool.getTanks(); i++) {
-                if (!pool.drain(pool.getFluidInTank(i), EXECUTE).isEmpty()) {
+                if (!pool.drain(pool.getFluidInTank(i), IFluidHandler.FluidAction.EXECUTE).isEmpty()) {
                     any = true;
                 }
             }
@@ -416,12 +393,13 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public Ingredient getUnsealedIngredient(ItemStack stack) {
-        return ForgeUnsealedIngredient.of(stack);
+        return ForgeUnsealedIngredient.of(stack).toVanilla();
     }
 
     @Override
     public boolean isCorrectTierForDrops(Tier tier, BlockState bs) {
-        return !bs.requiresCorrectToolForDrops() || TierSortingRegistry.isCorrectTierForDrops(tier, bs);
+        // TODO port: check tag
+        return !bs.is(HexTags.Blocks.HEX_UNBREAKABLE);
     }
 
     @Override
@@ -432,12 +410,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     private static final IXplatTags TAGS = new IXplatTags() {
         @Override
         public TagKey<Item> amethystDust() {
-            return HexTags.Items.create(new ResourceLocation("forge", "dusts/amethyst"));
+            return HexTags.Items.create(ResourceLocation.fromNamespaceAndPath("forge", "dusts/amethyst"));
         }
 
         @Override
         public TagKey<Item> gems() {
-            return HexTags.Items.create(new ResourceLocation("forge", "gems"));
+            return HexTags.Items.create(ResourceLocation.fromNamespaceAndPath("forge", "gems"));
         }
     };
 
@@ -448,7 +426,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public LootItemCondition.Builder isShearsCondition() {
-        return CanToolPerformAction.canToolPerformAction(ToolActions.SHEARS_DIG);
+        return CanItemPerformAbility.canItemPerformAbility(ItemAbilities.SHEARS_DIG);
     }
 
     @Override
@@ -463,70 +441,83 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         return namespace;
     }
 
-    private static final Supplier<Registry<ActionRegistryEntry>> ACTION_REGISTRY = Suppliers.memoize(() ->
-            ForgeAccessorBuiltInRegistries.hex$registerSimple(
-                HexRegistries.ACTION, null)
-    );
-    private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
-        Suppliers.memoize(() ->
-            ForgeAccessorBuiltInRegistries.hex$registerSimple(
-                HexRegistries.SPECIAL_HANDLER, null)
-        );
-    private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
-            ForgeAccessorBuiltInRegistries.hex$registerDefaulted(
-                HexRegistries.IOTA_TYPE,
-                modLoc("null").toString(), registry -> HexIotaTypes.NULL)
-    );
-    private static final Supplier<Registry<Arithmetic>> ARITHMETIC_REGISTRY = Suppliers.memoize(() ->
-            ForgeAccessorBuiltInRegistries.hex$registerSimple(
-                HexRegistries.ARITHMETIC, null)
-    );
-    private static final Supplier<Registry<ContinuationFrame.Type<?>>> CONTINUATION_TYPE_REGISTRY = Suppliers.memoize(() ->
-            ForgeAccessorBuiltInRegistries.hex$registerDefaulted(
-                    HexRegistries.CONTINUATION_TYPE,
-                    modLoc("end").toString(), registry -> HexContinuationTypes.END)
-    );
-    private static final Supplier<Registry<EvalSound>> EVAL_SOUND_REGISTRY = Suppliers.memoize(() ->
-            ForgeAccessorBuiltInRegistries.hex$registerDefaulted(
-                HexRegistries.EVAL_SOUND,
-                modLoc("nothing").toString(), registry -> HexEvalSounds.NOTHING)
-    );
+    private static final Registry<ActionRegistryEntry> ACTION_REGISTRY = new RegistryBuilder<>(HexRegistries.ACTION)
+            .sync(true)
+            .create();
+    private static final Registry<SpecialHandler.Factory<?>> SPECIAL_HANDLER_REGISTRY = new RegistryBuilder<>(HexRegistries.SPECIAL_HANDLER)
+            .sync(true)
+            .create();
+    private static final Registry<IotaType<?>> IOTA_TYPE_REGISTRY = new RegistryBuilder<>(HexRegistries.IOTA_TYPE)
+            .sync(true)
+            .defaultKey(modLoc("null"))
+            .create();
+
+    private static final Registry<Arithmetic> ARITHMETIC_REGISTRY = new RegistryBuilder<>(HexRegistries.ARITHMETIC)
+            .sync(true)
+            .create();
+
+    private static final Registry<ContinuationFrame.Type<?>> CONTINUATION_TYPE_REGISTRY = new RegistryBuilder<>(HexRegistries.CONTINUATION_TYPE)
+            .sync(true)
+            .defaultKey(modLoc("end"))
+            .create();
+    private static final Registry<EvalSound> EVAL_SOUND_REGISTRY = new RegistryBuilder<>(HexRegistries.EVAL_SOUND)
+            .sync(true)
+            .defaultKey(modLoc("nothing"))
+            .create();
+    private static final Registry<StateIngredientType<?>> STATE_INGREDIENT_REGISTRY = new RegistryBuilder<>(HexRegistries.STATE_INGREDIENT)
+            .sync(true)
+            .defaultKey(modLoc("none"))
+            .create();
+    private static final Registry<BrainsweepeeIngredientType<?>> BRAINSWEEPEE_INGREDIENT_REGISTRY = new RegistryBuilder<>(HexRegistries.BRAINSWEEPEE_INGREDIENT)
+            .sync(true)
+            .defaultKey(modLoc("none"))
+            .create();
 
     @Override
     public Registry<ActionRegistryEntry> getActionRegistry() {
-        return ACTION_REGISTRY.get();
+        return ACTION_REGISTRY;
     }
 
     @Override
     public Registry<SpecialHandler.Factory<?>> getSpecialHandlerRegistry() {
-        return SPECIAL_HANDLER_REGISTRY.get();
+        return SPECIAL_HANDLER_REGISTRY;
     }
 
     @Override
     public Registry<IotaType<?>> getIotaTypeRegistry() {
-        return IOTA_TYPE_REGISTRY.get();
+        return IOTA_TYPE_REGISTRY;
     }
 
     @Override
     public Registry<Arithmetic> getArithmeticRegistry() {
-        return ARITHMETIC_REGISTRY.get();
+        return ARITHMETIC_REGISTRY;
     }
 
     @Override
     public Registry<ContinuationFrame.Type<?>> getContinuationTypeRegistry() {
-        return CONTINUATION_TYPE_REGISTRY.get();
+        return CONTINUATION_TYPE_REGISTRY;
     }
 
     @Override
     public Registry<EvalSound> getEvalSoundRegistry() {
-        return EVAL_SOUND_REGISTRY.get();
+        return EVAL_SOUND_REGISTRY;
+    }
+
+    @Override
+    public Registry<StateIngredientType<?>> getStateIngredientRegistry() {
+        return STATE_INGREDIENT_REGISTRY;
+    }
+
+    @Override
+    public Registry<BrainsweepeeIngredientType<?>> getBrainsweepeeIngredientRegistry() {
+        return BRAINSWEEPEE_INGREDIENT_REGISTRY;
     }
 
     @Override
     public boolean isBreakingAllowed(ServerLevel world, BlockPos pos, BlockState state, @Nullable Player player) {
         if (player == null)
             player = FakePlayerFactory.get(world, HEXCASTING);
-        return !MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player));
+        return !NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player)).isCanceled();
     }
 
     @Override
@@ -535,7 +526,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             player = FakePlayerFactory.get(world, HEXCASTING);
         ItemStack cached = player.getMainHandItem();
         player.setItemInHand(InteractionHand.MAIN_HAND, blockStack.copy());
-        var evt = ForgeHooks.onRightClickBlock(player, InteractionHand.MAIN_HAND, pos,
+        var evt = CommonHooks.onRightClickBlock(player, InteractionHand.MAIN_HAND, pos,
             new BlockHitResult(Vec3.atCenterOf(pos), Direction.DOWN, pos, true));
         player.setItemInHand(InteractionHand.MAIN_HAND, cached);
         return !evt.isCanceled();
@@ -583,8 +574,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public static final String TAG_ALTIORA_ALLOWED = "hexcasting:altiora_allowed";
     public static final String TAG_ALTIORA_GRACE = "hexcasting:altiora_grace_period";
 
-    public static final UUID ALTIORA_ATTRIBUTE_ID = UUID.fromString("91897c79-3ebb-468c-a265-40418ed01c41");
+    public static final ResourceLocation ALTIORA_ATTRIBUTE_ID = modLoc("altiora");
 
-    public static final String TAG_HARNESS = "hexcasting:spell_harness";
+    public static final String TAG_VM = "hexcasting:spell_harness";
     public static final String TAG_PATTERNS = "hexcasting:spell_patterns";
 }

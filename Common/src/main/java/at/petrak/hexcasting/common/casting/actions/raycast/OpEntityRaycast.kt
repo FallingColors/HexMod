@@ -38,7 +38,7 @@ object OpEntityRaycast : ConstMediaAction {
         return if (entityHitResult != null && env.isEntityInRange(entityHitResult.entity)) {
             entityHitResult.entity.asActionResult
         } else {
-            listOf(NullIota())
+            listOf(NullIota.INSTANCE)
         }
     }
 

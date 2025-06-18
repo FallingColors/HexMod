@@ -5,7 +5,9 @@ import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -17,28 +19,15 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static at.petrak.hexcasting.common.items.storage.ItemFocus.NUM_VARIANTS;
 
 public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
-    public static String TAG_SELECTED_PAGE = "page_idx";
-    // this is a CompoundTag of string numerical keys to SpellData
-    // it is 1-indexed, so that 0/0 can be the special case of "it is empty"
-    public static String TAG_PAGES = "pages";
-
-    // this stores the names of pages, to be restored when you scroll
-    // it is 1-indexed, and the 0-case for TAG_PAGES will be treated as 1
-    public static String TAG_PAGE_NAMES = "page_names";
-
-    // this stores the sealed status of each page, to be restored when you scroll
-    // it is 1-indexed, and the 0-case for TAG_PAGES will be treated as 1
-    public static String TAG_SEALED = "sealed_pages";
-
-    // this stores which variant of the spellbook should be rendered
-    public static final String TAG_VARIANT = "variant";
-
     public static final int MAX_PAGES = 64;
 
     public ItemSpellbook(Properties properties) {
@@ -46,12 +35,11 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip,
-        TooltipFlag isAdvanced) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag isAdvanced) {
         boolean sealed = isSealed(stack);
         boolean empty = false;
-        if (NBTHelper.hasNumber(stack, TAG_SELECTED_PAGE)) {
-            var pageIdx = NBTHelper.getInt(stack, TAG_SELECTED_PAGE);
+        if (stack.has(HexDataComponents.SELECTED_PAGE)) {
+            var pageIdx = stack.get(HexDataComponents.SELECTED_PAGE);
             int highest = highestPage(stack);
             if (highest != 0) {
                 if (sealed) {
@@ -74,7 +62,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         }
 
         if (empty) {
-            boolean overridden = NBTHelper.hasString(stack, TAG_OVERRIDE_VISUALLY);
+            boolean overridden = stack.has(HexDataComponents.VISUAL_OVERRIDE);
             if (sealed) {
                 if (overridden) {
                     tooltip.add(Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(
@@ -92,37 +80,55 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
 
         IotaHolderItem.appendHoverText(this, stack, tooltip, isAdvanced);
 
-        super.appendHoverText(stack, level, tooltip, isAdvanced);
+        super.appendHoverText(stack, context, tooltip, isAdvanced);
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
+    public void inventoryTick(ItemStack stack, Level level, Entity pEntity, int pSlotId, boolean pIsSelected) {
         int index = getPage(stack, 0);
-        NBTHelper.putInt(stack, TAG_SELECTED_PAGE, index);
+        stack.set(HexDataComponents.SELECTED_PAGE, index);
 
         int shiftedIdx = Math.max(1, index);
         String nameKey = String.valueOf(shiftedIdx);
-        CompoundTag names = NBTHelper.getOrCreateCompound(stack, TAG_PAGE_NAMES);
-        if (stack.hasCustomHoverName()) {
-            names.putString(nameKey, Component.Serializer.toJson(stack.getHoverName()));
-        } else {
-            names.remove(nameKey);
+
+        var customName = stack.get(DataComponents.CUSTOM_NAME);
+        var savedNames = stack.get(HexDataComponents.PAGE_NAMES);
+
+        if(customName != null) {
+            if(savedNames != null) {
+                if(!savedNames.containsKey(nameKey) || !savedNames.get(nameKey).equals(customName)) {
+                    var mutNames = new HashMap<>(savedNames);
+                    mutNames.put(nameKey, customName);
+                    stack.set(HexDataComponents.PAGE_NAMES, mutNames);
+                }
+            } else {
+                var mutNames = new HashMap<String, Component>();
+                mutNames.put(nameKey, customName);
+                stack.set(HexDataComponents.PAGE_NAMES, mutNames);
+            }
+        } else if(savedNames != null) {
+            var mutNames = new HashMap<>(savedNames);
+            mutNames.remove(nameKey);
+            if(mutNames.isEmpty()) {
+                stack.remove(HexDataComponents.PAGE_NAMES);
+            } else {
+                stack.set(HexDataComponents.PAGE_NAMES, mutNames);
+            }
         }
     }
 
     public static boolean arePagesEmpty(ItemStack stack) {
-        CompoundTag tag = NBTHelper.getCompound(stack, TAG_PAGES);
-        return tag == null || tag.isEmpty();
+        var pages = stack.get(HexDataComponents.PAGES);
+        return pages == null || pages.isEmpty();
     }
 
     @Override
-    public @Nullable
-    CompoundTag readIotaTag(ItemStack stack) {
+    public @Nullable Iota readIota(ItemStack stack) {
         int idx = getPage(stack, 1);
         var key = String.valueOf(idx);
-        var tag = NBTHelper.getCompound(stack, TAG_PAGES);
-        if (tag != null && tag.contains(key, Tag.TAG_COMPOUND)) {
-            return tag.getCompound(key);
+        var pages = stack.get(HexDataComponents.PAGES);
+        if (pages != null && pages.containsKey(key)) {
+            return pages.get(key);
         } else {
             return null;
         }
@@ -146,30 +152,61 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
 
         int idx = getPage(stack, 1);
         var key = String.valueOf(idx);
-        CompoundTag pages = NBTHelper.getCompound(stack, TAG_PAGES);
+
+        var pages = stack.get(HexDataComponents.PAGES);
+
         if (pages != null) {
+            var pagesMut = new HashMap<>(pages);
+
             if (datum == null) {
-                pages.remove(key);
-                NBTHelper.remove(NBTHelper.getCompound(stack, TAG_SEALED), key);
+                pagesMut.remove(key);
+                var seals = stack.get(HexDataComponents.PAGE_SEALS);
+                if(seals != null) {
+                    var sealsMut = new HashMap<>(seals);
+
+                    sealsMut.remove(key);
+
+                    if(sealsMut.isEmpty()) {
+                        stack.remove(HexDataComponents.PAGE_SEALS);
+                    } else {
+                        stack.set(HexDataComponents.PAGE_SEALS, sealsMut);
+                    }
+                }
             } else {
-                pages.put(key, IotaType.serialize(datum));
+                pagesMut.put(key, datum);
             }
 
-            if (pages.isEmpty()) {
-                NBTHelper.remove(stack, TAG_PAGES);
+            if (pagesMut.isEmpty()) {
+                stack.remove(HexDataComponents.PAGES);
+            } else {
+                stack.set(HexDataComponents.PAGES, pagesMut);
             }
         } else if (datum != null) {
-            NBTHelper.getOrCreateCompound(stack, TAG_PAGES).put(key, IotaType.serialize(datum));
+            var map = new HashMap<String, Iota>();
+            map.put(key, datum);
+            stack.set(HexDataComponents.PAGES, map);
         } else {
-            NBTHelper.remove(NBTHelper.getCompound(stack, TAG_SEALED), key);
+            var seals = stack.get(HexDataComponents.PAGE_SEALS);
+            if(seals != null) {
+                var sealsMut = new HashMap<>(seals);
+                sealsMut.remove(key);
+
+                if(sealsMut.isEmpty()) {
+                    stack.remove(HexDataComponents.PAGE_SEALS);
+                } else {
+                    stack.set(HexDataComponents.PAGE_SEALS, sealsMut);
+                }
+            }
         }
     }
 
     public static int getPage(ItemStack stack, int ifEmpty) {
         if (arePagesEmpty(stack)) {
             return ifEmpty;
-        } else if (NBTHelper.hasNumber(stack, TAG_SELECTED_PAGE)) {
-            int index = NBTHelper.getInt(stack, TAG_SELECTED_PAGE);
+        } else if (stack.has(HexDataComponents.SELECTED_PAGE)) {
+            var index = stack.get(HexDataComponents.SELECTED_PAGE);
+            if(index == null)
+                return 1;
             if (index == 0) {
                 index = 1;
             }
@@ -183,36 +220,41 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         int index = getPage(stack, 1);
 
         String nameKey = String.valueOf(index);
-        CompoundTag names = NBTHelper.getOrCreateCompound(stack, TAG_SEALED);
+
+        var seals = stack.get(HexDataComponents.PAGE_SEALS);
+
+        var sealsMut = seals != null ? new HashMap<>(seals) : new HashMap<String, Boolean>();
 
         if (!sealed) {
-            names.remove(nameKey);
+            sealsMut.remove(nameKey);
         } else {
-            names.putBoolean(nameKey, true);
+            sealsMut.put(nameKey, true);
         }
 
-        if (names.isEmpty()) {
-            NBTHelper.remove(stack, TAG_SEALED);
+        if (sealsMut.isEmpty()) {
+            stack.remove(HexDataComponents.PAGE_SEALS);
         } else {
-            NBTHelper.putCompound(stack, TAG_SEALED, names);
+            stack.set(HexDataComponents.PAGE_SEALS, sealsMut);
         }
-
     }
 
     public static boolean isSealed(ItemStack stack) {
         int index = getPage(stack, 1);
 
         String nameKey = String.valueOf(index);
-        CompoundTag names = NBTHelper.getCompound(stack, TAG_SEALED);
-        return NBTHelper.getBoolean(names, nameKey);
+        var seals = stack.get(HexDataComponents.PAGE_SEALS);
+        if(seals == null)
+            return false;
+        var v = seals.get(nameKey);
+        return v != null && v;
     }
 
     public static int highestPage(ItemStack stack) {
-        CompoundTag tag = NBTHelper.getCompound(stack, TAG_PAGES);
-        if (tag == null) {
+        var pages = stack.get(HexDataComponents.PAGES);
+        if (pages == null) {
             return 0;
         }
-        return tag.getAllKeys().stream().flatMap(s -> {
+        return pages.keySet().stream().flatMap(s -> {
             try {
                 return Stream.of(Integer.parseInt(s));
             } catch (NumberFormatException e) {
@@ -228,16 +270,16 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
             idx = Math.max(1, idx);
         }
         idx = Mth.clamp(idx, 0, MAX_PAGES);
-        NBTHelper.putInt(stack, TAG_SELECTED_PAGE, idx);
+        stack.set(HexDataComponents.SELECTED_PAGE, idx);
 
-        CompoundTag names = NBTHelper.getCompound(stack, TAG_PAGE_NAMES);
+        var names = stack.getOrDefault(HexDataComponents.PAGE_NAMES, Collections.<String, Component>emptyMap());
         int shiftedIdx = Math.max(1, idx);
         String nameKey = String.valueOf(shiftedIdx);
-        String name = NBTHelper.getString(names, nameKey);
+        Component name = names.get(nameKey);
         if (name != null) {
-            stack.setHoverName(Component.Serializer.fromJson(name));
+            stack.set(DataComponents.CUSTOM_NAME, name);
         } else {
-            stack.resetHoverName();
+            stack.remove(DataComponents.CUSTOM_NAME);
         }
 
         return idx;
@@ -251,6 +293,6 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     @Override
     public void setVariant(ItemStack stack, int variant) {
         if (!isSealed(stack))
-            NBTHelper.putInt(stack, TAG_VARIANT, clampVariant(variant));
+            stack.set(HexDataComponents.VARIANT, clampVariant(variant));
     }
 }

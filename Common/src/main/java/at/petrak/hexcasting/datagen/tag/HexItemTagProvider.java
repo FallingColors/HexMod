@@ -4,12 +4,13 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatTags;
-import at.petrak.paucal.api.datagen.PaucalItemTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.data.tags.VanillaItemTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
@@ -18,15 +19,13 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.concurrent.CompletableFuture;
 
-public class HexItemTagProvider extends PaucalItemTagProvider {
+public class HexItemTagProvider extends ItemTagsProvider {
     private final IXplatTags xtags;
 
-    public HexItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookup, TagsProvider<Block> pBlockTagsProvider, IXplatTags xtags) {
-        super(output, lookup, HexAPI.MOD_ID, pBlockTagsProvider);
+    public HexItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookup, CompletableFuture<TagLookup<Block>> pBlockTagsProvider, IXplatTags xtags) {
+        super(output, lookup, pBlockTagsProvider, HexAPI.MOD_ID, null);
         this.xtags = xtags;
     }
-
-
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {

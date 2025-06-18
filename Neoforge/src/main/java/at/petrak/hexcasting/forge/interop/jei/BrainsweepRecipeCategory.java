@@ -1,9 +1,11 @@
 package at.petrak.hexcasting.forge.interop.jei;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
+import at.petrak.hexcasting.common.casting.actions.spells.OpEdifySapling;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -18,8 +20,6 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -44,16 +44,19 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public @NotNull
     Component getTitle() {
         return localizedName;
     }
 
     @Override
-    public @NotNull
-    IDrawable getBackground() {
-        return background;
+    public int getWidth() {
+        return background.getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        return background.getHeight();
     }
 
     @Override
@@ -63,19 +66,16 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
     }
 
     @Override
-    public @NotNull
-    List<Component> getTooltipStrings(@NotNull BrainsweepRecipe recipe,
-        @NotNull IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+    public void getTooltip(ITooltipBuilder tooltip, BrainsweepRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if (37 <= mouseX && mouseX <= 37 + 26 && 19 <= mouseY && mouseY <= 19 + 48) {
             Minecraft mc = Minecraft.getInstance();
-            return recipe.entityIn().getTooltip(mc.options.advancedItemTooltips);
+            tooltip.addAll(recipe.entityIn().getTooltip(mc.options.advancedItemTooltips));
         }
-
-        return Collections.emptyList();
     }
 
     @Override
     public void draw(@NotNull BrainsweepRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull GuiGraphics graphics, double mouseX, double mouseY) {
+        background.draw(graphics);
         ClientLevel level = Minecraft.getInstance().level;
         if (level != null) {
             var example = recipe.entityIn().exampleEntity(level);

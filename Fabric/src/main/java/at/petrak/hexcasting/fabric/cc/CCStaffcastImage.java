@@ -10,7 +10,7 @@ import net.minecraft.world.InteractionHand;
 import org.jetbrains.annotations.Nullable;
 
 public class CCStaffcastImage implements Component {
-    public static final String TAG_HARNESS = "harness";
+    public static final String TAG_VM = "harness";
 
     private final ServerPlayer owner;
     private CompoundTag lazyLoadedTag = new CompoundTag();
@@ -39,11 +39,11 @@ public class CCStaffcastImage implements Component {
 
     @Override
     public void readFromNbt(CompoundTag tag) {
-        this.lazyLoadedTag = tag.getCompound(TAG_HARNESS);
+        this.lazyLoadedTag = tag.getCompound(TAG_VM);
     }
 
     @Override
     public void writeToNbt(CompoundTag tag) {
-        tag.put(TAG_HARNESS, this.lazyLoadedTag);
+        tag.put(TAG_VM, this.lazyLoadedTag);
     }
 }

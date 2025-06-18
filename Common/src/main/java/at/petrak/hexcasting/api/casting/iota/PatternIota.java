@@ -21,11 +21,16 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.interop.inline.InlinePatternData;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
@@ -38,16 +43,15 @@ import java.util.function.Supplier;
 import static at.petrak.hexcasting.api.utils.HexUtils.isOfTag;
 
 public class PatternIota extends Iota {
+    private HexPattern value;
+
     public PatternIota(@NotNull HexPattern pattern) {
-        super(HexIotaTypes.PATTERN, pattern);
+        super(() -> HexIotaTypes.PATTERN);
+        this.value = pattern;
     }
 
     public HexPattern getPattern() {
-        return (HexPattern) this.payload;
-    }
-
-    protected PatternIota(@NotNull IotaType<?> type, @NotNull Object payload) {
-        super(type, payload);
+        return value;
     }
 
     @Override
@@ -60,11 +64,6 @@ public class PatternIota extends Iota {
         return typesMatch(this, that)
             && that instanceof PatternIota piota
             && this.getPattern().getAngles().equals(piota.getPattern().getAngles());
-    }
-
-    @Override
-    public @NotNull Tag serialize() {
-        return this.getPattern().serializeToNBT();
     }
 
     @Override
@@ -140,15 +139,31 @@ public class PatternIota extends Iota {
         return true;
     }
 
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+
+    @Override
+    public Component display() {
+        return PatternIota.display(getPattern());
+    }
+
     public static IotaType<PatternIota> TYPE = new IotaType<>() {
+        public static final MapCodec<PatternIota> CODEC = HexPattern.CODEC
+                .xmap(PatternIota::new, PatternIota::getPattern)
+                .fieldOf("value");
+        public static final StreamCodec<RegistryFriendlyByteBuf, PatternIota> STREAM_CODEC =
+                HexPattern.STREAM_CODEC.map(PatternIota::new, PatternIota::getPattern);
+
         @Override
-        public PatternIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            return PatternIota.deserialize(tag);
+        public MapCodec<PatternIota> codec() {
+            return CODEC;
         }
 
         @Override
-        public Component display(Tag tag) {
-            return PatternIota.display(PatternIota.deserialize(tag).getPattern());
+        public StreamCodec<RegistryFriendlyByteBuf, PatternIota> streamCodec() {
+            return STREAM_CODEC;
         }
 
         @Override
@@ -156,12 +171,6 @@ public class PatternIota extends Iota {
             return 0xff_ffaa00;
         }
     };
-
-    public static PatternIota deserialize(Tag tag) throws IllegalArgumentException {
-        var patTag = HexUtils.downcast(tag, CompoundTag.TYPE);
-        HexPattern pat = HexPattern.fromNBT(patTag);
-        return new PatternIota(pat);
-    }
 
     public static Component display(HexPattern pat) {
         Component text = (new InlinePatternData(pat)).asText(true);

@@ -18,7 +18,7 @@ object OpGetSentinelPos : ConstMediaAction {
         if (env.castingEntity !is ServerPlayer)
             throw MishapBadCaster()
 
-        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(env.castingEntity as? ServerPlayer) ?: return listOf(NullIota())
+        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(env.castingEntity as? ServerPlayer) ?: return listOf(NullIota.INSTANCE)
         if (sentinel.dimension != env.world.dimension())
             throw MishapLocationInWrongDimension(sentinel.dimension.location())
         return sentinel.position.asActionResult

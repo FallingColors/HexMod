@@ -46,6 +46,11 @@
       "": "Focus",
       sealed: "Sealed Focus",
     },
+
+    ancient_cypher: {
+      "": "Ancient Cypher",
+      preset: "Ancient Cypher: %s",
+    },
     
     thought_knot: "Thought-Knot",
     spellbook: "Spellbook",
@@ -252,8 +257,8 @@
   },
   
   "itemGroup.hexcasting": {
-    "": "Hexcasting",
-    creative_tab: "Hexcasting",
+    hexcasting: "Hex Casting",
+    scrolls: "Hex Casting (Scrolls)",
   },
   
   "gui.hexcasting": {
@@ -368,23 +373,42 @@
           "": "Circle Action Deny List",
           "@Tooltip": "Resource locations of disallowed actions within circles. Trying to cast one of these from a circle will result in a mishap.",
         },
+        greaterTeleportSplatsItems: {
+          "": "Greater Teleport Splats Items",
+          "@Tooltip": "Whether items should fly out of the player's inventory when using Greater Teleport"
+        },
         villagersOffendedByMindMurder: {
           "": "Villagers Offended By Mind Murder",
           "@Tooltip": "Whether villagers should be angry at the player when other villagers are mindflayed",
+        },
+        traderScrollChance: {
+          "": "Wandering Trader Scroll Chance",
+          "@Tooltip": "The chance for wandering traders to sell an Ancient Scroll",
         },
         scrollInjectionsRaw: {
           "": "Scroll Injection Weights",
           "@Tooltip": "Maps the names of loot tables to the amount of per-world patterns on scrolls should go in them. There's about a 50% chance to get any scrolls in a given chest marked here; once that is met, between 1 and that many scrolls are generated.",
         },
+        loreInjectionsRaw: {
+          "": "Lore Injection Sites",
+          "@Tooltip": "Lists the loot tables that lore fragments should be added to.",
+        },
+        loreChance: {
+          "": "Lore Fragment Chance",
+          "@Tooltip": "The chance for lore fragments to appear in any of the above loot tables.",
+        },
+        cypherInjectionsRaw: {
+          "": "Ancient Cypher Injection Sites",
+          "@Tooltip": "Lists the loot tables that ancient cyphers should be added to.",
+        },
+        cypherChance: {
+          "": "Ancient Cypher Chance",
+          "@Tooltip": "The chance for ancient cyphers to appear in any of the above loot tables.",
+        },
         amethystShardModification: {
           "": "Amethyst Shard Drop Rate Change",
           "@Tooltip": "How much the number of amethyst shards dropped from clusters is increased/decreased.",
         },
-        
-        // TODO: are these used anywhere??
-        "fewScrollTables.@Tooltip": "Loot tables that a small number of Ancient Scrolls are injected into",
-        "someScrollTables.@Tooltip": "Loot tables that a decent number of Ancient Scrolls are injected into",
-        "manyScrollTables.@Tooltip": "Loot tables that a huge number of Ancient Scrolls are injected into",
       },
     },
   },
@@ -499,6 +523,25 @@
       infinite_media: "Infinite",
     },
     
+    loot_hex: {
+      "shatter": "Shatter",
+      "kindle": "Kindle",
+      "illuminate": "Illuminate",
+      "growth": "Growth",
+      "lunge": "Lunge",
+      "sidestep": "Sidestep",
+      "ascend": "Ascend",
+      "blink": "Blink",
+      "blastoff": "Blastoff",
+      "radar": "Radar",
+      "beckon": "Beckon",
+      "detonate": "Detonate",
+      "shockwave": "Shockwave",
+      "heat_wave": "Heat Wave",
+      "wither_wave": "Wither Wave",
+      "flight_zone": "Flight Zone",
+    },
+
     // TODO: post-eigengrau make these less anticlimactic
     message: {
       cant_overcast: "That Hex needed more media than I had... I should double-check my math.",
@@ -520,6 +563,11 @@
           sealed: "Empty (%s)",
         },
         sealed: "Sealed",
+      },
+
+      scroll: {
+        needs_purchase: "Purchase to show pattern",
+        pattern_not_loaded: "Place in inventory to load pattern",
       },
       
       abacus: {
@@ -562,6 +610,7 @@
       media: "%d dust",
       media_amount: "Contains: %s (%s)",
       "media_amount.advanced": "Contains: %s/%s (%s)",
+      stored_hex: "Hex: ",
       
       list_contents: "[%s]",
       null_iota: "Null",
@@ -586,6 +635,7 @@
           add_segment: "Adding line",
         },
         cast: {
+          fail: "Mishap crunches",
           normal: "Action hums",
           spell: "Spell boinks",
           hermes: "Hermes' twangs",
@@ -614,8 +664,12 @@
     
     attributes: {
       grid_zoom: "Casting Grid Size",
+      media_consumption: "Media Consumption",
+      ambit_radius: "Player Ambit Radius",
+      sentinel_radius: "Sentinel Ambit Radius",
       // TODO: the +1 is kind of janky
       scry_sight: "Scrying Sight",
+      feeble_mind: "Feeble Mind"
     },
     
     // Action localizations
@@ -927,7 +981,7 @@
       wrong_dimension: "cannot see %s from %s",
       entity_too_far: "%s is out of range",
       immune_entity: "cannot alter %s",
-      eval_too_deep: "Recursively evaluated too deep",
+      eval_too_much: "Evaluated too many patterns",
       no_item: "needs %s but got nothing",
       "no_item.offhand": "needs %s in the other hand but got nothing",
       bad_entity: "needs %s but got %s",
@@ -1159,6 +1213,7 @@
       
       // why is this called "hexcasting"?
       hexcasting: "Casting Items",
+      ancient_cyphers: "Ancient Cyphers",
       phials: "Phials of Media",
       potions: "Hex Potions",
       pigments: "Pigments",
@@ -1383,8 +1438,8 @@
         "retrospection.title": "Hasty Retrospection",
         retrospection: "I attempted to draw $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ without first drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$.$(br2)Causes orange sparks, and pushes the pattern for $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ to the stack as a pattern iota.",
         
-        "too_deep.title": "Delve Too Deep",
-        too_deep: "Evaluated too many spells with meta-evaluation from one spell.$(br2)Causes dark blue sparks, and chokes all the air out of me.",
+        "too_many_patterns.title": "Lost in Thought",
+        too_many_patterns: "I attempted to evaluate too many patterns in one _Hex. Often, this happens because I've accidentally created an infinite loop.$(br2)Causes dark blue sparks, and chokes all the air out of me.",
         
         "true_name.title": "Transgress Other",
         true_name: "I attempted to $(l:patterns/readwrite#hexcasting:write)$(action)save a reference/$ to another player to a permanent medium.$(br2)Causes black sparks, and robs me of my sight for approximately one minute.",
@@ -1475,7 +1530,7 @@
         "2": "Like a $(l:items/focus)$(item)Focus/$, there exists a simple method to prevent accidental overwriting. Crafting it with a $(item)Honeycomb/$ will lacquer the current page, preventing $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$ from modifying its contents. Also like a $(l:items/focus)$(item)Focus/$, using $(l:patterns/spells/hexcasting#hexcasting:erase)$(action)Erase Item/$ will remove the lacquer along with the page's contents.$(br2)I can also name each page individually in an anvil. Naming it will change only the name of the currently selected page, for easy browsing.",
         "crafting.desc": "$(italic)Wizards love words. Most of them read a great deal, and indeed one strong sign of a potential wizard is the inability to get to sleep without reading something first.",
       },
-      
+
       scroll: {
         "1": "A $(l:items/scroll)$(item)Scroll/$ is a convenient method of sharing a pattern with others. I can copy a pattern onto one with $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$, after which it will display in a tooltip.$(br2)I can also place them on the wall as decoration or edification, like a painting, in sizes from 1x1 to 3x3 blocks. Using $(l:items/amethyst)$(item)Amethyst Dust/$ on such a scroll will have it display the stroke order.",
         "2": "In addition, I can also find so-called $(l:items/scroll)$(item)Ancient Scrolls/$ in the dungeons and strongholds of the world. These contain the stroke order of $(thing)Great Spells/$, powerful magicks rumored to be too powerful for the hands and minds of mortals...$(br2)If those \"mortals\" couldn't cast them, I'm not sure they deserve to know them.",
@@ -1497,6 +1552,11 @@
         "4": "$(l:items/hexcasting)$(item)Artifacts/$ are the most powerful of all-- after their _media is depleted, they can use $(l:items/amethyst)$(item)Amethyst/$ from the holder's inventory to pay for the _Hex, just as I do when casting with a $(l:items/staff)$(item)Staff/$. Of course, this also means the spell might consume their mind if there's not enough $(l:items/amethyst)$(item)Amethyst/$.$(br2)Once I've made an empty magic item in a mundane crafting bench, I infuse the _Hex into it using (what else but) a spell appropriate to the item. $(l:patterns/spells/hexcasting)I've catalogued the patterns here./$",
         "5": "Each infusion spell requires an entity and a list of patterns on the stack. The entity must be a _media-holding item entity (i.e. $(l:items/amethyst)$(item)amethyst/$ crystals, dropped on the ground); the entity is consumed and forms the battery.$(br2)Usefully, it seems that the _media in the battery is not consumed in chunks as it is when casting with a $(l:items/staff)$(item)Staff/$-- rather, the _media \"melts down\" into one continuous pool. Thus, if I store a _Hex that only costs one $(l:items/amethyst)$(item)Amethyst Dust/$'s worth of media, a $(l:items/amethyst)$(item)Charged Crystal/$ used as the battery will allow me to cast it 10 times.",
         "crafting.desc": "$(italic)We have a saying in our field: \"Magic isn't\". It doesn't \"just work,\" it doesn't respond to your thoughts, you can't throw fireballs or create a roast dinner from thin air or turn a bunch of muggers into frogs and snails./$",
+      },
+
+      ancient_cyphers: {
+        "1": "While adventuring, I've come across what appear to be $(l:items/hexcasting)$(item)Cyphers/$ created by the Hexcasters of the ancient past. These $(item)Ancient Cyphers/$ work just like the ones I can craft: they can't be recharged, and will break when their reserve of _Media runs out. However, unlike my own $(l:items/hexcasting)$(item)Cyphers/$, their decayed structure allows me to glimpse the _Hex stored within.",
+        "2": "These may be useful for learning new techniques - who better to teach me than ancient masters of the art?$(br2)Alternatively, I could erase the contents of one and store my own _Hex inside, creating a casting item that clearly displays its own function."
       },
       
       phials: {
@@ -1557,7 +1617,7 @@
       
       spellcircles: {
         "1": "I KNOW what the $(l:items/slate)$(item)slates/$ are for. The grand assemblies lost to time. The patterns scribed on them can be actuated in sequence, automatically. Thought and power ricocheting through, one by one by one by one by one by through and through and THROUGH AND -- I must not I must not I should know better than to think that way.",
-        "2": "To start the ritual I need an $(l:greatwork/impetus)$(item)Impetus/$ to create a self-sustaining wave of _media. That wave travels along a track of $(l:items/slate)$(item)slates/$ or other blocks suitable for the energies, one by one, collecting any patterns it finds. Once the wave circles back around to the $(l:greatwork/impetus)$(item)Impetus/$, all the patterns encountered are cast in order.$(br2)The direction the _media exits any given block MUST be unambiguous, or the casting will fail at the block with too many neighbors.",
+        "2": "To start the ritual I need an $(l:greatwork/impetus)$(item)Impetus/$ to create a self-sustaining wave of _media. That wave travels along a track of $(l:items/slate)$(item)slates/$ or other suitable blocks, casting any patterns it finds.$(br2)If there is no way for the wave to return to the $(l:greatwork/impetus)$(item)Impetus/$, the casting will fail immediately. Also, the direction the wave exits any given block MUST be unambiguous, or the casting will fail at the block with too many neighbors.",
         "3": "As a result, the outline of the spell \"circle\" may be any closed shape, concave or convex, and it may face any direction. In fact, with the application of certain other blocks it is possible to make a spell circle that spans all three dimensions. I doubt such an oddity has very much use, but I must allocate myself a bit of vapid levity to encourage my crude mind to continue my work.",
         "4": "Miracle of miracles, the circle will withdraw _media neither from my inventory nor my mind. Instead, crystallized shards of _media must be provided to the $(l:greatwork/impetus)$(item)Impetus/$ via hopper, or other such artifice.$(br2)The application of a $(l:items/lens)$(item)Scrying Lens/$ will show how much _media is inside an $(l:greatwork/impetus)$(item)Impetus/$, in units of dust.",
         "5": "However, a spell cast from a circle does have one major limitation: it is unable to affect anything outside of the circle's bounds. That is, it cannot interact with anything outside of the cuboid of minimum size which encloses every block composing it (so a concave spell circle can still affect things in the concavity).",

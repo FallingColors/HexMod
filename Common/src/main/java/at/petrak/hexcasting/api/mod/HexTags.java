@@ -47,6 +47,8 @@ public class HexTags {
 
         public static final TagKey<Block> CHEAP_TO_BREAK_BLOCK = create("cheap_to_break_block");
 
+        public static final TagKey<Block> HEX_UNBREAKABLE = create("hex_unbreakable");
+
         public static TagKey<Block> create(String name) {
             return TagKey.create(Registries.BLOCK, modLoc(name));
         }

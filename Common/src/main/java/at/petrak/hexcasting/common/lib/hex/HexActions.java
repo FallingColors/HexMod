@@ -275,16 +275,16 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("adaa", HexDir.WEST), OpBeep.INSTANCE));
 
     public static final ActionRegistryEntry CRAFT$CYPHER = make("craft/cypher", new ActionRegistryEntry(
-        HexPattern.fromAngles("waqqqqq", HexDir.EAST), new OpMakePackagedSpell<>(HexItems.CYPHER,
-        MediaConstants.CRYSTAL_UNIT)
+        HexPattern.fromAngles("waqqqqq", HexDir.EAST), 
+        new OpMakePackagedSpell(s -> (s.is(HexItems.CYPHER)||s.is(HexItems.ANCIENT_CYPHER)), HexItems.CYPHER.getDescription(), MediaConstants.CRYSTAL_UNIT)
     ));
     public static final ActionRegistryEntry CRAFT$TRINKET = make("craft/trinket", new ActionRegistryEntry(
-        HexPattern.fromAngles(
-            "wwaqqqqqeaqeaeqqqeaeq", HexDir.EAST), new OpMakePackagedSpell<>(HexItems.TRINKET,
-        5 * MediaConstants.CRYSTAL_UNIT)));
+        HexPattern.fromAngles("wwaqqqqqeaqeaeqqqeaeq", HexDir.EAST), 
+        new OpMakePackagedSpell(HexItems.TRINKET, 5 * MediaConstants.CRYSTAL_UNIT)
+    ));
     public static final ActionRegistryEntry CRAFT$ARTIFACT = make("craft/artifact", new ActionRegistryEntry(
         HexPattern.fromAngles("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", HexDir.EAST),
-        new OpMakePackagedSpell<>(HexItems.ARTIFACT, 10 * MediaConstants.CRYSTAL_UNIT)
+        new OpMakePackagedSpell(HexItems.ARTIFACT, 10 * MediaConstants.CRYSTAL_UNIT)
     ));
     public static final ActionRegistryEntry CRAFT$BATTERY = make("craft/battery", new ActionRegistryEntry(
         HexPattern.fromAngles("aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw", HexDir.SOUTH_WEST), OpMakeBattery.INSTANCE));
@@ -423,7 +423,7 @@ public class HexActions {
     // == Consts ==
 
     public static final ActionRegistryEntry CONST$NULL = make("const/null",
-        new ActionRegistryEntry(HexPattern.fromAngles("d", HexDir.EAST), Action.makeConstantOp(new NullIota())));
+        new ActionRegistryEntry(HexPattern.fromAngles("d", HexDir.EAST), Action.makeConstantOp(NullIota.INSTANCE)));
 
     public static final ActionRegistryEntry CONST$TRUE = make("const/true",
         new ActionRegistryEntry(HexPattern.fromAngles("aqae",

@@ -1,11 +1,13 @@
-package at.petrak.hexcasting.common.recipe.ingredient;
+package at.petrak.hexcasting.common.recipe.ingredient.state;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import net.minecraft.core.Registry;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -26,6 +28,11 @@ public class StateIngredientBlocks implements StateIngredient {
     }
 
     @Override
+    public StateIngredientType<?> getType() {
+        return StateIngredients.BLOCKS;
+    }
+
+    @Override
     public boolean test(BlockState state) {
         return blocks.contains(state.getBlock());
     }
@@ -33,28 +40,6 @@ public class StateIngredientBlocks implements StateIngredient {
     @Override
     public BlockState pick(Random random) {
         return blocks.asList().get(random.nextInt(blocks.size())).defaultBlockState();
-    }
-
-    @Override
-    public JsonObject serialize() {
-        JsonObject object = new JsonObject();
-        object.addProperty("type", "blocks");
-        JsonArray array = new JsonArray();
-        for (Block block : blocks) {
-            array.add(BuiltInRegistries.BLOCK.getKey(block).toString());
-        }
-        object.add("blocks", array);
-        return object;
-    }
-
-    @Override
-    public void write(FriendlyByteBuf buffer) {
-        List<Block> blocks = getBlocks();
-        buffer.writeVarInt(0);
-        buffer.writeVarInt(blocks.size());
-        for (Block block : blocks) {
-            buffer.writeVarInt(BuiltInRegistries.BLOCK.getId(block));
-        }
     }
 
     @Override
@@ -94,5 +79,26 @@ public class StateIngredientBlocks implements StateIngredient {
     @Override
     public int hashCode() {
         return Objects.hash(blocks);
+    }
+
+
+    public static class Type implements StateIngredientType<StateIngredientBlocks> {
+        public static final MapCodec<StateIngredientBlocks> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                BuiltInRegistries.BLOCK.byNameCodec().listOf().fieldOf("block").forGetter(StateIngredientBlocks::getBlocks)
+        ).apply(instance, StateIngredientBlocks::new));
+        public static final StreamCodec<RegistryFriendlyByteBuf, StateIngredientBlocks> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.registry(Registries.BLOCK).apply(ByteBufCodecs.list()), StateIngredientBlocks::getBlocks,
+                StateIngredientBlocks::new
+        );
+
+        @Override
+        public MapCodec<StateIngredientBlocks> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, StateIngredientBlocks> streamCodec() {
+            return STREAM_CODEC;
+        }
     }
 }

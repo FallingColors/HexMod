@@ -6,25 +6,26 @@ import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.forge.lib.ForgeHexLootMods;
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.common.loot.LootModifier;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
 public class ForgeHexScrollLootMod extends LootModifier {
-    public static final Supplier<Codec<ForgeHexScrollLootMod>> CODEC =
-        Suppliers.memoize(() -> RecordCodecBuilder.create(
+    public static final Supplier<MapCodec<ForgeHexScrollLootMod>> CODEC =
+        Suppliers.memoize(() -> RecordCodecBuilder.mapCodec(
             inst -> codecStart(inst).and(
                 Codec.INT.fieldOf("countRange").forGetter(it -> it.countRange)
             ).apply(inst, ForgeHexScrollLootMod::new)
         ));
-
+    
     public final int countRange;
 
     public ForgeHexScrollLootMod(LootItemCondition[] conditionsIn, int countRange) {
@@ -38,14 +39,14 @@ public class ForgeHexScrollLootMod extends LootModifier {
         int count = HexLootHandler.getScrollCount(this.countRange, context.getRandom());
         for (int i = 0; i < count; i++) {
             var newStack = new ItemStack(HexItems.SCROLL_LARGE);
-            AddPerWorldPatternToScrollFunc.doStatic(newStack, context);
+            AddPerWorldPatternToScrollFunc.doStatic(newStack, context.getRandom(), context.getLevel().getServer().overworld());
             generatedLoot.add(newStack);
         }
         return generatedLoot;
     }
 
     @Override
-    public Codec<? extends IGlobalLootModifier> codec() {
+    public MapCodec<? extends IGlobalLootModifier> codec() {
         return ForgeHexLootMods.INJECT_SCROLLS.get();
     }
 }

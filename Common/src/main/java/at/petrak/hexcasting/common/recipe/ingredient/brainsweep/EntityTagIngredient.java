@@ -1,17 +1,17 @@
 package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -25,6 +25,15 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
 
     public EntityTagIngredient(TagKey<EntityType<?>> tag) {
         this.entityTypeTag = tag;
+    }
+
+    @Override
+    public BrainsweepeeIngredientType<?> getType() {
+        return BrainsweepeeIngredients.TAG;
+    }
+
+    public TagKey<EntityType<?>> getTag() {
+        return entityTypeTag;
     }
 
     @Override
@@ -80,49 +89,6 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
     }
 
     @Override
-    public JsonObject serialize() {
-        var obj = new JsonObject();
-        obj.addProperty("type", Type.ENTITY_TAG.getSerializedName());
-
-        obj.addProperty("tag", this.entityTypeTag.location().toString());
-
-        return obj;
-    }
-
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeResourceLocation(this.entityTypeTag.location());
-    }
-
-    public static EntityTagIngredient deserialize(JsonObject obj) {
-        var tagLoc = ResourceLocation.tryParse(GsonHelper.getAsString(obj, "tag"));
-        if (tagLoc == null) {
-            throw new IllegalArgumentException("unknown tag " + obj);
-        }
-        var type = TagKey.create(Registries.ENTITY_TYPE, tagLoc);
-        return new EntityTagIngredient(type);
-    }
-
-    public static EntityTagIngredient read(FriendlyByteBuf buf) {
-        var typeLoc = buf.readResourceLocation();
-        var type = TagKey.create(Registries.ENTITY_TYPE, typeLoc);
-        return new EntityTagIngredient(type);
-    }
-
-    @Override
-    public Type ingrType() {
-        return Type.ENTITY_TAG;
-    }
-
-    @Override
-    public String getSomeKindOfReasonableIDForEmi() {
-        var resloc = this.entityTypeTag.location();
-        return resloc.getNamespace()
-            + "//"
-            + resloc.getPath();
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -133,5 +99,26 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
     @Override
     public int hashCode() {
         return Objects.hashCode(this.entityTypeTag);
+    }
+
+
+    public static class Type implements BrainsweepeeIngredientType<EntityTagIngredient> {
+        public static final MapCodec<EntityTagIngredient> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                TagKey.hashedCodec(Registries.ENTITY_TYPE).fieldOf("tag").forGetter(EntityTagIngredient::getTag)
+        ).apply(instance, EntityTagIngredient::new));
+        public static final StreamCodec<RegistryFriendlyByteBuf, EntityTagIngredient> STREAM_CODEC = StreamCodec.composite(
+                ResourceLocation.STREAM_CODEC.map(id -> TagKey.create(Registries.ENTITY_TYPE, id), TagKey::location), EntityTagIngredient::getTag,
+                EntityTagIngredient::new
+        );
+
+        @Override
+        public MapCodec<EntityTagIngredient> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, EntityTagIngredient> streamCodec() {
+            return STREAM_CODEC;
+        }
     }
 }

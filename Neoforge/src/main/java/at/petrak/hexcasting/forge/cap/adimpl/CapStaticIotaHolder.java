@@ -15,14 +15,7 @@ public record CapStaticIotaHolder(Function<ItemStack, Iota> provider,
 
     @Override
     public @Nullable
-    CompoundTag readIotaTag() {
-        var iota = provider.apply(stack);
-        return iota == null ? null : IotaType.serialize(iota);
-    }
-
-    @Override
-    public @Nullable
-    Iota readIota(ServerLevel world) {
+    Iota readIota() {
         return provider.apply(stack);
     }
 

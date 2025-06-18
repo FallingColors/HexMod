@@ -23,7 +23,7 @@ object OpGetSentinelWayfind : ConstMediaAction {
 
         val from = args.getVec3(0, argc)
 
-        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(env.castingEntity as? ServerPlayer) ?: return listOf(NullIota())
+        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(env.castingEntity as? ServerPlayer) ?: return listOf(NullIota.INSTANCE)
 
         if (sentinel.dimension != env.world.dimension())
             throw MishapLocationInWrongDimension(sentinel.dimension.location())
