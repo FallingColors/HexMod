@@ -31,19 +31,19 @@ public class CircleExecutionState {
     public static final String
         TAG_IMPETUS_POS = "impetus_pos",
         TAG_IMPETUS_DIR = "impetus_dir",
-        TAG_KNOWN_POSITIONS = "known_positions",
         TAG_REACHED_POSITIONS = "reached_positions",
         TAG_CURRENT_POS = "current_pos",
         TAG_ENTERED_FROM = "entered_from",
         TAG_IMAGE = "image",
         TAG_CASTER = "caster",
         TAG_PIGMENT = "pigment",
-        TAG_REACHED_NUMBER = "reached_slate";
+        TAG_REACHED_NUMBER = "reached_slate",
+        TAG_POSITIVE_POS = "positive_pos",
+        TAG_NEGATIVE_POS = "negative_pos";
 
     public final BlockPos impetusPos;
     public final Direction impetusDir;
     // Does contain the starting impetus
-    public final Set<BlockPos> knownPositions;
     public final HashSet<BlockPos> reachedPositions;
     public BlockPos currentPos;
     public Direction enteredFrom;
@@ -53,15 +53,19 @@ public class CircleExecutionState {
     // This controls the speed of the current slate
     public Long reachedSlate;
 
+    // Tracks the highest pos, and lowest pos of the AABB
+    public BlockPos positivePos;
+    public BlockPos negativePos;
+
     public final AABB bounds;
 
 
-    protected CircleExecutionState(BlockPos impetusPos, Direction impetusDir, Set<BlockPos> knownPositions,
+    protected CircleExecutionState(BlockPos impetusPos, Direction impetusDir,
        HashSet<BlockPos> reachedPositions, BlockPos currentPos, Direction enteredFrom,
-       CastingImage currentImage, @Nullable UUID caster, @Nullable FrozenPigment casterPigment, @Nullable Long reachedSlate) {
+       CastingImage currentImage, @Nullable UUID caster, @Nullable FrozenPigment casterPigment, @Nullable Long reachedSlate,
+       BlockPos positivePos, BlockPos negativePos) {
         this.impetusPos = impetusPos;
         this.impetusDir = impetusDir;
-        this.knownPositions = knownPositions;
         this.reachedPositions = reachedPositions;
         this.currentPos = currentPos;
         this.enteredFrom = enteredFrom;
@@ -70,7 +74,10 @@ public class CircleExecutionState {
         this.casterPigment = casterPigment;
         this.reachedSlate = reachedSlate;
 
-        this.bounds = BlockEntityAbstractImpetus.getBounds(new ArrayList<>(this.knownPositions));
+        this.positivePos = positivePos;
+        this.negativePos = negativePos;
+
+        this.bounds = new AABB(positivePos,negativePos);
     }
 
     public @Nullable ServerPlayer getCaster(ServerLevel world) {
@@ -148,7 +155,6 @@ public class CircleExecutionState {
             return new Result.Err<>(seenGoodPositions.get(seenGoodPositions.size() - 1));
         }
 
-        var knownPositions = new HashSet<>(seenGoodPositions);
         var reachedPositions = new HashSet<BlockPos>();
         reachedPositions.add(impetus.getBlockPos());
         var start = seenGoodPositions.get(0);
@@ -161,9 +167,11 @@ public class CircleExecutionState {
             colorizer = HexAPI.instance().getColorizer(caster);
             casterUUID = caster.getUUID();
         }
+        AABB aabb = BlockEntityAbstractImpetus.getBounds(seenGoodPositions);
         return new Result.Ok<>(
-            new CircleExecutionState(impetus.getBlockPos(), impetus.getStartDirection(), knownPositions,
-                reachedPositions, start, impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer, 0L));
+            new CircleExecutionState(impetus.getBlockPos(), impetus.getStartDirection(),
+                reachedPositions, start, impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer,
+    0L, new BlockPos((int) aabb.maxX, (int) aabb.maxY, (int) aabb.maxZ), new BlockPos((int) aabb.minX, (int) aabb.minY, (int) aabb.minZ)));
     }
 
     public CompoundTag save() {
@@ -171,12 +179,6 @@ public class CircleExecutionState {
 
         out.put(TAG_IMPETUS_POS, NbtUtils.writeBlockPos(this.impetusPos));
         out.putByte(TAG_IMPETUS_DIR, (byte) this.impetusDir.ordinal());
-
-        var knownTag = new ListTag();
-        for (var bp : this.knownPositions) {
-            knownTag.add(NbtUtils.writeBlockPos(bp));
-        }
-        out.put(TAG_KNOWN_POSITIONS, knownTag);
 
         var reachedTag = new ListTag();
         for (var bp : this.reachedPositions) {
@@ -202,11 +204,6 @@ public class CircleExecutionState {
         var startPos = NbtUtils.readBlockPos(nbt.getCompound(TAG_IMPETUS_POS));
         var startDir = Direction.values()[nbt.getByte(TAG_IMPETUS_DIR)];
 
-        var knownPositions = new HashSet<BlockPos>();
-        var knownTag = nbt.getList(TAG_KNOWN_POSITIONS, Tag.TAG_COMPOUND);
-        for (var tag : knownTag) {
-            knownPositions.add(NbtUtils.readBlockPos(HexUtils.downcast(tag, CompoundTag.TYPE)));
-        }
         var reachedPositions = new HashSet<BlockPos>();
         var reachedTag = nbt.getList(TAG_REACHED_POSITIONS, Tag.TAG_COMPOUND);
         for (var tag : reachedTag) {
@@ -226,12 +223,19 @@ public class CircleExecutionState {
             pigment = FrozenPigment.fromNBT(nbt.getCompound(TAG_PIGMENT));
 
         long reachedNumber = 0;
-        if (nbt.contains(TAG_REACHED_NUMBER, Tag.TAG_LONG)){
+        if (nbt.contains(TAG_REACHED_NUMBER, Tag.TAG_LONG))
             reachedNumber = nbt.getLong(TAG_REACHED_NUMBER);
-        }
 
-        return new CircleExecutionState(startPos, startDir, knownPositions, reachedPositions, currentPos,
-            enteredFrom, image, caster, pigment, reachedNumber);
+        BlockPos.MutableBlockPos positivePos = new BlockPos.MutableBlockPos();
+        if (nbt.contains(TAG_POSITIVE_POS))
+            positivePos.set(NbtUtils.readBlockPos(nbt.getCompound(TAG_POSITIVE_POS)));
+
+        BlockPos.MutableBlockPos negativePos = new BlockPos.MutableBlockPos();
+        if (nbt.contains(TAG_NEGATIVE_POS))
+            negativePos.set(NbtUtils.readBlockPos(nbt.getCompound(TAG_NEGATIVE_POS)));
+
+        return new CircleExecutionState(startPos, startDir, reachedPositions, currentPos,
+            enteredFrom, image, caster, pigment, reachedNumber,positivePos,negativePos);
     }
 
     /**
