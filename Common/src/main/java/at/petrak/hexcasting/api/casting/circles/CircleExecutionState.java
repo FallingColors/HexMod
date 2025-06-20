@@ -51,14 +51,14 @@ public class CircleExecutionState {
     public @Nullable UUID caster;
     public @Nullable FrozenPigment casterPigment;
     // This controls the speed of the current slate
-    public Integer reachedNumber;
+    public Long reachedSlate;
 
     public final AABB bounds;
 
 
     protected CircleExecutionState(BlockPos impetusPos, Direction impetusDir, Set<BlockPos> knownPositions,
        HashSet<BlockPos> reachedPositions, BlockPos currentPos, Direction enteredFrom,
-       CastingImage currentImage, @Nullable UUID caster, @Nullable FrozenPigment casterPigment, @Nullable Integer reachedNumber) {
+       CastingImage currentImage, @Nullable UUID caster, @Nullable FrozenPigment casterPigment, @Nullable Long reachedSlate) {
         this.impetusPos = impetusPos;
         this.impetusDir = impetusDir;
         this.knownPositions = knownPositions;
@@ -68,7 +68,7 @@ public class CircleExecutionState {
         this.currentImage = currentImage;
         this.caster = caster;
         this.casterPigment = casterPigment;
-        this.reachedNumber = reachedNumber;
+        this.reachedSlate = reachedSlate;
 
         this.bounds = BlockEntityAbstractImpetus.getBounds(new ArrayList<>(this.knownPositions));
     }
@@ -101,19 +101,22 @@ public class CircleExecutionState {
         var seenGoodPositions = new ArrayList<BlockPos>();
 
         while (!todo.isEmpty()) {
-            // Sophia/Stickia here!
-            // This block of code works well enough, it gets all the ICircleComponent that it can. However,
-            // this tries to do all the calculating in a single tick, so it can get *really* laggy for larger circles.
-            // So, this `while` would likely need to be moved into the #tick method, so it can be spread out over time during start up.
-            // Why are these comments here? Likely so Sophia can remember this for after she gets sleep, or if anyone
-            // else wants to take up the challenge. As for her system will work, but not be clean lmao
+            /*
+            Sophia/Stickia here!
+            This block of code works well enough, it gets all the ICircleComponent that it can. However,
+            this tries to do all the calculating in a single tick, so it can get *really* laggy for larger circles.
+            So, this `while` would likely need to be moved into the #tick method, so it can be spread out over time during start up.
+            Why are these comments here? Likely so Sophia can remember this for after she gets sleep, or if anyone
+            else wants to take up the challenge. As for her system will work, but not be clean lmao
 
-            // As brought up by Chloe, the slates *could* change during start up.
-            // Meaning someone could just place/remove slate at the same rate of discovery, and have World Ambit for no slate
-            // cost and generally cheating the system. What would be best would be (somehow) getting the block slate
-            // without loading the chunk its self, meaning servers wont have to handle 1000s of chunks being loaded at once
-            // and players not cheating the system.
-            // But this is easier said than done.
+            As brought up by Chloe, the slates *could* change during start up.
+            Meaning someone could just place/remove slate at the same rate of discovery, and have World Ambit for almost no slate
+            cost and generally cheating the system. What would be best would be (somehow) getting the block slate
+            without loading the chunk its self, meaning servers wont have to handle 1000s of chunks being loaded at once
+            and players not cheating the system.
+            But this is easier said than done.
+            */
+
             var pair = todo.pop();
             var enterDir = pair.getFirst();
             var herePos = pair.getSecond();
@@ -160,7 +163,7 @@ public class CircleExecutionState {
         }
         return new Result.Ok<>(
             new CircleExecutionState(impetus.getBlockPos(), impetus.getStartDirection(), knownPositions,
-                reachedPositions, start, impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer, 0));
+                reachedPositions, start, impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer, 0L));
     }
 
     public CompoundTag save() {
@@ -191,8 +194,7 @@ public class CircleExecutionState {
         if (this.casterPigment != null)
             out.put(TAG_PIGMENT, this.casterPigment.serializeToNBT());
 
-        if (this.reachedNumber != null)
-            out.putInt(TAG_REACHED_NUMBER, this.reachedNumber);
+        out.putLong(TAG_REACHED_NUMBER, this.reachedSlate);
         return out;
     }
 
@@ -223,9 +225,9 @@ public class CircleExecutionState {
         if (nbt.contains(TAG_PIGMENT, Tag.TAG_COMPOUND))
             pigment = FrozenPigment.fromNBT(nbt.getCompound(TAG_PIGMENT));
 
-        int reachedNumber = 0;
-        if (nbt.contains(TAG_REACHED_NUMBER, Tag.TAG_INT)) {
-            reachedNumber = nbt.getInt(TAG_REACHED_NUMBER);
+        long reachedNumber = 0;
+        if (nbt.contains(TAG_REACHED_NUMBER, Tag.TAG_LONG)){
+            reachedNumber = nbt.getLong(TAG_REACHED_NUMBER);
         }
 
         return new CircleExecutionState(startPos, startDir, knownPositions, reachedPositions, currentPos,
@@ -255,7 +257,7 @@ public class CircleExecutionState {
 
         executorBlockState = executor.startEnergized(this.currentPos, executorBlockState, world);
         this.reachedPositions.add(this.currentPos);
-        this.reachedNumber = this.reachedNumber +1;
+        this.reachedSlate = this.reachedSlate +1;
 
         // Do the execution!
         boolean halt = false;
@@ -314,7 +316,7 @@ public class CircleExecutionState {
      * How many ticks should pass between activations, given the number of blocks encountered so far.
      */
     protected int getTickSpeed() {
-        return Math.max(2, 10 - (this.reachedNumber - 1) / 3);
+        return Math.toIntExact(Math.max(2, 10 - (this.reachedSlate - 1) / 3));
     }
 
     public void endExecution(BlockEntityAbstractImpetus impetus) {
