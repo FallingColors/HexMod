@@ -105,7 +105,10 @@ public class CircleExecutionState {
         var todo = new Stack<Pair<Direction, BlockPos>>();
         todo.add(Pair.of(impetus.getStartDirection(), impetus.getBlockPos().relative(impetus.getStartDirection())));
         var seenGoodPosSet = new HashSet<BlockPos>();
-        var seenGoodPositions = new ArrayList<BlockPos>();
+        var positiveBlock = new BlockPos.MutableBlockPos();
+        var negativeBlock = new BlockPos.MutableBlockPos();
+        var lastBlockPos = new BlockPos.MutableBlockPos();
+        BlockPos firstBlock = null;
 
         while (!todo.isEmpty()) {
             /*
@@ -137,8 +140,23 @@ public class CircleExecutionState {
             }
 
             if (seenGoodPosSet.add(herePos)) {
+                if (firstBlock == null) {
+                    firstBlock = herePos;
+                    negativeBlock.set(firstBlock);
+                    positiveBlock.set(firstBlock);
+                }
+                lastBlockPos.set(herePos);
+                // Checks to see if it should update the most positive/negative block pos
+                if (herePos.getX() > positiveBlock.getX()) positiveBlock.setX(herePos.getX());
+                if (herePos.getX() < negativeBlock.getX()) negativeBlock.setX(herePos.getX());
+
+                if (herePos.getY() > positiveBlock.getY()) positiveBlock.setY(herePos.getY());
+                if (herePos.getY() < negativeBlock.getY()) negativeBlock.setY(herePos.getY());
+
+                if (herePos.getZ() > positiveBlock.getZ()) positiveBlock.setZ(herePos.getZ());
+                if (herePos.getZ() < negativeBlock.getZ()) negativeBlock.setZ(herePos.getZ());
+
                 // it's new
-                seenGoodPositions.add(herePos);
                 var outs = cmp.possibleExitDirections(herePos, hereBs, level);
                 for (var out : outs) {
                     todo.add(Pair.of(out, herePos.relative(out)));
@@ -146,18 +164,17 @@ public class CircleExecutionState {
             }
         }
 
-        if (seenGoodPositions.isEmpty()) {
+        if (firstBlock == null) {
             return new Result.Err<>(null);
         } else if (!seenGoodPosSet.contains(impetus.getBlockPos())) {
             // we can't enter from the side the directrix exits from, so this means we couldn't loop back.
             // the last item we tried to examine will always be a terminal slate (b/c if it wasn't,
             // then the *next* slate would be last qed)
-            return new Result.Err<>(seenGoodPositions.get(seenGoodPositions.size() - 1));
+            return new Result.Err<>(lastBlockPos);
         }
 
         var reachedPositions = new HashSet<BlockPos>();
         reachedPositions.add(impetus.getBlockPos());
-        var start = seenGoodPositions.get(0);
 
         FrozenPigment colorizer = null;
         UUID casterUUID;
@@ -167,11 +184,10 @@ public class CircleExecutionState {
             colorizer = HexAPI.instance().getColorizer(caster);
             casterUUID = caster.getUUID();
         }
-        AABB aabb = BlockEntityAbstractImpetus.getBounds(seenGoodPositions);
         return new Result.Ok<>(
             new CircleExecutionState(impetus.getBlockPos(), impetus.getStartDirection(),
-                reachedPositions, start, impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer,
-    0L, new BlockPos((int) aabb.maxX, (int) aabb.maxY, (int) aabb.maxZ), new BlockPos((int) aabb.minX, (int) aabb.minY, (int) aabb.minZ)));
+                reachedPositions, firstBlock, impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer,
+    0L, positiveBlock.move(1,1,1), negativeBlock));
     }
 
     public CompoundTag save() {
