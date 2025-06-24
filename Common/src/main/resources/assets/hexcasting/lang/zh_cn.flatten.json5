@@ -1411,7 +1411,7 @@
         "not_enough_iotas.title": "Iota 过少",
         not_enough_iotas: "该操作需要比当前栈中元素数还多的 iota。$(br2)产生淡灰色火花，并向栈顶压入缺少的参数的数量个$(l:casting/influences)$(action)垃圾/$。",
 
-        "stack_size.title": "Iota 过大",
+        "stack_size.title": "Iota 过多",
         "stack_size": "试图施放超出栈大小限制的法术。$(br2)产生黑色火花，我的整个栈变为仅含有单个$(l:casting/influences)$(action)垃圾/$。",
 
         "incorrect_iota.title": "Iota 错误",
