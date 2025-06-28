@@ -15,10 +15,10 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
@@ -131,7 +131,7 @@ public class CircleExecutionState {
             var enterDir = pair.getFirst();
             var herePos = pair.getSecond();
 
-            var hereBs = level.getBlockState(herePos);
+            BlockState hereBs = level.getLevel().getBlockState(herePos); //FUCK THIS LINE. THIS FUC-
             if (!(hereBs.getBlock() instanceof ICircleComponent cmp)) {
                 continue;
             }
@@ -213,6 +213,10 @@ public class CircleExecutionState {
             out.put(TAG_PIGMENT, this.casterPigment.serializeToNBT());
 
         out.putLong(TAG_REACHED_NUMBER, this.reachedSlate);
+
+        out.put(TAG_POSITIVE_POS,NbtUtils.writeBlockPos(this.positivePos));
+        out.put(TAG_NEGATIVE_POS,NbtUtils.writeBlockPos(this.negativePos));
+
         return out;
     }
 
