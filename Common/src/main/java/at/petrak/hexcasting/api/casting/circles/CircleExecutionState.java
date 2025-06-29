@@ -18,11 +18,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 /**
  * See {@link BlockEntityAbstractImpetus}, this is what's stored in it
@@ -109,7 +113,7 @@ public class CircleExecutionState {
         var negativeBlock = new BlockPos.MutableBlockPos();
         var lastBlockPos = new BlockPos.MutableBlockPos();
         BlockPos firstBlock = null;
-
+        HashMap<ChunkPos, ChunkAccess> chunkSet = new HashMap<>();
         while (!todo.isEmpty()) {
             /*
             Sophia/Stickia here!
@@ -131,7 +135,24 @@ public class CircleExecutionState {
             var enterDir = pair.getFirst();
             var herePos = pair.getSecond();
 
-            BlockState hereBs = level.getLevel().getBlockState(herePos); //FUCK THIS LINE. THIS FUC-
+            BlockState hereBs;
+            var chunkPos = new ChunkPos(herePos);
+
+            if (!chunkSet.containsKey(chunkPos)) {
+                var z = level.getChunkSource().getChunkFuture(chunkPos.x,chunkPos.z, ChunkStatus.EMPTY,true);
+                try {
+                    if (z.get().left().isPresent()){
+                        chunkSet.put(chunkPos,z.get().left().get());
+                        hereBs = z.get().left().get().getBlockState(herePos);
+                    } else {
+                        hereBs = level.getLevel().getBlockState(herePos);
+                    }
+                } catch (InterruptedException | ExecutionException e) {
+                    hereBs = level.getLevel().getBlockState(herePos);
+                }
+            } else {
+                hereBs = chunkSet.get(chunkPos).getBlockState(herePos);
+            }
             if (!(hereBs.getBlock() instanceof ICircleComponent cmp)) {
                 continue;
             }
