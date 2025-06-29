@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.misc.Result;
+import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import com.mojang.datafixers.util.Pair;
@@ -113,7 +114,7 @@ public class CircleExecutionState {
         var negativeBlock = new BlockPos.MutableBlockPos();
         var lastBlockPos = new BlockPos.MutableBlockPos();
         BlockPos firstBlock = null;
-        HashMap<ChunkPos, ChunkAccess> chunkSet = new HashMap<>();
+        HashMap<ChunkPos, ChunkAccess> chunkMap = new HashMap<>();
         while (!todo.isEmpty()) {
 
             var pair = todo.pop();
@@ -123,21 +124,22 @@ public class CircleExecutionState {
             BlockState hereBs;
             var chunkPos = new ChunkPos(herePos);
 
-            if (!chunkSet.containsKey(chunkPos)) {
-                var z = level.getChunkSource().getChunkFuture(chunkPos.x,chunkPos.z, ChunkStatus.EMPTY,true);
+            if (!chunkMap.containsKey(chunkPos)) { // Have we found/loaded this chunk yet?
+                var z = level.getChunkSource().getChunkFuture(chunkPos.x,chunkPos.z, ChunkStatus.EMPTY,true); // For some reason, loads almost no chunks
                 try {
-                    if (z.get().left().isPresent()){
-                        chunkSet.put(chunkPos,z.get().left().get());
+                    if (z.get().left().isPresent()){ // Has the Future computed yet?
+                        chunkMap.put(chunkPos,z.get().left().get());
                         hereBs = z.get().left().get().getBlockState(herePos);
-                    } else {
+                    } else { // If the future has not been somehow, run normal getBlockState
                         hereBs = level.getLevel().getBlockState(herePos);
                     }
-                } catch (InterruptedException | ExecutionException e) {
+                } catch (InterruptedException | ExecutionException e) { // If something goes *wrong*, run normal getBlockState
                     hereBs = level.getLevel().getBlockState(herePos);
                 }
-            } else {
-                hereBs = chunkSet.get(chunkPos).getBlockState(herePos);
+            } else { // Oh good! We found this chunk already, get it from the HashMap
+                hereBs = chunkMap.get(chunkPos).getBlockState(herePos);
             }
+
             if (!(hereBs.getBlock() instanceof ICircleComponent cmp)) {
                 continue;
             }
@@ -162,11 +164,16 @@ public class CircleExecutionState {
                 if (herePos.getZ() > positiveBlock.getZ()) positiveBlock.setZ(herePos.getZ());
                 if (herePos.getZ() < negativeBlock.getZ()) negativeBlock.setZ(herePos.getZ());
 
-                // it's new
+                // It's new
                 var outs = cmp.possibleExitDirections(herePos, hereBs, level);
                 for (var out : outs) {
                     todo.add(Pair.of(out, herePos.relative(out)));
                 }
+            }
+
+            // Who would leave out the config limit? If this is forgotten, someone could make a Spell Circle the size of a world
+            if (seenGoodPosSet.size() >= HexConfig.server().maxSpellCircleLength()){
+                return new Result.Err<>(null);
             }
         }
 
