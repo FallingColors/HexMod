@@ -11,10 +11,10 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -147,7 +147,7 @@ public interface ICircleComponent {
      */
     default void fakeThrowMishap(BlockPos pos, BlockState bs, CastingImage image, CircleCastEnv env, Mishap mishap) {
         Mishap.Context errorCtx = new Mishap.Context(null,
-            bs.getBlock().getName().append(" (").append(Component.literal(pos.toShortString())).append(")"));
+            bs.getBlock().getName().withStyle(ChatFormatting.LIGHT_PURPLE));
         var sideEffect = new OperatorSideEffect.DoMishap(mishap, errorCtx);
         var vm = new CastingVM(image, env);
         sideEffect.performEffect(vm);

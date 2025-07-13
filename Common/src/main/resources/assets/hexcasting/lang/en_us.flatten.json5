@@ -1105,10 +1105,10 @@
         sapling: "a sapling",
         replaceable: "somewhere to place a block",
       },
-      
-      "circle.bool_directrix": {
-        no_bool: "the iota encountered at %s was %s, not a bool",
-        empty_stack: "the stack was empty at %s",
+
+      circle: {
+        empty_stack: "expected %s or more arguments but the stack was empty at %s",
+        invalid_value: "expected %s at index %s of the stack at %s, but got %s"
       },
     },
     // ^ mishap

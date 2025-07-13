@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.Mishap
 import at.petrak.hexcasting.api.pigment.FrozenPigment
+import net.minecraft.ChatFormatting
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
@@ -21,5 +22,7 @@ class MishapBoolDirectrixNotBool(
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component =
-        error("circle.bool_directrix_no_bool", pos.toShortString(), perpetrator.display())
+        error("circle.invalid_value", "boolean", 0,
+            Component.literal("(").append(pos.toShortString()).append(")").withStyle(ChatFormatting.RED),
+            perpetrator.display())
 }
