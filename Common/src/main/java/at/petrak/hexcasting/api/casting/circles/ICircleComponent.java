@@ -151,6 +151,8 @@ public interface ICircleComponent {
         var sideEffect = new OperatorSideEffect.DoMishap(mishap, errorCtx);
         var vm = new CastingVM(image, env);
         sideEffect.performEffect(vm);
+        if (env.getImpetus() != null)
+            env.getImpetus().postMishap(mishap.errorMessageWithName(env,errorCtx));
     }
 
     abstract sealed class ControlFlow {
