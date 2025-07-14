@@ -695,6 +695,7 @@
             pi: "Arc's Reflection",
             tau: "Circle's Reflection",
             "e": "Euler's Reflection",
+            "phi": "Harmony Reflection",
           },
         },
         
@@ -1788,6 +1789,7 @@
           tau: "Adds τ, the radial representation of a complete circle, to the stack.",
           pi: "Adds π, the radial representation of half a circle, to the stack.",
           "e": "Adds $(italic)e/$, the base of natural logarithms, to the stack.",
+          "phi": "Adds $(italic)φ/$, the ratio of a whole to its greater part, to the stack.",
         },
       },
       
