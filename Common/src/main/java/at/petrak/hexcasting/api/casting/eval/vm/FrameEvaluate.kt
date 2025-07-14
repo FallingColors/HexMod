@@ -21,7 +21,7 @@ import net.minecraft.server.level.ServerLevel
  */
 data class FrameEvaluate(val list: Vector<Iota>, val isMetacasting: Boolean) : ContinuationFrame {
     // Discard this frame and keep discarding frames.
-    override fun breakDownwards(stack: List<Iota>) = false to stack
+    override fun breakDownwards(stack: Vector<Iota>) = false to stack
 
     // Step the list of patterns, evaluating a single one.
     override fun evaluate(

@@ -35,7 +35,7 @@ interface ContinuationFrame {
      * In other words, we should consume Evaluate frames until we hit a FinishEval or Thoth frame.
      * @return whether the break should stop here, alongside the new stack state (e.g. for finalizing a Thoth)
      */
-    fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>>
+    fun breakDownwards(stack: Vector<Iota>): Pair<Boolean, Vector<Iota>>
 
     /**
      * Serializes this frame. Used for things like delays, where we pause execution.

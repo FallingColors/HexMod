@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.item.ItemStack
 
@@ -13,7 +14,7 @@ object OpErase : SpellAction {
     override val argc = 0
 
     override fun execute(
-            args: List<Iota>,
+            args: Vector<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
         val (handStack) = env.getHeldItemToOperateOn {

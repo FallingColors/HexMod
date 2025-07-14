@@ -10,6 +10,7 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexTags
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.api.utils.extractMedia
 import at.petrak.hexcasting.api.utils.isMediaItem
 import at.petrak.hexcasting.common.items.magic.ItemMediaHolder
@@ -23,7 +24,7 @@ object OpMakeBattery : SpellAction {
     override val argc = 1
 
     override fun execute(
-            args: List<Iota>,
+            args: Vector<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
         val entity = args.getItemEntity(0, argc)

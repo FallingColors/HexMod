@@ -12,6 +12,7 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapBadBrainsweep
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
 import at.petrak.hexcasting.ktxt.tellWitnessesThatIWasMurdered
@@ -32,7 +33,7 @@ object OpBrainsweep : SpellAction {
     override fun hasCastingSound(ctx: CastingEnvironment) = false
 
     override fun execute(
-            args: List<Iota>,
+            args: Vector<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
         val sacrifice = args.getMob(0, argc)

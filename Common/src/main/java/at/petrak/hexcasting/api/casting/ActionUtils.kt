@@ -23,7 +23,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
-fun List<Iota>.getDouble(idx: Int, argc: Int = 0): Double {
+fun Vector<Iota>.getDouble(idx: Int, argc: Int = 0): Double {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is DoubleIota) {
         return x.double
@@ -33,7 +33,7 @@ fun List<Iota>.getDouble(idx: Int, argc: Int = 0): Double {
     }
 }
 
-fun List<Iota>.getEntity(idx: Int, argc: Int = 0): Entity {
+fun Vector<Iota>.getEntity(idx: Int, argc: Int = 0): Entity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
         return x.entity
@@ -42,7 +42,7 @@ fun List<Iota>.getEntity(idx: Int, argc: Int = 0): Entity {
     }
 }
 
-fun List<Iota>.getList(idx: Int, argc: Int = 0): Vector<Iota> {
+fun Vector<Iota>.getList(idx: Int, argc: Int = 0): Vector<Iota> {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is ListIota) {
         return x.list
@@ -51,7 +51,7 @@ fun List<Iota>.getList(idx: Int, argc: Int = 0): Vector<Iota> {
     }
 }
 
-fun List<Iota>.getPattern(idx: Int, argc: Int = 0): HexPattern {
+fun Vector<Iota>.getPattern(idx: Int, argc: Int = 0): HexPattern {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is PatternIota) {
         return x.pattern
@@ -60,7 +60,7 @@ fun List<Iota>.getPattern(idx: Int, argc: Int = 0): HexPattern {
     }
 }
 
-fun List<Iota>.getVec3(idx: Int, argc: Int = 0): Vec3 {
+fun Vector<Iota>.getVec3(idx: Int, argc: Int = 0): Vec3 {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is Vec3Iota) {
         return x.vec3
@@ -69,7 +69,7 @@ fun List<Iota>.getVec3(idx: Int, argc: Int = 0): Vec3 {
     }
 }
 
-fun List<Iota>.getBool(idx: Int, argc: Int = 0): Boolean {
+fun Vector<Iota>.getBool(idx: Int, argc: Int = 0): Boolean {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is BooleanIota) {
         return x.bool
@@ -80,7 +80,7 @@ fun List<Iota>.getBool(idx: Int, argc: Int = 0): Boolean {
 
 // Helpers
 
-fun List<Iota>.getItemEntity(idx: Int, argc: Int = 0): ItemEntity {
+fun Vector<Iota>.getItemEntity(idx: Int, argc: Int = 0): ItemEntity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
         val e = x.entity
@@ -90,7 +90,7 @@ fun List<Iota>.getItemEntity(idx: Int, argc: Int = 0): ItemEntity {
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.item")
 }
 
-fun List<Iota>.getPlayer(idx: Int, argc: Int = 0): ServerPlayer {
+fun Vector<Iota>.getPlayer(idx: Int, argc: Int = 0): ServerPlayer {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
         val e = x.entity
@@ -100,7 +100,7 @@ fun List<Iota>.getPlayer(idx: Int, argc: Int = 0): ServerPlayer {
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.player")
 }
 
-fun List<Iota>.getMob(idx: Int, argc: Int = 0): Mob {
+fun Vector<Iota>.getMob(idx: Int, argc: Int = 0): Mob {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
         val e = x.entity
@@ -110,7 +110,7 @@ fun List<Iota>.getMob(idx: Int, argc: Int = 0): Mob {
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.mob")
 }
 
-fun List<Iota>.getLivingEntityButNotArmorStand(idx: Int, argc: Int = 0): LivingEntity {
+fun Vector<Iota>.getLivingEntityButNotArmorStand(idx: Int, argc: Int = 0): LivingEntity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
         val e = x.entity
@@ -120,7 +120,7 @@ fun List<Iota>.getLivingEntityButNotArmorStand(idx: Int, argc: Int = 0): LivingE
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity.living")
 }
 
-fun List<Iota>.getPositiveDouble(idx: Int, argc: Int = 0): Double {
+fun Vector<Iota>.getPositiveDouble(idx: Int, argc: Int = 0): Double {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is DoubleIota) {
         val double = x.double
@@ -131,7 +131,7 @@ fun List<Iota>.getPositiveDouble(idx: Int, argc: Int = 0): Double {
     throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "double.positive")
 }
 
-fun List<Iota>.getPositiveDoubleUnder(idx: Int, max: Double, argc: Int = 0): Double {
+fun Vector<Iota>.getPositiveDoubleUnder(idx: Int, max: Double, argc: Int = 0): Double {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is DoubleIota) {
         val double = x.double
@@ -142,7 +142,7 @@ fun List<Iota>.getPositiveDoubleUnder(idx: Int, max: Double, argc: Int = 0): Dou
     throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "double.positive.less", max)
 }
 
-fun List<Iota>.getPositiveDoubleUnderInclusive(idx: Int, max: Double, argc: Int = 0): Double {
+fun Vector<Iota>.getPositiveDoubleUnderInclusive(idx: Int, max: Double, argc: Int = 0): Double {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is DoubleIota) {
         val double = x.double
@@ -153,7 +153,7 @@ fun List<Iota>.getPositiveDoubleUnderInclusive(idx: Int, max: Double, argc: Int 
     throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "double.positive.less.equal", max)
 }
 
-fun List<Iota>.getDoubleBetween(idx: Int, min: Double, max: Double, argc: Int = 0): Double {
+fun Vector<Iota>.getDoubleBetween(idx: Int, min: Double, max: Double, argc: Int = 0): Double {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is DoubleIota) {
         val double = x.double
@@ -164,7 +164,7 @@ fun List<Iota>.getDoubleBetween(idx: Int, min: Double, max: Double, argc: Int = 
     throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "double.between", min, max)
 }
 
-fun List<Iota>.getInt(idx: Int, argc: Int = 0): Int {
+fun Vector<Iota>.getInt(idx: Int, argc: Int = 0): Int {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is DoubleIota) {
         val double = x.double
@@ -176,7 +176,7 @@ fun List<Iota>.getInt(idx: Int, argc: Int = 0): Int {
     throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int")
 }
 
-fun List<Iota>.getLong(idx: Int, argc: Int = 0): Long {
+fun Vector<Iota>.getLong(idx: Int, argc: Int = 0): Long {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is DoubleIota) {
         val double = x.double
@@ -188,7 +188,7 @@ fun List<Iota>.getLong(idx: Int, argc: Int = 0): Long {
     throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int") // shh we're lying
 }
 
-fun List<Iota>.getPositiveInt(idx: Int, argc: Int = 0): Int {
+fun Vector<Iota>.getPositiveInt(idx: Int, argc: Int = 0): Int {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is DoubleIota) {
         val double = x.double
@@ -200,7 +200,7 @@ fun List<Iota>.getPositiveInt(idx: Int, argc: Int = 0): Int {
     throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.positive")
 }
 
-fun List<Iota>.getPositiveLong(idx: Int, argc: Int = 0): Long {
+fun Vector<Iota>.getPositiveLong(idx: Int, argc: Int = 0): Long {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is DoubleIota) {
         val double = x.double
@@ -212,7 +212,7 @@ fun List<Iota>.getPositiveLong(idx: Int, argc: Int = 0): Long {
     throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.positive")
 }
 
-fun List<Iota>.getPositiveIntUnder(idx: Int, max: Int, argc: Int = 0): Int {
+fun Vector<Iota>.getPositiveIntUnder(idx: Int, max: Int, argc: Int = 0): Int {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is DoubleIota) {
         val double = x.double
@@ -224,7 +224,7 @@ fun List<Iota>.getPositiveIntUnder(idx: Int, max: Int, argc: Int = 0): Int {
     throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.positive.less", max)
 }
 
-fun List<Iota>.getPositiveIntUnderInclusive(idx: Int, max: Int, argc: Int = 0): Int {
+fun Vector<Iota>.getPositiveIntUnderInclusive(idx: Int, max: Int, argc: Int = 0): Int {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is DoubleIota) {
         val double = x.double
@@ -236,7 +236,7 @@ fun List<Iota>.getPositiveIntUnderInclusive(idx: Int, max: Int, argc: Int = 0): 
     throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.positive.less.equal", max)
 }
 
-fun List<Iota>.getIntBetween(idx: Int, min: Int, max: Int, argc: Int = 0): Int {
+fun Vector<Iota>.getIntBetween(idx: Int, min: Int, max: Int, argc: Int = 0): Int {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is DoubleIota) {
         val double = x.double
@@ -248,7 +248,7 @@ fun List<Iota>.getIntBetween(idx: Int, min: Int, max: Int, argc: Int = 0): Int {
     throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.between", min, max)
 }
 
-fun List<Iota>.getBlockPos(idx: Int, argc: Int = 0): BlockPos {
+fun Vector<Iota>.getBlockPos(idx: Int, argc: Int = 0): BlockPos {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is Vec3Iota) {
         return BlockPos.containing(x.vec3)
@@ -257,7 +257,7 @@ fun List<Iota>.getBlockPos(idx: Int, argc: Int = 0): BlockPos {
     throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "vector")
 }
 
-fun List<Iota>.getNumOrVec(idx: Int, argc: Int = 0): Either<Double, Vec3> {
+fun Vector<Iota>.getNumOrVec(idx: Int, argc: Int = 0): Either<Double, Vec3> {
     val datum = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     return when (datum) {
         is DoubleIota -> Either.left(datum.double)
@@ -270,7 +270,7 @@ fun List<Iota>.getNumOrVec(idx: Int, argc: Int = 0): Either<Double, Vec3> {
     }
 }
 
-fun List<Iota>.getLongOrList(idx: Int, argc: Int = 0): Either<Long, Vector<Iota>> {
+fun Vector<Iota>.getLongOrList(idx: Int, argc: Int = 0): Either<Long, Vector<Iota>> {
     val datum = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (datum is DoubleIota) {
         val double = datum.double
@@ -309,15 +309,15 @@ fun aplKinnie(operatee: Either<Double, Vec3>, fn: DoubleUnaryOperator): Iota =
         { vec -> Vec3Iota(Vec3(fn.applyAsDouble(vec.x), fn.applyAsDouble(vec.y), fn.applyAsDouble(vec.z))) }
     )
 
-inline val Boolean.asActionResult get() = listOf(BooleanIota(this))
-inline val Double.asActionResult get() = listOf(DoubleIota(this))
-inline val Number.asActionResult get() = listOf(DoubleIota(this.toDouble()))
+inline val Boolean.asActionResult: Vector<Iota> get() = Vector.from(listOf(BooleanIota(this)))
+inline val Double.asActionResult: Vector<Iota> get() = Vector.from(listOf(DoubleIota(this)))
+inline val Number.asActionResult: Vector<Iota> get() = Vector.from(listOf(DoubleIota(this.toDouble())))
 
-inline val List<Iota>.asActionResult get() = listOf(ListIota(Vector.from(this)))
+inline val Vector<Iota>.asActionResult: Vector<Iota> get() = Vector.from(listOf(ListIota(this)))
 
-inline val BlockPos.asActionResult get() = listOf(Vec3Iota(Vec3.atCenterOf(this)))
-inline val Vector3f.asActionResult get() = listOf(Vec3Iota(Vec3(this)))
-inline val Vec3.asActionResult get() = listOf(Vec3Iota(this))
+inline val BlockPos.asActionResult: Vector<Iota> get() = Vector.from(listOf(Vec3Iota(Vec3.atCenterOf(this))))
+inline val Vector3f.asActionResult: Vector<Iota> get() = Vector.from(listOf(Vec3Iota(Vec3(this))))
+inline val Vec3.asActionResult: Vector<Iota> get() = Vector.from(listOf(Vec3Iota(this)))
 
-inline val Entity?.asActionResult get() = listOf(if (this == null) NullIota() else EntityIota(this))
-inline val HexPattern.asActionResult get() = listOf(PatternIota(this))
+inline val Entity?.asActionResult: Vector<Iota> get() = Vector.from(listOf(if (this == null) NullIota() else EntityIota(this)))
+inline val HexPattern.asActionResult: Vector<Iota> get() = Vector.from(listOf(PatternIota(this)))

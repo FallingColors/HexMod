@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.circle.MishapNoSpellCircle
+import at.petrak.hexcasting.api.utils.Vector
 
 // TODO: we now have the interesting potential to add *other* spell circle getters, like the current position
 // of the eval. Hmm hm hm.
@@ -14,7 +15,7 @@ import at.petrak.hexcasting.api.casting.mishaps.circle.MishapNoSpellCircle
 object OpImpetusDir : ConstMediaAction {
     override val argc = 0
 
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
+    override fun execute(args: Vector<Iota>, ctx: CastingEnvironment): Vector<Iota> {
         if (ctx !is CircleCastEnv)
             throw MishapNoSpellCircle()
 

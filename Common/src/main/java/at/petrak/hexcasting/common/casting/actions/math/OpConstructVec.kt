@@ -5,11 +5,12 @@ import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getDouble
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.utils.Vector
 import net.minecraft.world.phys.Vec3
 
 object OpConstructVec : ConstMediaAction {
     override val argc = 3
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+    override fun execute(args: Vector<Iota>, env: CastingEnvironment): Vector<Iota> {
         val x = args.getDouble(0, argc)
         val y = args.getDouble(1, argc)
         val z = args.getDouble(2, argc)

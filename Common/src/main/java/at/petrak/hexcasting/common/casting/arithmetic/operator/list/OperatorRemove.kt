@@ -14,11 +14,10 @@ import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.*
 object OperatorRemove : OperatorBasic(2, IotaMultiPredicate.pair(IotaPredicate.ofType(LIST), IotaPredicate.ofType(DOUBLE))) {
     override fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator().withIndex()
-        val list = it.nextList(arity).toMutableList()
+        val list = it.nextList(arity)
         val index = it.nextInt(arity)
         if (index < 0 || index >= list.size)
             return list.asActionResult
-        list.removeAt(index)
-        return list.asActionResult
+        return list.take(index).appendedAll(list.drop(index + 1)).asActionResult
     }
 }

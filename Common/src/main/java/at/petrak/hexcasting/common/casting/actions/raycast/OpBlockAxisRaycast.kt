@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.utils.Vector
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
@@ -15,7 +16,7 @@ import net.minecraft.world.phys.Vec3
 object OpBlockAxisRaycast : ConstMediaAction {
     override val argc = 2
     override val mediaCost: Long = MediaConstants.DUST_UNIT / 100
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+    override fun execute(args: Vector<Iota>, env: CastingEnvironment): Vector<Iota> {
         val origin = args.getVec3(0, argc)
         val look = args.getVec3(1, argc)
 
@@ -35,7 +36,7 @@ object OpBlockAxisRaycast : ConstMediaAction {
         return if (blockHitResult.type == HitResult.Type.BLOCK && env.isVecInRange(Vec3.atCenterOf(blockHitResult.blockPos))) {
             blockHitResult.direction.step().asActionResult
         } else {
-            listOf(NullIota())
+            Vector.from(listOf(NullIota()))
         }
     }
 }

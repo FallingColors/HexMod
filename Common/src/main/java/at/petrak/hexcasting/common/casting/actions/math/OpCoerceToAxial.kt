@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getNumOrVec
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.utils.Vector
 import net.minecraft.core.Direction
 import net.minecraft.world.phys.Vec3
 import kotlin.math.sign
@@ -13,7 +14,7 @@ object OpCoerceToAxial : ConstMediaAction {
     override val argc: Int
         get() = 1
 
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+    override fun execute(args: Vector<Iota>, env: CastingEnvironment): Vector<Iota> {
         val value = args.getNumOrVec(0, argc)
         return value.map({ num ->
             num.sign.asActionResult

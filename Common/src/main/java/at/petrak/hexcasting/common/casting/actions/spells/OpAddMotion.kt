@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.getEntity
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.utils.Vector
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.Vec3
@@ -21,7 +22,7 @@ object OpAddMotion : SpellAction {
     val MAX_MOTION: Double = 8192.0
 
     override fun executeWithUserdata(
-            args: List<Iota>,
+            args: Vector<Iota>,
             env: CastingEnvironment,
             userData: CompoundTag
     ): SpellAction.Result {
@@ -51,7 +52,7 @@ object OpAddMotion : SpellAction {
         )
     }
 
-    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+    override fun execute(args: Vector<Iota>, env: CastingEnvironment): SpellAction.Result {
         throw IllegalStateException()
     }
 

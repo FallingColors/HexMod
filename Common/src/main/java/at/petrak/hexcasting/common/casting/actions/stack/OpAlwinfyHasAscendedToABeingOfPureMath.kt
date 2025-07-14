@@ -7,19 +7,18 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.getPositiveLong
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import it.unimi.dsi.fastutil.longs.LongArrayList
 
 // "lehmer code"
 object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stack = image.stack.toMutableList()
-
-        if (stack.isEmpty())
+        if (image.stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0)
 
-        val code = stack.getPositiveLong(stack.lastIndex)
-        stack.removeLast()
+        val code = image.stack.getPositiveLong(image.stack.lastIndex)
+        val stack = image.stack.init()
 
         val strides = LongArrayList()
         for (f in FactorialIter()) {
@@ -31,7 +30,10 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
 
         if (strides.size > stack.size)
             throw MishapNotEnoughArgs(strides.size + 1, stack.size + 1)
-        var editTarget = stack.subList(stack.size - strides.size, stack.size)
+
+        val base = stack.dropRight(strides.size)
+        val editSlice = stack.takeRight(strides.size).toMutableList()
+        var editTarget = editSlice
         val swap = editTarget.toMutableList()
         var radix = code
         for (divisor in strides.asReversed()) {
@@ -42,7 +44,9 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
             editTarget = editTarget.subList(1, editTarget.size)
         }
 
-        val image2 = image.withUsedOp().copy(stack = stack)
+        val result = base.appendedAll(Vector.from(editSlice))
+
+        val image2 = image.withUsedOp().copy(stack = result)
         return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
     }
 

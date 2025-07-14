@@ -59,6 +59,6 @@ object ListArithmetic : Arithmetic {
 
     private fun make2(op: BinaryOperator<Vector<Iota>>): OperatorBinary = OperatorBinary(all(IotaPredicate.ofType(LIST)))
     { i: Iota, j: Iota -> ListIota(
-        op.apply(downcast(i, LIST).list, downcast(j, LIST).list)
+            op.apply(downcast(i, LIST).list, downcast(j, LIST).list)
     ) }
 }

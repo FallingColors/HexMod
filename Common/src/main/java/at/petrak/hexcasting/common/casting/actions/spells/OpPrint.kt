@@ -14,14 +14,14 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 // TODO should this dump the whole stack
 object OpPrint : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stack = image.stack.toMutableList()
+        val stack = image.stack
 
         if (stack.isEmpty()) {
             throw MishapNotEnoughArgs(1, 0)
         }
         val datum = stack[stack.lastIndex]
 
-        val image2 = image.withUsedOp().copy(stack = stack)
+        val image2 = image.withUsedOp()
         return OperationResult(
             image2,
             listOf(

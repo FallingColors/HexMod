@@ -6,12 +6,13 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.circle.MishapNoSpellCircle
+import at.petrak.hexcasting.api.utils.Vector
 import net.minecraft.world.phys.Vec3
 
 class OpCircleBounds(val max: Boolean) : ConstMediaAction {
     override val argc = 0
 
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+    override fun execute(args: Vector<Iota>, env: CastingEnvironment): Vector<Iota> {
         if (env !is CircleCastEnv)
             throw MishapNoSpellCircle()
         val circle = env.impetus ?: throw MishapNoSpellCircle()

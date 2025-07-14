@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.Mishap
 import at.petrak.hexcasting.api.pigment.FrozenPigment
+import at.petrak.hexcasting.api.utils.Vector
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
@@ -25,7 +26,7 @@ class MishapNoSpellCircle : Mishap() {
         }
     }
 
-    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+    override fun executeReturnStack(env: CastingEnvironment, errorCtx: Context, stack: Vector<Iota>): Vector<Iota> {
         val caster = env.castingEntity as? ServerPlayer
         if (caster != null) {
             // FIXME: handle null caster case
@@ -35,6 +36,7 @@ class MishapNoSpellCircle : Mishap() {
                 !EnchantmentHelper.hasBindingCurse(it)
             }
         }
+        return stack
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =

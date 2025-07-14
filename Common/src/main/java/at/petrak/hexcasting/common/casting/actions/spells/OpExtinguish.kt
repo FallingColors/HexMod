@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.ktxt.UseOnContext
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
@@ -25,7 +26,7 @@ import net.minecraft.world.phys.Vec3
 object OpExtinguish : SpellAction {
     override val argc = 1
     override fun execute(
-            args: List<Iota>,
+            args: Vector<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
         // TODO: sho

@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -29,7 +30,7 @@ object OpPlaceBlock : SpellAction {
         get() = 1
 
     override fun execute(
-        args: List<Iota>,
+        args: Vector<Iota>,
         env: CastingEnvironment
     ): SpellAction.Result {
         val pos = args.getBlockPos(0, argc)

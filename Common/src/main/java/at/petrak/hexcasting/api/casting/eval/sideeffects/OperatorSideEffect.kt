@@ -66,7 +66,7 @@ sealed class OperatorSideEffect {
                 )
             )
 
-            harness.image = harness.image.copy(stack = mishap.executeReturnStack(harness.env, errorCtx, harness.image.stack.toMutableList()))
+            harness.image = harness.image.copy(stack = mishap.executeReturnStack(harness.env, errorCtx, harness.image.stack))
         }
     }
 }

@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.castables.SpecialHandler
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.math.HexPattern
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.lightPurple
 import at.petrak.hexcasting.common.lib.hex.HexSpecialHandlers
@@ -28,7 +29,7 @@ class SpecialHandlerNumberLiteral(val x: Double) : SpecialHandler {
     class InnerAction(val x: Double) : ConstMediaAction {
         override val argc = 0
 
-        override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+        override fun execute(args: Vector<Iota>, env: CastingEnvironment): Vector<Iota> {
             return this.x.asActionResult
         }
     }

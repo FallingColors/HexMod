@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.Mishap
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import java.util.function.Consumer
 
@@ -14,14 +15,14 @@ abstract class OperatorBasic(arity: Int, accepts: IotaMultiPredicate) : Operator
 
     @Throws(Mishap::class)
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stack = image.stack.toMutableList()
-        val args = stack.takeLast(arity)
-        repeat(arity) { stack.removeLast() }
+        val stack = Vector.VectorBuilder<Iota>()
+        stack.addAll(image.stack.dropRight(arity))
+        val args = image.stack.takeRight(arity)
 
         val ret = apply(args, env)
-        ret.forEach(Consumer { e: Iota -> stack.add(e) })
+        ret.forEach(Consumer { e: Iota -> stack.addOne(e) })
 
-        val image2 = image.copy(stack = stack, opsConsumed = image.opsConsumed + 1)
+        val image2 = image.copy(stack = stack.result(), opsConsumed = image.opsConsumed + 1)
         return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
     }
 

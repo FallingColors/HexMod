@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.utils.Vector
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
@@ -12,7 +13,7 @@ import java.util.function.Predicate
 
 class OpGetEntityAt(val checker: Predicate<Entity>) : ConstMediaAction {
     override val argc = 1
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+    override fun execute(args: Vector<Iota>, env: CastingEnvironment): Vector<Iota> {
         val pos = args.getVec3(0, argc)
         env.assertVecInRange(pos)
         val aabb = AABB(pos.add(Vec3(-0.5, -0.5, -0.5)), pos.add(Vec3(0.5, 0.5, 0.5)))

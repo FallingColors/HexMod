@@ -6,12 +6,13 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getDouble
 import at.petrak.hexcasting.api.casting.iota.DoubleIota
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.utils.Vector
 import java.util.function.BiPredicate
 
 class OpCompare(val acceptsEqual: Boolean, val cmp: BiPredicate<Double, Double>) : ConstMediaAction {
     override val argc = 2
 
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+    override fun execute(args: Vector<Iota>, env: CastingEnvironment): Vector<Iota> {
         val lhs = args.getDouble(0, argc)
         val rhs = args.getDouble(1, argc)
         if (DoubleIota.tolerates(lhs, rhs))

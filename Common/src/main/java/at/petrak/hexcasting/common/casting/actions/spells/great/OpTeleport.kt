@@ -12,6 +12,7 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.msgs.MsgBlinkS2C
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
@@ -28,7 +29,7 @@ import net.minecraft.world.phys.Vec3
 object OpTeleport : SpellAction {
     override val argc = 2
     override fun execute(
-            args: List<Iota>,
+            args: Vector<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
 

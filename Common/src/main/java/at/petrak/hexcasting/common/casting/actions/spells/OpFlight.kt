@@ -10,6 +10,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.pigment.FrozenPigment
 import at.petrak.hexcasting.api.player.FlightAbility
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.lib.HexItems
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -28,7 +29,7 @@ import kotlin.math.roundToLong
 class OpFlight(val type: Type) : SpellAction {
     override val argc = 2
     override fun execute(
-            args: List<Iota>,
+            args: Vector<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
         val target = args.getPlayer(0, argc)

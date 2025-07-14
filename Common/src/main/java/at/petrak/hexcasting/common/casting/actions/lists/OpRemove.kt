@@ -6,13 +6,14 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getInt
 import at.petrak.hexcasting.api.casting.getList
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.utils.Vector
 
 object OpRemove : ConstMediaAction {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
-        val list = args.getList(0, argc).toMutableList()
+    override fun execute(args: Vector<Iota>, env: CastingEnvironment): Vector<Iota> {
+        val list = args.getList(0, argc)
         val index = args.getInt(1, argc)
         if (index < 0 || index >= list.size)
             return list.asActionResult

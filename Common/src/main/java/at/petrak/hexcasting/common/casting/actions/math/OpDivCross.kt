@@ -6,13 +6,14 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getNumOrVec
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapDivideByZero
+import at.petrak.hexcasting.api.utils.Vector
 import net.minecraft.world.phys.Vec3
 
 object OpDivCross : ConstMediaAction {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+    override fun execute(args: Vector<Iota>, env: CastingEnvironment): Vector<Iota> {
         val lhs = args.getNumOrVec(0, argc)
         val rhs = args.getNumOrVec(1, argc)
         val theMishap = MishapDivideByZero.of(args[0], args[1])

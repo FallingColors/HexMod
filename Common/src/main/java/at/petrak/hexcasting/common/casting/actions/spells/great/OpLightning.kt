@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.utils.Vector
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LightningBolt
@@ -17,7 +18,7 @@ object OpLightning : SpellAction {
     override val argc = 1
 
     override fun execute(
-            args: List<Iota>,
+            args: Vector<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
         val target = args.getVec3(0, argc)

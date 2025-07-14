@@ -17,16 +17,16 @@ import net.minecraft.world.entity.Entity
  * The state of a casting VM, containing the stack and all
  */
 data class CastingImage private constructor(
-    val stack: List<Iota>,
+    val stack: Vector<Iota>,
 
     val parenCount: Int,
-    val parenthesized: List<ParenthesizedIota>,
+    val parenthesized: Vector<ParenthesizedIota>,
     val escapeNext: Boolean,
     val opsConsumed: Long,
 
     val userData: CompoundTag
 ) {
-    constructor() : this(listOf(), 0, listOf(), false, 0, CompoundTag())
+    constructor() : this(Vector.empty(), 0, Vector.empty(), false, 0, CompoundTag())
 
     data class ParenthesizedIota(val iota: Iota, val escaped: Boolean) {
         companion object {
@@ -38,7 +38,7 @@ data class CastingImage private constructor(
     /**
      * Returns an empty list if it's too complicated.
      */
-    private fun Iterable<ParenthesizedIota>.serializeToNBT(): CompoundTag {
+    private fun Vector<ParenthesizedIota>.serializeToNBT(): CompoundTag {
         val tag = CompoundTag()
 
         if (IotaType.isTooLargeToSerialize(this.map { it.iota })) {
@@ -70,7 +70,7 @@ data class CastingImage private constructor(
     /**
      * Returns a copy of this with escape/paren-related fields cleared.
      */
-    fun withResetEscape() = this.copy(parenCount = 0, parenthesized = listOf(), escapeNext = false)
+    fun withResetEscape() = this.copy(parenCount = 0, parenthesized = Vector.empty(), escapeNext = false)
 
     fun serializeToNbt() = NBTBuilder {
         TAG_STACK %= stack.serializeToNBT()
@@ -94,11 +94,11 @@ data class CastingImage private constructor(
         @JvmStatic
         fun loadFromNbt(tag: CompoundTag, world: ServerLevel): CastingImage {
             return try {
-                val stack = mutableListOf<Iota>()
+                val stack = Vector.VectorBuilder<Iota>()
                 val stackTag = tag.getList(TAG_STACK, Tag.TAG_COMPOUND)
                 for (subtag in stackTag) {
                     val datum = IotaType.deserialize(subtag.asCompound, world)
-                    stack.add(datum)
+                    stack.addOne(datum)
                 }
 
                 val userData = if (tag.contains(TAG_USERDATA)) {
@@ -107,20 +107,20 @@ data class CastingImage private constructor(
                     CompoundTag()
                 }
 
-                val parenthesized = mutableListOf<ParenthesizedIota>()
+                val parenthesized = Vector.VectorBuilder<ParenthesizedIota>()
                 val parenTag = tag.getCompound(TAG_PARENTHESIZED)
                 val parenIotasTag = parenTag.getList(TAG_IOTAS, Tag.TAG_COMPOUND)
                 val parenEscapedTag = parenTag.getByteArray(TAG_ESCAPED)
 
                 for ((subtag, isEscapedByte) in parenIotasTag.zipWithDefault(parenEscapedTag) { _ -> 0 }) {
-                    parenthesized.add(ParenthesizedIota(IotaType.deserialize(subtag.downcast(CompoundTag.TYPE), world), isEscapedByte != 0.toByte()))
+                    parenthesized.addOne(ParenthesizedIota(IotaType.deserialize(subtag.downcast(CompoundTag.TYPE), world), isEscapedByte != 0.toByte()))
                 }
 
                 val parenCount = tag.getInt(TAG_PAREN_COUNT)
                 val escapeNext = tag.getBoolean(TAG_ESCAPE_NEXT)
                 val opsUsed = tag.getLong(TAG_OPS_CONSUMED)
 
-                CastingImage(stack, parenCount, parenthesized, escapeNext, opsUsed, userData)
+                CastingImage(stack.result(), parenCount, parenthesized.result(), escapeNext, opsUsed, userData)
             } catch (exn: Exception) {
                 HexAPI.LOGGER.warn("error while loading a CastingImage", exn)
                 CastingImage()

@@ -27,13 +27,13 @@ import net.minecraft.server.level.ServerLevel
 data class FrameForEach(
     val data: Vector<Iota>,
     val code: Vector<Iota>,
-    val baseStack: List<Iota>?,
+    val baseStack: Vector<Iota>?,
     val acc: Vector<Iota>
 ) : ContinuationFrame {
 
     /** When halting, we add the stack state at halt to the stack accumulator, then return the original pre-Thoth stack, plus the accumulator. */
-    override fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>> {
-        val newStack = Vector.from(stack).appendedAll(acc)
+    override fun breakDownwards(stack: Vector<Iota>): Pair<Boolean, Vector<Iota>> {
+        val newStack = stack.appendedAll(acc)
         return true to newStack
     }
 
@@ -46,7 +46,7 @@ data class FrameForEach(
         // If this isn't the very first Thoth step (i.e. no Thoth computations run yet)...
         val (stack, nextAcc) = if (baseStack == null) {
             // init stack to the harness stack...
-            harness.image.stack.toList() to acc
+            harness.image.stack to acc
         } else {
             // else save the stack to the accumulator and reuse the saved base stack.
             baseStack to acc.appendedAll(harness.image.stack)
@@ -65,10 +65,9 @@ data class FrameForEach(
             // Else, dump our final list onto the stack.
             Triple(ListIota(nextAcc), harness.image, continuation)
         }
-        val tStack = stack.toMutableList()
-        tStack.add(stackTop)
+        val tStack = stack.appended(stackTop)
         return CastResult(
-            ListIota(Vector.from(code)),
+            ListIota(code),
             newCont,
             // reset escapes so they don't carry over to other iterations or out of thoth
             newImage.withResetEscape().copy(stack = tStack),
@@ -98,13 +97,13 @@ data class FrameForEach(
                     HexIotaTypes.LIST.deserialize(tag.getList("data", Tag.TAG_COMPOUND), world)!!.list,
                     HexIotaTypes.LIST.deserialize(tag.getList("code", Tag.TAG_COMPOUND), world)!!.list,
                     if (tag.hasList("base", Tag.TAG_COMPOUND))
-                        HexIotaTypes.LIST.deserialize(tag.getList("base", Tag.TAG_COMPOUND), world)!!.list.toList()
+                        HexIotaTypes.LIST.deserialize(tag.getList("base", Tag.TAG_COMPOUND), world)!!.list
                     else
                         null,
-                    Vector.from(HexIotaTypes.LIST.deserialize(
+                    HexIotaTypes.LIST.deserialize(
                         tag.getList("accumulator", Tag.TAG_COMPOUND),
                         world
-                    )!!.list.toList())
+                    )!!.list
                 )
             }
 

@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.blocks.BlockConjured
 import at.petrak.hexcasting.common.lib.HexBlocks
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -21,7 +22,7 @@ import net.minecraft.world.phys.Vec3
 class OpConjureBlock(val light: Boolean) : SpellAction {
     override val argc = 1
     override fun execute(
-            args: List<Iota>,
+            args: Vector<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
         val vecPos = args.getVec3(0, argc)

@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.utils.Vector
 import net.minecraft.world.phys.Vec3
 import java.text.DecimalFormat
 
@@ -54,8 +55,8 @@ interface Action {
             override val argc: Int
                 get() = 0
 
-            override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> =
-                listOf(x)
+            override fun execute(args: Vector<Iota>, env: CastingEnvironment): Vector<Iota> =
+                Vector.from(listOf(x))
         }
 
         public val DOUBLE_FORMATTER = DecimalFormat("####.####")

@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getDoubleBetween
 import at.petrak.hexcasting.api.casting.getEntity
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.entity.Entity
 
@@ -14,7 +15,7 @@ object OpSetScale : SpellAction {
     override val argc = 2
 
     override fun execute(
-            args: List<Iota>,
+            args: Vector<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
         val target = args.getEntity(0, argc)

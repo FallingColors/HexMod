@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.pigment.FrozenPigment
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.lightPurple
 import at.petrak.hexcasting.common.lib.HexItems
@@ -32,19 +33,14 @@ abstract class Mishap : Throwable() {
 
     open fun resolutionType(ctx: CastingEnvironment): ResolvedPatternType = ResolvedPatternType.ERRORED
 
+    protected abstract fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component?
+
     /**
      * Execute the actual effect, not any sfx.
      *
-     * You can also mess up the stack with this.
+     * This returns a new stack.
      */
-    abstract fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>)
-
-    protected abstract fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component?
-
-    fun executeReturnStack(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>): List<Iota> {
-        execute(ctx, errorCtx, stack)
-        return stack
-    }
+    abstract fun executeReturnStack(ctx: CastingEnvironment, errorCtx: Context, stack: Vector<Iota>): Vector<Iota>
 
     /**
      * Every error message should be prefixed with the name of the action...

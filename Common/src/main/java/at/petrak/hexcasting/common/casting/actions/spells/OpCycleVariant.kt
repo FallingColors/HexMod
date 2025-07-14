@@ -6,13 +6,14 @@ import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.item.ItemStack
 
 object OpCycleVariant : SpellAction {
     override val argc = 0
 
-    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+    override fun execute(args: Vector<Iota>, env: CastingEnvironment): SpellAction.Result {
         val (handStack) = env.getHeldItemToOperateOn {
             IXplatAbstractions.INSTANCE.findVariantHolder(it) != null
         } ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY.copy(), "variant") // TODO: hack

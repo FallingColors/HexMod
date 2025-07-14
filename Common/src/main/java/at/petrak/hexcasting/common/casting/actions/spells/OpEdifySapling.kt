@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
@@ -19,7 +20,7 @@ object OpEdifySapling : SpellAction {
     override val argc = 1
 
     override fun execute(
-            args: List<Iota>,
+            args: Vector<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
         val vecPos = args.getVec3(0, argc)

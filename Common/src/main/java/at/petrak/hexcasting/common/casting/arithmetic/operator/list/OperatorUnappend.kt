@@ -8,15 +8,14 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.iota.NullIota
-import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.casting.arithmetic.operator.nextList
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.*
 
 object OperatorUnappend : OperatorBasic(1, IotaMultiPredicate.all(IotaPredicate.ofType(LIST))) {
     override fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator().withIndex()
-        val list = it.nextList(arity).toMutableList()
-        val last = list.removeLastOrNull() ?: NullIota()
-        return listOf(ListIota(Vector.from(list)), last)
+        val list = it.nextList(arity)
+        val last = if (list.isEmpty()) NullIota() else list.last()
+        return listOf(ListIota(if (list.isEmpty()) list else list.init()), last)
     }
 }

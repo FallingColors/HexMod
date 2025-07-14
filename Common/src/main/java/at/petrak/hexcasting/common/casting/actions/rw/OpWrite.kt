@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.casting.mishaps.MishapOthersName
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerPlayer
 
@@ -14,7 +15,7 @@ import net.minecraft.server.level.ServerPlayer
 object OpWrite : SpellAction {
     override val argc = 1
     override fun execute(
-            args: List<Iota>,
+            args: Vector<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
         val datum = args[0]
