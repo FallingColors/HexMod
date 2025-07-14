@@ -236,7 +236,7 @@ p.fake-li-alt::before {
   content: "\25E6";
 }
 .linkout::before {
-  content: "Link: ";
+  content: "Ссылка: ";
 }
 p.todo-note {
   font-style: italic;
