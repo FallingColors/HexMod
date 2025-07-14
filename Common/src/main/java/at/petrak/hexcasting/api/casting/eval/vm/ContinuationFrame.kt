@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
-import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.lib.hex.HexContinuationTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
@@ -60,10 +60,10 @@ interface ContinuationFrame {
          */
         @JvmStatic
         fun fromNBT(tag: CompoundTag, world: ServerLevel): ContinuationFrame {
-            val type = getTypeFromTag(tag) ?: return FrameEvaluate(SpellList.LList(0, listOf()), false)
+            val type = getTypeFromTag(tag) ?: return FrameEvaluate(Vector.empty(), false)
 
             return (tag.get(HexContinuationTypes.KEY_DATA) as? CompoundTag)?.let { type.deserializeFromNBT(it, world) }
-                    ?: FrameEvaluate(SpellList.LList(0, listOf()), false)
+                    ?: FrameEvaluate(Vector.empty(), false)
         }
 
         /**

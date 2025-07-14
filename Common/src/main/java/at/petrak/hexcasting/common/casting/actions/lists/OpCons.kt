@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.casting.actions.lists
 
-import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.asActionResult
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
@@ -12,6 +11,6 @@ object OpCons : ConstMediaAction {
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val bottom = args.getList(0, argc)
         val top = args[1]
-        return SpellList.LPair(top, SpellList.LList(0, bottom)).asActionResult
+        return bottom.prepended(top).asActionResult
     }
 }

@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
-import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -26,8 +25,8 @@ import net.minecraft.server.level.ServerLevel
  * @property acc concatenated list of final stack states after Thoth exit
  */
 data class FrameForEach(
-    val data: SpellList,
-    val code: SpellList,
+    val data: Vector<Iota>,
+    val code: Vector<Iota>,
     val baseStack: List<Iota>?,
     val acc: Vector<Iota>
 ) : ContinuationFrame {
@@ -54,14 +53,14 @@ data class FrameForEach(
         }
 
         // If we still have data to process...
-        val (stackTop, newImage, newCont) = if (data.nonEmpty) {
+        val (stackTop, newImage, newCont) = if (!data.isEmpty()) {
             // push the next datum to the top of the stack,
             val cont2 = continuation
                 // put the next Thoth object back on the stack for the next Thoth cycle,
-                .pushFrame(FrameForEach(data.cdr, code, stack, nextAcc))
+                .pushFrame(FrameForEach(data.tail(), code, stack, nextAcc))
                 // and prep the Thoth'd code block for evaluation.
                 .pushFrame(FrameEvaluate(code, true))
-            Triple(data.car, harness.image.withUsedOp(), cont2)
+            Triple(data.head(), harness.image.withUsedOp(), cont2)
         } else {
             // Else, dump our final list onto the stack.
             Triple(ListIota(nextAcc), harness.image, continuation)
@@ -87,7 +86,7 @@ data class FrameForEach(
         "accumulator" %= acc.toList().serializeToNBT()
     }
 
-    override fun size() = data.size() + code.size() + acc.size + (baseStack?.size ?: 0)
+    override fun size() = data.size + code.size + acc.size + (baseStack?.size ?: 0)
 
     override val type: ContinuationFrame.Type<*> = TYPE
 
@@ -96,8 +95,8 @@ data class FrameForEach(
         val TYPE: ContinuationFrame.Type<FrameForEach> = object : ContinuationFrame.Type<FrameForEach> {
             override fun deserializeFromNBT(tag: CompoundTag, world: ServerLevel): FrameForEach {
                 return FrameForEach(
-                    SpellList.LList(0, HexIotaTypes.LIST.deserialize(tag.getList("data", Tag.TAG_COMPOUND), world)!!.list),
-                    SpellList.LList(0, HexIotaTypes.LIST.deserialize(tag.getList("code", Tag.TAG_COMPOUND), world)!!.list),
+                    HexIotaTypes.LIST.deserialize(tag.getList("data", Tag.TAG_COMPOUND), world)!!.list,
+                    HexIotaTypes.LIST.deserialize(tag.getList("code", Tag.TAG_COMPOUND), world)!!.list,
                     if (tag.hasList("base", Tag.TAG_COMPOUND))
                         HexIotaTypes.LIST.deserialize(tag.getList("base", Tag.TAG_COMPOUND), world)!!.list.toList()
                     else

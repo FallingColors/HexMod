@@ -313,7 +313,6 @@ inline val Boolean.asActionResult get() = listOf(BooleanIota(this))
 inline val Double.asActionResult get() = listOf(DoubleIota(this))
 inline val Number.asActionResult get() = listOf(DoubleIota(this.toDouble()))
 
-inline val SpellList.asActionResult get() = listOf(ListIota(Vector.from(this)))
 inline val List<Iota>.asActionResult get() = listOf(ListIota(Vector.from(this)))
 
 inline val BlockPos.asActionResult get() = listOf(Vec3Iota(Vec3.atCenterOf(this)))
