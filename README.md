@@ -22,8 +22,9 @@ On Fabric, it requires:
 - Cardinal Components
 - ClothConfig and ModMenu
 
-- [Read the documentation online here!](https://fallingcolors.github.io/HexMod/)
-- [Discord link](https://discord.gg/4xxHGYteWk)
+[Read the documentation online here!](https://fallingcolors.github.io/HexMod/)
+
+[Discord link](https://discord.gg/4xxHGYteWk)
 
 ## The Branches
 
