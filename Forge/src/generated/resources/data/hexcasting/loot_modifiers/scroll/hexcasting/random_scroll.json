@@ -1,0 +1,10 @@
+{
+  "type": "hexcasting:inject_scrolls",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "hexcasting:random_scroll"
+    }
+  ],
+  "countRange": -1
+}
