@@ -47,6 +47,11 @@
       sealed: "密封核心",
     },
 
+    ancient_cypher: {
+      "": "远古杂件",
+      preset: "远古杂件：%s",
+    },
+
     thought_knot: "结念绳",
     spellbook: "法术书",
     cypher: "杂件",
@@ -253,7 +258,7 @@
 
   "itemGroup.hexcasting": {
     hexcasting: "咒法学",
-    scrolls: "咒法学",
+    scrolls: "咒法学丨卷轴",
   },
 
   "gui.hexcasting": {
@@ -368,13 +373,37 @@
           "": "法术环禁用操作列表",
           "@Tooltip": "法术环中被禁用操作的资源位置；试图执行此类操作会导致事故",
         },
+        greaterTeleportSplatsItems: {
+          "": "卓越传送散落物品",
+          "@Tooltip": "使用卓越传送时，玩家物品栏中的物品是否会飞出"
+        },
         villagersOffendedByMindMurder: {
           "": "村民会被意识剥除冒犯",
           "@Tooltip": "村民是否会在其他村民被剥离意识时感到气愤",
         },
+        traderScrollChance: {
+          "": "流浪商人交易卷轴概率",
+          "@Tooltip": "流浪商人出售远古卷轴的概率",
+        },
         scrollInjectionsRaw: {
           "": "卷轴战利品权重",
           "@Tooltip": "将战利品表名与卷轴生成数量期望一一对应并罗列。在下列所有战利品表中生成卷轴的概率约50%，生成时会放入1到对应期望个数的卷轴。",
+        },
+        loreInjectionsRaw: {
+          "": "故事残卷战利品位置",
+          "@Tooltip": "应加入故事残卷的战利品表列表。",
+        },
+        loreChance: {
+          "": "故事残卷出现概率",
+          "@Tooltip": "上述战利品表中故事残卷出现的概率。",
+        },
+        cypherInjectionsRaw: {
+          "": "远古杂件战利品位置",
+          "@Tooltip": "应加入远古杂件的战利品表列表。",
+        },
+        cypherChance: {
+          "": "远古杂件出现概率",
+          "@Tooltip": "上述战利品表中远古杂件出现的概率。",
         },
         amethystShardModification: {
           "": "紫水晶碎片掉落率变化量",
@@ -494,6 +523,25 @@
       "infinite_media": "无限",
     },
 
+    loot_hex: {
+      "shatter": "粉碎",
+      "kindle": "燃焰",
+      "illuminate": "耀明",
+      "growth": "生长",
+      "lunge": "猛冲",
+      "sidestep": "侧闪",
+      "ascend": "升空",
+      "blink": "闪现",
+      "blastoff": "起飞",
+      "radar": "雷达",
+      "beckon": "召来",
+      "detonate": "引爆",
+      "shockwave": "冲击波",
+      "heat_wave": "热浪",
+      "wither_wave": "凋零波纹",
+      "flight_zone": "飞行区",
+    },
+
     // TODO: post-eigengrau make these less anticlimactic
     message: {
       "cant_overcast": "这个咒术需求的媒质量比我有的还多……我应该再算几遍。",
@@ -515,6 +563,11 @@
           sealed: "空白（%s）",
         },
         sealed: "已密封",
+      },
+
+      scroll: {
+        needs_purchase: "购买以显示图案",
+        pattern_not_loaded: "放入物品栏以加载图案",
       },
 
       abacus: {
@@ -557,6 +610,7 @@
       media: "%d 紫水晶粉",
       media_amount: "含有：%s（%s）",
       "media_amount.advanced": "含有：%s/%s（%s）",
+      stored_hex: "咒术：",
 
       list_contents: "[%s]",
       null_iota: "NULL",
@@ -610,8 +664,12 @@
 
     attributes: {
       grid_zoom: "咒术网格大小",
+      media_consumption: "媒质消耗",
+      ambit_radius: "玩家影响范围半径",
+      sentinel_radius: "哨卫影响范围半径",
       // TODO: the +1 is kind of janky
-      scry_sight: "探知视觉"
+      scry_sight: "探知视觉",
+      feeble_mind: "孱弱意识"
     },
 
     // Action localizations
@@ -1155,6 +1213,7 @@
 
       // why is this called "hexcasting"?
       hexcasting: "施法物品",
+      ancient_cyphers: "远古杂件",
       phials: "媒质之瓶",
       potions: "咒术药水",
       pigments: "染色剂",
@@ -1352,7 +1411,7 @@
         "not_enough_iotas.title": "Iota 过少",
         not_enough_iotas: "该操作需要比当前栈中元素数还多的 iota。$(br2)产生淡灰色火花，并向栈顶压入缺少的参数的数量个$(l:casting/influences)$(action)垃圾/$。",
 
-        "stack_size.title": "Iota 过大",
+        "stack_size.title": "Iota 过多",
         "stack_size": "试图施放超出栈大小限制的法术。$(br2)产生黑色火花，我的整个栈变为仅含有单个$(l:casting/influences)$(action)垃圾/$。",
 
         "incorrect_iota.title": "Iota 错误",
@@ -1462,7 +1521,7 @@
 
       abacus: {
         "1": "虽然有$(l:patterns/numbers)$(action)对应数的图案/$，但它们确实……过于复杂。$(br2)幸运的是，从前研究这门学问的大师们发明了一个名为“$(l:items/abacus)$(item)算盘/$”的天才般的装置，它们能极为方便地表示数。只需要在其上设定好，然后用$(l:patterns/readwrite#hexcasting:read)$(action)书吏之精思/$把值读出即可，就和读出$(l:items/focus)$(item)核心/$中 iota 的操作一样。",
-        "2": "操作方法是潜行时手持算盘滚动滚轮。如果是主手持算盘，则其数值会以 1 增加或减少，按住 $(k:sprint) 时则以 10。若是副手持算盘，则其数值会以 0.1 增加或减少，按住 $(k:sprint) 时则以 0.001。$(br2)也可以在潜行时手持算盘右击以重设为 0。",
+        "2": "操作方法是潜行时手持算盘滚动滚轮。如果是主手持算盘，则其数值会以 1 增加或减少，按住 $(k:sprint) 时则以 10。若是副手持算盘，则其数值会以 0.1 增加或减少，按住 $(k:sprint) 时则以 0.01。$(br2)也可以在潜行时手持算盘右击以重设为 0。",
         "crafting.desc": "$(italic)数学？那是给聪明人用的！/$",
       },
 
@@ -1493,6 +1552,11 @@
         "4": "$(l:items/hexcasting)$(item)造物/$是三者之中最强力的——其内含的$(media)媒质/$耗尽后，它们还能消耗持有者物品栏内的$(l:items/amethyst)$(item)紫水晶/$来施放$(hex)咒术/$，就和用$(l:items/staff)$(item)法杖/$施法一样。不过这也意味着，一旦$(l:items/amethyst)$(item)紫水晶/$不够，继续施法可能会消耗施法者的意识。$(br2)而在工作台中合成魔法物品后，必须将$(hex)咒术/$以适合对应物品的法术写入其中。（也没什么其他办法。）$(l:patterns/spells/hexcasting)对应的图案详情见此。/$",
         "5": "每次写入都需要栈上有一个实体和一个由图案构成的列表。这个实体必须是一个含有$(media)媒质/$的物品实体（也即掉落在地上的$(l:items/amethyst)$(item)紫水晶/$）。该实体会变成该魔法物品的内部电池。$(br2)似乎电池中的$(media)媒质/$不会像用$(l:items/staff)$(item)法杖/$施法那样以物品组为单位消耗。其中的$(media)媒质/$实际上会“溶解”入一个连续的能量池。因此，当物品中存有会消耗 1 个$(l:items/amethyst)$(item)紫水晶粉/$中媒质来施放的$(hex)咒术/$时，含有相当于 1 个$(l:items/amethyst)$(item)充能紫水晶/$中媒质的电池能支持施放该咒术 10 次。",
         "crafting.desc": "$(italic)我们常说一句话，“魔法从不……”。它从不“就是行得通”，它不会随你操控。你不能光靠所谓魔法扔个火球，烧顿晚饭，或是把一帮劫匪变成青蛙和蜗牛。/$",
+      },
+
+      ancient_cyphers: {
+        "1": "在四处探险的过程中，我找到了一些$(l:items/hexcasting)$(item)杂件/$，似乎是古代的咒术师们制造后残存至今的。这些$(item)远古杂件/$的功能和我自己制作的基本一致：都不可再充能，其中$(media)媒质/$耗尽后也都会碎掉。两者间的不同点则在于：搜刮到的$(l:items/hexcasting)$(item)杂件/$的结构已经残破，我可以借此窥探其中的$(hex)咒术/$。",
+        "2": "这些物件大概很适合用来学新技巧——若要在授业解惑方面将古代的大师们排第二，就没人能称第一了。$(br2)此外，还可清除其中的$(hex)咒术/$换成我自己写的，如此就得到了能显示自身功能的施法物品。"
       },
 
       phials: {
@@ -1670,7 +1734,7 @@
         "abs.2": "将一个数变为其绝对值，将一个向量变为其模长。",
 
         "pow.1": "执行乘方或向量射影。",
-        "pow.2": "若栈顶为两个数，返回两数的乘方。$(li)若为一个数和一个向量，移除该数并计算向量的每个分量与该数的乘方。$(li)若为两个向量，计算栈顶向量对栈顶往下第二向量的$(l:https://en.wikipedia.org/wiki/Vector_projection)向量射影/$。$(br2)第一第二种情况下，栈顶元素或其分量为指数, 栈顶往下第二元素或其分量为底数。",
+        "pow.2": "若栈顶为两个数，返回两数的乘方。$(li)若为一个数和一个向量，移除该数并计算向量的每个分量与该数的乘方。$(li)若为两个向量，计算栈顶向量对栈顶往下第二向量的$(l:https://en.wikipedia.org/wiki/Vector_projection)向量射影/$。$(br2)第一第二种情况下，栈顶元素或其分量为指数，栈顶往下第二元素或其分量为底数。",
 
         floor: "对一个数取底，也即去掉小数部分取整。或对向量的每个分量取底。",
         ceil: "对一个数取顶，也即将小数部分不为零的数换为大于其的最小整数。或对向量的每个分量取顶。",
@@ -1809,7 +1873,7 @@
         index_of: "移除栈顶元素，并将栈顶列表变为该元素在其中第一次出现的位置（从 0 开始）。若没有出现过则返回 -1。",
         remove_from: "移除栈顶的数，而后移除栈顶列表中下标为该数（就是被移除的那个数）的元素。",
         replace: "移除栈顶元素和栈顶的数，而后将栈顶列表中下标为该数（就是被移除的那个数）变为该元素。若该数越界则不进行操作。",
-        last_n_list: "移除$(italic)所给数/$个元素，并将这些元素加入列表并将该列表压入栈顶。",
+        last_n_list: "移除$(italic)所给数/$个元素，将这些元素加入列表并将该列表压入栈顶。",
         splat: "移除栈顶列表，而后将其中元素全部压入栈顶。",
         construct: "移除栈顶元素，将其加到栈顶列表的开头。",
         deconstruct: "移除栈顶列表中的第一个元素，并将该元素压入栈顶。",
