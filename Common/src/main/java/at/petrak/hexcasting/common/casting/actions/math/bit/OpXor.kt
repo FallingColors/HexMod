@@ -7,11 +7,12 @@ import at.petrak.hexcasting.api.casting.getList
 import at.petrak.hexcasting.api.casting.getLong
 import at.petrak.hexcasting.api.casting.getLongOrList
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.utils.Vector
 
 object OpXor : ConstMediaAction {
     override val argc = 2
 
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+    override fun execute(args: Vector<Iota>, env: CastingEnvironment): Vector<Iota> {
         val firstParam = args.getLongOrList(0, argc)
 
         return firstParam.map(
@@ -23,13 +24,13 @@ object OpXor : ConstMediaAction {
                 val list2 = args.getList(1, argc)
                 val out =
                     list1.filter { x1 ->
-                        list2.none {
+                        !list2.exists {
                             Iota.tolerates(
                                 x1,
                                 it
                             )
                         }
-                    } + list2.filter { x2 -> list1.none { Iota.tolerates(x2, it) } }
+                    }.appendedAll(list2.filter { x2 -> !list1.exists { Iota.tolerates(x2, it) } })
                 out.asActionResult
             }
         )

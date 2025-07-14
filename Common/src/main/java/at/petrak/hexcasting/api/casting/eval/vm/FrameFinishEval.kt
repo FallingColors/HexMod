@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.utils.NBTBuilder
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
@@ -15,7 +16,7 @@ import net.minecraft.server.level.ServerLevel
  */
 object FrameFinishEval : ContinuationFrame {
     // Don't do anything else to the stack, just finish the halt statement.
-    override fun breakDownwards(stack: List<Iota>) = true to stack
+    override fun breakDownwards(stack: Vector<Iota>) = true to stack
 
     // Evaluating it does nothing; it's only a boundary condition.
     override fun evaluate(

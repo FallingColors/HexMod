@@ -14,8 +14,8 @@ import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.*
 object OperatorUnappend : OperatorBasic(1, IotaMultiPredicate.all(IotaPredicate.ofType(LIST))) {
     override fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator().withIndex()
-        val list = it.nextList(arity).toMutableList()
-        val last = list.removeLastOrNull() ?: NullIota()
-        return listOf(ListIota(list), last)
+        val list = it.nextList(arity)
+        val last = if (list.isEmpty()) NullIota() else list.last()
+        return listOf(ListIota(if (list.isEmpty()) list else list.init()), last)
     }
 }

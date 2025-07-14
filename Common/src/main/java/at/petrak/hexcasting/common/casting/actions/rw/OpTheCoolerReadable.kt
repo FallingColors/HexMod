@@ -5,15 +5,16 @@ import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getEntity
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 
 object OpTheCoolerReadable : ConstMediaAction {
     override val argc = 1
 
     override fun execute(
-        args: List<Iota>,
+        args: Vector<Iota>,
         env: CastingEnvironment
-    ): List<Iota> {
+    ): Vector<Iota> {
         val target = args.getEntity(0, argc)
         env.assertEntityInRange(target)
 

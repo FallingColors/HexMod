@@ -10,6 +10,7 @@ import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.MishapNoAkashicRecord
 import at.petrak.hexcasting.api.casting.mishaps.MishapOthersName
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord
 import at.petrak.hexcasting.common.lib.HexSounds
 import net.minecraft.core.BlockPos
@@ -20,12 +21,12 @@ object OpAkashicWrite : SpellAction {
     override val argc = 3
 
     override fun execute(
-            args: List<Iota>,
-            env: CastingEnvironment
+        args: Vector<Iota>,
+        env: CastingEnvironment
     ): SpellAction.Result {
         val pos = args.getBlockPos(0, argc)
         val key = args.getPattern(1, argc)
-        val datum = args.get(2)
+        val datum = args[2]
 
         env.assertPosInRange(pos)
 

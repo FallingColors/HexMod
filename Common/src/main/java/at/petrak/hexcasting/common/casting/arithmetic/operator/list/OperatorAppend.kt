@@ -13,8 +13,7 @@ import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.*
 object OperatorAppend : OperatorBasic(2, IotaMultiPredicate.pair(IotaPredicate.ofType(LIST), IotaPredicate.TRUE)) {
     override fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator().withIndex()
-        val list = it.nextList(arity).toMutableList()
-        list.add(it.next().value)
-        return list.asActionResult
+        val list = it.nextList(arity)
+        return list.appended(it.next().value).asActionResult
     }
 }

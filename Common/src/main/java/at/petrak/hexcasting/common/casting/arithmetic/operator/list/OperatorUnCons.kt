@@ -15,8 +15,8 @@ object OperatorUnCons : OperatorBasic(1, IotaMultiPredicate.all(IotaPredicate.of
     override fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator().withIndex()
         val list = it.nextList(arity)
-        if (list.nonEmpty)
-            return listOf(ListIota(list.cdr), list.car)
+        if (!list.isEmpty())
+            return listOf(ListIota(list.tail()), list.head())
         return listOf(ListIota(list), NullIota())
     }
 }

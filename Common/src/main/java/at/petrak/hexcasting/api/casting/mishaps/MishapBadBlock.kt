@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.pigment.FrozenPigment
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
@@ -16,8 +17,9 @@ class MishapBadBlock(val pos: BlockPos, val expected: Component) : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.LIME)
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+    override fun executeReturnStack(ctx: CastingEnvironment, errorCtx: Context, stack: Vector<Iota>): Vector<Iota> {
         ctx.world.explode(null, pos.x + 0.5, pos.y + 0.5, pos.z + 0.5, 0.25f, Level.ExplosionInteraction.NONE)
+        return stack
     }
 
     override fun particleSpray(ctx: CastingEnvironment) =

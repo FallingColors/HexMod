@@ -6,13 +6,14 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getDouble
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapDivideByZero
+import at.petrak.hexcasting.api.utils.Vector
 import kotlin.math.log
 
 object OpLog : ConstMediaAction {
     override val argc: Int
         get() = 2
 
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+    override fun execute(args: Vector<Iota>, env: CastingEnvironment): Vector<Iota> {
         val value = args.getDouble(0, argc)
         val base = args.getDouble(1, argc)
         if (value <= 0.0 || base <= 0.0 || base == 1.0)

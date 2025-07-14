@@ -11,6 +11,7 @@ import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.math.HexPattern
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.casting.arithmetic.operator.list.OperatorUnique
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.LIST
 import java.util.function.BinaryOperator
@@ -28,16 +29,16 @@ object ListSetArithmetic : Arithmetic {
     override fun opTypes() = OPS
 
     override fun getOperator(pattern: HexPattern): Operator = when (pattern) {
-        AND -> make2 { list0, list1 -> list0.filter { x -> list1.any { Iota.tolerates(x, it) } } }
-        OR -> make2 { list0, list1 -> list0 + list1.filter { x -> list0.none { Iota.tolerates(x, it) } } }
-        XOR -> make2 { list0, list1 -> list0.filter { x0 -> list1.none {Iota.tolerates(x0, it) } } + list1.filter { x1 -> list0.none { Iota.tolerates(x1, it) } } }
+        AND -> make2 { list0, list1 -> list0.filter { x -> list1.exists { Iota.tolerates(x, it) } } }
+        OR -> make2 { list0, list1 -> list0.appendedAll(list1.filter { x -> !list0.exists { Iota.tolerates(x, it) } }) }
+        XOR -> make2 { list0, list1 -> list0.filter { x0 -> !list1.exists {Iota.tolerates(x0, it) } }.appendedAll(list1.filter { x1 -> !list0.exists { Iota.tolerates(x1, it) } }) }
         UNIQUE -> OperatorUnique
         else -> throw InvalidOperatorException("$pattern is not a valid operator in Arithmetic $this.")
     }
 
 
-    private fun make2(op: BinaryOperator<List<Iota>>): OperatorBinary = OperatorBinary(all(IotaPredicate.ofType(LIST)))
+    private fun make2(op: BinaryOperator<Vector<Iota>>): OperatorBinary = OperatorBinary(all(IotaPredicate.ofType(LIST)))
     { i: Iota, j: Iota -> ListIota(
-            op.apply(downcast(i, LIST).list.toList(), downcast(j, LIST).list.toList())
+            op.apply(downcast(i, LIST).list, downcast(j, LIST).list)
         ) }
 }

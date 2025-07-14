@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.api.utils.Vector;
 import at.petrak.hexcasting.common.msgs.MsgNewSpiralPatternsS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.nbt.CompoundTag;
@@ -66,19 +67,19 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
     }
 
     @Override
-    public @Nullable List<Iota> getHex(ItemStack stack, ServerLevel level) {
+    public @Nullable Vector<Iota> getHex(ItemStack stack, ServerLevel level) {
         var patsTag = NBTHelper.getList(stack, TAG_PROGRAM, Tag.TAG_COMPOUND);
 
         if (patsTag == null) {
             return null;
         }
 
-        var out = new ArrayList<Iota>();
+        var out = new Vector.VectorBuilder<Iota>();
         for (var patTag : patsTag) {
             CompoundTag tag = NBTHelper.getAsCompound(patTag);
-            out.add(IotaType.deserialize(tag, level));
+            out.addOne(IotaType.deserialize(tag, level));
         }
-        return out;
+        return out.result();
     }
 
     @Override
@@ -122,7 +123,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
             return InteractionResultHolder.success(stack);
         }
 
-        List<Iota> instrs = getHex(stack, (ServerLevel) world);
+        Vector<Iota> instrs = getHex(stack, (ServerLevel) world);
         if (instrs == null) {
             return InteractionResultHolder.fail(stack);
         }

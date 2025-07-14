@@ -1,14 +1,14 @@
 package at.petrak.hexcasting.common.casting.arithmetic.operator
 
-import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.iota.DoubleIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
+import at.petrak.hexcasting.api.utils.Vector
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-fun Iterator<IndexedValue<Iota>>.nextList(argc: Int = 0): SpellList {
+fun Iterator<IndexedValue<Iota>>.nextList(argc: Int = 0): Vector<Iota> {
     val (idx, x) = this.next()
     if (x is ListIota) {
         return x.list

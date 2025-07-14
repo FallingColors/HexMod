@@ -13,18 +13,14 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 object OpLastNToList : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stack = image.stack.toMutableList()
+        var stack = image.stack
 
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0)
-        val yoinkCount = stack.takeLast(1).getPositiveIntUnderInclusive(0, stack.size - 1)
-        stack.removeLast()
-        val output = mutableListOf<Iota>()
-        output.addAll(stack.takeLast(yoinkCount))
-        for (i in 0 until yoinkCount) {
-            stack.removeLast()
-        }
-        stack.addAll(output.asActionResult)
+        val yoinkCount = stack.takeRight(1).getPositiveIntUnderInclusive(0, stack.size - 1)
+        stack = stack.init()
+        val output = stack.takeRight(yoinkCount)
+        stack = stack.dropRight(yoinkCount).appendedAll(output.asActionResult)
 
         val image2 = image.withUsedOp().copy(stack = stack)
         return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)

@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.getPositiveDoubleUnderInclusive
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.casting.actions.selectors.OpGetEntitiesBy
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
@@ -20,7 +21,7 @@ class OpExplode(val fire: Boolean) : SpellAction {
         get() = 2
 
     override fun execute(
-        args: List<Iota>,
+        args: Vector<Iota>,
         env: CastingEnvironment
     ): SpellAction.Result {
         var pos = args.getVec3(0, argc)

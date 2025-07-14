@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.getPlayer
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.player.AltioraAbility
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerLevel
@@ -19,7 +20,7 @@ import kotlin.math.max
 object OpAltiora : SpellAction {
     override val argc = 1
 
-    override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
+    override fun execute(args: Vector<Iota>, env: CastingEnvironment): SpellAction.Result {
         val target = args.getPlayer(0, argc)
         env.assertEntityInRange(target)
 

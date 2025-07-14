@@ -14,15 +14,13 @@ import kotlin.math.roundToInt
 
 object OpFisherman : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stack = image.stack.toMutableList()
+        if (image.stack.size < 2)
+            throw MishapNotEnoughArgs(2, image.stack.size)
 
-        if (stack.size < 2)
-            throw MishapNotEnoughArgs(2, stack.size)
-
+        val x = image.stack.last()
+        var stack = image.stack.init()
+        val maxIdx = stack.size - 1
         val depth = let {
-            val x = stack.last()
-            stack.removeLast()
-            val maxIdx = stack.size - 1
             if (x is DoubleIota) {
                 val double = x.double
                 val rounded = double.roundToInt()
@@ -34,11 +32,11 @@ object OpFisherman : Action {
         }
 
         if (depth >= 0) {
-            val fish = stack.removeAt(stack.size - 1 - depth)
-            stack.add(fish)
+            val fish = stack[stack.size - 1 - depth]
+            stack = stack.dropRight(depth + 1).appendedAll(stack.takeRight(depth)).appended(fish)
         } else {
-            val lure = stack.removeLast()
-            stack.add(stack.size + depth, lure)
+            val lure = stack.last()
+            stack = stack.dropRight(1 - depth).appended(lure).appendedAll(stack.takeRight(1 - depth).init())
         }
 
         val image2 = image.withUsedOp().copy(stack = stack)

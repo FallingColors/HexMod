@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadCaster
 import at.petrak.hexcasting.api.casting.mishaps.MishapLocationInWrongDimension
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerPlayer
 
@@ -17,13 +18,13 @@ import net.minecraft.server.level.ServerPlayer
 object OpGetSentinelWayfind : ConstMediaAction {
     override val argc = 1
     override val mediaCost: Long = MediaConstants.DUST_UNIT / 10
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+    override fun execute(args: Vector<Iota>, env: CastingEnvironment): Vector<Iota> {
         if (env.castingEntity !is ServerPlayer)
             throw MishapBadCaster()
 
         val from = args.getVec3(0, argc)
 
-        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(env.castingEntity as? ServerPlayer) ?: return listOf(NullIota())
+        val sentinel = IXplatAbstractions.INSTANCE.getSentinel(env.castingEntity as? ServerPlayer) ?: return Vector.from(listOf(NullIota()))
 
         if (sentinel.dimension != env.world.dimension())
             throw MishapLocationInWrongDimension(sentinel.dimension.location())

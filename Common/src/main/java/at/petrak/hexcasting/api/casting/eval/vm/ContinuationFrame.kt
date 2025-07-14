@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
-import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.lib.hex.HexContinuationTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
@@ -35,7 +35,7 @@ interface ContinuationFrame {
      * In other words, we should consume Evaluate frames until we hit a FinishEval or Thoth frame.
      * @return whether the break should stop here, alongside the new stack state (e.g. for finalizing a Thoth)
      */
-    fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>>
+    fun breakDownwards(stack: Vector<Iota>): Pair<Boolean, Vector<Iota>>
 
     /**
      * Serializes this frame. Used for things like delays, where we pause execution.
@@ -60,10 +60,10 @@ interface ContinuationFrame {
          */
         @JvmStatic
         fun fromNBT(tag: CompoundTag, world: ServerLevel): ContinuationFrame {
-            val type = getTypeFromTag(tag) ?: return FrameEvaluate(SpellList.LList(0, listOf()), false)
+            val type = getTypeFromTag(tag) ?: return FrameEvaluate(Vector.empty(), false)
 
             return (tag.get(HexContinuationTypes.KEY_DATA) as? CompoundTag)?.let { type.deserializeFromNBT(it, world) }
-                    ?: FrameEvaluate(SpellList.LList(0, listOf()), false)
+                    ?: FrameEvaluate(Vector.empty(), false)
         }
 
         /**

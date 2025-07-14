@@ -43,13 +43,13 @@ public class BlockBooleanDirectrix extends BlockCircleComponent {
     @Override
     public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos,
         BlockState bs, ServerLevel world) {
-        var stack = new ArrayList<>(imageIn.getStack());
+        var stack = imageIn.getStack();
         if (stack.isEmpty()) {
             this.fakeThrowMishap(pos, bs, imageIn, env,
                 new MishapBoolDirectrixEmptyStack(pos));
             return new ControlFlow.Stop();
         }
-        var last = stack.remove(stack.size() - 1);
+        var last = stack.last();
 
         if (!(last instanceof BooleanIota biota)) {
             this.fakeThrowMishap(pos, bs, imageIn, env,
@@ -62,7 +62,7 @@ public class BlockBooleanDirectrix extends BlockCircleComponent {
         var outputDir = biota.getBool()
             ? bs.getValue(FACING).getOpposite()
             : bs.getValue(FACING);
-        var imageOut = imageIn.copy(stack, imageIn.getParenCount(), imageIn.getParenthesized(),
+        var imageOut = imageIn.copy(stack.init(), imageIn.getParenCount(), imageIn.getParenthesized(),
             imageIn.getEscapeNext(), imageIn.getOpsConsumed(), imageIn.getUserData());
 
         return new ControlFlow.Continue(imageOut, List.of(this.exitPositionFromDirection(pos, outputDir)));

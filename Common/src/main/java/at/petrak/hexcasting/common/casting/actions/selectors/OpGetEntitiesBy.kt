@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.getPositiveDouble
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.EntityIota
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.utils.Vector
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.animal.Animal
@@ -22,7 +23,7 @@ import java.util.function.Predicate
 
 class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : ConstMediaAction {
     override val argc = 2
-    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+    override fun execute(args: Vector<Iota>, env: CastingEnvironment): Vector<Iota> {
         val pos = args.getVec3(0, argc)
         val radius = args.getPositiveDouble(1, argc)
         env.assertVecInRange(pos)
@@ -33,7 +34,7 @@ class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : Con
                 && it.distanceToSqr(pos) <= radius * radius
                 && (checker.test(it) != negate)
         }.sortedBy { it.distanceToSqr(pos) }
-        return entitiesGot.map(::EntityIota).asActionResult
+        return Vector.from(entitiesGot).map<Iota>(::EntityIota).asActionResult
     }
 
     companion object {
