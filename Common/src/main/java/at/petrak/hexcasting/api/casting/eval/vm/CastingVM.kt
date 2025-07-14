@@ -219,7 +219,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                         displayDepth--
                         if (newParenCount == 0) {
                             val newStack = this.image.stack.toMutableList()
-                            newStack.add(ListIota(this.image.parenthesized.toList().map { it.iota }))
+                            newStack.add(ListIota(Vector.from(this.image.parenthesized.toList().map { it.iota })))
                             this.image.copy(
                                 stack = newStack,
                                 parenCount = newParenCount,

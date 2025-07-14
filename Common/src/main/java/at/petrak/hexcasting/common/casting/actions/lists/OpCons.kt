@@ -12,6 +12,6 @@ object OpCons : ConstMediaAction {
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val bottom = args.getList(0, argc)
         val top = args[1]
-        return SpellList.LPair(top, bottom).asActionResult
+        return SpellList.LPair(top, SpellList.LList(0, bottom)).asActionResult
     }
 }

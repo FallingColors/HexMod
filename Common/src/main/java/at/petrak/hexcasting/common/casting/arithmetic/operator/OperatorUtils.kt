@@ -11,7 +11,7 @@ import kotlin.math.roundToInt
 fun Iterator<IndexedValue<Iota>>.nextList(argc: Int = 0): SpellList {
     val (idx, x) = this.next()
     if (x is ListIota) {
-        return x.list
+        return SpellList.LList(0, x.list)
     } else {
         throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "list")
     }

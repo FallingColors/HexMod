@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.utils.NBTBuilder
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.api.utils.getList
 import at.petrak.hexcasting.api.utils.serializeToNBT
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
@@ -44,7 +45,7 @@ data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : Cont
             }
         } else {
             // If there are no patterns (e.g. empty Hermes), just return OK.
-            CastResult(ListIota(list), continuation, null, listOf(), ResolvedPatternType.EVALUATED, HexEvalSounds.HERMES)
+            CastResult(ListIota(Vector.from(list)), continuation, null, listOf(), ResolvedPatternType.EVALUATED, HexEvalSounds.HERMES)
         }
     }
 
@@ -62,10 +63,10 @@ data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : Cont
         val TYPE: ContinuationFrame.Type<FrameEvaluate> = object : ContinuationFrame.Type<FrameEvaluate> {
             override fun deserializeFromNBT(tag: CompoundTag, world: ServerLevel): FrameEvaluate {
                 return FrameEvaluate(
-                    HexIotaTypes.LIST.deserialize(
+                    SpellList.LList(0, HexIotaTypes.LIST.deserialize(
                         tag.getList("patterns", Tag.TAG_COMPOUND),
                         world
-                    )!!.list,
+                    )!!.list),
                     tag.getBoolean("isMetacasting"))
             }
 

@@ -45,7 +45,7 @@ data class CastingImage private constructor(
             tag.put(TAG_IOTAS, ListTag())
             tag.put(TAG_ESCAPED, ListTag())
         } else {
-            tag.put(TAG_IOTAS, ListIota(this.map { it.iota }).serialize())
+            tag.put(TAG_IOTAS, ListIota(Vector.from(this).map { it.iota }).serialize())
             tag.put(TAG_ESCAPED, this.map { it.escaped }.serializeToNBT())
         }
 

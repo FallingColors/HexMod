@@ -265,7 +265,7 @@ fun Iterable<Iota>.serializeToNBT() =
     if (IotaType.isTooLargeToSerialize(this))
         ListTag()
     else
-        ListIota(this.toList()).serialize()
+        ListIota(Vector.from(this)).serialize()
 
 fun Iterable<Boolean>.serializeToNBT(): ByteArrayTag {
     val out = ByteArray(if (this is Collection<*>) this.size else 10)

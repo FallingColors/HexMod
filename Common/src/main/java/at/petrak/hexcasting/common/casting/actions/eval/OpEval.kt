@@ -30,7 +30,7 @@ object OpEval : Action {
                     continuation.pushFrame(FrameFinishEval) // install a break-boundary after eval
                 }
 
-        val instrsList = instrs.map({ SpellList.LList(0, listOf(it)) }, { it })
+        val instrsList = instrs.map({ SpellList.LList(0, listOf(it)) }, { SpellList.LList(0, it) })
         val frame = FrameEvaluate(instrsList, true)
 
         val image2 = image.withUsedOp().copy(stack = newStack)

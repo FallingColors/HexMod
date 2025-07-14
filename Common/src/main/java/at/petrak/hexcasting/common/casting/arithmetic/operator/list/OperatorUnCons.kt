@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.iota.NullIota
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.casting.arithmetic.operator.nextList
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.LIST
 
@@ -16,7 +17,7 @@ object OperatorUnCons : OperatorBasic(1, IotaMultiPredicate.all(IotaPredicate.of
         val it = iotas.iterator().withIndex()
         val list = it.nextList(arity)
         if (list.nonEmpty)
-            return listOf(ListIota(list.cdr), list.car)
-        return listOf(ListIota(list), NullIota())
+            return listOf(ListIota(Vector.from(list.cdr)), list.car)
+        return listOf(ListIota(Vector.from(list)), NullIota())
     }
 }

@@ -69,7 +69,7 @@ data class FrameForEach(
         val tStack = stack.toMutableList()
         tStack.add(stackTop)
         return CastResult(
-            ListIota(code),
+            ListIota(Vector.from(code)),
             newCont,
             // reset escapes so they don't carry over to other iterations or out of thoth
             newImage.withResetEscape().copy(stack = tStack),
@@ -96,8 +96,8 @@ data class FrameForEach(
         val TYPE: ContinuationFrame.Type<FrameForEach> = object : ContinuationFrame.Type<FrameForEach> {
             override fun deserializeFromNBT(tag: CompoundTag, world: ServerLevel): FrameForEach {
                 return FrameForEach(
-                    HexIotaTypes.LIST.deserialize(tag.getList("data", Tag.TAG_COMPOUND), world)!!.list,
-                    HexIotaTypes.LIST.deserialize(tag.getList("code", Tag.TAG_COMPOUND), world)!!.list,
+                    SpellList.LList(0, HexIotaTypes.LIST.deserialize(tag.getList("data", Tag.TAG_COMPOUND), world)!!.list),
+                    SpellList.LList(0, HexIotaTypes.LIST.deserialize(tag.getList("code", Tag.TAG_COMPOUND), world)!!.list),
                     if (tag.hasList("base", Tag.TAG_COMPOUND))
                         HexIotaTypes.LIST.deserialize(tag.getList("base", Tag.TAG_COMPOUND), world)!!.list.toList()
                     else

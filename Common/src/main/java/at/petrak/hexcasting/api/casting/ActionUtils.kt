@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.iota.*
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import com.mojang.datafixers.util.Either
 import net.minecraft.core.BlockPos
@@ -41,7 +42,7 @@ fun List<Iota>.getEntity(idx: Int, argc: Int = 0): Entity {
     }
 }
 
-fun List<Iota>.getList(idx: Int, argc: Int = 0): SpellList {
+fun List<Iota>.getList(idx: Int, argc: Int = 0): Vector<Iota> {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is ListIota) {
         return x.list
@@ -269,7 +270,7 @@ fun List<Iota>.getNumOrVec(idx: Int, argc: Int = 0): Either<Double, Vec3> {
     }
 }
 
-fun List<Iota>.getLongOrList(idx: Int, argc: Int = 0): Either<Long, SpellList> {
+fun List<Iota>.getLongOrList(idx: Int, argc: Int = 0): Either<Long, Vector<Iota>> {
     val datum = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (datum is DoubleIota) {
         val double = datum.double
@@ -287,7 +288,7 @@ fun List<Iota>.getLongOrList(idx: Int, argc: Int = 0): Either<Long, SpellList> {
     )
 }
 
-fun evaluatable(datum: Iota, reverseIdx: Int): Either<Iota, SpellList> =
+fun evaluatable(datum: Iota, reverseIdx: Int): Either<Iota, Vector<Iota>> =
     when (datum) {
         is ListIota -> Either.right(datum.list)
         else -> if (datum.executable()) Either.left(datum) else throw MishapInvalidIota(
@@ -312,8 +313,8 @@ inline val Boolean.asActionResult get() = listOf(BooleanIota(this))
 inline val Double.asActionResult get() = listOf(DoubleIota(this))
 inline val Number.asActionResult get() = listOf(DoubleIota(this.toDouble()))
 
-inline val SpellList.asActionResult get() = listOf(ListIota(this))
-inline val List<Iota>.asActionResult get() = listOf(ListIota(this))
+inline val SpellList.asActionResult get() = listOf(ListIota(Vector.from(this)))
+inline val List<Iota>.asActionResult get() = listOf(ListIota(Vector.from(this)))
 
 inline val BlockPos.asActionResult get() = listOf(Vec3Iota(Vec3.atCenterOf(this)))
 inline val Vector3f.asActionResult get() = listOf(Vec3Iota(Vec3(this)))
