@@ -1,0 +1,12 @@
+[
+  { "start_dir": "NORTH_EAST", "angles": "qaq" },
+  { "start_dir": "EAST", "angles": "aa" },
+  { "start_dir": "NORTH_EAST", "angles": "qaq" },
+  { "start_dir": "NORTH_EAST", "angles": "wa" },
+  { "start_dir": "EAST", "angles": "aadadaaw" },
+  { "start_dir": "EAST", "angles": "wqaawdd" },
+  { "start_dir": "NORTH_EAST", "angles": "ddqdd" },
+  { "start_dir": "EAST", "angles": "weddwaa" },
+  { "start_dir": "NORTH_EAST", "angles": "waaw" },
+  { "start_dir": "NORTH_EAST", "angles": "qqd" }
+]

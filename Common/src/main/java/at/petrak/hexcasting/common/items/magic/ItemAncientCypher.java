@@ -14,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class ItemAncientCypher extends ItemCypher {
-    public static final String TAG_PATTERNS = "patterns";
     public static final String TAG_HEX_NAME = "hex_name";
 
     public ItemAncientCypher(Properties pProperties) {
@@ -45,7 +44,7 @@ public class ItemAncientCypher extends ItemCypher {
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
 
         // also show contained spell
-        var patternsTag = NBTHelper.getList(pStack, TAG_PATTERNS, Tag.TAG_COMPOUND);
+        var patternsTag = NBTHelper.getList(pStack, TAG_PROGRAM, Tag.TAG_COMPOUND);
         if (patternsTag != null) {
             var storedHex = Component.translatable("hexcasting.tooltip.stored_hex");
             for (var iotaTag : patternsTag) {

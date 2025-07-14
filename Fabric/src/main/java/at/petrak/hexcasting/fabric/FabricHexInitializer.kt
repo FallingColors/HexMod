@@ -13,6 +13,7 @@ import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
 import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.lib.hex.*
+import at.petrak.hexcasting.common.loot.AncientCypherManager
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower
 import at.petrak.hexcasting.common.misc.BrainsweepingEvents
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
@@ -37,14 +38,23 @@ import net.fabricmc.fabric.api.event.player.UseEntityCallback
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.loot.v2.LootTableEvents
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.packs.PackType
+import net.minecraft.server.packs.resources.PreparableReloadListener.PreparationBarrier
+import net.minecraft.server.packs.resources.ResourceManager
+import net.minecraft.util.profiling.ProfilerFiller
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.level.block.state.properties.BlockSetType
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Executor
 import java.util.function.BiConsumer
+
 
 object FabricHexInitializer : ModInitializer {
     lateinit var CONFIG: FabricHexConfig
@@ -112,6 +122,29 @@ object FabricHexInitializer : ModInitializer {
             HexBlocks.registerBlockCreativeTab(entries::accept, tab)
             HexItems.registerItemCreativeTab(entries, tab)
         }
+
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(object :
+            IdentifiableResourceReloadListener {
+            override fun reload(
+                barrier: PreparationBarrier,
+                manager: ResourceManager,
+                preparationsProfiler: ProfilerFiller,
+                reloadProfiler: ProfilerFiller,
+                backgroundExecutor: Executor,
+                gameExecutor: Executor
+            ): CompletableFuture<Void> {
+                return AncientCypherManager.INSTANCE.reload(
+                    barrier,
+                    manager,
+                    preparationsProfiler,
+                    reloadProfiler,
+                    backgroundExecutor,
+                    gameExecutor
+                )
+            }
+
+            override fun getFabricId(): ResourceLocation = modLoc("loot_cyphers")
+        })
     }
 
     private fun initRegistries() {

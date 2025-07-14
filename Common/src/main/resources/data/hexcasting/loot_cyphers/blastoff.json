@@ -1,0 +1,7 @@
+[
+  { "start_dir": "NORTH_EAST", "angles": "qaq" },
+  { "start_dir": "NORTH_WEST", "angles": "qqqqqew" },
+  { "start_dir": "SOUTH_EAST", "angles": "aqaawaa" },
+  { "start_dir": "SOUTH_EAST", "angles": "waqaw" },
+  { "start_dir": "SOUTH_WEST", "angles": "awqqqwaqw" }
+]

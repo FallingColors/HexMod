@@ -13,6 +13,7 @@ import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.lib.*;
 import at.petrak.hexcasting.common.lib.hex.*;
+import at.petrak.hexcasting.common.loot.AncientCypherManager;
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower;
 import at.petrak.hexcasting.common.misc.BrainsweepingEvents;
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder;
@@ -52,6 +53,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
@@ -197,6 +199,10 @@ public class ForgeHexInitializer {
                 HexLootFunctions.registerSerializers((lift, id) ->
                     Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, id, lift));
             }
+        });
+
+        evBus.addListener((AddReloadListenerEvent evt) -> {
+            evt.addListener(AncientCypherManager.INSTANCE);
         });
 
         evBus.register(CapClientCastingStack.class);
