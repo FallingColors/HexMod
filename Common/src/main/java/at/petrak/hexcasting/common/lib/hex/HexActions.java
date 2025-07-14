@@ -466,7 +466,7 @@ public class HexActions {
             HexDir.EAST), Action.makeConstantOp(new DoubleIota(Math.E))));
     public static final ActionRegistryEntry CONST$PHI = make("const/double/phi",
         new ActionRegistryEntry(HexPattern.fromAngles("wdded",
-            HexDir.NORTH_EAST), Action.makeConstantOp(new DoubleIota(1.618))));
+            HexDir.NORTH_EAST), Action.makeConstantOp(new DoubleIota(1.618033988749895))));
 
     // == Entities ==
 
