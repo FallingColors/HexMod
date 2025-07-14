@@ -7,8 +7,9 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.FrameForEach
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.getList
+import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
-import at.petrak.hexcasting.api.utils.Vec
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 object OpForEach : Action {
@@ -23,7 +24,7 @@ object OpForEach : Action {
         stack.removeLastOrNull()
         stack.removeLastOrNull()
 
-        val frame = FrameForEach(datums, instrs, null, Vec.empty())
+        val frame = FrameForEach(datums, instrs, null, Vector.empty<Iota>())
         val image2 = image.withUsedOp().copy(stack = stack)
 
         return OperationResult(image2, listOf(), continuation.pushFrame(frame), HexEvalSounds.THOTH)

@@ -9,7 +9,7 @@ import at.petrak.hexcasting.api.utils.NBTBuilder
 import at.petrak.hexcasting.api.utils.getList
 import at.petrak.hexcasting.api.utils.hasList
 import at.petrak.hexcasting.api.utils.serializeToNBT
-import at.petrak.hexcasting.api.utils.Vec
+import at.petrak.hexcasting.api.utils.Vector
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import net.minecraft.nbt.CompoundTag
@@ -29,13 +29,12 @@ data class FrameForEach(
     val data: SpellList,
     val code: SpellList,
     val baseStack: List<Iota>?,
-    val acc: Vec<Iota>
+    val acc: Vector<Iota>
 ) : ContinuationFrame {
 
     /** When halting, we add the stack state at halt to the stack accumulator, then return the original pre-Thoth stack, plus the accumulator. */
     override fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>> {
-        val newStack = baseStack?.toMutableList() ?: mutableListOf()
-        newStack.add(ListIota(acc.appendAll(stack).toList()))
+        val newStack = Vector.from(stack).appendedAll(acc)
         return true to newStack
     }
 
@@ -51,7 +50,7 @@ data class FrameForEach(
             harness.image.stack.toList() to acc
         } else {
             // else save the stack to the accumulator and reuse the saved base stack.
-            baseStack to acc.appendAll(harness.image.stack)
+            baseStack to acc.appendedAll(harness.image.stack)
         }
 
         // If we still have data to process...
@@ -65,7 +64,7 @@ data class FrameForEach(
             Triple(data.car, harness.image.withUsedOp(), cont2)
         } else {
             // Else, dump our final list onto the stack.
-            Triple(ListIota(acc.toList()), harness.image, continuation)
+            Triple(ListIota(nextAcc), harness.image, continuation)
         }
         val tStack = stack.toMutableList()
         tStack.add(stackTop)
@@ -88,7 +87,7 @@ data class FrameForEach(
         "accumulator" %= acc.toList().serializeToNBT()
     }
 
-    override fun size() = data.size() + code.size() + acc.length + (baseStack?.size ?: 0)
+    override fun size() = data.size() + code.size() + acc.size + (baseStack?.size ?: 0)
 
     override val type: ContinuationFrame.Type<*> = TYPE
 
@@ -103,10 +102,10 @@ data class FrameForEach(
                         HexIotaTypes.LIST.deserialize(tag.getList("base", Tag.TAG_COMPOUND), world)!!.list.toList()
                     else
                         null,
-                    Vec.ofIterable(HexIotaTypes.LIST.deserialize(
+                    Vector.from(HexIotaTypes.LIST.deserialize(
                         tag.getList("accumulator", Tag.TAG_COMPOUND),
                         world
-                    )!!.list)
+                    )!!.list.toList())
                 )
             }
 
