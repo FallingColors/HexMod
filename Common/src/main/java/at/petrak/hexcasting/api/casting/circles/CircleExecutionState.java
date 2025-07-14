@@ -56,7 +56,7 @@ public class CircleExecutionState {
     public @Nullable UUID caster;
     public @Nullable FrozenPigment casterPigment;
     // This controls the speed of the current slate
-    public Long reachedSlate;
+    public long reachedSlate;
 
     // Tracks the highest pos, and lowest pos of the AABB
     public BlockPos positivePos;
@@ -116,7 +116,6 @@ public class CircleExecutionState {
         BlockPos firstBlock = null;
         HashMap<ChunkPos, ChunkAccess> chunkMap = new HashMap<>();
         while (!todo.isEmpty()) {
-
             var pair = todo.pop();
             var enterDir = pair.getFirst();
             var herePos = pair.getSecond();
@@ -294,7 +293,7 @@ public class CircleExecutionState {
 
         executorBlockState = executor.startEnergized(this.currentPos, executorBlockState, world);
         this.reachedPositions.add(this.currentPos);
-        this.reachedSlate = this.reachedSlate +1;
+        this.reachedSlate +=1;
 
         // Do the execution!
         boolean halt = false;
@@ -321,7 +320,7 @@ public class CircleExecutionState {
                                 Component.literal(this.currentPos.toShortString()).withStyle(ChatFormatting.RED)),
                             new ItemStack(Items.COMPASS));
                         ICircleComponent.sfx(this.currentPos, executorBlockState, world,
-                                Objects.requireNonNull(env.getImpetus()), false);
+                            Objects.requireNonNull(env.getImpetus()), false);
                         halt = true;
                         break;
                     } else {
@@ -353,7 +352,7 @@ public class CircleExecutionState {
      * How many ticks should pass between activations, given the number of blocks encountered so far.
      */
     protected int getTickSpeed() {
-        return Math.toIntExact(Math.max(2, 10 - (this.reachedSlate - 1) / 3));
+        return (int) Math.max(2, 10 - (this.reachedSlate - 1) / 3);
     }
 
     public void endExecution(BlockEntityAbstractImpetus impetus) {
