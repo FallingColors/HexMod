@@ -36,6 +36,8 @@ object FrameFinishEval : ContinuationFrame {
     override fun serializeToNBT() = CompoundTag()
 
     override fun size() = 0
+    override fun depth() = 0
+    override fun subIotas(): Iterable<Iota>? = null
 
     @JvmField
     val TYPE: ContinuationFrame.Type<FrameFinishEval> = object : ContinuationFrame.Type<FrameFinishEval> {
