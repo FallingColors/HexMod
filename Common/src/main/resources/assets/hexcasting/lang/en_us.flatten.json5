@@ -991,7 +991,7 @@
       bad_entity: "needs %s but got %s",
       bad_brainsweep: "The %s rejected the being's mind",
       already_brainswept: "The mind has already been used",
-      no_spell_circle: "%s requires a spell circle",
+      no_spell_circle: "requires a spell circle",
       others_name: "Tried to invade the privacy of %s's soul",
       "others_name.self": "Tried to divulge my Name too recklessly",
       
@@ -1485,6 +1485,9 @@
         
         "no_record.title": "Lack Akashic Record",
         no_record: "Tried to access an $(l:greatwork/akashiclib)$(item)Akashic Record/$ at a location where there isn't one.$(br2)Causes purple sparks, and steals away some of my experience.",
+
+        "bad_shepherd.title": "Improper Shepherding",
+        bad_shepherd: "Tried to activate a $(l:greatwork/directrix)$(item)Shepherd Directrix/$ without a boolean on the top of the stack.$(br2)Causes red and white sparks, and forcibly ejects the Shepherd Directrix from the circle. This doesn't destroy it, thankfully, but I should make sure to go pick it up and replace it where it belongs.",
       },
       
       
@@ -1651,7 +1654,7 @@
         
         empty_directrix: "Firstly, a design for the cradle ... although, perhaps \"substrate\" would be more accurate a word. Without a mind guiding it, the output direction is determined by microscopic fluctuations in the _media wave and surroundings, making it effectively random.",
         directrix_redstone: "A $(l:greatwork/directrix)$(item)Mason Directrix/$ switches output side based on a redstone signal. Without a signal, the exit is the _media-color side; with a signal, the exit is the redstone-color side.",
-        directrix_boolean: "A $(l:greatwork/directrix)$(item)Shepherd Directrix/$ switches output side based on a boolean on the stack. A $(thing)True/$ makes the wave exit from the back, a $(thing)False/$ from the front."
+        directrix_boolean: "A $(l:greatwork/directrix)$(item)Shepherd Directrix/$ switches output side based on a boolean on the stack. A $(thing)True/$ makes the wave exit from the back, a $(thing)False/$ from the front. Failing to provide a boolean at all will cause a mishap."
       },
       
       akashiclib: {
@@ -1723,7 +1726,7 @@
         numvec: "Many mathematical operations function on both numbers and vectors. Such arguments are written as \"num|vec\".",
         
         "add.1": "Perform addition.",
-        "add.2": "As such:$(li)With two numbers at the top of the stack, combines them into their sum.$(li)With a number and a vector, removes the number from the stack and adds it to each element of the vector.$(li)With two vectors, combines them by summing corresponding components into a new vector (i.e. [1, 2, 3] + [0, 4, -1] = [1, 6, 2]).",
+        "add.2": "As such:$(li)With two numbers at the top of the stack, combines them into their sum.$(li)With a number and a vector, removes the number from the stack and adds it to each element of the vector.$(li)With two vectors, combines them by summing corresponding components into a new vector (i.e. (1, 2, 3) + (0, 4, -1) = (1, 6, 2)).",
         
         "sub.1": "Perform subtraction.",
         "sub.2": "As such:$(li)With two numbers at the top of the stack, combines them into their difference.$(li)With a number and a vector, removes the number from the stack and subtracts it from each element of the vector.$(li)With two vectors, combines them by subtracting each component.$(br2)In all cases, the top of the stack or its components are subtracted $(italic)from/$ the second-from-the-top.",
@@ -1782,10 +1785,10 @@
         "false": "Adds $(thing)False/$ to the top of the stack.",
         
         "vec/": {
-          x: "The left-hand counter-clockwise pattern adds [1, 0, 0] to the stack; the right-hand clockwise pattern adds [-1, 0, 0].",
-          y: "The left-hand counter-clockwise pattern adds [0, 1, 0] to the stack; the right-hand clockwise pattern adds [0, -1, 0].",
-          z: "The left-hand counter-clockwise pattern adds [0, 0, 1]; the right-hand clockwise pattern adds [0, 0, -1].",
-          "0": "Adds [0, 0, 0] to the stack.",
+          x: "The left-hand counter-clockwise pattern adds (1, 0, 0) to the stack; the right-hand clockwise pattern adds (-1, 0, 0).",
+          y: "The left-hand counter-clockwise pattern adds (0, 1, 0) to the stack; the right-hand clockwise pattern adds (0, -1, 0).",
+          z: "The left-hand counter-clockwise pattern adds (0, 0, 1); the right-hand clockwise pattern adds (0, 0, -1).",
+          "0": "Adds (0, 0, 0) to the stack.",
         },
         
         "double/": {
@@ -1893,9 +1896,14 @@
         parens: {
           "1": "Drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$ makes my drawing of patterns act differently, for a time. Until I draw $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Retrospection/$, the patterns I draw are saved. Then, when I draw $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$, they are added to the stack as a list iota.",
           "2": "If I draw another $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Introspection/$, it'll still be saved to the list, but I'll then have to draw $(italic)two/$ $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospections/$ to get back to normal casting.",
-          "3": "Also, I can escape the special behavior of $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ by drawing a $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ before them, which will simply add them to the list without affecting which the number of $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospections/$ I need to return to casting.$(br2)If I draw two $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Considerations/$ in a row while $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)introspecting/$, it will add a single $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ to the list.",
         },
         undo: "Finally, if I make a mistake while drawing patterns inside $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ I can draw $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ to remove the last pattern that I drew from the pattern list that is being constructed.",
+        further_notes: {
+          title: "Further Notes",
+          "1": "I can escape the special behavior of $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ by drawing a $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ before them, which will simply add them to the list without affecting which the number of $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospections/$ I need to return to casting.$(br2)If I draw two $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Considerations/$ in a row while $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)introspecting/$, it will add a single $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ to the list.",
+          "2": "If an iota other than a pattern is present in a list to be executed by $(l:patterns/meta#hexcasting:eval)$(action)Hermes' Gambit/$ or any other meta-evaluation pattern, it will normally result in a mishap. However, this can be avoided using the patterns described in this section.$(br2)Just as with pattern iotas, the patterns described here can be used to \"escape\" $(o)any other$() kind of iota, causing it to be pushed to the stack when something tries to evaluate it instead of causing a mishap.",
+          "3": "This technique may be useful if I want a _Hex to be able to reference a specific iota, such as a complicated vector or an entity reference, without having to construct or obtain it each time.$(br2)The process of getting such an iota into a list of patterns in the first place may be somewhat involved. The simplest method would be to draw a placeholder pattern when assembling the list, and then make use of $(l:patterns/lists#hexcasting:replace)$(action)Surgeon's Exaltation/$ to replace it with my desired iota.",
+        },
       },
       
       readwrite: {
