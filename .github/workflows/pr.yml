@@ -5,6 +5,7 @@ name: Build pull request
 
 on:
   pull_request:
+  merge_group:
   workflow_dispatch:
   # trigger on pushes to the default branch (main) to keep the cache up to date
   push:
