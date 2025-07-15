@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.misc.Result;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.api.utils.ChunkScanning;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
@@ -95,13 +96,17 @@ public class CircleExecutionState {
         todo.add(Pair.of(impetus.getStartDirection(), impetus.getBlockPos().relative(impetus.getStartDirection())));
         var seenGoodPosSet = new HashSet<BlockPos>();
         var seenGoodPositions = new ArrayList<BlockPos>();
+        var scanning = new ChunkScanning(level);
 
         while (!todo.isEmpty()) {
             var pair = todo.pop();
             var enterDir = pair.getFirst();
             var herePos = pair.getSecond();
+            var hereBs = scanning.getBlock(herePos);
 
-            var hereBs = level.getBlockState(herePos);
+            if (hereBs == null){
+                continue;
+            }
             if (!(hereBs.getBlock() instanceof ICircleComponent cmp)) {
                 continue;
             }
@@ -118,6 +123,7 @@ public class CircleExecutionState {
                 }
             }
         }
+        scanning.clearCache();
 
         if (seenGoodPositions.isEmpty()) {
             return new Result.Err<>(null);
