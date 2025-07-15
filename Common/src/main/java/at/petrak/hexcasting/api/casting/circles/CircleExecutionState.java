@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.misc.Result;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.api.utils.ChunkScanning;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
@@ -19,15 +20,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 /**
  * See {@link BlockEntityAbstractImpetus}, this is what's stored in it
@@ -113,30 +109,17 @@ public class CircleExecutionState {
         var positiveBlock = new BlockPos.MutableBlockPos();
         var negativeBlock = new BlockPos.MutableBlockPos();
         var lastBlockPos = new BlockPos.MutableBlockPos();
+        var scanning = new ChunkScanning(level);
         BlockPos firstBlock = null;
-        HashMap<ChunkPos, ChunkAccess> chunkMap = new HashMap<>();
+
         while (!todo.isEmpty()) {
             var pair = todo.pop();
             var enterDir = pair.getFirst();
             var herePos = pair.getSecond();
+            var hereBs = scanning.getBlock(herePos);
 
-            BlockState hereBs;
-            var chunkPos = new ChunkPos(herePos);
-
-            if (!chunkMap.containsKey(chunkPos)) { // Have we found/loaded this chunk yet?
-                var z = level.getChunkSource().getChunkFuture(chunkPos.x,chunkPos.z, ChunkStatus.EMPTY,true); // For some reason, loads almost no chunks
-                try {
-                    if (z.get().left().isPresent()){ // Has the Future computed yet?
-                        chunkMap.put(chunkPos,z.get().left().get());
-                        hereBs = z.get().left().get().getBlockState(herePos);
-                    } else { // If the future has not been somehow, run normal getBlockState
-                        hereBs = level.getLevel().getBlockState(herePos);
-                    }
-                } catch (InterruptedException | ExecutionException e) { // If something goes *wrong*, run normal getBlockState
-                    hereBs = level.getLevel().getBlockState(herePos);
-                }
-            } else { // Oh good! We found this chunk already, get it from the HashMap
-                hereBs = chunkMap.get(chunkPos).getBlockState(herePos);
+            if (hereBs == null){
+                continue;
             }
 
             if (!(hereBs.getBlock() instanceof ICircleComponent cmp)) {
@@ -175,6 +158,8 @@ public class CircleExecutionState {
                 return new Result.Err<>(null);
             }
         }
+        // Maybe not required, but still seems like a good idea
+        scanning.clearCache();
 
         if (firstBlock == null) {
             return new Result.Err<>(null);
