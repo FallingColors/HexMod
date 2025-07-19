@@ -98,7 +98,7 @@ enableExperimentalFeatures = true
 # mostly we use strict mode
 # but pyright doesn't allow decreasing error severity in strict mode
 # so we need to manually specify all of the strict mode overrides so we can do that :/
-typeCheckingMode = "basic"
+typeCheckingMode = "standard"
 
 strictDictionaryInference = true
 strictListInference = true
