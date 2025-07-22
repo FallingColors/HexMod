@@ -156,6 +156,8 @@ public class HexItemModels extends PaucalItemModelProvider {
             "layer0", modLoc("item/colorizer/uuid"));
         singleTexture(getPath(HexItems.DEFAULT_PIGMENT), new ResourceLocation("item/generated"),
             "layer0", modLoc("item/colorizer/uuid"));
+        singleTexture(getPath(HexItems.ANCIENT_PIGMENT), new ResourceLocation("item/generated"),
+            "layer0", modLoc("item/colorizer/uuid"));
 
         simpleItem(modLoc("slate_blank"));
         simpleItem(modLoc("slate_written"));

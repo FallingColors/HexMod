@@ -103,6 +103,7 @@
     
     uuid_colorizer: "Soulglimmer Pigment",
     default_colorizer: "Vacant Pigment",
+    ancient_colorizer: "Ancient Pigment,
     
     creative_unlocker: {
       "": "The Media Cube",

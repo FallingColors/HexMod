@@ -9,10 +9,7 @@ import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.items.ItemStaff;
 import at.petrak.hexcasting.common.items.magic.*;
-import at.petrak.hexcasting.common.items.pigment.ItemAmethystAndCopperPigment;
-import at.petrak.hexcasting.common.items.pigment.ItemDyePigment;
-import at.petrak.hexcasting.common.items.pigment.ItemPridePigment;
-import at.petrak.hexcasting.common.items.pigment.ItemUUIDPigment;
+import at.petrak.hexcasting.common.items.pigment.*;
 import at.petrak.hexcasting.common.items.storage.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.base.Suppliers;
@@ -136,6 +133,8 @@ public class HexItems {
 
     public static final Item UUID_PIGMENT = make("uuid_colorizer", new ItemUUIDPigment(unstackable()));
     public static final Item DEFAULT_PIGMENT = make("default_colorizer",
+        new ItemAmethystPigment(unstackable()));
+    public static final Item ANCIENT_PIGMENT = make("ancient_colorizer",
         new ItemAmethystAndCopperPigment(unstackable()));
 
     // BUFF SANDVICH
