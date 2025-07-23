@@ -1554,10 +1554,10 @@
       // roll credits
       hexcasting: {
         "1": "虽然用$(l:items/staff)$(item)法杖/$直接施放$(hex)咒术/$确实足够灵活易用，但仅凭法杖重复施放同一种咒术就很烦人了。如果能将某些常用法术存储起来后续直接使用，就再方便不过了，同时也方便我与朋友分享这些$(hex)咒术/$。",
-        "2": "以下三种魔法物品就能做到这点：$(l:items/hexcasting)$(item)杂件/$，$(l:items/hexcasting)$(item)缀品/$和$(l:items/hexcasting)$(item)造物/$。所有三种物品都能存储$(hex)咒术/$对应的所有图案，且都有一个用来存储$(media)媒质/$的小电池。$(br2)手持时按下$(thing)$(k:use)/$就会消耗其内含的媒质像用法杖施法那样运行其中图案。",
+        "2": "以下三种魔法物品就能做到这点：$(l:items/hexcasting)$(item)杂件/$，$(l:items/hexcasting)$(item)缀品/$和$(l:items/hexcasting)$(item)造物/$。所有三种物品都能存储$(hex)咒术/$对应的所有图案，且都有一个用来存储$(media)媒质/$的小储库。$(br2)手持时按下$(thing)$(k:use)/$就会消耗其内含的媒质像用法杖施法那样运行其中图案。",
         "3": "每种物品都有自己的特点：$(br2)$(l:items/hexcasting)$(item)杂件/$很脆弱，在耗尽其内含的$(media)媒质/$后就会损坏，$(italic)不可/$重新充能。$(br2)$(l:items/hexcasting)$(item)缀品/$则只要还有剩余的$(media)媒质/$就能一直施法，但媒质耗尽后若不重新充能就无法使用。",
         "4": "$(l:items/hexcasting)$(item)造物/$是三者之中最强力的——其内含的$(media)媒质/$耗尽后，它们还能消耗持有者物品栏内的$(l:items/amethyst)$(item)紫水晶/$来施放$(hex)咒术/$，就和用$(l:items/staff)$(item)法杖/$施法一样。不过这也意味着，一旦$(l:items/amethyst)$(item)紫水晶/$不够，继续施法可能会消耗施法者的意识。$(br2)而在工作台中合成魔法物品后，必须将$(hex)咒术/$以适合对应物品的法术写入其中。（也没什么其他办法。）$(l:patterns/spells/hexcasting)对应的图案详情见此。/$",
-        "5": "每次写入都需要栈上有一个实体和一个由图案构成的列表。这个实体必须是一个含有$(media)媒质/$的物品实体（也即掉落在地上的$(l:items/amethyst)$(item)紫水晶/$）。该实体会变成该魔法物品的内部电池。$(br2)似乎电池中的$(media)媒质/$不会像用$(l:items/staff)$(item)法杖/$施法那样以物品组为单位消耗。其中的$(media)媒质/$实际上会“溶解”入一个连续的能量池。因此，当物品中存有会消耗 1 个$(l:items/amethyst)$(item)紫水晶粉/$中媒质来施放的$(hex)咒术/$时，含有相当于 1 个$(l:items/amethyst)$(item)充能紫水晶/$中媒质的电池能支持施放该咒术 10 次。",
+        "5": "每次写入都需要栈上有一个实体和一个由图案构成的列表。这个实体必须是一个含有$(media)媒质/$的物品实体（也即掉落在地上的$(l:items/amethyst)$(item)紫水晶/$）。该实体会变成该魔法物品的内部储库。$(br2)似乎储库中的$(media)媒质/$不会像用$(l:items/staff)$(item)法杖/$施法那样以物品组为单位消耗。其中的$(media)媒质/$实际上会“溶解”入一个连续的能量池。因此，当物品中存有会消耗 1 个$(l:items/amethyst)$(item)紫水晶粉/$中媒质来施放的$(hex)咒术/$时，含有相当于 1 个$(l:items/amethyst)$(item)充能紫水晶/$中媒质的储库能支持施放该咒术 10 次。",
         "crafting.desc": "$(italic)我们常说一句话，“魔法从不……”。它从不“就是行得通”，它不会随你操控。你不能光靠所谓魔法扔个火球，烧顿晚饭，或是把一帮劫匪变成青蛙和蜗牛。/$",
       },
 
@@ -1568,7 +1568,7 @@
 
       phials: {
         "1": "我觉得……自然不愿意给我的研究留些余量的做法，令人非常不快。如果我手头只有$(l:items/amethyst)$(item)充能紫水晶/$，就算是最为基础的$(l:patterns/basics#hexcasting:raycast)$(action)弓箭手之馏化/$也会消耗一整块水晶，没利用的$(media)媒质/$就被浪费了。$(br2)幸运的是，我找到了一种解决问题的方法。",
-        "2": "我找到了记载着一种注入了$(media)媒质/$的$(item)玻璃瓶/$的卷轴。施放$(hex)咒术/$时，法术会从这种试剂瓶中汲取$(media)媒质/$。液态的$(media)媒质/$便于按量使用，不会有媒质被浪费。它就和$(l:items/hexcasting)$(item)缀品/$的内部电池差不多，也一样可以用$(l:patterns/spells/hexcasting#hexcasting:recharge)$(action)重新充能/$补充媒质。",
+        "2": "我找到了记载着一种注入了$(media)媒质/$的$(item)玻璃瓶/$的卷轴。施放$(hex)咒术/$时，法术会从这种试剂瓶中汲取$(media)媒质/$。液态的$(media)媒质/$便于按量使用，不会有媒质被浪费。它就和$(l:items/hexcasting)$(item)缀品/$的内部储库差不多，也一样可以用$(l:patterns/spells/hexcasting#hexcasting:recharge)$(action)重新充能/$补充媒质。",
         "3": "而不幸的是，用于$(italic)制作/$这种试剂瓶的技艺已经散佚了。我确实发现了$(l:patterns/great_spells/make_battery#hexcasting:craft/battery)$(thing)对应图案画法的提示/$，但具体绘制方法难以捉摸，怎么都画不对。不过我想只要勤学苦练就能修得真功。现在的话，浪费$(media)媒质/$是没法避免了……$(br2)但我不会一直囿于此处的。",
         desc: "$(italic)玉液琼浆。/$",
       },
@@ -2000,13 +2000,13 @@
       },
 
       hexcasting_spell: {
-        "basics": "这三个法术都能制作$(l:items/hexcasting)$(thing)用于施放$(hex)咒术/$的物品/$。$(br)它们都要求我在另一只手上手持对应的基础物品，并且需提供两个参数：需运行的图案和一个用作电池的$(l:items/amethyst)$(item)紫水晶/$物品实体。$(br2)详情参见$(l:items/hexcasting)此条目/$。",
+        "basics": "这三个法术都能制作$(l:items/hexcasting)$(thing)用于施放$(hex)咒术/$的物品/$。$(br)它们都要求我在另一只手上手持对应的基础物品，并且需提供两个参数：需运行的图案和一个用作储库的$(l:items/amethyst)$(item)紫水晶/$物品实体。$(br2)详情参见$(l:items/hexcasting)此条目/$。",
         "craft/cypher": "消耗大约 1 个$(l:items/amethyst)$(item)充能紫水晶/$。",
         "craft/trinket": "消耗大约 5 个$(l:items/amethyst)$(item)充能紫水晶/$。",
         "craft/artifact": "消耗大约 10 个$(l:items/amethyst)$(item)充能紫水晶/$。",
 
         "recharge.1": "给另一只手中的能装$(media)媒质/$的物品重新充能。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶碎片/$。",
-        "recharge.2": "此法术的施放方式和制作施法物品所用法术的类似。提供一个$(l:items/amethyst)$(item)紫水晶/$物品实体，就能给另一只手中物品的$(media)媒质/$电池重新充能。$(br2)此法术$(italic)不能/$充入超过电池大小的媒质。",
+        "recharge.2": "此法术的施放方式和制作施法物品所用法术的类似。提供一个$(l:items/amethyst)$(item)紫水晶/$物品实体，就能给另一只手中物品的$(media)媒质/$储库重新充能。$(br2)此法术$(italic)不能/$充入超过储库大小的媒质。",
 
         "erase.1": "清除另一只手中写有$(hex)咒术/$的物品。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
         "erase.2": "此法术也会清除物品内存储的$(media)媒质/$，将其释放给自然并将物品恢复到其初始状态。如此就能回收利用容易出错的$(l:items/hexcasting)$(item)缀品/$了。$(br2)此法术也能清除$(l:items/focus)$(item)核心/$和$(l:items/spellbook)$(item)法术书/$书页内容，同时去除其上密封。",
