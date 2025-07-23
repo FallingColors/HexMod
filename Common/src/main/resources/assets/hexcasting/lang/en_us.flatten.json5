@@ -1564,7 +1564,7 @@
 
       ancient_cyphers: {
         "1": "While adventuring, I've come across what appear to be $(l:items/hexcasting)$(item)Cyphers/$ created by the Hexcasters of the ancient past. These $(item)Ancient Cyphers/$ work just like the ones I can craft: they can't be recharged, and will break when their reserve of _Media runs out. However, unlike my own $(l:items/hexcasting)$(item)Cyphers/$, their decayed structure allows me to glimpse the _Hex stored within.",
-        "2": "These may be useful for learning new techniques - who better to teach me than ancient masters of the art?$(br2)Alternatively, I could erase the contents of one and store my own _Hex inside, creating a casting item that clearly displays its own function."
+        "2": "These may be useful for learning new techniques - who better to teach me than ancient masters of the art?$(br2)Alternatively, I could erase the contents of one and store my own _Hex inside, creating a casting item that clearly displays its own function.",
         "3": "The $(l:items/pigments)$(item)Pigment/$ baked into these relics is a unique blend of purple and orange, matching their copper-and-amethyst appearance. I can replicate it using the above recipe.",
       },
       
