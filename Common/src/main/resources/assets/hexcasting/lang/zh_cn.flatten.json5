@@ -350,6 +350,10 @@
           "": "单击切换绘制与否",
           "@Tooltip": "单击即可开始或结束绘制，无需按住拖动",
         },
+        alwaysShowListCommas: {
+          "": "在所有情况下都显示列表逗号",
+          "@Tooltip": "是否用逗号分隔列表中各种类型的iota（默认情况下，图案iota不会使用逗号分隔）",
+        },
       },
 
       server: {
@@ -987,7 +991,7 @@
       bad_entity: "需要%s，而实际接受了%s",
       bad_brainsweep: "%s排斥此生物的意识",
       already_brainswept: "此意识已被使用",
-      no_spell_circle: "%s需在法术环上执行",
+      no_spell_circle: "需在法术环上执行",
       others_name: "试图侵犯%s的灵魂的隐私",
       "others_name.self": "试图随意泄露我自己真名的秘密",
 
@@ -1427,10 +1431,10 @@
         entity_immune: "该操作试图影响某不会受其影响的实体。$(br2)产生蓝色火花，我手中的物品将会掉落并飞向对应实体。",
 
         "math_error.title": "数学错误",
-        math_error: "该操作违背了数学规律，例如试图除以零。$(br2)产生红色火花，压入一个$(l:casting/influences)$(action)垃圾/$，并且我的意识会被销蚀，扣去我当时生命力的一半。自然似乎对这种举动深感冒犯，而后便会报复性地惩罚$(italic)我/$。",
+        math_error: "该操作违背了数学规律，例如试图除以零。$(br2)产生红色火花，压入一个$(l:casting/influences)$(action)垃圾/$，并销蚀我的意识，扣去我当时生命力的一半。自然似乎对这种举动深感冒犯，而后便会报复性地惩罚$(italic)我/$。",
 
         "incorrect_item.title": "物品错误",
-        incorrect_item: "该操作需要某种物品，而我所提供的物品不合适。$(br2)产生棕色火花。如果在手中持有对应物品，则该物品会掉落在地。如果对应物品以实体形式存在，则其会被击飞。",
+        incorrect_item: "该操作需要某种物品，而我提供的物品不合适。$(br2)产生棕色火花。如果在手中持有对应物品，则该物品会掉落在地。如果对应物品以实体形式存在，则其会被击飞。",
 
         "incorrect_block.title": "方块错误",
         incorrect_block: "该操作需在目标位置存在某种方块，而该位置实际存在的方块不合适。$(br2)产生亮绿色火花，并在对应位置产生一次爆炸。这种爆炸似乎不会伤害到我、世界或是任何其他事物。就是挺吓人的。",
@@ -1439,7 +1443,7 @@
         retrospection: "试图在绘制$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$前绘制$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$。$(br2)产生橙色火花，并压入一个$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$对应的图案。",
 
         "too_many_patterns.title": "陷入沉思",
-        too_many_patterns: "在单个$(hex)咒术/$试图运行过多图案，通常是因为不小心制造了死循环。$(br2)产生暗蓝色火花，并使我窒息。",
+        too_many_patterns: "试图在单个$(hex)咒术/$内运行过多图案，通常是因为不小心制造了死循环。$(br2)产生暗蓝色火花，并使我窒息。",
 
         "true_name.title": "违犯他人",
         true_name: "试图在某种永久性媒介中$(l:patterns/readwrite#hexcasting:write)$(action)存储/$代表另一位玩家的 iota。$(br2)产生黑色火花，并致盲大约一分钟。",
@@ -1453,7 +1457,7 @@
 
       stack: {
         "1": "$(thing)栈/$，又被称为“后进先出表（LIFO）”，是计算机科学中的概念。简而言之，栈是一种只能与最近交互过的事物交互的事物的集合。$(br2)想象一摞盘子，新盘子会被放在其顶部。若想要与放在这摞盘子中间的某个盘子交互，你就必须先将它上面的所有盘子拿开才行。",
-        "2": "因为栈非常简单，所以与其的交互种类屈指可数：$(li)$(italic)向其中加入事物/$，称为“入栈”/“push”。$(li)$(italic)移除最后加入的元素/$，称为“出栈”/“pop”。$(li)$(italic)校验或修改最后加入的元素/$，称为“检视”/“peek”。$(br)我们将最后加入的元素称为“栈顶元素”，就和盘子的类比差不多。$(p)举个例子，如果向栈压入 1 号元素，然后压入 2 号元素，然后弹出一个元素，这时栈顶元素便是 1 号元素。",
+        "2": "因为栈非常简单，所以可用的交互种类屈指可数：$(li)$(italic)向其中加入事物/$，称为“入栈”/“push”。$(li)$(italic)移除最后加入的元素/$，称为“出栈”/“pop”。$(li)$(italic)校验或修改最后加入的元素/$，称为“检视”/“peek”。$(br)我们将最后加入的元素称为“栈顶元素”，就和盘子的类比差不多。$(p)举个例子，如果向栈压入 1 号元素，然后压入 2 号元素，然后弹出一个元素，这时栈顶元素便是 1 号元素。",
         "3": "操作（大致）都只能与栈以如上几种方式交互。它们会弹出部分它们所期望的 iota（称为“参数”或“实参”或“形参”），对它们进行处理，然后压入一定数目的结果。$(br2)当然，某些操作（例如$(l:patterns/basics#hexcasting:get_caster)$(action)意识之精思/$）可能不会弹出任何元素，而某些操作（尤其是法术）可能不会压入任何元素。",
         "4": "更复杂的操作都可用若干次入栈、出栈或检视操作实现。例如，$(l:patterns/stackmanip#hexcasting:swap)$(action)弄臣之策略/$交换栈顶两个元素的顺序。这可认为是弹出两个 iota 并以相反顺序重新压入。又例如，$(l:patterns/stackmanip#hexcasting:duplicate)$(action)双子之分解/$会复制栈顶元素，也即其检视栈顶并压入一个一样的元素。",
       },
@@ -1466,7 +1470,7 @@
 
       influences: {
         "1": "虚指非常……奇怪，至少能这么说。大部分 iota 都代表着世界中的某个实际事物，而虚指则代表着某些更为……抽象或无形的事物。$(br2)例如，我将一种虚指命名为 $(l:casting/influences)$(thing)Null/$，它似乎代表着“无”这种状态。当一个问题没有确切的答案时就会出现一个 Null，比如对着天空执行$(l:patterns/basics#hexcasting:raycast)$(action)弓箭手之馏化/$。",
-        "2": "此外，我还发现了一组四个奇特的虚指，命名为$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)考察/$、$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$、$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$和$(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)消解/$。它们似乎同时有着图案和虚指的性质，但实际作用却和这两者都不一样。我能用它们将图案作为 iota 加到栈中，而非执行图案对应的操作。$(l:patterns/patterns_as_iotas)相关笔记在此/$。",
+        "2": "此外，我还发现了一组四个奇特的虚指，命名为$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)考察/$、$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$、$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$和$(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)消解/$。它们似乎同时有着图案和虚指的性质，但实际作用却和这两者都不一样。我能用它们把图案作为 iota 加到栈中，而非执行图案对应的操作。$(l:patterns/patterns_as_iotas)相关笔记在此/$。",
         "3": "最后，似乎还有一组无限个虚指，它们都代表着一团紊乱的$(media)媒质/$。我称其为$(l:casting/influences)$(action)垃圾/$，因为它们毫无用处。它们似乎会因$(l:casting/mishaps)$(thing)事故/$而在栈中任意位置出现，呈现出来的则是一团乱麻。",
       },
 
@@ -1481,13 +1485,16 @@
 
         "no_record.title": "缺失阿卡夏记录",
         no_record: "试图在无对应方块处访问$(l:greatwork/akashiclib)$(item)阿卡夏记录/$。$(br2)产生紫色火花，并消耗部分经验。",
+
+        "bad_shepherd.title": "不当牧羊",
+        bad_shepherd: "试图在栈顶无布尔值时激活$(l:greatwork/directrix)$(item)牧羊人导向石/$。$(br2)产生红色和白色火花，并将牧羊人导向石抛出环外。只能说，还好不会伤到它，但这之后需要把它带回到原来的位置。",
       },
 
 
       // Items
 
       amethyst: {
-        dust: "在晶洞里破坏紫水晶会产生三种形态的紫水晶。紫水晶量最少的物品是一堆闪着光的粉末，含有较少量的$(media)媒质/$。",
+        dust: "破坏晶洞里的紫水晶会产生三种形态的紫水晶。紫水晶量最少的物品是一堆闪着光的粉末，含有较少量的$(media)媒质/$。",
         shard: "第二种是紫水晶的碎片，也就是不是$(hex)咒术师/$的人们最为熟悉的。这种碎片大约含有 5 个$(l:items/amethyst)$(item)紫水晶粉/$量的$(media)媒质/$。",
         crystal: "最后，偶尔能发现充盈着能量的大型水晶。它们含有大约 10 个$(l:items/amethyst)$(item)紫水晶粉/$（也即两个$(l:items/amethyst)$(item)紫水晶碎片/$）量的$(media)媒质/$。",
         lore: "$(italic)老人叹了口气，对着火炉伸出了一只手。他回想起自己对周边山脉的记忆，从那些土地中汲取能量——就像他在泰瑞西亚城从札夫拿、河鼓、主教还有象牙塔中的其它法师身上学到的那样。他集中精神，从柴薪中升起的火焰摇摆扭动，最终形成了一抹温柔的微笑。/$",
@@ -1647,7 +1654,7 @@
 
         empty_directrix: "第一步，基床……用“基底”这个名字会准确些。倘若没有意识引导，媒质的流向是由$(media)媒质/$波的微观涨落和环境决定的，换句话说，随机的。",
         directrix_redstone: "$(l:greatwork/directrix)$(item)石匠导向石/$会根据红石信号改变输出方向。没有信号的话，出口是$(media)媒质/$色的一端；有信号的话，出口是红石色的一端。",
-        directrix_boolean: "$(l:greatwork/directrix)$(item)牧羊人导向石/$会根据栈中的布尔值改变输出方向。为$(thing)True/$时，媒质自后方流出；为$(thing)False/$时，媒质自前方流出。"
+        directrix_boolean: "$(l:greatwork/directrix)$(item)牧羊人导向石/$会根据栈中的布尔值改变输出方向。为$(thing)True/$时，媒质自后方流出；为$(thing)False/$时，媒质自前方流出。未能获取到布尔值则会招致事故。"
       },
 
       akashiclib: {
@@ -1661,7 +1668,7 @@
         "1": "$(l)它们就是小块媒质。/$我怎么没早点发现呢？它们——我是一堆血肉再加上一小点……是被赐予了一小点的思维，但悦灵是能维持自稳的媒质集群，再被按到一小点血肉上去。所有东西就都说得通了——它们对媒质的趋向性，它们对音乐的种种反应，$(l)我现在理解了/$，$(l)但/$为何前人$(l)没有/$？",
         "2": "理解这点后，唯一$(l)正确/$的选择就是去征服它们奇异的意识——它们奇异的自我——也是它们的全部、一个意识、一个自我、一段尾声。它们的性状似乎揭示了某些东西。我能……我能使用它们压缩$(media)媒质/$，将两束思维叠放在一起，形体与认知，多与一。$(br2)这个过程不知怎么的会自行产生$(media)媒质/$。这是怎么回事？也许——也许是$(l)我/$的缘故，是完成这项任务的过程——",
         "3": "它不重要。我不重要。它们不重要，重要的只有功用。这就是了。$(br2)这肯定相当痛苦。$(br2)十份$(l:items/amethyst)$(item)紫水晶粉/$，就是启动如此恶劣仪式的代价。",
-        "4": "所得的产物十分脆弱。直接破坏会将其打碎成碎片，$(thing)时运/$则能增加产量……如果需要获得方块本身，那要有精准采集才行。$(br2)产生的碎片相当于 3 个$(l:items/amethyst)$(item)充能紫水晶/$拼在一起。方块则相当于 4 个碎片。",
+        "4": "所得的产物十分脆弱。直接破坏会将其打碎成碎片，$(thing)时运/$则能增加产量……如果需要获得方块本身，那要有精准采集才行。$(br2)产生的碎片相当于 3 个$(l:items/amethyst)$(item)充能紫水晶/$拼在一起。方块则相当于 4 个这种碎片。",
         "5": "它们变幻莫测，好像会在我的手中不断变形闪烁，若是给予它们来自另一种$(media)媒质/$形态的引导，它们便会变成对应的形态，且$(media)媒质/$总量前后不变。",
       },
 
@@ -1734,7 +1741,7 @@
         "abs.2": "将一个数变为其绝对值，将一个向量变为其模长。",
 
         "pow.1": "执行乘方或向量射影。",
-        "pow.2": "若栈顶为两个数，返回两数的乘方。$(li)若为一个数和一个向量，移除该数并计算向量的每个分量与该数的乘方。$(li)若为两个向量，计算栈顶向量对栈顶往下第二向量的$(l:https://en.wikipedia.org/wiki/Vector_projection)向量射影/$。$(br2)第一第二种情况下，栈顶元素或其分量为指数，栈顶往下第二元素或其分量为底数。",
+        "pow.2": "若栈顶为两个数，返回两数的幂。$(li)若为一个数和一个向量，移除该数并计算向量的每个分量与该数的幂。$(li)若为两个向量，计算栈顶向量对栈顶往下第二向量的$(l:https://en.wikipedia.org/wiki/Vector_projection)向量射影/$。$(br2)第一第二种情况下，栈顶元素或其分量为指数，栈顶往下第二元素或其分量为底数。",
 
         floor: "对一个数取底，也即去掉小数部分取整。或对向量的每个分量取底。",
         ceil: "对一个数取顶，也即将小数部分不为零的数换为大于其的最小整数。或对向量的每个分量取顶。",
@@ -1760,13 +1767,13 @@
         numlist: "集合操作比较奇怪，部分操作只能接受两个数或两个列表，一个数一个列表就不行。这类参数记为“(num, num) (list, list)”。$(br2)当接受的是数时，它们将被视为所谓二进制的“位组”，也就是由 1 和 0、真和假、“开”和“关”组成的列表。",
 
         "or.1": "取两集合的并集。",
-        "or.2": "操作如下：$(li)若栈顶为两个数，将其组合为在两个位组中有一个为 1 处为 1 的位组。$(li)若栈顶为两个列表，则创建一个由第一个列表中所有元素和第二个列表独有的元素组成的列表。和$(l:patterns/lists#hexcasting:add)$(action)加法之馏化/$有些类似。",
+        "or.2": "操作如下：$(li)若栈顶为两个数，那么在两个位组中至少有一个为 1 的位置，所得位组也为 1。$(li)若栈顶为两个列表，则创建一个由第一个列表中所有元素和第二个列表独有的元素组成的列表。和$(l:patterns/lists#hexcasting:add)$(action)加法之馏化/$有些类似。",
 
         "and.1": "取两集合的交集。",
-        "and.2": "操作如下：$(li)若栈顶为两个数，将其组合为仅在两个位组中$(italic)均/$为 1 处为 1 的位组。$(li)若栈顶为两个列表，则创建一个由第一个和第二个列表共有的元素组成的列表。",
+        "and.2": "操作如下：$(li)若栈顶为两个数，那么只有在两个位组中$(italic)均/$为 1 的位置，所得位组为 1。$(li)若栈顶为两个列表，则创建一个由第一个和第二个列表共有的元素组成的列表。",
 
         "xor.1": "取两集合中每个集合独有的元素集合。",
-        "xor.2": "操作如下：$(li)若栈顶为两个数，将其组合为仅在两个位组中$(italic)仅一个/$为 1 处为 1 的位组。$(li)若栈顶为两个列表，则创建一个在两个列表中$(italic)仅出现一次/$的元素组成的列表。",
+        "xor.2": "操作如下：$(li)若栈顶为两个数，那么只有在两个位组中$(italic)仅一个/$为 1 的位置，所得位组为 1。$(li)若栈顶为两个列表，则创建一个在两个列表中$(italic)仅出现一次/$的元素组成的列表。",
 
         not: "对位组执行位非操作，将所有为 1 的比特换为 0，反之亦然。就我经验而言，这会使一个数变为其相反数，然后减 1。例如，0 会变成 -1，而 -100 会变成 99。",
         to_set: "去除列表内重复的元素。",
@@ -1803,13 +1810,13 @@
         tuck: "将栈底元素复制至栈顶往下第二元素下方。[0, 1] 变为 [1, 0, 1]。",
         "2dup": "复制栈顶的两个 iota。[0, 1] 变为 [0, 1, 0, 1]。",
         stack_len: "以数的形式压入栈中元素的个数。（例如，一个形如 [0, 1] 的栈会变为 [0, 1, 2]。）",
-        duplicate_n: "移除栈顶的数，然后将现在的栈顶元素复制该数次。（若所给数为 2，则栈顶会有两个同一元素。）",
+        duplicate_n: "移除栈顶的数，然后将移除后的栈顶元素复制该数次。（若所给数为 2，则栈顶会有两个同一元素，不是三个。）",
         fisherman: "提出下标为所给数的元素并将其置于栈顶。",
         "fisherman/copy": "与$(l:patterns/stackmanip#hexcasting:fisherman)$(action)渔夫之策略/$类似，但会复制 iota 而非将其提出。",
 
         mask: {
           "1": "一组无限个根据凹槽和横线的顺序来保留或移除栈中元素的操作。",
-          "2": "假如从左到右绘制书吏之策略，此操作操控的 iota 个数由其横向长度决定。从靠近栈底端开始计入，一条横线代表保留该处元素，一个凹槽代表移除该处元素。$(br2)如果栈从栈底起形如 $(italic)0, 1, 2/$ ，绘制左页例图一，则栈变为 $(italic)1/$；例图二会将栈变为 $(italic)0/$；例图三会将栈变为 $(italic)0, 2/$（栈底的 0 不受影响）。",
+          "2": "假如从左到右绘制书吏之策略，此操作操控的 iota 个数由其横向长度决定。从靠近栈底的位置开始往栈顶计入，一条横线代表保留该处元素，一个凹槽代表移除该处元素。$(br2)如果栈从靠近栈底处起形如 $(italic)0, 1, 2/$ ，绘制左页例图一，则栈变为 $(italic)1/$；例图二会将栈变为 $(italic)0/$；例图三会将栈变为 $(italic)0, 2/$（栈底方向的 0 不受影响）。",
         },
 
         swizzle: {
@@ -1829,7 +1836,7 @@
         if: "如果第一个参数是 True，保留第二个参数并移除第三个。否则保留第三个参数并移除第二个。",
         equals: "如果第一个参数等于第二个（允许较小误差），返回 True。否则返回 False。",
         not_equals: "如果第一个参数不等于第二个（允许较小误差），返回 True。否则返回 False。",
-        greater: "如果第一个参数大于第二个，返回 True. 否则返回 False。",
+        greater: "如果第一个参数大于第二个，返回 True。否则返回 False。",
         less: "如果第一个参数小于第二个，返回 True。否则返回 False。",
         greater_eq: "如果第一个参数大于或等于第二个，返回 True。否则返回 False。",
         less_eq: "如果第一个参数小于或等于第二个，返回 True。否则返回 False。",
@@ -1880,7 +1887,7 @@
       },
 
       patterns_as_iotas: {
-        "1": "咒法学中的一个怪异之处就是$(italic)图案本身/$也可被视为 iota ——其甚至能在施法时被压到栈中。$(br2)这就产生了一个问题：我怎么把图案用作 iota 呢？如果就只是画一遍，自然大概不会将其理解为“把它加到栈里”，而只会将其与操作对应起来。",
+        "1": "咒法学中的一个怪异之处就是$(italic)图案本身/$也可被视为 iota——其甚至能在施法时被压到栈中。$(br2)这就产生了一个问题：我怎么把图案用作 iota 呢？如果就只是画一遍，自然大概不会将其理解为“把它加到栈里”，而只会将其与操作对应起来。",
         "2": "幸运的是，自然提供了一组专用于此道的$(l:casting/influences)虚指/$。$(br2)简而言之，$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)考察/$使我能将一个图案加到栈中，$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$和$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$则能加入一整个列表。",
         escape: {
           "1": "要使用$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)考察/$，先绘制它，然后绘制任意图案。第二个图案就会被加到栈中。",
@@ -1889,9 +1896,14 @@
         parens: {
           "1": "绘制$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$会让这之后绘制的图案不再与操作联系。而在绘制$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)反思/$后，之前绘制的图案就会作为一个列表加到栈中。",
           "2": "如果绘制内省后再绘制一个$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)内省/$，则它也将被加到列表中，而且需绘制$(italic)两次/$$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$才能回到正常施法模式。",
-          "3": "而且，如果在绘制$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$和$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$前绘制一个$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)考察/$，就能绕过它们的特殊功能，并将它们作为普通图案加到栈中，且不会影响返回正常施法模式前要绘制的$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$个数。$(br2)如果在$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)考察中/$连续绘制两个$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)考察/$，只有第一个$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)考察/$会被加到栈中。",
         },
         undo: "最后，若在$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$和$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$之间有图案绘制错误，则可绘制$(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)消解/$以移除图案列表中的最后绘制的图案。",
+        further_notes: {
+          title: "更多笔记",
+          "1": "在绘制$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$和$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$前绘制一个$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)考察/$，就能绕过它们的特殊功能，并将它们作为普通图案加到栈中，且不会影响返回正常施法模式前要绘制的$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$个数。$(br2)如果在$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省中/$连续绘制两个$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)考察/$，只有第一个$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)考察/$会被加到栈中。",
+          "2": "如果$(l:patterns/meta#hexcasting:eval)$(action)赫尔墨斯之策略/$或者其他元运行图案运行的列表中出现了图案之外的 iota，那么通常来说会招致事故。但是，这种事故也可用本节中写到的图案规避。$(br2)本节中的图案可以“转义”图案 iota，也一样能“转义”$(o)任意一种 iota$()。运行到这些 iota 时，它们只会被压入栈中，而不会招致事故。",
+          "3": "我要是想让$(hex)咒术/$直接引用特定的 iota——比如复杂向量、对实体的引用等——而不在每次运行时都从头开始构造或获取，这一技术会很有用。$(br2)把这类 iota 加入列表的过程可能会比较复杂。最简单的方法是在组装列表时绘制占位图案，然后用$(l:patterns/lists#hexcasting:replace)$(action)外科医师之提整/$替换成所需的 iota。",
+        },
       },
 
       readwrite: {
@@ -1922,7 +1934,7 @@
         "halt.2": "但当与$(l:patterns/meta#hexcasting:eval)$(action)赫尔墨斯之策略/$或$(l:patterns/meta#hexcasting:for_each)$(action)托特之策略/$一起使用时，它就将发挥$(italic)大/$用。那些图案会碰到这个休止符，但$(hex)咒术/$本身不会停止，停止运行的是那些策略。它可以用来防止$(l:patterns/meta#hexcasting:for_each)$(action)托特之策略/$将每个 iota 都运行一遍。这便是逃离疯狂的秘道。",
 
         "eval/cc.1": "此图案和$(l:patterns/meta#hexcasting:eval)$(action)赫尔墨斯之策略/$类似，也能运行图案或依次运行图案列表，但会在开始之前将一独特的“跳转” iota 压入栈中。",
-        "eval/cc.2": "当执行至“跳转” iota 时，法术会直接跳过图案列表中剩余的图案至列表尾部。$(p)当然因为已经有了$(l:patterns/meta#hexcasting:halt)$(action)卡戎之策略/$，这种性质难免显得有些冗余。不过它能以可控方式退出$(italic)多层嵌套/$调用的$(l:patterns/meta#hexcasting:eval)$(action)赫尔墨斯之策略/$，而卡戎之策略只能退出一层。$(p)“跳转” iota 甚至会在所有策略都执行完毕后还留在栈上……真是细思恐极。",
+        "eval/cc.2": "当执行至“跳转” iota 时，法术会直接跳过图案列表中剩余的图案至列表尾部。$(p)当然因为已经有了$(l:patterns/meta#hexcasting:halt)$(action)卡戎之策略/$，这种性质难免显得有些冗余。不过它能以可控方式退出$(italic)多层嵌套/$调用的$(l:patterns/meta#hexcasting:eval)$(action)赫尔墨斯之策略/$，而卡戎之策略只能退出一层。$(p)“跳转”iota 甚至会在所有策略都执行完毕后还留在栈上……真是细思恐极。",
 
         "thanatos.1": "将$(hex)咒术/$仍能运行的图案数压入列表。每运行一个图案，所得数即减少 1。"
       },
@@ -1972,7 +1984,7 @@
         conjure_light: "在给定位置构筑一个发着我染色剂颜色的光的魔法光源。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
         bonemeal: "使目标位置的植物或树苗更快成长，就像对其施以$(item)骨粉/$一样。消耗略多于 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
         edify: "将$(media)媒质/$强制注入目标位置的树苗，使其长为$(l:items/edified)$(thing)启迪树/$。消耗大约 1 个$(l:items/amethyst)$(item)充能紫水晶/$。",
-        ignite: "在给定位置上方生火，或点燃给定生物，就像对其使用$(item)火焰弹/$一样。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
+        ignite: "在给定位置上方生火，或点燃给定实体，就像对其使用$(item)火焰弹/$一样。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
         extinguish: "熄灭周围较大区域内的火焰。消耗大约 6 个$(l:items/amethyst)$(item)紫水晶粉/$。",
       },
 
@@ -2022,7 +2034,7 @@
         "range.2": "第二参数代表水平方向上的半径（以米计），在此范围内，法术能保持稳定。走出该范围就会结束该法术，滞空的物体会直接坠向地面。但只要一直待在这个范围内，法术的效果便会无限持续。此法术还会额外产生微量$(media)媒质/$用以标记安全区域中心点。$(br2)每米安全范围消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
 
         "time.1": "受时间限制的飞行法术。",
-        "time.2": "第二参数代表持续时间（以秒计），在此限制内，法术能保持稳定。持续时间超过限制就会结束该法术，滞空的物体会直接坠向地面。$(br2)此法术相对较昂贵，每秒持续时间消耗大约 1 个$(l:items/amethyst)$(item)充能紫水晶/$。我觉得它极其适合长途旅行。",
+        "time.2": "第二参数代表持续时间（以秒计），在此限制内，法术能保持稳定。持续时间超过限制就会结束该法术，滞空的物体会直接坠向地面。$(br2)此法术相对较昂贵，每秒持续时间消耗大约 1 个$(l:items/amethyst)$(item)紫水晶碎片/$。我觉得它极其适合长途旅行。",
 
         // Putting this in this category instead of elsewhere -- see sentinel chapter also containing some reflections/nonspells
         "can_fly.1": "检查玩家是否处于$(l:patterns/spells/flight#hexcasting:flight/range)隐士之飞行/$或$(l:patterns/spells/flight#hexcasting:flight/time)旅者之飞行/$的影响之下。",
@@ -2172,7 +2184,7 @@
 
         gravity: {
           "1": "我发现了获取与改变实体所受引力的操作。挺有趣，也挺让人头晕。$(br2)有趣的是，虽然$(l:patterns/spells/flight)$(action)飞行/$的范围和持续时间有限，且也能操控引力，但这些法术的操控方式似乎有所区别。我不能理解……也许模组制作者们只是想让玩家们玩得开心。",
-          get: "获取所给实体的所受引力的主方向上的单位向量。对大多数实体而言，此向量会是向下的：<0, -1, 0>。",
+          get: "获取所给实体的所受引力的主方向上的单位向量。对大多数实体而言，此向量会是向下的：(0, -1, 0)。",
           set: "设置所给实体所受引力的主方向。所给向量会被转换为与其夹角最小的轴向单位向量，如同$(l:patterns/math#hexcasting:coerce_axial)$(action)轴向之纯化/$那样。消耗大约 1 个$(l:items/amethyst)$(item)充能紫水晶/$。",
         },
 
