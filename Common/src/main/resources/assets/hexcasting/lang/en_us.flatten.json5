@@ -103,7 +103,7 @@
     
     uuid_colorizer: "Soulglimmer Pigment",
     default_colorizer: "Vacant Pigment",
-    ancient_colorizer: "Ancient Pigment,
+    ancient_colorizer: "Ancient Pigment",
     
     creative_unlocker: {
       "": "The Media Cube",
@@ -1565,6 +1565,7 @@
       ancient_cyphers: {
         "1": "While adventuring, I've come across what appear to be $(l:items/hexcasting)$(item)Cyphers/$ created by the Hexcasters of the ancient past. These $(item)Ancient Cyphers/$ work just like the ones I can craft: they can't be recharged, and will break when their reserve of _Media runs out. However, unlike my own $(l:items/hexcasting)$(item)Cyphers/$, their decayed structure allows me to glimpse the _Hex stored within.",
         "2": "These may be useful for learning new techniques - who better to teach me than ancient masters of the art?$(br2)Alternatively, I could erase the contents of one and store my own _Hex inside, creating a casting item that clearly displays its own function."
+        "3": "The $(l:items/pigments)$(item)Pigment/$ baked into these relics is a unique blend of purple and orange, matching their copper-and-amethyst appearance. I can replicate it using the above recipe.",
       },
       
       phials: {
@@ -1587,7 +1588,7 @@
         "colored.crafting.header": "Chromatic Pigments",
         "colored.crafting.desc": "Pigments in all the colors of the rainbow.",
         
-        special: "And finally, a pair of special pigments. $(item)Soulglimmer Pigment/$ shines with colors wholly unique to me, and $(item)Vacant Pigment/$ restores my original purplish-orange spread.$(br2)$(italic)And all the colors I am inside have not been invented yet./$",
+        special: "And finally, a pair of special pigments. $(item)Soulglimmer Pigment/$ shines with colors wholly unique to me, and $(item)Vacant Pigment/$ restores my original amethyst hue.$(br2)$(italic)And all the colors I am inside have not been invented yet./$",
       },
       
       edified: {
