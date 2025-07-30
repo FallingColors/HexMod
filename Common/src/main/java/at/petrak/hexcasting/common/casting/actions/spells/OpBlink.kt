@@ -27,7 +27,7 @@ object OpBlink : SpellAction {
         val delta = args.getDouble(1, argc)
         env.assertEntityInRange(target)
 
-        if (!target.canChangeDimensions() || target.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
+        if (target.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
             throw MishapImmuneEntity(target)
 
         val dvec = target.lookAngle.scale(delta)

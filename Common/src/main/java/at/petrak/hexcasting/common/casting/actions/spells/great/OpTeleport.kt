@@ -36,7 +36,7 @@ object OpTeleport : SpellAction {
         val delta = args.getVec3(1, argc)
         env.assertEntityInRange(teleportee)
 
-        if (!teleportee.canChangeDimensions() || teleportee.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
+        if (teleportee.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
             throw MishapImmuneEntity(teleportee)
 
         val targetPos = teleportee.position().add(delta)
