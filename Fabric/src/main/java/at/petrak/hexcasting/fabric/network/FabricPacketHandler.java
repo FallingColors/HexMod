@@ -27,8 +27,6 @@ public class FabricPacketHandler {
     public static void initClient() {
         ClientPlayNetworking.registerGlobalReceiver(MsgNewSpellPatternS2C.ID,
             makeClientBoundHandler(MsgNewSpellPatternS2C::deserialize, MsgNewSpellPatternS2C::handle));
-        ClientPlayNetworking.registerGlobalReceiver(
-            MsgBlinkS2C.ID, makeClientBoundHandler(MsgBlinkS2C::deserialize, MsgBlinkS2C::handle));
         ClientPlayNetworking.registerGlobalReceiver(MsgCastParticleS2C.ID,
             makeClientBoundHandler(MsgCastParticleS2C::deserialize, MsgCastParticleS2C::handle));
         ClientPlayNetworking.registerGlobalReceiver(MsgOpenSpellGuiS2C.ID,
