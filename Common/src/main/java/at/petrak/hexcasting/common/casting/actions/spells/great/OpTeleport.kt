@@ -39,6 +39,12 @@ object OpTeleport : SpellAction {
         if (teleportee.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
             throw MishapImmuneEntity(teleportee)
 
+        if (teleportee.type.`is`(HexTags.Entities.STICKY_TELEPORTERS)) {
+            val immunePassengers = teleportee.passengers.filter { it.type.`is`(HexTags.Entities.CANNOT_TELEPORT) }
+            if (!immunePassengers.isEmpty()) 
+                throw MishapImmuneEntity(immunePassengers.get(0))
+        }
+
         val targetPos = teleportee.position().add(delta)
         if (!HexConfig.server().canTeleportInThisDimension(env.world.dimension()))
             throw MishapBadLocation(targetPos, "bad_dimension")
@@ -102,10 +108,6 @@ object OpTeleport : SpellAction {
 
         val playersToUpdate = mutableListOf<ServerPlayer>()
         val target = teleportee.position().add(delta)
-
-        val cannotTeleport = teleportee.passengers.any { it.type.`is`(HexTags.Entities.CANNOT_TELEPORT) }
-        if (cannotTeleport)
-            return
 
         // A "sticky" entity teleports itself and its riders
         val sticky = teleportee.type.`is`(HexTags.Entities.STICKY_TELEPORTERS)

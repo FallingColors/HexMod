@@ -30,6 +30,12 @@ object OpBlink : SpellAction {
         if (target.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
             throw MishapImmuneEntity(target)
 
+        if (target.type.`is`(HexTags.Entities.STICKY_TELEPORTERS)) {
+            val immunePassengers = target.passengers.filter { it.type.`is`(HexTags.Entities.CANNOT_TELEPORT) }
+            if (!immunePassengers.isEmpty()) 
+                throw MishapImmuneEntity(immunePassengers.get(0))
+        }
+
         val dvec = target.lookAngle.scale(delta)
         val endPos = target.position().add(dvec)
 
