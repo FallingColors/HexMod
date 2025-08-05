@@ -4,10 +4,12 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.GarbageIota
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.iota.PatternIota
+import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.pigment.FrozenPigment
 import net.minecraft.world.item.DyeColor
 
-class MishapInvalidPattern : Mishap() {
+class MishapInvalidPattern(val pattern: HexPattern) : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.YELLOW)
 
@@ -18,5 +20,5 @@ class MishapInvalidPattern : Mishap() {
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("invalid_pattern")
+        error("invalid_pattern", PatternIota.display(pattern))
 }
