@@ -88,7 +88,11 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
         if (e instanceof ServerPlayer player) {
             return player;
         } else {
-            HexAPI.LOGGER.error("Entity {} stored in a cleric impetus wasn't a player somehow", e);
+            // if owner is offline then getEntity will return null
+            // if e is somehow neither null nor a player, something is very wrong
+            if (e != null) {
+                HexAPI.LOGGER.error("Entity {} stored in a cleric impetus wasn't a player somehow", e);
+            }
             return null;
         }
     }
