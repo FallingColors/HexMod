@@ -69,8 +69,6 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
                 this.storedPlayerProfile = newProfile;
                 this.setChanged();
             }
-        } else {
-            this.storedPlayerProfile = null;
         }
     }
 
