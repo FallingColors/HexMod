@@ -1037,9 +1037,9 @@
           
           entity: {
             "": "an entity",
+            mob: "a mob",
             item: "an item entity",
             player: "a player",
-            villager: "a villager",
             living: "a living entity",
           },
           
