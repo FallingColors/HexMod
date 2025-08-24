@@ -50,19 +50,18 @@ public class CircleExecutionState {
     public CastingImage currentImage;
     public @Nullable UUID caster;
     public @Nullable FrozenPigment casterPigment;
-    // This controls the speed of the current slate
     public long reachedSlate;
 
     // Tracks the highest pos, and lowest pos of the AABB
-    public BlockPos positivePos;
-    public BlockPos negativePos;
+    public BlockPos greaterCorner;
+    public BlockPos lesserCorner;
 
     public final AABB bounds;
 
 
     protected CircleExecutionState(BlockPos impetusPos, Direction impetusDir, HashSet<BlockPos> reachedPositions,
-        BlockPos currentPos, Direction enteredFrom, CastingImage currentImage, @Nullable UUID caster,
-        @Nullable FrozenPigment casterPigment, Long reachedSlate, BlockPos positivePos, BlockPos negativePos) {
+       BlockPos currentPos, Direction enteredFrom, CastingImage currentImage, @Nullable UUID caster,
+       @Nullable FrozenPigment casterPigment, Long reachedSlate, BlockPos greaterCorner, BlockPos lesserPos) {
         this.impetusPos = impetusPos;
         this.impetusDir = impetusDir;
         this.reachedPositions = reachedPositions;
@@ -73,9 +72,9 @@ public class CircleExecutionState {
         this.casterPigment = casterPigment;
         this.reachedSlate = reachedSlate;
 
-        this.positivePos = positivePos;
-        this.negativePos = negativePos;
-        this.bounds = new AABB(positivePos,negativePos);
+        this.greaterCorner = greaterCorner;
+        this.lesserCorner = lesserPos;
+        this.bounds = new AABB(greaterCorner, lesserPos);
     }
 
     public @Nullable ServerPlayer getCaster(ServerLevel world) {
@@ -123,15 +122,14 @@ public class CircleExecutionState {
 
             if (seenGoodPosSet.add(herePos)) {
                 lastBlockPos.set(herePos);
-                // Checks to see if it should update the most positive/negative block pos
-                if (herePos.getX() > positiveBlock.getX()) positiveBlock.setX(herePos.getX());
-                if (herePos.getX() < negativeBlock.getX()) negativeBlock.setX(herePos.getX());
+                // Updates the highest and or lowest corner of the Circle
+                positiveBlock.setX(Math.max(herePos.getX(), positiveBlock.getX()));
+                positiveBlock.setY(Math.max(herePos.getY(), positiveBlock.getY()));
+                positiveBlock.setZ(Math.max(herePos.getZ(), positiveBlock.getZ()));
 
-                if (herePos.getY() > positiveBlock.getY()) positiveBlock.setY(herePos.getY());
-                if (herePos.getY() < negativeBlock.getY()) negativeBlock.setY(herePos.getY());
-
-                if (herePos.getZ() > positiveBlock.getZ()) positiveBlock.setZ(herePos.getZ());
-                if (herePos.getZ() < negativeBlock.getZ()) negativeBlock.setZ(herePos.getZ());
+                negativeBlock.setX(Math.min(herePos.getX(), negativeBlock.getX()));
+                negativeBlock.setY(Math.min(herePos.getY(), negativeBlock.getY()));
+                negativeBlock.setZ(Math.min(herePos.getZ(), negativeBlock.getZ()));
                 // it's new
                 var outs = cmp.possibleExitDirections(herePos, hereBs, level);
                 for (var out : outs) {
@@ -189,8 +187,8 @@ public class CircleExecutionState {
 
         out.putLong(TAG_REACHED_NUMBER, this.reachedSlate);
 
-        out.put(TAG_POSITIVE_POS,NbtUtils.writeBlockPos(this.positivePos));
-        out.put(TAG_NEGATIVE_POS,NbtUtils.writeBlockPos(this.negativePos));
+        out.put(TAG_POSITIVE_POS,NbtUtils.writeBlockPos(this.greaterCorner));
+        out.put(TAG_NEGATIVE_POS,NbtUtils.writeBlockPos(this.lesserCorner));
 
         return out;
     }
