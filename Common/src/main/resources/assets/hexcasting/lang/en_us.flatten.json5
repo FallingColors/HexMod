@@ -810,7 +810,7 @@
         arcsin: "Inverse Sine Purification",
         arccos: "Inverse Cosine Purification",
         arctan: "Inverse Tangent Purification",
-        arctan2: "Inverse Tangent Purification II",
+        arctan2: "Inverse Tangent Distillation",
         random: "Entropy Reflection",
         logarithm: "Logarithmic Distillation",
         coerce_axial: "Axial Purification",
@@ -941,7 +941,7 @@
         arcsin: "Inverse Sine Prfn.",
         arccos: "Inverse Cosine Prfn.",
         arctan: "Inverse Tangent Prfn.",
-        arctan2: "Inverse Tan. Prfn. II",
+        arctan2: "Inverse Tangent Dstl.",
         
         "const/vec/": {
           x: "Vector Rfln. +X/-X",
