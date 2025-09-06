@@ -7,8 +7,8 @@ from hexdoc_hexcasting.metadata import HexContext
 from hexdoc_hexcasting.utils.pattern import PatternInfo, RawPatternInfo
 from pydantic import ValidationInfo, field_validator, model_validator
 
-from ..recipes import BrainsweepRecipe
-from .abstract_pages import PageWithOpPattern, PageWithPattern
+from hexdoc_hexcasting.book.recipes import BrainsweepRecipe
+from hexdoc_hexcasting.book.page.abstract_pages import PageWithOpPattern, PageWithPattern
 
 
 class LookupPatternPage(PageWithOpPattern, type="hexcasting:pattern"):
