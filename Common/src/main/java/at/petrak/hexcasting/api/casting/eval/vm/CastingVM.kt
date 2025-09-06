@@ -74,7 +74,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             lastResolutionType = image2.resolutionType
             try {
                 performSideEffects(image2.sideEffects)
-            } catch (e: Exception) {
+            } catch (e: RuntimeException) {
                 e.printStackTrace()
                 performSideEffects(listOf(OperatorSideEffect.DoMishap(MishapInternalException(e), Mishap.Context(null, null))))
             }
