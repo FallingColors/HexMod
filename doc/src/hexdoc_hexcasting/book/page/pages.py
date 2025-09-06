@@ -19,7 +19,10 @@ class LookupPatternPage(PageWithOpPattern, type="hexcasting:pattern"):
     @model_validator(mode="after")
     def _post_root_lookup(self, info: ValidationInfo):
         hex_ctx = HexContext.of(info)
-        self._patterns = [hex_ctx.patterns[self.op_id]]
+        try:
+            self._patterns = [hex_ctx.patterns[self.op_id]]
+        except KeyError as e:
+            raise KeyError(e.add_note("Unknown Pattern ID!"))
         return self
 
     @model_validator(mode="after")
