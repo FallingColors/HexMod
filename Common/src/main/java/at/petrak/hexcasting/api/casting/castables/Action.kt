@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.mishaps.Mishap
 import net.minecraft.world.phys.Vec3
 import java.text.DecimalFormat
 
@@ -33,6 +34,7 @@ interface Action {
      * The userdata tag is copied for you, so you don't need to worry about mutation messing up things
      * behind the scenes.
      */
+    @Throws(Mishap::class)
     fun operate(
         env: CastingEnvironment,
         image: CastingImage,
