@@ -98,7 +98,7 @@ public class PatternIota extends Iota {
                 castedName = special.handler::getName;
                 action = special.handler.act();
             } else if (lookup instanceof PatternShapeMatch.Nothing) {
-                throw new MishapInvalidPattern();
+                throw new MishapInvalidPattern(this.getPattern());
             } else throw new IllegalStateException();
 
             // do the actual calculation!!
