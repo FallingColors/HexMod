@@ -1181,16 +1181,12 @@
           It's probably just the ramblings of extinct traditionalists, though -- a pattern's a pattern.$(br2)\
           What could possibly go wrong?",
       },
-      creative_unlocker: {
-        "": "The Media Cube",
-        desc: "I have found a source of near limitless power, The Media Cube.",
-      }
     },
     // ^ categories
     
     entry: {
       media: "Media",
-      media_cube: "The Media Cube",
+      creative_items: "Creative-Only Items",
       geodes: "Geodes",
       couldnt_cast: "A Frustration",
       start_to_see: "WHAT DID I SEE",
@@ -1290,12 +1286,18 @@
     // ^ entries
     
     page: {
-      creative_unlocker: {
-        "1": "The $(#74b3f2)Media Cube/$ is a near-limitless source of power, acting as an infinite source of _media for whatever _Hexes I wish to cast. It also looks quite tasty. Eating it might perhaps reveal more about the world, possibly delving into spoiler territory...",
+      creative_items: {
+        "1": "I have invented some fanciful items that can only be acquired through $(italic)creative/$ means.",
+        creative_unlocker: "The $(#74b3f2)Media Cube/$ is a near-limitless source of power, acting as an infinite source of _media for whatever _Hexes I wish to cast. It also looks quite tasty. Eating it might perhaps reveal more about the world, possibly delving into spoiler territory...",
         "2": "Additionally, it seems that by renaming a $(#74b3f2)Media Cube/$ at an Anvil, I should be able to utilize it to test and understand more about my _Hexes. If I have somehow acquired Creative power over the world, I might wish to turn that off before attempting any of the following.",
-        "3": "By renaming the $(#74b3f2)Media Cube/$ to 'debug media', I will be given feedback in the chat window about the amount of media consumed.",
+        debug_media: {
+          // do not localize 'debug media' in the title or description, the item must be named exactly that
+          // TODO: we can remove the title if hexdoc-dev/hexdoc#85 is implemented, since the title in Patchouli already defaults to the item name
+          title: "debug media",
+          desc: "By renaming the $(#74b3f2)Media Cube/$ to 'debug media', I will be given feedback in the chat window about the amount of media consumed.",
+        },
         // NOTE: The following feature documented is broken in the current implementation. It should be uncommented and the page in patchouli should be updated when the feature is fixed.
-        //"4": "By renaming the $(#74b3f2)Media Cube/$ to 'debug patterns', I will be given feedback in the chat window about the order patterns are ran."
+        //debug_patterns: "By renaming the $(#74b3f2)Media Cube/$ to 'debug patterns', I will be given feedback in the chat window about the order patterns are ran."
       },
       media: {
         "1": "_Media is a form of mental energy external to a mind. All living creatures generate trace amounts of _media when thinking about anything; after the thought is finished, the media is released into the environment.$(br2)The art of casting _Hexes is all about manipulating _media to do your bidding.",
