@@ -1,0 +1,13 @@
+[
+  { "start_dir": "NORTH_EAST", "angles": "qaq" },
+  { "start_dir": "EAST", "angles": "aadaa" },
+  { "start_dir": "NORTH_EAST", "angles": "wa" },
+  { "start_dir": "NORTH_WEST", "angles": "eqqq" },
+  { "start_dir": "SOUTH_EAST", "angles": "aqaawd" },
+  { "start_dir": "SOUTH_EAST", "angles": "e" },
+  { "start_dir": "NORTH_WEST", "angles": "qqqqqew" },
+  { "start_dir": "SOUTH_WEST", "angles": "eeeeeqw" },
+  { "start_dir": "SOUTH_EAST", "angles": "awdd" },
+  { "start_dir": "NORTH_EAST", "angles": "wdedw" },
+  { "start_dir": "SOUTH_WEST", "angles": "awqqqwaqw" }
+]

@@ -131,8 +131,8 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
 
         @JvmField
         val CODEC: Codec<HexPattern> = RecordCodecBuilder.create({instance -> instance.group(
-            Codec.STRING.fieldOf(TAG_START_DIR).forGetter(HexPattern::anglesSignature),
-            HexDir.CODEC.fieldOf(TAG_ANGLES).forGetter(HexPattern::startDir)
+            Codec.STRING.fieldOf(TAG_ANGLES).forGetter(HexPattern::anglesSignature),
+            HexDir.CODEC.fieldOf(TAG_START_DIR).forGetter(HexPattern::startDir)
         ).apply(instance, HexPattern::fromAngles)
         })
 
