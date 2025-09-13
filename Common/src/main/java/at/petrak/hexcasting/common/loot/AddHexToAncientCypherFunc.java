@@ -44,7 +44,7 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
         var patsTag = new ListTag();
         for (var patString : hex.getSecond()){
             var pieces = patString.split(" ");
-            var pat = HexPattern.fromAngles(pieces[1],HexDir.fromString(pieces[0]));
+            var pat = HexPattern.fromAnglesUnchecked(pieces[1],HexDir.fromString(pieces[0]));
             patsTag.add(IotaType.serialize(new PatternIota(pat)));
         }
         
