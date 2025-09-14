@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.misc.Result;
+import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import com.mojang.datafixers.util.Pair;
@@ -116,6 +117,10 @@ public class CircleExecutionState {
                 for (var out : outs) {
                     todo.add(Pair.of(out, herePos.relative(out)));
                 }
+            }
+            // Who would leave out the config limit? If this is forgotten, someone could make a Spell Circle the size of a world
+            if (seenGoodPosSet.size() >= HexConfig.server().maxSpellCircleLength()){
+                return new Result.Err<>(null);
             }
         }
 
