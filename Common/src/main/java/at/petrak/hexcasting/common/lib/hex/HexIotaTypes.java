@@ -23,7 +23,7 @@ public class HexIotaTypes {
         KEY_TYPE = HexAPI.MOD_ID + ":type",
         KEY_DATA = HexAPI.MOD_ID + ":data";
     public static final int MAX_SERIALIZATION_DEPTH = 256;
-    public static final int MAX_SERIALIZATION_TOTAL = 1024;
+    public static final int MAX_SERIALIZATION_TOTAL = 8192;
 
     public static void registerTypes(BiConsumer<IotaType<?>, ResourceLocation> r) {
         for (var e : TYPES.entrySet()) {
