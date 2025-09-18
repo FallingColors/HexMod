@@ -70,7 +70,7 @@ public class BlockBooleanDirectrix extends BlockCircleComponent {
 
     @Override
     public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
-        // No entering from the front, no entering from the back.
+        // No entering from either of the output faces
         return enterDir != bs.getValue(FACING).getOpposite() && enterDir != bs.getValue(FACING);
     }
 
