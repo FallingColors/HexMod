@@ -6,7 +6,7 @@
       "item": "hexcasting:amethyst_dust"
     },
     "I": {
-      "item": "minecraft:amethyst_shard"
+      "item": "minecraft:copper_ingot"
     }
   },
   "pattern": [
@@ -15,7 +15,7 @@
     " C "
   ],
   "result": {
-    "item": "hexcasting:default_colorizer"
+    "item": "hexcasting:ancient_colorizer"
   },
   "show_notification": true
 }

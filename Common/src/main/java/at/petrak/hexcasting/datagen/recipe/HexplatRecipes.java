@@ -207,7 +207,9 @@ public class HexplatRecipes extends PaucalRecipeProvider {
 
         ring(RecipeCategory.MISC, HexItems.UUID_PIGMENT, 1, HexItems.AMETHYST_DUST, Items.AMETHYST_SHARD)
             .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
-        ring(RecipeCategory.MISC, HexItems.DEFAULT_PIGMENT, 1, HexItems.AMETHYST_DUST, Items.COPPER_INGOT)
+        ringCornerless(RecipeCategory.MISC, HexItems.DEFAULT_PIGMENT, 1, HexItems.AMETHYST_DUST, Items.AMETHYST_SHARD)
+            .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
+        ringCornerless(RecipeCategory.MISC, HexItems.ANCIENT_PIGMENT, 1, HexItems.AMETHYST_DUST, Items.COPPER_INGOT)
             .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, HexItems.SCROLL_SMOL)
