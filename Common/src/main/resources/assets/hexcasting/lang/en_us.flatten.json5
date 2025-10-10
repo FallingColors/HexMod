@@ -1025,15 +1025,17 @@
       bad_caster: "Tried to execute a pattern that requires a greater mind",
       
       invalid_value: {
-        "": "expected %s at index %s of the stack, but got %s",
+        "": "expected %s at index %s of the stack, but got %s: %s",
         
         class: {
           double: "a number",
           boolean: "a boolean",
-          vector: "a vector",
+          vec3: "a vector",
           list: "a list",
-          widget: "an influence",
           pattern: "a pattern",
+          continuation: "a jump iota",
+          garbage: "garbage",
+          null: "null",
           
           entity: {
             "": "an entity",

@@ -64,7 +64,7 @@ fun List<Iota>.getVec3(idx: Int, argc: Int = 0): Vec3 {
     if (x is Vec3Iota) {
         return x.vec3
     } else {
-        throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "vector")
+        throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "vec3")
     }
 }
 
@@ -253,7 +253,7 @@ fun List<Iota>.getBlockPos(idx: Int, argc: Int = 0): BlockPos {
         return BlockPos.containing(x.vec3)
     }
 
-    throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "vector")
+    throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "vec3")
 }
 
 fun List<Iota>.getNumOrVec(idx: Int, argc: Int = 0): Either<Double, Vec3> {
