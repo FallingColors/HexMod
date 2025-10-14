@@ -128,6 +128,6 @@ public class PatternRegistryManifest {
 
         var sig = pair.getFirst();
         var entry = pair.getSecond();
-        return HexPattern.fromAngles(sig, entry.canonicalStartDir());
+        return HexPattern.fromAnglesUnchecked(sig, entry.canonicalStartDir());
     }
 }

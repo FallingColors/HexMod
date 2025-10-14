@@ -136,7 +136,7 @@ public class ListIota extends Iota {
                 if (i < list.size() - 1) {
                     var thisIotaNeedsComma = IotaType.getTypeFromTag(csub) != PatternIota.TYPE;
                     var nextIotaNeedsComma = IotaType.getTypeFromTag(HexUtils.downcast(list.get(i+1), CompoundTag.TYPE)) != PatternIota.TYPE;
-                    var alwaysShowCommas = HexConfig.client().alwaysShowListCommas();
+                    var alwaysShowCommas = HexConfig.client() != null && HexConfig.client().alwaysShowListCommas();
                     if (thisIotaNeedsComma || nextIotaNeedsComma || alwaysShowCommas)
                         out.append(", ");
                 }
