@@ -9,11 +9,11 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 // https://github.com/VazkiiMods/Botania/blob/1.18.x/Xplat/src/main/java/vazkii/botania/common/loot/LootHandler.java
 // We need to inject dungeon loot (scrolls and lore), make amethyst drop fewer shards, and the extra dust stuff.
 // On forge:
-// - Scrolls and lore are done with a loot mod
+// - Scrolls, lore, and cyphers are done with a loot mod
 // - Amethyst drop fiddling is done with another loot mod; the shard delta is in the loot mod data and the rest of
 //   the stuff is loaded from TABLE_INJECT_AMETHYST_CLUSTER
 // On fabric:
-// - Scrolls and lore are done with a lootLoad listener and the amounts are loaded from config
+// - Scrolls, lore, and cyphers are done with a lootLoad listener and the amounts are loaded from config
 // - Amethyst shard reduction is done with a loot function mixed in to always be on amethyst clusters, god, cause I
 //   don't think it's facile to use the loot pool api to try to figure out which pool is for the amethyst and reduce it
 // - Amethyst dust and crystals are done by adding the loot table Forge uses in directly via listener
@@ -45,6 +45,8 @@ public class HexLootHandler {
         // if you manage to find one of these things you deserve a lot of scrolls
         new ScrollInjection(new ResourceLocation("minecraft", "chests/woodland_mansion"), 5),
         new ScrollInjection(new ResourceLocation("minecraft", "chests/stronghold_library"), 5)
+
+        // you can use the table hexcasting:random_scroll to get exactly 1 scroll and nothing else
     );
 
     public static final ImmutableList<ResourceLocation> DEFAULT_LORE_INJECTS = ImmutableList.of(
@@ -61,12 +63,24 @@ public class HexLootHandler {
         new ResourceLocation("minecraft", "chests/village/village_taiga_house")
     );
 
+    public static final ImmutableList<ResourceLocation> DEFAULT_CYPHER_INJECTS = ImmutableList.of(
+        new ResourceLocation("minecraft", "chests/simple_dungeon"),
+        new ResourceLocation("minecraft", "chests/abandoned_mineshaft"),
+        new ResourceLocation("minecraft", "chests/stronghold_corridor"),
+        new ResourceLocation("minecraft", "chests/jungle_temple"),
+        new ResourceLocation("minecraft", "chests/desert_pyramid"),
+        new ResourceLocation("minecraft", "chests/ancient_city"),
+        new ResourceLocation("minecraft", "chests/nether_bridge")
+        // you can use the table hexcasting:random_cypher to get exactly 1 cypher and nothing else
+    );
+
     public static int getScrollCount(int range, RandomSource random) {
         return Math.max(random.nextIntBetweenInclusive(-range, range), 0);
     }
 
     public static final double DEFAULT_SHARD_MODIFICATION = -0.5;
     public static final double DEFAULT_LORE_CHANCE = 0.4;
+    public static final double DEFAULT_CYPHER_CHANCE = 0.4;
 
     public static final ResourceLocation TABLE_INJECT_AMETHYST_CLUSTER = modLoc("inject/amethyst_cluster");
 

@@ -15,6 +15,7 @@ import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 
@@ -135,6 +136,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private double gridSnapThreshold = DEFAULT_GRID_SNAP_THRESHOLD;
         @ConfigEntry.Gui.Tooltip
         private boolean clickingTogglesDrawing = DEFAULT_CLICKING_TOGGLES_DRAWING;
+        @ConfigEntry.Gui.Tooltip
+        private boolean alwaysShowListCommas = DEFAULT_ALWAYS_SHOW_LIST_COMMAS;
 
         @Override
         public void validatePostLoad() throws ValidationException {
@@ -165,6 +168,11 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         public boolean clickingTogglesDrawing() {
              return clickingTogglesDrawing;
         }
+
+        @Override
+        public boolean alwaysShowListCommas() {
+             return alwaysShowListCommas;
+        }
     }
 
     @Config(name = "server")
@@ -181,13 +189,16 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private List<String> circleActionDenyList = List.of();
         @ConfigEntry.Gui.Tooltip
+        private boolean greaterTeleportSplatsItems = DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS;
+        @ConfigEntry.Gui.Tooltip
         private boolean villagersOffendedByMindMurder = DEFAULT_VILLAGERS_DISLIKE_MIND_MURDER;
         @ConfigEntry.Gui.Tooltip
         private boolean doesTrueNameHaveAmbit = DEFAULT_TRUE_NAME_HAS_AMBIT;
-
-
         @ConfigEntry.Gui.Tooltip
         private List<String> tpDimDenylist = DEFAULT_DIM_TP_DENYLIST;
+        
+        @ConfigEntry.Gui.Tooltip
+        private double traderScrollChance = DEFAULT_TRADER_SCROLL_CHANCE;
 
         // ModMenu bad and doesn't like java objects in here so we do stupid string parsing
         @ConfigEntry.Gui.Tooltip
@@ -209,11 +220,22 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private double loreChance = HexLootHandler.DEFAULT_LORE_CHANCE;
 
+        @ConfigEntry.Gui.Tooltip
+        private List<String> cypherInjectionsRaw = HexLootHandler.DEFAULT_CYPHER_INJECTS
+                .stream()
+                .map(ResourceLocation::toString)
+                .toList();
+        @ConfigEntry.Gui.Excluded
+        private transient List<ResourceLocation> cypherInjections;
+        @ConfigEntry.Gui.Tooltip
+        private double cypherChance = HexLootHandler.DEFAULT_CYPHER_CHANCE;
+
 
         @Override
         public void validatePostLoad() throws ValidationException {
             this.maxOpCount = Math.max(this.maxOpCount, 0);
             this.maxSpellCircleLength = Math.max(this.maxSpellCircleLength, 4);
+            this.traderScrollChance = Mth.clamp(this.traderScrollChance, 0.0, 1.0);
 
             this.scrollInjections = new Object2IntOpenHashMap<>();
             try {
@@ -239,6 +261,18 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             }
 
             this.loreChance = Mth.clamp(this.loreChance, 0.0, 1.0);
+
+            this.cypherInjections = new ArrayList<>();
+            try {
+                for (var table : this.cypherInjectionsRaw) {
+                    ResourceLocation loc = new ResourceLocation(table);
+                    this.cypherInjections.add(loc);
+                }
+            } catch (Exception e) {
+                throw new ValidationException("Bad parsing of cypher injects", e);
+            }
+
+            this.cypherChance = Mth.clamp(this.cypherChance, 0.0, 1.0);
         }
 
         @Override
@@ -267,6 +301,9 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         }
 
         @Override
+        public boolean doesGreaterTeleportSplatItems() { return greaterTeleportSplatsItems; }
+
+        @Override
         public boolean doVillagersTakeOffenseAtMindMurder() {
             return villagersOffendedByMindMurder;
         }
@@ -281,6 +318,10 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             return doesTrueNameHaveAmbit;
         }
 
+        public double traderScrollChance() {
+            return traderScrollChance;
+        }
+
         /**
          * Returns -1 if none is found
          */
@@ -292,8 +333,16 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             return anyMatchResLoc(this.loreInjections, lootTable);
         }
 
-        public double getLoreChance() {
+        public double loreChance() {
             return loreChance;
+        }
+
+        public boolean shouldInjectCyphers(ResourceLocation lootTable) {
+            return anyMatchResLoc(this.cypherInjections, lootTable);
+        }
+
+        public double cypherChance() {
+            return cypherChance;
         }
     }
 }

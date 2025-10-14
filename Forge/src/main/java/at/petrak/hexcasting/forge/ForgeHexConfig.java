@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraft.util.RandomSource;
 
 import java.util.List;
 
@@ -83,6 +84,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.BooleanValue invertAbacusScrollDirection;
         private static ForgeConfigSpec.DoubleValue gridSnapThreshold;
         private static ForgeConfigSpec.BooleanValue clickingTogglesDrawing;
+        private static ForgeConfigSpec.BooleanValue alwaysShowListCommas;
 
         public Client(ForgeConfigSpec.Builder builder) {
             ctrlTogglesOffStrokeOrder = builder.comment(
@@ -102,6 +104,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             clickingTogglesDrawing = builder.comment(
                             "Whether you click to start and stop drawing instead of clicking and dragging")
                     .define("clickingTogglesDrawing", DEFAULT_CLICKING_TOGGLES_DRAWING);
+            alwaysShowListCommas = builder.comment(
+                            "Whether all iota types should be comma-separated in lists (by default, pattern iotas don't use commas)")
+                    .define("alwaysShowListCommas", DEFAULT_ALWAYS_SHOW_LIST_COMMAS);
         }
 
         @Override
@@ -128,27 +133,25 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         public boolean clickingTogglesDrawing() {
             return clickingTogglesDrawing.get();
         }
+
+        @Override
+        public boolean alwaysShowListCommas() {
+            return alwaysShowListCommas.get();
+        }
     }
 
     public static class Server implements HexConfig.ServerConfigAccess {
         private static ForgeConfigSpec.IntValue opBreakHarvestLevel;
         private static ForgeConfigSpec.IntValue maxOpCount;
-
         private static ForgeConfigSpec.IntValue maxSpellCircleLength;
-
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
 
+        private static ForgeConfigSpec.BooleanValue greaterTeleportSplatsItems;
         private static ForgeConfigSpec.BooleanValue villagersOffendedByMindMurder;
-
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> tpDimDenyList;
-
         private static ForgeConfigSpec.BooleanValue doesTrueNameHaveAmbit;
-
-        private static ForgeConfigSpec.ConfigValue<List<? extends String>> fewScrollTables;
-        private static ForgeConfigSpec.ConfigValue<List<? extends String>> someScrollTables;
-        private static ForgeConfigSpec.ConfigValue<List<? extends String>> manyScrollTables;
-
+        private static ForgeConfigSpec.DoubleValue traderScrollChance;
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.push("Spells");
@@ -171,9 +174,21 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 .defineList("circleActionDenyList", List.of(), Server::isValidReslocArg);
             builder.pop();
 
+            builder.push("Loot");
+            traderScrollChance = builder.comment("The chance for wandering traders to sell an Ancient Scroll")
+                .defineInRange("traderScrollChance", DEFAULT_TRADER_SCROLL_CHANCE, 0.0, 1.0);
+
+            // builders for loot (eg. scroll/lore/cypher pools and chances) should go here
+
+            builder.pop();
+
             actionDenyList = builder.comment(
                     "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
                 .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
+
+            greaterTeleportSplatsItems = builder.comment(
+                    "Should items fly out of the player's inventory when using Greater Teleport?"
+            ).define("greaterTeleportSplatsItems", DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS);
 
             villagersOffendedByMindMurder = builder.comment(
                     "Should villagers take offense when you flay the mind of their fellow villagers?")
@@ -183,7 +198,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 .defineList("tpDimDenyList", DEFAULT_DIM_TP_DENYLIST, Server::isValidReslocArg);
 
             doesTrueNameHaveAmbit = builder.comment(
-                    "when false makes player reference iotas behave as normal entity reference iotas")
+                    "When false, makes player reference iotas behave as normal entity reference iotas")
                 .define("doesTrueNameHaveAmbit", DEFAULT_TRUE_NAME_HAS_AMBIT);
         }
 
@@ -213,6 +228,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         }
 
         @Override
+        public boolean doesGreaterTeleportSplatItems() { return greaterTeleportSplatsItems.get(); }
+
+        @Override
         public boolean doVillagersTakeOffenseAtMindMurder() {
             return villagersOffendedByMindMurder.get();
         }
@@ -225,6 +243,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public boolean trueNameHasAmbit() {
             return doesTrueNameHaveAmbit.get();
+        }
+
+        @Override
+        public double traderScrollChance() {
+            return traderScrollChance.get();
         }
 
         private static boolean isValidReslocArg(Object o) {
