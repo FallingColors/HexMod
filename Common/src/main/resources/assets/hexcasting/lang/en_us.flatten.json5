@@ -382,6 +382,14 @@
           "": "Greater Teleport Splats Items",
           "@Tooltip": "Whether items should fly out of the player's inventory when using Greater Teleport"
         },
+        doesTrueNameHaveAmbit: {
+          "": "Does True Name Have Ambit",
+          "@Tooltip": "Whether True Names (ie entity references to a player) should allow targeting the referenced player even outside of normal ambit",
+        },
+        tpDimDenylist: {
+          "": "Teleport Dimension Deny List",
+          "@Tooltip": "Resource locations of dimensions where teleportation is not allowed",
+        },
         villagersOffendedByMindMurder: {
           "": "Villagers Offended By Mind Murder",
           "@Tooltip": "Whether villagers should be angry at the player when other villagers are mindflayed",
@@ -803,7 +811,7 @@
         arcsin: "Inverse Sine Purification",
         arccos: "Inverse Cosine Purification",
         arctan: "Inverse Tangent Purification",
-        arctan2: "Inverse Tangent Purification II",
+        arctan2: "Inverse Tangent Distillation",
         random: "Entropy Reflection",
         logarithm: "Logarithmic Distillation",
         coerce_axial: "Axial Purification",
@@ -934,7 +942,7 @@
         arcsin: "Inverse Sine Prfn.",
         arccos: "Inverse Cosine Prfn.",
         arctan: "Inverse Tangent Prfn.",
-        arctan2: "Inverse Tan. Prfn. II",
+        arctan2: "Inverse Tangent Dstl.",
         
         "const/vec/": {
           x: "Vector Rfln. +X/-X",
@@ -1038,9 +1046,9 @@
           
           entity: {
             "": "an entity",
+            mob: "a mob",
             item: "an item entity",
             player: "a player",
-            villager: "a villager",
             living: "a living entity",
           },
           
