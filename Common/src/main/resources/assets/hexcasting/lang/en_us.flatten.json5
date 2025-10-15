@@ -103,6 +103,7 @@
     
     uuid_colorizer: "Soulglimmer Pigment",
     default_colorizer: "Vacant Pigment",
+    ancient_colorizer: "Ancient Pigment",
     
     creative_unlocker: {
       "": "The Media Cube",
@@ -350,6 +351,10 @@
           "": "Clicking Toggles Drawing",
           "@Tooltip": "Whether you click to start and stop drawing instead of clicking and dragging to draw",
         },
+        alwaysShowListCommas: {
+          "": "Always Show List Commas",
+          "@Tooltip": "Whether all iota types should be comma-separated when displayed in lists (by default, pattern iotas do not use commas)",
+        },
       },
       
       server: {
@@ -376,6 +381,14 @@
         greaterTeleportSplatsItems: {
           "": "Greater Teleport Splats Items",
           "@Tooltip": "Whether items should fly out of the player's inventory when using Greater Teleport"
+        },
+        doesTrueNameHaveAmbit: {
+          "": "Does True Name Have Ambit",
+          "@Tooltip": "Whether True Names (ie entity references to a player) should allow targeting the referenced player even outside of normal ambit",
+        },
+        tpDimDenylist: {
+          "": "Teleport Dimension Deny List",
+          "@Tooltip": "Resource locations of dimensions where teleportation is not allowed",
         },
         villagersOffendedByMindMurder: {
           "": "Villagers Offended By Mind Murder",
@@ -798,7 +811,7 @@
         arcsin: "Inverse Sine Purification",
         arccos: "Inverse Cosine Purification",
         arctan: "Inverse Tangent Purification",
-        arctan2: "Inverse Tangent Purification II",
+        arctan2: "Inverse Tangent Distillation",
         random: "Entropy Reflection",
         logarithm: "Logarithmic Distillation",
         coerce_axial: "Axial Purification",
@@ -929,7 +942,7 @@
         arcsin: "Inverse Sine Prfn.",
         arccos: "Inverse Cosine Prfn.",
         arctan: "Inverse Tangent Prfn.",
-        arctan2: "Inverse Tan. Prfn. II",
+        arctan2: "Inverse Tangent Dstl.",
         
         "const/vec/": {
           x: "Vector Rfln. +X/-X",
@@ -987,7 +1000,7 @@
       bad_entity: "needs %s but got %s",
       bad_brainsweep: "The %s rejected the being's mind",
       already_brainswept: "The mind has already been used",
-      no_spell_circle: "%s requires a spell circle",
+      no_spell_circle: "requires a spell circle",
       others_name: "Tried to invade the privacy of %s's soul",
       "others_name.self": "Tried to divulge my Name too recklessly",
       
@@ -1033,9 +1046,9 @@
           
           entity: {
             "": "an entity",
+            mob: "a mob",
             item: "an item entity",
             player: "a player",
-            villager: "a villager",
             living: "a living entity",
           },
           
@@ -1177,16 +1190,12 @@
           It's probably just the ramblings of extinct traditionalists, though -- a pattern's a pattern.$(br2)\
           What could possibly go wrong?",
       },
-      creative_unlocker: {
-        "": "The Media Cube",
-        desc: "I have found a source of near limitless power, The Media Cube.",
-      }
     },
     // ^ categories
     
     entry: {
       media: "Media",
-      media_cube: "The Media Cube",
+      creative_items: "Creative-Only Items",
       geodes: "Geodes",
       couldnt_cast: "A Frustration",
       start_to_see: "WHAT DID I SEE",
@@ -1286,12 +1295,18 @@
     // ^ entries
     
     page: {
-      creative_unlocker: {
-        "1": "The $(#74b3f2)Media Cube/$ is a near-limitless source of power, acting as an infinite source of _media for whatever _Hexes I wish to cast. It also looks quite tasty. Eating it might perhaps reveal more about the world, possibly delving into spoiler territory...",
+      creative_items: {
+        "1": "I have invented some fanciful items that can only be acquired through $(italic)creative/$ means.",
+        creative_unlocker: "The $(#74b3f2)Media Cube/$ is a near-limitless source of power, acting as an infinite source of _media for whatever _Hexes I wish to cast. It also looks quite tasty. Eating it might perhaps reveal more about the world, possibly delving into spoiler territory...",
         "2": "Additionally, it seems that by renaming a $(#74b3f2)Media Cube/$ at an Anvil, I should be able to utilize it to test and understand more about my _Hexes. If I have somehow acquired Creative power over the world, I might wish to turn that off before attempting any of the following.",
-        "3": "By renaming the $(#74b3f2)Media Cube/$ to 'debug media', I will be given feedback in the chat window about the amount of media consumed.",
+        debug_media: {
+          // do not localize 'debug media' in the title or description, the item must be named exactly that
+          // TODO: we can remove the title if hexdoc-dev/hexdoc#85 is implemented, since the title in Patchouli already defaults to the item name
+          title: "debug media",
+          desc: "By renaming the $(#74b3f2)Media Cube/$ to 'debug media', I will be given feedback in the chat window about the amount of media consumed.",
+        },
         // NOTE: The following feature documented is broken in the current implementation. It should be uncommented and the page in patchouli should be updated when the feature is fixed.
-        //"4": "By renaming the $(#74b3f2)Media Cube/$ to 'debug patterns', I will be given feedback in the chat window about the order patterns are ran."
+        //debug_patterns: "By renaming the $(#74b3f2)Media Cube/$ to 'debug patterns', I will be given feedback in the chat window about the order patterns are ran."
       },
       media: {
         "1": "_Media is a form of mental energy external to a mind. All living creatures generate trace amounts of _media when thinking about anything; after the thought is finished, the media is released into the environment.$(br2)The art of casting _Hexes is all about manipulating _media to do your bidding.",
@@ -1366,7 +1381,7 @@
           "3": "Generally, I provide iotas to actions. \
             For example, take $(l:patterns/spells/basic#hexcasting:explode)$(action)Explosion/$. \
             This spell requires a number iota, to indicate the strength, and a vector iota, to indicate the location.$(br2)\
-            Or, take $(l:patterns/basic#hexcasting:get_pos)$(action)Compass Purification/$. \
+            Or, take $(l:patterns/basic#hexcasting:get_pos)$(action)Compass' Purification/$. \
             This takes an entity iota and transforms it into a vector iota, representing the position of that entity.",
         },
       },
@@ -1379,7 +1394,7 @@
         "4.header": "An Example",
         "4": "It's interesting to note that the $(italic)rotation/$ of a pattern doesn't seem to matter at all. These two patterns both perform an action called $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$, for example.",
         "5": "A _Hex is cast by drawing (valid) actions in sequence. Each action might do one of a few things:$(li)Gather some information about the environment, leaving it on the top of the stack;$(li)manipulate the info gathered (e.g. adding two numbers); or$(li)perform some magical effect, like summoning lightning or an explosion. (These actions are called \"spells.\")$(p)When I start casting a _Hex, it creates an empty stack. Actions manipulate the top of that stack.",
-        "6": "For example, $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$ will create an iota representing $(italic)me/$, the caster, and add it to the top of the stack. $(l:patterns/basics#hexcasting:entity_pos/eye)$(action)Compass Purification/$ will take the iota at the top the stack, if it represents an entity, and transform it into an iota representing that entity's location.$(br2)So, drawing those patterns in that order would result in an iota on the stack representing my position.",
+        "6": "For example, $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$ will create an iota representing $(italic)me/$, the caster, and add it to the top of the stack. $(l:patterns/basics#hexcasting:entity_pos/eye)$(action)Compass' Purification/$ will take the iota at the top the stack, if it represents an entity, and transform it into an iota representing that entity's location.$(br2)So, drawing those patterns in that order would result in an iota on the stack representing my position.",
         "7": "$(thing)Iotas/$ can represent things like myself or my position, but there are several other types I can manipulate with $(thing)Actions/$. Here's a comprehensive list:$(li)Numbers (which some legends called \"doubles\");$(li)Vectors, a collection of three numbers representing a position, movement, or direction in the world;$(li)Booleans or \"bools\" for short, representing an abstract True or False,",
         "8": "$(li)Entities, like myself, chickens, and minecarts;$(li)Influences, peculiar types of iota that seem to represent abstract ideas;$(li)Patterns themselves, used for crafting magic items and truly mind-boggling feats like $(italic)spells that cast other spells/$; and$(li)A list of several of the above, gathered into a single iota.",
         "9": "Of course, there's no such thing as a free lunch. All spells, and certain other actions, require _media as payment.$(br2)The best I can figure, a _Hex is a little bit like a plan of action presented to Nature-- in this analogy, the _media is used to provide the arguments to back it up, so Nature will accept your plan and carry it out.",
@@ -1481,6 +1496,9 @@
         
         "no_record.title": "Lack Akashic Record",
         no_record: "Tried to access an $(l:greatwork/akashiclib)$(item)Akashic Record/$ at a location where there isn't one.$(br2)Causes purple sparks, and steals away some of my experience.",
+
+        "bad_shepherd.title": "Improper Shepherding",
+        bad_shepherd: "Tried to activate a $(l:greatwork/directrix)$(item)Shepherd Directrix/$ without a boolean on the top of the stack.$(br2)Causes red and white sparks, and forcibly ejects the Shepherd Directrix from the circle. This doesn't destroy it, thankfully, but I should make sure to go pick it up and replace it where it belongs.",
       },
       
       
@@ -1556,7 +1574,8 @@
 
       ancient_cyphers: {
         "1": "While adventuring, I've come across what appear to be $(l:items/hexcasting)$(item)Cyphers/$ created by the Hexcasters of the ancient past. These $(item)Ancient Cyphers/$ work just like the ones I can craft: they can't be recharged, and will break when their reserve of _Media runs out. However, unlike my own $(l:items/hexcasting)$(item)Cyphers/$, their decayed structure allows me to glimpse the _Hex stored within.",
-        "2": "These may be useful for learning new techniques - who better to teach me than ancient masters of the art?$(br2)Alternatively, I could erase the contents of one and store my own _Hex inside, creating a casting item that clearly displays its own function."
+        "2": "These may be useful for learning new techniques - who better to teach me than ancient masters of the art?$(br2)Alternatively, I could erase the contents of one and store my own _Hex inside, creating a casting item that clearly displays its own function.",
+        "3": "The $(l:items/pigments)$(item)Pigment/$ baked into these relics is a unique blend of purple and orange, matching their copper-and-amethyst appearance. I can replicate it using the above recipe.",
       },
       
       phials: {
@@ -1579,7 +1598,7 @@
         "colored.crafting.header": "Chromatic Pigments",
         "colored.crafting.desc": "Pigments in all the colors of the rainbow.",
         
-        special: "And finally, a pair of special pigments. $(item)Soulglimmer Pigment/$ shines with colors wholly unique to me, and $(item)Vacant Pigment/$ restores my original purplish-orange spread.$(br2)$(italic)And all the colors I am inside have not been invented yet./$",
+        special: "And finally, a pair of special pigments. $(item)Soulglimmer Pigment/$ shines with colors wholly unique to me, and $(item)Vacant Pigment/$ restores my original amethyst hue.$(br2)$(italic)And all the colors I am inside have not been invented yet./$",
       },
       
       edified: {
@@ -1647,7 +1666,7 @@
         
         empty_directrix: "Firstly, a design for the cradle ... although, perhaps \"substrate\" would be more accurate a word. Without a mind guiding it, the output direction is determined by microscopic fluctuations in the _media wave and surroundings, making it effectively random.",
         directrix_redstone: "A $(l:greatwork/directrix)$(item)Mason Directrix/$ switches output side based on a redstone signal. Without a signal, the exit is the _media-color side; with a signal, the exit is the redstone-color side.",
-        directrix_boolean: "A $(l:greatwork/directrix)$(item)Shepherd Directrix/$ switches output side based on a boolean on the stack. A $(thing)True/$ makes the wave exit from the back, a $(thing)False/$ from the front."
+        directrix_boolean: "A $(l:greatwork/directrix)$(item)Shepherd Directrix/$ switches output side based on a boolean on the stack. A $(thing)True/$ makes the wave exit from the back, a $(thing)False/$ from the front. Failing to provide a boolean at all will cause a mishap."
       },
       
       akashiclib: {
@@ -1685,7 +1704,7 @@
         print: "Displays the top iota of the stack to me.",
         raycast: {
           "1": "Combines two vectors (a position and a direction) into the answer to the question: If I stood at the position and looked in the direction, what block would I be looking at? Costs a negligible amount of _media.",
-          "2": "If it doesn't hit anything, the vectors will combine into $(l:casting/influences)$(thing)Null/$.$(br2)A common sequence of patterns, the so-called \"raycast mantra,\" is $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$, $(l:patterns/basics#hexcasting:entity_pos/eye)$(action)Compass Purification/$, $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$, $(l:patterns/basics#hexcasting:get_entity_look)$(action)Alidade Purification/$, $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation/$. Together, they return the vector position of the block I am looking at.",
+          "2": "If it doesn't hit anything, the vectors will combine into $(l:casting/influences)$(thing)Null/$.$(br2)A common sequence of patterns, the so-called \"raycast mantra,\" is $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$, $(l:patterns/basics#hexcasting:entity_pos/eye)$(action)Compass' Purification/$, $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$, $(l:patterns/basics#hexcasting:get_entity_look)$(action)Alidade Purification/$, $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation/$. Together, they return the vector position of the block I am looking at.",
         },
         "raycast/axis": {
           "1": "Like $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation/$, but instead returns a vector representing the answer to the question: Which $(italic)side/$ of the block am I looking at? Costs a negligible amount of _media.",
@@ -1719,7 +1738,7 @@
         numvec: "Many mathematical operations function on both numbers and vectors. Such arguments are written as \"num|vec\".",
         
         "add.1": "Perform addition.",
-        "add.2": "As such:$(li)With two numbers at the top of the stack, combines them into their sum.$(li)With a number and a vector, removes the number from the stack and adds it to each element of the vector.$(li)With two vectors, combines them by summing corresponding components into a new vector (i.e. [1, 2, 3] + [0, 4, -1] = [1, 6, 2]).",
+        "add.2": "As such:$(li)With two numbers at the top of the stack, combines them into their sum.$(li)With a number and a vector, removes the number from the stack and adds it to each element of the vector.$(li)With two vectors, combines them by summing corresponding components into a new vector (i.e. (1, 2, 3) + (0, 4, -1) = (1, 6, 2)).",
         
         "sub.1": "Perform subtraction.",
         "sub.2": "As such:$(li)With two numbers at the top of the stack, combines them into their difference.$(li)With a number and a vector, removes the number from the stack and subtracts it from each element of the vector.$(li)With two vectors, combines them by subtracting each component.$(br2)In all cases, the top of the stack or its components are subtracted $(italic)from/$ the second-from-the-top.",
@@ -1778,10 +1797,10 @@
         "false": "Adds $(thing)False/$ to the top of the stack.",
         
         "vec/": {
-          x: "The left-hand counter-clockwise pattern adds [1, 0, 0] to the stack; the right-hand clockwise pattern adds [-1, 0, 0].",
-          y: "The left-hand counter-clockwise pattern adds [0, 1, 0] to the stack; the right-hand clockwise pattern adds [0, -1, 0].",
-          z: "The left-hand counter-clockwise pattern adds [0, 0, 1]; the right-hand clockwise pattern adds [0, 0, -1].",
-          "0": "Adds [0, 0, 0] to the stack.",
+          x: "The left-hand counter-clockwise pattern adds (1, 0, 0) to the stack; the right-hand clockwise pattern adds (-1, 0, 0).",
+          y: "The left-hand counter-clockwise pattern adds (0, 1, 0) to the stack; the right-hand clockwise pattern adds (0, -1, 0).",
+          z: "The left-hand counter-clockwise pattern adds (0, 0, 1); the right-hand clockwise pattern adds (0, 0, -1).",
+          "0": "Adds (0, 0, 0) to the stack.",
         },
         
         "double/": {
@@ -1889,9 +1908,14 @@
         parens: {
           "1": "Drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$ makes my drawing of patterns act differently, for a time. Until I draw $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Retrospection/$, the patterns I draw are saved. Then, when I draw $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$, they are added to the stack as a list iota.",
           "2": "If I draw another $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Introspection/$, it'll still be saved to the list, but I'll then have to draw $(italic)two/$ $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospections/$ to get back to normal casting.",
-          "3": "Also, I can escape the special behavior of $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ by drawing a $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ before them, which will simply add them to the list without affecting which the number of $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospections/$ I need to return to casting.$(br2)If I draw two $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Considerations/$ in a row while $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)introspecting/$, it will add a single $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ to the list.",
         },
         undo: "Finally, if I make a mistake while drawing patterns inside $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ I can draw $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ to remove the last pattern that I drew from the pattern list that is being constructed.",
+        further_notes: {
+          title: "Further Notes",
+          "1": "I can escape the special behavior of $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ by drawing a $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ before them, which will simply add them to the list without affecting which the number of $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospections/$ I need to return to casting.$(br2)If I draw two $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Considerations/$ in a row while $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)introspecting/$, it will add a single $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ to the list.",
+          "2": "If an iota other than a pattern is present in a list to be executed by $(l:patterns/meta#hexcasting:eval)$(action)Hermes' Gambit/$ or any other meta-evaluation pattern, it will normally result in a mishap. However, this can be avoided using the patterns described in this section.$(br2)Just as with pattern iotas, the patterns described here can be used to \"escape\" $(o)any other$() kind of iota, causing it to be pushed to the stack when something tries to evaluate it instead of causing a mishap.",
+          "3": "This technique may be useful if I want a _Hex to be able to reference a specific iota, such as a complicated vector or an entity reference, without having to construct or obtain it each time.$(br2)The process of getting such an iota into a list of patterns in the first place may be somewhat involved. The simplest method would be to draw a placeholder pattern when assembling the list, and then make use of $(l:patterns/lists#hexcasting:replace)$(action)Surgeon's Exaltation/$ to replace it with my desired iota.",
+        },
       },
       
       readwrite: {
@@ -1972,7 +1996,7 @@
         conjure_light: "Conjure a magical light that softly glows with my pigment at the given position. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         bonemeal: "Encourage a plant or sapling at the target position to grow, as if $(item)Bonemeal/$ was applied. Costs a bit more than one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         edify: "Forcibly infuse _media into the sapling at the target position, causing it to grow into an $(l:items/edified)$(thing)Edified Tree/$. Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$.",
-        ignite: "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied, or sets fire to a creature. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
+        ignite: "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied, or set fire to an entity. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         extinguish: "Extinguish blocks in a large area. Costs about six $(l:items/amethyst)$(item)Amethyst Dust/$.",
       },
       
@@ -2022,7 +2046,7 @@
         "range.2": "The second argument is a horizontal radius, in meters, in which the spell is stable. Moving outside of that radius will end the spell, dropping me out of the sky. As long as I stay inside the safe zone, however, the spell lasts indefinitely. An additional shimmer of _media marks the origin point of the safe zone. $(br2)Costs about 1 $(l:items/amethyst)$(item)Amethyst Dust/$ per meter of safety.",
         
         "time.1": "A flight limited in its duration.",
-        "time.2": "The second argument is an amount of time in seconds for which the spell is stable. After that time, the spell ends and I am dropped from the sky. $(br2)It is relatively expensive at about 1 $(l:items/amethyst)$(item)Charged Crystal/$ per second of flight; I believe it is best suited for travel.",
+        "time.2": "The second argument is an amount of time in seconds for which the spell is stable. After that time, the spell ends and I am dropped from the sky. $(br2)It is relatively expensive at about 1 $(l:items/amethyst)$(item)Amethyst Shard/$ per second of flight; I believe it is best suited for travel.",
         
         // Putting this in this category instead of elsewhere -- see sentinel chapter also containing some reflections/nonspells
         "can_fly.1": "Returns whether the given player is under the effects of $(l:patterns/spells/flight#hexcasting:flight/range)Anchorite's/$ or $(l:patterns/spells/flight#hexcasting:flight/time)Wayfarer's Flight/$.",

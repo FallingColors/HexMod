@@ -8,11 +8,15 @@ import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.items.magic.ItemAncientCypher;
+import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexLootFunctions;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
+import net.minecraft.Util;
 import net.minecraft.util.RandomSource;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.CompoundTag;
@@ -44,16 +48,19 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
         var patsTag = new ListTag();
         for (var patString : hex.getSecond()){
             var pieces = patString.split(" ");
-            var pat = HexPattern.fromAngles(pieces[1],HexDir.fromString(pieces[0]));
+            var pat = HexPattern.fromAnglesUnchecked(pieces[1],HexDir.fromString(pieces[0]));
             patsTag.add(IotaType.serialize(new PatternIota(pat)));
         }
         
         var tag = new CompoundTag();
+
         tag.putString(ItemAncientCypher.TAG_HEX_NAME, hex.getFirst());
+        tag.put(ItemAncientCypher.TAG_PATTERNS, patsTag);
+        tag.put(ItemPackagedHex.TAG_PIGMENT, FrozenPigment.ANCIENT.get().serializeToNBT());
         tag.putLong(ItemAncientCypher.TAG_MEDIA, 32*MediaConstants.SHARD_UNIT);
         tag.putLong(ItemAncientCypher.TAG_MAX_MEDIA, 32*MediaConstants.SHARD_UNIT);
         tag.putInt(VariantItem.TAG_VARIANT, rand.nextInt(8));
-        tag.put(ItemAncientCypher.TAG_PATTERNS, patsTag);
+        
         stack.getOrCreateTag().merge(tag);
 
         return stack;
