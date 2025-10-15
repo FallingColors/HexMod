@@ -13,6 +13,7 @@ import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
+import kotlin.math.max
 
 /**
  * A list of patterns to be evaluated in sequence.
@@ -53,7 +54,23 @@ data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : Cont
         "isMetacasting" %= isMetacasting
     }
 
-    override fun size() = list.size()
+    private val size: Int
+    private val depth: Int
+
+    init {
+        var maxChildDepth = 0
+        var totalSize = 1
+        for (iota in list) {
+            totalSize += iota.size()
+            maxChildDepth = max(maxChildDepth, iota.depth())
+        }
+        depth = maxChildDepth
+        size = totalSize
+    }
+
+    override fun size() = size
+    override fun depth() = depth
+    override fun subIotas(): Iterable<Iota> = list
 
     override val type: ContinuationFrame.Type<*> = TYPE
 
