@@ -1747,7 +1747,7 @@
         "mul.2": "As such:$(li)With two numbers, combines them into their product.$(li)With a number and a vector, removes the number from the stack and multiplies each component of the vector by that number.$(li)With two vectors, combines them into their $(l:https://www.mathsisfun.com/algebra/vectors-dot-product.html)dot product/$.",
         
         "div.1": "Perform division or the cross product.",
-        "div.2": "As such:$(li)With two numbers, combines them into their quotient.$(li)With a number and a vector, removes the number and divides it by each element of the vector.$(li)With two vectors, combines them into their $(l:https://www.mathsisfun.com/algebra/vectors-cross-product.html)cross product/$.$(br2)In the first and second cases, the top of the stack or its components comprise the dividend, and the second-from-the-top or its components are the divisor.$(p)WARNING: Never divide by zero!",
+        "div.2": "As such:$(li)With two numbers, combines them into their quotient.$(li)With a number and a vector, removes the number and divides each element of the vector by it.$(li)With two vectors, combines them into their $(l:https://www.mathsisfun.com/algebra/vectors-cross-product.html)cross product/$.$(br2)In the first and second cases, the second-from-the-top of the stack is divided by the top of the stack.$(p)WARNING: Never divide by zero!",
         
         "abs.1": "Compute the absolute value or length.",
         "abs.2": "Replaces a number with its absolute value, or a vector with its length.",
