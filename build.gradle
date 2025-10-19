@@ -1,3 +1,5 @@
+import at.petrak.pkpcpbp.MiscUtil
+
 buildscript {
     repositories {
         mavenCentral()
@@ -17,8 +19,9 @@ plugins {
     // Also it looks like property lookups don't work this early
     id 'fabric-loom' version '1.6-SNAPSHOT' apply false
 
-    id("at.petra-k.PKPlugin") version "0.1.0-pre-87"
-    id("at.petra-k.PKSubprojPlugin") version "0.1.0-pre-87" apply false
+    id("at.petra-k.pkpcpbp.PKPlugin") version "0.2.0-pre-104"
+    id("at.petra-k.pkpcpbp.PKSubprojPlugin") version "0.2.0-pre-104" apply false
+    id("at.petra-k.pkpcpbp.PKJson5Plugin") version "0.2.0-pre-104" apply false
 }
 
 repositories {
@@ -26,20 +29,27 @@ repositories {
 }
 
 pkpcpbp {
+    // if something goes wrong in CI, make sure we can see the logs to figure out why
+    superDebugInfo = System.getenv("CI") != null
+    // we set the maven coordinates manually in the subprojects block
+    doProjectMetadata = false
+    setupJarMetadata = true
+    setupMavenMetadata = true
+    javaVersion = 17
     modInfo {
-        modID(project.modID)
-        mcVersion(project.minecraftVersion)
-        modVersion(project.modVersion)
+        modID = project.modID
+        mcVersion = project.minecraftVersion
+        modVersion = project.modVersion
     }
     curseforgeInfo {
-        id 569849
-        stability "beta"
-        token(System.getenv("CURSEFORGE_TOKEN"))
+        id = 569849
+        stability = "beta"
+        token = System.getenv("CURSEFORGE_TOKEN")
     }
     modrinthInfo {
-        id "nTW3yKrm"
-        stability "beta"
-        token(System.getenv("MODRINTH_TOKEN"))
+        id = "nTW3yKrm"
+        stability = "beta"
+        token = System.getenv("MODRINTH_TOKEN")
     }
 }
 
@@ -47,10 +57,47 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'kotlin'
     apply plugin: 'maven-publish'
+    apply plugin: 'at.petra-k.pkpcpbp.PKSubprojPlugin'
+    apply plugin: 'at.petra-k.pkpcpbp.PKJson5Plugin'
+
+    group = "at.petra-k.$modID"
+    base.archivesName = "$modID-$platform-$minecraftVersion"
+    version = modVersion
+
+    def isRelease = MiscUtil.isRelease(MiscUtil.getMostRecentPush(project))
+    def buildNumber = System.getenv("BUILD_NUMBER")
+    if (!isRelease && buildNumber != null) {
+        version += "-pre-$buildNumber"
+    }
+
+    pkSubproj {
+        platform = project.platform
+        // this value is only checked if we run a publish task and the commit already starts with [Release]
+        // so we should be fine to just leave it enabled
+        pkPublish = true
+        artifactId = base.archivesName.get()
+        versionDisplayName = "$platform-$minecraftVersion-$modVersion"
+    }
+
+    pkJson5 {
+        autoProcessJson5 = true
+        autoProcessJson5Flattening = true
+    }
 
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = 'UTF-8'
         it.options.release = 17
+    }
+
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = "17"
+        }
+    }
+    compileTestKotlin {
+        kotlinOptions {
+            jvmTarget = "17"
+        }
     }
 
     // Disables Gradle's custom module metadata from being published to maven. The
@@ -83,17 +130,6 @@ allprojects {
 
     // disable most javadoc warnings
     javadoc.options.addStringOption('Xdoclint:none', '-quiet')
-}
-
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-}
-compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "17"
-    }
 }
 
 tasks.register("runAllDatagen") {
