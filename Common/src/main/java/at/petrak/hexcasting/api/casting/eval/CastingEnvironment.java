@@ -330,13 +330,15 @@ public abstract class CastingEnvironment {
     }
 
     public final void assertPosInRange(BlockPos vec) throws MishapBadLocation {
-        this.assertVecInRange(new Vec3(vec.getX(), vec.getY(), vec.getZ()));
+        Vec3 centered = Vec3.atCenterOf(vec);
+        this.assertVecInRange(centered);
     }
 
     public final void assertPosInRangeForEditing(BlockPos vec) throws MishapBadLocation {
-        this.assertVecInRange(new Vec3(vec.getX(), vec.getY(), vec.getZ()));
+        Vec3 centered = Vec3.atCenterOf(vec);
+        this.assertVecInRange(centered);
         if (!this.canEditBlockAt(vec))
-            throw new MishapBadLocation(Vec3.atCenterOf(vec), "forbidden");
+            throw new MishapBadLocation(centered, "forbidden");
     }
 
     public final boolean canEditBlockAt(BlockPos vec) {
