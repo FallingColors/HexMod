@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Added several new player attributes, by beholderface in [#823](https://github.com/FallingColors/HexMod/pull/823).
+- Added several new player attributes (ported from [Hexxy Attributes](https://modrinth.com/mod/hexxyattributes)), by beholderface in [#823](https://github.com/FallingColors/HexMod/pull/823).
 - Added ancient cyphers, by Robotgiggle in [#838](https://github.com/FallingColors/HexMod/pull/838).
 - Added the ability for wandering traders to sell ancient scrolls, by Robotgiggle in [#837](https://github.com/FallingColors/HexMod/pull/837).
 - Added a creative tab for ancient scrolls, by Robotgiggle in [#837](https://github.com/FallingColors/HexMod/pull/837).
