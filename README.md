@@ -48,3 +48,7 @@ There are some other folders in the `hexcasting` folder from old CI configuratio
 
 Please only use things in the `at.petrak.hexcasting.api` package. (We do try to keep the API fairly stable, but we don't
 do a very good job.) If you find you need something not in there yell at me on Discord.
+
+## Contributing
+
+Contributions are welcome via pull requests on GitHub. Please [link your PR](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue) to any issues that it fixes. Note that if your PR makes many unrelated changes, we may ask you to split it up into several smaller PRs to make it simpler to review. Also, feel free to update the `[UNRELEASED]` section in [CHANGELOG.md](./CHANGELOG.md) to document the changes in your PR (in a human-readable and concise manner, not just copying the commit messages).
