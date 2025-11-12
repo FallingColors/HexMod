@@ -508,15 +508,15 @@ class GuiSpellcasting constructor(
     fun pxToCoord(px: Vec2) = at.petrak.hexcasting.api.utils.pxToCoord(px, this.hexSize(), this.coordsOffset())
 
 
-    private sealed class PatternDrawState {
+    public sealed class PatternDrawState {
         /** We're waiting on the player to right-click again */
-        object BetweenPatterns : PatternDrawState()
+        public object BetweenPatterns : PatternDrawState()
 
         /** We just started drawing and haven't drawn the first line yet. */
-        data class JustStarted(val start: HexCoord) : PatternDrawState()
+        public data class JustStarted(val start: HexCoord) : PatternDrawState()
 
         /** We've started drawing a pattern for real. */
-        data class Drawing(val start: HexCoord, var current: HexCoord, val wipPattern: HexPattern) : PatternDrawState()
+        public data class Drawing(val start: HexCoord, var current: HexCoord, val wipPattern: HexPattern) : PatternDrawState()
     }
 
     companion object {
