@@ -25,11 +25,14 @@ class MishapInvalidIota(
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component? {
-        val typeStr = HexIotaTypes.REGISTRY.getKey(perpetrator.getType())?.getPath();
-        val typeComp = Component.translatable("hexcasting.mishap.invalid_value.class.${typeStr}")
+        val perpKey = HexIotaTypes.REGISTRY.getKey(perpetrator.getType())
+        val perpDesc = Component.translatableWithFallback(
+            "hexcasting.iota.${perpKey}.desc",
+            "hexcasting.mishap.invalid_value.class.${perpKey?.getPath()}"
+        )
         return error(
             "invalid_value", expected, reverseIdx,
-            typeComp, perpetrator.display()
+            perpDesc, perpetrator.display()
         )
     }
 
