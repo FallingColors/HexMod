@@ -84,12 +84,12 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
-    protected List<ItemStack> getUsableStacks(StackDiscoveryMode mode) {
+    public List<ItemStack> getUsableStacks(StackDiscoveryMode mode) {
         return getUsableStacksForPlayer(mode, castingHand, caster);
     }
 
     @Override
-    protected List<HeldItemInfo> getPrimaryStacks() {
+    public List<HeldItemInfo> getPrimaryStacks() {
         return getPrimaryStacksForPlayer(this.castingHand, this.caster);
     }
 
