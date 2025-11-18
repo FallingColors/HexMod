@@ -969,7 +969,7 @@
       escape: "Consideration",
       undo: "Evanition",
     },
-    
+
     "iota.hexcasting:": {
       null: {
         "": "Null",
@@ -1070,8 +1070,10 @@
           boolean: "a boolean",
           vector: "a vector",
           list: "a list",
-          widget: "an influence",
           pattern: "a pattern",
+          continuation: "a jump iota",
+          garbage: "garbage",
+          null: "null",
           
           entity: {
             "": "an entity",
