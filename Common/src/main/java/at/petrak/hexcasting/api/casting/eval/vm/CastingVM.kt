@@ -38,9 +38,10 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
      *
      * Mutates this
      */
-    fun queueExecuteAndWrapIotas(iotas: List<Iota>, world: ServerLevel): ExecutionClientView {
+    @JvmOverloads
+    fun queueExecuteAndWrapIotas(iotas: List<Iota>, world: ServerLevel, nextContinuation: SpellContinuation = SpellContinuation.Done): ExecutionClientView {
         // Initialize the continuation stack to a single top-level eval for all iotas.
-        var continuation = SpellContinuation.Done.pushFrame(FrameEvaluate(SpellList.LList(0, iotas), false))
+        var continuation = nextContinuation.pushFrame(FrameEvaluate(SpellList.LList(0, iotas), false))
         // Begin aggregating info
         val info = TempControllerInfo(earlyExit = false)
         var lastResolutionType = ResolvedPatternType.UNRESOLVED
