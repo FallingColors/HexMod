@@ -971,14 +971,42 @@
     },
     
     "iota.hexcasting:": {
-      "null": "Null",
-      double: "Number",
-      boolean: "Boolean",
-      entity: "Entity",
-      list: "List",
-      pattern: "Pattern",
-      garbage: "Garbage",
-      vec3: "Vector",
+      null: {
+        "": "Null",
+        desc: "a null value",
+      },
+      double: {
+        "": "Number",
+        desc: "a number",
+      },
+      boolean: {
+        "": "Boolean",
+        desc: "a boolean",
+      },
+      entity: {
+        "": "Entity",
+        desc: "an entity",
+      },
+      list: {
+        "": "List",
+        desc: "a list",
+      },
+      pattern: {
+        "": "Pattern",
+        desc: "a pattern",
+      },
+      garbage: {
+        "": "Garbage",
+        desc: "garbage",
+      },
+      vec3: {
+        "": "Vector",
+        desc: "a vector",
+      },
+      continution: {
+        "": "Continuation",
+        desc: "a jump iota",
+      },
     },
     
     mishap: {
@@ -1035,7 +1063,7 @@
       bad_caster: "Tried to execute a pattern that requires a greater mind",
       
       invalid_value: {
-        "": "expected %s at index %s of the stack, but got %s",
+        "": "expected %s at index %s of the stack, but got %s: %s",
         
         class: {
           double: "a number",
