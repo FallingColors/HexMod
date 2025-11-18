@@ -984,7 +984,8 @@
     mishap: {
       "": "%s: %s",
       
-      invalid_pattern: "That pattern isn't associated with any action",
+      invalid_pattern: "The pattern %s isn't associated with any action",
+      invalid_pattern_generic: "That pattern isn't associated with any action",
       unescaped: "Expected to evaluate a pattern, but evaluated %s instead",
       
       not_enough_args: "expected %s or more arguments but the stack was only %s tall",
