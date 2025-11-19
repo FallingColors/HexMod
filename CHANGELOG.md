@@ -37,6 +37,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Re-added the slate limit for spell circles, by Stickia in [#909](https://github.com/FallingColors/HexMod/pull/909).
 - Renamed Inverse Tangent Purification II to Inverse Tangent Distillation, by Robotgiggle in [#921](https://github.com/FallingColors/HexMod/pull/921).
 - Massively improved ru_ru translations, by JustS-js and LedinecMing in [#832](https://github.com/FallingColors/HexMod/pull/832).
+- Changed the invalid-pattern mishap to display the offending pattern, by Robotgiggle in [#951](https://github.com/FallingColors/HexMod/pull/951).
+- Changed the invalid-iota mishap to display the type of the offending iota along with the iota itself, by Robotgiggle in [#951](https://github.com/FallingColors/HexMod/pull/951).
 
 ### Fixed
 
