@@ -67,6 +67,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added several missing translations for config options, by Robotgiggle in [#921](https://github.com/FallingColors/HexMod/pull/921).
 - Clarified the description of Division Distillation, by JustS-js in [#832](https://github.com/FallingColors/HexMod/pull/832).
 - Fixed a bug where some patterns inconsistently checked the lower-north-west corner of blocks for ambit instead of the center, by YukkuriC in [#959](https://github.com/FallingColors/HexMod/pull/959).
+- Fixed Erase Item cost not scaling with stack size, by PoolloverNathan in [#966](https://github.com/FallingColors/HexMod/pull/966).
 
 ## Previous versions
 
