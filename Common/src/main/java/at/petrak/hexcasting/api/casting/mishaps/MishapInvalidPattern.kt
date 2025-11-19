@@ -10,7 +10,10 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
 
-class MishapInvalidPattern(val pattern: HexPattern? = null) : Mishap() {
+class MishapInvalidPattern(val pattern: HexPattern?) : Mishap() {
+    @Deprecated("Provide the pattern that caused the mishap as an argument")
+    constructor() : this(null) {}
+
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.YELLOW)
 
@@ -22,6 +25,6 @@ class MishapInvalidPattern(val pattern: HexPattern? = null) : Mishap() {
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component? {
         if (pattern == null) return error("invalid_pattern_generic")
-        else return error("invalid_pattern", PatternIota.display(pattern))
+        return error("invalid_pattern", PatternIota.display(pattern))
     }
 }
