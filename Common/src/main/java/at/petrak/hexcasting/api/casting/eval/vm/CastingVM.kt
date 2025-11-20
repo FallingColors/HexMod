@@ -38,9 +38,11 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
      *
      * Mutates this
      */
-    fun queueExecuteAndWrapIotas(iotas: List<Iota>, world: ServerLevel): ExecutionClientView {
+    @JvmOverloads
+    fun queueExecuteAndWrapIotas(iotas: List<Iota>, world: ServerLevel, nextContinuation: SpellContinuation = SpellContinuation.Done): ExecutionClientView {
         // Initialize the continuation stack to a single top-level eval for all iotas.
-        var continuation = SpellContinuation.Done.pushFrame(FrameEvaluate(SpellList.LList(0, iotas), false))
+        // HACK: Ideally, we'd have a separate (SpellContinuation, ServerWorld) overload, but then 0.11.3 would cause mixins to break. Look into properly splitting this in 1.21?
+        var continuation = if (iotas.isNotEmpty()) nextContinuation.pushFrame(FrameEvaluate(SpellList.LList(0, iotas), false)) else nextContinuation;
         // Begin aggregating info
         val info = TempControllerInfo(earlyExit = false)
         var lastResolutionType = ResolvedPatternType.UNRESOLVED
