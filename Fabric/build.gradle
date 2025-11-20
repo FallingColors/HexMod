@@ -149,7 +149,8 @@ compileKotlin {
 }
 
 sourcesJar {
-    from project(":Common").sourceSets.main.allJava
+    // NOTE: Kotlin sources will not be remapped since Loom doesn't support it :/
+    from project(":Common").sourceSets.main.allSource
 }
 
 sourceSets {
