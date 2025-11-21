@@ -189,7 +189,7 @@ public abstract class CastingEnvironment {
         ResourceLocation key = actionKey(match);
 
         if (!HexConfig.server().isActionAllowed(key)) {
-            throw new MishapDisallowedSpell();
+            throw new MishapDisallowedSpell("disallowed", key);
         }
     }
 
