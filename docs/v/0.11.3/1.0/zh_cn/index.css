@@ -1,0 +1,489 @@
+h5 {
+  font-weight: bold;
+  font-size: 14px;
+}
+.footer {
+  margin: 16px;
+}
+.footer p {
+  text-align: center;
+}
+summary {
+  display: list-item;
+}
+.details-collapsible {
+  display: inline-block;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  padding: 0.5em 0.5em 0;
+  margin-bottom: 0.5em;
+}
+.collapse-details {
+  font-weight: bold;
+  margin: -0.5em -0.5em 0;
+  padding: 0.5em;
+}
+.details-collapsible[open] {
+  padding: 0.5em;
+}
+.details-collapsible[open] .collapse-details {
+  border-bottom: 1px solid #aaa;
+  margin-bottom: 0.5em;
+}
+.details-collapsible .collapse-details.collapse-spell::before {
+  content: "点击以显示图案";
+}
+.details-collapsible[open] .collapse-details.collapse-spell::before {
+  content: "点击以隐藏图案";
+}
+/* if the collapsible is closed, hide the "hide recipe" message */
+.details-collapsible:not([open]) > .collapse-details > .collapse-recipe-hide {
+  display: none;
+  visibility: hidden;
+}
+/* if the collapsible is open, hide the "show recipe" message */
+.details-collapsible[open] > .collapse-details > .collapse-recipe-show {
+  display: none;
+  visibility: hidden;
+}
+blockquote.crafting-info {
+  font-size: inherit;
+}
+/* to account for the section icons */
+.entry-title, .category-title {
+  display: flex;
+  align-items: end;
+  .texture {
+    margin-right: 4px;
+    display: inline-block;
+  }
+}
+/* we do a bit of crafting (mostly stolen from https://computercraft.info/wiki) */
+.crafting-tables {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: 256px;
+}
+@media (min-width: 992px) {
+  .crafting-tables {
+    max-width: calc(2*256px + 1*4px);
+  }
+}
+@media (min-width: 1200px) {
+  .crafting-tables {
+    max-width: calc(3*256px + 2*4px);
+  }
+}
+.details-collapsible .crafting-tables {
+  margin-top: -5px;
+}
+.crafting-tables h5 {
+  margin-bottom: 5px;
+}
+.crafting-table {
+  position: relative;
+  width: 256px;
+  height: 132px;
+  background-color: #c6c6c6;
+  border-radius: 16px;
+}
+.crafting-table > img { /* background */
+  image-rendering: pixelated;
+  width: 100%;
+  height: 100%;
+}
+.crafting-table-grid {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: grid;
+  grid: repeat(3, 32px) / repeat(3, 32px);
+  gap: 4px;
+}
+.crafting-table-result {
+  top: 50px;
+  left: 202px;
+}
+.item-texture-count {
+  position: absolute;
+  background-color: #292929;
+  bottom: -4px;
+  right: -4px;
+}
+.item-texture {
+  width: 32px;
+  height: 32px;
+}
+.pixelated {
+  image-rendering: pixelated;
+}
+.multi-textures .texture {
+  position: absolute;
+}
+.item-slot {
+  position: relative;
+  width: min-content;
+}
+.item-slot > .texture {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+.extra-info .texture {
+  width: 16px;
+  height: 16px;
+  margin: 2px;
+}
+.extra-info {
+  display: grid;
+  grid-auto-flow: column;
+  align-items: center;
+  justify-content: start;
+}
+.recipe {
+  position:relative;
+}
+.recipe-item-slot {
+  position: absolute;
+}
+.smelting-input {
+  top: 50px;
+  left: 54px;
+}
+.smelting-result {
+  top: 50px;
+  left: 174px;
+}
+.stonecutting-input {
+  top: 50px;
+  left: 54px;
+}
+.stonecutting-result {
+  top: 50px;
+  left: 174px;
+}
+.smithing-template {
+  top: 64px;
+  left: 34px;
+}
+.smithing-base {
+  top: 64px;
+  left: 70px;
+}
+.smithing-addition {
+  top: 64px;
+  left: 106px;
+}
+.smithing-result {
+  top: 64px;
+  left: 198px;
+}
+.multiblock-details {
+  width: max-content;
+}
+.multiblock-ingredient {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: start;
+  align-items: center;
+}
+.multiblock-ingredient .item-slot {
+  margin-right: 4px;
+}
+.toc-elem > .texture {
+  margin-right: 2px;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+}
+.toc-elem .texture {
+  width: 16px;
+  height: 16px;
+}
+.multi-textures .texture:not(.multi-texture-active) {
+  visibility: hidden;
+}
+.spotlight {
+  position: relative;
+  width: min-content;
+  margin: -6px 0 8px 0;
+}
+.spotlight > .texture {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+a.permalink {
+  margin-left: 0.5em;
+}
+a.permalink:hover {
+  color: lightgray;
+}
+p {
+  margin: 0.5ex 0;
+}
+p.fake-li {
+  margin: 0;
+  --level: 1;
+}
+p.fake-li::before {
+  content: "\2022";
+  margin: 1ex;
+  margin-left: calc(1ex + (var(--level) - 1) * 2ex);
+}
+p.fake-li-alt::before {
+  content: "\25E6";
+}
+.linkout::before {
+  content: "链接：";
+}
+p.todo-note {
+  font-style: italic;
+  color: lightgray;
+}
+.obfuscated {
+  filter: blur(1em);
+  user-select: none;
+}
+.spoilered {
+  filter: blur(1ex);
+  transition: filter 0.04s linear;
+  -moz-transition: filter 0.04s linear;
+}
+.spoilered:hover {
+  filter: blur(0.5ex);
+}
+.spoilered.unspoilered {
+  filter: blur(0);
+}
+.dropdown-menu .divider {
+  margin: 4px 0;
+}
+.dropdown-menu .dropdown-header {
+  padding: 3px 9px;
+}
+/* https://codepen.io/Magisters/pen/MwbeWv */
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu > .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  -webkit-border-radius: 0 6px 6px 6px;
+  -moz-border-radius: 0 6px 6px;
+  border-radius: 0 6px 6px 6px;
+  width: max-content;
+}
+.dropdown-submenu:hover > .dropdown-menu {
+  display: block;
+}
+.dropdown-submenu > a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #ccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover > a:after {
+  border-left-color: #fff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left > .dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  -webkit-border-radius: 6px 0 6px 6px;
+  -moz-border-radius: 6px 0 6px 6px;
+  border-radius: 6px 0 6px 6px;
+}
+.external-link-icon {
+  position: relative;
+  bottom: 2px;
+  margin-left: 2px;
+}
+.nobr {
+  white-space: nowrap;
+}
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+@media (min-width: 40rem) {
+  .book-body {
+    width: 70%;
+    left: 5%;
+    position: relative;
+    float: left;
+  }
+  .toc-container {
+    position: sticky;
+    top: 0;
+    width: 25%;
+    float: left;
+    max-height: 80vh;
+    overflow-y: scroll;
+  }
+  .toc-permalink {
+    display: none;
+    visibility: hidden;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #201a20;
+    color: #ddd;
+  }
+  .jumbotron {
+    background-color: #323;
+  }
+  .navbar-default {
+    background-color: #2b1f2b;
+    border-color: #080808;
+  }
+  /* please help, i'm not a frontend dev, i'm shocked this works at all */
+  .navbar-default .navbar-brand,
+  .navbar-default .navbar-nav > li > a,
+  .navbar-default .navbar-nav > li > a:focus {
+    color: #aaa;
+  }
+  .navbar-default .navbar-brand:focus,
+  .navbar-default .navbar-brand:hover,
+  .navbar-default .navbar-nav > li > a:hover {
+    color: #ccc;
+  }
+  .navbar-default .navbar-nav > .open > a,
+  .navbar-default .navbar-nav > .open > a:focus,
+  .navbar-default .navbar-nav > .open > a:hover {
+    color: #bbb;
+    background-color: #1e131e;
+  }
+  .dropdown-menu {
+    background-color: #402a40;
+    min-width: 120px;
+  }
+  .dropdown-menu .divider {
+    background-color: #080808;
+  }
+  .dropdown-menu .dropdown-header {
+    color: #888;
+  }
+  .dropdown-menu > li > a {
+    color: #bbb;
+  }
+  .dropdown-menu > li > a:focus,
+  .dropdown-menu > li > a:hover {
+    color: #ccc;
+    background-color: #553455;
+  }
+}
+.flay-recipe{
+  image-rendering: pixelated; /* put it up here so it's inherited */
+  position: relative;
+}
+.flay-recipe-background{
+  position: relative;
+  top:0;
+  left: 0;
+}
+.flay-recipe-block-ingredient{
+  position: absolute;
+  top: 70px;
+  left: 24px;
+}
+.flay-recipe-cost{
+  position: absolute;
+  top: 110px;
+  left: 24px;
+}
+/* entity chamber starts at top: 38px & left: 74px. it is 52px wide & 96px tall  */
+.flay-recipe-entity{
+  position: absolute;
+  top: 86px;
+  left: 100px;
+  transform: translate(-50%, -50%);
+  max-height: 94px;
+  max-width: 50px;
+}
+.flay-recipe-result{
+  position: absolute;
+  top: 70px;
+  left: 176px;
+}
+canvas.spell-viz {
+  --dot-color: #777f;
+  --dot-color: #777f;
+  --start-dot-color: #f009;
+  --moving-dot-color: #0fa9;
+  --path-color: darkgray;
+  --visited-path-color: #0c8;
+  --dot-scale: 0.0625;
+  --moving-dot-scale: 0.125;
+  --line-scale: 0.08333;
+  --pausetext-scale: 0.5;
+  --dark-mode: 0;
+}
+@media (prefers-color-scheme: dark) {
+  canvas.spell-viz {
+    /* hack */
+    --dark-mode: 1;
+  }
+}
+/* For hexcasting_render */
+img.spell-viz {
+  object-fit: contain;
+}
+.render-option {
+  cursor: pointer;
+}
+.palette-option {
+  cursor: pointer;
+}
+.spell-settings-dropdown {
+  position: absolute;
+}
+.spell-settings-toggle {
+  font-size: large;
+}
+.palettes, .pattern-settings {
+  --default: #ff6bff, #a81ee3, #6490ed, #b189c7;
+  --turbo: #3f3d9c, #4096fe, #19e3b8, #84fe50, #dfde36, #fd8c27, #d63405, #7a0402;
+  --dark2: #1b9e77, #d95f02, #7570b3, #e7298a, #66a61e, #e6ab02, #a6761d, #666666;
+  --tab10: #1f77b4, #ff7f0e, #2ca02c, #d62728, #9467bd, #8c564b, #e377c2, #7f7f7f, #bcbd22, #17becf;
+}
+.pattern-settings {
+  --line-thickness: 0.12;
+  --point-color: #ffffff;
+  --point-inner-radius: 0.04;
+  --point-outer-radius: 0.07;
+}
+@media (prefers-color-scheme: light) {
+  .pattern-settings {
+    --point-color: #000000;
+  }
+}
+.monocolor-settings {
+  --palette-offset: 0
+}
+.gradient-settings {
+  --segs-per-color: 15;
+}
+.segment-settings {
+  --triangle-inner-radius: 0.13;
+  --triangle-outer-radius: 0.2;
+  --triangle-color: #ffffff;
+}
+@media (prefers-color-scheme: light) {
+  .segment-settings {
+    --triangle-color: #000000;
+  }
+}
