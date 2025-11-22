@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## `0.11.3` - [UNRELEASED]
+## `0.11.3` - 2025-11-22
 
 ### Added
 
@@ -23,7 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Updated the spell circle documentation to clarify their new behavior in 0.11.x, by Robotgiggle in [#814](https://github.com/FallingColors/HexMod/pull/814).
 - Added the recipes for bamboo and cherry staves to the notebook entry, by Robotgiggle in [#814](https://github.com/FallingColors/HexMod/pull/814).
 - Renamed the eval limit mishap from "Delve Too Deep" to "Lost in Thought", and updated the description and error message to match, by Robotgiggle in [#814](https://github.com/FallingColors/HexMod/pull/814).
-- Updated zh_cn translations, by ChuijkYahus in [#799](https://github.com/FallingColors/HexMod/pull/799), [#828](https://github.com/FallingColors/HexMod/pull/828), [#847](https://github.com/FallingColors/HexMod/pull/847), [#913](https://github.com/FallingColors/HexMod/pull/913), [#953](https://github.com/FallingColors/HexMod/pull/953), and [#954](https://github.com/FallingColors/HexMod/pull/954).
+- Updated zh_cn translations, by ChuijkYahus in [#799](https://github.com/FallingColors/HexMod/pull/799), [#828](https://github.com/FallingColors/HexMod/pull/828), [#847](https://github.com/FallingColors/HexMod/pull/847), [#913](https://github.com/FallingColors/HexMod/pull/913), [#953](https://github.com/FallingColors/HexMod/pull/953), [#954](https://github.com/FallingColors/HexMod/pull/954), and [#971](https://github.com/FallingColors/HexMod/pull/971).
 - Added apostrophes to Compass' Purification in the notebook, by kineticneticat in [#867](https://github.com/FallingColors/HexMod/pull/867).
 - Updated the description of Ignite to clarify that it works on all entities, by Robotgiggle in [#844](https://github.com/FallingColors/HexMod/pull/844).
 - Improved documentation of iota embedding, by Robotgiggle in [#862](https://github.com/FallingColors/HexMod/pull/862).

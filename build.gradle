@@ -72,9 +72,6 @@ subprojects {
 
     pkSubproj {
         platform = project.platform
-        // this value is only checked if we run a publish task and the commit already starts with [Release]
-        // so we should be fine to just leave it enabled
-        pkPublish = true
         artifactId = base.archivesName.get()
         versionDisplayName = "$platform-$minecraftVersion-$modVersion"
     }
