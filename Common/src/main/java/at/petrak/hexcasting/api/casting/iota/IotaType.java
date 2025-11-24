@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.nbt.CompoundTag;
@@ -43,6 +44,12 @@ public abstract class IotaType<T extends Iota> {
      * Get the color associated with this datum type.
      */
     public abstract int color();
+
+    /**
+     * Get the MapCodec associated with this datum type.
+     */
+
+    public abstract MapCodec<T> codec();
 
     /**
      * Get a display component that's the name of this iota type.
@@ -100,10 +107,7 @@ public abstract class IotaType<T extends Iota> {
             return null;
         }
         var typeKey = tag.getString(HexIotaTypes.KEY_TYPE);
-        if (!ResourceLocation.isValidResourceLocation(typeKey)) {
-            return null;
-        }
-        var typeLoc = new ResourceLocation(typeKey);
+        var typeLoc = ResourceLocation.tryParse(typeKey);
         return HexIotaTypes.REGISTRY.get(typeLoc);
     }
 

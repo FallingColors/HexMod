@@ -2,7 +2,6 @@ package at.petrak.hexcasting.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.client.ClientCastingStack;
-import at.petrak.hexcasting.common.msgs.IMessage;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
@@ -19,7 +18,7 @@ import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
 public interface IClientXplatAbstractions {
-    void sendPacketToServer(IMessage packet);
+    void sendPacketToServer(CustomPacketPayload packet);
 
     void setRenderLayer(Block block, RenderType type);
 

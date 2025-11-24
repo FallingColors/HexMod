@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.fabric.xplat;
 
 import at.petrak.hexcasting.api.client.ClientCastingStack;
-import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.fabric.client.ExtendedTexture;
 import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsApiInterop;
@@ -32,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class FabricClientXplatImpl implements IClientXplatAbstractions {
     @Override
-    public void sendPacketToServer(IMessage packet) {
+    public void sendPacketToServer(CustomPacketPayload packet) {
         ClientPlayNetworking.send(packet.getFabricId(), packet.toBuf());
     }
 

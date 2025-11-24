@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexSounds;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -17,10 +18,11 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
+import javax.xml.crypto.Data;
 import java.util.List;
 
 public class ItemAbacus extends Item implements IotaHolderItem {
-    public static final String TAG_VALUE = "value";
+    public static final String TAG_VALUE = "abacus_value";
 
     public ItemAbacus(Properties pProperties) {
         super(pProperties);
@@ -29,7 +31,7 @@ public class ItemAbacus extends Item implements IotaHolderItem {
     @Override
     public @Nullable
     CompoundTag readIotaTag(ItemStack stack) {
-        var datum = new DoubleIota(NBTHelper.getDouble(stack, TAG_VALUE));
+        var datum = new DoubleIota(stack.get(DataComponents.CUSTOM_DATA).copyTag().getDouble(TAG_VALUE));
         return IotaType.serialize(datum);
     }
 

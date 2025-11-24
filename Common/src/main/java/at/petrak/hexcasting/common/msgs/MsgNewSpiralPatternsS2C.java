@@ -5,6 +5,8 @@ import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
@@ -13,11 +15,12 @@ import java.util.UUID;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public record MsgNewSpiralPatternsS2C(UUID playerUUID, List<HexPattern> patterns, int lifetime) implements IMessage {
-    public static final ResourceLocation ID = modLoc("spi_pats_sc");
+public record MsgNewSpiralPatternsS2C(UUID playerUUID, List<HexPattern> patterns, int lifetime) implements CustomPacketPayload {
+    public static final StreamCodec<FriendlyByteBuf, MsgNewSpiralPatternsS2C> CODEC = CustomPacketPayload.codec(MsgNewSpiralPatternsS2C::serialize, MsgNewSpiralPatternsS2C::deserialize);
+    public static final Type<MsgNewSpiralPatternsS2C> ID = new Type<>(modLoc("spi_pats_sc"));
 
     @Override
-    public ResourceLocation getFabricId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 
@@ -32,7 +35,6 @@ public record MsgNewSpiralPatternsS2C(UUID playerUUID, List<HexPattern> patterns
         return new MsgNewSpiralPatternsS2C(player, patterns, lifetime);
     }
 
-    @Override
     public void serialize(FriendlyByteBuf buf) {
         buf.writeUUID(playerUUID);
         buf.writeCollection(patterns, (buff, pattern) -> buff.writeNbt(pattern.serializeToNBT()));

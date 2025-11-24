@@ -2,15 +2,15 @@ package at.petrak.hexcasting.fabric.cc.adimpl;
 
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
-import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
-import dev.onyxstudios.cca.api.v3.item.ItemComponent;
+import org.ladysnake.cca.api.v3.component.Component;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Supplier;
 
-public abstract class CCMediaHolder extends ItemComponent implements ADMediaHolder {
+public abstract class CCMediaHolder implements ADMediaHolder, Component {
+    final ItemStack stack;
     public CCMediaHolder(ItemStack stack) {
-        super(stack, HexCardinalComponents.MEDIA_HOLDER);
+        this.stack = stack;
     }
 
     public static class ItemBased extends CCMediaHolder {

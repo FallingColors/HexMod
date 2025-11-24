@@ -6,6 +6,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 
@@ -21,11 +23,12 @@ public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> pat
                                  CompoundTag ravenmind,
                                  int parenCount
 )
-    implements IMessage {
-    public static final ResourceLocation ID = modLoc("cgui");
+    implements CustomPacketPayload {
+    public static final StreamCodec<FriendlyByteBuf, MsgOpenSpellGuiS2C> CODEC = CustomPacketPayload.codec(MsgOpenSpellGuiS2C::serialize, MsgOpenSpellGuiS2C::deserialize);
+    public static final Type<MsgOpenSpellGuiS2C> ID = new Type<>(modLoc("cgui"));
 
     @Override
-    public ResourceLocation getFabricId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 
@@ -34,10 +37,10 @@ public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> pat
 
         var hand = buf.readEnum(InteractionHand.class);
 
-        var patterns = buf.readList(fbb -> ResolvedPattern.fromNBT(fbb.readAnySizeNbt()));
+        var patterns = buf.readList(fbb -> ResolvedPattern.fromNBT(fbb.readNbt()));
 
-        var stack = buf.readList(FriendlyByteBuf::readNbt);
-        var raven = buf.readAnySizeNbt();
+        var stack = buf.readList(b -> b.readNbt());
+        var raven = buf.readNbt();
 
         var parenCount = buf.readVarInt();
 
@@ -49,7 +52,7 @@ public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> pat
 
         buf.writeCollection(this.patterns, (fbb, pat) -> fbb.writeNbt(pat.serializeToNBT()));
 
-        buf.writeCollection(this.stack, FriendlyByteBuf::writeNbt);
+        buf.writeCollection(this.stack, (b, t) -> b.writeNbt(t));
         buf.writeNbt(this.ravenmind);
 
         buf.writeVarInt(this.parenCount);

@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.forge.xplat;
 
 import at.petrak.hexcasting.api.client.ClientCastingStack;
-import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
@@ -21,7 +20,7 @@ import net.minecraft.world.phys.AABB;
 
 public class ForgeClientXplatImpl implements IClientXplatAbstractions {
     @Override
-    public void sendPacketToServer(IMessage packet) {
+    public void sendPacketToServer(CustomPacketPayload packet) {
         ForgePacketHandler.getNetwork().sendToServer(packet);
     }
 

@@ -7,6 +7,8 @@ import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.Optional;
@@ -16,11 +18,12 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * Sent server->client when the player finishes casting a spell.
  */
-public record MsgNewSpellPatternS2C(ExecutionClientView info, int index) implements IMessage {
-    public static final ResourceLocation ID = modLoc("pat_sc");
+public record MsgNewSpellPatternS2C(ExecutionClientView info, int index) implements CustomPacketPayload {
+    public static final StreamCodec<FriendlyByteBuf, MsgNewSpellPatternS2C> CODEC = CustomPacketPayload.codec(MsgNewSpellPatternS2C::serialize, MsgNewSpellPatternS2C::deserialize);
+    public static final Type<MsgNewSpellPatternS2C> ID = new Type<>(modLoc("pat_sc"));
 
     @Override
-    public ResourceLocation getFabricId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 
@@ -31,22 +34,21 @@ public record MsgNewSpellPatternS2C(ExecutionClientView info, int index) impleme
         var resolutionType = buf.readEnum(ResolvedPatternType.class);
         var index = buf.readInt();
 
-        var stack = buf.readList(FriendlyByteBuf::readNbt);
-        var raven = buf.readOptional(FriendlyByteBuf::readNbt).orElse(null);
+        var stack = buf.readList(bu -> bu.readNbt());
+        var raven = buf.readOptional(bu -> bu.readNbt()).orElse(null);
 
         return new MsgNewSpellPatternS2C(
             new ExecutionClientView(isStackEmpty, resolutionType, stack, raven), index
         );
     }
 
-    @Override
     public void serialize(FriendlyByteBuf buf) {
         buf.writeBoolean(this.info.isStackClear());
         buf.writeEnum(this.info.getResolutionType());
         buf.writeInt(this.index);
 
-        buf.writeCollection(this.info.getStackDescs(), FriendlyByteBuf::writeNbt);
-        buf.writeOptional(Optional.ofNullable(this.info.getRavenmind()), FriendlyByteBuf::writeNbt);
+        buf.writeCollection(this.info.getStackDescs(), (b, t) -> b.writeNbt(t));
+        buf.writeOptional(Optional.ofNullable(this.info.getRavenmind()), (b, t) -> b.writeNbt(t));
     }
 
     public static void handle(MsgNewSpellPatternS2C self) {

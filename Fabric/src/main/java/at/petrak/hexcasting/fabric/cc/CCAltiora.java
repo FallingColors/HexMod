@@ -1,8 +1,9 @@
 package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.player.AltioraAbility;
-import dev.onyxstudios.cca.api.v3.component.Component;
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import net.minecraft.core.HolderLookup;
+import org.ladysnake.cca.api.v3.component.Component;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
@@ -34,7 +35,7 @@ public class CCAltiora implements Component, AutoSyncedComponent {
     }
 
     @Override
-    public void readFromNbt(CompoundTag tag) {
+    public void readFromNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
         var allowed = tag.getBoolean(TAG_ALLOWED);
         if (!allowed) {
             this.altiora = null;
@@ -45,7 +46,7 @@ public class CCAltiora implements Component, AutoSyncedComponent {
     }
 
     @Override
-    public void writeToNbt(CompoundTag tag) {
+    public void writeToNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
         tag.putBoolean(TAG_ALLOWED, this.altiora != null);
         if (this.altiora != null) {
             tag.putInt(TAG_GRACE, this.altiora.gracePeriod());

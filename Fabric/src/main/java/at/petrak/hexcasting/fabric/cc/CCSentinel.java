@@ -2,8 +2,9 @@ package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.utils.HexUtils;
-import dev.onyxstudios.cca.api.v3.component.Component;
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import net.minecraft.core.HolderLookup;
+import org.ladysnake.cca.api.v3.component.Component;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
@@ -36,13 +37,13 @@ public class CCSentinel implements Component, AutoSyncedComponent {
     }
 
     @Override
-    public void readFromNbt(CompoundTag tag) {
+    public void readFromNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
         var hasSentinel = tag.getBoolean(TAG_HAS_SENTINEL);
         if (hasSentinel) {
             var extendsRange = tag.getBoolean(TAG_EXTENDS_RANGE);
             var position = HexUtils.vecFromNBT(tag.getCompound(TAG_POSITION));
             var dim = ResourceKey.create(Registries.DIMENSION,
-                new ResourceLocation(tag.getString(TAG_DIMENSION)));
+                ResourceLocation.parse(tag.getString(TAG_DIMENSION)));
             this.sentinel = new Sentinel(extendsRange, position, dim);
         } else {
             this.sentinel = null;
@@ -50,7 +51,7 @@ public class CCSentinel implements Component, AutoSyncedComponent {
     }
 
     @Override
-    public void writeToNbt(CompoundTag tag) {
+    public void writeToNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
         tag.putBoolean(TAG_HAS_SENTINEL, this.sentinel != null);
         if (this.sentinel != null) {
             tag.putBoolean(TAG_EXTENDS_RANGE, this.sentinel.extendsRange());

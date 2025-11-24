@@ -7,6 +7,8 @@ import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
@@ -18,11 +20,12 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * Sent server->client to spray particles everywhere.
  */
-public record MsgCastParticleS2C(ParticleSpray spray, FrozenPigment colorizer) implements IMessage {
-    public static final ResourceLocation ID = modLoc("cprtcl");
+public record MsgCastParticleS2C(ParticleSpray spray, FrozenPigment colorizer) implements CustomPacketPayload {
+    public static final StreamCodec<FriendlyByteBuf, MsgCastParticleS2C> CODEC = CustomPacketPayload.codec(MsgCastParticleS2C::serialize, MsgCastParticleS2C::deserialize);
+    public static final Type<MsgCastParticleS2C> ID = new Type<>(modLoc("cprtcl"));
 
     @Override
-    public ResourceLocation getFabricId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 
@@ -37,14 +40,13 @@ public record MsgCastParticleS2C(ParticleSpray spray, FrozenPigment colorizer) i
         var fuzziness = buf.readDouble();
         var spread = buf.readDouble();
         var count = buf.readInt();
-        var tag = buf.readAnySizeNbt();
+        var tag = buf.readNbt();
         var colorizer = FrozenPigment.fromNBT(tag);
         return new MsgCastParticleS2C(
             new ParticleSpray(new Vec3(posX, posY, posZ), new Vec3(velX, velY, velZ), fuzziness, spread, count),
             colorizer);
     }
 
-    @Override
     public void serialize(FriendlyByteBuf buf) {
         buf.writeDouble(this.spray.getPos().x);
         buf.writeDouble(this.spray.getPos().y);

@@ -4,16 +4,17 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
-import dev.onyxstudios.cca.api.v3.item.ItemComponent;
+import org.ladysnake.cca.api.v3.item.ItemComponent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
-public abstract class CCItemIotaHolder extends ItemComponent implements CCIotaHolder {
+public abstract class CCItemIotaHolder implements CCIotaHolder, Component {
+    final ItemStack stack;
     public CCItemIotaHolder(ItemStack stack) {
-        super(stack, HexCardinalComponents.IOTA_HOLDER);
+        this.stack = stack;
     }
 
     public static class ItemBased extends CCItemIotaHolder {

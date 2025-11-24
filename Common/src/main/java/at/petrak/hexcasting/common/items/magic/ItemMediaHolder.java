@@ -19,8 +19,8 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
-    public static final String TAG_MEDIA = "hexcasting:media";
-    public static final String TAG_MAX_MEDIA = "hexcasting:start_media";
+    public static final String TAG_MEDIA = "media";
+    public static final String TAG_MAX_MEDIA = "max_media";
 
     public static final TextColor HEX_COLOR = TextColor.fromRgb(0xb38ef3);
 

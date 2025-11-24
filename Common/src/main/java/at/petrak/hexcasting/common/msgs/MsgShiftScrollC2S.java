@@ -8,15 +8,23 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
+
+import javax.xml.crypto.Data;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -25,11 +33,12 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  * or scrolls in the spellcasting UI.
  */
 public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boolean isCtrl, boolean invertSpellbook,
-                                boolean invertAbacus) implements IMessage {
-    public static final ResourceLocation ID = modLoc("scroll");
+                                boolean invertAbacus) implements CustomPacketPayload {
+    public static final StreamCodec<FriendlyByteBuf, MsgShiftScrollC2S> CODEC = CustomPacketPayload.codec(MsgShiftScrollC2S::serialize, MsgShiftScrollC2S::deserialize);
+    public static final Type<MsgShiftScrollC2S> ID = new Type<>(modLoc("scroll"));
 
     @Override
-    public ResourceLocation getFabricId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 
@@ -82,19 +91,19 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         var sealed = ItemSpellbook.isSealed(stack);
 
         MutableComponent component;
-        if (hand == InteractionHand.OFF_HAND && stack.hasCustomHoverName()) {
+        if (hand == InteractionHand.OFF_HAND && stack.has(DataComponents.CUSTOM_NAME)) {
             if (sealed) {
                 component = Component.translatable("hexcasting.tooltip.spellbook.page_with_name.sealed",
                     Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
                     Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-                    Component.literal("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC)
+                    Component.literal("").withStyle(stack.getRarity().color(), ChatFormatting.ITALIC)
                         .append(stack.getHoverName()),
                     Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
             } else {
                 component = Component.translatable("hexcasting.tooltip.spellbook.page_with_name",
                     Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
                     Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-                    Component.literal("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC)
+                    Component.literal("").withStyle(stack.getRarity().color(), ChatFormatting.ITALIC)
                         .append(stack.getHoverName()));
             }
 
@@ -120,7 +129,7 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         }
 
         var increase = delta < 0;
-        double num = NBTHelper.getDouble(stack, ItemAbacus.TAG_VALUE);
+        double num = stack.get(DataComponents.CUSTOM_DATA).copyTag().getDouble(ItemAbacus.TAG_VALUE);
 
         double shiftDelta;
         float pitch;
@@ -135,7 +144,10 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         int scale = Math.max((int) Math.floor(Math.abs(delta)), 1);
 
         num += scale * shiftDelta * (increase ? 1 : -1);
-        NBTHelper.putDouble(stack, ItemAbacus.TAG_VALUE, num);
+        CustomData data = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+        CompoundTag tag = data.copyTag();
+        tag.putDouble(ItemAbacus.TAG_VALUE, num);
+        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
 
         pitch *= (increase ? 1.05f : 0.95f);
         pitch += (Math.random() - 0.5) * 0.1;

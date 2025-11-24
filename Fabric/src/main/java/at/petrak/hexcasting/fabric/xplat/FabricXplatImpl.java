@@ -21,8 +21,8 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
+import at.petrak.hexcasting.common.components.PigmentItemComponent;
 import at.petrak.hexcasting.common.lib.HexRegistries;
-import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsApiInterop;
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
@@ -38,7 +38,6 @@ import net.fabricmc.fabric.api.entity.FakePlayer;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -52,6 +51,7 @@ import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.*;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -117,21 +117,21 @@ public class FabricXplatImpl implements IXplatAbstractions {
 //    }
 
     @Override
-    public void sendPacketToPlayer(ServerPlayer target, IMessage packet) {
+    public void sendPacketToPlayer(ServerPlayer target, CustomPacketPayload packet) {
         ServerPlayNetworking.send(target, packet.getFabricId(), packet.toBuf());
     }
 
     @Override
-    public void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, IMessage packet) {
+    public void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, CustomPacketPayload packet) {
         sendPacketToPlayers(PlayerLookup.around(dimension, pos, radius), packet);
     }
 
     @Override
-    public void sendPacketTracking(Entity entity, IMessage packet) {
+    public void sendPacketTracking(Entity entity, CustomPacketPayload packet) {
         sendPacketToPlayers(PlayerLookup.tracking(entity), packet);
     }
 
-    private void sendPacketToPlayers(Collection<ServerPlayer> players, IMessage packet) {
+    private void sendPacketToPlayers(Collection<ServerPlayer> players, CustomPacketPayload packet) {
         var pkt = ServerPlayNetworking.createS2CPacket(packet.getFabricId(), packet.toBuf());
         for (var p : players) {
             p.connection.send(pkt);
@@ -139,7 +139,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> toVanillaClientboundPacket(IMessage message) {
+    public Packet<ClientGamePacketListener> toVanillaClientboundPacket(CustomPacketPayload message) {
         return ServerPlayNetworking.createS2CPacket(message.getFabricId(), message.toBuf());
     }
 
@@ -276,7 +276,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public boolean isPigment(ItemStack stack) {
-        return HexCardinalComponents.PIGMENT.isProvidedBy(stack);
+        return stack.get(PigmentItemComponent.COMPONENT_TYPE) != null;
     }
 
     @Override
@@ -369,18 +369,18 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public Item.Properties addEquipSlotFabric(EquipmentSlot slot) {
-        return new FabricItemSettings().equipmentSlot(s -> slot);
+        return new Item.Properties().equipmentSlot((e, s) -> slot);
     }
 
     private static final IXplatTags TAGS = new IXplatTags() {
         @Override
         public TagKey<Item> amethystDust() {
-            return HexTags.Items.create(new ResourceLocation("c", "amethyst_dusts"));
+            return HexTags.Items.create(ResourceLocation.fromNamespaceAndPath("c", "amethyst_dusts"));
         }
 
         @Override
         public TagKey<Item> gems() {
-            return HexTags.Items.create(new ResourceLocation("c", "gems"));
+            return HexTags.Items.create(ResourceLocation.fromNamespaceAndPath("c", "gems"));
         }
     };
 
@@ -394,7 +394,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
         return AnyOfCondition.anyOf(
             MatchTool.toolMatches(ItemPredicate.Builder.item().of(Items.SHEARS)),
             MatchTool.toolMatches(ItemPredicate.Builder.item().of(
-                HexTags.Items.create(new ResourceLocation("c", "shears"))))
+                HexTags.Items.create(ResourceLocation.fromNamespaceAndPath("c", "shears"))))
         );
     }
 

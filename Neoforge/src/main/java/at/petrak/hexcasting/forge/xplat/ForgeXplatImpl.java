@@ -25,7 +25,6 @@ import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.lib.hex.HexContinuationTypes;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
-import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
@@ -47,6 +46,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -363,24 +363,24 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public void sendPacketToPlayer(ServerPlayer target, IMessage packet) {
+    public void sendPacketToPlayer(ServerPlayer target, CustomPacketPayload packet) {
         ForgePacketHandler.getNetwork().send(PacketDistributor.PLAYER.with(() -> target), packet);
     }
 
     @Override
-    public void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, IMessage packet) {
+    public void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, CustomPacketPayload packet) {
         ForgePacketHandler.getNetwork().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(
             pos.x, pos.y, pos.z, radius * radius, dimension.dimension()
         )), packet);
     }
 
     @Override
-    public void sendPacketTracking(Entity entity, IMessage packet) {
+    public void sendPacketTracking(Entity entity, CustomPacketPayload packet) {
         ForgePacketHandler.getNetwork().send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), packet);
     }
 
     @Override
-    public Packet<ClientGamePacketListener> toVanillaClientboundPacket(IMessage message) {
+    public Packet<ClientGamePacketListener> toVanillaClientboundPacket(CustomPacketPayload message) {
         //noinspection unchecked
         return (Packet<ClientGamePacketListener>) ForgePacketHandler.getNetwork().toVanillaPacket(message, NetworkDirection.PLAY_TO_CLIENT);
     }

@@ -1,8 +1,9 @@
 package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
-import dev.onyxstudios.cca.api.v3.component.Component;
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import net.minecraft.core.HolderLookup;
+import org.ladysnake.cca.api.v3.component.Component;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
@@ -33,12 +34,12 @@ public class CCFavoredPigment implements Component, AutoSyncedComponent {
     }
 
     @Override
-    public void readFromNbt(CompoundTag tag) {
+    public void readFromNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
         this.pigment = FrozenPigment.fromNBT(tag.getCompound(TAG_PIGMENT));
     }
 
     @Override
-    public void writeToNbt(CompoundTag tag) {
+    public void writeToNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
         tag.put(TAG_PIGMENT, this.pigment.serializeToNBT());
     }
 }

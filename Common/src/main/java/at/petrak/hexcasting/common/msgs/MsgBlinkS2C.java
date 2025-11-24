@@ -3,6 +3,8 @@ package at.petrak.hexcasting.common.msgs;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
@@ -11,11 +13,12 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * Sent server->client to synchronize OpBlink when the target is a player.
  */
-public record MsgBlinkS2C(Vec3 addedPosition) implements IMessage {
-    public static final ResourceLocation ID = modLoc("blink");
+public record MsgBlinkS2C(Vec3 addedPosition) implements CustomPacketPayload {
+    public static final StreamCodec<FriendlyByteBuf, MsgBlinkS2C> CODEC = CustomPacketPayload.codec(MsgBlinkS2C::serialize, MsgBlinkS2C::deserialize);
+    public static final Type<MsgBlinkS2C> ID = new Type<>(modLoc("blink"));
 
     @Override
-    public ResourceLocation getFabricId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 
@@ -27,7 +30,6 @@ public record MsgBlinkS2C(Vec3 addedPosition) implements IMessage {
         return new MsgBlinkS2C(new Vec3(x, y, z));
     }
 
-    @Override
     public void serialize(FriendlyByteBuf buf) {
         buf.writeDouble(this.addedPosition.x);
         buf.writeDouble(this.addedPosition.y);
@@ -43,4 +45,6 @@ public record MsgBlinkS2C(Vec3 addedPosition) implements IMessage {
             }
         });
     }
+
+
 }

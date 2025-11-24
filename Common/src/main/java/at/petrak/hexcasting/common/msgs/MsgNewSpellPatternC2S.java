@@ -5,6 +5,8 @@ import at.petrak.hexcasting.api.casting.eval.env.StaffCastEnv;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,11 +23,12 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  */
 public record MsgNewSpellPatternC2S(InteractionHand handUsed, HexPattern pattern,
                                     List<ResolvedPattern> resolvedPatterns)
-    implements IMessage {
-    public static final ResourceLocation ID = modLoc("pat_cs");
+    implements CustomPacketPayload {
+    public static final StreamCodec<FriendlyByteBuf, MsgNewSpellPatternC2S> CODEC = CustomPacketPayload.codec(MsgNewSpellPatternC2S::serialize, MsgNewSpellPatternC2S::deserialize);
+    public static final Type<MsgNewSpellPatternC2S> ID = new Type<>(modLoc("pat_cs"));
 
     @Override
-    public ResourceLocation getFabricId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 
@@ -42,7 +45,6 @@ public record MsgNewSpellPatternC2S(InteractionHand handUsed, HexPattern pattern
         return new MsgNewSpellPatternC2S(hand, pattern, resolvedPatterns);
     }
 
-    @Override
     public void serialize(FriendlyByteBuf buf) {
         buf.writeEnum(handUsed);
         buf.writeNbt(this.pattern.serializeToNBT());

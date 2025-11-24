@@ -1,7 +1,9 @@
 package at.petrak.hexcasting.fabric.cc;
 
-import dev.onyxstudios.cca.api.v3.component.Component;
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import org.ladysnake.cca.api.v3.component.Component;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,19 +30,19 @@ public class CCBrainswept implements Component, AutoSyncedComponent {
     }
 
     @Override
-    public void applySyncPacket(FriendlyByteBuf buf) {
+    public void applySyncPacket(RegistryFriendlyByteBuf buf) {
         AutoSyncedComponent.super.applySyncPacket(buf);
         if (owner instanceof Mob mob && brainswept)
             mob.removeFreeWill();
     }
 
     @Override
-    public void readFromNbt(CompoundTag tag) {
+    public void readFromNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
         this.brainswept = tag.getBoolean(TAG_BRAINSWEPT);
     }
 
     @Override
-    public void writeToNbt(CompoundTag tag) {
+    public void writeToNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
         tag.putBoolean(TAG_BRAINSWEPT, this.brainswept);
     }
 }

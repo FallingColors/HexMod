@@ -9,11 +9,19 @@ import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapUnescapedValue;
+import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.component.CustomData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,6 +32,20 @@ public abstract class Iota {
     protected final Object payload;
     @NotNull
     protected final IotaType<?> type;
+
+    public static final Codec<Iota> IOTA_CODEC = HexIotaTypes.REGISTRY.byNameCodec()
+            .dispatch("type", Iota::getType, IotaType::codec);
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, Iota> IOTA_STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, Iota iota) {
+            ByteBufCodecs.fromCodecWithRegistries(IOTA_CODEC).encode(buf, iota);
+        }
+
+        public Iota decode(RegistryFriendlyByteBuf buf) {
+            var iota = ByteBufCodecs.fromCodecWithRegistries(IOTA_CODEC).decode(buf); return iota;
+        }
+    };
 
     protected Iota(@NotNull IotaType<?> type, @NotNull Object payload) {
         this.type = type;

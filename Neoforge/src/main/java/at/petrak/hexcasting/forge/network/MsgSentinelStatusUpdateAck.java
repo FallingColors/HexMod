@@ -1,12 +1,13 @@
 package at.petrak.hexcasting.forge.network;
 
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
@@ -18,11 +19,15 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 /**
  * Sent server->client to synchronize the status of the sentinel.
  */
-public record MsgSentinelStatusUpdateAck(@Nullable Sentinel update) implements IMessage {
-    public static final ResourceLocation ID = modLoc("sntnl");
+public record MsgSentinelStatusUpdateAck(@Nullable Sentinel update) implements CustomPacketPayload {
+    public static final StreamCodec<FriendlyByteBuf, MsgSentinelStatusUpdateAck> CODEC = CustomPacketPayload.codec(
+            MsgSentinelStatusUpdateAck::serialize,
+            MsgSentinelStatusUpdateAck::deserialize
+    );
+    public static final Type<MsgSentinelStatusUpdateAck> ID = new Type<>(modLoc("sntnl"));
 
     @Override
-    public ResourceLocation getFabricId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 

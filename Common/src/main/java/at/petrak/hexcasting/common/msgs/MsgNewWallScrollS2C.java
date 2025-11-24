@@ -5,7 +5,12 @@ import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -14,29 +19,41 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 // https://github.com/VazkiiMods/Botania/blob/1.18.x/Xplat/src/main/java/vazkii/botania/network/clientbound/PacketSpawnDoppleganger.java
 public record MsgNewWallScrollS2C(ClientboundAddEntityPacket inner, BlockPos pos, Direction dir, ItemStack scrollItem,
-                                  boolean showsStrokeOrder, int blockSize) implements IMessage {
-    public static final ResourceLocation ID = modLoc("wallscr");
+                                  boolean showsStrokeOrder, int blockSize) implements CustomPacketPayload {
+    public static final StreamCodec<RegistryFriendlyByteBuf, MsgNewWallScrollS2C> CODEC = CustomPacketPayload.codec(MsgNewWallScrollS2C::serialize, MsgNewWallScrollS2C::deserialize);
+    public static final Type<MsgNewWallScrollS2C> ID = new Type<>(modLoc("wallscr"));
 
     @Override
-    public ResourceLocation getFabricId() {
+    public Type<? extends CustomPacketPayload> type() {
         return ID;
     }
 
-    @Override
-    public void serialize(FriendlyByteBuf buf) {
-        inner.write(buf);
+    public void serialize(RegistryFriendlyByteBuf buf) {
+        buf.writeVarInt(inner.getId());
+        buf.writeUUID(inner.getUUID());
+        ByteBufCodecs.registry(Registries.ENTITY_TYPE).encode(buf, inner.getType());
+        buf.writeDouble(inner.getX());
+        buf.writeDouble(inner.getY());
+        buf.writeDouble(inner.getZ());
+        buf.writeByte((byte) inner.getXRot());
+        buf.writeByte((byte) inner.getYRot());
+        buf.writeByte((byte) inner.getYHeadRot());
+        buf.writeVarInt(inner.getData());
+        buf.writeShort((short) inner.getXa());
+        buf.writeShort((short) inner.getYa());
+        buf.writeShort((short) inner.getZa());
         buf.writeBlockPos(pos);
         buf.writeByte(dir.ordinal());
-        buf.writeItem(scrollItem);
+        ItemStack.STREAM_CODEC.encode(buf, scrollItem);
         buf.writeBoolean(showsStrokeOrder);
         buf.writeVarInt(blockSize);
     }
 
-    public static MsgNewWallScrollS2C deserialize(FriendlyByteBuf buf) {
-        var inner = new ClientboundAddEntityPacket(buf);
+    public static MsgNewWallScrollS2C deserialize(RegistryFriendlyByteBuf buf) {
+        var inner = ClientboundAddEntityPacket.STREAM_CODEC.decode(buf);
         var pos = buf.readBlockPos();
         var dir = HexUtils.getSafe(Direction.values(), buf.readByte());
-        var scroll = buf.readItem();
+        var scroll = ItemStack.STREAM_CODEC.decode(buf);
         var strokeOrder = buf.readBoolean();
         var blockSize = buf.readVarInt();
         return new MsgNewWallScrollS2C(inner, pos, dir, scroll, strokeOrder, blockSize);

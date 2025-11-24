@@ -108,11 +108,11 @@ dependencies {
 //    modImplementation "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
     modImplementation "io.wispforest:accessories-fabric:$accessoriesVersion"
 
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:$cardinalComponentsVersion"
-//    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-util:$cardinalComponentsVersion"
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:$cardinalComponentsVersion"
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-item:$cardinalComponentsVersion"
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-block:$cardinalComponentsVersion"
+    modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-base:$cardinalComponentsVersion"
+//    modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-util:$cardinalComponentsVersion"
+    modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-entity:$cardinalComponentsVersion"
+    modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-item:$cardinalComponentsVersion"
+    modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-block:$cardinalComponentsVersion"
 
     // apparently the 1.18 version Just Works on 1.19
     modImplementation "${modID}:serialization-hooks:$serializationHooksVersion"

@@ -2,7 +2,8 @@ package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.utils.HexUtils;
-import dev.onyxstudios.cca.api.v3.component.Component;
+import net.minecraft.core.HolderLookup;
+import org.ladysnake.cca.api.v3.component.Component;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
@@ -37,14 +38,14 @@ public class CCFlight implements Component {
     }
 
     @Override
-    public void readFromNbt(CompoundTag tag) {
+    public void readFromNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
         var allowed = tag.getBoolean(TAG_ALLOWED);
         if (!allowed) {
             this.flight = null;
         } else {
             var timeLeft = tag.getInt(TAG_TIME_LEFT);
             var dim = ResourceKey.create(Registries.DIMENSION,
-                new ResourceLocation(tag.getString(TAG_DIMENSION)));
+                ResourceLocation.parse(tag.getString(TAG_DIMENSION)));
             var origin = HexUtils.vecFromNBT(tag.getCompound(TAG_ORIGIN));
             var radius = tag.getDouble(TAG_RADIUS);
             this.flight = new FlightAbility(timeLeft, dim, origin, radius);
@@ -52,7 +53,7 @@ public class CCFlight implements Component {
     }
 
     @Override
-    public void writeToNbt(CompoundTag tag) {
+    public void writeToNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
         tag.putBoolean(TAG_ALLOWED, this.flight != null);
         if (this.flight != null) {
             tag.putInt(TAG_TIME_LEFT, this.flight.timeLeft());
