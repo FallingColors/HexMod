@@ -42,7 +42,7 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-        BlockHitResult pHit) {
+                                 BlockHitResult pHit) {
         if (pLevel instanceof ServerLevel level
             && level.getBlockEntity(pPos) instanceof BlockEntityRedstoneImpetus tile) {
             var usedStack = pPlayer.getItemInHand(pHand);

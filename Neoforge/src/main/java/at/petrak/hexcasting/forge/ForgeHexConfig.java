@@ -4,23 +4,23 @@ import at.petrak.hexcasting.api.mod.HexConfig;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.List;
 
 import static at.petrak.hexcasting.api.mod.HexConfig.noneMatch;
 
 public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
-    private static ForgeConfigSpec.LongValue dustMediaAmount;
-    private static ForgeConfigSpec.LongValue shardMediaAmount;
-    private static ForgeConfigSpec.LongValue chargedCrystalMediaAmount;
-    private static ForgeConfigSpec.DoubleValue mediaToHealthRate;
+    private static ModConfigSpec.LongValue dustMediaAmount;
+    private static ModConfigSpec.LongValue shardMediaAmount;
+    private static ModConfigSpec.LongValue chargedCrystalMediaAmount;
+    private static ModConfigSpec.DoubleValue mediaToHealthRate;
 
-    private static ForgeConfigSpec.IntValue cypherCooldown;
-    private static ForgeConfigSpec.IntValue trinketCooldown;
-    private static ForgeConfigSpec.IntValue artifactCooldown;
+    private static ModConfigSpec.IntValue cypherCooldown;
+    private static ModConfigSpec.IntValue trinketCooldown;
+    private static ModConfigSpec.IntValue artifactCooldown;
 
-    public ForgeHexConfig(ForgeConfigSpec.Builder builder) {
+    public ForgeHexConfig(ModConfigSpec.Builder builder) {
         builder.push("Media Amounts");
         dustMediaAmount = builder.comment("How much media a single Amethyst Dust item is worth")
             .defineInRange("dustMediaAmount", DEFAULT_DUST_MEDIA_AMOUNT, 0, Integer.MAX_VALUE);
@@ -78,13 +78,13 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     }
 
     public static class Client implements HexConfig.ClientConfigAccess {
-        private static ForgeConfigSpec.BooleanValue ctrlTogglesOffStrokeOrder;
-        private static ForgeConfigSpec.BooleanValue invertSpellbookScrollDirection;
-        private static ForgeConfigSpec.BooleanValue invertAbacusScrollDirection;
-        private static ForgeConfigSpec.DoubleValue gridSnapThreshold;
-        private static ForgeConfigSpec.BooleanValue clickingTogglesDrawing;
+        private static ModConfigSpec.BooleanValue ctrlTogglesOffStrokeOrder;
+        private static ModConfigSpec.BooleanValue invertSpellbookScrollDirection;
+        private static ModConfigSpec.BooleanValue invertAbacusScrollDirection;
+        private static ModConfigSpec.DoubleValue gridSnapThreshold;
+        private static ModConfigSpec.BooleanValue clickingTogglesDrawing;
 
-        public Client(ForgeConfigSpec.Builder builder) {
+        public Client(ModConfigSpec.Builder builder) {
             ctrlTogglesOffStrokeOrder = builder.comment(
                     "Whether the ctrl key will instead turn *off* the color gradient on patterns")
                 .define("ctrlTogglesOffStrokeOrder", DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER);
@@ -131,26 +131,26 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     }
 
     public static class Server implements HexConfig.ServerConfigAccess {
-        private static ForgeConfigSpec.IntValue opBreakHarvestLevel;
-        private static ForgeConfigSpec.IntValue maxOpCount;
+        private static ModConfigSpec.IntValue opBreakHarvestLevel;
+        private static ModConfigSpec.IntValue maxOpCount;
 
-        private static ForgeConfigSpec.IntValue maxSpellCircleLength;
+        private static ModConfigSpec.IntValue maxSpellCircleLength;
 
-        private static ForgeConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
-        private static ForgeConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
+        private static ModConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
+        private static ModConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
 
-        private static ForgeConfigSpec.BooleanValue villagersOffendedByMindMurder;
+        private static ModConfigSpec.BooleanValue villagersOffendedByMindMurder;
 
-        private static ForgeConfigSpec.ConfigValue<List<? extends String>> tpDimDenyList;
+        private static ModConfigSpec.ConfigValue<List<? extends String>> tpDimDenyList;
 
-        private static ForgeConfigSpec.BooleanValue doesTrueNameHaveAmbit;
+        private static ModConfigSpec.BooleanValue doesTrueNameHaveAmbit;
 
-        private static ForgeConfigSpec.ConfigValue<List<? extends String>> fewScrollTables;
-        private static ForgeConfigSpec.ConfigValue<List<? extends String>> someScrollTables;
-        private static ForgeConfigSpec.ConfigValue<List<? extends String>> manyScrollTables;
+        private static ModConfigSpec.ConfigValue<List<? extends String>> fewScrollTables;
+        private static ModConfigSpec.ConfigValue<List<? extends String>> someScrollTables;
+        private static ModConfigSpec.ConfigValue<List<? extends String>> manyScrollTables;
 
 
-        public Server(ForgeConfigSpec.Builder builder) {
+        public Server(ModConfigSpec.Builder builder) {
             builder.push("Spells");
             maxOpCount = builder.comment("The maximum number of actions that can be executed in one tick, to avoid " +
                     "hanging the server.")
@@ -228,7 +228,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         }
 
         private static boolean isValidReslocArg(Object o) {
-            return o instanceof String s && ResourceLocation.isValidResourceLocation(s);
+            return o instanceof String s && ResourceLocation.tryParse(s) != null;
         }
     }
 }

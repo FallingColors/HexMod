@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.blocks.decoration;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -8,6 +9,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DirectionalBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
@@ -15,6 +17,12 @@ import net.minecraft.world.phys.BlockHitResult;
 public class BlockAmethystDirectional extends DirectionalBlock {
     public BlockAmethystDirectional(Properties properties) {
         super(properties);
+    }
+
+    public static final MapCodec<BlockAmethystDirectional> CODEC = BlockBehaviour.simpleCodec(BlockAmethystDirectional::new);
+    @Override
+    protected MapCodec<? extends DirectionalBlock> codec() {
+        return CODEC;
     }
 
     public void onProjectileHit(Level level, BlockState state, BlockHitResult result, Projectile projectile) {

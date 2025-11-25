@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.math.HexCoord
 import net.minecraft.ChatFormatting
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
 import net.minecraft.nbt.*
 import net.minecraft.network.chat.Component
@@ -16,6 +17,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.TagKey
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import java.lang.ref.WeakReference
@@ -290,6 +292,12 @@ fun <A> List<A>.zipWithDefault(array: ByteArray, default: (idx: Int) -> Byte): L
 //    return out
 //}
 
+fun ItemStack.serializeToNBT(provider: HolderLookup.Provider): CompoundTag {
+    val out = CompoundTag()
+    save(provider, out)
+    return out
+}
+
 @Suppress("UNCHECKED_CAST")
 @Throws(IllegalArgumentException::class)
 fun <T : Tag> Tag.downcast(type: TagType<T>): T {
@@ -313,3 +321,4 @@ fun <T> isOfTag(registry: Registry<T>, loc: ResourceLocation, tag: TagKey<T>): B
     val key = ResourceKey.create(registry.key(), loc);
     return isOfTag(registry, key, tag)
 }
+

@@ -292,9 +292,9 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         tag.putLong(TAG_MEDIA, this.media);
 
         if (this.displayMsg != null && this.displayItem != null) {
-            tag.putString(TAG_ERROR_MSG, Component.Serializer.toJson(this.displayMsg));
+            tag.putString(TAG_ERROR_MSG, Component.Serializer.toJson(this.displayMsg, level.registryAccess()));
             var itemTag = new CompoundTag();
-            this.displayItem.save(itemTag);
+            this.displayItem.save(level.registryAccess(), itemTag);
             tag.put(TAG_ERROR_DISPLAY, itemTag);
         }
         if (this.pigment != null)
@@ -315,8 +315,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         }
 
         if (tag.contains(TAG_ERROR_MSG, Tag.TAG_STRING) && tag.contains(TAG_ERROR_DISPLAY, Tag.TAG_COMPOUND)) {
-            var msg = Component.Serializer.fromJson(tag.getString(TAG_ERROR_MSG));
-            var display = ItemStack.of(tag.getCompound(TAG_ERROR_DISPLAY));
+            var msg = Component.Serializer.fromJson(tag.getString(TAG_ERROR_MSG), level.registryAccess());
+            var display = ItemStack.parseOptional(level.registryAccess(), tag.getCompound(TAG_ERROR_DISPLAY));
             this.displayMsg = msg;
             this.displayItem = display;
         } else {

@@ -3,7 +3,6 @@ package at.petrak.hexcasting.forge.xplat;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
-import at.petrak.hexcasting.api.addldata.ADVariantItem;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
@@ -29,7 +28,6 @@ import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.forge.mixin.ForgeAccessorBuiltInRegistries;
-import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
@@ -45,9 +43,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -72,33 +69,33 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.*;
-import net.minecraftforge.common.loot.CanToolPerformAction;
-import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.ModContainer;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLLoader;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.PacketDistributor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.loot.CanItemPerformAbility;
+import net.neoforged.neoforge.common.util.FakePlayerFactory;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import top.theillusivec4.caelus.api.CaelusApi;
+import com.illusivesoulworks.caelus.api.CaelusApi;
 import virtuoel.pehkui.api.ScaleTypes;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
-import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
+
 
 public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
@@ -133,8 +130,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         mob.getPersistentData().putBoolean(TAG_BRAINSWEPT, true);
 
         if (mob.level() instanceof ServerLevel) {
-            ForgePacketHandler.getNetwork()
-                .send(PacketDistributor.TRACKING_ENTITY.with(() -> mob), MsgBrainsweepAck.of(mob));
+            sendPacketTracking(mob, MsgBrainsweepAck.of(mob));
         }
     }
 
@@ -166,12 +162,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         }
 
         // The elytra ability is done with an event on fabric
-        var elytraing = CaelusApi.getInstance().getFlightAttribute();
-        var inst = player.getAttributes().getInstance(elytraing);
+        var elytraing = CaelusApi.getInstance().getFallFlyingAttribute();
+        var inst = player.getAttribute(elytraing);
         if (altiora != null) {
             if (inst.getModifier(ALTIORA_ATTRIBUTE_ID) == null) {
-                inst.addTransientModifier(new AttributeModifier(ALTIORA_ATTRIBUTE_ID, "Altiora", 1.0,
-                    AttributeModifier.Operation.ADDITION));
+                inst.addTransientModifier(new AttributeModifier(ALTIORA_ATTRIBUTE_ID, 1.0,
+                    AttributeModifier.Operation.ADD_VALUE));
             }
         } else {
             inst.removeModifier(ALTIORA_ATTRIBUTE_ID);
@@ -246,7 +242,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             var origin = HexUtils.vecFromNBT(tag.getCompound(TAG_FLIGHT_ORIGIN));
             var radius = tag.getDouble(TAG_FLIGHT_RADIUS);
             var dimension = ResourceKey.create(Registries.DIMENSION,
-                new ResourceLocation(tag.getString(TAG_FLIGHT_DIMENSION)));
+                ResourceLocation.parse(tag.getString(TAG_FLIGHT_DIMENSION)));
             return new FlightAbility(timeLeft, dimension, origin, radius);
         }
         return null;
@@ -278,7 +274,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         var extendsRange = tag.getBoolean(TAG_SENTINEL_GREATER);
         var position = HexUtils.vecFromNBT(tag.getCompound(TAG_SENTINEL_POSITION));
         var dimension = ResourceKey.create(Registries.DIMENSION,
-            new ResourceLocation(tag.getString(TAG_SENTINEL_DIMENSION)));
+            ResourceLocation.parse(tag.getString(TAG_SENTINEL_DIMENSION)));
 
         return new Sentinel(extendsRange, position, dimension);
     }
@@ -312,77 +308,63 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public @Nullable
     ADMediaHolder findMediaHolder(ItemStack stack) {
-        var maybeCap = stack.getCapability(HexCapabilities.MEDIA).resolve();
-        return maybeCap.orElse(null);
+        return stack.getCapability(HexCapabilities.MEDIA);
     }
 
     @Override
     public @Nullable ADMediaHolder findMediaHolder(ServerPlayer player) {
-        var maybeCap = player.getCapability(HexCapabilities.MEDIA).resolve();
-        return maybeCap.orElse(null);
+        return player.getCapability(HexCapabilities.MEDIA_ENTITY);
     }
 
     @Override
     public @Nullable
     ADIotaHolder findDataHolder(ItemStack stack) {
-        var maybeCap = stack.getCapability(HexCapabilities.IOTA).resolve();
-        return maybeCap.orElse(null);
+        return stack.getCapability(HexCapabilities.IOTA);
     }
 
     @Override
     public @Nullable ADIotaHolder findDataHolder(Entity entity) {
-        var maybeCap = entity.getCapability(HexCapabilities.IOTA).resolve();
-        return maybeCap.orElse(null);
+        return entity.getCapability(HexCapabilities.IOTA_ENTITY);
     }
 
     @Override
     public @Nullable
     ADHexHolder findHexHolder(ItemStack stack) {
-        var maybeCap = stack.getCapability(HexCapabilities.STORED_HEX).resolve();
-        return maybeCap.orElse(null);
-    }
-
-    @Override
-    public @Nullable ADVariantItem findVariantHolder(ItemStack stack) {
-        var maybeCap = stack.getCapability(HexCapabilities.VARIANT_ITEM).resolve();
-        return maybeCap.orElse(null);
-    }
-
-    @Override
-    public boolean isPigment(ItemStack stack) {
-        return stack.getCapability(HexCapabilities.COLOR).isPresent();
+        return stack.getCapability(HexCapabilities.STORED_HEX);
     }
 
     @Override
     public ColorProvider getColorProvider(FrozenPigment pigment) {
-        var maybePigment = pigment.item().getCapability(HexCapabilities.COLOR).resolve();
-        if (maybePigment.isPresent()) {
-            return maybePigment.get().provideColor(pigment.owner());
-        }
-        return ColorProvider.MISSING;
+        var maybePigment = pigment.item().getCapability(HexCapabilities.COLOR);
+        assert maybePigment != null;
+        return maybePigment.provideColor(pigment.owner());
     }
 
     @Override
     public void sendPacketToPlayer(ServerPlayer target, CustomPacketPayload packet) {
-        ForgePacketHandler.getNetwork().send(PacketDistributor.PLAYER.with(() -> target), packet);
+        target.connection.send(packet);
     }
 
     @Override
     public void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, CustomPacketPayload packet) {
-        ForgePacketHandler.getNetwork().send(PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(
-            pos.x, pos.y, pos.z, radius * radius, dimension.dimension()
-        )), packet);
+        List<ServerPlayer> players = dimension.getPlayers((player) -> {
+            double r2 = radius * radius;
+            return player.level() == dimension && player.position().distanceToSqr(pos) <= r2;
+        });
+        for (ServerPlayer player : players) {
+            player.connection.send(packet);
+        }
     }
 
     @Override
     public void sendPacketTracking(Entity entity, CustomPacketPayload packet) {
-        ForgePacketHandler.getNetwork().send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), packet);
+        PacketDistributor.sendToPlayersTrackingEntity(entity, packet);
     }
 
     @Override
-    public Packet<ClientGamePacketListener> toVanillaClientboundPacket(CustomPacketPayload message) {
+    public ClientboundCustomPayloadPacket toVanillaClientboundPacket(CustomPacketPayload message) {
         //noinspection unchecked
-        return (Packet<ClientGamePacketListener>) ForgePacketHandler.getNetwork().toVanillaPacket(message, NetworkDirection.PLAY_TO_CLIENT);
+        return message.toVanillaClientbound();
     }
 
     @Override
@@ -393,19 +375,19 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public boolean tryPlaceFluid(Level level, InteractionHand hand, BlockPos pos, Fluid fluid) {
-        Optional<IFluidHandler> handler = FluidUtil.getFluidHandler(level, pos, Direction.UP).resolve();
+        Optional<IFluidHandler> handler = FluidUtil.getFluidHandler(level, pos, Direction.UP);
         return handler.isPresent() &&
-            handler.get().fill(new FluidStack(fluid, FluidType.BUCKET_VOLUME), EXECUTE) > 0;
+            handler.get().fill(new FluidStack(fluid, FluidType.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE) > 0;
     }
 
     @Override
     public boolean drainAllFluid(Level level, BlockPos pos) {
-        Optional<IFluidHandler> handler = FluidUtil.getFluidHandler(level, pos, Direction.UP).resolve();
+        Optional<IFluidHandler> handler = FluidUtil.getFluidHandler(level, pos, Direction.UP);
         if (handler.isPresent()) {
             boolean any = false;
             IFluidHandler pool = handler.get();
             for (int i = 0; i < pool.getTanks(); i++) {
-                if (!pool.drain(pool.getFluidInTank(i), EXECUTE).isEmpty()) {
+                if (!pool.drain(pool.getFluidInTank(i), IFluidHandler.FluidAction.EXECUTE).isEmpty()) {
                     any = true;
                 }
             }
@@ -416,12 +398,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public Ingredient getUnsealedIngredient(ItemStack stack) {
-        return ForgeUnsealedIngredient.of(stack);
+        return ForgeUnsealedIngredient.of(stack).toVanilla();
     }
 
     @Override
     public boolean isCorrectTierForDrops(Tier tier, BlockState bs) {
-        return !bs.requiresCorrectToolForDrops() || TierSortingRegistry.isCorrectTierForDrops(tier, bs);
+        return !bs.requiresCorrectToolForDrops();
     }
 
     @Override
@@ -432,12 +414,12 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     private static final IXplatTags TAGS = new IXplatTags() {
         @Override
         public TagKey<Item> amethystDust() {
-            return HexTags.Items.create(new ResourceLocation("forge", "dusts/amethyst"));
+            return HexTags.Items.create(ResourceLocation.fromNamespaceAndPath("forge", "dusts/amethyst"));
         }
 
         @Override
         public TagKey<Item> gems() {
-            return HexTags.Items.create(new ResourceLocation("forge", "gems"));
+            return HexTags.Items.create(ResourceLocation.fromNamespaceAndPath("forge", "gems"));
         }
     };
 
@@ -448,7 +430,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public LootItemCondition.Builder isShearsCondition() {
-        return CanToolPerformAction.canToolPerformAction(ToolActions.SHEARS_DIG);
+        return CanItemPerformAbility.canItemPerformAbility(ItemAbilities.SHEARS_DIG);
     }
 
     @Override
@@ -526,7 +508,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public boolean isBreakingAllowed(ServerLevel world, BlockPos pos, BlockState state, @Nullable Player player) {
         if (player == null)
             player = FakePlayerFactory.get(world, HEXCASTING);
-        return !MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player));
+        return !NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, state, player)).isCanceled();
     }
 
     @Override
@@ -535,7 +517,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             player = FakePlayerFactory.get(world, HEXCASTING);
         ItemStack cached = player.getMainHandItem();
         player.setItemInHand(InteractionHand.MAIN_HAND, blockStack.copy());
-        var evt = ForgeHooks.onRightClickBlock(player, InteractionHand.MAIN_HAND, pos,
+        var evt = CommonHooks.onRightClickBlock(player, InteractionHand.MAIN_HAND, pos,
             new BlockHitResult(Vec3.atCenterOf(pos), Direction.DOWN, pos, true));
         player.setItemInHand(InteractionHand.MAIN_HAND, cached);
         return !evt.isCanceled();
@@ -583,7 +565,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public static final String TAG_ALTIORA_ALLOWED = "hexcasting:altiora_allowed";
     public static final String TAG_ALTIORA_GRACE = "hexcasting:altiora_grace_period";
 
-    public static final UUID ALTIORA_ATTRIBUTE_ID = UUID.fromString("91897c79-3ebb-468c-a265-40418ed01c41");
+    public static final ResourceLocation ALTIORA_ATTRIBUTE_ID = modLoc("Altiora");
 
     public static final String TAG_HARNESS = "hexcasting:spell_harness";
     public static final String TAG_PATTERNS = "hexcasting:spell_patterns";

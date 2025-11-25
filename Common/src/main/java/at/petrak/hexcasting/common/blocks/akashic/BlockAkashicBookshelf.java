@@ -40,7 +40,7 @@ public class BlockAkashicBookshelf extends Block implements AkashicFloodfiller, 
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-        BlockHitResult pHit) {
+                                 BlockHitResult pHit) {
         if (pLevel.getBlockEntity(pPos) instanceof BlockEntityAkashicBookshelf shelf) {
             var stack = pPlayer.getItemInHand(pHand);
             if (stack.getItem() instanceof ItemScroll scroll) {

@@ -23,11 +23,10 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.io.IOException;
 import java.util.function.Function;
@@ -48,7 +47,7 @@ public class ForgeHexClientInitializer {
                 (colorizer, block) -> GLOBAL_BLOCK_COLORS.register(colorizer, block));
         });
 
-        var evBus = MinecraftForge.EVENT_BUS;
+        var evBus = NeoForge.EVENT_BUS;
 
         evBus.addListener((ClientPlayerNetworkEvent.LoggingIn e) ->
             PatternRegistryManifest.processRegistry(null));

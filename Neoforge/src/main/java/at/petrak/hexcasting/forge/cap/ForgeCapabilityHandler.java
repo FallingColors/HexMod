@@ -15,7 +15,6 @@ import at.petrak.hexcasting.forge.cap.adimpl.*;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.ItemFrame;
@@ -24,18 +23,18 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.common.util.NonNullSupplier;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.neoforged.neoforge.capabilities.BaseCapability;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.ICapabilityProvider;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -78,10 +77,12 @@ public class ForgeCapabilityHandler {
     public static final ResourceLocation PATTERN_SPIRAL = modLoc("pattern_spiral");
 
     public static void registerCaps(RegisterCapabilitiesEvent evt) {
-        evt.register(ADMediaHolder.class);
-        evt.register(ADIotaHolder.class);
-        evt.register(ADHexHolder.class);
-        evt.register(ADPigment.class);
+        evt.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                ,
+                (impetus, context) -> provide(impetus, Capabilities.ItemHandler.BLOCK,
+                        () -> new ForgeImpetusCapability((BlockEntityAbstractImpetus) impetus)
+        );
     }
 
     public static void attachItemCaps(AttachCapabilitiesEvent<ItemStack> evt) {
@@ -159,57 +160,54 @@ public class ForgeCapabilityHandler {
         }
     }
 
-    public static void attachBlockEntityCaps(AttachCapabilitiesEvent<BlockEntity> evt) {
-        if (evt.getObject() instanceof BlockEntityAbstractImpetus impetus) {
-            evt.addCapability(IMPETUS_HANDLER, provide(impetus, ForgeCapabilities.ITEM_HANDLER,
-                () -> new ForgeImpetusCapability(impetus)));
-        }
-    }
-
     // i do not know why we need super here
-    private static <E extends Entity> SimpleProvider<? super CapEntityIotaHolder.Wrapper> wrapItemEntityDelegate(E entity,
+    private static <E extends Entity> SimpleProvider<? super CapEntityIotaHolder.Wrapper, Void> wrapItemEntityDelegate(E entity,
         Function<E, ItemDelegatingEntityIotaHolder> make) {
-        return provide(entity, HexCapabilities.IOTA,
+        return provide(entity, HexCapabilities.ITEM_IOTA,
             () -> new CapEntityIotaHolder.Wrapper(make.apply(entity)));
     }
 
-    private static <CAP> SimpleProvider<CAP> provide(Entity entity, Capability<CAP> capability,
-        NonNullSupplier<CAP> supplier) {
+    private static <CAP, CON> SimpleProvider<CAP, CON> provide(Entity entity, BaseCapability<CAP, CON> capability,
+        Supplier<CAP> supplier) {
         return provide(entity::isRemoved, capability, supplier);
     }
 
-    private static <CAP> SimpleProvider<CAP> provide(BlockEntity be, Capability<CAP> capability,
-        NonNullSupplier<CAP> supplier) {
+    private static <CAP, CON> SimpleProvider<CAP, CON> provide(BlockEntity be, BaseCapability<CAP, CON> capability,
+        Supplier<CAP> supplier) {
         return provide(be::isRemoved, capability, supplier);
     }
 
-    public static <CAP> SimpleProvider<CAP> provide(ItemStack stack, Capability<CAP> capability,
-        NonNullSupplier<CAP> supplier) {
+    public static <CAP, CON> SimpleProvider<CAP, CON> provide(ItemStack stack, BaseCapability<CAP, CON> capability,
+        Supplier<CAP> supplier) {
         return provide(stack::isEmpty, capability, supplier);
     }
 
-    private static <CAP> SimpleProvider<CAP> provide(BooleanSupplier invalidated, Capability<CAP> capability,
-        NonNullSupplier<CAP> supplier) {
-        return new SimpleProvider<>(invalidated, capability, LazyOptional.of(supplier));
+    private static <CAP, CON> SimpleProvider<CAP, CON> provide(BooleanSupplier invalidated, BaseCapability<CAP, CON> capability,
+        Supplier<CAP> supplier) {
+        return new SimpleProvider<>(invalidated, capability, Optional.of(supplier));
     }
 
-    public static <T, U extends T> ICapabilityProvider makeProvider(Capability<T> cap, U instance) {
-        LazyOptional<T> lazyInstanceButNotReally = LazyOptional.of(() -> instance);
+    public static <CAP, CON> ICapabilityProvider makeProvider(BaseCapability<CAP, CON> cap, CAP instance) {
+        Optional<Supplier<CAP>> lazyInstanceButNotReally = Optional.of(() -> instance);
         return new SimpleProvider<>(() -> false, cap, lazyInstanceButNotReally);
     }
 
-    public record SimpleProvider<CAP>(BooleanSupplier invalidated,
-                                      Capability<CAP> capability,
-                                      LazyOptional<CAP> instance) implements ICapabilityProvider {
+    public record SimpleProvider<CAP, CON>(BooleanSupplier invalidated,
+                                      BaseCapability<CAP,CON> capability,
+                                      Optional<Supplier<CAP>> instance) implements ICapabilityProvider {
 
         @NotNull
-        @Override
-        public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        public Optional getCapability(@NotNull BaseCapability<CAP, CON> cap) {
             if (invalidated.getAsBoolean()) {
-                return LazyOptional.empty();
+                return Optional.empty();
             }
 
-            return cap == capability ? instance.cast() : LazyOptional.empty();
+            return cap == capability ? instance : Optional.empty();
+        }
+
+        @Override
+        public @Nullable Object getCapability(Object object, Object object2) {
+            return null;
         }
     }
 

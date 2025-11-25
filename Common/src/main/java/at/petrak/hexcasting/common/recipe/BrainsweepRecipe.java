@@ -4,8 +4,12 @@ import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.GsonHelper;
@@ -13,6 +17,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -28,7 +33,7 @@ public record BrainsweepRecipe(
 	BrainsweepeeIngredient entityIn,
 	long mediaCost,
 	BlockState result
-) implements Recipe<Container> {
+) implements Recipe<RecipeInput> {
 	public boolean matches(BlockState blockIn, Entity victim, ServerLevel level) {
 		return this.blockIn.test(blockIn) && this.entityIn.test(victim, level);
 	}
@@ -55,17 +60,22 @@ public record BrainsweepRecipe(
 		return false;
 	}
 
-	@Override
-	public ItemStack assemble(Container pContainer, RegistryAccess access) {
-		return ItemStack.EMPTY;
-	}
+    @Override
+    public ItemStack assemble(Container recipeInput, HolderLookup.Provider provider) {
+        return ItemStack.EMPTY;
+    }
 
 	@Override
 	public boolean canCraftInDimensions(int pWidth, int pHeight) {
 		return false;
 	}
 
-	@Override
+    @Override
+    public ItemStack getResultItem(HolderLookup.Provider provider) {
+        return null;
+    }
+
+    @Override
 	public ItemStack getResultItem(RegistryAccess registryAccess) {
 		return ItemStack.EMPTY.copy();
 	}
@@ -109,5 +119,15 @@ public record BrainsweepRecipe(
 			var result = Block.stateById(buf.readVarInt());
 			return new BrainsweepRecipe(recipeID, blockIn, brainsweepeeIn, cost, result);
 		}
-	}
+
+        @Override
+        public MapCodec<BrainsweepRecipe> codec() {
+            return null;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, BrainsweepRecipe> streamCodec() {
+            return null;
+        }
+    }
 }

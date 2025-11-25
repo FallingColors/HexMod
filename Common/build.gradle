@@ -30,6 +30,10 @@ repositories {
     maven { url = "https://maven.terraformersmc.com/releases/" }
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/hexplat.accesswidener")
+}
+
 dependencies {
     // === MANDATORY DEPS ===
     compileOnly "at.petra-k:paucal:$paucalVersion+$minecraftVersion-common"

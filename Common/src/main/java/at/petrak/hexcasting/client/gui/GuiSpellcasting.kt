@@ -291,8 +291,8 @@ class GuiSpellcasting constructor(
         return false
     }
 
-    override fun mouseScrolled(pMouseX: Double, pMouseY: Double, pDelta: Double): Boolean {
-        super.mouseScrolled(pMouseX, pMouseY, pDelta)
+    override fun mouseScrolled(pDelta: Double, e: Double, f: Double, g: Double): Boolean {
+        super.mouseScrolled(pDelta, e, f, g)
 
         val mouseHandler = Minecraft.getInstance().mouseHandler
 

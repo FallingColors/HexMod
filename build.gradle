@@ -120,7 +120,7 @@ compileTestKotlin {
 }
 
 tasks.register("runAllDatagen") {
-    dependsOn ":Forge:runXplatDatagen"
-    dependsOn ":Forge:runForgeDatagen"
+    dependsOn ":Neoforge:runXplatDatagen"
+    dependsOn ":Neoforge:runForgeDatagen"
     dependsOn ":Fabric:runDatagen"
 }

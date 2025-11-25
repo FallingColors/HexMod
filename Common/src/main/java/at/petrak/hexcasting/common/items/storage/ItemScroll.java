@@ -6,12 +6,15 @@ import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
+import at.petrak.hexcasting.common.components.ItemIotaHolderComponent;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
+import at.petrak.hexcasting.common.lib.HexItemComponents;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import at.petrak.hexcasting.interop.inline.InlinePatternData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -21,10 +24,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.gameevent.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -53,14 +58,14 @@ public class ItemScroll extends Item implements IotaHolderItem {
     @Override
     public @Nullable
     CompoundTag readIotaTag(ItemStack stack) {
-        CompoundTag pattern = NBTHelper.getCompound(stack, TAG_PATTERN);
+        Iota pattern = Objects.requireNonNull(stack.get(ItemIotaHolderComponent.COMPONENT_TYPE)).iota();
         if (pattern == null) {
             return null;
         }
         // We store only the data part of the iota; pretend the rest of it's there
         var out = new CompoundTag();
         out.putString(HexIotaTypes.KEY_TYPE, "hexcasting:pattern");
-        out.put(HexIotaTypes.KEY_DATA, pattern);
+        out.put(HexIotaTypes.KEY_DATA, pattern.serialize());
         return out;
     }
 
@@ -101,9 +106,9 @@ public class ItemScroll extends Item implements IotaHolderItem {
         var scrollEntity = new EntityWallScroll(level, posInFront, direction, scrollStack, false, this.blockSize);
 
         // i guess
-        var stackTag = itemstack.getTag();
-        if (stackTag != null) {
-            EntityType.updateCustomEntityTag(level, player, scrollEntity, stackTag);
+        var component = itemstack.get(ItemIotaHolderComponent.COMPONENT_TYPE);
+        if (component != null) {
+            EntityType.updateCustomEntityTag(level, player, scrollEntity, CustomData.of((CompoundTag) component.iota().serialize()));
         }
 
         if (scrollEntity.survives()) {
@@ -128,12 +133,12 @@ public class ItemScroll extends Item implements IotaHolderItem {
     @Override
     public Component getName(ItemStack pStack) {
         var descID = this.getDescriptionId(pStack);
-        var ancientId = NBTHelper.getString(pStack, TAG_OP_ID);
+        var ancientId = pStack.get(DataComponents.CUSTOM_DATA).copyTag().getString(TAG_OP_ID);
         if (ancientId != null) {
             return Component.translatable(descID + ".of",
                 Component.translatable("hexcasting.action." + ResourceLocation.tryParse(ancientId)));
-        } else if (NBTHelper.hasCompound(pStack, TAG_PATTERN)) {
-            var compound = NBTHelper.getCompound(pStack, ItemScroll.TAG_PATTERN);
+        } else if (pStack.get(DataComponents.CUSTOM_DATA).contains(TAG_PATTERN)) {
+            var compound = pStack.get(DataComponents.CUSTOM_DATA).copyTag().getCompound(TAG_PATTERN);
             var patternLabel = Component.literal("");
             if (compound != null) {
                 var pattern = HexPattern.fromNBT(compound);
@@ -149,12 +154,12 @@ public class ItemScroll extends Item implements IotaHolderItem {
 
     @Override
     public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-        var compound = NBTHelper.getCompound(stack, ItemScroll.TAG_PATTERN);
-        if (compound != null) {
+        var compound = stack.get(DataComponents.CUSTOM_DATA).copyTag().getCompound(TAG_PATTERN);
+        if (!compound.equals(new CompoundTag())) {
             var pattern = HexPattern.fromNBT(compound);
             return Optional.of(new PatternTooltip(
                 pattern,
-                NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID)
+                    stack.get(DataComponents.CUSTOM_DATA).contains(TAG_PATTERN)
                     ? PatternTooltipComponent.ANCIENT_BG
                     : PatternTooltipComponent.PRISTINE_BG));
         }

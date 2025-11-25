@@ -20,10 +20,7 @@ import at.petrak.hexcasting.common.blocks.decoration.*;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -65,7 +62,7 @@ public class HexBlocks {
 
     private static BlockBehaviour.Properties slateish() {
         return BlockBehaviour.Properties
-            .copy(Blocks.DEEPSLATE_TILES)
+            .ofFullCopy(Blocks.DEEPSLATE_TILES)
             .strength(4f, 4f);
     }
 
@@ -85,7 +82,7 @@ public class HexBlocks {
 
     private static BlockBehaviour.Properties woodyHard(MapColor color) {
         return BlockBehaviour.Properties
-            .copy(Blocks.OAK_LOG)
+            .ofFullCopy(Blocks.OAK_LOG)
             .mapColor(color)
             .sound(SoundType.WOOD)
             .strength(3f, 4f);
@@ -97,7 +94,7 @@ public class HexBlocks {
 
     private static BlockBehaviour.Properties woody(MapColor color) {
         return BlockBehaviour.Properties
-            .copy(Blocks.OAK_LOG)
+            .ofFullCopy(Blocks.OAK_LOG)
             .mapColor(color)
             .sound(SoundType.WOOD)
             .strength(2f);
@@ -105,7 +102,7 @@ public class HexBlocks {
 
     private static BlockBehaviour.Properties leaves(MapColor color) {
         return BlockBehaviour.Properties
-            .copy(Blocks.OAK_LEAVES)
+            .ofFullCopy(Blocks.OAK_LEAVES)
             .strength(0.2F)
             .randomTicks()
             .sound(SoundType.GRASS)
@@ -118,7 +115,7 @@ public class HexBlocks {
     // we have to make it emit light because otherwise it occludes itself and is always dark
     private static BlockBehaviour.Properties quenched() {
         return BlockBehaviour.Properties
-            .copy(Blocks.AMETHYST_BLOCK)
+            .ofFullCopy(Blocks.AMETHYST_BLOCK)
             .lightLevel($ -> 4)
             .noOcclusion();
     }
@@ -203,17 +200,17 @@ public class HexBlocks {
     public static final Block SLATE_BRICKS = blockItem("slate_bricks", new Block(slateish().strength(2f, 4f)));
     public static final Block SLATE_BRICKS_SMALL = blockItem("slate_bricks_small", new Block(slateish().strength(2f, 4f)));
     public static final RotatedPillarBlock SLATE_PILLAR = blockItem("slate_pillar", new RotatedPillarBlock(slateish().strength(2f, 4f)));
-    public static final SandBlock AMETHYST_DUST_BLOCK = blockItem("amethyst_dust_block",
-        new SandBlock(0xff_b38ef3, BlockBehaviour.Properties.copy(Blocks.SAND).mapColor(MapColor.COLOR_PURPLE)
-            .strength(0.5f).sound(SoundType.SAND)));
+    public static final BlockHexFallingBlock AMETHYST_DUST_BLOCK = blockItem("amethyst_dust_block",
+        new BlockHexFallingBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.SAND).mapColor(MapColor.COLOR_PURPLE)
+            .strength(0.5f).sound(SoundType.SAND).mapColor(DyeColor.byFireworkColor(0xff_b38ef3))));
     public static final AmethystBlock AMETHYST_TILES = blockItem("amethyst_tiles",
-        new AmethystBlock(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)));
+        new AmethystBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)));
     public static final AmethystBlock AMETHYST_BRICKS = blockItem("amethyst_bricks",
-            new AmethystBlock(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)));
+            new AmethystBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)));
     public static final AmethystBlock AMETHYST_BRICKS_SMALL = blockItem("amethyst_bricks_small",
-            new AmethystBlock(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)));
+            new AmethystBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)));
     public static final BlockAmethystDirectional AMETHYST_PILLAR = blockItem("amethyst_pillar",
-            new BlockAmethystDirectional(BlockBehaviour.Properties.copy(Blocks.AMETHYST_BLOCK)));
+            new BlockAmethystDirectional(BlockBehaviour.Properties.ofFullCopy(Blocks.AMETHYST_BLOCK)));
     public static final Block SLATE_AMETHYST_TILES = blockItem("slate_amethyst_tiles", new Block(slateish().strength(2f, 4f)));
     public static final Block SLATE_AMETHYST_BRICKS = blockItem("slate_amethyst_bricks", new Block(slateish().strength(2f, 4f)));
     public static final Block SLATE_AMETHYST_BRICKS_SMALL = blockItem("slate_amethyst_bricks_small", new Block(slateish().strength(2f, 4f)));
@@ -275,7 +272,7 @@ public class HexBlocks {
     public static final ButtonBlock EDIFIED_BUTTON = blockItem("edified_button",
         new BlockHexWoodButton(edifiedWoody().noOcclusion().noCollission()));
     public static final PressurePlateBlock EDIFIED_PRESSURE_PLATE = blockItem("edified_pressure_plate",
-        new BlockHexPressurePlate(PressurePlateBlock.Sensitivity.EVERYTHING,
+        new BlockHexPressurePlate(
             edifiedWoody().noOcclusion().noCollission()));
     public static final BlockAkashicLeaves AMETHYST_EDIFIED_LEAVES = blockItem("amethyst_edified_leaves",
         new BlockAkashicLeaves(leaves(MapColor.COLOR_PURPLE)));

@@ -8,6 +8,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
@@ -17,6 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -104,8 +106,7 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
             if (!name.equals(cachedDisplayProfile) || cachedDisplayStack == null) {
                 cachedDisplayProfile = name;
                 var head = new ItemStack(Items.PLAYER_HEAD);
-                NBTHelper.put(head, "SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), name));
-                head.getItem().verifyTagAfterLoad(head.getOrCreateTag());
+                head.set(DataComponents.PROFILE, new ResolvableProfile(cachedDisplayProfile));
                 cachedDisplayStack = head;
             }
             lines.add(new Pair<>(cachedDisplayStack,

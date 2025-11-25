@@ -63,24 +63,24 @@ dependencies {
     neoForge "net.neoforged:neoforge:${neoforgeVersion}"
     common(project(path: ':Common', configuration: 'namedElements')) { transitive false }
     shadowBundle(project(path: ':Common', configuration: 'transformProductionNeoForge')) { transitive false }
-    implementation "thedarkcolour:kotlinforforge:$kotlinForForgeVersion"
+    implementation "thedarkcolour:kotlinforforge-neoforge:$kotlinForForgeVersion"
 
     // === MANDATORY DEPS ===
 
-    implementation "at.petra-k:paucal:$paucalVersion+$minecraftVersion-common"
-    implementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-NEOFORGE-SNAPSHOT"
-    implementation "top.theillusivec4.caelus:caelus-forge:$caelusVersion"
+    modImplementation "at.petra-k:paucal:$paucalVersion+$minecraftVersion-common"
+    modImplementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-NEOFORGE-SNAPSHOT"
+    modImplementation "com.illusivesoulworks.caelus:caelus-forge:$caelusVersion"
 //    implementation("com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion")
     // needed for inline to run
-    runtimeOnly("me.shedaniel.cloth:cloth-config-forge:$clothConfigVersion")
+    modRuntimeOnly("me.shedaniel.cloth:cloth-config-forge:$clothConfigVersion")
 
     // === OPTIONAL DEPS ===
 
-    compileOnly "dev.emi:emi-neoforge:${emiVersion}:api"
-    runtimeOnly "dev.emi:emi-neoforge:${emiVersion}"
+    modCompileOnly "dev.emi:emi-neoforge:${emiVersion}:api"
+    modRuntimeOnly "dev.emi:emi-neoforge:${emiVersion}"
     modImplementation "io.wispforest:accessories-neoforge:$accessoriesVersion"
 
-    api("com.github.Virtuoel:Pehkui:${pehkuiVersion}-1.21-neoforge")
+    modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}-1.21-neoforge")
 
     // "Required due to issues with JIJ dependency resolving in arch or something"
     // https://github.com/wisp-forest/accessories
@@ -137,5 +137,3 @@ processResources {
         expand "version": project.version
     }
 }
-
-jar.finalizedBy('reobfJar')

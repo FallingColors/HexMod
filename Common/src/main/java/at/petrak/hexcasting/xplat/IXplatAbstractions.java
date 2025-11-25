@@ -19,11 +19,13 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
+import at.petrak.hexcasting.common.components.PigmentItemComponent;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
@@ -72,7 +74,7 @@ public interface IXplatAbstractions {
     void sendPacketTracking(Entity entity, CustomPacketPayload packet);
 
     // https://github.com/VazkiiMods/Botania/blob/13b7bcd9cbb6b1a418b0afe455662d29b46f1a7f/Xplat/src/main/java/vazkii/botania/xplat/IXplatAbstractions.java#L157
-    Packet<ClientGamePacketListener> toVanillaClientboundPacket(CustomPacketPayload message);
+    ClientboundCustomPayloadPacket toVanillaClientboundPacket(CustomPacketPayload message);
 
 //    double getReachDistance(Player player);
 
@@ -127,11 +129,11 @@ public interface IXplatAbstractions {
     @Nullable
     ADHexHolder findHexHolder(ItemStack stack);
 
-    @Nullable ADVariantItem findVariantHolder(ItemStack stack);
-
     // coooollooorrrs
 
-    boolean isPigment(ItemStack stack);
+    default boolean isPigment(ItemStack stack) {
+        return stack.has(PigmentItemComponent.COMPONENT_TYPE);
+    };
 
     ColorProvider getColorProvider(FrozenPigment pigment);
 

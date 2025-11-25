@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -32,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
 public class FabricClientXplatImpl implements IClientXplatAbstractions {
     @Override
     public void sendPacketToServer(CustomPacketPayload packet) {
-        ClientPlayNetworking.send(packet.getFabricId(), packet.toBuf());
+        ClientPlayNetworking.send(packet);
     }
 
     @Override

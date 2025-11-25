@@ -11,11 +11,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.crafting.AbstractIngredient;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.minecraftforge.common.crafting.PartialNBTIngredient;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.crafting.ICustomIngredient;
+import net.neoforged.neoforge.common.crafting.IngredientType;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -24,7 +21,7 @@ import java.util.stream.Stream;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class ForgeUnsealedIngredient extends AbstractIngredient {
+public class ForgeUnsealedIngredient implements ICustomIngredient {
     public static final ResourceLocation ID = modLoc("unsealed");
 
     private final ItemStack stack;
@@ -63,8 +60,18 @@ public class ForgeUnsealedIngredient extends AbstractIngredient {
     }
 
     @Override
+    public Stream<ItemStack> getItems() {
+        return Stream.empty();
+    }
+
+    @Override
     public boolean isSimple() {
         return false;
+    }
+
+    @Override
+    public IngredientType<?> getType() {
+        return null;
     }
 
     @Override

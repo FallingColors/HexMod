@@ -16,11 +16,13 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 
 import java.util.Collection;
 import java.util.List;
@@ -103,13 +105,13 @@ public class ListPerWorldPatternsCommand {
                     tag.put(ItemScroll.TAG_PATTERN, pat.serializeToNBT());
 
                     var stack = new ItemStack(HexItems.SCROLL_LARGE);
-                    stack.setTag(tag);
+                    stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
 
                     for (var player : targets) {
                         var stackEntity = player.drop(stack, false);
                         if (stackEntity != null) {
                             stackEntity.setNoPickUpDelay();
-                            stackEntity.setThrower(player.getUUID());
+                            stackEntity.setThrower(player);
                         }
 
                         count++;
@@ -137,7 +139,7 @@ public class ListPerWorldPatternsCommand {
             tag.put(ItemScroll.TAG_PATTERN, pat.serializeToNBT());
 
             var stack = new ItemStack(HexItems.SCROLL_LARGE);
-            stack.setTag(tag);
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
 
             source.sendSuccess(() ->
                 Component.translatable(
@@ -151,7 +153,7 @@ public class ListPerWorldPatternsCommand {
                 var stackEntity = player.drop(stack, false);
                 if (stackEntity != null) {
                     stackEntity.setNoPickUpDelay();
-                    stackEntity.setThrower(player.getUUID());
+                    stackEntity.setThrower(player);
                 }
             }
 

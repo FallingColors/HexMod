@@ -9,15 +9,7 @@ import com.google.common.collect.Multimap;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import top.theillusivec4.curios.api.CuriosCapability;
-import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.SlotTypeMessage;
-import top.theillusivec4.curios.api.SlotTypePreset;
-import top.theillusivec4.curios.api.type.capability.ICurio;
+
 
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -50,7 +42,7 @@ public class CuriosApiInterop {
     }
 
     public static ICapabilityProvider curioCap(ItemStack stack) {
-        return ForgeCapabilityHandler.makeProvider(CuriosCapability.ITEM, new Wrapper(stack));
+        return ForgeCapabilityHandler.makeProvider(CuriosCapability.ITEM);
     }
 
 

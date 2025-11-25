@@ -4,8 +4,11 @@
 
 package at.petrak.hexcasting.api.utils
 
+import at.petrak.hexcasting.common.components.VariantItemComponent
+import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.*
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.CustomData
 import java.util.*
 
 private inline fun <T : Any, K, E> T?.getIf(key: K, predicate: T?.(K) -> Boolean, get: T.(K) -> E): E? =
@@ -192,93 +195,108 @@ val Tag.asUUID: UUID get() = if (this is IntArrayTag && this.size == 4) NbtUtils
 
 // Checks for containment
 
-fun ItemStack.hasNumber(key: String) = tag.hasNumber(key)
-fun ItemStack.hasByte(key: String) = tag.hasByte(key)
-fun ItemStack.hasShort(key: String) = tag.hasShort(key)
-fun ItemStack.hasInt(key: String) = tag.hasInt(key)
-fun ItemStack.hasLong(key: String) = tag.hasLong(key)
-fun ItemStack.hasFloat(key: String) = tag.hasFloat(key)
-fun ItemStack.hasDouble(key: String) = tag.hasDouble(key)
-fun ItemStack.hasLongArray(key: String) = tag.hasLongArray(key)
-fun ItemStack.hasIntArray(key: String) = tag.hasIntArray(key)
-fun ItemStack.hasByteArray(key: String) = tag.hasByteArray(key)
-fun ItemStack.hasCompound(key: String) = tag.hasCompound(key)
-fun ItemStack.hasString(key: String) = tag.hasString(key)
-fun ItemStack.hasList(key: String) = tag.hasList(key)
-fun ItemStack.hasList(key: String, objType: Int) = tag.hasList(key, objType)
-fun ItemStack.hasList(key: String, objType: Byte) = tag.hasList(key, objType)
-fun ItemStack.hasUUID(key: String) = tag.hasUUID(key)
+fun ItemStack.hasNumber(key: String) = get(DataComponents.CUSTOM_DATA)?.copyTag().hasNumber(key)
+fun ItemStack.hasByte(key: String) = get(DataComponents.CUSTOM_DATA)?.copyTag().hasByte(key)
+fun ItemStack.hasShort(key: String) = get(DataComponents.CUSTOM_DATA)?.copyTag().hasShort(key)
+fun ItemStack.hasInt(key: String) = get(DataComponents.CUSTOM_DATA)?.copyTag().hasInt(key)
+fun ItemStack.hasLong(key: String) = get(DataComponents.CUSTOM_DATA)?.copyTag().hasLong(key)
+fun ItemStack.hasFloat(key: String) = get(DataComponents.CUSTOM_DATA)?.copyTag().hasFloat(key)
+fun ItemStack.hasDouble(key: String) = get(DataComponents.CUSTOM_DATA)?.copyTag().hasDouble(key)
+fun ItemStack.hasLongArray(key: String) = get(DataComponents.CUSTOM_DATA)?.copyTag().hasLongArray(key)
+fun ItemStack.hasIntArray(key: String) = get(DataComponents.CUSTOM_DATA)?.copyTag().hasIntArray(key)
+fun ItemStack.hasByteArray(key: String) = get(DataComponents.CUSTOM_DATA)?.copyTag().hasByteArray(key)
+fun ItemStack.hasCompound(key: String) = get(DataComponents.CUSTOM_DATA)?.copyTag().hasCompound(key)
+fun ItemStack.hasString(key: String) = get(DataComponents.CUSTOM_DATA)?.copyTag().hasString(key)
+fun ItemStack.hasList(key: String) = get(DataComponents.CUSTOM_DATA)?.copyTag().hasList(key)
+fun ItemStack.hasList(key: String, objType: Int) = get(DataComponents.CUSTOM_DATA)?.copyTag().hasList(key, objType)
+fun ItemStack.hasList(key: String, objType: Byte) = get(DataComponents.CUSTOM_DATA)?.copyTag().hasList(key, objType)
+fun ItemStack.hasUUID(key: String) = get(DataComponents.CUSTOM_DATA)?.copyTag().hasUUID(key)
 
 @JvmName("contains")
-fun ItemStack.containsTag(key: String) = tag.contains(key)
+fun ItemStack.containsTag(key: String) = get(DataComponents.CUSTOM_DATA)?.contains(key)
 
 @JvmName("contains")
-fun ItemStack.containsTag(key: String, id: Byte) = tag.contains(key, id)
+fun ItemStack.containsTag(key: String, id: Byte) = get(DataComponents.CUSTOM_DATA)?.copyTag().contains(key, id)
 
 @JvmName("contains")
-fun ItemStack.containsTag(key: String, id: Int) = tag.contains(key, id)
+fun ItemStack.containsTag(key: String, id: Int) = get(DataComponents.CUSTOM_DATA)?.copyTag().contains(key, id)
+
+fun ItemStack.findVariantHolder() = get<VariantItemComponent?>(VariantItemComponent.COMPONENT_TYPE)
+
 
 // Puts
+private fun ItemStack.updateCustomData(block: CompoundTag.() -> Unit) {
+    val old = this.get(DataComponents.CUSTOM_DATA)
+    val tag = (old?.copyTag() ?: CompoundTag()).apply(block)
+    this.set(DataComponents.CUSTOM_DATA, CustomData.of(tag))
+}
 
-fun ItemStack.putBoolean(key: String, value: Boolean) = orCreateTag.putBoolean(key, value)
-fun ItemStack.putByte(key: String, value: Byte) = orCreateTag.putByte(key, value)
-fun ItemStack.putShort(key: String, value: Short) = orCreateTag.putShort(key, value)
-fun ItemStack.putInt(key: String, value: Int) = orCreateTag.putInt(key, value)
-fun ItemStack.putLong(key: String, value: Long) = orCreateTag.putLong(key, value)
-fun ItemStack.putFloat(key: String, value: Float) = orCreateTag.putFloat(key, value)
-fun ItemStack.putDouble(key: String, value: Double) = orCreateTag.putDouble(key, value)
+fun ItemStack.putBoolean(key: String, value: Boolean) = updateCustomData { putBoolean(key, value) }fun ItemStack.putByte(key: String, value: Byte) = updateCustomData { putByte(key, value) }
+fun ItemStack.putShort(key: String, value: Short) = updateCustomData { putShort(key, value) }
+fun ItemStack.putInt(key: String, value: Int) = updateCustomData { putInt(key, value) }
+fun ItemStack.putLong(key: String, value: Long) = updateCustomData { putLong(key, value) }
+fun ItemStack.putFloat(key: String, value: Float) = updateCustomData { putFloat(key, value) }
+fun ItemStack.putDouble(key: String, value: Double) = updateCustomData { putDouble(key, value) }
 
-fun ItemStack.putLongArray(key: String, value: LongArray) = orCreateTag.putLongArray(key, value)
-fun ItemStack.putIntArray(key: String, value: IntArray) = orCreateTag.putIntArray(key, value)
-fun ItemStack.putByteArray(key: String, value: ByteArray) = orCreateTag.putByteArray(key, value)
-fun ItemStack.putCompound(key: String, value: CompoundTag) = putTag(key, value)
-fun ItemStack.putString(key: String, value: String) = orCreateTag.putString(key, value)
-fun ItemStack.putList(key: String, value: ListTag) = putTag(key, value)
-fun ItemStack.putUUID(key: String, value: UUID) = orCreateTag.putUUID(key, value)
-
-@JvmName("put")
-fun ItemStack.putTag(key: String, value: Tag) = orCreateTag.put(key, value)
+fun ItemStack.putLongArray(key: String, value: LongArray) = updateCustomData { putLongArray(key, value) }
+fun ItemStack.putIntArray(key: String, value: IntArray) = updateCustomData { putIntArray(key, value) }
+fun ItemStack.putByteArray(key: String, value: ByteArray) = updateCustomData { putByteArray(key, value) }
+fun ItemStack.putCompound(key: String, value: CompoundTag) = updateCustomData { put(key, value) }
+fun ItemStack.putString(key: String, value: String) = updateCustomData { putString(key, value) }
+fun ItemStack.putList(key: String, value: ListTag) = updateCustomData { put(key, value) }
+fun ItemStack.putUUID(key: String, value: UUID) = updateCustomData { putUUID(key, value) }
 
 // Remove
 
-fun ItemStack.remove(key: String) = removeTagKey(key)
+fun ItemStack.remove(key: String) = updateCustomData { remove(key) }
 
 // Gets
 
-@JvmOverloads
-fun ItemStack.getBoolean(key: String, defaultExpected: Boolean = false) = tag.getBoolean(key, defaultExpected)
+private fun ItemStack.customTag(): CompoundTag =
+    get(DataComponents.CUSTOM_DATA)?.copyTag() ?: CompoundTag()
+
 
 @JvmOverloads
-fun ItemStack.getByte(key: String, defaultExpected: Byte = 0) = tag.getByte(key, defaultExpected)
+fun ItemStack.getBoolean(key: String, defaultExpected: Boolean = false) =
+    customTag().getBoolean(key).let { if (customTag().contains(key)) it else defaultExpected }
 
 @JvmOverloads
-fun ItemStack.getShort(key: String, defaultExpected: Short = 0) = tag.getShort(key, defaultExpected)
+fun ItemStack.getByte(key: String, defaultExpected: Byte = 0) =
+    customTag().getByte(key).let { if (customTag().contains(key)) it else defaultExpected }
 
 @JvmOverloads
-fun ItemStack.getInt(key: String, defaultExpected: Int = 0) = tag.getInt(key, defaultExpected)
+fun ItemStack.getShort(key: String, defaultExpected: Short = 0) =
+    customTag().getShort(key).let { if (customTag().contains(key)) it else defaultExpected }
 
 @JvmOverloads
-fun ItemStack.getLong(key: String, defaultExpected: Long = 0) = tag.getLong(key, defaultExpected)
+fun ItemStack.getInt(key: String, defaultExpected: Int = 0) =
+    customTag().getInt(key).let { if (customTag().contains(key)) it else defaultExpected }
 
 @JvmOverloads
-fun ItemStack.getFloat(key: String, defaultExpected: Float = 0f) = tag.getFloat(key, defaultExpected)
+fun ItemStack.getLong(key: String, defaultExpected: Long = 0) =
+    customTag().getLong(key).let { if (customTag().contains(key)) it else defaultExpected }
 
 @JvmOverloads
-fun ItemStack.getDouble(key: String, defaultExpected: Double = 0.0) = tag.getDouble(key, defaultExpected)
+fun ItemStack.getFloat(key: String, defaultExpected: Float = 0f) =
+    customTag().getFloat(key).let { if (customTag().contains(key)) it else defaultExpected }
 
-fun ItemStack.getLongArray(key: String) = tag.getLongArray(key)
-fun ItemStack.getIntArray(key: String) = tag.getIntArray(key)
-fun ItemStack.getByteArray(key: String) = tag.getByteArray(key)
-fun ItemStack.getCompound(key: String) = tag.getCompound(key)
-fun ItemStack.getString(key: String) = tag.getString(key)
-fun ItemStack.getList(key: String, objType: Int) = tag.getList(key, objType)
-fun ItemStack.getUUID(key: String) = tag.getUUID(key)
+@JvmOverloads
+fun ItemStack.getDouble(key: String, defaultExpected: Double = 0.0) =
+    customTag().getDouble(key).let { if (customTag().contains(key)) it else defaultExpected }
+
+fun ItemStack.getLongArray(key: String) = customTag().getLongArray(key)
+fun ItemStack.getIntArray(key: String) = customTag().getIntArray(key)
+fun ItemStack.getByteArray(key: String) = customTag().getByteArray(key)
+fun ItemStack.getCompound(key: String) = customTag().getCompound(key)
+fun ItemStack.getString(key: String) = customTag().getString(key)
+fun ItemStack.getList(key: String, objType: Int) = customTag().getList(key, objType)
+fun ItemStack.getUUID(key: String) = customTag().getUUID(key)
 
 @JvmName("get")
-fun ItemStack.getTag(key: String) = tag.get(key)
+fun ItemStack.getTag(key: String) = customTag().get(key)
 
 // Get-or-create
 
-fun ItemStack.getOrCreateCompound(key: String): CompoundTag = getOrCreateTagElement(key)
-fun ItemStack.getOrCreateList(key: String, objType: Byte) = orCreateTag.getOrCreateList(key, objType)
-fun ItemStack.getOrCreateList(key: String, objType: Int) = orCreateTag.getOrCreateList(key, objType)
+fun ItemStack.getOrCreateCompound(key: String): CompoundTag = customTag().getOrCreateCompound(key)
+fun ItemStack.getOrCreateList(key: String, objType: Byte) = customTag().getOrCreateList(key, objType)
+fun ItemStack.getOrCreateList(key: String, objType: Int) = customTag().getOrCreateList(key, objType)
