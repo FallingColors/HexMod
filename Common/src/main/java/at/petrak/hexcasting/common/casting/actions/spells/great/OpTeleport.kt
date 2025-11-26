@@ -15,11 +15,13 @@ import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.common.msgs.MsgBlinkS2C
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
+import net.minecraft.core.component.DataComponents
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.TicketType
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.enchantment.EnchantmentHelper
+import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.phys.Vec3
 
@@ -28,15 +30,14 @@ import net.minecraft.world.phys.Vec3
 object OpTeleport : SpellAction {
     override val argc = 2
     override fun execute(
-        args: List<Iota>,
-        env: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
 
-        val teleportee = args.getEntity(0, argc)
+        val teleportee = args.getEntity(env.world, 0, argc)
         val delta = args.getVec3(1, argc)
         env.assertEntityInRange(teleportee)
 
-        // TODO: see todos on blink
         if (!teleportee.canUsePortal(true) || teleportee.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
             throw MishapImmuneEntity(teleportee)
 
@@ -63,7 +64,7 @@ object OpTeleport : SpellAction {
 
             teleportRespectSticky(teleportee, delta, env.world)
 
-            if (teleportee is ServerPlayer && teleportee == env.castingEntity) {
+            if (HexConfig.server().doesGreaterTeleportSplatItems() && teleportee is ServerPlayer && teleportee == env.castingEntity) {
                 // Drop items conditionally, based on distance teleported.
                 // MOST IMPORTANT: Never drop main hand item, since if it's a trinket, it will get duplicated later.
 
@@ -73,7 +74,7 @@ object OpTeleport : SpellAction {
                 // having to rearrange those. Also it makes sense for LORE REASONS probably, since the caster is more
                 // aware of items they use often.
                 for (armorItem in teleportee.inventory.armor) {
-                    if (EnchantmentHelper.hasBindingCurse(armorItem))
+                    if (armorItem.get(DataComponents.ENCHANTMENTS)?.keySet()?.any { e -> e.`is`(Enchantments.BINDING_CURSE) } == true)
                         continue
 
                     if (Math.random() < baseDropChance * 0.25) {

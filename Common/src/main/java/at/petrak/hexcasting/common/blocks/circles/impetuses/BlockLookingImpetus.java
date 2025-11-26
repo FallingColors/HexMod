@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
+import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -21,8 +22,13 @@ public class BlockLookingImpetus extends BlockAbstractImpetus {
     }
 
     @Override
+<<<<<<< HEAD
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         return null;
+=======
+    public BlockEntityType<? extends BlockEntityAbstractImpetus> getBlockEntityType() {
+        return HexBlockEntities.IMPETUS_LOOK_TILE;
+>>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     @Nullable

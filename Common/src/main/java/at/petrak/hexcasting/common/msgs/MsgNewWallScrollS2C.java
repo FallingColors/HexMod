@@ -1,7 +1,9 @@
 package at.petrak.hexcasting.common.msgs;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
+import at.petrak.paucal.api.PaucalCodecs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,12 +16,14 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 // https://github.com/VazkiiMods/Botania/blob/1.18.x/Xplat/src/main/java/vazkii/botania/network/clientbound/PacketSpawnDoppleganger.java
 public record MsgNewWallScrollS2C(ClientboundAddEntityPacket inner, BlockPos pos, Direction dir, ItemStack scrollItem,
                                   boolean showsStrokeOrder, int blockSize) implements CustomPacketPayload {
+<<<<<<< HEAD
     public static final StreamCodec<RegistryFriendlyByteBuf, MsgNewWallScrollS2C> CODEC = CustomPacketPayload.codec(MsgNewWallScrollS2C::serialize, MsgNewWallScrollS2C::deserialize);
     public static final Type<MsgNewWallScrollS2C> ID = new Type<>(modLoc("wallscr"));
 
@@ -57,20 +61,34 @@ public record MsgNewWallScrollS2C(ClientboundAddEntityPacket inner, BlockPos pos
         var strokeOrder = buf.readBoolean();
         var blockSize = buf.readVarInt();
         return new MsgNewWallScrollS2C(inner, pos, dir, scroll, strokeOrder, blockSize);
+=======
+    public static final CustomPacketPayload.Type<MsgNewWallScrollS2C> TYPE = new CustomPacketPayload.Type<>(HexAPI.modLoc("wallscr"));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, MsgNewWallScrollS2C> STREAM_CODEC = StreamCodec.composite(
+            ClientboundAddEntityPacket.STREAM_CODEC, MsgNewWallScrollS2C::inner,
+            BlockPos.STREAM_CODEC, MsgNewWallScrollS2C::pos,
+            Direction.STREAM_CODEC, MsgNewWallScrollS2C::dir,
+            ItemStack.STREAM_CODEC, MsgNewWallScrollS2C::scrollItem,
+            ByteBufCodecs.BOOL, MsgNewWallScrollS2C::showsStrokeOrder,
+            ByteBufCodecs.VAR_INT, MsgNewWallScrollS2C::blockSize,
+            MsgNewWallScrollS2C::new
+    );
+
+    @Override
+    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+>>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     public static void handle(MsgNewWallScrollS2C self) {
-        Minecraft.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
-                var player = Minecraft.getInstance().player;
-                if (player != null) {
-                    player.connection.handleAddEntity(self.inner);
-                    var e = player.level().getEntity(self.inner.getId());
-                    if (e instanceof EntityWallScroll scroll) {
-                        scroll.readSpawnData(self.pos, self.dir, self.scrollItem, self.showsStrokeOrder,
-                            self.blockSize);
-                    }
+        Minecraft.getInstance().execute(() -> {
+            var player = Minecraft.getInstance().player;
+            if (player != null) {
+                player.connection.handleAddEntity(self.inner);
+                var e = player.level().getEntity(self.inner.getId());
+                if (e instanceof EntityWallScroll scroll) {
+                    scroll.readSpawnData(self.pos, self.dir, self.scrollItem, self.showsStrokeOrder,
+                        self.blockSize);
                 }
             }
         });

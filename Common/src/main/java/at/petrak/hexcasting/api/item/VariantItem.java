@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.item;
 
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -10,16 +11,16 @@ import net.minecraft.world.item.ItemStack;
  * and the appropriate cap/CC will be attached.
  */
 public interface VariantItem {
-    String TAG_VARIANT = "variant";
 
     int numVariants();
 
     default int getVariant(ItemStack stack) {
-        return NBTHelper.getInt(stack, TAG_VARIANT, 0);
+        var variant = stack.get(HexDataComponents.VARIANT);
+        return variant != null ? variant : 0;
     }
 
     default void setVariant(ItemStack stack, int variant) {
-        NBTHelper.putInt(stack, TAG_VARIANT, clampVariant(variant));
+        stack.set(HexDataComponents.VARIANT, clampVariant(variant));
     }
 
     default int clampVariant(int variant) {

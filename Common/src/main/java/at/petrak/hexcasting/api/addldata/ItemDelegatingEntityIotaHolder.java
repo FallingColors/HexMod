@@ -24,12 +24,6 @@ public abstract class ItemDelegatingEntityIotaHolder implements ADIotaHolder {
     }
 
     @Override
-    public @Nullable CompoundTag readIotaTag() {
-        var delegate = IXplatAbstractions.INSTANCE.findDataHolder(this.stackSupplier.get());
-        return delegate == null ? null : delegate.readIotaTag();
-    }
-
-    @Override
     public boolean writeable() {
         var delegate = IXplatAbstractions.INSTANCE.findDataHolder(this.stackSupplier.get());
         return delegate != null && delegate.writeable();
@@ -47,9 +41,9 @@ public abstract class ItemDelegatingEntityIotaHolder implements ADIotaHolder {
     }
 
     @Override
-    public @Nullable Iota readIota(ServerLevel world) {
+    public @Nullable Iota readIota() {
         var delegate = IXplatAbstractions.INSTANCE.findDataHolder(this.stackSupplier.get());
-        return delegate == null ? null : delegate.readIota(world);
+        return delegate == null ? null : delegate.readIota();
     }
 
     @Override

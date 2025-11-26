@@ -20,14 +20,13 @@ import kotlin.math.roundToLong
 object OpBlink : SpellAction {
     override val argc = 2
     override fun execute(
-        args: List<Iota>,
-        env: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
-        val target = args.getEntity(0, argc)
+        val target = args.getEntity(env.world, 0, argc)
         val delta = args.getDouble(1, argc)
         env.assertEntityInRange(target)
 
-        // TODO: is this the same as canChangeDimensions? and what does that boolean do anyways
         if (!target.canUsePortal(true) || target.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
             throw MishapImmuneEntity(target)
 

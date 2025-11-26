@@ -20,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 
+@Deprecated
 public class PatternResLocArgument extends ResourceLocationArgument {
     private static final DynamicCommandExceptionType ERROR_UNKNOWN_PATTERN = new DynamicCommandExceptionType(
         (errorer) ->

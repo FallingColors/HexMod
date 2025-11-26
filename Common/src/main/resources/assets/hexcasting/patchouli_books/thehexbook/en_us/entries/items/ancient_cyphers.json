@@ -1,0 +1,18 @@
+{
+    "name": "hexcasting.entry.ancient_cyphers",
+    "category": "hexcasting:items",
+    "icon": "hexcasting:ancient_cypher",
+    "sortnum": 7,
+    "advancement": "hexcasting:root",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "hexcasting.page.ancient_cyphers.1"
+        },
+        {
+            "type": "patchouli:spotlight",
+            "text": "hexcasting.page.ancient_cyphers.2",
+            "item": "hexcasting:ancient_cypher[hexcasting:variant=0],hexcasting:ancient_cypher[hexcasting:variant=1],hexcasting:ancient_cypher[hexcasting:variant=2],hexcasting:ancient_cypher[hexcasting:variant=3],hexcasting:ancient_cypher[hexcasting:variant=4],hexcasting:ancient_cypher[hexcasting:variant=5],hexcasting:ancient_cypher[hexcasting:variant=6],hexcasting:ancient_cypher[hexcasting:variant=7]"
+        }
+    ]
+  }

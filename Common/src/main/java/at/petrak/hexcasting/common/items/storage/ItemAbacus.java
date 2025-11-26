@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -22,17 +23,25 @@ import javax.xml.crypto.Data;
 import java.util.List;
 
 public class ItemAbacus extends Item implements IotaHolderItem {
+<<<<<<< HEAD
     public static final String TAG_VALUE = "abacus_value";
+=======
+>>>>>>> refs/remotes/slava/devel/port-1.21
 
     public ItemAbacus(Properties pProperties) {
         super(pProperties);
     }
 
     @Override
+<<<<<<< HEAD
     public @Nullable
     CompoundTag readIotaTag(ItemStack stack) {
         var datum = new DoubleIota(stack.get(DataComponents.CUSTOM_DATA).copyTag().getDouble(TAG_VALUE));
         return IotaType.serialize(datum);
+=======
+    public @Nullable Iota readIota(ItemStack stack) {
+        return new DoubleIota(stack.getOrDefault(HexDataComponents.ABACUS_VALUE, 0.0));
+>>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     @Override
@@ -54,13 +63,13 @@ public class ItemAbacus extends Item implements IotaHolderItem {
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         var stack = player.getItemInHand(hand);
         if (player.isShiftKeyDown()) {
-            double oldNum = NBTHelper.getDouble(stack, TAG_VALUE);
-            stack.removeTagKey(TAG_VALUE);
+            Double oldNum = stack.get(HexDataComponents.ABACUS_VALUE);
+            stack.remove(HexDataComponents.ABACUS_VALUE);
 
             player.playSound(HexSounds.ABACUS_SHAKE, 1f, 1f);
 
             var key = "hexcasting.tooltip.abacus.reset";
-            if (oldNum == 69) {
+            if (oldNum != null && oldNum == 69) {
                 key += ".nice";
             }
             player.displayClientMessage(Component.translatable(key), true);
@@ -72,8 +81,13 @@ public class ItemAbacus extends Item implements IotaHolderItem {
     }
 
     @Override
+<<<<<<< HEAD
     public void appendHoverText(ItemStack pStack, Item.TooltipContext bruh, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {
         IotaHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
+=======
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        IotaHolderItem.appendHoverText(this, stack, tooltipComponents, tooltipFlag);
+>>>>>>> refs/remotes/slava/devel/port-1.21
     }
 }

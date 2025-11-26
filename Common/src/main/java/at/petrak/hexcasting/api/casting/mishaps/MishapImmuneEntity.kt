@@ -4,6 +4,8 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.pigment.FrozenPigment
 import at.petrak.hexcasting.api.utils.aqua
+import net.minecraft.core.registries.Registries
+import net.minecraft.network.chat.Component
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.DyeColor
 
@@ -16,5 +18,5 @@ class MishapImmuneEntity(val entity: Entity) : Mishap() {
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("immune_entity", entity.displayName!!.plainCopy().aqua)
+        error("immune_entity", entity.displayName?.plainCopy()?.aqua ?: entity.type.description.plainCopy().aqua)
 }

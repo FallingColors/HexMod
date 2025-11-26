@@ -19,6 +19,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.Holder;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.Style;
@@ -75,7 +76,6 @@ public class HexAdditionalRenderers {
 
 
         var tess = Tesselator.getInstance();
-        var buf = tess.getBuilder();
         var neo = ps.last().pose();
         RenderSystem.enableBlend();
         RenderSystem.setShader(GameRenderer::getRendertypeLinesShader);
@@ -86,23 +86,23 @@ public class HexAdditionalRenderers {
 
         var pigment = IXplatAbstractions.INSTANCE.getPigment(owner);
         var colProvider = pigment.getColorProvider();
+
+        // Icosahedron inscribed inside the unit sphere
+        var buf = tess.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL);
+
         BiConsumer<float[], float[]> v = (l, r) -> {
             int lcolor = colProvider.getColor(time, new Vec3(l[0], l[1], l[2])),
                 rcolor = colProvider.getColor(time, new Vec3(r[0], r[1], r[2]));
             var normal = new Vector3f(r[0] - l[0], r[1] - l[1], r[2] - l[2]);
             normal.normalize();
-            buf.vertex(neo, l[0], l[1], l[2])
-                .color(lcolor)
-                .normal(ps.last().normal(), normal.x(), normal.y(), normal.z())
-                .endVertex();
-            buf.vertex(neo, r[0], r[1], r[2])
-                .color(rcolor)
-                .normal(ps.last().normal(), -normal.x(), -normal.y(), -normal.z())
-                .endVertex();
+            buf.addVertex(neo, l[0], l[1], l[2])
+                .setColor(lcolor)
+                .setNormal(ps.last(), normal.x(), normal.y(), normal.z());
+            buf.addVertex(neo, r[0], r[1], r[2])
+                .setColor(rcolor)
+                .setNormal(ps.last(), -normal.x(), -normal.y(), -normal.z());
         };
 
-        // Icosahedron inscribed inside the unit sphere
-        buf.begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL);
         for (int side = 0; side <= 1; side++) {
             var ring = (side == 0) ? Icos.BOTTOM_RING : Icos.TOP_RING;
             var apex = (side == 0) ? Icos.BOTTOM : Icos.TOP;
@@ -123,7 +123,7 @@ public class HexAdditionalRenderers {
             v.accept(Icos.TOP_RING[(i + 2) % 5], bottom);
             v.accept(bottom, Icos.TOP_RING[(i + 3) % 5]);
         }
-        tess.end();
+        //tess.end();
 
         RenderSystem.enableDepthTest();
         RenderSystem.enableCull();
@@ -159,7 +159,7 @@ public class HexAdditionalRenderers {
             return;
         }
 
-        if (player.getAttributeValue(HexAttributes.SCRY_SIGHT) <= 0.0)
+        if (player.getAttributeValue(HexAttributes.SCRY_SIGHT) <= 0.0 || player.getAttributeValue(HexAttributes.FEEBLE_MIND) > 0)
             return;
 
         var hitRes = mc.hitResult;

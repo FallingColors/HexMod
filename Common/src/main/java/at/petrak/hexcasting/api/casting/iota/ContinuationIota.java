@@ -4,13 +4,17 @@ import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,13 +25,15 @@ import java.util.List;
  */
 public class ContinuationIota extends Iota {
     public static final Component DISPLAY = Component.translatable("hexcasting.tooltip.jump_iota").withStyle(ChatFormatting.RED);
+    private SpellContinuation value;
 
     public ContinuationIota(SpellContinuation cont) {
-        super(HexIotaTypes.CONTINUATION, cont);
+        super(() -> HexIotaTypes.CONTINUATION);
+        this.value = cont;
     }
 
     public SpellContinuation getContinuation() {
-        return (SpellContinuation) this.payload;
+        return value;
     }
 
     @Override
@@ -38,12 +44,6 @@ public class ContinuationIota extends Iota {
     @Override
     public boolean toleratesOther(Iota that) {
         return typesMatch(this, that) && that instanceof ContinuationIota cont && cont.getContinuation().equals(getContinuation());
-    }
-
-    @Override
-    public @NotNull
-    Tag serialize() {
-        return getContinuation().serializeToNBT();
     }
 
     @Override
@@ -69,16 +69,31 @@ public class ContinuationIota extends Iota {
         return Math.min(size, 1);
     }
 
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
+
+    @Override
+    public Component display() {
+        return DISPLAY;
+    }
+
     public static IotaType<ContinuationIota> TYPE = new IotaType<>() {
+        public static final MapCodec<ContinuationIota> CODEC = SpellContinuation.getCODEC()
+                .xmap(ContinuationIota::new, ContinuationIota::getContinuation)
+                .fieldOf("value");
+        public static final StreamCodec<RegistryFriendlyByteBuf, ContinuationIota> STREAM_CODEC =
+                SpellContinuation.getSTREAM_CODEC().map(ContinuationIota::new, ContinuationIota::getContinuation);
+
         @Override
-        public @NotNull ContinuationIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            var compoundTag = HexUtils.downcast(tag, CompoundTag.TYPE);
-            return new ContinuationIota(SpellContinuation.fromNBT(compoundTag, world));
+        public MapCodec<ContinuationIota> codec() {
+            return CODEC;
         }
 
         @Override
-        public Component display(Tag tag) {
-            return DISPLAY;
+        public StreamCodec<RegistryFriendlyByteBuf, ContinuationIota> streamCodec() {
+            return STREAM_CODEC;
         }
 
         @Override

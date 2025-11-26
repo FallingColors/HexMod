@@ -16,11 +16,10 @@ import java.util.Optional;
 public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Instance> {
     private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("hexcasting", "overcast");
 
-    private static final String TAG_MEDIA_GENERATED = "media_generated";
-    private static final String TAG_HEALTH_USED = "health_used";
-    // HEY KIDS DID YOYU KNOW THERE'S NOT A CRITERIA FOR HOW MUCH ***HEALTH*** AN ENTITY HAS
-    private static final String TAG_HEALTH_LEFT =
-        "mojang_i_am_begging_and_crying_please_add_an_entity_health_criterion";
+    @Override
+    public Codec<Instance> codec() {
+        return Instance.CODEC;
+    }
 
     public void trigger(ServerPlayer player, int mediaGenerated) {
         super.trigger(player, inst -> {
@@ -30,19 +29,25 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
         });
     }
 
-    @Override
-    public Codec<Instance> codec() {
-        return null;
-    }
-
-    public record Instance(MinMaxBounds.Ints mediaGenerated, MinMaxBounds.Doubles healthUsed, MinMaxBounds.Doubles healthLeft, Optional<ContextAwarePredicate> predicate) implements SimpleInstance {
-
-        public static final Codec<Instance> CODEC = RecordCodecBuilder.create((instance) -> (instance.group(
-                MinMaxBounds.Ints.CODEC.fieldOf("mediaGenerated").forGetter(Instance::mediaGenerated),
-                MinMaxBounds.Doubles.CODEC.fieldOf("healthUsed").forGetter(Instance::healthUsed),
-                MinMaxBounds.Doubles.CODEC.fieldOf("healthLeft").forGetter(Instance::healthLeft),
-                EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player)
-        )).apply(instance, Instance::new));
+    public static record Instance(
+            Optional<ContextAwarePredicate> player,
+            MinMaxBounds.Ints mediaGenerated,
+            // This is the *proporttion* of the health bar.
+            MinMaxBounds.Doubles healthUsed,
+            // DID YOU KNOW THERES ONE TO CHECK THE WORLD TIME, BUT NOT THE HEALTH!?
+            MinMaxBounds.Doubles healthLeft
+            // DID YOU KNOW THERE'S ONE TO CHECK THE FUCKING C A T T Y P E BUT NOT THE HEALTH
+    ) implements SimpleCriterionTrigger.SimpleInstance {
+        public static final Codec<Instance> CODEC = RecordCodecBuilder.create(
+                inst -> inst.group(
+                                EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player),
+                                MinMaxBounds.Ints.CODEC.fieldOf("media_generated").forGetter(Instance::mediaGenerated),
+                                MinMaxBounds.Doubles.CODEC.fieldOf("health_used").forGetter(Instance::healthUsed),
+                                // HEY KIDS DID YOYU KNOW THERE'S NOT A CRITERIA FOR HOW MUCH ***HEALTH*** AN ENTITY HAS
+                                MinMaxBounds.Doubles.CODEC.fieldOf("mojang_i_am_begging_and_crying_please_add_an_entity_health_criterion").forGetter(Instance::healthLeft)
+                        )
+                        .apply(inst, Instance::new)
+        );
 
         private boolean test(int mediaGeneratedIn, double healthUsedIn, float healthLeftIn) {
             return this.mediaGenerated.matches(mediaGeneratedIn)

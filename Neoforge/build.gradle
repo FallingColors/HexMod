@@ -1,3 +1,7 @@
+plugins {
+    id 'com.gradleup.shadow'
+}
+
 architectury {
     platformSetupLoomIde()
     neoForge()
@@ -30,6 +34,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
     flatDir {
@@ -63,14 +68,23 @@ dependencies {
     neoForge "net.neoforged:neoforge:${neoforgeVersion}"
     common(project(path: ':Common', configuration: 'namedElements')) { transitive false }
     shadowBundle(project(path: ':Common', configuration: 'transformProductionNeoForge')) { transitive false }
+<<<<<<< HEAD
     implementation "thedarkcolour:kotlinforforge-neoforge:$kotlinForForgeVersion"
+=======
+    modImplementation "thedarkcolour:kotlinforforge:$kotlinForForgeVersion"
+>>>>>>> refs/remotes/slava/devel/port-1.21
 
     // === MANDATORY DEPS ===
 
     modImplementation "at.petra-k:paucal:$paucalVersion+$minecraftVersion-common"
     modImplementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-NEOFORGE-SNAPSHOT"
+<<<<<<< HEAD
     modImplementation "com.illusivesoulworks.caelus:caelus-forge:$caelusVersion"
 //    implementation("com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion")
+=======
+    modImplementation "top.theillusivec4.caelus:caelus-forge:$caelusVersion"
+    modImplementation "com.samsthenerd.inline:inline-common:1.21.1-1.2.2-74"
+>>>>>>> refs/remotes/slava/devel/port-1.21
     // needed for inline to run
     modRuntimeOnly("me.shedaniel.cloth:cloth-config-forge:$clothConfigVersion")
 
@@ -81,8 +95,11 @@ dependencies {
     modImplementation "io.wispforest:accessories-neoforge:$accessoriesVersion"
 
     modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}-1.21-neoforge")
+<<<<<<< HEAD
     compileOnly("mezz.jei:jei-${minecraftVersion}-neoforge-api:${jeiVersion}")
     runtimeOnly("mezz.jei:jei-${minecraftVersion}-neoforge:${jeiVersion}")
+=======
+>>>>>>> refs/remotes/slava/devel/port-1.21
 
     // "Required due to issues with JIJ dependency resolving in arch or something"
     // https://github.com/wisp-forest/accessories
@@ -138,4 +155,16 @@ processResources {
     filesMatching("mods.toml") {
         expand "version": project.version
     }
+<<<<<<< HEAD
+=======
+}
+
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
+}
+
+remapJar {
+    inputFile.set shadowJar.archiveFile
+>>>>>>> refs/remotes/slava/devel/port-1.21
 }

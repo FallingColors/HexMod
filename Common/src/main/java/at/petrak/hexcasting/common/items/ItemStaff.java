@@ -1,10 +1,13 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.common.lib.HexAttributes;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.common.msgs.MsgClearSpiralPatternsS2C;
 import at.petrak.hexcasting.common.msgs.MsgOpenSpellGuiS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import net.minecraft.core.Holder;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -25,6 +28,9 @@ public class ItemStaff extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+        if (player.getAttributeValue(HexAttributes.FEEBLE_MIND) > 0){
+            return InteractionResultHolder.fail(player.getItemInHand(hand));
+        }
         if (player.isShiftKeyDown()) {
             if (world.isClientSide()) {
                 player.playSound(HexSounds.STAFF_RESET, 1f, 1f);
@@ -37,12 +43,16 @@ public class ItemStaff extends Item {
         }
 
         if (!world.isClientSide() && player instanceof ServerPlayer serverPlayer) {
-            var harness = IXplatAbstractions.INSTANCE.getStaffcastVM(serverPlayer, hand);
+            var vm = IXplatAbstractions.INSTANCE.getStaffcastVM(serverPlayer, hand);
             var patterns = IXplatAbstractions.INSTANCE.getPatternsSavedInUi(serverPlayer);
-            var descs = harness.generateDescs();
+
+            var userData = vm.getImage().getUserData();
+            CompoundTag ravenmind = null;
+            if(userData.contains(HexAPI.RAVENMIND_USERDATA))
+                ravenmind = userData.getCompound(HexAPI.RAVENMIND_USERDATA);
 
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(serverPlayer,
-                new MsgOpenSpellGuiS2C(hand, patterns, descs.getFirst(), descs.getSecond(),
+                new MsgOpenSpellGuiS2C(hand, patterns, vm.getImage().getStack(), ravenmind,
                     0)); // TODO: Fix!
         }
 

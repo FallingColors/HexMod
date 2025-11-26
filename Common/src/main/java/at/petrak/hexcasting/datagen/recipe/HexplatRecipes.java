@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.datagen.recipe;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.blocks.decoration.BlockAkashicLog;
@@ -9,40 +10,44 @@ import at.petrak.hexcasting.common.items.pigment.ItemPridePigment;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.SealThingsRecipe;
-import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredients;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.EntityTypeIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.VillagerIngredient;
 import at.petrak.hexcasting.datagen.HexAdvancements;
 import at.petrak.hexcasting.datagen.IXplatConditionsBuilder;
 import at.petrak.hexcasting.datagen.IXplatIngredients;
 import at.petrak.hexcasting.datagen.recipe.builders.BrainsweepRecipeBuilder;
-import at.petrak.hexcasting.datagen.recipe.builders.CompatIngredientValue;
-import at.petrak.hexcasting.datagen.recipe.builders.CreateCrushingRecipeBuilder;
-import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightCuttingRecipeBuilder;
-import at.petrak.paucal.api.datagen.PaucalRecipeProvider;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 // TODO: need to do a big refactor of this class cause it's giant and unwieldy, probably as part of #360
-public class HexplatRecipes extends PaucalRecipeProvider {
+public class HexplatRecipes extends RecipeProvider {
     private final IXplatIngredients ingredients;
     private final Function<RecipeBuilder, IXplatConditionsBuilder> conditions;
 
@@ -61,17 +66,17 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         Map.entry(HexBlocks.STRIPPED_EDIFIED_LOG, HexBlocks.STRIPPED_EDIFIED_WOOD)
     );
 
-    public HexplatRecipes(PackOutput output, IXplatIngredients ingredients,
+    public HexplatRecipes(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, IXplatIngredients ingredients,
                           Function<RecipeBuilder, IXplatConditionsBuilder> conditions) {
-        super(output, HexAPI.MOD_ID);
+        super(output, registries);
         this.ingredients = ingredients;
         this.conditions = conditions;
     }
 
     @Override
-    public void buildRecipes(Consumer<FinishedRecipe> recipes) {
-        specialRecipe(recipes, SealThingsRecipe.FOCUS_SERIALIZER);
-        specialRecipe(recipes, SealThingsRecipe.SPELLBOOK_SERIALIZER);
+    public void buildRecipes(RecipeOutput recipes) {
+        specialRecipe(recipes, SealThingsRecipe.FOCUS_SERIALIZER, SealThingsRecipe::focus);
+        specialRecipe(recipes, SealThingsRecipe.SPELLBOOK_SERIALIZER, SealThingsRecipe::spellbook);
 
         staffRecipe(recipes, HexItems.STAFF_OAK, Items.OAK_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_BIRCH, Items.BIRCH_PLANKS);
@@ -142,7 +147,8 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .define('F', ingredients.goldIngot())
             .define('A', HexItems.CHARGED_AMETHYST)
             // why in god's name does minecraft have two different places for item tags
-            .define('D', ItemTags.MUSIC_DISCS)
+            // TODO port: check if good for music discs
+            .define('D', ItemTags.CREEPER_DROP_MUSIC_DISCS)
             .pattern(" F ")
             .pattern("FAF")
             .pattern(" D ")
@@ -195,11 +201,12 @@ public class HexplatRecipes extends PaucalRecipeProvider {
         gayRecipe(recipes, ItemPridePigment.Type.INTERSEX, Ingredient.of(Items.AZALEA));
         gayRecipe(recipes, ItemPridePigment.Type.LESBIAN, Ingredient.of(Items.HONEYCOMB));
         gayRecipe(recipes, ItemPridePigment.Type.NONBINARY, Ingredient.of(Items.MOSS_BLOCK));
-        gayRecipe(recipes, ItemPridePigment.Type.PANSEXUAL, ingredients.whenModIngredient(
+        // TODO port: This is neither an item value nor a tag value.
+        /*gayRecipe(recipes, ItemPridePigment.Type.PANSEXUAL, ingredients.whenModIngredient(
             Ingredient.of(Items.CARROT),
             "farmersdelight",
             CompatIngredientValue.of("farmersdelight:skillet")
-        ));
+        ));*/
         gayRecipe(recipes, ItemPridePigment.Type.PLURAL, Ingredient.of(Items.REPEATER));
         gayRecipe(recipes, ItemPridePigment.Type.TRANSGENDER, Ingredient.of(Items.EGG));
 
@@ -395,7 +402,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern("PSS")
             .pattern("BAB")
             .pattern("SSP")
-            .unlockedBy("enlightenment", enlightenment).save(recipes);
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment)).save(recipes);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, HexBlocks.EMPTY_DIRECTRIX)
             .define('C', Items.COMPARATOR)
@@ -405,7 +412,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern("CSS")
             .pattern("OAO")
             .pattern("SSC")
-            .unlockedBy("enlightenment", enlightenment).save(recipes);
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment)).save(recipes);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, HexBlocks.AKASHIC_BOOKSHELF)
             .define('L', HexTags.Items.EDIFIED_LOGS)
@@ -414,7 +421,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             /*this is the*/.pattern("LPL") // and what i have for you today is
             .pattern("CCC")
             .pattern("LPL")
-            .unlockedBy("enlightenment", enlightenment).save(recipes);
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment)).save(recipes);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, HexBlocks.AKASHIC_LIGATURE, 4)
             .define('L', HexTags.Items.EDIFIED_LOGS)
@@ -425,66 +432,66 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern("LPL")
             .pattern("123")
             .pattern("LPL")
-            .unlockedBy("enlightenment", enlightenment).save(recipes);
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment)).save(recipes);
 
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.AMETHYST_BLOCK),
+        new BrainsweepRecipeBuilder(StateIngredients.of(Blocks.AMETHYST_BLOCK),
             new VillagerIngredient(null, null, 3),
             Blocks.BUDDING_AMETHYST.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
-            .unlockedBy("enlightenment", enlightenment)
-            .save(recipes, modLoc("brainsweep/budding_amethyst"));
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
+            .save(recipes, modLoc("budding_amethyst"));
 
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.IMPETUS_EMPTY),
+        new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.IMPETUS_EMPTY),
             new VillagerIngredient(VillagerProfession.TOOLSMITH, null, 2),
             HexBlocks.IMPETUS_RIGHTCLICK.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
-            .unlockedBy("enlightenment", enlightenment)
-            .save(recipes, modLoc("brainsweep/impetus_rightclick"));
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
+            .save(recipes, modLoc("impetus_rightclick"));
 
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.IMPETUS_EMPTY),
+        new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.IMPETUS_EMPTY),
             new VillagerIngredient(VillagerProfession.FLETCHER, null, 2),
             HexBlocks.IMPETUS_LOOK.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
-            .unlockedBy("enlightenment", enlightenment)
-            .save(recipes, modLoc("brainsweep/impetus_look"));
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
+            .save(recipes, modLoc("impetus_look"));
 
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.IMPETUS_EMPTY),
+        new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.IMPETUS_EMPTY),
             new VillagerIngredient(VillagerProfession.CLERIC, null, 2),
             HexBlocks.IMPETUS_REDSTONE.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
-            .unlockedBy("enlightenment", enlightenment)
-            .save(recipes, modLoc("brainsweep/impetus_storedplayer"));
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
+            .save(recipes, modLoc("impetus_storedplayer"));
 
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_DIRECTRIX),
+        new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.EMPTY_DIRECTRIX),
             new VillagerIngredient(VillagerProfession.MASON, null, 1),
             HexBlocks.DIRECTRIX_REDSTONE.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
-            .unlockedBy("enlightenment", enlightenment)
-            .save(recipes, modLoc("brainsweep/directrix_redstone"));
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
+            .save(recipes, modLoc("directrix_redstone"));
 
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.EMPTY_DIRECTRIX),
+        new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.EMPTY_DIRECTRIX),
                 new VillagerIngredient(VillagerProfession.SHEPHERD, null, 1),
                 HexBlocks.DIRECTRIX_BOOLEAN.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
-                .unlockedBy("enlightenment", enlightenment)
-                .save(recipes, modLoc("brainsweep/directrix_boolean"));
+                .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
+                .save(recipes, modLoc("directrix_boolean"));
 
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(HexBlocks.AKASHIC_LIGATURE),
+        new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.AKASHIC_LIGATURE),
             new VillagerIngredient(VillagerProfession.LIBRARIAN, null, 5),
             HexBlocks.AKASHIC_RECORD.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
-            .unlockedBy("enlightenment", enlightenment)
-            .save(recipes, modLoc("brainsweep/akashic_record"));
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
+            .save(recipes, modLoc("akashic_record"));
 
         // Temporary tests
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.AMETHYST_BLOCK),
+        new BrainsweepRecipeBuilder(StateIngredients.of(Blocks.AMETHYST_BLOCK),
             new EntityTypeIngredient(EntityType.ALLAY),
             HexBlocks.QUENCHED_ALLAY.defaultBlockState(), MediaConstants.CRYSTAL_UNIT)
-            .unlockedBy("enlightenment", enlightenment)
-            .save(recipes, modLoc("brainsweep/quench_allay"));
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
+            .save(recipes, modLoc("quench_allay"));
 
         // Create compat
-        this.conditions.apply(new CreateCrushingRecipeBuilder()
+        /*this.conditions.apply(new CreateCrushingRecipeBuilder()
                 .withInput(Blocks.AMETHYST_CLUSTER)
                 .duration(150)
                 .withOutput(Items.AMETHYST_SHARD, 7)
                 .withOutput(HexItems.AMETHYST_DUST, 5)
                 .withOutput(0.25f, HexItems.CHARGED_AMETHYST))
             .whenModLoaded("create")
-            .save(recipes, new ResourceLocation("create", "crushing/amethyst_cluster"));
+            .save(recipes, ResourceLocation.fromNamespaceAndPath("create", "crushing/amethyst_cluster"));
 
         this.conditions.apply(new CreateCrushingRecipeBuilder()
                 .withInput(Blocks.AMETHYST_BLOCK)
@@ -492,7 +499,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
                 .withOutput(Items.AMETHYST_SHARD, 3)
                 .withOutput(0.5f, HexItems.AMETHYST_DUST, 4))
             .whenModLoaded("create")
-            .save(recipes, new ResourceLocation("create", "crushing/amethyst_block"));
+            .save(recipes, ResourceLocation.fromNamespaceAndPath("create", "crushing/amethyst_block"));
 
         this.conditions.apply(new CreateCrushingRecipeBuilder()
                 .withInput(Items.AMETHYST_SHARD)
@@ -535,14 +542,14 @@ public class HexplatRecipes extends PaucalRecipeProvider {
                 .withTool(ingredients.axeDig())
                 .withOutput(HexBlocks.EDIFIED_PLANKS))
             .whenModLoaded("farmersdelight")
-            .save(recipes, modLoc("compat/farmersdelight/cutting/akashic_door"));
+            .save(recipes, modLoc("compat/farmersdelight/cutting/akashic_door"));*/
     }
 
-    private void staffRecipe(Consumer<FinishedRecipe> recipes, ItemStaff staff, Item plank) {
+    private void staffRecipe(RecipeOutput recipes, ItemStaff staff, Item plank) {
         staffRecipe(recipes, staff, Ingredient.of(plank));
     }
 
-    private void staffRecipe(Consumer<FinishedRecipe> recipes, ItemStaff staff, Ingredient plank) {
+    private void staffRecipe(RecipeOutput recipes, ItemStaff staff, Ingredient plank) {
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, staff)
             .define('W', plank)
             .define('S', Items.STICK)
@@ -554,7 +561,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .save(recipes);
     }
 
-    private void gayRecipe(Consumer<FinishedRecipe> recipes, ItemPridePigment.Type type, Ingredient material) {
+    private void gayRecipe(RecipeOutput recipes, ItemPridePigment.Type type, Ingredient material) {
         var colorizer = HexItems.PRIDE_PIGMENTS.get(type);
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, colorizer)
             .define('D', HexItems.AMETHYST_DUST)
@@ -566,8 +573,148 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .save(recipes);
     }
 
-    private void specialRecipe(Consumer<FinishedRecipe> consumer, SimpleCraftingRecipeSerializer<?> serializer) {
+    private <T extends Recipe<?>> void specialRecipe(RecipeOutput consumer, RecipeSerializer<T> serializer, Function<CraftingBookCategory, T> recipeFunc) {
         var name = BuiltInRegistries.RECIPE_SERIALIZER.getKey(serializer);
-        SpecialRecipeBuilder.special(serializer).save(consumer, HexAPI.MOD_ID + ":dynamic" + name.getPath());
+        SpecialRecipeBuilder.special(recipeFunc::apply).save(consumer, HexAPI.MOD_ID + ":dynamic" + name.getPath());
+    }
+
+    protected static Criterion<InventoryChangeTrigger.TriggerInstance> hasItem(ItemLike p_125978_) {
+        return paucalInventoryTrigger(ItemPredicate.Builder.item().of(p_125978_).build());
+    }
+
+    protected static Criterion<InventoryChangeTrigger.TriggerInstance> hasItem(TagKey<Item> p_206407_) {
+        return paucalInventoryTrigger(ItemPredicate.Builder.item().of(p_206407_).build());
+    }
+
+    /**
+     * Prefixed with {@code paucal} to avoid collisions when Forge ATs {@link RecipeProvider#inventoryTrigger}.
+     */
+    protected static Criterion<InventoryChangeTrigger.TriggerInstance> paucalInventoryTrigger(ItemPredicate... $$0) {
+        return new Criterion<>(
+                CriteriaTriggers.INVENTORY_CHANGED,
+                new InventoryChangeTrigger.TriggerInstance(Optional.empty(), InventoryChangeTrigger.TriggerInstance.Slots.ANY, List.of($$0))
+        );
+    }
+
+    // ================================= From PAUCAL 1.20
+
+    protected ShapedRecipeBuilder ring(RecipeCategory category, ItemLike out, int count, Ingredient outer, @Nullable Ingredient inner) {
+        return ringCornered(category, out, count, outer, outer, inner);
+    }
+
+    protected ShapedRecipeBuilder ring(RecipeCategory category, ItemLike out, int count, ItemLike outer, @Nullable ItemLike inner) {
+        return ring(category, out, count, Ingredient.of(outer), ingredientOf(inner));
+    }
+
+    protected ShapedRecipeBuilder ring(RecipeCategory category, ItemLike out, int count, TagKey<Item> outer, @Nullable TagKey<Item> inner) {
+        return ring(category, out, count, Ingredient.of(outer), ingredientOf(inner));
+    }
+
+    protected ShapedRecipeBuilder ringCornerless(RecipeCategory category, ItemLike out, int count, Ingredient outer,
+                                                 @Nullable Ingredient inner) {
+        return ringCornered(category, out, count, outer, null, inner);
+    }
+
+    protected ShapedRecipeBuilder ringCornerless(RecipeCategory category, ItemLike out, int count, ItemLike outer, @Nullable ItemLike inner) {
+        return ringCornerless(category, out, count, Ingredient.of(outer), ingredientOf(inner));
+    }
+
+    protected ShapedRecipeBuilder ringAll(RecipeCategory category, ItemLike out, int count, Ingredient outer, @Nullable Ingredient inner) {
+        return ringCornered(category, out, count, outer, outer, inner);
+    }
+
+    protected ShapedRecipeBuilder ringAll(RecipeCategory category, ItemLike out, int count, ItemLike outer, @Nullable ItemLike inner) {
+        return ringAll(category, out, count, Ingredient.of(outer), ingredientOf(inner));
+    }
+
+    protected ShapedRecipeBuilder ringCornered(RecipeCategory category, ItemLike out, int count, @Nullable Ingredient cardinal,
+                                               @Nullable Ingredient diagonal, @Nullable Ingredient inner) {
+        if (cardinal == null && diagonal == null && inner == null) {
+            throw new IllegalArgumentException("at least one ingredient must be non-null");
+        }
+        if (inner != null && cardinal == null && diagonal == null) {
+            throw new IllegalArgumentException("if inner is non-null, either cardinal or diagonal must not be");
+        }
+
+        var builder = ShapedRecipeBuilder.shaped(category, out, count);
+        var C = ' ';
+        if (cardinal != null) {
+            builder.define('C', cardinal);
+            C = 'C';
+        }
+        var D = ' ';
+        if (diagonal != null) {
+            builder.define('D', diagonal);
+            D = 'D';
+        }
+        var I = ' ';
+        if (inner != null) {
+            builder.define('I', inner);
+            I = 'I';
+        }
+
+        builder
+                .pattern(String.format("%c%c%c", D, C, D))
+                .pattern(String.format("%c%c%c", C, I, C))
+                .pattern(String.format("%c%c%c", D, C, D));
+
+        return builder;
+    }
+
+    protected ShapedRecipeBuilder stack(RecipeCategory category, ItemLike out, int count, Ingredient top, Ingredient bottom) {
+        return ShapedRecipeBuilder.shaped(category, out, count)
+                .define('T', top)
+                .define('B', bottom)
+                .pattern("T")
+                .pattern("B");
+    }
+
+    protected ShapedRecipeBuilder stack(RecipeCategory category, ItemLike out, int count, ItemLike top, ItemLike bottom) {
+        return stack(category, out, count, Ingredient.of(top), Ingredient.of(bottom));
+    }
+
+    protected ShapedRecipeBuilder stack(RecipeCategory category, ItemLike out, int count, TagKey<Item> top, TagKey<Item> bottom) {
+        return stack(category, out, count, Ingredient.of(top), Ingredient.of(bottom));
+    }
+
+
+    protected ShapedRecipeBuilder stick(RecipeCategory category, ItemLike out, int count, Ingredient input) {
+        return stack(category, out, count, input, input);
+    }
+
+    protected ShapedRecipeBuilder stick(RecipeCategory category, ItemLike out, int count, ItemLike input) {
+        return stick(category, out, count, Ingredient.of(input));
+    }
+
+    protected ShapedRecipeBuilder stick(RecipeCategory category, ItemLike out, int count, TagKey<Item> input) {
+        return stick(category, out, count, Ingredient.of(input));
+    }
+
+    /**
+     * @param largeSize True for a 3x3, false for a 2x2
+     */
+    protected void packing(RecipeCategory category, ItemLike free, ItemLike compressed, String freeName, boolean largeSize, RecipeOutput recipes) {
+        var pack = ShapedRecipeBuilder.shaped(category, compressed)
+                .define('X', free);
+        if (largeSize) {
+            pack.pattern("XXX").pattern("XXX").pattern("XXX");
+        } else {
+            pack.pattern("XX").pattern("XX");
+        }
+        pack.unlockedBy("has_item", hasItem(free)).save(recipes, modLoc(freeName + "_packing"));
+
+        ShapelessRecipeBuilder.shapeless(category, free, largeSize ? 9 : 4)
+                .requires(compressed)
+                .unlockedBy("has_item", hasItem(free)).save(recipes, modLoc(freeName + "_unpacking"));
+    }
+
+    @Nullable
+    protected Ingredient ingredientOf(@Nullable ItemLike item) {
+        return item == null ? null : Ingredient.of(item);
+    }
+
+    @Nullable
+    protected Ingredient ingredientOf(@Nullable TagKey<Item> item) {
+        return item == null ? null : Ingredient.of(item);
     }
 }

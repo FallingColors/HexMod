@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.ClientTickCounter;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -26,30 +27,15 @@ import java.util.List;
  * and the appropriate cap/CC will be attached.
  */
 public interface IotaHolderItem {
-    /**
-     * If this key is set on the item, we ignore the rest of the item and render this as if it were of the
-     * {@link at.petrak.hexcasting.api.casting.iota.IotaType IotaType} given by the resource location.
-     * <p>
-     * This is not useful to the player at all.
-     */
-    String TAG_OVERRIDE_VISUALLY = "VisualOverride";
 
     @Nullable
-    CompoundTag readIotaTag(ItemStack stack);
-
-    @Nullable
-    default Iota readIota(ItemStack stack, ServerLevel world) {
-        if (!(stack.getItem() instanceof IotaHolderItem dh)) {
+    default Iota readIota(ItemStack stack) {
+        if (!(stack.getItem() instanceof IotaHolderItem)) {
             // this should be checked via mishap beforehand
             throw new IllegalArgumentException("stack's item must be an IotaHolderItem but was " + stack.getItem());
         }
 
-        var tag = dh.readIotaTag(stack);
-        if (tag != null) {
-            return IotaType.deserialize(tag, world);
-        } else {
-            return null;
-        }
+        return stack.get(HexDataComponents.IOTA);
     }
 
     /**
@@ -61,28 +47,18 @@ public interface IotaHolderItem {
     }
 
     default int getColor(ItemStack stack) {
-        if (NBTHelper.hasString(stack, TAG_OVERRIDE_VISUALLY)) {
-            var override = NBTHelper.getString(stack, TAG_OVERRIDE_VISUALLY);
-
-            if (override != null && ResourceLocation.isValidResourceLocation(override)) {
-                var key = new ResourceLocation(override);
-                if (HexIotaTypes.REGISTRY.containsKey(key)) {
-                    var iotaType = HexIotaTypes.REGISTRY.get(key);
-                    if (iotaType != null) {
-                        return iotaType.color();
-                    }
-                }
-            }
-
-            return 0xFF000000 | Mth.hsvToRgb(ClientTickCounter.getTotal() * 2 % 360 / 360F, 0.75F, 1F);
+        var override = stack.get(HexDataComponents.VISUAL_OVERRIDE);
+        //noinspection OptionalAssignedToNull
+        if (override != null) {
+            return override.map(IotaType::color).orElseGet(() -> 0xFF000000 | Mth.hsvToRgb(ClientTickCounter.getTotal() * 2 % 360 / 360F, 0.75F, 1F));
         }
 
-        var tag = this.readIotaTag(stack);
-        if (tag == null) {
+        var iota = this.readIota(stack);
+        if (iota == null) {
             return HexUtils.ERROR_COLOR;
         }
 
-        return IotaType.getColor(tag);
+        return iota.getType().color();
     }
 
     /**
@@ -102,15 +78,16 @@ public interface IotaHolderItem {
 
     static void appendHoverText(IotaHolderItem self, ItemStack stack, List<Component> components,
         TooltipFlag flag) {
-        var datumTag = self.readIotaTag(stack);
-        if (datumTag != null) {
-            var cmp = IotaType.getDisplay(datumTag);
+        var datum = self.readIota(stack);
+        if (datum != null) {
+            var cmp = datum.display();
             components.add(Component.translatable("hexcasting.spelldata.onitem", cmp));
 
-            if (flag.isAdvanced()) {
-                components.add(Component.literal("").append(NbtUtils.toPrettyComponent(datumTag)));
-            }
-        } else if (NBTHelper.hasString(stack, IotaHolderItem.TAG_OVERRIDE_VISUALLY)) {
+            //TODO port: show NBT in advanced display
+            /*if (flag.isAdvanced()) {
+                components.add(Component.literal("").append(NbtUtils.toPrettyComponent(datum)));
+            }*/
+        } else if (stack.has(HexDataComponents.VISUAL_OVERRIDE)) {
             components.add(Component.translatable("hexcasting.spelldata.onitem",
                 Component.translatable("hexcasting.spelldata.anything").withStyle(ChatFormatting.LIGHT_PURPLE)));
         }

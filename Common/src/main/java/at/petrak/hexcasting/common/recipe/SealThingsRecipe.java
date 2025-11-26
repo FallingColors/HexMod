@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.recipe;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.items.storage.ItemFocus;
 import at.petrak.hexcasting.common.items.storage.ItemSpellbook;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
@@ -24,8 +25,8 @@ public class SealThingsRecipe extends CustomRecipe {
     public static final SimpleCraftingRecipeSerializer<SealThingsRecipe> SPELLBOOK_SERIALIZER =
         new SimpleCraftingRecipeSerializer<>(SealThingsRecipe::spellbook);
 
-    public SealThingsRecipe(ResourceLocation id, CraftingBookCategory category, Sealee sealee) {
-        super(id, category);
+    public SealThingsRecipe(CraftingBookCategory category, Sealee sealee) {
+        super(category);
         this.sealee = sealee;
     }
 
@@ -40,7 +41,11 @@ public class SealThingsRecipe extends CustomRecipe {
         boolean foundComb = false;
         boolean foundSealee = false;
 
+<<<<<<< HEAD
         for (int i = 0; i < container.ingredientCount(); i++) {
+=======
+        for (int i = 0; i < container.size(); i++) {
+>>>>>>> refs/remotes/slava/devel/port-1.21
             var stack = container.getItem(i);
             if (this.sealee.isCorrectSealee(stack)) {
                 if (foundSealee) return false;
@@ -55,10 +60,17 @@ public class SealThingsRecipe extends CustomRecipe {
     }
 
     @Override
+<<<<<<< HEAD
     public ItemStack assemble(CraftingInput inv, HolderLookup.Provider provider) {
         ItemStack sealee = ItemStack.EMPTY;
 
         for (int i = 0; i < inv.ingredientCount(); i++) {
+=======
+    public @NotNull ItemStack assemble(CraftingInput inv, HolderLookup.RegistryLookup.@NotNull Provider registryProvider) {
+        ItemStack sealee = ItemStack.EMPTY;
+
+        for (int i = 0; i < inv.size(); i++) {
+>>>>>>> refs/remotes/slava/devel/port-1.21
             var stack = inv.getItem(i);
             if (this.sealee.isCorrectSealee(stack)) {
                 sealee = stack.copy();
@@ -82,12 +94,12 @@ public class SealThingsRecipe extends CustomRecipe {
         };
     }
 
-    public static SealThingsRecipe focus(ResourceLocation id, CraftingBookCategory category) {
-        return new SealThingsRecipe(id, category, Sealee.FOCUS);
+    public static SealThingsRecipe focus(CraftingBookCategory category) {
+        return new SealThingsRecipe(category, Sealee.FOCUS);
     }
 
-    public static SealThingsRecipe spellbook(ResourceLocation id, CraftingBookCategory category) {
-        return new SealThingsRecipe(id, category, Sealee.SPELLBOOK);
+    public static SealThingsRecipe spellbook(CraftingBookCategory category) {
+        return new SealThingsRecipe(category, Sealee.SPELLBOOK);
     }
 
     public enum Sealee implements StringRepresentable {
@@ -102,10 +114,10 @@ public class SealThingsRecipe extends CustomRecipe {
         public boolean isCorrectSealee(ItemStack stack) {
             return switch (this) {
                 case FOCUS -> stack.is(HexItems.FOCUS)
-                    && HexItems.FOCUS.readIotaTag(stack) != null
+                    && stack.has(HexDataComponents.IOTA)
                     && !ItemFocus.isSealed(stack);
                 case SPELLBOOK -> stack.is(HexItems.SPELLBOOK)
-                    && HexItems.SPELLBOOK.readIotaTag(stack) != null
+                    && HexItems.SPELLBOOK.readIota(stack) != null
                     && !ItemSpellbook.isSealed(stack);
             };
         }

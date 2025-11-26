@@ -1,7 +1,9 @@
 package at.petrak.hexcasting.common.blocks.circles.impetuses;
 
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
+import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.casting.iota.EntityIota;
+import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.BlockPos;
@@ -10,10 +12,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -26,6 +31,11 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
 
     public BlockRedstoneImpetus(Properties p_49795_) {
         super(p_49795_);
+    }
+
+    @Override
+    public BlockEntityType<? extends BlockEntityAbstractImpetus> getBlockEntityType() {
+        return HexBlockEntities.IMPETUS_REDSTONE_TILE;
     }
 
     @Nullable
@@ -41,37 +51,47 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
     }
 
     @Override
+<<<<<<< HEAD
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
                                  BlockHitResult pHit) {
         if (pLevel instanceof ServerLevel level
             && level.getBlockEntity(pPos) instanceof BlockEntityRedstoneImpetus tile) {
             var usedStack = pPlayer.getItemInHand(pHand);
             if (usedStack.isEmpty() && pPlayer.isDiscrete()) {
+=======
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (level instanceof ServerLevel sLevel
+                && level.getBlockEntity(pos) instanceof BlockEntityRedstoneImpetus tile) {
+            var usedStack = player.getItemInHand(hand);
+            if (usedStack.isEmpty() && player.isDiscrete()) {
+>>>>>>> refs/remotes/slava/devel/port-1.21
                 tile.clearPlayer();
                 tile.sync();
-                pLevel.playSound(null, pPos, HexSounds.IMPETUS_REDSTONE_CLEAR, SoundSource.BLOCKS, 1f, 1f);
-                return InteractionResult.sidedSuccess(pLevel.isClientSide);
+                level.playSound(null, pos, HexSounds.IMPETUS_REDSTONE_CLEAR, SoundSource.BLOCKS, 1f, 1f);
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
             } else {
                 var datumContainer = IXplatAbstractions.INSTANCE.findDataHolder(usedStack);
                 if (datumContainer != null) {
-                    var stored = datumContainer.readIota(level);
+                    var stored = datumContainer.readIota();
                     if (stored instanceof EntityIota eieio) {
-                        var entity = eieio.getEntity();
-                        if (entity instanceof Player player) {
+                        var entity = eieio.getOrFindEntity(sLevel);
+                        if (entity instanceof Player iotaPlayer) {
                             // phew, we got something
-                            tile.setPlayer(player.getGameProfile(), entity.getUUID());
+                            tile.setPlayer(iotaPlayer.getGameProfile(), entity.getUUID());
                             tile.sync();
 
-                            pLevel.playSound(null, pPos, HexSounds.IMPETUS_REDSTONE_DING,
-                                SoundSource.BLOCKS, 1f, 1f);
-                            return InteractionResult.sidedSuccess(pLevel.isClientSide);
+                            level.playSound(null, pos, HexSounds.IMPETUS_REDSTONE_DING,
+                                    SoundSource.BLOCKS, 1f, 1f);
+                            return ItemInteractionResult.sidedSuccess(level.isClientSide);
                         }
                     }
                 }
             }
         }
 
-        return InteractionResult.PASS;
+        return stack.isEmpty() && hand == InteractionHand.MAIN_HAND
+                ? ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
+                : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override

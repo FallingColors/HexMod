@@ -133,6 +133,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     public static class Server implements HexConfig.ServerConfigAccess {
         private static ModConfigSpec.IntValue opBreakHarvestLevel;
         private static ModConfigSpec.IntValue maxOpCount;
+<<<<<<< HEAD
 
         private static ModConfigSpec.IntValue maxSpellCircleLength;
 
@@ -145,6 +146,18 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
         private static ModConfigSpec.BooleanValue doesTrueNameHaveAmbit;
 
+=======
+        private static ModConfigSpec.IntValue maxSpellCircleLength;
+        private static ModConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
+        private static ModConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
+
+        private static ModConfigSpec.BooleanValue greaterTeleportSplatsItems;
+        private static ModConfigSpec.BooleanValue villagersOffendedByMindMurder;
+        private static ModConfigSpec.ConfigValue<List<? extends String>> tpDimDenyList;
+        private static ModConfigSpec.BooleanValue doesTrueNameHaveAmbit;
+        private static ModConfigSpec.DoubleValue traderScrollChance;
+
+>>>>>>> refs/remotes/slava/devel/port-1.21
         private static ModConfigSpec.ConfigValue<List<? extends String>> fewScrollTables;
         private static ModConfigSpec.ConfigValue<List<? extends String>> someScrollTables;
         private static ModConfigSpec.ConfigValue<List<? extends String>> manyScrollTables;
@@ -171,9 +184,17 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 .defineList("circleActionDenyList", List.of(), Server::isValidReslocArg);
             builder.pop();
 
+            builder.push("Loot");
+            traderScrollChance = builder.comment("The chance for wandering traders to sell an Ancient Scroll")
+                .defineInRange("traderScrollChance", DEFAULT_TRADER_SCROLL_CHANCE, 0.0, 1.0);
+
             actionDenyList = builder.comment(
                     "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
                 .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
+
+            greaterTeleportSplatsItems = builder.comment(
+                    "Should items fly out of the player's inventory when using Greater Teleport?"
+            ).define("greaterTeleportSplatsItems", DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS);
 
             villagersOffendedByMindMurder = builder.comment(
                     "Should villagers take offense when you flay the mind of their fellow villagers?")
@@ -213,6 +234,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         }
 
         @Override
+        public boolean doesGreaterTeleportSplatItems() { return greaterTeleportSplatsItems.get(); }
+
+        @Override
         public boolean doVillagersTakeOffenseAtMindMurder() {
             return villagersOffendedByMindMurder.get();
         }
@@ -225,6 +249,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public boolean trueNameHasAmbit() {
             return doesTrueNameHaveAmbit.get();
+        }
+
+        @Override
+        public double traderScrollChance() {
+            return traderScrollChance.get();
         }
 
         private static boolean isValidReslocArg(Object o) {

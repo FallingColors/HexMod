@@ -12,23 +12,28 @@ import java.util.Optional;
 public class SpendMediaTrigger extends SimpleCriterionTrigger<SpendMediaTrigger.Instance> {
     private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("hexcasting", "spend_media");
 
-    private static final String TAG_MEDIA_SPENT = "media_spent";
-    private static final String TAG_MEDIA_WASTED = "media_wasted";
-
-    public void trigger(ServerPlayer player, long mediaSpent, long mediaWasted) {
-        super.trigger(player, inst -> inst.test(mediaSpent, mediaWasted));
-    }
-
     @Override
     public Codec<Instance> codec() {
         return Instance.CODEC;
     }
 
-    public static record Instance(MinMaxLongs mediaSpent, MinMaxLongs mediaWasted) implements SimpleInstance {
-        public static final Codec<Instance> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
-                MinMaxLongs.CODEC.fieldOf("mediaSpent").forGetter(Instance::mediaSpent),
-                MinMaxLongs.CODEC.fieldOf("mediaWasted").forGetter(Instance::mediaWasted)
-        ).apply(instance, Instance::new));
+    public void trigger(ServerPlayer player, long mediaSpent, long mediaWasted) {
+        super.trigger(player, inst -> inst.test(mediaSpent, mediaWasted));
+    }
+
+    public static record Instance(
+            Optional<ContextAwarePredicate> player,
+            MinMaxLongs mediaSpent,
+            MinMaxLongs mediaWasted
+    ) implements SimpleCriterionTrigger.SimpleInstance {
+        public static final Codec<Instance> CODEC = RecordCodecBuilder.create(
+                inst -> inst.group(
+                                EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(Instance::player),
+                                MinMaxLongs.CODEC.fieldOf("media_generated").forGetter(Instance::mediaSpent),
+                                MinMaxLongs.CODEC.fieldOf("health_used").forGetter(Instance::mediaWasted)
+                        )
+                        .apply(inst, Instance::new)
+        );
 
         private boolean test(long mediaSpentIn, long mediaWastedIn) {
             return this.mediaSpent.matches(mediaSpentIn) && this.mediaWasted.matches(mediaWastedIn);

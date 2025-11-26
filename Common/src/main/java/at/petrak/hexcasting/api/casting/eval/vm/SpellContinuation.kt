@@ -1,10 +1,13 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
-import at.petrak.hexcasting.api.utils.NBTBuilder
-import at.petrak.hexcasting.api.utils.getList
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.Tag
-import net.minecraft.server.level.ServerLevel
+import com.mojang.datafixers.util.Either
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
+import io.netty.buffer.ByteBuf
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
+import java.util.function.Function
 
 /**
  * A continuation during the execution of a spell.
@@ -16,31 +19,43 @@ sealed interface SpellContinuation {
 
     fun pushFrame(frame: ContinuationFrame): SpellContinuation = NotDone(frame, this)
 
-    fun serializeToNBT() = NBTBuilder {
-        TAG_FRAME %= list(getNBTFrames())
-    }
-    fun getNBTFrames(): List<CompoundTag> {
-        var self = this
-        val frames = mutableListOf<CompoundTag>()
-        while (self is NotDone) {
-            frames.add(ContinuationFrame.toNBT(self.frame))
-            self = self.next
-        }
-        return frames
-    }
     companion object {
-        const val TAG_FRAME = "frame"
-
+        // TODO port: maybe serialize to list like before?
+        // TODO port: maybe unit should be first
         @JvmStatic
-        fun fromNBT(nbt: CompoundTag, world: ServerLevel): SpellContinuation {
-            val frames = nbt.getList(TAG_FRAME, Tag.TAG_COMPOUND)
-            var result: SpellContinuation = Done
-            for (frame in frames.asReversed()) {
-                if (frame is CompoundTag) {
-                    result = result.pushFrame(ContinuationFrame.fromNBT(frame, world))
+        val CODEC = Codec.recursive<SpellContinuation>(
+            SpellContinuation::class.java.simpleName
+        ) { recursed: Codec<SpellContinuation> ->
+            Codec.withAlternative<SpellContinuation>(
+                Codec.unit(Done),
+                RecordCodecBuilder.create<NotDone> { inst ->
+                    inst.group(
+                        ContinuationFrame.Type.TYPED_CODEC.fieldOf("frame").forGetter { it.frame },
+                        recursed.fieldOf("next").forGetter { it.next }
+                    ).apply(inst, ::NotDone)
                 }
-            }
-            return result
+            )
+        }
+        @JvmStatic
+        val STREAM_CODEC = StreamCodec.recursive<RegistryFriendlyByteBuf, SpellContinuation> { recursed ->
+            withAlternative(
+                StreamCodec.unit(Done),
+                StreamCodec.composite(
+                    ContinuationFrame.Type.TYPED_STREAM_CODEC, NotDone::frame,
+                    recursed, NotDone::next,
+                    ::NotDone
+                ).map(Function.identity()) { it as NotDone }
+            )
+        }
+
+        private fun <B: ByteBuf, T> withAlternative(primary: StreamCodec<B, T>, alternative: StreamCodec<B, T>): StreamCodec<B, T> {
+            return ByteBufCodecs.either<B, T, T>(
+                primary,
+                alternative
+            ).map<T>(
+                Function { either: Either<T, T> -> Either.unwrap(either) },
+                Function { value: T -> Either.left(value) }
+            )
         }
     }
 }

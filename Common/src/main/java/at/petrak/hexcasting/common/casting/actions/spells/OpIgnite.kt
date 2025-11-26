@@ -27,12 +27,12 @@ import net.minecraft.world.phys.Vec3
 object OpIgnite : SpellAction {
     override val argc = 1
     override fun execute(
-        args: List<Iota>,
-        env: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         when (val target = args[0]) {
             is EntityIota -> {
-                val entity = args.getEntity(0, argc)
+                val entity = args.getEntity(env.world, 0, argc)
                 env.assertEntityInRange(entity)
                 return SpellAction.Result(
                     EntitySpell(entity),
@@ -40,7 +40,6 @@ object OpIgnite : SpellAction {
                     listOf(ParticleSpray.burst(entity.position(), 1.0))
                 )
             }
-
             is Vec3Iota -> {
                 val block = args.getBlockPos(0, argc)
                 env.assertPosInRangeForEditing(block)
@@ -50,7 +49,6 @@ object OpIgnite : SpellAction {
                     listOf(ParticleSpray.burst(Vec3.atCenterOf(BlockPos(block)), 1.0))
                 )
             }
-
             else -> throw MishapInvalidIota.ofType(target, 0, "entity_or_vector")
         }
     }
@@ -64,12 +62,7 @@ object OpIgnite : SpellAction {
         }
 
         fun tryToClick(ctx: CastingEnvironment, pos: BlockPos, item: Item): Boolean {
-            return IXplatAbstractions.INSTANCE.isPlacingAllowed(
-                ctx.world,
-                pos,
-                ItemStack(item),
-                ctx.castingEntity as? ServerPlayer
-            ) &&
+            return IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(item), ctx.castingEntity as? ServerPlayer) &&
                 item.useOn(
                     UseOnContext(
                         ctx.world,
@@ -84,7 +77,9 @@ object OpIgnite : SpellAction {
 
     private data class EntitySpell(val entity: Entity) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            entity.igniteForSeconds(8f)
+            if (!entity.fireImmune()) {
+                entity.igniteForSeconds(8.0f)
+            }
         }
     }
 }

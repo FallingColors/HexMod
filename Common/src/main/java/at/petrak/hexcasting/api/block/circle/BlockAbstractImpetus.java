@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -33,6 +34,8 @@ public abstract class BlockAbstractImpetus extends BlockCircleComponent implemen
         this.registerDefaultState(
             this.stateDefinition.any().setValue(ENERGIZED, false).setValue(FACING, Direction.NORTH));
     }
+
+    public abstract BlockEntityType<? extends BlockEntityAbstractImpetus> getBlockEntityType();
 
     @Override
     public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos,

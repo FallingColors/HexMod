@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.forge;
 
+import at.petrak.hexcasting.api.client.ClientCastingStack;
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.RegisterClientStuff;
 import at.petrak.hexcasting.client.ShiftScrollListener;
@@ -11,6 +12,7 @@ import at.petrak.hexcasting.client.render.shader.HexShaders;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.lib.HexParticles;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
+import at.petrak.hexcasting.forge.lib.ForgeHexAttachments;
 import at.petrak.hexcasting.interop.HexInterop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
@@ -27,6 +29,10 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.common.NeoForge;
+<<<<<<< HEAD
+=======
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+>>>>>>> refs/remotes/slava/devel/port-1.21
 
 import java.io.IOException;
 import java.util.function.Function;
@@ -52,33 +58,36 @@ public class ForgeHexClientInitializer {
         evBus.addListener((ClientPlayerNetworkEvent.LoggingIn e) ->
             PatternRegistryManifest.processRegistry(null));
 
+        // TODO port: check if gametimedelta is the right one
         evBus.addListener((RenderLevelStageEvent e) -> {
             if (e.getStage().equals(RenderLevelStageEvent.Stage.AFTER_PARTICLES)) {
-                HexAdditionalRenderers.overlayLevel(e.getPoseStack(), e.getPartialTick());
+                HexAdditionalRenderers.overlayLevel(e.getPoseStack(), e.getPartialTick().getGameTimeDeltaTicks());
             }
         });
 
         evBus.addListener((RenderGuiEvent.Post e) -> {
-            HexAdditionalRenderers.overlayGui(e.getGuiGraphics(), e.getPartialTick());
+            HexAdditionalRenderers.overlayGui(e.getGuiGraphics(), e.getPartialTick().getGameTimeDeltaTicks());
         });
 
-
-        evBus.addListener((TickEvent.RenderTickEvent e) -> {
-            if (e.phase == TickEvent.Phase.START) {
-                ClientTickCounter.renderTickStart(e.renderTickTime);
-            }
+        //TODO port: maybe replace with DeltaTracker from Mojang?
+        evBus.addListener((RenderFrameEvent.Pre e) -> {
+            ClientTickCounter.renderTickStart(e.getPartialTick().getGameTimeDeltaTicks());
         });
 
-        evBus.addListener((TickEvent.ClientTickEvent e) -> {
-            if (e.phase == TickEvent.Phase.END) {
-                ClientTickCounter.clientTickEnd();
-                ShiftScrollListener.clientTickEnd();
-            }
+        evBus.addListener((ClientTickEvent.Post e) -> {
+            ClientTickCounter.clientTickEnd();
+            ShiftScrollListener.clientTickEnd();
         });
 
         evBus.addListener((InputEvent.MouseScrollingEvent e) -> {
-            var cancel = ShiftScrollListener.onScrollInGameplay(e.getScrollDelta());
+            var cancel = ShiftScrollListener.onScrollInGameplay(e.getScrollDeltaY());
             e.setCanceled(cancel);
+        });
+
+        evBus.addListener((PlayerTickEvent.Pre ev) -> {
+            if(!ev.getEntity().isDeadOrDying()) {
+                ev.getEntity().getData(ForgeHexAttachments.CLIENT_CASTING_STACK).tick();
+            }
         });
 
         HexInterop.clientInit();

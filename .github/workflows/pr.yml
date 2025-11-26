@@ -11,7 +11,7 @@ on:
     branches: main
 
 env:
-  JAVA_VERSION: '17.0.1'
+  JAVA_VERSION: '21.0.5'
 
 jobs:
   build:
@@ -74,7 +74,7 @@ jobs:
   hexdoc:
     # don't bother running the docs build when pushing to main - nothing necessary to cache here
     if: github.event_name != 'push'
-    uses: hexdoc-dev/hexdoc/.github/workflows/hexdoc.yml@main
+    uses: hexdoc-dev/actions/.github/workflows/hexdoc.yml@v1
     permissions:
       contents: write
       pages: read

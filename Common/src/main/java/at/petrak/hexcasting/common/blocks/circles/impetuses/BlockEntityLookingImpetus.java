@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -36,6 +37,7 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
 
         int prevLookAmt = self.lookAmount;
         int range = 20;
+<<<<<<< HEAD
         AABB box = AABB.ofSize(
                 Vec3.atCenterOf(pos),  // center of the cube
                 range * 2 + 1,
@@ -44,6 +46,11 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
         );
 
         var players = level.getEntitiesOfClass(ServerPlayer.class, box);
+=======
+        //TODO port: test AABB check, it's Vec3 now instead of BlockPos
+        var players = level.getEntitiesOfClass(ServerPlayer.class,
+            new AABB(pos.offset(-range, -range, -range).getCenter(), pos.offset(range, range, range).getCenter()));
+>>>>>>> refs/remotes/slava/devel/port-1.21
 
         ServerPlayer looker = null;
         for (var player : players) {
@@ -91,14 +98,14 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
     }
 
     @Override
-    protected void saveModData(CompoundTag tag) {
-        super.saveModData(tag);
+    protected void saveModData(CompoundTag tag, HolderLookup.Provider registries) {
+        super.saveModData(tag, registries);
         tag.putInt(TAG_LOOK_AMOUNT, this.lookAmount);
     }
 
     @Override
-    protected void loadModData(CompoundTag tag) {
-        super.loadModData(tag);
+    protected void loadModData(CompoundTag tag, HolderLookup.Provider registries) {
+        super.loadModData(tag, registries);
         this.lookAmount = tag.getInt(TAG_LOOK_AMOUNT);
     }
 }

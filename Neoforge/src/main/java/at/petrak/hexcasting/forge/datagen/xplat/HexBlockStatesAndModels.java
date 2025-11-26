@@ -7,19 +7,18 @@ import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockBooleanDirectrix;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockRedstoneDirectrix;
 import at.petrak.hexcasting.common.lib.HexBlocks;
-import at.petrak.paucal.api.forge.datagen.PaucalBlockStateAndModelProvider;
+import at.petrak.paucal.forge.api.datagen.PaucalBlockStateAndModelProvider;
 import net.minecraft.core.Direction;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelBuilder;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.ModelBuilder;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
+import static net.neoforged.neoforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
 
 public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
     public HexBlockStatesAndModels(PackOutput output, ExistingFileHelper exFileHelper) {
@@ -186,7 +185,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         blockAndItem(HexBlocks.EDIFIED_PANEL, models().cubeAll("edified_panel", modLoc("block/edified_panel")));
         blockAndItem(HexBlocks.EDIFIED_TILE, models().cubeAll("edified_tile", modLoc("block/edified_tile")));
 
-        ResourceLocation leavesParent = new ResourceLocation("block/leaves");
+        ResourceLocation leavesParent = ResourceLocation.withDefaultNamespace("block/leaves");
         blockAndItem(HexBlocks.AMETHYST_EDIFIED_LEAVES,
             models().withExistingParent("amethyst_edified_leaves", leavesParent)
                 .texture("all", modLoc("block/amethyst_edified_leaves"))

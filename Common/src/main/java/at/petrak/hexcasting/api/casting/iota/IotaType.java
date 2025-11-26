@@ -1,45 +1,56 @@
 package at.petrak.hexcasting.api.casting.iota;
 
-import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+<<<<<<< HEAD
 import com.mojang.datafixers.util.Pair;
+=======
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+>>>>>>> refs/remotes/slava/devel/port-1.21
 import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.chat.ComponentSerialization;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.FormattedCharSequence;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Objects;
+import java.util.function.Function;
 
 // Take notes from ForgeRegistryEntry
 public abstract class IotaType<T extends Iota> {
+    public static final Codec<Iota> TYPED_CODEC = Codec.lazyInitialized(() -> IXplatAbstractions.INSTANCE
+            .getIotaTypeRegistry()
+            .byNameCodec()
+            .<Iota>dispatch("type", Iota::getType, IotaType::codec)
+            .comapFlatMap(
+                    iota -> {
+                        if (isTooLargeToSerialize(List.of(iota), 0)) {
+                            return DataResult.success(GarbageIota.INSTANCE);
+                        }
+                        return DataResult.success(iota);
+                    },
+                    Function.identity()
+            ).orElse(GarbageIota.INSTANCE)
+    );
+    public static final StreamCodec<RegistryFriendlyByteBuf, Iota> TYPED_STREAM_CODEC = ByteBufCodecs
+            .registry(HexRegistries.IOTA_TYPE)
+            .dispatch(Iota::getType, IotaType::streamCodec);
 
-    /**
-     * Spell datums are stored as such: {@code { "type": "modid:type", "datum": a_tag }}.
-     * <p>
-     * The {@code type} key is given when registering the spell datum type; this method
-     * deserializes the tag associated with {@code "datum"}.
-     * <p>
-     * Returning {@code null} makes the resulting datum be {@link NullIota}.
-     * Throwing an exception raises a mishap.
-     */
-    @Nullable
-    public abstract T deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException;
 
-    /**
-     * Get a display of this datum from the {@code data} tag, <i>without</i> the world.
-     * This is for use on the client.
-     */
-    public abstract Component display(Tag tag);
+    public abstract MapCodec<T> codec();
 
+<<<<<<< HEAD
     /**
      * Get the color associated with this datum type.
      */
@@ -80,6 +91,9 @@ public abstract class IotaType<T extends Iota> {
         out.put(HexIotaTypes.KEY_DATA, dataTag);
         return out;
     }
+=======
+    public abstract StreamCodec<RegistryFriendlyByteBuf, T> streamCodec();
+>>>>>>> refs/remotes/slava/devel/port-1.21
 
     public static boolean isTooLargeToSerialize(Iterable<Iota> examinee) {
         return isTooLargeToSerialize(examinee, 1);
@@ -95,6 +109,7 @@ public abstract class IotaType<T extends Iota> {
         return totalSize >= HexIotaTypes.MAX_SERIALIZATION_TOTAL;
     }
 
+<<<<<<< HEAD
     /**
      * This method attempts to find the type from the {@code type} key.
      * See {@link IotaType#serialize(Iota)} for the storage format.
@@ -142,49 +157,12 @@ public abstract class IotaType<T extends Iota> {
     }
 
     private static Component brokenIota() {
+=======
+    public static Component brokenIota() {
+>>>>>>> refs/remotes/slava/devel/port-1.21
         return Component.translatable("hexcasting.spelldata.unknown")
             .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC);
     }
 
-    public static Component getDisplay(CompoundTag tag) {
-        var type = getTypeFromTag(tag);
-        if (type == null) {
-            return brokenIota();
-        }
-        var data = tag.get(HexIotaTypes.KEY_DATA);
-        if (data == null) {
-            return brokenIota();
-        }
-        return type.display(data);
-    }
-
-    public static FormattedCharSequence getDisplayWithMaxWidth(CompoundTag tag, int maxWidth, Font font) {
-        var type = getTypeFromTag(tag);
-        if (type == null) {
-            return brokenIota().getVisualOrderText();
-        }
-        var data = tag.get(HexIotaTypes.KEY_DATA);
-        if (data == null) {
-            return brokenIota().getVisualOrderText();
-        }
-        var display = type.display(data);
-        var splitted = font.split(display, maxWidth - font.width("..."));
-        if (splitted.isEmpty())
-            return FormattedCharSequence.EMPTY;
-        else if (splitted.size() == 1)
-            return splitted.get(0);
-        else {
-            var first = splitted.get(0);
-            return FormattedCharSequence.fromPair(first,
-                Component.literal("...").withStyle(ChatFormatting.GRAY).getVisualOrderText());
-        }
-    }
-
-    public static int getColor(CompoundTag tag) {
-        var type = getTypeFromTag(tag);
-        if (type == null) {
-            return HexUtils.ERROR_COLOR;
-        }
-        return type.color();
-    }
+    public abstract int color();
 }

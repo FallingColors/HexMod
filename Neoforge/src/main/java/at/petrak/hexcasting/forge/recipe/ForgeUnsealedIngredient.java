@@ -4,11 +4,18 @@ import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
+import at.petrak.hexcasting.forge.lib.ForgeHexIngredientTypes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
@@ -17,24 +24,38 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class ForgeUnsealedIngredient implements ICustomIngredient {
+<<<<<<< HEAD
     public static final ResourceLocation ID = modLoc("unsealed");
+=======
+    public static final MapCodec<ForgeUnsealedIngredient> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+        ItemStack.CODEC.fieldOf("stack").forGetter(ForgeUnsealedIngredient::getStack)
+    ).apply(inst, ForgeUnsealedIngredient::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, ForgeUnsealedIngredient> STREAM_CODEC = ItemStack.STREAM_CODEC.map(
+            ForgeUnsealedIngredient::of,
+            ForgeUnsealedIngredient::getStack
+    );
+>>>>>>> refs/remotes/slava/devel/port-1.21
 
     private final ItemStack stack;
 
     private static ItemStack createStack(ItemStack base) {
         ItemStack newStack = base.copy();
-        NBTHelper.putString(newStack, IotaHolderItem.TAG_OVERRIDE_VISUALLY, "any");
+        base.set(HexDataComponents.VISUAL_OVERRIDE, Optional.empty());
         return newStack;
     }
 
     protected ForgeUnsealedIngredient(ItemStack stack) {
-        super(Stream.of(new Ingredient.ItemValue(createStack(stack))));
         this.stack = stack;
+    }
+
+    public ItemStack getStack() {
+        return stack;
     }
 
     /**
@@ -52,7 +73,7 @@ public class ForgeUnsealedIngredient implements ICustomIngredient {
         if (this.stack.getItem() == input.getItem() && this.stack.getDamageValue() == input.getDamageValue()) {
             ADIotaHolder holder = IXplatAbstractions.INSTANCE.findDataHolder(this.stack);
             if (holder != null) {
-                return holder.readIotaTag() != null && holder.writeIota(new NullIota(), true);
+                return holder.readIota() != null && holder.writeIota(NullIota.INSTANCE, true);
             }
         }
 
@@ -61,7 +82,11 @@ public class ForgeUnsealedIngredient implements ICustomIngredient {
 
     @Override
     public Stream<ItemStack> getItems() {
+<<<<<<< HEAD
         return Stream.empty();
+=======
+        return Stream.of(createStack(stack));
+>>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     @Override
@@ -71,6 +96,7 @@ public class ForgeUnsealedIngredient implements ICustomIngredient {
 
     @Override
     public IngredientType<?> getType() {
+<<<<<<< HEAD
         return null;
     }
 
@@ -106,5 +132,8 @@ public class ForgeUnsealedIngredient implements ICustomIngredient {
         public void write(FriendlyByteBuf buffer, ForgeUnsealedIngredient ingredient) {
             buffer.writeItem(ingredient.stack);
         }
+=======
+        return ForgeHexIngredientTypes.UNSEALED_INGREDIENT.get();
+>>>>>>> refs/remotes/slava/devel/port-1.21
     }
 }

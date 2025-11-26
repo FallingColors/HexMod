@@ -1,6 +1,8 @@
 package at.petrak.hexcasting.common.lib;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.misc.HexMobEffect;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -23,11 +25,19 @@ public class HexMobEffects {
 
     public static final MobEffect ENLARGE_GRID = make("enlarge_grid",
         new HexMobEffect(MobEffectCategory.BENEFICIAL, 0xc875ff))
+<<<<<<< HEAD
         .addAttributeModifier(HexAttributes.GRID_ZOOM, modLoc("enlarge_grid"),
             0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
     public static final MobEffect SHRINK_GRID = make("shrink_grid",
         new HexMobEffect(MobEffectCategory.HARMFUL, 0xc0e660))
         .addAttributeModifier(HexAttributes.GRID_ZOOM, modLoc("shrink_grid"),
+=======
+        .addAttributeModifier(HexAttributes.GRID_ZOOM, HexAPI.modLoc("enlarge_grid"),
+            0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+    public static final MobEffect SHRINK_GRID = make("shrink_grid",
+        new HexMobEffect(MobEffectCategory.HARMFUL, 0xc0e660))
+        .addAttributeModifier(HexAttributes.GRID_ZOOM, HexAPI.modLoc("shrink_grid"),
+>>>>>>> refs/remotes/slava/devel/port-1.21
             -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
 
 

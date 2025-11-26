@@ -1,8 +1,11 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     // used for something??
-    id 'dev.architectury.loom' version '1.7-SNAPSHOT' apply false
+    id 'dev.architectury.loom' version '1.10-SNAPSHOT' apply false
     // used for multi-loader stuff, NOT for the archi API
     id 'architectury-plugin' version '3.4-SNAPSHOT'
+    id 'com.gradleup.shadow' version '8.3.6' apply false
 
     id "org.jetbrains.kotlin.jvm"
 
@@ -87,7 +90,7 @@ subprojects {
     // Disables Gradle's custom module metadata from being published to maven. The
     // metadata includes mapped dependencies which are not reasonably consumable by
     // other mod developers.
-    tasks.withType(GenerateModuleMetadata) {
+    tasks.withType(GenerateModuleMetadata).configureEach {
         enabled = false
     }
 
@@ -99,7 +102,7 @@ allprojects {
     }
 
     gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
+        tasks.withType(JavaCompile).configureEach {
             options.compilerArgs << "-Xmaxerrs" << "1000"
         }
     }
@@ -109,13 +112,13 @@ allprojects {
 }
 
 compileKotlin {
-    kotlinOptions {
-        jvmTarget = "21"
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_21
     }
 }
 compileTestKotlin {
-    kotlinOptions {
-        jvmTarget = "21"
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_21
     }
 }
 

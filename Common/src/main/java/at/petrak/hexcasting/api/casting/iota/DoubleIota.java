@@ -2,23 +2,30 @@ package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class DoubleIota extends Iota {
     public static final double TOLERANCE = 0.0001;
+    private double value;
 
     public DoubleIota(double d) {
-        super(HexIotaTypes.DOUBLE, d);
+        super(() -> HexIotaTypes.DOUBLE);
+        this.value = d;
     }
 
     public double getDouble() {
-        return HexUtils.fixNAN((Double) this.payload);
+        return HexUtils.fixNAN((Double) value);
     }
 
     @Override
@@ -38,20 +45,30 @@ public class DoubleIota extends Iota {
     }
 
     @Override
-    public @NotNull Tag serialize() {
-        return DoubleTag.valueOf(this.getDouble());
+    public int hashCode() {
+        return Double.hashCode(value);
+    }
+
+    @Override
+    public Component display() {
+        return DoubleIota.display(value);
     }
 
     public static IotaType<DoubleIota> TYPE = new IotaType<>() {
-        @Nullable
+        public static final MapCodec<DoubleIota> CODEC = Codec.DOUBLE
+                .xmap(DoubleIota::new, DoubleIota::getDouble)
+                .fieldOf("value");
+        public static final StreamCodec<RegistryFriendlyByteBuf, DoubleIota> STREAM_CODEC =
+                ByteBufCodecs.DOUBLE.map(DoubleIota::new, DoubleIota::getDouble).mapStream(buffer -> buffer);
+
         @Override
-        public DoubleIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            return DoubleIota.deserialize(tag);
+        public MapCodec<DoubleIota> codec() {
+            return CODEC;
         }
 
         @Override
-        public Component display(Tag tag) {
-            return DoubleIota.display(DoubleIota.deserialize(tag).getDouble());
+        public StreamCodec<RegistryFriendlyByteBuf, DoubleIota> streamCodec() {
+            return STREAM_CODEC;
         }
 
         @Override

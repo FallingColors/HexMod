@@ -1,13 +1,14 @@
 package at.petrak.hexcasting.forge.cap;
 
-import at.petrak.hexcasting.api.addldata.*;
-import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
+import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.addldata.ItemDelegatingEntityIotaHolder;
+import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.client.ClientCastingStack;
 import at.petrak.hexcasting.api.item.*;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.common.entities.EntityWallScroll;
+import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.HexBaubleItem;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -15,13 +16,15 @@ import at.petrak.hexcasting.forge.cap.adimpl.*;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+<<<<<<< HEAD
+=======
+import net.minecraft.core.registries.BuiltInRegistries;
+>>>>>>> refs/remotes/slava/devel/port-1.21
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.decoration.ItemFrame;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+<<<<<<< HEAD
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.capabilities.BaseCapability;
@@ -35,48 +38,19 @@ import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.Function;
 import java.util.function.Supplier;
+=======
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+>>>>>>> refs/remotes/slava/devel/port-1.21
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class ForgeCapabilityHandler {
-    /**
-     * Items that store an iota to their tag.
-     */
-    public static final ResourceLocation IOTA_STORAGE_CAP = modLoc("iota_holder");
-    /**
-     * Items that intrinsically store an iota.
-     */
-    public static final ResourceLocation IOTA_STATIC_CAP = modLoc("iota_item");
-    /**
-     * Items that store a variable amount of media to their tag.
-     */
-    public static final ResourceLocation MEDIA_STORAGE_CAP = modLoc("media_holder");
-    /**
-     * Items that statically provide media.
-     */
-    public static final ResourceLocation MEDIA_STATIC_CAP = modLoc("media_item");
-    /**
-     * Items that store a packaged Hex.
-     */
-    public static final ResourceLocation HEX_HOLDER_CAP = modLoc("hex_item");
-    /**
-     * Items that have multiple visual variants.
-     */
-    public static final ResourceLocation VARIANT_ITEM_CAP = modLoc("variant_item");
-    /**
-     * Items that work as pigments.
-     */
-    public static final ResourceLocation PIGMENT_CAP = modLoc("pigment");
-    public static final ResourceLocation CURIO_CAP = modLoc("curio");
-
-    public static final ResourceLocation IMPETUS_HANDLER = modLoc("impetus_items");
-
-    /**
-     * Used to render the pattern spiral around players while casting.
-     */
-    public static final ResourceLocation PATTERN_SPIRAL = modLoc("pattern_spiral");
 
     public static void registerCaps(RegisterCapabilitiesEvent evt) {
+<<<<<<< HEAD
         evt.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
                 ,
@@ -112,31 +86,73 @@ public class ForgeCapabilityHandler {
             evt.addCapability(MEDIA_STATIC_CAP,
                 provide(stack, HexCapabilities.MEDIA, () -> new CapStaticMediaHolder(
                     () -> MediaConstants.QUENCHED_BLOCK_UNIT, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, stack)));
+=======
+        for(Item item : BuiltInRegistries.ITEM) {
+            if(item instanceof MediaHolderItem holder)
+                evt.registerItem(HexCapabilities.Item.MEDIA, (stack, ctx) -> new CapItemMediaHolder(holder, stack), item);
+            if(item instanceof IotaHolderItem holder)
+                evt.registerItem(HexCapabilities.Item.IOTA, (stack, ctx) -> new CapItemIotaHolder(holder, stack), item);
+            if(item instanceof HexHolderItem holder)
+                evt.registerItem(HexCapabilities.Item.STORED_HEX, (stack, ctx) -> new CapItemHexHolder(holder, stack), item);
+            if(item instanceof VariantItem holder)
+                evt.registerItem(HexCapabilities.Item.VARIANT_ITEM, (stack, ctx) -> new CapItemVariantItem(holder, stack), item);
+            if(item instanceof PigmentItem holder)
+                evt.registerItem(HexCapabilities.Item.COLOR, (stack, ctx) -> new CapItemPigment(holder, stack), item);
+            if(item instanceof HexBaubleItem && IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Forge.CURIOS_API_ID))
+                CuriosApiInterop.registerCap(evt, item);
+>>>>>>> refs/remotes/slava/devel/port-1.21
         }
 
-        if (stack.getItem() instanceof IotaHolderItem holder) {
-            evt.addCapability(IOTA_STORAGE_CAP,
-                provide(stack, HexCapabilities.IOTA, () -> new CapItemIotaHolder(holder, stack)));
-        } else if (stack.is(Items.PUMPKIN_PIE)) {
-            // haha yes
-            evt.addCapability(IOTA_STATIC_CAP, provide(stack, HexCapabilities.IOTA, () ->
-                new CapStaticIotaHolder((s) -> new DoubleIota(Math.PI * s.getCount()), stack)));
-        }
+        evt.registerItem(
+                HexCapabilities.Item.MEDIA,
+                (stack, ctx) -> new CapStaticMediaHolder(HexConfig.common()::dustMediaAmount, ADMediaHolder.AMETHYST_DUST_PRIORITY, stack),
+                HexItems.AMETHYST_DUST
+        );
+        evt.registerItem(
+                HexCapabilities.Item.MEDIA,
+                (stack, ctx) -> new CapStaticMediaHolder(HexConfig.common()::shardMediaAmount, ADMediaHolder.AMETHYST_SHARD_PRIORITY, stack),
+                Items.AMETHYST_SHARD
+        );
+        evt.registerItem(
+                HexCapabilities.Item.MEDIA,
+                (stack, ctx) -> new CapStaticMediaHolder(HexConfig.common()::chargedCrystalMediaAmount, ADMediaHolder.CHARGED_AMETHYST_PRIORITY, stack),
+                HexItems.CHARGED_AMETHYST
+        );
+        evt.registerItem(
+                HexCapabilities.Item.MEDIA,
+                (stack, ctx) -> new CapStaticMediaHolder(() -> MediaConstants.QUENCHED_SHARD_UNIT, ADMediaHolder.QUENCHED_SHARD_PRIORITY, stack),
+                HexItems.QUENCHED_SHARD
+        );
+        evt.registerItem(
+                HexCapabilities.Item.MEDIA,
+                (stack, ctx) -> new CapStaticMediaHolder(() -> MediaConstants.QUENCHED_BLOCK_UNIT, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, stack),
+                HexBlocks.QUENCHED_ALLAY.asItem()
+        );
 
-        if (stack.getItem() instanceof HexHolderItem holder) {
-            evt.addCapability(HEX_HOLDER_CAP,
-                provide(stack, HexCapabilities.STORED_HEX, () -> new CapItemHexHolder(holder, stack)));
-        }
-        if (stack.getItem() instanceof VariantItem variantItem) {
-            evt.addCapability(VARIANT_ITEM_CAP,
-                    provide(stack, HexCapabilities.VARIANT_ITEM, () -> new CapItemVariantItem(variantItem, stack)));
-        }
+        // haha yes
+        evt.registerItem(
+                HexCapabilities.Item.IOTA,
+                (stack, ctx) -> new CapStaticIotaHolder((s) -> new DoubleIota(Math.PI * s.getCount()), stack),
+                Items.PUMPKIN_PIE
+        );
 
-        if (stack.getItem() instanceof PigmentItem pigment) {
-            evt.addCapability(PIGMENT_CAP,
-                provide(stack, HexCapabilities.COLOR, () -> new CapItemPigment(pigment, stack)));
-        }
+        evt.registerEntity(
+                HexCapabilities.Entity.IOTA,
+                EntityType.ITEM,
+                (ent, ctx) -> new ItemDelegatingEntityIotaHolder.ToItemEntity(ent)
+        );
+        evt.registerEntity(
+                HexCapabilities.Entity.IOTA,
+                EntityType.ITEM_FRAME,
+                (ent, ctx) -> new ItemDelegatingEntityIotaHolder.ToItemFrame(ent)
+        );
+        evt.registerEntity(
+                HexCapabilities.Entity.IOTA,
+                HexEntities.WALL_SCROLL,
+                (ent, ctx) -> new ItemDelegatingEntityIotaHolder.ToWallScroll(ent)
+        );
 
+<<<<<<< HEAD
         if (IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Forge.CURIOS_API_ID)
             && stack.getItem() instanceof HexBaubleItem) {
             evt.addCapability(CURIO_CAP, CuriosApiInterop.curioCap(stack));
@@ -208,7 +224,16 @@ public class ForgeCapabilityHandler {
         @Override
         public @Nullable Object getCapability(Object object, Object object2) {
             return null;
+=======
+        for(Block block : BuiltInRegistries.BLOCK) {
+            if(block instanceof BlockAbstractImpetus imBlock) {
+                evt.registerBlockEntity(
+                        Capabilities.ItemHandler.BLOCK,
+                        imBlock.getBlockEntityType(),
+                        (be, dir) -> new ForgeImpetusCapability(be)
+                );
+            }
+>>>>>>> refs/remotes/slava/devel/port-1.21
         }
     }
-
 }

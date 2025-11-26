@@ -1,7 +1,7 @@
 {
   "name": "hexcasting.entry.hexcasting",
   "category": "hexcasting:items",
-  "icon": "hexcasting:artifact{patterns:[]}",
+  "icon": "hexcasting:artifact",
   "sortnum": 6,
   "advancement": "hexcasting:root",
   "pages": [

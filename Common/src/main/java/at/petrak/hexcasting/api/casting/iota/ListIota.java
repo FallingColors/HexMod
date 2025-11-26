@@ -1,18 +1,15 @@
 package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.api.casting.SpellList;
-import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.codec.StreamCodec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.max;
@@ -21,11 +18,13 @@ import static java.lang.Math.max;
  * This is a <i>wrapper</i> for {@link SpellList}.
  */
 public class ListIota extends Iota {
+    private SpellList list;
     private final int depth;
     private final int size;
 
     public ListIota(@NotNull SpellList list) {
-        super(HexIotaTypes.LIST, list);
+        super(() -> HexIotaTypes.LIST);
+        this.list = list;
         int maxChildDepth = 0;
         int totalSize = 1;
         for (Iota iota : list) {
@@ -41,7 +40,7 @@ public class ListIota extends Iota {
     }
 
     public SpellList getList() {
-        return (SpellList) this.payload;
+        return list;
     }
 
     @Override
@@ -78,15 +77,6 @@ public class ListIota extends Iota {
     }
 
     @Override
-    public @NotNull Tag serialize() {
-        var out = new ListTag();
-        for (var subdatum : this.getList()) {
-            out.add(IotaType.serialize(subdatum));
-        }
-        return out;
-    }
-
-    @Override
     public @Nullable Iterable<Iota> subIotas() {
         return this.getList();
     }
@@ -101,43 +91,45 @@ public class ListIota extends Iota {
         return depth;
     }
 
-    public static IotaType<ListIota> TYPE = new IotaType<>() {
-        @Nullable
-        @Override
-        public ListIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            var listTag = HexUtils.downcast(tag, ListTag.TYPE);
-            var out = new ArrayList<Iota>(listTag.size());
+    @Override
+    public int hashCode() {
+        return list.hashCode();
+    }
 
-            for (var sub : listTag) {
-                var csub = HexUtils.downcast(sub, CompoundTag.TYPE);
-                var subiota = IotaType.deserialize(csub, world);
-                if (subiota == null) {
-                    return null;
-                }
-                out.add(subiota);
+    @Override
+    public Component display() {
+        var out = Component.empty();
+
+        for (int i = 0; i < list.size(); i++) {
+            var sub = list.getAt(i);
+
+            out.append(sub.display());
+
+            // only add a comma between 2 non-patterns (commas don't look good with Inline patterns)
+            // TODO: maybe add a config? maybe add a method on IotaType to allow it to opt out of commas
+            if (i < list.size() - 1 && (sub.type != PatternIota.TYPE
+                    || list.getAt(i + 1).type != PatternIota.TYPE)) {
+                out.append(", ");
             }
+        }
+        return Component.translatable("hexcasting.tooltip.list_contents", out).withStyle(ChatFormatting.DARK_PURPLE);
+    }
 
-            return new ListIota(out);
+    public static IotaType<ListIota> TYPE = new IotaType<>() {
+        public static final MapCodec<ListIota> CODEC = SpellList.getCODEC()
+                .xmap(ListIota::new, ListIota::getList)
+                .fieldOf("list");
+        public static final StreamCodec<RegistryFriendlyByteBuf, ListIota> STREAM_CODEC =
+                SpellList.getSTREAM_CODEC().map(ListIota::new, ListIota::getList);
+
+        @Override
+        public MapCodec<ListIota> codec() {
+            return CODEC;
         }
 
         @Override
-        public Component display(Tag tag) {
-            var out = Component.empty();
-            var list = HexUtils.downcast(tag, ListTag.TYPE);
-            for (int i = 0; i < list.size(); i++) {
-                Tag sub = list.get(i);
-                var csub = HexUtils.downcast(sub, CompoundTag.TYPE);
-
-                out.append(IotaType.getDisplay(csub));
-
-                // only add a comma between 2 non-patterns (commas don't look good with Inline patterns)
-                // TODO: maybe add a config? maybe add a method on IotaType to allow it to opt out of commas
-                if (i < list.size() - 1 && (IotaType.getTypeFromTag(csub) != PatternIota.TYPE
-                        || IotaType.getTypeFromTag(HexUtils.downcast(list.get(i+1), CompoundTag.TYPE)) != PatternIota.TYPE)) {
-                    out.append(", ");
-                }
-            }
-            return Component.translatable("hexcasting.tooltip.list_contents", out).withStyle(ChatFormatting.DARK_PURPLE);
+        public StreamCodec<RegistryFriendlyByteBuf, ListIota> streamCodec() {
+            return STREAM_CODEC;
         }
 
         @Override

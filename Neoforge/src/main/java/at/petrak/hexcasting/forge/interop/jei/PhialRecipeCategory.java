@@ -1,21 +1,22 @@
 package at.petrak.hexcasting.forge.interop.jei;
 
 import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.common.casting.actions.spells.OpEdifySapling;
 import at.petrak.hexcasting.common.casting.actions.spells.OpMakeBattery;
 import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -36,14 +37,23 @@ public class PhialRecipeCategory implements IRecipeCategory<OpMakeBattery> {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public @NotNull Component getTitle() {
         return localizedName;
     }
 
     @Override
-    public @NotNull IDrawable getBackground() {
-        return background;
+    public int getWidth() {
+        return background.getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        return background.getHeight();
+    }
+
+    @Override
+    public void draw(OpMakeBattery recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        background.draw(guiGraphics);
     }
 
     @Override

@@ -15,12 +15,6 @@ public abstract class CapEntityIotaHolder implements ADIotaHolder {
             this.inner = inner;
         }
 
-
-        @Override
-        public @Nullable CompoundTag readIotaTag() {
-            return inner.readIotaTag();
-        }
-
         @Override
         public boolean writeable() {
             return inner.writeable();
@@ -32,8 +26,8 @@ public abstract class CapEntityIotaHolder implements ADIotaHolder {
         }
 
         @Override
-        public @Nullable Iota readIota(ServerLevel world) {
-            return inner.readIota(world);
+        public @Nullable Iota readIota() {
+            return inner.readIota();
         }
 
         @Override

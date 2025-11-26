@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.components.ItemIotaHolderComponent;
 import at.petrak.hexcasting.common.items.storage.ItemScroll;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.common.msgs.MsgNewWallScrollS2C;
@@ -15,12 +16,17 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
+<<<<<<< HEAD
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
+=======
+import net.minecraft.network.protocol.common.ClientCommonPacketListener;
+>>>>>>> refs/remotes/slava/devel/port-1.21
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -29,6 +35,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.HangingEntity;
+import net.minecraft.world.entity.decoration.PaintingVariant;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
@@ -65,6 +72,7 @@ public class EntityWallScroll extends HangingEntity {
     }
 
     public void recalculateDisplay() {
+<<<<<<< HEAD
         CompoundTag patternTag = scroll.get(DataComponents.CUSTOM_DATA).copyTag().getCompound(ItemScroll.TAG_PATTERN);
         var stuck = ItemStack.EMPTY.get(ItemIotaHolderComponent.COMPONENT_TYPE).iota();
         if (patternTag != null) {
@@ -74,6 +82,10 @@ public class EntityWallScroll extends HangingEntity {
             this.pattern = null;
             this.isAncient = false;
         }
+=======
+        this.pattern = scroll.get(HexDataComponents.PATTERN);
+        this.isAncient = scroll.has(HexDataComponents.ACTION);
+>>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     @Override
@@ -90,6 +102,23 @@ public class EntityWallScroll extends HangingEntity {
     }
 
     @Override
+<<<<<<< HEAD
+=======
+    protected AABB calculateBoundingBox(BlockPos pos, Direction p_direction) {
+        float f = 0.46875F;
+        Vec3 vec3 = Vec3.atCenterOf(pos).relative(p_direction, -0.46875);
+        double d0 = blockSize % 2 == 0 ? 0.5 : 0.0;
+        Direction direction = p_direction.getCounterClockWise();
+        Vec3 vec31 = vec3.relative(direction, d0).relative(Direction.UP, d0);
+        Direction.Axis direction$axis = p_direction.getAxis();
+        double d2 = direction$axis == Direction.Axis.X ? 0.0625 : blockSize;
+        double d3 = blockSize;
+        double d4 = direction$axis == Direction.Axis.Z ? 0.0625 : blockSize;
+        return AABB.ofSize(vec31, d2, d3, d4);
+    }
+
+    @Override
+>>>>>>> refs/remotes/slava/devel/port-1.21
     public void dropItem(@Nullable Entity pBrokenEntity) {
         if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
             this.playSound(SoundEvents.PAINTING_BREAK, 1.0F, 1.0F);
@@ -154,9 +183,16 @@ public class EntityWallScroll extends HangingEntity {
         this.playSound(SoundEvents.PAINTING_PLACE, 1.0F, 1.0F);
     }
 
+<<<<<<< HEAD
     public ClientboundCustomPayloadPacket getAddEntityPacket() {
         return IXplatAbstractions.INSTANCE.toVanillaClientboundPacket(
             new MsgNewWallScrollS2C(new ClientboundAddEntityPacket(this, this.blockSize, this.pos),
+=======
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity entity) {
+        return IXplatAbstractions.INSTANCE.toVanillaClientboundPacket(
+            new MsgNewWallScrollS2C(new ClientboundAddEntityPacket(this, this.direction.get3DDataValue(), this.getPos()),
+>>>>>>> refs/remotes/slava/devel/port-1.21
                 pos, direction, scroll, getShowsStrokeOrder(), blockSize));
     }
 
@@ -176,7 +212,11 @@ public class EntityWallScroll extends HangingEntity {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         tag.putByte("direction", (byte) this.direction.ordinal());
+<<<<<<< HEAD
         tag.put("scroll", HexUtils.serializeToNBT(this.scroll, this.level().registryAccess()));
+=======
+        tag.put("scroll", this.scroll.save(registryAccess()));
+>>>>>>> refs/remotes/slava/devel/port-1.21
         tag.putBoolean("showsStrokeOrder", this.getShowsStrokeOrder());
         tag.putInt("blockSize", this.blockSize);
         super.addAdditionalSaveData(tag);
@@ -185,7 +225,11 @@ public class EntityWallScroll extends HangingEntity {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         this.direction = Direction.values()[tag.getByte("direction")];
+<<<<<<< HEAD
         this.scroll = ItemStack.parseOptional(this.level().registryAccess(), tag.getCompound("scroll"));
+=======
+        this.scroll = ItemStack.parse(registryAccess(), tag.getCompound("scroll")).orElse(ItemStack.EMPTY);
+>>>>>>> refs/remotes/slava/devel/port-1.21
         this.blockSize = tag.getInt("blockSize");
 
         this.setDirection(this.direction);
@@ -202,9 +246,15 @@ public class EntityWallScroll extends HangingEntity {
         this.setPos(pX, pY, pZ);
     }
 
+<<<<<<< HEAD
     public void lerpTo(double pX, double pY, double pZ, float pYaw, float pPitch, int pPosRotationIncrements,
         boolean pTeleport) {
         BlockPos blockpos = this.pos.offset((int) (pX - this.getX()), (int) (pY - this.getY()), (int) (pZ - this.getZ()));
+=======
+    @Override
+    public void lerpTo(double x, double y, double z, float yRot, float xRot, int steps) {
+        BlockPos blockpos = this.pos.offset((int) (x - this.getX()), (int) (y - this.getY()), (int) (z - this.getZ()));
+>>>>>>> refs/remotes/slava/devel/port-1.21
         this.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
     }
 

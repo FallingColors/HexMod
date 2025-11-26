@@ -2,8 +2,14 @@ package at.petrak.hexcasting.api.pigment;
 
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.Util;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.UUID;
@@ -16,13 +22,10 @@ import java.util.function.Supplier;
  * Get it once, and then query it a lot.
  */
 public record FrozenPigment(ItemStack item, UUID owner) {
-
-    public static final String TAG_STACK = "stack";
-    public static final String TAG_OWNER = "owner";
-
     public static final Supplier<FrozenPigment> DEFAULT =
-        () -> new FrozenPigment(new ItemStack(HexItems.DEFAULT_PIGMENT), Util.NIL_UUID);
+            () -> new FrozenPigment(new ItemStack(HexItems.DEFAULT_PIGMENT), Util.NIL_UUID);
 
+<<<<<<< HEAD
     public CompoundTag serializeToNBT() {
         var out = new CompoundTag();
         out.put(TAG_STACK, this.item.save(new CompoundTag()));
@@ -43,6 +46,19 @@ public record FrozenPigment(ItemStack item, UUID owner) {
             return FrozenPigment.DEFAULT.get();
         }
     }
+=======
+    public static Codec<FrozenPigment> CODEC = RecordCodecBuilder.<FrozenPigment>create(inst ->
+            inst.group(
+                ItemStack.CODEC.fieldOf("stack").forGetter(FrozenPigment::item),
+                UUIDUtil.CODEC.fieldOf("owner").forGetter(FrozenPigment::owner)
+            ).apply(inst, FrozenPigment::new)).orElseGet(FrozenPigment.DEFAULT);
+    //TODO port: maybe default here too somehow?..
+    public static StreamCodec<RegistryFriendlyByteBuf, FrozenPigment> STREAM_CODEC = StreamCodec.composite(
+            ItemStack.STREAM_CODEC, FrozenPigment::item,
+            UUIDUtil.STREAM_CODEC, FrozenPigment::owner,
+            FrozenPigment::new
+    );
+>>>>>>> refs/remotes/slava/devel/port-1.21
 
     public ColorProvider getColorProvider() {
         return IXplatAbstractions.INSTANCE.getColorProvider(this);

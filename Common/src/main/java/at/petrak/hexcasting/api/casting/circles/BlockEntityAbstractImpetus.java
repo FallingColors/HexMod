@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.casting.circles;
 
 import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
+import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.MediaHelper;
@@ -11,7 +12,9 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -284,7 +287,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     }
 
     @Override
-    protected void saveModData(CompoundTag tag) {
+    protected void saveModData(CompoundTag tag, HolderLookup.Provider registries) {
         if (this.executionState != null) {
             tag.put(TAG_EXECUTION_STATE, this.executionState.save());
         }
@@ -292,17 +295,23 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         tag.putLong(TAG_MEDIA, this.media);
 
         if (this.displayMsg != null && this.displayItem != null) {
+<<<<<<< HEAD
             tag.putString(TAG_ERROR_MSG, Component.Serializer.toJson(this.displayMsg, level.registryAccess()));
             var itemTag = new CompoundTag();
             this.displayItem.save(level.registryAccess(), itemTag);
+=======
+            tag.putString(TAG_ERROR_MSG, Component.Serializer.toJson(this.displayMsg, registries));
+            var itemTag = new CompoundTag();
+            this.displayItem.save(registries, itemTag);
+>>>>>>> refs/remotes/slava/devel/port-1.21
             tag.put(TAG_ERROR_DISPLAY, itemTag);
         }
         if (this.pigment != null)
-            tag.put(TAG_PIGMENT, this.pigment.serializeToNBT());
+            tag.put(TAG_PIGMENT, FrozenPigment.CODEC.encodeStart(NbtOps.INSTANCE, pigment).getOrThrow());
     }
 
     @Override
-    protected void loadModData(CompoundTag tag) {
+    protected void loadModData(CompoundTag tag, HolderLookup.Provider registries) {
         this.executionState = null;
         if (tag.contains(TAG_EXECUTION_STATE, Tag.TAG_COMPOUND)) {
             this.lazyExecutionState = tag.getCompound(TAG_EXECUTION_STATE);
@@ -315,8 +324,13 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         }
 
         if (tag.contains(TAG_ERROR_MSG, Tag.TAG_STRING) && tag.contains(TAG_ERROR_DISPLAY, Tag.TAG_COMPOUND)) {
+<<<<<<< HEAD
             var msg = Component.Serializer.fromJson(tag.getString(TAG_ERROR_MSG), level.registryAccess());
             var display = ItemStack.parseOptional(level.registryAccess(), tag.getCompound(TAG_ERROR_DISPLAY));
+=======
+            var msg = Component.Serializer.fromJson(tag.getString(TAG_ERROR_MSG), registries);
+            var display = ItemStack.parseOptional(registries, tag);
+>>>>>>> refs/remotes/slava/devel/port-1.21
             this.displayMsg = msg;
             this.displayItem = display;
         } else {
@@ -324,7 +338,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             this.displayItem = null;
         }
         if (tag.contains(TAG_PIGMENT, Tag.TAG_COMPOUND))
-            this.pigment = FrozenPigment.fromNBT(tag.getCompound(TAG_PIGMENT));
+            this.pigment = FrozenPigment.CODEC.parse(NbtOps.INSTANCE, tag.getCompound(TAG_PIGMENT)).getOrThrow();
     }
 
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,

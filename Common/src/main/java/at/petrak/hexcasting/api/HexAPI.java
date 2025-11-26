@@ -29,6 +29,7 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -165,14 +166,24 @@ public interface HexAPI {
         return FrozenPigment.DEFAULT.get();
     }
 
+    ArmorMaterial DUMMY_ARMOR_MATERIAL = new ArmorMaterial(
+            Collections.emptyMap(),
+            0,
+            SoundEvents.ARMOR_EQUIP_LEATHER,
+            () -> Ingredient.EMPTY,
+            Collections.emptyList(),
+            0,
+            0
+    );
+
+    default ArmorMaterial robesMaterial() {
+        return DUMMY_ARMOR_MATERIAL;
+    }
+
     /**
      * Location in the userdata of the ravenmind
      */
     String RAVENMIND_USERDATA = modLoc("ravenmind").toString();
-    /**
-     * Location in the userdata of the number of ops executed
-     */
-    String OP_COUNT_USERDATA = modLoc("op_count").toString();
 
     String MARKED_MOVED_USERDATA = modLoc("impulsed").toString();
 

@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -21,20 +22,13 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 public class ItemThoughtKnot extends Item implements IotaHolderItem {
     public static final ResourceLocation WRITTEN_PRED = modLoc("written");
 
-    public static final String TAG_DATA = "data";
-
     public ItemThoughtKnot(Properties properties) {
         super(properties);
     }
 
     @Override
-    public @Nullable CompoundTag readIotaTag(ItemStack stack) {
-        return NBTHelper.getCompound(stack, TAG_DATA);
-    }
-
-    @Override
     public boolean writeable(ItemStack stack) {
-        return !NBTHelper.contains(stack, TAG_DATA);
+        return !stack.has(HexDataComponents.IOTA);
     }
 
     @Override
@@ -45,12 +39,16 @@ public class ItemThoughtKnot extends Item implements IotaHolderItem {
     @Override
     public void writeDatum(ItemStack stack, @Nullable Iota iota) {
         if (iota != null) {
-            NBTHelper.putCompound(stack, TAG_DATA, IotaType.serialize(iota));
+            stack.set(HexDataComponents.IOTA, iota);
         }
     }
 
     @Override
+<<<<<<< HEAD
     public void appendHoverText(ItemStack pStack, Item.TooltipContext pLevel,
+=======
+    public void appendHoverText(ItemStack pStack, TooltipContext context,
+>>>>>>> refs/remotes/slava/devel/port-1.21
         List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         IotaHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
     }

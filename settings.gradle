@@ -19,4 +19,4 @@ pluginManagement {
 }
 
 rootProject.name = 'Hex Casting'
-include("Common", "Fabric", "Neoforge")
+include("Common", /*"Fabric",*/ "Neoforge")

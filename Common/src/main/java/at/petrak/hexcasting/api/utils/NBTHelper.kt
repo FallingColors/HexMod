@@ -1,7 +1,5 @@
 @file:JvmName("NBTHelper")
 
-// TODO this entire file needs to be HEAVILY refactored. also i need to understand components
-
 package at.petrak.hexcasting.api.utils
 
 import at.petrak.hexcasting.common.components.VariantItemComponent
@@ -133,12 +131,9 @@ fun CompoundTag.getList(key: String, objType: Byte): ListTag = getList(key, objT
 
 // Get-or-create
 
-fun CompoundTag.getOrCreateCompound(key: String): CompoundTag =
-    getCompound(key) ?: CompoundTag().also { putCompound(key, it) }
-
+fun CompoundTag.getOrCreateCompound(key: String): CompoundTag = getCompound(key) ?: CompoundTag().also { putCompound(key, it) }
 fun CompoundTag.getOrCreateList(key: String, objType: Byte) = getOrCreateList(key, objType.toInt())
-fun CompoundTag.getOrCreateList(key: String, objType: Int): ListTag =
-    if (hasList(key, objType)) getList(key, objType) else ListTag().also { putList(key, it) }
+fun CompoundTag.getOrCreateList(key: String, objType: Int): ListTag = if (hasList(key, objType)) getList(key, objType) else ListTag().also { putList(key, it) }
 
 // ================================================================================================================ Tag
 
@@ -157,12 +152,10 @@ val Tag.asLongArray: LongArray
             val array = this.asIntArray
             LongArray(array.size) { array[it].toLong() }
         }
-
         is ByteArrayTag -> {
             val array = this.asByteArray
             LongArray(array.size) { array[it].toLong() }
         }
-
         else -> LongArray(0)
     }
 
@@ -173,12 +166,10 @@ val Tag.asIntArray: IntArray
             val array = this.asLongArray
             IntArray(array.size) { array[it].toInt() }
         }
-
         is ByteArrayTag -> {
             val array = this.asByteArray
             IntArray(array.size) { array[it].toInt() }
         }
-
         else -> IntArray(0)
     }
 
@@ -189,12 +180,10 @@ val Tag.asByteArray: ByteArray
             val array = this.asLongArray
             ByteArray(array.size) { array[it].toByte() }
         }
-
         is IntArrayTag -> {
             val array = this.asIntArray
             ByteArray(array.size) { array[it].toByte() }
         }
-
         else -> ByteArray(0)
     }
 
@@ -203,6 +192,7 @@ val Tag.asCompound get() = this as? CompoundTag ?: CompoundTag()
 // asString is defined in Tag
 val Tag.asList get() = this as? ListTag ?: ListTag()
 val Tag.asUUID: UUID get() = if (this is IntArrayTag && this.size == 4) NbtUtils.loadUUID(this) else UUID(0, 0)
+<<<<<<< HEAD
 
 // ========================================================================================================== ItemStack
 
@@ -313,3 +303,5 @@ fun ItemStack.getTag(key: String) = customTag().get(key)
 fun ItemStack.getOrCreateCompound(key: String): CompoundTag = customTag().getOrCreateCompound(key)
 fun ItemStack.getOrCreateList(key: String, objType: Byte) = customTag().getOrCreateList(key, objType)
 fun ItemStack.getOrCreateList(key: String, objType: Int) = customTag().getOrCreateList(key, objType)
+=======
+>>>>>>> refs/remotes/slava/devel/port-1.21
