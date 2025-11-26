@@ -9,11 +9,16 @@ import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.AdvancementTree;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.server.ServerAdvancementManager;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -35,6 +40,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
+import static at.petrak.hexcasting.api.utils.NBTHelper.isChildOf;
 
 public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
 
@@ -70,7 +76,7 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     }
 
     public static boolean isDebug(ItemStack stack, String flag) {
-        if (!stack.is(HexItems.CREATIVE_UNLOCKER) || !stack.hasCustomHoverName()) {
+        if (!stack.is(HexItems.CREATIVE_UNLOCKER) || !stack.has(DataComponents.CUSTOM_NAME)) {
             return false;
         }
         var keywords = Arrays.asList(stack.getHoverName().getString().toLowerCase(Locale.ROOT).split(" "));
@@ -80,13 +86,13 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
         return flag == null || keywords.contains(flag);
     }
 
-    public static Component infiniteMedia(Level level) {
+    public static Component infiniteMedia() {
         String prefix = "item.hexcasting.creative_unlocker.";
 
         String emphasis = Language.getInstance().getOrDefault(prefix + "for_emphasis");
         MutableComponent emphasized = Component.empty();
         for (int i = 0; i < emphasis.length(); i++) {
-            emphasized.append(rainbow(Component.literal("" + emphasis.charAt(i)), i, level));
+            emphasized.append(rainbow(Component.literal("" + emphasis.charAt(i)), i));
         }
 
         return emphasized;
@@ -215,13 +221,14 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity consumer) {
         if (level instanceof ServerLevel slevel && consumer instanceof ServerPlayer player) {
             var names = new ArrayList<>(ItemLoreFragment.NAMES);
+            var serverAdman = slevel.getServer().getAdvancements();
             names.add(0, modLoc("root"));
             for (var name : names) {
-                var rootAdv = slevel.getServer().getAdvancements().getAdvancement(name);
+                var rootAdv = slevel.getServer().getAdvancements().get(name);
                 if (rootAdv != null) {
-                    var children = new ArrayList<Advancement>();
+                    var children = new ArrayList<AdvancementHolder>();
                     children.add(rootAdv);
-                    addChildren(rootAdv, children);
+                    addChildren(rootAdv, children, serverAdman);
 
                     var adman = player.getAdvancements();
 
@@ -242,32 +249,30 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
         return copy;
     }
 
-    private static MutableComponent rainbow(MutableComponent component, int shift, Level level) {
-        if (level == null) {
-            return component.withStyle(ChatFormatting.WHITE);
-        }
-
+    private static MutableComponent rainbow(MutableComponent component, int shift) {
         return component.withStyle((s) -> s.withColor(
-            TextColor.fromRgb(Mth.hsvToRgb((level.getGameTime() + shift) * 2 % 360 / 360F, 1F, 1F))));
+            TextColor.fromRgb(Mth.hsvToRgb(((float) Util.getMillis() / 50 + shift) * 2 % 360 / 360F, 1F, 1F))));
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents,
-        TooltipFlag isAdvanced) {
-        Component emphasized = infiniteMedia(level);
+    public void appendHoverText(ItemStack stack, Item.TooltipContext level, List<Component> tooltipComponents,
+                                TooltipFlag isAdvanced) {
+        Component emphasized = infiniteMedia();
 
         MutableComponent modName = Component.translatable("item.hexcasting.creative_unlocker.mod_name").withStyle(
-            (s) -> s.withColor(ItemMediaHolder.HEX_COLOR));
+                (s) -> s.withColor(ItemMediaHolder.HEX_COLOR));
 
         tooltipComponents.add(
-            Component.translatable("hexcasting.spelldata.onitem", emphasized).withStyle(ChatFormatting.GRAY));
+                Component.translatable("hexcasting.spelldata.onitem", emphasized).withStyle(ChatFormatting.GRAY));
         tooltipComponents.add(Component.translatable("item.hexcasting.creative_unlocker.tooltip", modName).withStyle(ChatFormatting.GRAY));
     }
 
-    private static void addChildren(Advancement root, List<Advancement> out) {
-        for (Advancement kiddo : root.getChildren()) {
-            out.add(kiddo);
-            addChildren(kiddo, out);
+    private static void addChildren(AdvancementHolder root, List<AdvancementHolder> out, ServerAdvancementManager manager) {
+        var advList = manager.getAllAdvancements();
+        for (AdvancementHolder holder : advList) {
+            if (isChildOf(holder, root, manager) && !out.contains(holder)) {
+                out.add(holder);
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.recipe;
 
+import at.petrak.hexcasting.common.misc.ContainerInput;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
@@ -33,14 +34,9 @@ public record BrainsweepRecipe(
 	BrainsweepeeIngredient entityIn,
 	long mediaCost,
 	BlockState result
-) implements Recipe<RecipeInput> {
+) implements Recipe<ContainerInput> {
 	public boolean matches(BlockState blockIn, Entity victim, ServerLevel level) {
 		return this.blockIn.test(blockIn) && this.entityIn.test(victim, level);
-	}
-
-	@Override
-	public ResourceLocation getId() {
-		return id;
 	}
 
 	@Override
@@ -55,17 +51,18 @@ public record BrainsweepRecipe(
 
 	// in order to get this to be a "Recipe" we need to do a lot of bending-over-backwards
 	// to get the implementation to be satisfied even though we never use it
-	@Override
-	public boolean matches(Container pContainer, Level pLevel) {
-		return false;
-	}
 
     @Override
-    public ItemStack assemble(Container recipeInput, HolderLookup.Provider provider) {
-        return ItemStack.EMPTY;
+    public boolean matches(ContainerInput recipeInput, Level level) {
+        return false;
     }
 
-	@Override
+    @Override
+    public ItemStack assemble(ContainerInput recipeInput, HolderLookup.Provider provider) {
+        return null;
+    }
+
+    @Override
 	public boolean canCraftInDimensions(int pWidth, int pHeight) {
 		return false;
 	}

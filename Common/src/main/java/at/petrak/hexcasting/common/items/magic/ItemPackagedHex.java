@@ -9,6 +9,9 @@ import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.components.ItemHexHolderComponent;
+import at.petrak.hexcasting.common.components.ItemMediaHolderComponent;
+import at.petrak.hexcasting.common.components.PigmentItemComponent;
 import at.petrak.hexcasting.common.msgs.MsgNewSpiralPatternsS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.nbt.CompoundTag;
@@ -22,6 +25,7 @@ import net.minecraft.stats.Stat;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
@@ -62,23 +66,12 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
 
     @Override
     public boolean hasHex(ItemStack stack) {
-        return NBTHelper.hasList(stack, TAG_PROGRAM, Tag.TAG_COMPOUND);
+        return ItemHexHolderComponent.hex(stack).isEmpty();
     }
 
     @Override
     public @Nullable List<Iota> getHex(ItemStack stack, ServerLevel level) {
-        var patsTag = NBTHelper.getList(stack, TAG_PROGRAM, Tag.TAG_COMPOUND);
-
-        if (patsTag == null) {
-            return null;
-        }
-
-        var out = new ArrayList<Iota>();
-        for (var patTag : patsTag) {
-            CompoundTag tag = NBTHelper.getAsCompound(patTag);
-            out.add(IotaType.deserialize(tag, level));
-        }
-        return out;
+        return ItemHexHolderComponent.hex(stack);
     }
 
     @Override
@@ -97,10 +90,9 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
 
     @Override
     public void clearHex(ItemStack stack) {
-        NBTHelper.remove(stack, TAG_PROGRAM);
-        NBTHelper.remove(stack, TAG_PIGMENT);
-        NBTHelper.remove(stack, TAG_MEDIA);
-        NBTHelper.remove(stack, TAG_MAX_MEDIA);
+        stack.remove(ItemHexHolderComponent.COMPONENT_TYPE);
+        stack.remove(PigmentItemComponent.COMPONENT_TYPE);
+        stack.remove(ItemMediaHolderComponent.COMPONENT_TYPE);
     }
 
     @Override
@@ -113,6 +105,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand usedHand) {
+        EquipmentSlot slot = usedHand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
         var stack = player.getItemInHand(usedHand);
         if (!hasHex(stack)) {
             return InteractionResultHolder.fail(stack);
@@ -167,7 +160,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
 
         if (broken) {
             stack.shrink(1);
-            player.broadcastBreakEvent(usedHand);
+            player.onEquippedItemBroken(stack.getItem(), slot);
             return InteractionResultHolder.consume(stack);
         } else {
             return InteractionResultHolder.success(stack);

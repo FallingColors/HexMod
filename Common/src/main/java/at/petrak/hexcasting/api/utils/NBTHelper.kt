@@ -5,11 +5,14 @@
 package at.petrak.hexcasting.api.utils
 
 import at.petrak.hexcasting.common.components.VariantItemComponent
+import net.minecraft.advancements.AdvancementHolder
 import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.*
+import net.minecraft.server.ServerAdvancementManager
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.CustomData
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 private inline fun <T : Any, K, E> T?.getIf(key: K, predicate: T?.(K) -> Boolean, get: T.(K) -> E): E? =
     getIf(key, predicate, get, null)
@@ -18,6 +21,16 @@ private inline fun <T : Any, K, E> T?.getIf(key: K, predicate: T?.(K) -> Boolean
     if (this != null && predicate(key))
         return get(key)
     return default
+}
+
+fun AdvancementHolder.isChildOf(root: AdvancementHolder, serverAdvancementManager: ServerAdvancementManager): Boolean {
+    var current = this
+    while (true) {
+        if (current.equals(root)) return true
+        var parentOpt = serverAdvancementManager.get(current.value.parent.getOrNull() ?: return false) ?: return false
+
+        current = parentOpt
+    }
 }
 
 // ======================================================================================================== CompoundTag

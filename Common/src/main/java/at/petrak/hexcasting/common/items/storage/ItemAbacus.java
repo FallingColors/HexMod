@@ -72,7 +72,7 @@ public class ItemAbacus extends Item implements IotaHolderItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext bruh, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {
         IotaHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
     }

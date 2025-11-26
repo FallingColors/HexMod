@@ -81,6 +81,8 @@ dependencies {
     modImplementation "io.wispforest:accessories-neoforge:$accessoriesVersion"
 
     modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}-1.21-neoforge")
+    compileOnly("mezz.jei:jei-${minecraftVersion}-neoforge-api:${jeiVersion}")
+    runtimeOnly("mezz.jei:jei-${minecraftVersion}-neoforge:${jeiVersion}")
 
     // "Required due to issues with JIJ dependency resolving in arch or something"
     // https://github.com/wisp-forest/accessories

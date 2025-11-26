@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -46,7 +47,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip,
+    public void appendHoverText(ItemStack stack, Item.TooltipContext level, List<Component> tooltip,
         TooltipFlag isAdvanced) {
         boolean sealed = isSealed(stack);
         boolean empty = false;
@@ -103,8 +104,8 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         int shiftedIdx = Math.max(1, index);
         String nameKey = String.valueOf(shiftedIdx);
         CompoundTag names = NBTHelper.getOrCreateCompound(stack, TAG_PAGE_NAMES);
-        if (stack.hasCustomHoverName()) {
-            names.putString(nameKey, Component.Serializer.toJson(stack.getHoverName()));
+        if (stack.has(DataComponents.CUSTOM_NAME)) {
+            names.putString(nameKey, Component.Serializer.toJson(stack.get(DataComponents.CUSTOM_NAME).copy(), pLevel.registryAccess()));
         } else {
             names.remove(nameKey);
         }
@@ -221,7 +222,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         }).max(Integer::compare).orElse(0);
     }
 
-    public static int rotatePageIdx(ItemStack stack, boolean increase) {
+    public static int rotatePageIdx(ItemStack stack, boolean increase, Level level) {
         int idx = getPage(stack, 0);
         if (idx != 0) {
             idx += increase ? 1 : -1;
@@ -235,9 +236,9 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         String nameKey = String.valueOf(shiftedIdx);
         String name = NBTHelper.getString(names, nameKey);
         if (name != null) {
-            stack.setHoverName(Component.Serializer.fromJson(name));
+            stack.set(DataComponents.CUSTOM_NAME, Component.Serializer.fromJson(name, level.registryAccess()));
         } else {
-            stack.resetHoverName();
+            stack.remove(DataComponents.CUSTOM_NAME);
         }
 
         return idx;

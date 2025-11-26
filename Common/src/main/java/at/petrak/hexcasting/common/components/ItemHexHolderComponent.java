@@ -9,6 +9,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 public record ItemHexHolderComponent(List<Iota> hex) {
     public static final ItemHexHolderComponent EMPTY = new ItemHexHolderComponent(List.of());
     public static final Codec<ItemHexHolderComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Iota.IOTA_CODEC.listOf().fieldOf("datum").forGetter(ItemHexHolderComponent::hex)
+            Iota.IOTA_CODEC.listOf().fieldOf("patterns").forGetter(ItemHexHolderComponent::hex)
     ).apply(instance, ItemHexHolderComponent::new));
     public static final StreamCodec<RegistryFriendlyByteBuf, ItemHexHolderComponent> STREAM_CODEC = StreamCodec.composite(
             Iota.IOTA_STREAM_CODEC.apply(ByteBufCodecs.list()),
@@ -27,4 +28,9 @@ public record ItemHexHolderComponent(List<Iota> hex) {
             .persistent(CODEC)
             .networkSynchronized(STREAM_CODEC)
             .build();
+
+    public static List<Iota> hex(ItemStack stack) {
+        ItemHexHolderComponent comp = stack.get(COMPONENT_TYPE);
+        return comp != null ? comp.hex() : List.of();
+    }
 }

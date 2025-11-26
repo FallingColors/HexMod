@@ -36,7 +36,7 @@ public record FrozenPigment(ItemStack item, UUID owner) {
         }
         try {
             CompoundTag stackTag = tag.getCompound(TAG_STACK);
-            var stack = ItemStack.of(stackTag);
+            var stack = ItemStack.(stackTag);
             var uuid = tag.getUUID(TAG_OWNER);
             return new FrozenPigment(stack, uuid);
         } catch (NullPointerException exn) {

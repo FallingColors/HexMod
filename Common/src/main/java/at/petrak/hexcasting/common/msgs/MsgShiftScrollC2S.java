@@ -84,7 +84,7 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
             delta = -delta;
         }
 
-        var newIdx = ItemSpellbook.rotatePageIdx(stack, delta < 0.0);
+        var newIdx = ItemSpellbook.rotatePageIdx(stack, delta < 0.0, sender.level());
 
         var len = ItemSpellbook.highestPage(stack);
 

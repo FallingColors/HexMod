@@ -4,15 +4,13 @@ import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.items.storage.ItemFocus;
 import at.petrak.hexcasting.common.items.storage.ItemSpellbook;
 import at.petrak.hexcasting.common.lib.HexItems;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
-import net.minecraft.world.item.crafting.CustomRecipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,11 +36,11 @@ public class SealThingsRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean matches(CraftingContainer container, Level level) {
+    public boolean matches(CraftingInput container, Level level) {
         boolean foundComb = false;
         boolean foundSealee = false;
 
-        for (int i = 0; i < container.getContainerSize(); i++) {
+        for (int i = 0; i < container.ingredientCount(); i++) {
             var stack = container.getItem(i);
             if (this.sealee.isCorrectSealee(stack)) {
                 if (foundSealee) return false;
@@ -57,10 +55,10 @@ public class SealThingsRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
+    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider provider) {
         ItemStack sealee = ItemStack.EMPTY;
 
-        for (int i = 0; i < inv.getContainerSize(); i++) {
+        for (int i = 0; i < inv.ingredientCount(); i++) {
             var stack = inv.getItem(i);
             if (this.sealee.isCorrectSealee(stack)) {
                 sealee = stack.copy();

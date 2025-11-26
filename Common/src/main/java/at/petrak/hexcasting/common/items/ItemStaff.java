@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 
 public class ItemStaff extends Item {
     // 0 = normal. 1 = old. 2 = cherry preview
-    public static final ResourceLocation FUNNY_LEVEL_PREDICATE = new ResourceLocation(HexAPI.MOD_ID, "funny_level");
+    public static final ResourceLocation FUNNY_LEVEL_PREDICATE = ResourceLocation.fromNamespaceAndPath(HexAPI.MOD_ID, "funny_level");
 
     public ItemStaff(Properties pProperties) {
         super(pProperties);

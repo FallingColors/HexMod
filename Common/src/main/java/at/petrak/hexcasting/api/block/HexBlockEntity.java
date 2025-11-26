@@ -19,24 +19,6 @@ public abstract class HexBlockEntity extends BlockEntity {
     protected abstract void loadModData(CompoundTag tag);
 
     @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        this.saveModData(pTag);
-    }
-
-    @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
-        this.loadModData(pTag);
-    }
-
-    @Override
-    public CompoundTag getUpdateTag() {
-        CompoundTag tag = new CompoundTag();
-        this.saveModData(tag);
-        return tag;
-    }
-
-    @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }

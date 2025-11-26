@@ -18,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -67,7 +68,8 @@ public class HexItems {
 
     public static final ItemLens SCRYING_LENS = make("lens", new ItemLens(
         IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
-            .stacksTo(1)));
+            .stacksTo(1).attributes(ItemAttributeModifiers.builder()
+                        .add().build())));
 
     public static final ItemAbacus ABACUS = make("abacus", new ItemAbacus(unstackable()));
     public static final ItemThoughtKnot THOUGHT_KNOT = make("thought_knot", new ItemThoughtKnot(unstackable()));
@@ -79,7 +81,7 @@ public class HexItems {
     public static final ItemArtifact ARTIFACT = make("artifact", new ItemArtifact(unstackable().rarity(Rarity.RARE)));
 
     public static final ItemJewelerHammer JEWELER_HAMMER = make("jeweler_hammer",
-        new ItemJewelerHammer(Tiers.IRON, 0, -2.8F, props().stacksTo(1).defaultDurability(Tiers.DIAMOND.getUses())));
+        new ItemJewelerHammer(Tiers.IRON, props().stacksTo(1).durability(Tiers.DIAMOND.getUses())));
 
     public static final ItemScroll SCROLL_SMOL = make("scroll_small", new ItemScroll(props(), 1));
     public static final ItemScroll SCROLL_MEDIUM = make("scroll_medium", new ItemScroll(props(), 2));
@@ -134,7 +136,7 @@ public class HexItems {
 
     // BUFF SANDVICH
     public static final Item SUBMARINE_SANDWICH = make("sub_sandwich",
-        new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationMod(1.2f).build())));
+        new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationModifier(1.2f).build())));
 
     public static final ItemLoreFragment LORE_FRAGMENT = make("lore_fragment",
         new ItemLoreFragment(unstackable()
@@ -143,7 +145,7 @@ public class HexItems {
     public static final ItemCreativeUnlocker CREATIVE_UNLOCKER = make("creative_unlocker",
         new ItemCreativeUnlocker(unstackable()
             .rarity(Rarity.EPIC)
-            .food(new FoodProperties.Builder().nutrition(20).saturationMod(1f).alwaysEat().build())));
+            .food(new FoodProperties.Builder().nutrition(20).saturationModifier(1f).alwaysEdible().build())));
 
     //
 

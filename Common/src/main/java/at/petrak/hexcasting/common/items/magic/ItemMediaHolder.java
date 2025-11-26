@@ -87,12 +87,7 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
     }
 
     @Override
-    public boolean canBeDepleted() {
-        return false;
-    }
-
-    @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pLevel, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {
         var maxMedia = getMaxMedia(pStack);
         if (maxMedia > 0) {

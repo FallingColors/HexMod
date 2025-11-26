@@ -178,21 +178,23 @@ public class CircleExecutionState {
     }
 
     public static CircleExecutionState load(CompoundTag nbt, ServerLevel world) {
-        var startPos = NbtUtils.readBlockPos(nbt.getCompound(TAG_IMPETUS_POS));
+        var startPos = NbtUtils.readBlockPos(nbt, TAG_IMPETUS_POS);
         var startDir = Direction.values()[nbt.getByte(TAG_IMPETUS_DIR)];
 
         var knownPositions = new HashSet<BlockPos>();
         var knownTag = nbt.getList(TAG_KNOWN_POSITIONS, Tag.TAG_COMPOUND);
         for (var tag : knownTag) {
-            knownPositions.add(NbtUtils.readBlockPos(HexUtils.downcast(tag, CompoundTag.TYPE)));
+            var blockPos = NbtUtils.readBlockPos(HexUtils.downcast(tag, CompoundTag.TYPE), TAG_KNOWN_POSITIONS);
+            blockPos.ifPresent(knownPositions::add);
         }
         var reachedPositions = new ArrayList<BlockPos>();
         var reachedTag = nbt.getList(TAG_REACHED_POSITIONS, Tag.TAG_COMPOUND);
         for (var tag : reachedTag) {
-            reachedPositions.add(NbtUtils.readBlockPos(HexUtils.downcast(tag, CompoundTag.TYPE)));
+            var blockPos = NbtUtils.readBlockPos(HexUtils.downcast(tag, CompoundTag.TYPE), TAG_REACHED_POSITIONS);
+            blockPos.ifPresent(reachedPositions::add);
         }
 
-        var currentPos = NbtUtils.readBlockPos(nbt.getCompound(TAG_CURRENT_POS));
+        var currentPos = NbtUtils.readBlockPos(nbt, TAG_CURRENT_POS);
         var enteredFrom = Direction.values()[nbt.getByte(TAG_ENTERED_FROM)];
         var image = CastingImage.loadFromNbt(nbt.getCompound(TAG_IMAGE), world);
 
@@ -204,7 +206,7 @@ public class CircleExecutionState {
         if (nbt.contains(TAG_PIGMENT, Tag.TAG_COMPOUND))
             pigment = FrozenPigment.fromNBT(nbt.getCompound(TAG_PIGMENT));
 
-        return new CircleExecutionState(startPos, startDir, knownPositions, reachedPositions, currentPos,
+        return new CircleExecutionState(startPos.get(), startDir, knownPositions, reachedPositions, currentPos.get(),
             enteredFrom, image, caster, pigment);
     }
 
