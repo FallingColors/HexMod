@@ -130,16 +130,6 @@ loom {
 //    config "hexcasting_forge.mixins.json"
 //}
 
-compileJava {
-    source(project(":Common").sourceSets.main.allSource)
-}
-compileKotlin {
-    source(project(":Common").sourceSets.main.kotlin)
-}
-compileTestKotlin {
-    source(project(":Common").sourceSets.main.kotlin)
-}
-
 sourceSets {
     main.resources.srcDirs += ['src/generated/resources', '../Common/src/generated/resources']
     main.kotlin.srcDirs += 'src/main/java'
@@ -162,6 +152,7 @@ shadowJar {
 
 remapJar {
     inputFile.set shadowJar.archiveFile
+    dependsOn shadowJar
 }
 
 jar.finalizedBy('remapJar')
