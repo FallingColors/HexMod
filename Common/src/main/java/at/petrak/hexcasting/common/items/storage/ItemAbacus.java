@@ -23,25 +23,14 @@ import javax.xml.crypto.Data;
 import java.util.List;
 
 public class ItemAbacus extends Item implements IotaHolderItem {
-<<<<<<< HEAD
-    public static final String TAG_VALUE = "abacus_value";
-=======
->>>>>>> refs/remotes/slava/devel/port-1.21
 
     public ItemAbacus(Properties pProperties) {
         super(pProperties);
     }
 
     @Override
-<<<<<<< HEAD
-    public @Nullable
-    CompoundTag readIotaTag(ItemStack stack) {
-        var datum = new DoubleIota(stack.get(DataComponents.CUSTOM_DATA).copyTag().getDouble(TAG_VALUE));
-        return IotaType.serialize(datum);
-=======
     public @Nullable Iota readIota(ItemStack stack) {
         return new DoubleIota(stack.getOrDefault(HexDataComponents.ABACUS_VALUE, 0.0));
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     @Override
@@ -81,13 +70,7 @@ public class ItemAbacus extends Item implements IotaHolderItem {
     }
 
     @Override
-<<<<<<< HEAD
-    public void appendHoverText(ItemStack pStack, Item.TooltipContext bruh, List<Component> pTooltipComponents,
-        TooltipFlag pIsAdvanced) {
-        IotaHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
-=======
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         IotaHolderItem.appendHoverText(this, stack, tooltipComponents, tooltipFlag);
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 }

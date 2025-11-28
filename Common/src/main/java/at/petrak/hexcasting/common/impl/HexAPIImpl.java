@@ -96,8 +96,6 @@ public class HexAPIImpl implements HexAPI {
     public FrozenPigment getColorizer(Player player) {
         return IXplatAbstractions.INSTANCE.getPigment(player);
     }
-<<<<<<< HEAD
-=======
 
     ArmorMaterial ARMOR_MATERIAL = new ArmorMaterial(
             Collections.emptyMap(),
@@ -113,5 +111,4 @@ public class HexAPIImpl implements HexAPI {
     public ArmorMaterial robesMaterial() {
         return ARMOR_MATERIAL;
     }
->>>>>>> refs/remotes/slava/devel/port-1.21
 }

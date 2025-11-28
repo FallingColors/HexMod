@@ -21,14 +21,17 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.common.components.PigmentItemComponent;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexRegistries;
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredientType;
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredientType;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
-import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsApiInterop;
+import at.petrak.hexcasting.fabric.interop.accessories.AccessoriesApiInterop;
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.xplat.IXplatRegister;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
 import com.google.common.base.Suppliers;
@@ -53,6 +56,7 @@ import net.minecraft.core.*;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -78,6 +82,7 @@ import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.phys.Vec3;
+import org.apache.commons.codec.binary.Hex;
 import org.jetbrains.annotations.Nullable;
 import virtuoel.pehkui.api.ScaleTypes;
 
@@ -107,7 +112,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public void initPlatformSpecific() {
         if (this.isModPresent(HexInterop.Fabric.TRINKETS_API_ID)) {
-            TrinketsApiInterop.init();
+            AccessoriesApiInterop.init();
         }
     }
 
@@ -118,7 +123,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public void sendPacketToPlayer(ServerPlayer target, CustomPacketPayload packet) {
-        ServerPlayNetworking.send(target, packet.getFabricId(), packet.toBuf());
+        ServerPlayNetworking.send(target, packet);
     }
 
     @Override
@@ -132,7 +137,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     private void sendPacketToPlayers(Collection<ServerPlayer> players, CustomPacketPayload packet) {
-        var pkt = ServerPlayNetworking.createS2CPacket(packet.getFabricId(), packet.toBuf());
+        var pkt = ServerPlayNetworking.createS2CPacket(packet);
         for (var p : players) {
             p.connection.send(pkt);
         }
@@ -140,7 +145,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public Packet<ClientGamePacketListener> toVanillaClientboundPacket(CustomPacketPayload message) {
-        return ServerPlayNetworking.createS2CPacket(message.getFabricId(), message.toBuf());
+        return (Packet<ClientGamePacketListener>) (Object) ServerPlayNetworking.createS2CPacket(message);
     }
 
     @Override
@@ -237,21 +242,13 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public @Nullable
     ADMediaHolder findMediaHolder(ItemStack stack) {
-        var cc = HexCardinalComponents.MEDIA_HOLDER.maybeGet(stack);
-        return cc.orElse(null);
-    }
-
-    @Override
-    public @Nullable ADMediaHolder findMediaHolder(ServerPlayer player) {
-        var cc = HexCardinalComponents.MEDIA_HOLDER.maybeGet(player);
-        return cc.orElse(null);
+        return HexCardinalComponents.MEDIA_HOLDER_LOOKUP.find(stack, null);
     }
 
     @Override
     public @Nullable
     ADIotaHolder findDataHolder(ItemStack stack) {
-        var cc = HexCardinalComponents.IOTA_HOLDER.maybeGet(stack);
-        return cc.orElse(null);
+        return HexCardinalComponents.IOTA_HOLDER_LOOKUP.find(stack, null);
     }
 
     @Override
@@ -264,19 +261,17 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public @Nullable
     ADHexHolder findHexHolder(ItemStack stack) {
-        var cc = HexCardinalComponents.HEX_HOLDER.maybeGet(stack);
-        return cc.orElse(null);
+        return HexCardinalComponents.HEX_HOLDER_LOOKUP.find(stack, null);
     }
 
     @Override
-    public @Nullable ADVariantItem findVariantHolder(ItemStack stack) {
-        var cc = HexCardinalComponents.VARIANT_ITEM.maybeGet(stack);
-        return cc.orElse(null);
+    public ADVariantItem findVariantHolder(ItemStack stack) {
+        return HexCardinalComponents.VARIANT_ITEM_LOOKUP.find(stack, null);
     }
 
     @Override
     public boolean isPigment(ItemStack stack) {
-        return stack.get(PigmentItemComponent.COMPONENT_TYPE) != null;
+        return stack.get(HexDataComponents.PIGMENT) != null;
     }
 
     @Override
@@ -424,8 +419,8 @@ public class FabricXplatImpl implements IXplatAbstractions {
                 .buildAndRegister()
         );
     private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
-                HexAPI.MOD_ID + ":null", HexRegistries.IOTA_TYPE,
+        FabricRegistryBuilder.from(new MappedRegistry<>(
+                HexRegistries.IOTA_TYPE,
                 Lifecycle.stable(), false))
             .buildAndRegister()
     );
@@ -449,6 +444,20 @@ public class FabricXplatImpl implements IXplatAbstractions {
                 HexAPI.MOD_ID + ":nothing", HexRegistries.EVAL_SOUND,
                 Lifecycle.stable(), false))
             .buildAndRegister()
+    );
+
+    private static final Supplier<Registry<StateIngredientType<?>>> STATE_INGREDIENT_REGISTRY = Suppliers.memoize(() ->
+            FabricRegistryBuilder.from(new MappedRegistry<>(
+                    HexRegistries.STATE_INGREDIENT,
+                    Lifecycle.stable(), false))
+                    .buildAndRegister()
+    );
+
+    private static final Supplier<Registry<BrainsweepeeIngredientType<?>>> BRAINSWEEPEE_INGREDIENT_REGISTRY = Suppliers.memoize(() ->
+            FabricRegistryBuilder.from(new MappedRegistry<>(
+                    HexRegistries.BRAINSWEEPEE_INGREDIENT,
+                    Lifecycle.stable(), false))
+                    .buildAndRegister()
     );
 
     @Override
@@ -482,6 +491,16 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public Registry<StateIngredientType<?>> getStateIngredientRegistry() {
+        return STATE_INGREDIENT_REGISTRY.get();
+    }
+
+    @Override
+    public Registry<BrainsweepeeIngredientType<?>> getBrainsweepeeIngredientRegistry() {
+        return BRAINSWEEPEE_INGREDIENT_REGISTRY.get();
+    }
+
+    @Override
     public boolean isBreakingAllowed(ServerLevel world, BlockPos pos, BlockState state, @Nullable Player player) {
         if (player == null)
             player = FakePlayer.get(world, HEXCASTING);
@@ -498,6 +517,11 @@ public class FabricXplatImpl implements IXplatAbstractions {
         var success = UseItemCallback.EVENT.invoker().interact(player, world, InteractionHand.MAIN_HAND);
         player.setItemInHand(InteractionHand.MAIN_HAND, cached);
         return success.getResult() == InteractionResult.PASS; // No other mod tried to consume this
+    }
+
+    @Override
+    public <B> IXplatRegister<B> createRegistar(ResourceKey<Registry<B>> registryKey) {
+        return null;
     }
 
     private static PehkuiInterop.ApiAbstraction PEHKUI_API = null;

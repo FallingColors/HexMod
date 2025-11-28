@@ -12,21 +12,12 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
-<<<<<<< HEAD
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
-=======
-import net.minecraft.core.component.DataComponents;
->>>>>>> refs/remotes/slava/devel/port-1.21
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-<<<<<<< HEAD
-=======
 import net.minecraft.network.codec.ByteBufCodecs;
->>>>>>> refs/remotes/slava/devel/port-1.21
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
@@ -47,32 +38,6 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  */
 public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boolean isCtrl, boolean invertSpellbook,
                                 boolean invertAbacus) implements CustomPacketPayload {
-<<<<<<< HEAD
-    public static final StreamCodec<FriendlyByteBuf, MsgShiftScrollC2S> CODEC = CustomPacketPayload.codec(MsgShiftScrollC2S::serialize, MsgShiftScrollC2S::deserialize);
-    public static final Type<MsgShiftScrollC2S> ID = new Type<>(modLoc("scroll"));
-
-    @Override
-    public Type<? extends CustomPacketPayload> type() {
-        return ID;
-    }
-
-    public static MsgShiftScrollC2S deserialize(ByteBuf buffer) {
-        var buf = new FriendlyByteBuf(buffer);
-        var mainHandDelta = buf.readDouble();
-        var offHandDelta = buf.readDouble();
-        var isCtrl = buf.readBoolean();
-        var invertSpellbook = buf.readBoolean();
-        var invertAbacus = buf.readBoolean();
-        return new MsgShiftScrollC2S(mainHandDelta, offHandDelta, isCtrl, invertSpellbook, invertAbacus);
-    }
-
-    public void serialize(FriendlyByteBuf buf) {
-        buf.writeDouble(this.mainHandDelta);
-        buf.writeDouble(this.offHandDelta);
-        buf.writeBoolean(this.isCtrl);
-        buf.writeBoolean(this.invertSpellbook);
-        buf.writeBoolean(this.invertAbacus);
-=======
     public static final CustomPacketPayload.Type<MsgShiftScrollC2S> TYPE = new CustomPacketPayload.Type<>(HexAPI.modLoc("scroll"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, MsgShiftScrollC2S> STREAM_CODEC = StreamCodec.composite(
@@ -87,7 +52,6 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     public void handle(MinecraftServer server, ServerPlayer sender) {
@@ -126,22 +90,14 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
                 component = Component.translatable("hexcasting.tooltip.spellbook.page_with_name.sealed",
                     Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
                     Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-<<<<<<< HEAD
-                    Component.literal("").withStyle(stack.getRarity().color(), ChatFormatting.ITALIC)
-=======
-                    Component.literal("").withStyle(stack.getRarity().getStyleModifier()).withStyle(ChatFormatting.ITALIC)
->>>>>>> refs/remotes/slava/devel/port-1.21
+                    Component.literal("").withStyle(stack.getRarity().color()).withStyle(ChatFormatting.ITALIC)
                         .append(stack.getHoverName()),
                     Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
             } else {
                 component = Component.translatable("hexcasting.tooltip.spellbook.page_with_name",
                     Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
                     Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-<<<<<<< HEAD
-                    Component.literal("").withStyle(stack.getRarity().color(), ChatFormatting.ITALIC)
-=======
-                    Component.literal("").withStyle(stack.getRarity().getStyleModifier()).withStyle(ChatFormatting.ITALIC)
->>>>>>> refs/remotes/slava/devel/port-1.21
+                    Component.literal("").withStyle(stack.getRarity().color()).withStyle(ChatFormatting.ITALIC)
                         .append(stack.getHoverName()));
             }
 
@@ -167,13 +123,9 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         }
 
         var increase = delta < 0;
-<<<<<<< HEAD
-        double num = stack.get(DataComponents.CUSTOM_DATA).copyTag().getDouble(ItemAbacus.TAG_VALUE);
-=======
         Double num = stack.get(HexDataComponents.ABACUS_VALUE);
         if(num == null)
             num = 0.0;
->>>>>>> refs/remotes/slava/devel/port-1.21
 
         double shiftDelta;
         float pitch;
@@ -188,14 +140,7 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         int scale = Math.max((int) Math.floor(Math.abs(delta)), 1);
 
         num += scale * shiftDelta * (increase ? 1 : -1);
-<<<<<<< HEAD
-        CustomData data = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
-        CompoundTag tag = data.copyTag();
-        tag.putDouble(ItemAbacus.TAG_VALUE, num);
-        stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-=======
         stack.set(HexDataComponents.ABACUS_VALUE, num);
->>>>>>> refs/remotes/slava/devel/port-1.21
 
         pitch *= (increase ? 1.05f : 0.95f);
         pitch += (Math.random() - 0.5) * 0.1;

@@ -41,11 +41,7 @@ public class SealThingsRecipe extends CustomRecipe {
         boolean foundComb = false;
         boolean foundSealee = false;
 
-<<<<<<< HEAD
-        for (int i = 0; i < container.ingredientCount(); i++) {
-=======
         for (int i = 0; i < container.size(); i++) {
->>>>>>> refs/remotes/slava/devel/port-1.21
             var stack = container.getItem(i);
             if (this.sealee.isCorrectSealee(stack)) {
                 if (foundSealee) return false;
@@ -60,17 +56,10 @@ public class SealThingsRecipe extends CustomRecipe {
     }
 
     @Override
-<<<<<<< HEAD
-    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider provider) {
-        ItemStack sealee = ItemStack.EMPTY;
-
-        for (int i = 0; i < inv.ingredientCount(); i++) {
-=======
     public @NotNull ItemStack assemble(CraftingInput inv, HolderLookup.RegistryLookup.@NotNull Provider registryProvider) {
         ItemStack sealee = ItemStack.EMPTY;
 
         for (int i = 0; i < inv.size(); i++) {
->>>>>>> refs/remotes/slava/devel/port-1.21
             var stack = inv.getItem(i);
             if (this.sealee.isCorrectSealee(stack)) {
                 sealee = stack.copy();

@@ -1,18 +1,17 @@
-package at.petrak.hexcasting.fabric.interop.trinkets;
+package at.petrak.hexcasting.fabric.interop.accessories;
 
 import at.petrak.hexcasting.common.lib.HexItems;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.client.TrinketRenderer;
+import io.wispforest.accessories.api.client.AccessoryRenderer;
+import io.wispforest.accessories.api.slot.SlotReference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
@@ -20,23 +19,17 @@ import net.minecraft.world.item.ItemStack;
  * @author WireSegal
  * Created at 9:50 AM on 7/25/22.
  */
-public class LensTrinketRenderer implements TrinketRenderer {
+public class LensAccessoryRenderer implements AccessoryRenderer {
     @Override
     @SuppressWarnings("unchecked")
-    public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> model,
-                       PoseStack matrices, MultiBufferSource multiBufferSource, int light, LivingEntity entity,
-                       float limbAngle, float limbDistance, float tickDelta, float animationProgress,
-                       float headYaw, float headPitch) {
+    public <M extends LivingEntity> void render(ItemStack stack, SlotReference slotReference, PoseStack matrices, EntityModel<M> model, MultiBufferSource multiBufferSource, int light, float v, float v1, float v2, float v3, float v4, float v5) {
         if (stack.is(HexItems.SCRYING_LENS) &&
-            model instanceof PlayerModel playerModel &&
-            entity instanceof AbstractClientPlayer player) {
+                model instanceof PlayerModel playerModel && slotReference.entity() instanceof Player) {
 
             // from https://github.com/Creators-of-Create/Create/blob/ee33823ed0b5084af10ed131a1626ce71db4c07e/src/main/java/com/simibubi/create/compat/curios/GogglesCurioRenderer.java
 
             // Translate and rotate with our head
             matrices.pushPose();
-            TrinketRenderer.followBodyRotations(entity, playerModel);
-            TrinketRenderer.translateToFace(matrices, playerModel, player, headYaw, headPitch);
 
             // Translate and scale to our head
             matrices.translate(0, 0, 0.3);
@@ -46,9 +39,8 @@ public class LensTrinketRenderer implements TrinketRenderer {
             // Render
             var instance = Minecraft.getInstance();
             instance.getItemRenderer().renderStatic(stack, ItemDisplayContext.HEAD,
-                light, OverlayTexture.NO_OVERLAY, matrices, multiBufferSource, instance.level, 0);
+                    light, OverlayTexture.NO_OVERLAY, matrices, multiBufferSource, instance.level, 0);
             matrices.popPose();
         }
     }
-
 }

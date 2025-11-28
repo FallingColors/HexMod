@@ -38,6 +38,11 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
         return HexBlockEntities.IMPETUS_REDSTONE_TILE;
     }
 
+    @Override
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        return null;
+    }
+
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
@@ -51,20 +56,11 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
     }
 
     @Override
-<<<<<<< HEAD
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-                                 BlockHitResult pHit) {
-        if (pLevel instanceof ServerLevel level
-            && level.getBlockEntity(pPos) instanceof BlockEntityRedstoneImpetus tile) {
-            var usedStack = pPlayer.getItemInHand(pHand);
-            if (usedStack.isEmpty() && pPlayer.isDiscrete()) {
-=======
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (level instanceof ServerLevel sLevel
                 && level.getBlockEntity(pos) instanceof BlockEntityRedstoneImpetus tile) {
             var usedStack = player.getItemInHand(hand);
             if (usedStack.isEmpty() && player.isDiscrete()) {
->>>>>>> refs/remotes/slava/devel/port-1.21
                 tile.clearPlayer();
                 tile.sync();
                 level.playSound(null, pos, HexSounds.IMPETUS_REDSTONE_CLEAR, SoundSource.BLOCKS, 1f, 1f);

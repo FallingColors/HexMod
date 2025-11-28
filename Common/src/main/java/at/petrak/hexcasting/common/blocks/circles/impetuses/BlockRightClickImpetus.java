@@ -25,6 +25,11 @@ public class BlockRightClickImpetus extends BlockAbstractImpetus {
         return HexBlockEntities.IMPETUS_RIGHTCLICK_TILE;
     }
 
+    @Override
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        return null;
+    }
+
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {

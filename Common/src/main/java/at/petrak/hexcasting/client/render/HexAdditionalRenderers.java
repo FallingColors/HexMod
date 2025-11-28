@@ -14,6 +14,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -44,7 +45,7 @@ public class HexAdditionalRenderers {
         }
     }
 
-    public static void overlayGui(GuiGraphics graphics, float partialTicks) {
+    public static void overlayGui(GuiGraphics graphics, DeltaTracker partialTicks) {
         tryRenderScryingLensOverlay(graphics, partialTicks);
     }
 
@@ -149,7 +150,7 @@ public class HexAdditionalRenderers {
         }
     }
 
-    private static void tryRenderScryingLensOverlay(GuiGraphics graphics, float partialTicks) {
+    private static void tryRenderScryingLensOverlay(GuiGraphics graphics, DeltaTracker partialTicks) {
         var mc = Minecraft.getInstance();
         var ps = graphics.pose();
 

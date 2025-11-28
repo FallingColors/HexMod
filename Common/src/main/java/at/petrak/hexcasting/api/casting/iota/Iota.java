@@ -13,29 +13,17 @@ import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import com.mojang.serialization.Codec;
-<<<<<<< HEAD
-import com.mojang.serialization.MapCodec;
-import io.netty.buffer.ByteBuf;
-=======
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.nbt.NbtOps;
->>>>>>> refs/remotes/slava/devel/port-1.21
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-<<<<<<< HEAD
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.item.component.CustomData;
-=======
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.level.Level;
->>>>>>> refs/remotes/slava/devel/port-1.21
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,25 +35,7 @@ public abstract class Iota {
     @NotNull
     protected final Supplier<IotaType<? extends Iota>> type;
 
-<<<<<<< HEAD
-    public static final Codec<Iota> IOTA_CODEC = HexIotaTypes.REGISTRY.byNameCodec()
-            .dispatch("type", Iota::getType, IotaType::codec);
-
-    public static final StreamCodec<RegistryFriendlyByteBuf, Iota> IOTA_STREAM_CODEC = new StreamCodec<>() {
-        @Override
-        public void encode(RegistryFriendlyByteBuf buf, Iota iota) {
-            ByteBufCodecs.fromCodecWithRegistries(IOTA_CODEC).encode(buf, iota);
-        }
-
-        public Iota decode(RegistryFriendlyByteBuf buf) {
-            var iota = ByteBufCodecs.fromCodecWithRegistries(IOTA_CODEC).decode(buf); return iota;
-        }
-    };
-
-    protected Iota(@NotNull IotaType<?> type, @NotNull Object payload) {
-=======
     protected Iota(@NotNull Supplier<IotaType<? extends Iota>> type) {
->>>>>>> refs/remotes/slava/devel/port-1.21
         this.type = type;
     }
 

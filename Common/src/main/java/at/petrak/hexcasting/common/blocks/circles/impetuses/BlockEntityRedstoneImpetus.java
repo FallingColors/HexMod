@@ -8,10 +8,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-<<<<<<< HEAD
-=======
 import net.minecraft.core.HolderLookup;
->>>>>>> refs/remotes/slava/devel/port-1.21
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -113,12 +110,8 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
             if (!plProfile.equals(resolvableProfile) || cachedDisplayStack == null) {
                 cachedDisplayProfile = resolvableProfile;
                 var head = new ItemStack(Items.PLAYER_HEAD);
-<<<<<<< HEAD
-                head.set(DataComponents.PROFILE, new ResolvableProfile(cachedDisplayProfile));
-=======
                 head.set(DataComponents.PROFILE, resolvableProfile);
                 head.getItem().verifyComponentsAfterLoad(head);
->>>>>>> refs/remotes/slava/devel/port-1.21
                 cachedDisplayStack = head;
             }
             lines.add(new Pair<>(cachedDisplayStack,

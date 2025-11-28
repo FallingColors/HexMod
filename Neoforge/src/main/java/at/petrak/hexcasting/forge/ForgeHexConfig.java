@@ -133,20 +133,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     public static class Server implements HexConfig.ServerConfigAccess {
         private static ModConfigSpec.IntValue opBreakHarvestLevel;
         private static ModConfigSpec.IntValue maxOpCount;
-<<<<<<< HEAD
-
-        private static ModConfigSpec.IntValue maxSpellCircleLength;
-
-        private static ModConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
-        private static ModConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
-
-        private static ModConfigSpec.BooleanValue villagersOffendedByMindMurder;
-
-        private static ModConfigSpec.ConfigValue<List<? extends String>> tpDimDenyList;
-
-        private static ModConfigSpec.BooleanValue doesTrueNameHaveAmbit;
-
-=======
         private static ModConfigSpec.IntValue maxSpellCircleLength;
         private static ModConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
         private static ModConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
@@ -157,7 +143,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ModConfigSpec.BooleanValue doesTrueNameHaveAmbit;
         private static ModConfigSpec.DoubleValue traderScrollChance;
 
->>>>>>> refs/remotes/slava/devel/port-1.21
         private static ModConfigSpec.ConfigValue<List<? extends String>> fewScrollTables;
         private static ModConfigSpec.ConfigValue<List<? extends String>> someScrollTables;
         private static ModConfigSpec.ConfigValue<List<? extends String>> manyScrollTables;

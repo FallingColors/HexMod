@@ -22,13 +22,13 @@ public class BlockLookingImpetus extends BlockAbstractImpetus {
     }
 
     @Override
-<<<<<<< HEAD
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        return null;
-=======
     public BlockEntityType<? extends BlockEntityAbstractImpetus> getBlockEntityType() {
         return HexBlockEntities.IMPETUS_LOOK_TILE;
->>>>>>> refs/remotes/slava/devel/port-1.21
+    }
+
+    @Override
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        return null;
     }
 
     @Nullable

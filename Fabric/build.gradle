@@ -74,13 +74,23 @@ configurations {
 
 repositories {
     mavenCentral()
+    mavenLocal()
+
+    // serialization hooks
+    maven { url = "https://maven.hexxy.media" }
 
     // paucal and patchi
     maven { url = 'https://maven.blamejared.com' }
     // modmenu and clothconfig
     maven { url "https://maven.shedaniel.me/" }
     // Cardinal Components
-    maven { url 'https://maven.ladysnake.org/releases' }
+    maven {
+        url = "https://jitpack.io"
+        content {
+            includeGroupAndSubgroups 'com.github'
+        }
+    }
+    maven { url = "https://maven.ladysnake.org/releases" }
     maven { url "https://mvn.devos.one/snapshots/" }
     // EMI
     maven { url = "https://maven.terraformersmc.com/releases/" }
@@ -123,9 +133,9 @@ dependencies {
     modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-block:$cardinalComponentsVersion"
 
     // apparently the 1.18 version Just Works on 1.19
-    modImplementation "${modID}:serialization-hooks:$serializationHooksVersion"
-    include "${modID}:serialization-hooks:$serializationHooksVersion"
-    implementation(include("com.github.LlamaLad7:MixinExtras:0.1.1"))
+    modImplementation "io.github.tropheusj:serialization-hooks:$serializationHooksVersion"
+    include "io.github.tropheusj:serialization-hooks:$serializationHooksVersion"
+    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.5.0")))
 
     // === OPTIONAL DEPS ===
 

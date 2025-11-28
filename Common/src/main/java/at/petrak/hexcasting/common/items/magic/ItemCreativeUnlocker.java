@@ -8,8 +8,10 @@ import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
+import com.mojang.authlib.minecraft.client.MinecraftClient;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.AdvancementNode;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.locale.Language;
@@ -243,7 +245,7 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents,
         TooltipFlag isAdvanced) {
-        Component emphasized = infiniteMedia(context.level());
+        Component emphasized = infiniteMedia(Minecraft.getInstance().level);
 
         MutableComponent modName = Component.translatable("item.hexcasting.creative_unlocker.mod_name").withStyle(
             (s) -> s.withColor(ItemMediaHolder.HEX_COLOR));

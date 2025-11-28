@@ -41,15 +41,8 @@ public class BlockAkashicBookshelf extends Block implements AkashicFloodfiller, 
     }
 
     @Override
-<<<<<<< HEAD
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-                                 BlockHitResult pHit) {
-        if (pLevel.getBlockEntity(pPos) instanceof BlockEntityAkashicBookshelf shelf) {
-            var stack = pPlayer.getItemInHand(pHand);
-=======
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (level.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf shelf) {
->>>>>>> refs/remotes/slava/devel/port-1.21
             if (stack.getItem() instanceof ItemScroll scroll) {
                 if (!level.isClientSide()) {
                     scroll.writeDatum(stack, new PatternIota(shelf.getPattern()));
@@ -123,5 +116,10 @@ public class BlockAkashicBookshelf extends Block implements AkashicFloodfiller, 
 
     public BlockState mirror(BlockState pState, Mirror pMirror) {
         return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
+    }
+
+    @Override
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        return null;
     }
 }

@@ -23,45 +23,6 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 // https://github.com/VazkiiMods/Botania/blob/1.18.x/Xplat/src/main/java/vazkii/botania/network/clientbound/PacketSpawnDoppleganger.java
 public record MsgNewWallScrollS2C(ClientboundAddEntityPacket inner, BlockPos pos, Direction dir, ItemStack scrollItem,
                                   boolean showsStrokeOrder, int blockSize) implements CustomPacketPayload {
-<<<<<<< HEAD
-    public static final StreamCodec<RegistryFriendlyByteBuf, MsgNewWallScrollS2C> CODEC = CustomPacketPayload.codec(MsgNewWallScrollS2C::serialize, MsgNewWallScrollS2C::deserialize);
-    public static final Type<MsgNewWallScrollS2C> ID = new Type<>(modLoc("wallscr"));
-
-    @Override
-    public Type<? extends CustomPacketPayload> type() {
-        return ID;
-    }
-
-    public void serialize(RegistryFriendlyByteBuf buf) {
-        buf.writeVarInt(inner.getId());
-        buf.writeUUID(inner.getUUID());
-        ByteBufCodecs.registry(Registries.ENTITY_TYPE).encode(buf, inner.getType());
-        buf.writeDouble(inner.getX());
-        buf.writeDouble(inner.getY());
-        buf.writeDouble(inner.getZ());
-        buf.writeByte((byte) inner.getXRot());
-        buf.writeByte((byte) inner.getYRot());
-        buf.writeByte((byte) inner.getYHeadRot());
-        buf.writeVarInt(inner.getData());
-        buf.writeShort((short) inner.getXa());
-        buf.writeShort((short) inner.getYa());
-        buf.writeShort((short) inner.getZa());
-        buf.writeBlockPos(pos);
-        buf.writeByte(dir.ordinal());
-        ItemStack.STREAM_CODEC.encode(buf, scrollItem);
-        buf.writeBoolean(showsStrokeOrder);
-        buf.writeVarInt(blockSize);
-    }
-
-    public static MsgNewWallScrollS2C deserialize(RegistryFriendlyByteBuf buf) {
-        var inner = ClientboundAddEntityPacket.STREAM_CODEC.decode(buf);
-        var pos = buf.readBlockPos();
-        var dir = HexUtils.getSafe(Direction.values(), buf.readByte());
-        var scroll = ItemStack.STREAM_CODEC.decode(buf);
-        var strokeOrder = buf.readBoolean();
-        var blockSize = buf.readVarInt();
-        return new MsgNewWallScrollS2C(inner, pos, dir, scroll, strokeOrder, blockSize);
-=======
     public static final CustomPacketPayload.Type<MsgNewWallScrollS2C> TYPE = new CustomPacketPayload.Type<>(HexAPI.modLoc("wallscr"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, MsgNewWallScrollS2C> STREAM_CODEC = StreamCodec.composite(
@@ -77,7 +38,6 @@ public record MsgNewWallScrollS2C(ClientboundAddEntityPacket inner, BlockPos pos
     @Override
     public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
         return TYPE;
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     public static void handle(MsgNewWallScrollS2C self) {

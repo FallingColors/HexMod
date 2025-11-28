@@ -46,21 +46,6 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
-<<<<<<< HEAD
-import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.common.ItemAbilities;
-import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.common.crafting.CraftingHelper;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
-import net.neoforged.neoforge.event.entity.living.LivingConversionEvent;
-import net.neoforged.neoforge.event.entity.living.LivingEvent;
-=======
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -73,20 +58,14 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeModificationEvent;
 import net.neoforged.neoforge.event.entity.living.LivingConversionEvent;
->>>>>>> refs/remotes/slava/devel/port-1.21
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
-<<<<<<< HEAD
-import net.neoforged.neoforge.event.tick.LevelTickEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
-=======
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
->>>>>>> refs/remotes/slava/devel/port-1.21
 import net.neoforged.neoforge.registries.RegisterEvent;
 import thedarkcolour.kotlinforforge.neoforge.KotlinModLoadingContext;
 
@@ -95,23 +74,14 @@ import java.util.function.Consumer;
 
 @Mod(HexAPI.MOD_ID)
 public class ForgeHexInitializer {
-<<<<<<< HEAD
-    public ForgeHexInitializer(ModContainer container) {
-        initConfig();
-=======
     public ForgeHexInitializer(ModContainer modContainer) {
         initConfig(modContainer);
->>>>>>> refs/remotes/slava/devel/port-1.21
         initRegistries();
         initRegistry();
         initListeners();
     }
 
-<<<<<<< HEAD
-    private static void initConfig() {
-=======
     private static void initConfig(ModContainer modContainer) {
->>>>>>> refs/remotes/slava/devel/port-1.21
         var config = new ModConfigSpec.Builder().configure(ForgeHexConfig::new);
         var clientConfig = new ModConfigSpec.Builder().configure(ForgeHexConfig.Client::new);
         var serverConfig = new ModConfigSpec.Builder().configure(ForgeHexConfig.Server::new);
@@ -239,24 +209,15 @@ public class ForgeHexInitializer {
         evBus.addListener((LivingConversionEvent.Post evt) ->
             BrainsweepingEvents.copyBrainsweepPostTransformation(evt.getEntity(), evt.getOutcome()));
 
-<<<<<<< HEAD
-        evBus.addListener((LivingEvent evt) -> {
-=======
         evBus.addListener((EntityTickEvent.Post evt) -> {
->>>>>>> refs/remotes/slava/devel/port-1.21
             if (evt.getEntity() instanceof ServerPlayer splayer) {
                 OpFlight.tickDownFlight(splayer);
                 OpAltiora.checkPlayerCollision(splayer);
             }
         });
 
-<<<<<<< HEAD
-        evBus.addListener((LevelTickEvent evt) -> {
-            if (evt instanceof LevelTickEvent.Post && evt.getLevel() instanceof ServerLevel world) {
-=======
         evBus.addListener((LevelTickEvent.Post evt) -> {
             if (evt.getLevel() instanceof ServerLevel world) {
->>>>>>> refs/remotes/slava/devel/port-1.21
                 PlayerPositionRecorder.updateAllPlayers(world);
             }
         });

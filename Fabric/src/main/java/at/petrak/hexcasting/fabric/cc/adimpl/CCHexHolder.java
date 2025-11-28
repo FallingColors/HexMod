@@ -5,6 +5,8 @@ import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -59,6 +61,16 @@ public abstract class CCHexHolder implements ADHexHolder, Component {
         @Override
         public @Nullable FrozenPigment getPigment() {
             return this.hexHolder.getPigment(this.stack);
+        }
+
+        @Override
+        public void readFromNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
+
+        }
+
+        @Override
+        public void writeToNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
+
         }
     }
 }

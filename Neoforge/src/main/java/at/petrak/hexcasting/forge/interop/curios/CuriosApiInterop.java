@@ -10,15 +10,11 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-<<<<<<< HEAD
-
-=======
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import top.theillusivec4.curios.api.CuriosCapability;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
->>>>>>> refs/remotes/slava/devel/port-1.21
 
 public class CuriosApiInterop {
     static class Wrapper implements ICurio {
@@ -47,13 +43,6 @@ public class CuriosApiInterop {
         }
     }
 
-<<<<<<< HEAD
-    public static ICapabilityProvider curioCap(ItemStack stack) {
-        return ForgeCapabilityHandler.makeProvider(CuriosCapability.ITEM);
-    }
-
-=======
->>>>>>> refs/remotes/slava/devel/port-1.21
 
     public static void init() {
         DiscoveryHandlers.addDebugItemDiscoverer((player, type) -> {

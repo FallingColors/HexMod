@@ -1,7 +1,11 @@
 package at.petrak.hexcasting.fabric
 
 import at.petrak.hexcasting.api.HexAPI.modLoc
+import at.petrak.hexcasting.api.addldata.ADMediaHolder
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
+import at.petrak.hexcasting.api.casting.iota.DoubleIota
+import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexStatistics
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting
 import at.petrak.hexcasting.common.blocks.behavior.HexStrippables
@@ -18,10 +22,11 @@ import at.petrak.hexcasting.common.misc.BrainsweepingEvents
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
 import at.petrak.hexcasting.common.misc.RegisterMisc
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
+import at.petrak.hexcasting.fabric.cc.HexCardinalComponents
+import at.petrak.hexcasting.fabric.cc.adimpl.CCMediaHolder
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.loot.FabricHexLootModJankery
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
-import at.petrak.hexcasting.fabric.recipe.FabricModConditionalIngredient
 import at.petrak.hexcasting.fabric.storage.FabricImpetusStorage
 import at.petrak.hexcasting.interop.HexInterop
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -34,8 +39,9 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.UseEntityCallback
+import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
-import net.fabricmc.fabric.api.loot.v2.LootTableEvents
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
@@ -43,6 +49,7 @@ import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.state.properties.BlockSetType
 import java.util.function.BiConsumer
 
@@ -62,7 +69,7 @@ object FabricHexInitializer : ModInitializer {
             PatternResLocArgument::class.java,
             SingletonArgumentInfo.contextFree { PatternResLocArgument.id() }
         )
-        HexAdvancementTriggers.registerTriggers()
+        HexAdvancementTriggers.registerTriggers(bind(BuiltInRegistries.TRIGGER_TYPES))
         HexComposting.setup()
         HexStrippables.init()
         FabricImpetusStorage.registerStorage()
@@ -95,8 +102,8 @@ object FabricHexInitializer : ModInitializer {
 
         CommandRegistrationCallback.EVENT.register { dp, _, _ -> HexCommands.register(dp) }
 
-        LootTableEvents.MODIFY.register { _, _, id, supplier, _ ->
-            FabricHexLootModJankery.lootLoad(id, supplier::withPool)
+        LootTableEvents.MODIFY.register { key, builder, _, _ ->
+            FabricHexLootModJankery.lootLoad(key, builder::withPool)
         }
 
         EntityElytraEvents.CUSTOM.register { target, _ ->
@@ -126,12 +133,12 @@ object FabricHexInitializer : ModInitializer {
         HexBlocks.registerBlockItems(bind(BuiltInRegistries.ITEM))
         HexBlockEntities.registerTiles(bind(BuiltInRegistries.BLOCK_ENTITY_TYPE))
         HexItems.registerItems(bind(BuiltInRegistries.ITEM))
-        Registry.register(IngredientDeserializer.REGISTRY, FabricModConditionalIngredient.ID, FabricModConditionalIngredient.Deserializer.INSTANCE)
+        // Registry.register(IngredientDeserializer.REGISTRY, FabricModConditionalIngredient.ID, FabricModConditionalIngredient.Deserializer.INSTANCE)
 
         HexEntities.registerEntities(bind(BuiltInRegistries.ENTITY_TYPE))
-        HexAttributes.register(bind(BuiltInRegistries.ATTRIBUTE))
+        HexAttributes.register()
         HexMobEffects.register(bind(BuiltInRegistries.MOB_EFFECT))
-        HexPotions.register(bind(BuiltInRegistries.POTION))
+        HexPotions.registerPotions(bind(BuiltInRegistries.POTION))
 
         HexRecipeStuffRegistry.registerSerializers(bind(BuiltInRegistries.RECIPE_SERIALIZER))
         HexRecipeStuffRegistry.registerTypes(bind(BuiltInRegistries.RECIPE_TYPE))
@@ -160,12 +167,31 @@ object FabricHexInitializer : ModInitializer {
 
     // sorry lex (not sorry)
     private fun fabricOnlyRegistration() {
-//        if (GravityApiInterop.isActive()) {
-//            HexActions.make("interop/gravity/get",
-//                ActionRegistryEntry(HexPattern.fromAngles("wawawddew", HexDir.NORTH_EAST), OpGetGravity))
-//            HexActions.make("interop/gravity/set",
-//                ActionRegistryEntry(HexPattern.fromAngles("wdwdwaaqw", HexDir.NORTH_WEST), OpChangeGravity))
-//        }
+        DefaultItemComponentEvents.MODIFY.register {
+            it.modify(Items.PUMPKIN_PIE, {
+                it.set(HexDataComponents.IOTA, DoubleIota(Math.PI))
+            })
+        }
+
+        HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
+         stack, _ -> CCMediaHolder.Static({ HexConfig.common().dustMediaAmount() }, ADMediaHolder.AMETHYST_DUST_PRIORITY, stack)
+        }, HexItems.AMETHYST_DUST)
+
+        HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
+            stack, _ -> CCMediaHolder.Static({ HexConfig.common().shardMediaAmount() }, ADMediaHolder.AMETHYST_SHARD_PRIORITY, stack)
+        }, Items.AMETHYST_SHARD)
+
+        HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
+                stack, _ -> CCMediaHolder.Static({ HexConfig.common().chargedCrystalMediaAmount() }, ADMediaHolder.CHARGED_AMETHYST_PRIORITY, stack)
+        }, HexItems.CHARGED_AMETHYST)
+
+        HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
+                stack, _ -> CCMediaHolder.Static({ MediaConstants.QUENCHED_SHARD_UNIT }, ADMediaHolder.QUENCHED_SHARD_PRIORITY, stack)
+        }, HexItems.QUENCHED_SHARD)
+
+        HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
+                stack, _ -> CCMediaHolder.Static({ MediaConstants.QUENCHED_BLOCK_UNIT }, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, stack)
+        }, HexBlocks.QUENCHED_ALLAY.asItem())
     }
 
     private fun butYouCouldBeFire() {

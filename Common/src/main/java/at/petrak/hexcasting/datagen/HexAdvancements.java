@@ -22,19 +22,14 @@ import java.util.function.Consumer;
 
 public class HexAdvancements extends PaucalAdvancementSubProvider {
     public static final OvercastTrigger.Instance ENLIGHTEN =
-<<<<<<< HEAD
-        new OvercastTrigger.Instance(MinMaxBounds.Ints.ANY,
-=======
         new OvercastTrigger.Instance(Optional.empty(),
             MinMaxBounds.Ints.ANY,
->>>>>>> refs/remotes/slava/devel/port-1.21
             // add a little bit of slop here. use 80% or more health ...
             MinMaxBounds.Doubles.atLeast(0.8),
             // and be left with under 1 healthpoint (half a heart)
             // TODO this means if 80% of your health is less than half a heart, so if you have 2.5 hearts or
             //  less, you can't become enlightened.
-            MinMaxBounds.Doubles.between(Double.MIN_NORMAL, 1.0),
-                Optional.empty()
+            MinMaxBounds.Doubles.between(Double.MIN_NORMAL, 1.0)
         );
 
     public HexAdvancements() {

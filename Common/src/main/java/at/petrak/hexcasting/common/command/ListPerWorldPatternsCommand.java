@@ -104,12 +104,8 @@ public class ListPerWorldPatternsCommand {
                     var pat = HexPattern.fromAngles(signature, startDir);
 
                     var stack = new ItemStack(HexItems.SCROLL_LARGE);
-<<<<<<< HEAD
-                    stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-=======
                     stack.set(HexDataComponents.ACTION, key);
                     stack.set(HexDataComponents.PATTERN, pat);
->>>>>>> refs/remotes/slava/devel/port-1.21
 
                     for (var player : targets) {
                         var stackEntity = player.drop(stack, false);
@@ -139,12 +135,8 @@ public class ListPerWorldPatternsCommand {
                                ResourceKey<ActionRegistryEntry> actionKey, HexPattern pat) {
         if (!targets.isEmpty()) {
             var stack = new ItemStack(HexItems.SCROLL_LARGE);
-<<<<<<< HEAD
-            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
-=======
             stack.set(HexDataComponents.ACTION, actionKey);
             stack.set(HexDataComponents.PATTERN, pat);
->>>>>>> refs/remotes/slava/devel/port-1.21
 
             source.sendSuccess(() ->
                 Component.translatable(

@@ -5,7 +5,6 @@ import at.petrak.hexcasting.api.item.PigmentItem;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import org.ladysnake.cca.api.v3.component.TransientComponent;
-import org.ladysnake.cca.api.v3.item.ItemComponent;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.UUID;

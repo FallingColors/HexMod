@@ -25,28 +25,6 @@ public record FrozenPigment(ItemStack item, UUID owner) {
     public static final Supplier<FrozenPigment> DEFAULT =
             () -> new FrozenPigment(new ItemStack(HexItems.DEFAULT_PIGMENT), Util.NIL_UUID);
 
-<<<<<<< HEAD
-    public CompoundTag serializeToNBT() {
-        var out = new CompoundTag();
-        out.put(TAG_STACK, this.item.save(new CompoundTag()));
-        out.putUUID(TAG_OWNER, this.owner);
-        return out;
-    }
-
-    public static FrozenPigment fromNBT(CompoundTag tag) {
-        if (tag.isEmpty()) {
-            return FrozenPigment.DEFAULT.get();
-        }
-        try {
-            CompoundTag stackTag = tag.getCompound(TAG_STACK);
-            var stack = ItemStack.(stackTag);
-            var uuid = tag.getUUID(TAG_OWNER);
-            return new FrozenPigment(stack, uuid);
-        } catch (NullPointerException exn) {
-            return FrozenPigment.DEFAULT.get();
-        }
-    }
-=======
     public static Codec<FrozenPigment> CODEC = RecordCodecBuilder.<FrozenPigment>create(inst ->
             inst.group(
                 ItemStack.CODEC.fieldOf("stack").forGetter(FrozenPigment::item),
@@ -58,7 +36,6 @@ public record FrozenPigment(ItemStack item, UUID owner) {
             UUIDUtil.STREAM_CODEC, FrozenPigment::owner,
             FrozenPigment::new
     );
->>>>>>> refs/remotes/slava/devel/port-1.21
 
     public ColorProvider getColorProvider() {
         return IXplatAbstractions.INSTANCE.getColorProvider(this);

@@ -7,13 +7,8 @@ import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
-import at.petrak.hexcasting.common.components.ItemIotaHolderComponent;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
-<<<<<<< HEAD
-import at.petrak.hexcasting.common.lib.HexItemComponents;
-=======
 import at.petrak.hexcasting.common.lib.HexDataComponents;
->>>>>>> refs/remotes/slava/devel/port-1.21
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
@@ -34,11 +29,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-<<<<<<< HEAD
-import net.minecraft.world.item.component.CustomData;
-=======
 import net.minecraft.world.item.TooltipFlag;
->>>>>>> refs/remotes/slava/devel/port-1.21
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.Level;
@@ -69,20 +60,6 @@ public class ItemScroll extends Item implements IotaHolderItem {
         this.blockSize = blockSize;
     }
 
-<<<<<<< HEAD
-    @Override
-    public @Nullable
-    CompoundTag readIotaTag(ItemStack stack) {
-        Iota pattern = Objects.requireNonNull(stack.get(ItemIotaHolderComponent.COMPONENT_TYPE)).iota();
-        if (pattern == null) {
-            return null;
-        }
-        // We store only the data part of the iota; pretend the rest of it's there
-        var out = new CompoundTag();
-        out.putString(HexIotaTypes.KEY_TYPE, "hexcasting:pattern");
-        out.put(HexIotaTypes.KEY_DATA, pattern.serialize());
-        return out;
-=======
     // this produces a scroll that will load the correct pattern for your world once it ticks
     public static ItemStack withPerWorldPattern(ItemStack stack, ResourceKey<ActionRegistryEntry> action) {
         Item item = stack.getItem();
@@ -91,7 +68,6 @@ public class ItemScroll extends Item implements IotaHolderItem {
         }
 
         return stack;
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     @Override
@@ -131,15 +107,9 @@ public class ItemScroll extends Item implements IotaHolderItem {
         var scrollEntity = new EntityWallScroll(level, posInFront, direction, scrollStack, false, this.blockSize);
 
         // i guess
-<<<<<<< HEAD
-        var component = itemstack.get(ItemIotaHolderComponent.COMPONENT_TYPE);
-        if (component != null) {
-            EntityType.updateCustomEntityTag(level, player, scrollEntity, CustomData.of((CompoundTag) component.iota().serialize()));
-=======
         var customData = itemstack.get(DataComponents.CUSTOM_DATA);
         if (customData != null) {
             EntityType.updateCustomEntityTag(level, player, scrollEntity, customData);
->>>>>>> refs/remotes/slava/devel/port-1.21
         }
 
         if (scrollEntity.survives()) {
@@ -164,21 +134,12 @@ public class ItemScroll extends Item implements IotaHolderItem {
     @Override
     public Component getName(ItemStack pStack) {
         var descID = this.getDescriptionId(pStack);
-<<<<<<< HEAD
-        var ancientId = pStack.get(DataComponents.CUSTOM_DATA).copyTag().getString(TAG_OP_ID);
-        if (ancientId != null) {
-            return Component.translatable(descID + ".of",
-                Component.translatable("hexcasting.action." + ResourceLocation.tryParse(ancientId)));
-        } else if (pStack.get(DataComponents.CUSTOM_DATA).contains(TAG_PATTERN)) {
-            var compound = pStack.get(DataComponents.CUSTOM_DATA).copyTag().getCompound(TAG_PATTERN);
-=======
         var ancientAction = pStack.get(HexDataComponents.ACTION);
         if (ancientAction != null) {
             return Component.translatable(descID + ".of",
                 Component.translatable("hexcasting.action." + ancientAction.location()));
         } else if (pStack.has(HexDataComponents.PATTERN)) {
             var pattern = pStack.get(HexDataComponents.PATTERN);
->>>>>>> refs/remotes/slava/devel/port-1.21
             var patternLabel = Component.literal("");
             if (pattern != null) {
                 patternLabel = Component.literal(": ").append(new InlinePatternData(pattern).asText(false));
@@ -216,20 +177,11 @@ public class ItemScroll extends Item implements IotaHolderItem {
 
     @Override
     public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-<<<<<<< HEAD
-        var compound = stack.get(DataComponents.CUSTOM_DATA).copyTag().getCompound(TAG_PATTERN);
-        if (!compound.equals(new CompoundTag())) {
-            var pattern = HexPattern.fromNBT(compound);
-            return Optional.of(new PatternTooltip(
-                pattern,
-                    stack.get(DataComponents.CUSTOM_DATA).contains(TAG_PATTERN)
-=======
         var pattern = stack.get(HexDataComponents.PATTERN);
         if (pattern != null && !stack.has(HexDataComponents.NEEDS_PURCHASE)) {
             return Optional.of(new PatternTooltip(
                 pattern,
                     stack.has(HexDataComponents.ACTION)
->>>>>>> refs/remotes/slava/devel/port-1.21
                     ? PatternTooltipComponent.ANCIENT_BG
                     : PatternTooltipComponent.PRISTINE_BG));
         }

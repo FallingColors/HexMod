@@ -1,19 +1,5 @@
 package at.petrak.hexcasting.common.recipe;
 
-<<<<<<< HEAD
-import at.petrak.hexcasting.common.misc.ContainerInput;
-import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
-import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
-import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
-import com.google.gson.JsonObject;
-import com.mojang.serialization.MapCodec;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
-=======
 import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredients;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
@@ -25,7 +11,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
->>>>>>> refs/remotes/slava/devel/port-1.21
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -45,11 +30,7 @@ public record BrainsweepRecipe(
 	BrainsweepeeIngredient entityIn,
 	long mediaCost,
 	BlockState result
-<<<<<<< HEAD
-) implements Recipe<ContainerInput> {
-=======
 ) implements Recipe<RecipeInput> {
->>>>>>> refs/remotes/slava/devel/port-1.21
 	public boolean matches(BlockState blockIn, Entity victim, ServerLevel level) {
 		return this.blockIn.test(blockIn) && this.entityIn.test(victim, level);
 	}
@@ -66,13 +47,6 @@ public record BrainsweepRecipe(
 
 	// in order to get this to be a "Recipe" we need to do a lot of bending-over-backwards
 	// to get the implementation to be satisfied even though we never use it
-<<<<<<< HEAD
-
-    @Override
-    public boolean matches(ContainerInput recipeInput, Level level) {
-        return false;
-    }
-=======
 	@Override
 	public boolean matches(RecipeInput input, Level level) {
 		return false;
@@ -82,30 +56,14 @@ public record BrainsweepRecipe(
 	public ItemStack assemble(RecipeInput input, HolderLookup.Provider registries) {
 		return ItemStack.EMPTY;
 	}
->>>>>>> refs/remotes/slava/devel/port-1.21
-
-    @Override
-    public ItemStack assemble(ContainerInput recipeInput, HolderLookup.Provider provider) {
-        return null;
-    }
 
     @Override
 	public boolean canCraftInDimensions(int pWidth, int pHeight) {
 		return false;
 	}
 
-<<<<<<< HEAD
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider provider) {
-        return null;
-    }
-
-    @Override
-	public ItemStack getResultItem(RegistryAccess registryAccess) {
-=======
 	@Override
 	public ItemStack getResultItem(HolderLookup.Provider registries) {
->>>>>>> refs/remotes/slava/devel/port-1.21
 		return ItemStack.EMPTY.copy();
 	}
 
@@ -149,15 +107,5 @@ public record BrainsweepRecipe(
 		public @NotNull StreamCodec<RegistryFriendlyByteBuf, BrainsweepRecipe> streamCodec() {
 			return STREAM_CODEC;
 		}
-
-        @Override
-        public MapCodec<BrainsweepRecipe> codec() {
-            return null;
-        }
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, BrainsweepRecipe> streamCodec() {
-            return null;
-        }
     }
 }

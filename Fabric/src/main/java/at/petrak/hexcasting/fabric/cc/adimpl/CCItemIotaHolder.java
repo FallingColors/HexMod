@@ -4,7 +4,8 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
-import org.ladysnake.cca.api.v3.item.ItemComponent;
+import net.minecraft.core.HolderLookup;
+import org.ladysnake.cca.api.v3.component.Component;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -29,8 +30,8 @@ public abstract class CCItemIotaHolder implements CCIotaHolder, Component {
         }
 
         @Override
-        public @Nullable CompoundTag readIotaTag() {
-            return this.iotaHolder.readIotaTag(this.stack);
+        public @Nullable Iota readIota() {
+            return this.iotaHolder.readIota(this.stack);
         }
 
         @Override
@@ -49,6 +50,16 @@ public abstract class CCItemIotaHolder implements CCIotaHolder, Component {
             }
             return true;
         }
+
+        @Override
+        public void readFromNbt(CompoundTag compoundTag, HolderLookup.Provider provider) {
+
+        }
+
+        @Override
+        public void writeToNbt(CompoundTag compoundTag, HolderLookup.Provider provider) {
+
+        }
     }
 
     public static class Static extends CCItemIotaHolder {
@@ -60,9 +71,8 @@ public abstract class CCItemIotaHolder implements CCIotaHolder, Component {
         }
 
         @Override
-        public @Nullable CompoundTag readIotaTag() {
-            var iota = this.provider.apply(this.stack);
-            return iota == null ? null : IotaType.serialize(iota);
+        public @Nullable Iota readIota() {
+            return this.provider.apply(this.stack);
         }
 
         @Override
@@ -73,6 +83,16 @@ public abstract class CCItemIotaHolder implements CCIotaHolder, Component {
         @Override
         public boolean writeIota(@Nullable Iota datum, boolean simulate) {
             return false;
+        }
+
+        @Override
+        public void readFromNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
+
+        }
+
+        @Override
+        public void writeToNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
+
         }
     }
 }

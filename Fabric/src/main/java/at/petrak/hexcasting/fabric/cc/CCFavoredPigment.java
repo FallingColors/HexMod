@@ -35,11 +35,11 @@ public class CCFavoredPigment implements Component, AutoSyncedComponent {
 
     @Override
     public void readFromNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
-        this.pigment = FrozenPigment.fromNBT(tag.getCompound(TAG_PIGMENT));
+
     }
 
     @Override
     public void writeToNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
-        tag.put(TAG_PIGMENT, this.pigment.serializeToNBT());
+
     }
 }

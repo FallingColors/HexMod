@@ -30,9 +30,6 @@ import java.util.stream.Stream;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class ForgeUnsealedIngredient implements ICustomIngredient {
-<<<<<<< HEAD
-    public static final ResourceLocation ID = modLoc("unsealed");
-=======
     public static final MapCodec<ForgeUnsealedIngredient> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
         ItemStack.CODEC.fieldOf("stack").forGetter(ForgeUnsealedIngredient::getStack)
     ).apply(inst, ForgeUnsealedIngredient::new));
@@ -40,7 +37,6 @@ public class ForgeUnsealedIngredient implements ICustomIngredient {
             ForgeUnsealedIngredient::of,
             ForgeUnsealedIngredient::getStack
     );
->>>>>>> refs/remotes/slava/devel/port-1.21
 
     private final ItemStack stack;
 
@@ -82,11 +78,7 @@ public class ForgeUnsealedIngredient implements ICustomIngredient {
 
     @Override
     public Stream<ItemStack> getItems() {
-<<<<<<< HEAD
-        return Stream.empty();
-=======
         return Stream.of(createStack(stack));
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     @Override
@@ -96,44 +88,6 @@ public class ForgeUnsealedIngredient implements ICustomIngredient {
 
     @Override
     public IngredientType<?> getType() {
-<<<<<<< HEAD
-        return null;
-    }
-
-    @Override
-    public @NotNull IIngredientSerializer<? extends Ingredient> getSerializer() {
-        return ForgeUnsealedIngredient.Serializer.INSTANCE;
-    }
-
-    @Override
-    public @NotNull JsonElement toJson() {
-        JsonObject json = new JsonObject();
-        // TODO: should this be Partial or Strict
-        json.addProperty("type", Objects.toString(CraftingHelper.getID(PartialNBTIngredient.Serializer.INSTANCE)));
-        json.addProperty("item", Objects.toString(ForgeRegistries.ITEMS.getKey(stack.getItem())));
-        return json;
-    }
-
-
-    public static class Serializer implements IIngredientSerializer<ForgeUnsealedIngredient> {
-        public static final ForgeUnsealedIngredient.Serializer INSTANCE = new ForgeUnsealedIngredient.Serializer();
-
-        @Override
-        public @NotNull ForgeUnsealedIngredient parse(FriendlyByteBuf buffer) {
-            return new ForgeUnsealedIngredient(buffer.readItem());
-        }
-
-        @Override
-        public @NotNull ForgeUnsealedIngredient parse(@NotNull JsonObject json) {
-            return new ForgeUnsealedIngredient(CraftingHelper.getItemStack(json, true));
-        }
-
-        @Override
-        public void write(FriendlyByteBuf buffer, ForgeUnsealedIngredient ingredient) {
-            buffer.writeItem(ingredient.stack);
-        }
-=======
         return ForgeHexIngredientTypes.UNSEALED_INGREDIENT.get();
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 }

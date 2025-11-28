@@ -267,7 +267,25 @@ public class RegisterClientStuff {
                 locStart += "deco/";
 
             for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
-                extraModels.accept(new ModelResourceLocation(modLoc( locStart + blockLoc.getPath() + "_" + i), ModelResourceLocation.STANDALONE_VARIANT));
+                extraModels.accept(new ModelResourceLocation(modLoc( locStart + blockLoc.getPath() + "_" + i), ModelResourceLocation.INVENTORY_VARIANT));
+            }
+        }
+    }
+
+    @FunctionalInterface
+    public interface FabricModelContext {
+        void add(ResourceLocation id);
+    }
+
+    public static void onModelRegister(FabricModelContext context) {
+        for (var type : QUENCHED_ALLAY_TYPES.entrySet()) {
+            var blockLoc = BuiltInRegistries.BLOCK.getKey(type.getKey());
+            var locStart = "block/";
+            if (type.getValue())
+                locStart += "deco/";
+
+            for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
+                context.add(modLoc( locStart + blockLoc.getPath() + "_" + i));
             }
         }
     }
@@ -281,7 +299,7 @@ public class RegisterClientStuff {
 
             var list = new ArrayList<BakedModel>();
             for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
-                var variantLoc = new ModelResourceLocation(modLoc(locStart + blockLoc.getPath() + "_" + i), ModelResourceLocation.STANDALONE_VARIANT);
+                var variantLoc = new ModelResourceLocation(modLoc(locStart + blockLoc.getPath() + "_" + i), ModelResourceLocation.INVENTORY_VARIANT);
                 var model = map.get(variantLoc);
                 list.add(model);
             }

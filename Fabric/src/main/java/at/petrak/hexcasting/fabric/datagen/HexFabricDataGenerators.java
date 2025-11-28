@@ -33,20 +33,21 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
 
         var pack = gen.createPack();
         var xtags = IXplatAbstractions.INSTANCE.tags();
+        var provider = gen.getRegistries();
 
-        pack.addProvider((FabricDataGenerator.Pack.Factory<HexplatRecipes>) x -> new HexplatRecipes(x, INGREDIENTS, HexFabricConditionsBuilder::new));
+        pack.addProvider((FabricDataGenerator.Pack.Factory<HexplatRecipes>) x -> new HexplatRecipes(x, provider, INGREDIENTS, HexFabricConditionsBuilder::new));
 
         var btagProviderWrapper = new BlockTagProviderWrapper(); // CURSED
         pack.addProvider((output, lookup) -> {
             btagProviderWrapper.provider = new HexBlockTagProvider(output, lookup, xtags);
             return btagProviderWrapper.provider;
         });
-        pack.addProvider((output, lookup) -> new HexItemTagProvider(output, lookup, btagProviderWrapper.provider, xtags));
+        pack.addProvider((output, lookup) -> new HexItemTagProvider(output, lookup, btagProviderWrapper.provider.contentsGetter(), xtags));
 
         pack.addProvider(HexActionTagProvider::new);
 
         pack.addProvider((FabricDataGenerator.Pack.Factory<LootTableProvider>) (output) -> new LootTableProvider(
-                output, Set.of(), List.of(new LootTableProvider.SubProviderEntry(HexLootTables::new, LootContextParamSets.ALL_PARAMS))
+                output, Set.of(), List.of(new LootTableProvider.SubProviderEntry(HexLootTables::new, LootContextParamSets.ALL_PARAMS)), provider
         ));
     }
 
@@ -117,10 +118,10 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
                     new Ingredient.ItemValue(new ItemStack(DyeItem.byColor(col))),
                     new Ingredient.TagValue(
                         TagKey.create(Registries.ITEM,
-                            new ResourceLocation("c", col.getSerializedName() + "_dye"))),
+                            ResourceLocation.fromNamespaceAndPath("c", col.getSerializedName() + "_dye"))),
                     new Ingredient.TagValue(
                         TagKey.create(Registries.ITEM,
-                            new ResourceLocation("c", col.getSerializedName() + "_dyes"))
+                            ResourceLocation.fromNamespaceAndPath("c", col.getSerializedName() + "_dyes"))
                     ))));
             }
             return out;
@@ -162,6 +163,6 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
     }
 
     private static TagKey<Item> tag(String namespace, String s) {
-        return TagKey.create(Registries.ITEM, new ResourceLocation(namespace, s));
+        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(namespace, s));
     }
 }

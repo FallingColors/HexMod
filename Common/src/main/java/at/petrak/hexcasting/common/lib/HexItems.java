@@ -77,14 +77,8 @@ public class HexItems {
     public static final ItemStaff STAFF_MINDSPLICE = make("staff/mindsplice", new ItemStaff(unstackable()));
 
     public static final ItemLens SCRYING_LENS = make("lens", new ItemLens(
-<<<<<<< HEAD
-        IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
-            .stacksTo(1).attributes(ItemAttributeModifiers.builder()
-                        .add().build())));
-=======
             IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
                     .stacksTo(1)));
->>>>>>> refs/remotes/slava/devel/port-1.21
 
     public static final ItemAbacus ABACUS = make("abacus", new ItemAbacus(unstackable()));
     public static final ItemThoughtKnot THOUGHT_KNOT = make("thought_knot", new ItemThoughtKnot(unstackable()));
@@ -97,9 +91,6 @@ public class HexItems {
     public static final ItemArtifact ARTIFACT = make("artifact", new ItemArtifact(unstackable().rarity(Rarity.RARE)));
 
     public static final ItemJewelerHammer JEWELER_HAMMER = make("jeweler_hammer",
-<<<<<<< HEAD
-        new ItemJewelerHammer(Tiers.IRON, props().stacksTo(1).durability(Tiers.DIAMOND.getUses())));
-=======
             new ItemJewelerHammer(Tiers.IRON, props()
                     .stacksTo(1)
                     .durability(Tiers.DIAMOND.getUses())
@@ -113,7 +104,6 @@ public class HexItems {
                     )
             )
     );
->>>>>>> refs/remotes/slava/devel/port-1.21
 
     public static final ItemScroll SCROLL_SMOL = make("scroll_small", new ItemScroll(props(), 1));
     public static final ItemScroll SCROLL_MEDIUM = make("scroll_medium", new ItemScroll(props(), 2));
@@ -167,26 +157,16 @@ public class HexItems {
 
     // BUFF SANDVICH
     public static final Item SUBMARINE_SANDWICH = make("sub_sandwich",
-<<<<<<< HEAD
-        new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationModifier(1.2f).build())));
-=======
             new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationModifier(1.2f).build())));
->>>>>>> refs/remotes/slava/devel/port-1.21
 
     public static final ItemLoreFragment LORE_FRAGMENT = make("lore_fragment",
             new ItemLoreFragment(unstackable()
                     .rarity(Rarity.RARE)));
 
     public static final ItemCreativeUnlocker CREATIVE_UNLOCKER = make("creative_unlocker",
-<<<<<<< HEAD
-        new ItemCreativeUnlocker(unstackable()
-            .rarity(Rarity.EPIC)
-            .food(new FoodProperties.Builder().nutrition(20).saturationModifier(1f).alwaysEdible().build())));
-=======
             new ItemCreativeUnlocker(unstackable()
                     .rarity(Rarity.EPIC)
                     .food(new FoodProperties.Builder().nutrition(20).saturationModifier(1f).alwaysEdible().build())));
->>>>>>> refs/remotes/slava/devel/port-1.21
 
     //
 

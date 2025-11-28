@@ -37,20 +37,9 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
 
         int prevLookAmt = self.lookAmount;
         int range = 20;
-<<<<<<< HEAD
-        AABB box = AABB.ofSize(
-                Vec3.atCenterOf(pos),  // center of the cube
-                range * 2 + 1,
-                range * 2 + 1,
-                range * 2 + 1
-        );
-
-        var players = level.getEntitiesOfClass(ServerPlayer.class, box);
-=======
         //TODO port: test AABB check, it's Vec3 now instead of BlockPos
         var players = level.getEntitiesOfClass(ServerPlayer.class,
             new AABB(pos.offset(-range, -range, -range).getCenter(), pos.offset(range, range, range).getCenter()));
->>>>>>> refs/remotes/slava/devel/port-1.21
 
         ServerPlayer looker = null;
         for (var player : players) {

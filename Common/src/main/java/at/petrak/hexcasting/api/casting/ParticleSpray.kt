@@ -17,6 +17,7 @@ import net.minecraft.world.phys.Vec3
  */
 data class ParticleSpray(val pos: Vec3, val vel: Vec3, val fuzziness: Double, val spread: Double, val count: Int = 20) {
     companion object {
+
         @JvmStatic
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ParticleSpray> = StreamCodec.composite(
             PaucalCodecs.VEC3, ParticleSpray::pos,
@@ -37,6 +38,8 @@ data class ParticleSpray(val pos: Vec3, val vel: Vec3, val fuzziness: Double, va
             return ParticleSpray(pos, Vec3(0.0, 0.001, 0.0), size, 0.0, count)
         }
     }
+
+
 
     fun sprayParticles(world: ServerLevel, color: FrozenPigment) {
         IXplatAbstractions.INSTANCE.sendPacketNear(this.pos, 128.0, world, MsgCastParticleS2C(this, color))

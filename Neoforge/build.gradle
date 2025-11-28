@@ -41,11 +41,17 @@ repositories {
         dir 'libs'
     }
 
-    maven { url "https://maven.neoforged.net/releases/" }
+    maven { url = "https://maven.neoforged.net/releases/" }
     // paucal and patchi
     maven { url = 'https://maven.blamejared.com' }
-    // caelus elytra
-    maven { url = "https://maven.theillusivec4.top" }
+    maven {
+        name = "Curios"
+        url = uri("https://maven.theillusivec4.top/")
+    }
+    maven {
+        name = "C4's Maven"
+        setUrl("https://maven.theillusivec4.top/")
+    }
     // pehkui
     maven { url = "https://jitpack.io" }
     // EMI
@@ -68,23 +74,20 @@ dependencies {
     neoForge "net.neoforged:neoforge:${neoforgeVersion}"
     common(project(path: ':Common', configuration: 'namedElements')) { transitive false }
     shadowBundle(project(path: ':Common', configuration: 'transformProductionNeoForge')) { transitive false }
-<<<<<<< HEAD
-    implementation "thedarkcolour:kotlinforforge-neoforge:$kotlinForForgeVersion"
-=======
-    modImplementation "thedarkcolour:kotlinforforge:$kotlinForForgeVersion"
->>>>>>> refs/remotes/slava/devel/port-1.21
+    modImplementation "thedarkcolour:kotlinforforge-neoforge:$kotlinForForgeVersion"
 
     // === MANDATORY DEPS ===
 
-    modImplementation "at.petra-k:paucal:$paucalVersion+$minecraftVersion-common"
+    compileOnly("mezz.jei:jei-$minecraftVersion-neoforge-api:$jeiVersion")
+    runtimeOnly("mezz.jei:jei-$minecraftVersion-neoforge:$jeiVersion")
+
+    compileOnly("top.theillusivec4.curios:curios-neoforge:$curiosVersion+$minecraftVersion:api")
+    runtimeOnly("top.theillusivec4.curios:curios-neoforge:$curiosVersion+$minecraftVersion")
+
+    modImplementation "at.petra-k:paucal:$paucalVersion+$minecraftVersion-neoforge"
     modImplementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-NEOFORGE-SNAPSHOT"
-<<<<<<< HEAD
-    modImplementation "com.illusivesoulworks.caelus:caelus-forge:$caelusVersion"
-//    implementation("com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion")
-=======
-    modImplementation "top.theillusivec4.caelus:caelus-forge:$caelusVersion"
+    modImplementation "com.illusivesoulworks.caelus:caelus-neoforge:$caelusVersion"
     modImplementation "com.samsthenerd.inline:inline-common:1.21.1-1.2.2-74"
->>>>>>> refs/remotes/slava/devel/port-1.21
     // needed for inline to run
     modRuntimeOnly("me.shedaniel.cloth:cloth-config-forge:$clothConfigVersion")
 
@@ -95,11 +98,6 @@ dependencies {
     modImplementation "io.wispforest:accessories-neoforge:$accessoriesVersion"
 
     modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}-1.21-neoforge")
-<<<<<<< HEAD
-    compileOnly("mezz.jei:jei-${minecraftVersion}-neoforge-api:${jeiVersion}")
-    runtimeOnly("mezz.jei:jei-${minecraftVersion}-neoforge:${jeiVersion}")
-=======
->>>>>>> refs/remotes/slava/devel/port-1.21
 
     // "Required due to issues with JIJ dependency resolving in arch or something"
     // https://github.com/wisp-forest/accessories
@@ -155,8 +153,6 @@ processResources {
     filesMatching("mods.toml") {
         expand "version": project.version
     }
-<<<<<<< HEAD
-=======
 }
 
 shadowJar {
@@ -166,5 +162,6 @@ shadowJar {
 
 remapJar {
     inputFile.set shadowJar.archiveFile
->>>>>>> refs/remotes/slava/devel/port-1.21
 }
+
+jar.finalizedBy('remapJar')

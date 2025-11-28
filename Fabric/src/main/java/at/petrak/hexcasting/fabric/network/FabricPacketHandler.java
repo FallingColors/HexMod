@@ -15,10 +15,10 @@ import java.util.function.Function;
 
 public class FabricPacketHandler {
     public static void init() {
-        ServerPlayNetworking.registerGlobalReceiver(MsgNewSpellPatternC2S.ID,
+        ServerPlayNetworking.registerGlobalReceiver(MsgNewSpellPatternC2S.TYPE,
             makeServerBoundHandler(MsgNewSpellPatternC2S::handle));
         ServerPlayNetworking.registerGlobalReceiver(
-            MsgShiftScrollC2S.ID, makeServerBoundHandler(MsgShiftScrollC2S::handle));
+            MsgShiftScrollC2S.TYPE, makeServerBoundHandler(MsgShiftScrollC2S::handle));
     }
 
     private static <T extends CustomPacketPayload> ServerPlayNetworking.PlayPayloadHandler<T> makeServerBoundHandler(
@@ -27,23 +27,23 @@ public class FabricPacketHandler {
     }
 
     public static void initClient() {
-        ClientPlayNetworking.registerGlobalReceiver(MsgNewSpellPatternS2C.ID,
+        ClientPlayNetworking.registerGlobalReceiver(MsgNewSpellPatternS2C.TYPE,
             makeClientBoundHandler(MsgNewSpellPatternS2C::handle));
         ClientPlayNetworking.registerGlobalReceiver(
-            MsgBlinkS2C.ID, makeClientBoundHandler(MsgBlinkS2C::handle));
-        ClientPlayNetworking.registerGlobalReceiver(MsgCastParticleS2C.ID,
+            MsgBlinkS2C.TYPE, makeClientBoundHandler(MsgBlinkS2C::handle));
+        ClientPlayNetworking.registerGlobalReceiver(MsgCastParticleS2C.TYPE,
             makeClientBoundHandler(MsgCastParticleS2C::handle));
-        ClientPlayNetworking.registerGlobalReceiver(MsgOpenSpellGuiS2C.ID,
+        ClientPlayNetworking.registerGlobalReceiver(MsgOpenSpellGuiS2C.TYPE,
             makeClientBoundHandler(MsgOpenSpellGuiS2C::handle));
-        ClientPlayNetworking.registerGlobalReceiver(MsgBeepS2C.ID,
+        ClientPlayNetworking.registerGlobalReceiver(MsgBeepS2C.TYPE,
             makeClientBoundHandler(MsgBeepS2C::handle));
-        ClientPlayNetworking.registerGlobalReceiver(MsgNewWallScrollS2C.ID,
+        ClientPlayNetworking.registerGlobalReceiver(MsgNewWallScrollS2C.TYPE,
             makeClientBoundHandler(MsgNewWallScrollS2C::handle));
-        ClientPlayNetworking.registerGlobalReceiver(MsgRecalcWallScrollDisplayS2C.ID,
+        ClientPlayNetworking.registerGlobalReceiver(MsgRecalcWallScrollDisplayS2C.TYPE,
             makeClientBoundHandler(MsgRecalcWallScrollDisplayS2C::handle));
-        ClientPlayNetworking.registerGlobalReceiver(MsgNewSpiralPatternsS2C.ID,
+        ClientPlayNetworking.registerGlobalReceiver(MsgNewSpiralPatternsS2C.TYPE,
                 makeClientBoundHandler(MsgNewSpiralPatternsS2C::handle));
-        ClientPlayNetworking.registerGlobalReceiver(MsgClearSpiralPatternsS2C.ID,
+        ClientPlayNetworking.registerGlobalReceiver(MsgClearSpiralPatternsS2C.TYPE,
                 makeClientBoundHandler(MsgClearSpiralPatternsS2C::handle));
     }
 

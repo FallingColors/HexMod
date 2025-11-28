@@ -34,10 +34,5 @@ public class FailToCastGreatSpellTrigger extends SimpleCriterionTrigger<FailToCa
         public Optional<ContextAwarePredicate> player() {
             return player;
         }
-
-        @Override
-        public Optional<ContextAwarePredicate> player() {
-            return Optional.empty();
-        }
     }
 }

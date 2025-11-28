@@ -177,16 +177,11 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
 
     protected boolean canOvercast() {
         var adv = this.world.getServer().getAdvancements().get(modLoc("y_u_no_cast_angy"));
-<<<<<<< HEAD
-        var advs = this.caster.getAdvancements();
-        return advs.getOrStartProgress(adv).isDone();
-=======
         if(adv != null) {
             var advs = this.caster.getAdvancements();
             return advs.getOrStartProgress(adv).isDone();
         }
         return false;
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     @Override

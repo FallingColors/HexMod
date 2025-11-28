@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADHexHolder;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.api.addldata.ADVariantItem;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
@@ -22,21 +23,11 @@ import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexRegistries;
-<<<<<<< HEAD
-import at.petrak.hexcasting.common.lib.hex.HexContinuationTypes;
-import at.petrak.hexcasting.common.lib.hex.HexEvalSounds;
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
-import at.petrak.hexcasting.forge.cap.CapSyncers;
-import at.petrak.hexcasting.forge.cap.HexCapabilities;
-import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
-import at.petrak.hexcasting.forge.mixin.ForgeAccessorBuiltInRegistries;
-=======
 import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredientType;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredientType;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
->>>>>>> refs/remotes/slava/devel/port-1.21
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
@@ -53,14 +44,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-<<<<<<< HEAD
-import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-=======
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
->>>>>>> refs/remotes/slava/devel/port-1.21
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -100,14 +86,9 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.network.PacketDistributor;
-<<<<<<< HEAD
-import org.jetbrains.annotations.Nullable;
-import com.illusivesoulworks.caelus.api.CaelusApi;
-=======
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 import org.jetbrains.annotations.Nullable;
->>>>>>> refs/remotes/slava/devel/port-1.21
 import virtuoel.pehkui.api.ScaleTypes;
 
 import java.util.List;
@@ -115,10 +96,6 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
-<<<<<<< HEAD
-
-=======
->>>>>>> refs/remotes/slava/devel/port-1.21
 
 public class ForgeXplatImpl implements IXplatAbstractions {
 
@@ -159,11 +136,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         mob.getPersistentData().putBoolean(TAG_BRAINSWEPT, true);
 
         if (mob.level() instanceof ServerLevel) {
-<<<<<<< HEAD
-            sendPacketTracking(mob, MsgBrainsweepAck.of(mob));
-=======
             PacketDistributor.sendToPlayersTrackingEntity(mob, MsgBrainsweepAck.of(mob));
->>>>>>> refs/remotes/slava/devel/port-1.21
         }
     }
 
@@ -195,18 +168,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         }
 
         // The elytra ability is done with an event on fabric
-<<<<<<< HEAD
-        var elytraing = CaelusApi.getInstance().getFallFlyingAttribute();
-        var inst = player.getAttribute(elytraing);
-        if (altiora != null) {
-            if (inst.getModifier(ALTIORA_ATTRIBUTE_ID) == null) {
-=======
         // TODO port: added null check, test if still works
         var elytraing = CaelusApi.getInstance().getFallFlyingAttribute();
         var inst = player.getAttributes().getInstance(elytraing);
         if (altiora != null) {
             if (inst != null && !inst.hasModifier(ALTIORA_ATTRIBUTE_ID)) {
->>>>>>> refs/remotes/slava/devel/port-1.21
                 inst.addTransientModifier(new AttributeModifier(ALTIORA_ATTRIBUTE_ID, 1.0,
                     AttributeModifier.Operation.ADD_VALUE));
             }
@@ -312,12 +278,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         }
         var extendsRange = tag.getBoolean(TAG_SENTINEL_GREATER);
         var position = HexUtils.vecFromNBT(tag.getCompound(TAG_SENTINEL_POSITION));
-<<<<<<< HEAD
-        var dimension = ResourceKey.create(Registries.DIMENSION,
-            ResourceLocation.parse(tag.getString(TAG_SENTINEL_DIMENSION)));
-=======
         var dimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(tag.getString(TAG_SENTINEL_DIMENSION)));
->>>>>>> refs/remotes/slava/devel/port-1.21
 
         return new Sentinel(extendsRange, position, dimension);
     }
@@ -343,43 +304,23 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public @Nullable
     ADMediaHolder findMediaHolder(ItemStack stack) {
-<<<<<<< HEAD
-        return stack.getCapability(HexCapabilities.MEDIA);
-    }
-
-    @Override
-    public @Nullable ADMediaHolder findMediaHolder(ServerPlayer player) {
-        return player.getCapability(HexCapabilities.MEDIA_ENTITY);
-=======
         return stack.getCapability(HexCapabilities.Item.MEDIA);
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     @Override
     public @Nullable
     ADIotaHolder findDataHolder(ItemStack stack) {
-<<<<<<< HEAD
-        return stack.getCapability(HexCapabilities.IOTA);
-=======
         return stack.getCapability(HexCapabilities.Item.IOTA);
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     @Override
     public @Nullable ADIotaHolder findDataHolder(Entity entity) {
-<<<<<<< HEAD
-        return entity.getCapability(HexCapabilities.IOTA_ENTITY);
-=======
         return entity.getCapability(HexCapabilities.Entity.IOTA);
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     @Override
     public @Nullable
     ADHexHolder findHexHolder(ItemStack stack) {
-<<<<<<< HEAD
-        return stack.getCapability(HexCapabilities.STORED_HEX);
-=======
         return stack.getCapability(HexCapabilities.Item.STORED_HEX);
     }
 
@@ -391,43 +332,10 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public boolean isPigment(ItemStack stack) {
         return stack.getCapability(HexCapabilities.Item.COLOR) != null;
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     @Override
     public ColorProvider getColorProvider(FrozenPigment pigment) {
-<<<<<<< HEAD
-        var maybePigment = pigment.item().getCapability(HexCapabilities.COLOR);
-        assert maybePigment != null;
-        return maybePigment.provideColor(pigment.owner());
-    }
-
-    @Override
-    public void sendPacketToPlayer(ServerPlayer target, CustomPacketPayload packet) {
-        target.connection.send(packet);
-    }
-
-    @Override
-    public void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, CustomPacketPayload packet) {
-        List<ServerPlayer> players = dimension.getPlayers((player) -> {
-            double r2 = radius * radius;
-            return player.level() == dimension && player.position().distanceToSqr(pos) <= r2;
-        });
-        for (ServerPlayer player : players) {
-            player.connection.send(packet);
-        }
-    }
-
-    @Override
-    public void sendPacketTracking(Entity entity, CustomPacketPayload packet) {
-        PacketDistributor.sendToPlayersTrackingEntity(entity, packet);
-    }
-
-    @Override
-    public ClientboundCustomPayloadPacket toVanillaClientboundPacket(CustomPacketPayload message) {
-        //noinspection unchecked
-        return message.toVanillaClientbound();
-=======
         var adPigment = pigment.item().getCapability(HexCapabilities.Item.COLOR);
         return adPigment != null ? adPigment.provideColor(pigment.owner()) : ColorProvider.MISSING;
     }
@@ -452,7 +360,6 @@ public class ForgeXplatImpl implements IXplatAbstractions {
         // TODO port: test cast
         //noinspection unchecked
         return (Packet<ClientGamePacketListener>) (Object) message.toVanillaClientbound();
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     @Override
@@ -491,12 +398,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public boolean isCorrectTierForDrops(Tier tier, BlockState bs) {
-<<<<<<< HEAD
-        return !bs.requiresCorrectToolForDrops();
-=======
         // TODO port: check tag
         return !bs.is(HexTags.Blocks.HEX_UNBREAKABLE);
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     @Override
@@ -671,11 +574,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     public static final String TAG_ALTIORA_ALLOWED = "hexcasting:altiora_allowed";
     public static final String TAG_ALTIORA_GRACE = "hexcasting:altiora_grace_period";
 
-<<<<<<< HEAD
-    public static final ResourceLocation ALTIORA_ATTRIBUTE_ID = modLoc("Altiora");
-=======
     public static final ResourceLocation ALTIORA_ATTRIBUTE_ID = modLoc("altiora");
->>>>>>> refs/remotes/slava/devel/port-1.21
 
     public static final String TAG_VM = "hexcasting:spell_harness";
     public static final String TAG_PATTERNS = "hexcasting:spell_patterns";

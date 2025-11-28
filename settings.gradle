@@ -1,10 +1,10 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
-//        maven {
-//            name = 'Fabric'
-//            url = 'https://maven.fabricmc.net/'
-//        }
+        maven {
+            name = 'Fabric'
+            url = 'https://maven.fabricmc.net/'
+        }
         maven {
             name = 'Sponge Snapshots'
             url = 'https://repo.spongepowered.org/repository/maven-public/'
@@ -19,4 +19,4 @@ pluginManagement {
 }
 
 rootProject.name = 'Hex Casting'
-include("Common", /*"Fabric",*/ "Neoforge")
+include("Common", "Fabric", "Neoforge")

@@ -21,7 +21,7 @@ public class HexBlockTagProvider extends TagsProvider<Block> {
     public final IXplatTags xtags;
 
     public HexBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, IXplatTags xtags) {
-        super(output, Registries.BLOCK, lookupProvider, HexAPI.MOD_ID, null);
+        super(output, Registries.BLOCK, lookupProvider);
         this.xtags = xtags;
     }
 

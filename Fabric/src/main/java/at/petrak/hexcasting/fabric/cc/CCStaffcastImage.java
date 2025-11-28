@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.eval.env.StaffCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.NbtOps;
 import org.ladysnake.cca.api.v3.component.Component;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,7 +27,7 @@ public class CCStaffcastImage implements Component {
     public CastingVM getVM(InteractionHand hand) {
         var img = this.lazyLoadedTag.isEmpty()
             ? new CastingImage()
-            : CastingImage.loadFromNbt(this.lazyLoadedTag, this.owner.serverLevel());
+            : CastingImage.getCODEC().parse(NbtOps.INSTANCE, lazyLoadedTag).getOrThrow();
         var env = new StaffCastEnv(this.owner, hand);
         return new CastingVM(img, env);
     }
@@ -35,26 +36,16 @@ public class CCStaffcastImage implements Component {
         this.lazyLoadedTag =
             image == null
                 ? new CompoundTag()
-                : image.serializeToNbt();
+                : (CompoundTag) CastingImage.getCODEC().encode(image, NbtOps.INSTANCE, new CompoundTag()).getOrThrow();
     }
 
     @Override
-<<<<<<< HEAD
-    public void readFromNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
-        this.lazyLoadedTag = tag.getCompound(TAG_HARNESS);
-    }
-
-    @Override
-    public void writeToNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
-        tag.put(TAG_HARNESS, this.lazyLoadedTag);
-=======
-    public void readFromNbt(CompoundTag tag) {
+    public void readFromNbt(CompoundTag tag, HolderLookup.Provider provider) {
         this.lazyLoadedTag = tag.getCompound(TAG_VM);
     }
 
     @Override
-    public void writeToNbt(CompoundTag tag) {
+    public void writeToNbt(CompoundTag tag, HolderLookup.Provider provider) {
         tag.put(TAG_VM, this.lazyLoadedTag);
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 }

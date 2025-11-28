@@ -19,21 +19,13 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
-<<<<<<< HEAD
-import at.petrak.hexcasting.common.components.PigmentItemComponent;
-=======
 import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredientType;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredientType;
->>>>>>> refs/remotes/slava/devel/port-1.21
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.protocol.Packet;
-<<<<<<< HEAD
-import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
-=======
->>>>>>> refs/remotes/slava/devel/port-1.21
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceKey;
@@ -83,11 +75,7 @@ public interface IXplatAbstractions {
     void sendPacketTracking(Entity entity, CustomPacketPayload packet);
 
     // https://github.com/VazkiiMods/Botania/blob/13b7bcd9cbb6b1a418b0afe455662d29b46f1a7f/Xplat/src/main/java/vazkii/botania/xplat/IXplatAbstractions.java#L157
-<<<<<<< HEAD
-    ClientboundCustomPayloadPacket toVanillaClientboundPacket(CustomPacketPayload message);
-=======
     Packet<ClientGamePacketListener> toVanillaClientboundPacket(CustomPacketPayload message);
->>>>>>> refs/remotes/slava/devel/port-1.21
 
 //    double getReachDistance(Player player);
 
@@ -139,11 +127,11 @@ public interface IXplatAbstractions {
     @Nullable
     ADHexHolder findHexHolder(ItemStack stack);
 
+    ADVariantItem findVariantHolder(ItemStack stack);
+
     // coooollooorrrs
 
-    default boolean isPigment(ItemStack stack) {
-        return stack.has(PigmentItemComponent.COMPONENT_TYPE);
-    };
+    boolean isPigment(ItemStack stack);
 
     ColorProvider getColorProvider(FrozenPigment pigment);
 

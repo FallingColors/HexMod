@@ -175,40 +175,23 @@ public class CircleExecutionState {
     }
 
     public static CircleExecutionState load(CompoundTag nbt, ServerLevel world) {
-<<<<<<< HEAD
-        var startPos = NbtUtils.readBlockPos(nbt, TAG_IMPETUS_POS);
-=======
         var startPos = NbtUtils.readBlockPos(nbt, TAG_IMPETUS_POS).orElseThrow();
->>>>>>> refs/remotes/slava/devel/port-1.21
         var startDir = Direction.values()[nbt.getByte(TAG_IMPETUS_DIR)];
 
         var knownPositions = new HashSet<BlockPos>();
         var knownTag = nbt.getList(TAG_KNOWN_POSITIONS, Tag.TAG_COMPOUND);
         for (var tag : knownTag) {
-<<<<<<< HEAD
-            var blockPos = NbtUtils.readBlockPos(HexUtils.downcast(tag, CompoundTag.TYPE), TAG_KNOWN_POSITIONS);
-            blockPos.ifPresent(knownPositions::add);
-=======
             var pos = readBlockPos(HexUtils.downcast(tag, IntArrayTag.TYPE).getAsIntArray());
             pos.ifPresent(knownPositions::add);
->>>>>>> refs/remotes/slava/devel/port-1.21
         }
         var reachedPositions = new ArrayList<BlockPos>();
         var reachedTag = nbt.getList(TAG_REACHED_POSITIONS, Tag.TAG_COMPOUND);
         for (var tag : reachedTag) {
-<<<<<<< HEAD
-            var blockPos = NbtUtils.readBlockPos(HexUtils.downcast(tag, CompoundTag.TYPE), TAG_REACHED_POSITIONS);
-            blockPos.ifPresent(reachedPositions::add);
-        }
-
-        var currentPos = NbtUtils.readBlockPos(nbt, TAG_CURRENT_POS);
-=======
             var pos = readBlockPos(HexUtils.downcast(tag, IntArrayTag.TYPE).getAsIntArray());
             pos.ifPresent(reachedPositions::add);
         }
 
         var currentPos = NbtUtils.readBlockPos(nbt, TAG_CURRENT_POS).orElseThrow();
->>>>>>> refs/remotes/slava/devel/port-1.21
         var enteredFrom = Direction.values()[nbt.getByte(TAG_ENTERED_FROM)];
         var image = CastingImage.getCODEC().parse(NbtOps.INSTANCE, nbt.getCompound(TAG_IMAGE)).getOrThrow();
 
@@ -220,7 +203,7 @@ public class CircleExecutionState {
         if (nbt.contains(TAG_PIGMENT, Tag.TAG_COMPOUND))
             pigment = FrozenPigment.CODEC.parse(NbtOps.INSTANCE, nbt.getCompound(TAG_PIGMENT)).getOrThrow();
 
-        return new CircleExecutionState(startPos.get(), startDir, knownPositions, reachedPositions, currentPos.get(),
+        return new CircleExecutionState(startPos, startDir, knownPositions, reachedPositions, currentPos,
             enteredFrom, image, caster, pigment);
     }
 

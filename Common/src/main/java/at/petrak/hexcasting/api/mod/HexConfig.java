@@ -106,18 +106,9 @@ public class HexConfig {
     // Simple extensions for resource location configs
     public static boolean anyMatch(List<? extends String> keys, ResourceLocation key) {
         for (String s : keys) {
-<<<<<<< HEAD
-            var strings = s.split(":");
-            if (ResourceLocation.isValidNamespace(strings[0]) && ResourceLocation.isValidPath(strings[1])) {
-                var rl = ResourceLocation.parse(s);
-                if (rl.equals(key)) {
-                    return true;
-                }
-=======
             var rl = ResourceLocation.tryParse(s);
             if (rl != null && rl.equals(key)) {
                 return true;
->>>>>>> refs/remotes/slava/devel/port-1.21
             }
         }
         return false;

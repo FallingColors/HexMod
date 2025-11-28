@@ -10,11 +10,8 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-<<<<<<< HEAD
-=======
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
->>>>>>> refs/remotes/slava/devel/port-1.21
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
@@ -37,40 +34,6 @@ public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> pat
                                  int parenCount
 )
     implements CustomPacketPayload {
-<<<<<<< HEAD
-    public static final StreamCodec<FriendlyByteBuf, MsgOpenSpellGuiS2C> CODEC = CustomPacketPayload.codec(MsgOpenSpellGuiS2C::serialize, MsgOpenSpellGuiS2C::deserialize);
-    public static final Type<MsgOpenSpellGuiS2C> ID = new Type<>(modLoc("cgui"));
-
-    @Override
-    public Type<? extends CustomPacketPayload> type() {
-        return ID;
-    }
-
-    public static MsgOpenSpellGuiS2C deserialize(ByteBuf buffer) {
-        var buf = new FriendlyByteBuf(buffer);
-
-        var hand = buf.readEnum(InteractionHand.class);
-
-        var patterns = buf.readList(fbb -> ResolvedPattern.fromNBT(fbb.readNbt()));
-
-        var stack = buf.readList(b -> b.readNbt());
-        var raven = buf.readNbt();
-
-        var parenCount = buf.readVarInt();
-
-        return new MsgOpenSpellGuiS2C(hand, patterns, stack, raven, parenCount);
-    }
-
-    public void serialize(FriendlyByteBuf buf) {
-        buf.writeEnum(this.hand);
-
-        buf.writeCollection(this.patterns, (fbb, pat) -> fbb.writeNbt(pat.serializeToNBT()));
-
-        buf.writeCollection(this.stack, (b, t) -> b.writeNbt(t));
-        buf.writeNbt(this.ravenmind);
-
-        buf.writeVarInt(this.parenCount);
-=======
     public static final CustomPacketPayload.Type<MsgOpenSpellGuiS2C> TYPE = new CustomPacketPayload.Type<>(HexAPI.modLoc("cgui"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, MsgOpenSpellGuiS2C> STREAM_CODEC = StreamCodec.composite(
@@ -91,7 +54,6 @@ public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> pat
     @Override
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     public static void handle(MsgOpenSpellGuiS2C msg) {

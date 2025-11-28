@@ -8,10 +8,7 @@ import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
-<<<<<<< HEAD
-=======
 import net.minecraft.network.RegistryFriendlyByteBuf;
->>>>>>> refs/remotes/slava/devel/port-1.21
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
@@ -26,48 +23,6 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  * Sent server->client to spray particles everywhere.
  */
 public record MsgCastParticleS2C(ParticleSpray spray, FrozenPigment colorizer) implements CustomPacketPayload {
-<<<<<<< HEAD
-    public static final StreamCodec<FriendlyByteBuf, MsgCastParticleS2C> CODEC = CustomPacketPayload.codec(MsgCastParticleS2C::serialize, MsgCastParticleS2C::deserialize);
-    public static final Type<MsgCastParticleS2C> ID = new Type<>(modLoc("cprtcl"));
-
-    @Override
-    public Type<? extends CustomPacketPayload> type() {
-        return ID;
-    }
-
-    public static MsgCastParticleS2C deserialize(ByteBuf buffer) {
-        var buf = new FriendlyByteBuf(buffer);
-        var posX = buf.readDouble();
-        var posY = buf.readDouble();
-        var posZ = buf.readDouble();
-        var velX = buf.readDouble();
-        var velY = buf.readDouble();
-        var velZ = buf.readDouble();
-        var fuzziness = buf.readDouble();
-        var spread = buf.readDouble();
-        var count = buf.readInt();
-        var tag = buf.readNbt();
-        var colorizer = FrozenPigment.fromNBT(tag);
-        return new MsgCastParticleS2C(
-            new ParticleSpray(new Vec3(posX, posY, posZ), new Vec3(velX, velY, velZ), fuzziness, spread, count),
-            colorizer);
-    }
-
-    public void serialize(FriendlyByteBuf buf) {
-        buf.writeDouble(this.spray.getPos().x);
-        buf.writeDouble(this.spray.getPos().y);
-        buf.writeDouble(this.spray.getPos().z);
-        buf.writeDouble(this.spray.getVel().x);
-        buf.writeDouble(this.spray.getVel().y);
-        buf.writeDouble(this.spray.getVel().z);
-        buf.writeDouble(this.spray.getFuzziness());
-        buf.writeDouble(this.spray.getSpread());
-        buf.writeInt(this.spray.getCount());
-        buf.writeNbt(this.colorizer.serializeToNBT());
-    }
-
-
-=======
     public static final CustomPacketPayload.Type<MsgCastParticleS2C> TYPE = new CustomPacketPayload.Type<>(HexAPI.modLoc("cprtcl"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, MsgCastParticleS2C> STREAM_CODEC = StreamCodec.composite(
@@ -81,7 +36,6 @@ public record MsgCastParticleS2C(ParticleSpray spray, FrozenPigment colorizer) i
         return TYPE;
     }
 
->>>>>>> refs/remotes/slava/devel/port-1.21
     private static final Random RANDOM = new Random();
 
     // https://math.stackexchange.com/questions/44689/how-to-find-a-random-axis-or-unit-vector-in-3d

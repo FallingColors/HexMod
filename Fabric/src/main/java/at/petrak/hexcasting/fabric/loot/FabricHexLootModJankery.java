@@ -4,17 +4,20 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.loot.AddPerWorldPatternToScrollFunc;
 import at.petrak.hexcasting.common.loot.AddHexToAncientCypherFunc;
 import at.petrak.hexcasting.fabric.FabricHexInitializer;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.entries.LootTableReference;
+import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -23,21 +26,21 @@ import static at.petrak.hexcasting.common.loot.HexLootHandler.TABLE_INJECT_AMETH
 public class FabricHexLootModJankery {
     public static final ResourceLocation FUNC_AMETHYST_SHARD_REDUCER = modLoc("amethyst_shard_reducer");
 
-    public static void lootLoad(ResourceLocation id, Consumer<LootPool.Builder> addPool) {
+    public static void lootLoad(ResourceKey<LootTable> id, Consumer<LootPool.Builder> addPool) {
         if (id.equals(Blocks.AMETHYST_CLUSTER.getLootTable())) {
             addPool.accept(makeAmethystInjectPool());
         }
 
-        int countRange = FabricHexInitializer.CONFIG.server.scrollRangeForLootTable(id);
+        int countRange = FabricHexInitializer.CONFIG.server.scrollRangeForLootTable(id.location());
         if (countRange != -1) {
             addPool.accept(makeScrollAddPool(countRange));
         }
 
-        if (FabricHexInitializer.CONFIG.server.shouldInjectLore(id)) {
+        if (FabricHexInitializer.CONFIG.server.shouldInjectLore(id.location())) {
             addPool.accept(makeLoreAddPool(FabricHexInitializer.CONFIG.server.loreChance()));
         }
 
-        if (FabricHexInitializer.CONFIG.server.shouldInjectCyphers(id)) {
+        if (FabricHexInitializer.CONFIG.server.shouldInjectCyphers(id.location())) {
             addPool.accept(makeCypherAddPool(FabricHexInitializer.CONFIG.server.cypherChance()));
         }
     }
@@ -45,14 +48,14 @@ public class FabricHexLootModJankery {
     @NotNull
     private static LootPool.Builder makeAmethystInjectPool() {
         return LootPool.lootPool()
-            .add(LootTableReference.lootTableReference(TABLE_INJECT_AMETHYST_CLUSTER));
+            .add(NestedLootTable.lootTableReference(TABLE_INJECT_AMETHYST_CLUSTER));
     }
 
     private static LootPool.Builder makeScrollAddPool(int range) {
         return LootPool.lootPool()
             .setRolls(UniformGenerator.between(-range, range))
             .add(LootItem.lootTableItem(HexItems.SCROLL_LARGE))
-            .apply(() -> new AddPerWorldPatternToScrollFunc(new LootItemCondition[0]));
+            .apply(() -> new AddPerWorldPatternToScrollFunc(List.of(new LootItemCondition[0])));
     }
 
     private static LootPool.Builder makeLoreAddPool(double chance) {
@@ -67,6 +70,6 @@ public class FabricHexLootModJankery {
             .when(LootItemRandomChanceCondition.randomChance((float) chance))
             .setRolls(ConstantValue.exactly(1))
             .add(LootItem.lootTableItem(HexItems.ANCIENT_CYPHER))
-            .apply(() -> new AddHexToAncientCypherFunc(new LootItemCondition[0]));
+            .apply(() -> new AddHexToAncientCypherFunc(List.of(new LootItemCondition[0])));
     }
 }

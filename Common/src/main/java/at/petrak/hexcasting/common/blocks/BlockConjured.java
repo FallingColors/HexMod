@@ -34,17 +34,10 @@ public class BlockConjured extends Block implements EntityBlock, IForgeLikeBlock
 
     @Override
     public BlockState playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
-<<<<<<< HEAD
-        super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
-        // For some reason the block doesn't play breaking noises. So we fix that!
-        pPlayer.playSound(SoundEvents.AMETHYST_BLOCK_BREAK, 1f, 1f);
-        return pState;
-=======
         var res = super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
         // For some reason the block doesn't play breaking noises. So we fix that!
         pPlayer.playSound(SoundEvents.AMETHYST_BLOCK_BREAK, 1f, 1f);
         return res;
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     @Nullable

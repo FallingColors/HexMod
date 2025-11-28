@@ -2,6 +2,7 @@ package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.NbtOps;
 import org.ladysnake.cca.api.v3.component.Component;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -40,7 +41,7 @@ public class CCPatterns implements Component {
         List<ResolvedPattern> patterns = new ArrayList<>(patternsTag.size());
 
         for (int i = 0; i < patternsTag.size(); i++) {
-            patterns.add(ResolvedPattern.fromNBT(patternsTag.getCompound(i)));
+            patterns.add(ResolvedPattern.CODEC.parse(NbtOps.INSTANCE, patternsTag.getCompound(i)).getOrThrow());
         }
         this.patterns = patterns;
     }
@@ -49,7 +50,7 @@ public class CCPatterns implements Component {
     public void writeToNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
         var listTag = new ListTag();
         for (ResolvedPattern pattern : patterns) {
-            listTag.add(pattern.serializeToNBT());
+            listTag.add(ResolvedPattern.CODEC.encode(pattern, NbtOps.INSTANCE, new CompoundTag()).getOrThrow());
         }
         tag.put(TAG_PATTERNS, listTag);
     }

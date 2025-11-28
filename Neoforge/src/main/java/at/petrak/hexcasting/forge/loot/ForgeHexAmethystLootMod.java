@@ -39,8 +39,8 @@ public class ForgeHexAmethystLootMod extends LootModifier {
                 .lookupOrThrow(Registries.LOOT_TABLE)
                 .getOrThrow(HexLootHandler.TABLE_INJECT_AMETHYST_CLUSTER)
                 .value();
-        //TODO check if should be raw with modifiers applied or not
-        injectPool.getRandomItems(context, generatedLoot::add);
+        //noinspection deprecation
+        injectPool.getRandomItemsRaw(context, generatedLoot::add);
 
         for (var stack : generatedLoot) {
             AmethystReducerFunc.doStatic(stack, context, this.shardDelta);

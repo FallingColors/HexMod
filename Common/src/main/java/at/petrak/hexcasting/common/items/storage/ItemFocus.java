@@ -58,14 +58,8 @@ public class ItemFocus extends Item implements IotaHolderItem, VariantItem {
     }
 
     @Override
-<<<<<<< HEAD
-    public void appendHoverText(ItemStack pStack, Item.TooltipContext pLevel, List<Component> pTooltipComponents,
-        TooltipFlag pIsAdvanced) {
-        IotaHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
-=======
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         IotaHolderItem.appendHoverText(this, stack, tooltipComponents, tooltipFlag);
->>>>>>> refs/remotes/slava/devel/port-1.21
     }
 
     public static boolean isSealed(ItemStack stack) {

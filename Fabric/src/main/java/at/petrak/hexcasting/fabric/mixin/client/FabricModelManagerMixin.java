@@ -4,6 +4,7 @@ import at.petrak.hexcasting.client.RegisterClientStuff;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelManager;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -14,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import java.util.HashMap;
 import java.util.Map;
 
 // https://github.com/VazkiiMods/Botania/blob/986dff2e8cd9f40f7e4d6ed7b30c98944bdb3b87/Fabric/src/main/java/vazkii/botania/fabric/mixin/client/ModelManagerFabricMixin.java#L34
@@ -29,6 +31,8 @@ public class FabricModelManagerMixin {
                 "Lnet/minecraft/util/profiling/ProfilerFiller;)V",
         locals = LocalCapture.CAPTURE_FAILEXCEPTION)
     private void onModelBake(ModelManager.ReloadState reloadState, ProfilerFiller profiler, CallbackInfo ci, ModelBakery modelLoader) {
-        RegisterClientStuff.onModelBake(modelLoader, this.bakedRegistry);
+        Map<ModelResourceLocation, BakedModel> newRegistry = new HashMap<>();
+        this.bakedRegistry.forEach(((resourceLocation, bakedModel) -> newRegistry.put(new ModelResourceLocation(resourceLocation, ModelResourceLocation.INVENTORY_VARIANT), bakedModel)));
+        RegisterClientStuff.onModelBake(modelLoader, newRegistry);
     }
 }

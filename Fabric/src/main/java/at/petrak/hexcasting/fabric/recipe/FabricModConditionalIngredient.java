@@ -4,9 +4,11 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.mojang.serialization.JsonOps;
 import io.github.tropheusj.serialization_hooks.ingredient.BaseCustomIngredient;
 import io.github.tropheusj.serialization_hooks.ingredient.IngredientDeserializer;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -17,6 +19,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
+
 
 public class FabricModConditionalIngredient extends BaseCustomIngredient {
     public static final ResourceLocation ID = modLoc("mod_conditional");
@@ -36,9 +39,7 @@ public class FabricModConditionalIngredient extends BaseCustomIngredient {
         this.toUse = IXplatAbstractions.INSTANCE.isModPresent(modid) ? ifModLoaded : main;
     }
 
-    /**
-     * Creates a new ingredient matching the given stack
-     */
+
     public static FabricModConditionalIngredient of(Ingredient main, String modid, Ingredient ifModLoaded) {
         return new FabricModConditionalIngredient(main, modid, ifModLoaded);
     }
@@ -49,22 +50,12 @@ public class FabricModConditionalIngredient extends BaseCustomIngredient {
     }
 
     @Override
-    public @NotNull JsonElement toJson() {
-        JsonObject json = new JsonObject();
-        json.addProperty("type", Objects.toString(ID));
-        json.add("default", main.toJson());
-        json.addProperty("modid", modid);
-        json.add("if_loaded", ifModLoaded.toJson());
-        return json;
-    }
-
-    @Override
     public IngredientDeserializer getDeserializer() {
         return Deserializer.INSTANCE;
     }
 
     public static Ingredient fromNetwork(FriendlyByteBuf friendlyByteBuf) {
-        return Ingredient.fromNetwork(friendlyByteBuf); // Just send the actual ingredient
+        return Ingredient.CONTENTS_STREAM_CODEC.decode((RegistryFriendlyByteBuf) friendlyByteBuf); // Just send the actual ingredient
     }
 
     public static Ingredient fromJson(JsonElement element) {
@@ -76,7 +67,7 @@ public class FabricModConditionalIngredient extends BaseCustomIngredient {
         if (object.has("type") && object.getAsJsonPrimitive("type").getAsString().equals(ID.toString())) {
             if (object.has("modid") && IXplatAbstractions.INSTANCE.isModPresent(object.getAsJsonPrimitive("modid").getAsString())) {
                 try {
-                    Ingredient ingredient = Ingredient.fromJson(object.get("if_loaded"));
+                    Ingredient ingredient = Ingredient.CODEC.decode(JsonOps.INSTANCE, object.get("if_loaded")).getOrThrow().getFirst();
                     if (!ingredient.isEmpty()) {
                         return ingredient;
                     }
@@ -85,16 +76,10 @@ public class FabricModConditionalIngredient extends BaseCustomIngredient {
                 }
             }
 
-            return Ingredient.fromJson(object.get("default"));
+            return Ingredient.CODEC.decode(JsonOps.INSTANCE, object.get("default")).getOrThrow().getFirst();
         }
 
         return null;
-    }
-
-    @Override
-    public void toNetwork(@NotNull FriendlyByteBuf friendlyByteBuf) {
-        friendlyByteBuf.writeResourceLocation(ID);
-        toUse.toNetwork(friendlyByteBuf);
     }
 
     public static class Deserializer implements IngredientDeserializer {

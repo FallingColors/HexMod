@@ -23,7 +23,7 @@ public class HexItemTagProvider extends ItemTagsProvider {
     private final IXplatTags xtags;
 
     public HexItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookup, CompletableFuture<TagLookup<Block>> pBlockTagsProvider, IXplatTags xtags) {
-        super(output, lookup, pBlockTagsProvider, HexAPI.MOD_ID, null);
+        super(output, lookup, pBlockTagsProvider);
         this.xtags = xtags;
     }
 

@@ -44,11 +44,7 @@ public class ItemThoughtKnot extends Item implements IotaHolderItem {
     }
 
     @Override
-<<<<<<< HEAD
-    public void appendHoverText(ItemStack pStack, Item.TooltipContext pLevel,
-=======
     public void appendHoverText(ItemStack pStack, TooltipContext context,
->>>>>>> refs/remotes/slava/devel/port-1.21
         List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         IotaHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
     }

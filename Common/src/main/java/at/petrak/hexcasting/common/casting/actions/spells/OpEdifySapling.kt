@@ -51,6 +51,7 @@ object OpEdifySapling : SpellAction {
                     env.world,
                     env.world.chunkSource.generator,
                     pos,
+                    bs,
                     env.world.getRandom()
                 )
                 if (success) break

@@ -35,12 +35,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     }
 
     @Override
-<<<<<<< HEAD
-    public void appendHoverText(ItemStack stack, Item.TooltipContext level, List<Component> tooltip,
-        TooltipFlag isAdvanced) {
-=======
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag isAdvanced) {
->>>>>>> refs/remotes/slava/devel/port-1.21
         boolean sealed = isSealed(stack);
         boolean empty = false;
         if (stack.has(HexDataComponents.SELECTED_PAGE)) {
@@ -95,13 +90,6 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
 
         int shiftedIdx = Math.max(1, index);
         String nameKey = String.valueOf(shiftedIdx);
-<<<<<<< HEAD
-        CompoundTag names = NBTHelper.getOrCreateCompound(stack, TAG_PAGE_NAMES);
-        if (stack.has(DataComponents.CUSTOM_NAME)) {
-            names.putString(nameKey, Component.Serializer.toJson(stack.get(DataComponents.CUSTOM_NAME).copy(), pLevel.registryAccess()));
-        } else {
-            names.remove(nameKey);
-=======
 
         var customName = stack.get(DataComponents.CUSTOM_NAME);
         var savedNames = stack.get(HexDataComponents.PAGE_NAMES);
@@ -126,7 +114,6 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
             } else {
                 stack.set(HexDataComponents.PAGE_NAMES, mutNames);
             }
->>>>>>> refs/remotes/slava/devel/port-1.21
         }
     }
 
@@ -290,11 +277,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         String nameKey = String.valueOf(shiftedIdx);
         Component name = names.get(nameKey);
         if (name != null) {
-<<<<<<< HEAD
-            stack.set(DataComponents.CUSTOM_NAME, Component.Serializer.fromJson(name, level.registryAccess()));
-=======
             stack.set(DataComponents.CUSTOM_NAME, name);
->>>>>>> refs/remotes/slava/devel/port-1.21
         } else {
             stack.remove(DataComponents.CUSTOM_NAME);
         }
