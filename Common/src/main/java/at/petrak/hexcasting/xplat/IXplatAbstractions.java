@@ -59,6 +59,7 @@ import java.util.stream.Collectors;
 /**
  * more like IHexplatAbstracts lmaooooooo
  */
+
 public interface IXplatAbstractions {
     Platform platform();
 
