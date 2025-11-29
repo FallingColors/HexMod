@@ -2,6 +2,7 @@ package at.petrak.hexcasting.fabric.network;
 
 import at.petrak.hexcasting.common.msgs.*;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -14,11 +15,26 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class FabricPacketHandler {
+    public static void initPackets() {
+        PayloadTypeRegistry.playC2S().register(MsgShiftScrollC2S.TYPE, MsgShiftScrollC2S.STREAM_CODEC);
+        PayloadTypeRegistry.playC2S().register(MsgNewSpellPatternC2S.TYPE, MsgNewSpellPatternC2S.STREAM_CODEC);
+        PayloadTypeRegistry.playS2C().register(MsgNewSpellPatternS2C.TYPE, MsgNewSpellPatternS2C.STREAM_CODEC);
+        PayloadTypeRegistry.playS2C().register(MsgOpenSpellGuiS2C.TYPE, MsgOpenSpellGuiS2C.STREAM_CODEC);
+        PayloadTypeRegistry.playS2C().register(MsgBeepS2C.TYPE, MsgBeepS2C.STREAM_CODEC);
+        PayloadTypeRegistry.playS2C().register(MsgShiftScrollC2S.TYPE, MsgShiftScrollC2S.STREAM_CODEC);
+        PayloadTypeRegistry.playS2C().register(MsgCastParticleS2C.TYPE, MsgCastParticleS2C.STREAM_CODEC);
+        PayloadTypeRegistry.playS2C().register(MsgBlinkS2C.TYPE, MsgBlinkS2C.STREAM_CODEC);
+        PayloadTypeRegistry.playS2C().register(MsgClearSpiralPatternsS2C.TYPE, MsgClearSpiralPatternsS2C.STREAM_CODEC);
+        PayloadTypeRegistry.playS2C().register(MsgNewWallScrollS2C.TYPE, MsgNewWallScrollS2C.STREAM_CODEC);
+        PayloadTypeRegistry.playS2C().register(MsgRecalcWallScrollDisplayS2C.TYPE, MsgRecalcWallScrollDisplayS2C.STREAM_CODEC);
+        PayloadTypeRegistry.playS2C().register(MsgNewSpiralPatternsS2C.TYPE, MsgNewSpiralPatternsS2C.STREAM_CODEC);
+    }
+
     public static void init() {
+        ServerPlayNetworking.registerGlobalReceiver(MsgShiftScrollC2S.TYPE,
+                makeServerBoundHandler(MsgShiftScrollC2S::handle));
         ServerPlayNetworking.registerGlobalReceiver(MsgNewSpellPatternC2S.TYPE,
-            makeServerBoundHandler(MsgNewSpellPatternC2S::handle));
-        ServerPlayNetworking.registerGlobalReceiver(
-            MsgShiftScrollC2S.TYPE, makeServerBoundHandler(MsgShiftScrollC2S::handle));
+                makeServerBoundHandler(MsgNewSpellPatternC2S::handle));
     }
 
     private static <T extends CustomPacketPayload> ServerPlayNetworking.PlayPayloadHandler<T> makeServerBoundHandler(

@@ -60,6 +60,7 @@ object FabricHexInitializer : ModInitializer {
 
     override fun onInitialize() {
         this.CONFIG = FabricHexConfig.setup()
+        FabricPacketHandler.initPackets()
         FabricPacketHandler.init()
 
         initListeners()
