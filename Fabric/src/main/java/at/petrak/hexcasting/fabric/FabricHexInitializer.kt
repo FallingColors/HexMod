@@ -27,6 +27,8 @@ import at.petrak.hexcasting.fabric.cc.adimpl.CCMediaHolder
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.loot.FabricHexLootModJankery
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
+import at.petrak.hexcasting.fabric.recipe.FabricModConditionalIngredient
+import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient
 import at.petrak.hexcasting.fabric.storage.FabricImpetusStorage
 import at.petrak.hexcasting.interop.HexInterop
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -41,6 +43,7 @@ import net.fabricmc.fabric.api.event.player.UseEntityCallback
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents
+import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
@@ -133,6 +136,8 @@ object FabricHexInitializer : ModInitializer {
         HexBlockEntities.registerTiles(bind(BuiltInRegistries.BLOCK_ENTITY_TYPE))
         HexItems.registerItems(bind(BuiltInRegistries.ITEM))
         // Registry.register(IngredientDeserializer.REGISTRY, FabricModConditionalIngredient.ID, FabricModConditionalIngredient.Deserializer.INSTANCE)
+        CustomIngredientSerializer.register(FabricUnsealedIngredient.Serializer.INSTANCE);
+        CustomIngredientSerializer.register(FabricModConditionalIngredient.Serializer.INSTANCE);
 
         HexEntities.registerEntities(bind(BuiltInRegistries.ENTITY_TYPE))
         HexAttributes.register()

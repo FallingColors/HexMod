@@ -53,6 +53,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.*;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -521,7 +523,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public <B> IXplatRegister<B> createRegistar(ResourceKey<Registry<B>> registryKey) {
-        return null;
+        return new FabricRegister<>(FabricRegistryBuilder.createSimple(registryKey).buildAndRegister());
     }
 
     private static PehkuiInterop.ApiAbstraction PEHKUI_API = null;
