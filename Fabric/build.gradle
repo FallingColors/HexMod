@@ -132,9 +132,6 @@ dependencies {
     modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-item:$cardinalComponentsVersion"
     modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-block:$cardinalComponentsVersion"
 
-    // apparently the 1.18 version Just Works on 1.19
-    modImplementation "io.github.tropheusj:serialization-hooks:$serializationHooksVersion"
-    include "io.github.tropheusj:serialization-hooks:$serializationHooksVersion"
     include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.5.0")))
 
     // === OPTIONAL DEPS ===
@@ -170,13 +167,6 @@ dependencies {
     testCompileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
     compileOnly "com.demonwav.mcdev:annotations:1.0"
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-}
-
-tasks.withType(JavaCompile) {
-    source(project(":Common").sourceSets.main.allSource)
-}
-compileKotlin {
-    source(project(":Common").sourceSets.main.kotlin)
 }
 
 sourcesJar {

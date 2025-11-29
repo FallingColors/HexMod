@@ -4,14 +4,20 @@ import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.tropheusj.serialization_hooks.ingredient.BaseCustomIngredient;
 import io.github.tropheusj.serialization_hooks.ingredient.IngredientDeserializer;
+import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
+import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
@@ -21,15 +27,27 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import javax.xml.crypto.Data;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class FabricUnsealedIngredient extends BaseCustomIngredient {
+public class FabricUnsealedIngredient extends Ingredient implements CustomIngredient {
     public static final ResourceLocation ID = modLoc("unsealed");
 
     private final ItemStack stack;
+
+    public static final MapCodec<FabricUnsealedIngredient> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            ItemStack.CODEC.fieldOf("item").forGetter(FabricUnsealedIngredient::getStack)
+    ).apply(instance, FabricUnsealedIngredient::new));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, FabricUnsealedIngredient> STREAM_CODEC = StreamCodec.composite(
+            ResourceLocation.STREAM_CODEC, FabricUnsealedIngredient::getId,
+            ItemStack.STREAM_CODEC, FabricUnsealedIngredient::getStack,
+            (a, b) -> new FabricUnsealedIngredient(b)
+    );
 
     private static ItemStack createStack(ItemStack base) {
         ItemStack newStack = base.copy();
@@ -40,8 +58,16 @@ public class FabricUnsealedIngredient extends BaseCustomIngredient {
     }
 
     protected FabricUnsealedIngredient(ItemStack stack) {
-        super(Stream.of(new Ingredient.ItemValue(createStack(stack))));
+        super(Arrays.stream(Ingredient.of(stack).values));
         this.stack = stack;
+    }
+
+    public ItemStack getStack() {
+        return stack;
+    }
+
+    public ResourceLocation getId() {
+        return ID;
     }
 
     /**
@@ -61,40 +87,36 @@ public class FabricUnsealedIngredient extends BaseCustomIngredient {
     }
 
     @Override
-    public IngredientDeserializer getDeserializer() {
-        return Deserializer.INSTANCE;
+    public List<ItemStack> getMatchingStacks() {
+        return List.of(stack);
     }
 
-    public static Ingredient fromNetwork(RegistryFriendlyByteBuf friendlyByteBuf) {
-        return new FabricUnsealedIngredient(ItemStack.STREAM_CODEC.decode(friendlyByteBuf));
+    @Override
+    public boolean requiresTesting() {
+        return false;
     }
 
-    public static Ingredient fromJson(JsonElement element) {
-        if (element == null || element.isJsonNull() || !element.isJsonObject()) {
-            return null;
-        }
-
-        JsonObject object = element.getAsJsonObject();
-
-        if (object.has("type") && object.getAsJsonPrimitive("type").getAsString().equals(ID.toString())) {
-            return new FabricUnsealedIngredient(ItemStack.CODEC.parse(JsonOps.INSTANCE, object).getOrThrow());
-        }
-
-        return null;
+    @Override
+    public CustomIngredientSerializer getSerializer() {
+        return Serializer.INSTANCE;
     }
 
-    public static class Deserializer implements IngredientDeserializer {
-        public static final Deserializer INSTANCE = new Deserializer();
+    public static class Serializer implements CustomIngredientSerializer {
+        public static final Serializer INSTANCE = new Serializer();
 
         @Override
-        public Ingredient fromNetwork(FriendlyByteBuf buffer) {
-            return FabricUnsealedIngredient.fromNetwork((RegistryFriendlyByteBuf) buffer);
+        public ResourceLocation getIdentifier() {
+            return FabricUnsealedIngredient.ID;
         }
 
-        @Nullable
         @Override
-        public Ingredient fromJson(JsonObject object) {
-            return FabricUnsealedIngredient.fromJson(object);
+        public MapCodec getCodec(boolean b) {
+            return CODEC;
+        }
+
+        @Override
+        public StreamCodec getPacketCodec() {
+            return STREAM_CODEC;
         }
     }
 }

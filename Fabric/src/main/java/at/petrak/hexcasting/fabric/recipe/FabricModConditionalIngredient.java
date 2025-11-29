@@ -4,24 +4,30 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
-import io.github.tropheusj.serialization_hooks.ingredient.BaseCustomIngredient;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.tropheusj.serialization_hooks.ingredient.IngredientDeserializer;
+import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredient;
+import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.List;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 
-public class FabricModConditionalIngredient extends BaseCustomIngredient {
+public class FabricModConditionalIngredient extends Ingredient implements CustomIngredient {
     public static final ResourceLocation ID = modLoc("mod_conditional");
 
     private final Ingredient main;
@@ -30,8 +36,21 @@ public class FabricModConditionalIngredient extends BaseCustomIngredient {
 
     private final Ingredient toUse;
 
+    public static final MapCodec<FabricModConditionalIngredient> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Ingredient.CODEC.fieldOf("main").forGetter(FabricModConditionalIngredient::getMain),
+            Codec.STRING.fieldOf("modid").forGetter(FabricModConditionalIngredient::getModid),
+            Ingredient.CODEC.fieldOf("ifModLoaded").forGetter(FabricModConditionalIngredient::getIfModLoaded)
+    ).apply(instance, FabricModConditionalIngredient::new));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, FabricModConditionalIngredient> STREAM_CODEC = StreamCodec.composite(
+            Ingredient.CONTENTS_STREAM_CODEC, FabricModConditionalIngredient::getMain,
+            ByteBufCodecs.STRING_UTF8, FabricModConditionalIngredient::getModid,
+            Ingredient.CONTENTS_STREAM_CODEC, FabricModConditionalIngredient::getIfModLoaded,
+            FabricModConditionalIngredient::new
+    );
+
     protected FabricModConditionalIngredient(Ingredient main, String modid, Ingredient ifModLoaded) {
-        super(IXplatAbstractions.INSTANCE.isModPresent(modid) ? Arrays.stream(ifModLoaded.values) : Arrays.stream(main.values));
+        super(Arrays.stream((IXplatAbstractions.INSTANCE.isModPresent(modid) ? ifModLoaded : main).values));
         this.main = main;
         this.modid = modid;
         this.ifModLoaded = ifModLoaded;
@@ -50,50 +69,52 @@ public class FabricModConditionalIngredient extends BaseCustomIngredient {
     }
 
     @Override
-    public IngredientDeserializer getDeserializer() {
-        return Deserializer.INSTANCE;
+    public List<ItemStack> getMatchingStacks() {
+        return List.of();
     }
 
-    public static Ingredient fromNetwork(FriendlyByteBuf friendlyByteBuf) {
-        return Ingredient.CONTENTS_STREAM_CODEC.decode((RegistryFriendlyByteBuf) friendlyByteBuf); // Just send the actual ingredient
+    @Override
+    public boolean requiresTesting() {
+        return false;
     }
 
-    public static Ingredient fromJson(JsonElement element) {
-        if (element == null || element.isJsonNull() || !element.isJsonObject())
-            return null;
-
-        JsonObject object = element.getAsJsonObject();
-
-        if (object.has("type") && object.getAsJsonPrimitive("type").getAsString().equals(ID.toString())) {
-            if (object.has("modid") && IXplatAbstractions.INSTANCE.isModPresent(object.getAsJsonPrimitive("modid").getAsString())) {
-                try {
-                    Ingredient ingredient = Ingredient.CODEC.decode(JsonOps.INSTANCE, object.get("if_loaded")).getOrThrow().getFirst();
-                    if (!ingredient.isEmpty()) {
-                        return ingredient;
-                    }
-                } catch (JsonParseException e) {
-                    // NO-OP
-                }
-            }
-
-            return Ingredient.CODEC.decode(JsonOps.INSTANCE, object.get("default")).getOrThrow().getFirst();
-        }
-
-        return null;
+    public Ingredient getMain() {
+        return main;
     }
 
-    public static class Deserializer implements IngredientDeserializer {
-        public static final Deserializer INSTANCE = new Deserializer();
+    public Ingredient getToUse() {
+        return toUse;
+    }
+
+    public Ingredient getIfModLoaded() {
+        return ifModLoaded;
+    }
+
+    public String getModid() {
+        return modid;
+    }
+
+    @Override
+    public CustomIngredientSerializer<?> getSerializer() {
+        return Serializer.INSTANCE;
+    }
+
+    public static class Serializer implements CustomIngredientSerializer {
+        public static final Serializer INSTANCE = new Serializer();
 
         @Override
-        public Ingredient fromNetwork(FriendlyByteBuf buffer) {
-            return FabricModConditionalIngredient.fromNetwork(buffer);
+        public ResourceLocation getIdentifier() {
+            return FabricModConditionalIngredient.ID;
         }
 
-        @Nullable
         @Override
-        public Ingredient fromJson(JsonObject object) {
-            return FabricModConditionalIngredient.fromJson(object);
+        public MapCodec<?> getCodec(boolean b) {
+            return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, ?> getPacketCodec() {
+            return STREAM_CODEC;
         }
     }
 }
