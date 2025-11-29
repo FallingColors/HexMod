@@ -1,5 +1,5 @@
 architectury {
-    common([/*"fabric", */"neoforge"])
+    common(["fabric", "neoforge"])
 }
 
 loom {
@@ -78,4 +78,4 @@ processResources {
 }
 
 // it wants a task by this name to exist for some reason
-task("prepareWorkspace") {}
+tasks.register('prepareWorkspace') {}

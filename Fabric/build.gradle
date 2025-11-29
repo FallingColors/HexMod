@@ -1,5 +1,6 @@
 plugins {
     // id 'fabric-loom' version "1.8.9"
+    id 'com.gradleup.shadow'
 }
 
 architectury {
@@ -123,7 +124,7 @@ dependencies {
     modImplementation "at.petra-k:paucal:$paucalVersion+$minecraftVersion-fabric"
     // dear mod devs, don't put the platform in the middle of your version code
     modImplementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-FABRIC-SNAPSHOT"
-    modImplementation "com.samsthenerd.inline:inline-common:$minecraftVersion-$inlineVersion"
+    modImplementation "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
     modImplementation "io.wispforest:accessories-fabric:$accessoriesVersion"
 
     modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-base:$cardinalComponentsVersion"
@@ -144,7 +145,7 @@ dependencies {
 
     modRuntimeOnly "dev.architectury:architectury-fabric:$architecturyVersion"
     modRuntimeOnly "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
-    modImplementation "blue.endless:jankson:1.2.2"
+    modRuntimeOnly "blue.endless:jankson:1.2.2"
 
 //    modImplementation "maven.modrinth:gravity-api:$gravityApiVersion"
     modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {
@@ -186,3 +187,15 @@ processResources {
         expand "version": project.version
     }
 }
+
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
+}
+
+remapJar {
+    inputFile.set shadowJar.archiveFile
+    dependsOn shadowJar
+}
+
+jar.finalizedBy(remapJar)
