@@ -145,7 +145,8 @@ dependencies {
 
     modRuntimeOnly "dev.architectury:architectury-fabric:$architecturyVersion"
     modRuntimeOnly "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
-    modRuntimeOnly "blue.endless:jankson:1.2.2"
+    include(implementation("blue.endless:jankson:1.2.2"))
+
 
 //    modImplementation "maven.modrinth:gravity-api:$gravityApiVersion"
     modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {

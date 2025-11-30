@@ -12,6 +12,7 @@ import at.petrak.hexcasting.common.blocks.behavior.HexStrippables
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest
 import at.petrak.hexcasting.common.casting.actions.spells.OpFlight
 import at.petrak.hexcasting.common.casting.actions.spells.great.OpAltiora
+import at.petrak.hexcasting.common.command.PatternResKeyArgument
 import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
@@ -45,14 +46,27 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
+import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.tags.ItemTags
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.enchantment.Enchantments
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.properties.BlockSetType
+import net.minecraft.world.level.storage.loot.LootPool
+import net.minecraft.world.level.storage.loot.entries.LootItem
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction
+import net.minecraft.world.level.storage.loot.predicates.MatchTool
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue
+import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator
 import java.util.function.BiConsumer
 
 object FabricHexInitializer : ModInitializer {
@@ -69,13 +83,21 @@ object FabricHexInitializer : ModInitializer {
 
         ArgumentTypeRegistry.registerArgumentType(
             modLoc("pattern"),
-            PatternResLocArgument::class.java,
-            SingletonArgumentInfo.contextFree { PatternResLocArgument.id() }
+            PatternResKeyArgument::class.java,
+            SingletonArgumentInfo.contextFree { PatternResKeyArgument.id() }
         )
         HexAdvancementTriggers.registerTriggers(bind(BuiltInRegistries.TRIGGER_TYPES))
         HexComposting.setup()
         HexStrippables.init()
         FabricImpetusStorage.registerStorage()
+
+        LootTableEvents.MODIFY.register { key, tableBuilder, source, lookup ->
+            if (Blocks.AMETHYST_CLUSTER.lootTable.equals(key)) {
+                tableBuilder.modifyPools { pool ->
+                    pool.apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0f, 2.0f)))
+                }
+            }
+        }
 
         HexInterop.init()
         RegisterMisc.register()

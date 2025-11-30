@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.fabric.mixin.client;
 
 import at.petrak.hexcasting.client.RegisterClientStuff;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelManager;
@@ -22,17 +23,14 @@ import java.util.Map;
 @Mixin(ModelManager.class)
 public class FabricModelManagerMixin {
     @Shadow
-    private Map<ResourceLocation, BakedModel> bakedRegistry;
+    private Map<ModelResourceLocation, BakedModel> bakedRegistry;
 
     @Inject(at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/client/resources/model/ModelBakery;" +
-        "getBakedTopLevelModels()Ljava/util/Map;", shift = At.Shift.AFTER),
-        method = "Lnet/minecraft/client/resources/model/ModelManager;apply(" +
-                "Lnet/minecraft/client/resources/model/ModelManager$ReloadState;" +
-                "Lnet/minecraft/util/profiling/ProfilerFiller;)V",
-        locals = LocalCapture.CAPTURE_FAILEXCEPTION)
-    private void onModelBake(ModelManager.ReloadState reloadState, ProfilerFiller profiler, CallbackInfo ci, ModelBakery modelLoader) {
-        Map<ModelResourceLocation, BakedModel> newRegistry = new HashMap<>();
-        this.bakedRegistry.forEach(((resourceLocation, bakedModel) -> newRegistry.put(new ModelResourceLocation(resourceLocation, ModelResourceLocation.INVENTORY_VARIANT), bakedModel)));
+            "getBakedTopLevelModels()Ljava/util/Map;", shift = At.Shift.AFTER),
+            method = "apply(Lnet/minecraft/client/resources/model/ModelManager$ReloadState;Lnet/minecraft/util/profiling/ProfilerFiller;)V"
+    )
+    private void onModelBake(ModelManager.ReloadState reloadState, ProfilerFiller profiler, CallbackInfo ci, @Local ModelBakery modelLoader) {
+        Map<ModelResourceLocation, BakedModel> newRegistry = new HashMap<>(this.bakedRegistry);
         RegisterClientStuff.onModelBake(modelLoader, newRegistry);
     }
 }
