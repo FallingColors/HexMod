@@ -119,7 +119,7 @@ public class HexAdvancements extends PaucalAdvancementSubProvider {
 
         var loreRoot = Advancement.Builder.advancement()
             .display(simpleDisplayWithBackground(HexBlocks.AKASHIC_LIGATURE, "lore", AdvancementType.GOAL,
-                modLoc("textures/block/slate.png")))
+                modLoc("textures/block/slate_block.png")))
             .addCriterion("used_item", new Criterion<>(CriteriaTriggers.CONSUME_ITEM, new ConsumeItemTrigger.TriggerInstance(Optional.empty(),
                     Optional.of(ItemPredicate.Builder.item().of(HexItems.LORE_FRAGMENT).build()))))
             .save(consumer, prefix("lore"));

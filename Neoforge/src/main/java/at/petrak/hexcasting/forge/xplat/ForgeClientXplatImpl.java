@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -65,5 +66,10 @@ public class ForgeClientXplatImpl implements IClientXplatAbstractions {
     @Override
     public boolean fabricAdditionalQuenchFrustumCheck(AABB aabb) {
         return true; // forge fixes this with a patch so we just say "yep"
+    }
+
+    @Override
+    public String getModelLocVariant() {
+        return ModelResourceLocation.STANDALONE_VARIANT;
     }
 }

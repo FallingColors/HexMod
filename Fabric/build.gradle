@@ -117,11 +117,11 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${fabricLoaderVersion}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricVersion}"
 
-    common(project(path: ':Common', configuration: 'namedElements')) { transitive false }
+    implementation(project(path: ':Common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':Common', configuration: 'transformProductionFabric')
 
     // === MANDATORY DEPS ===
-    modImplementation "at.petra-k:paucal:$paucalVersion+$minecraftVersion-fabric"
+    modCompileOnly("at.petra-k:paucal:$paucalVersion+$minecraftVersion-common")
     // dear mod devs, don't put the platform in the middle of your version code
     modImplementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-FABRIC-SNAPSHOT"
     modImplementation "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
@@ -143,9 +143,10 @@ dependencies {
     modCompileOnly "dev.emi:emi-fabric:${emiVersion}:api"
     modLocalRuntime "dev.emi:emi-fabric:${emiVersion}"
 
-    modRuntimeOnly "dev.architectury:architectury-fabric:$architecturyVersion"
-    modRuntimeOnly "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
-    include(implementation("blue.endless:jankson:1.2.2"))
+    modLocalRuntime "dev.architectury:architectury-fabric:$architecturyVersion"
+    modLocalRuntime "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
+    modLocalRuntime "at.petra-k:paucal:$paucalVersion+$minecraftVersion-fabric"
+    localRuntime "blue.endless:jankson:1.2.2"
 
 
 //    modImplementation "maven.modrinth:gravity-api:$gravityApiVersion"

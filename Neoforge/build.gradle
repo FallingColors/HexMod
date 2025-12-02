@@ -20,6 +20,7 @@ configurations {
         canBeResolved = true
         canBeConsumed = false
     }
+    shadowCommon
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
     developmentNeoForge.extendsFrom common
@@ -72,9 +73,11 @@ repositories {
 
 dependencies {
     neoForge "net.neoforged:neoforge:${neoforgeVersion}"
-    common(project(path: ':Common', configuration: 'namedElements')) { transitive false }
+    implementation(project(path: ':Common', configuration: 'namedElements')) { transitive false }
     shadowBundle(project(path: ':Common', configuration: 'transformProductionNeoForge')) { transitive false }
-    modImplementation "thedarkcolour:kotlinforforge-neoforge:$kotlinForForgeVersion"
+    modImplementation("thedarkcolour:kotlinforforge-neoforge:$kotlinForForgeVersion") {
+        exclude(group: "net.neoforged.fancymodloader", module: "loader")
+    }
 
     // === MANDATORY DEPS ===
 
@@ -107,6 +110,17 @@ dependencies {
     forgeRuntimeLibrary("io.wispforest:endec:0.1.8")
     forgeRuntimeLibrary("io.wispforest.endec:gson:0.1.5")
     forgeRuntimeLibrary("io.wispforest.endec:netty:0.1.4")
+    forgeRuntimeLibrary("io.wispforest.endec:jankson:0.1.5")
+    forgeRuntimeLibrary("org.jetbrains.kotlin:kotlin-reflect:2.1.20")
+    forgeRuntimeLibrary("org.jetbrains.kotlin:kotlin-stdlib:2.1.20")
+    forgeRuntimeLibrary("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.20")
+    forgeRuntimeLibrary("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.20")
+    forgeRuntimeLibrary("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2")
+    forgeRuntimeLibrary("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.10.2")
+    forgeRuntimeLibrary("org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.8.1")
+    forgeRuntimeLibrary("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.8.1")
+    forgeRuntimeLibrary("blue.endless:jankson:1.2.2")
+    forgeRuntimeLibrary("blue.endless:jankson:0.1.5")
 }
 
 def generatedResources = project(":Common").file("src/generated/resources")
@@ -121,6 +135,7 @@ loom {
 
             programArgs "--all", "--mod", project.modID
             programArgs "--output", generatedResources.absolutePath
+            programArgs "--existing", project(":Common").file("src/main/resources").absolutePath
             programArgs "--existing", file("src/main/resources").absolutePath
             programArgs "--existing", generatedResources.absolutePath
         }

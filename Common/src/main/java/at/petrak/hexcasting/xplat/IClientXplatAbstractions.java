@@ -40,6 +40,8 @@ public interface IClientXplatAbstractions {
 
     IClientXplatAbstractions INSTANCE = find();
 
+    String getModelLocVariant();
+
     private static IClientXplatAbstractions find() {
         var providers = ServiceLoader.load(IClientXplatAbstractions.class).stream().toList();
         if (providers.size() != 1) {

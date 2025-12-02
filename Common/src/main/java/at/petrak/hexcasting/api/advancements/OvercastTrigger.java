@@ -55,10 +55,5 @@ public class OvercastTrigger extends SimpleCriterionTrigger<OvercastTrigger.Inst
                 // DID YOU KNOW ALL THE ENEITYT PREDICATES ARE HARD-CODED AND YOU CANT MAKE NEW ONES
                 && this.healthLeft.matches(healthLeftIn);
         }
-
-        @Override
-        public Optional<ContextAwarePredicate> player() {
-            return null;
-        }
     }
 }

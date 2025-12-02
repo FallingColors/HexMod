@@ -267,7 +267,7 @@ public class RegisterClientStuff {
                 locStart += "deco/";
 
             for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
-                extraModels.accept(new ModelResourceLocation(modLoc( locStart + blockLoc.getPath() + "_" + i), ModelResourceLocation.INVENTORY_VARIANT));
+                extraModels.accept(new ModelResourceLocation(modLoc( locStart + blockLoc.getPath() + "_" + i), IClientXplatAbstractions.INSTANCE.getModelLocVariant()));
             }
         }
     }
@@ -299,7 +299,7 @@ public class RegisterClientStuff {
 
             var list = new ArrayList<BakedModel>();
             for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
-                var variantLoc = new ModelResourceLocation(modLoc(locStart + blockLoc.getPath() + "_" + i), ModelResourceLocation.INVENTORY_VARIANT);
+                var variantLoc = new ModelResourceLocation(modLoc(locStart + blockLoc.getPath() + "_" + i), IClientXplatAbstractions.INSTANCE.getModelLocVariant());
                 var model = map.get(variantLoc);
                 list.add(model);
             }

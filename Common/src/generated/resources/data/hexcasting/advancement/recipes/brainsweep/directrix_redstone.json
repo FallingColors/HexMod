@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "enlightenment": {
+      "conditions": {
+        "health_used": {
+          "min": 0.8
+        },
+        "media_generated": {},
+        "mojang_i_am_begging_and_crying_please_add_an_entity_health_criterion": {
+          "max": 1.0,
+          "min": 2.2250738585072014E-308
+        }
+      },
+      "trigger": "hexcasting:overcast"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "hexcasting:directrix_redstone"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "enlightenment"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "hexcasting:directrix_redstone"
+    ]
+  }
+}
