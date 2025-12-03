@@ -8,11 +8,14 @@ import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightToolIngredient
 import at.petrak.hexcasting.datagen.tag.HexActionTagProvider;
 import at.petrak.hexcasting.datagen.tag.HexBlockTagProvider;
 import at.petrak.hexcasting.datagen.tag.HexItemTagProvider;
+import at.petrak.hexcasting.fabric.FabricHexInitializer;
 import at.petrak.hexcasting.fabric.recipe.FabricModConditionalIngredient;
+import at.petrak.hexcasting.fabric.xplat.FabricXplatImpl;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonObject;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
@@ -164,5 +167,10 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
 
     private static TagKey<Item> tag(String namespace, String s) {
         return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(namespace, s));
+    }
+
+    @Override
+    public void buildRegistry(RegistrySetBuilder registryBuilder) {
+
     }
 }

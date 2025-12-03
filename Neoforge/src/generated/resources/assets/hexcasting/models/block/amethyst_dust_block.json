@@ -1,0 +1,6 @@
+{
+  "parent": "hexcasting:block/cube_half_mirrored",
+  "textures": {
+    "all": "hexcasting:block/amethyst_dust_block"
+  }
+}

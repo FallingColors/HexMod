@@ -46,8 +46,8 @@ public class ForgeHexDataGenerators {
         //if (System.getProperty("hexcasting.xplat_datagen") != null) {
             configureXplatDatagen(ev);
         //}
-        //if (System.getProperty("hexcasting.forge_datagen") != null) {
-            configureForgeDatagen(ev);
+        //if (System.getProperty("hexcasting.neoforge_datagen") != null) {
+            configureNeoforgeDatagen(ev);
         //}
     }
 
@@ -80,8 +80,8 @@ public class ForgeHexDataGenerators {
     }
 
     @SuppressWarnings({"DataFlowIssue", "UnreachableCode"})
-    private static void configureForgeDatagen(GatherDataEvent ev) {
-        HexAPI.LOGGER.info("Starting Forge-specific datagen");
+    private static void configureNeoforgeDatagen(GatherDataEvent ev) {
+        HexAPI.LOGGER.info("Starting NeoForge-specific datagen");
 
         DataGenerator gen = ev.getGenerator();
         var output = gen.getPackOutput();

@@ -146,7 +146,7 @@ dependencies {
     modLocalRuntime "dev.architectury:architectury-fabric:$architecturyVersion"
     modLocalRuntime "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
     modLocalRuntime "at.petra-k:paucal:$paucalVersion+$minecraftVersion-fabric"
-    localRuntime "blue.endless:jankson:1.2.2"
+    localRuntime "hexcasting:jankson:1.2.3"
 
 
 //    modImplementation "maven.modrinth:gravity-api:$gravityApiVersion"
@@ -198,6 +198,10 @@ shadowJar {
 remapJar {
     inputFile.set shadowJar.archiveFile
     dependsOn shadowJar
+}
+
+tasks.named('processResources') {
+    duplicatesStrategy = DuplicatesStrategy.WARN
 }
 
 jar.finalizedBy(remapJar)

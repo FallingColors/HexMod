@@ -127,7 +127,7 @@ def generatedResources = project(":Common").file("src/generated/resources")
 
 loom {
     runs {
-        create("forgeXplatDatagen") {
+        create("xplatDatagen") {
             data()
             name "Forge Xplat Datagen"
 
@@ -138,6 +138,18 @@ loom {
             programArgs "--existing", project(":Common").file("src/main/resources").absolutePath
             programArgs "--existing", file("src/main/resources").absolutePath
             programArgs "--existing", generatedResources.absolutePath
+        }
+        create("Datagen") {
+            data()
+            name "NeoForge Datagen"
+
+            vmArg("-Dhexcasting.neoforge_datagen")
+
+            programArgs "--all", "--mod", project.modID
+            programArgs "--output", file("src/generated/resources").absolutePath
+            programArgs "--existing", project(":Common").file("src/main/resources").absolutePath
+            programArgs "--existing", file("src/main/resources").absolutePath
+            programArgs "--existing", file("src/generated/resources").absolutePath
         }
     }
 }

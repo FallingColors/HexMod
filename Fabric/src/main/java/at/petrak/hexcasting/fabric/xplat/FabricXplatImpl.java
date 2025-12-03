@@ -449,14 +449,16 @@ public class FabricXplatImpl implements IXplatAbstractions {
     );
 
     private static final Supplier<Registry<StateIngredientType<?>>> STATE_INGREDIENT_REGISTRY = Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new MappedRegistry<>(
+            FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+                            HexAPI.MOD_ID + ":none",
                     HexRegistries.STATE_INGREDIENT,
                     Lifecycle.stable(), false))
                     .buildAndRegister()
     );
 
     private static final Supplier<Registry<BrainsweepeeIngredientType<?>>> BRAINSWEEPEE_INGREDIENT_REGISTRY = Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new MappedRegistry<>(
+            FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+                            HexAPI.MOD_ID + ":none",
                     HexRegistries.BRAINSWEEPEE_INGREDIENT,
                     Lifecycle.stable(), false))
                     .buildAndRegister()

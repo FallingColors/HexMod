@@ -127,11 +127,15 @@ public class HexLootTables extends PaucalLootTableSubProvider {
             .when(noSilkTouchCond).when(goodAtAmethystingCond.invert())
             .when(LootItemRandomChanceCondition.randomChance(0.125f));
 
+        HexAPI.LOGGER.info("Doing amethyst cluster injection shit");
+
         lootTables.put(HexLootHandler.TABLE_INJECT_AMETHYST_CLUSTER, LootTable.lootTable()
             .withPool(dustPoolWhenGood)
             .withPool(dustPoolWhenBad)
             .withPool(isThatAnMFingBrandonSandersonReference)
             .withPool(isThatAnMFingBadBrandonSandersonReference));
+
+        HexAPI.LOGGER.info("Quenched bugged...?");
 
         // it looks like loot groups are bugged?
         // so instead we add some and then *increment* the amount, gated behind the cond

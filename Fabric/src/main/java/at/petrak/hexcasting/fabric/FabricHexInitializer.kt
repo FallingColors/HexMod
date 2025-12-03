@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.fabric
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.HexAPI.modLoc
 import at.petrak.hexcasting.api.addldata.ADMediaHolder
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
@@ -13,7 +14,6 @@ import at.petrak.hexcasting.common.casting.PatternRegistryManifest
 import at.petrak.hexcasting.common.casting.actions.spells.OpFlight
 import at.petrak.hexcasting.common.casting.actions.spells.great.OpAltiora
 import at.petrak.hexcasting.common.command.PatternResKeyArgument
-import at.petrak.hexcasting.common.command.PatternResLocArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
 import at.petrak.hexcasting.common.lib.*
@@ -23,6 +23,8 @@ import at.petrak.hexcasting.common.misc.BrainsweepingEvents
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
 import at.petrak.hexcasting.common.misc.RegisterMisc
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredients
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredients
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents
 import at.petrak.hexcasting.fabric.cc.adimpl.CCMediaHolder
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
@@ -46,26 +48,16 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
-import net.minecraft.advancements.critereon.ItemPredicate
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
-import net.minecraft.core.registries.Registries
 import net.minecraft.resources.ResourceLocation
-import net.minecraft.tags.ItemTags
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Items
-import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.properties.BlockSetType
-import net.minecraft.world.level.storage.loot.LootPool
-import net.minecraft.world.level.storage.loot.entries.LootItem
-import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction
-import net.minecraft.world.level.storage.loot.predicates.MatchTool
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue
-import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator
 import java.util.function.BiConsumer
 
@@ -74,6 +66,7 @@ object FabricHexInitializer : ModInitializer {
 
     override fun onInitialize() {
         this.CONFIG = FabricHexConfig.setup()
+        HexAPI.LOGGER.info("Testing for datagen...")
         FabricPacketHandler.initPackets()
         FabricPacketHandler.init()
 
@@ -166,6 +159,7 @@ object FabricHexInitializer : ModInitializer {
         HexAttributes.register()
         HexMobEffects.register(bind(BuiltInRegistries.MOB_EFFECT))
         HexPotions.registerPotions(bind(BuiltInRegistries.POTION))
+        HexDataComponents.registerDataComponents(bind(BuiltInRegistries.DATA_COMPONENT_TYPE))
 
         HexRecipeStuffRegistry.registerSerializers(bind(BuiltInRegistries.RECIPE_SERIALIZER))
         HexRecipeStuffRegistry.registerTypes(bind(BuiltInRegistries.RECIPE_TYPE))
@@ -180,6 +174,9 @@ object FabricHexInitializer : ModInitializer {
         HexArithmetics.register(bind(IXplatAbstractions.INSTANCE.arithmeticRegistry))
         HexContinuationTypes.registerContinuations(bind(IXplatAbstractions.INSTANCE.continuationTypeRegistry))
         HexEvalSounds.register(bind(IXplatAbstractions.INSTANCE.evalSoundRegistry))
+        StateIngredients.register(bind(IXplatAbstractions.INSTANCE.stateIngredientRegistry))
+        BrainsweepeeIngredients.register(bind(IXplatAbstractions.INSTANCE.brainsweepeeIngredientRegistry))
+
 
         // Because of Java's lazy-loading of classes, can't use Kotlin static initialization for
         // any calls that will eventually touch FeatureUtils.register(), as the growers here do,

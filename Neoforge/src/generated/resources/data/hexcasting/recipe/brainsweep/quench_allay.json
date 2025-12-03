@@ -1,0 +1,15 @@
+{
+  "type": "hexcasting:brainsweep",
+  "blockIn": {
+    "type": "hexcasting:block",
+    "block": "minecraft:amethyst_block"
+  },
+  "cost": 100000,
+  "entityIn": {
+    "type": "hexcasting:entity_type",
+    "entityType": "minecraft:allay"
+  },
+  "result": {
+    "Name": "hexcasting:quenched_allay"
+  }
+}

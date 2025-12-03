@@ -93,7 +93,6 @@ subprojects {
     tasks.withType(GenerateModuleMetadata).configureEach {
         enabled = false
     }
-
 }
 
 allprojects {
@@ -124,6 +123,6 @@ compileTestKotlin {
 
 tasks.register("runAllDatagen") {
     dependsOn ":Neoforge:runXplatDatagen"
-    dependsOn ":Neoforge:runForgeDatagen"
+    dependsOn ":Neoforge:runDatagen"
     dependsOn ":Fabric:runDatagen"
 }
