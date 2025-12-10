@@ -66,7 +66,6 @@ object FabricHexInitializer : ModInitializer {
 
     override fun onInitialize() {
         this.CONFIG = FabricHexConfig.setup()
-        HexAPI.LOGGER.info("Testing for datagen...")
         FabricPacketHandler.initPackets()
         FabricPacketHandler.init()
 

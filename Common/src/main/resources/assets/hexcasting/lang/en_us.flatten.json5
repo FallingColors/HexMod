@@ -141,7 +141,7 @@
     akashic_: {
       record: "Akashic Record",
       bookshelf: "Akashic Bookshelf",
-      connector: "Akashic Ligature",
+      ligature: "Akashic Ligature",
     },
     
     slate: {

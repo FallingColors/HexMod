@@ -49,7 +49,7 @@ loom {
         }
 
         configureEach {
-            runDir "Fabric/run"
+            runDir "run"
             ideConfigGenerated(true)
         }
     }
@@ -201,7 +201,7 @@ remapJar {
 }
 
 tasks.named('processResources') {
-    duplicatesStrategy = DuplicatesStrategy.WARN
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 jar.finalizedBy(remapJar)
