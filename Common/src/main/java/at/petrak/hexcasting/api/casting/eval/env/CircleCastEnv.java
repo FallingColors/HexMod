@@ -48,6 +48,11 @@ public class CircleCastEnv extends CastingEnvironment {
         return this.execState.getCaster(this.world);
     }
 
+    @Override
+    public Vec3 getCastingPosition() {
+        return this.getImpetus() == null ? this.execState.impetusPos.getCenter() : this.getImpetus().getBlockPos().getCenter();
+    }
+
     public @Nullable BlockEntityAbstractImpetus getImpetus() {
         var entity = this.world.getBlockEntity(execState.impetusPos);
 

@@ -63,6 +63,11 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
+    public Vec3 getCastingPosition() {
+        return this.caster.position();
+    }
+
+    @Override
     public void postExecution(CastResult result) {
         super.postExecution(result);
 

@@ -129,6 +129,13 @@ public abstract class CastingEnvironment {
     public abstract LivingEntity getCastingEntity();
 
     /**
+     * Gets the caster's position. Useful for compatibility.
+     *
+     * @return the position of the caster
+     */
+    public abstract Vec3 getCastingPosition();
+
+    /**
      * Get an interface used to do mishaps
      */
     public abstract MishapEnvironment getMishapEnvironment();
