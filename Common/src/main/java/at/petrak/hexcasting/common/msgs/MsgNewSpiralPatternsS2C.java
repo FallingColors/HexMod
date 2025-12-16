@@ -34,15 +34,22 @@ public record MsgNewSpiralPatternsS2C(UUID playerUUID, List<HexPattern> patterns
         return TYPE;
     }
 
-    public static void handle(MsgNewSpiralPatternsS2C self) {
-        Minecraft.getInstance().execute(() -> {
-            var mc = Minecraft.getInstance();
-            assert mc.level != null;
-            var player = mc.level.getPlayerByUUID(self.playerUUID);
-            var stack = IClientXplatAbstractions.INSTANCE.getClientCastingStack(player);
+    public void handle() {
+        Handler.handle(this);
+    }
 
-            for (var pattern : self.patterns)
-                stack.addPattern(pattern, self.lifetime);
-        });
+    public static final class Handler {
+
+        public static void handle(MsgNewSpiralPatternsS2C self) {
+            Minecraft.getInstance().execute(() -> {
+                var mc = Minecraft.getInstance();
+                assert mc.level != null;
+                var player = mc.level.getPlayerByUUID(self.playerUUID);
+                var stack = IClientXplatAbstractions.INSTANCE.getClientCastingStack(player);
+
+                for (var pattern : self.patterns)
+                    stack.addPattern(pattern, self.lifetime);
+            });
+        }
     }
 }

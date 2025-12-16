@@ -38,17 +38,24 @@ public record MsgNewSpellPatternS2C(ExecutionClientView info, int index) impleme
         return TYPE;
     }
 
-    public static void handle(MsgNewSpellPatternS2C self) {
-        Minecraft.getInstance().execute(() -> {
-            var mc = Minecraft.getInstance();
-            if (self.info().isStackClear()) {
-                // don't pay attention to the screen, so it also stops when we die
-                mc.getSoundManager().stop(HexSounds.CASTING_AMBIANCE.getLocation(), null);
-            }
-            var screen = Minecraft.getInstance().screen;
-            if (screen instanceof GuiSpellcasting spellGui) {
-                spellGui.recvServerUpdate(self.info(), self.index());
-            }
-        });
+    public void handle() {
+        Handler.handle(this);
+    }
+
+    public static final class Handler {
+
+        public static void handle(MsgNewSpellPatternS2C self) {
+            Minecraft.getInstance().execute(() -> {
+                var mc = Minecraft.getInstance();
+                if (self.info().isStackClear()) {
+                    // don't pay attention to the screen, so it also stops when we die
+                    mc.getSoundManager().stop(HexSounds.CASTING_AMBIANCE.getLocation(), null);
+                }
+                var screen = Minecraft.getInstance().screen;
+                if (screen instanceof GuiSpellcasting spellGui) {
+                    spellGui.recvServerUpdate(self.info(), self.index());
+                }
+            });
+        }
     }
 }

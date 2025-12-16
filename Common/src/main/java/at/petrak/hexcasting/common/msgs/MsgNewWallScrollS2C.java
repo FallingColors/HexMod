@@ -40,17 +40,24 @@ public record MsgNewWallScrollS2C(ClientboundAddEntityPacket inner, BlockPos pos
         return TYPE;
     }
 
-    public static void handle(MsgNewWallScrollS2C self) {
-        Minecraft.getInstance().execute(() -> {
-            var player = Minecraft.getInstance().player;
-            if (player != null) {
-                player.connection.handleAddEntity(self.inner);
-                var e = player.level().getEntity(self.inner.getId());
-                if (e instanceof EntityWallScroll scroll) {
-                    scroll.readSpawnData(self.pos, self.dir, self.scrollItem, self.showsStrokeOrder,
-                        self.blockSize);
+    public void handle() {
+        Handler.handle(this);
+    }
+
+    public static final class Handler {
+
+        public static void handle(MsgNewWallScrollS2C self) {
+            Minecraft.getInstance().execute(() -> {
+                var player = Minecraft.getInstance().player;
+                if (player != null) {
+                    player.connection.handleAddEntity(self.inner);
+                    var e = player.level().getEntity(self.inner.getId());
+                    if (e instanceof EntityWallScroll scroll) {
+                        scroll.readSpawnData(self.pos, self.dir, self.scrollItem, self.showsStrokeOrder,
+                                self.blockSize);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 }

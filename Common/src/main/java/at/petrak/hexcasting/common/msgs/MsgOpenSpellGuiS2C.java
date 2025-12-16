@@ -56,12 +56,19 @@ public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> pat
         return TYPE;
     }
 
-    public static void handle(MsgOpenSpellGuiS2C msg) {
-        Minecraft.getInstance().execute(() -> {
-            var mc = Minecraft.getInstance();
-            mc.setScreen(
-                new GuiSpellcasting(msg.hand(), msg.patterns(), msg.stack, msg.ravenmind,
-                    msg.parenCount));
-        });
+    public void handle() {
+        Handler.handle(this);
+    }
+
+    public static final class Handler {
+
+        public static void handle(MsgOpenSpellGuiS2C msg) {
+            Minecraft.getInstance().execute(() -> {
+                var mc = Minecraft.getInstance();
+                mc.setScreen(
+                        new GuiSpellcasting(msg.hand(), msg.patterns(), msg.stack, msg.ravenmind,
+                                msg.parenCount));
+            });
+        }
     }
 }

@@ -31,14 +31,18 @@ public record MsgBlinkS2C(Vec3 addedPosition) implements CustomPacketPayload {
         return TYPE;
     }
 
-    public static void handle(MsgBlinkS2C self) {
-        Minecraft.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
+    public void handle() {
+        Handler.handle(this);
+    }
+
+    public static final class Handler {
+
+        public static void handle(MsgBlinkS2C self) {
+            Minecraft.getInstance().execute(() -> {
                 var player = Minecraft.getInstance().player;
                 player.setPos(player.position().add(self.addedPosition()));
-            }
-        });
+            });
+        }
     }
 
 

@@ -34,14 +34,21 @@ public record MsgRecalcWallScrollDisplayS2C(int entityId, boolean showStrokeOrde
         return TYPE;
     }
 
-    public static void handle(MsgRecalcWallScrollDisplayS2C msg) {
-        Minecraft.getInstance().execute(() -> {
-            var mc = Minecraft.getInstance();
-            var entity = mc.level.getEntity(msg.entityId);
-            if (entity instanceof EntityWallScroll scroll
-                && scroll.getShowsStrokeOrder() != msg.showStrokeOrder) {
-                scroll.recalculateDisplay();
-            }
-        });
+    public void handle() {
+        Handler.handle(this);
+    }
+
+    public static final class Handler {
+
+        public static void handle(MsgRecalcWallScrollDisplayS2C msg) {
+            Minecraft.getInstance().execute(() -> {
+                var mc = Minecraft.getInstance();
+                var entity = mc.level.getEntity(msg.entityId);
+                if (entity instanceof EntityWallScroll scroll
+                        && scroll.getShowsStrokeOrder() != msg.showStrokeOrder) {
+                    scroll.recalculateDisplay();
+                }
+            });
+        }
     }
 }

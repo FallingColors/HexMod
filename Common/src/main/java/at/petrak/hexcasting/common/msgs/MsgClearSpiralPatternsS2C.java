@@ -30,13 +30,20 @@ public record MsgClearSpiralPatternsS2C(UUID playerUUID) implements CustomPacket
         return TYPE;
     }
 
-    public static void handle(MsgClearSpiralPatternsS2C self) {
-        Minecraft.getInstance().execute(() -> {
-            var mc = Minecraft.getInstance();
-            assert mc.level != null;
-            var player = mc.level.getPlayerByUUID(self.playerUUID);
-            var stack = IClientXplatAbstractions.INSTANCE.getClientCastingStack(player);
-            stack.slowClear();
-        });
+    public void handle() {
+        Handler.handle(this);
+    }
+
+    public static final class Handler {
+
+        public static void handle(MsgClearSpiralPatternsS2C self) {
+            Minecraft.getInstance().execute(() -> {
+                var mc = Minecraft.getInstance();
+                assert mc.level != null;
+                var player = mc.level.getPlayerByUUID(self.playerUUID);
+                var stack = IClientXplatAbstractions.INSTANCE.getClientCastingStack(player);
+                stack.slowClear();
+            });
+        }
     }
 }

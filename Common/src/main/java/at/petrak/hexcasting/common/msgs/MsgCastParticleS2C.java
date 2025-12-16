@@ -45,40 +45,47 @@ public record MsgCastParticleS2C(ParticleSpray spray, FrozenPigment colorizer) i
         return new Vec3(Math.sqrt(1.0 - z * z) * Math.cos(th), Math.sqrt(1.0 - z * z) * Math.sin(th), z);
     }
 
-    public static void handle(MsgCastParticleS2C msg) {
-        Minecraft.getInstance().execute(() -> {
-            var colProvider = msg.colorizer().getColorProvider();
-            for (int i = 0; i < msg.spray().getCount(); i++) {
-                // For the colors, pick any random time to get a mix of colors
+    public void handle() {
+        Handler.handle(this);
+    }
 
-                var offset = randomInCircle(Mth.TWO_PI).normalize()
-                    .scale(RANDOM.nextFloat() * msg.spray().getFuzziness() / 2);
-                var pos = msg.spray().getPos().add(offset);
+    public static final class Handler {
 
-                var phi = Math.acos(1.0 - RANDOM.nextDouble() * (1.0 - Math.cos(msg.spray().getSpread())));
-                var theta = Math.PI * 2.0 * RANDOM.nextDouble();
-                var v = msg.spray().getVel().normalize();
-                // pick any old vector to get a vector normal to v with
-                Vec3 k;
-                if (v.x == 0.0 && v.y == 0.0) {
-                    // oops, pick a *different* normal
-                    k = new Vec3(1.0, 0.0, 0.0);
-                } else {
-                    k = v.cross(new Vec3(0.0, 0.0, 1.0));
+        public static void handle(MsgCastParticleS2C msg) {
+            Minecraft.getInstance().execute(() -> {
+                var colProvider = msg.colorizer().getColorProvider();
+                for (int i = 0; i < msg.spray().getCount(); i++) {
+                    // For the colors, pick any random time to get a mix of colors
+
+                    var offset = randomInCircle(Mth.TWO_PI).normalize()
+                            .scale(RANDOM.nextFloat() * msg.spray().getFuzziness() / 2);
+                    var pos = msg.spray().getPos().add(offset);
+
+                    var phi = Math.acos(1.0 - RANDOM.nextDouble() * (1.0 - Math.cos(msg.spray().getSpread())));
+                    var theta = Math.PI * 2.0 * RANDOM.nextDouble();
+                    var v = msg.spray().getVel().normalize();
+                    // pick any old vector to get a vector normal to v with
+                    Vec3 k;
+                    if (v.x == 0.0 && v.y == 0.0) {
+                        // oops, pick a *different* normal
+                        k = new Vec3(1.0, 0.0, 0.0);
+                    } else {
+                        k = v.cross(new Vec3(0.0, 0.0, 1.0));
+                    }
+                    var velUnlen = v.scale(Math.cos(phi))
+                            .add(k.scale(Math.sin(phi) * Math.cos(theta)))
+                            .add(v.cross(k).scale(Math.sin(phi) * Math.sin(theta)));
+                    var vel = velUnlen.scale(msg.spray().getVel().length() / 20);
+
+                    var color = colProvider.getColor(ClientTickCounter.getTotal(), velUnlen);
+
+                    Minecraft.getInstance().level.addParticle(
+                            new ConjureParticleOptions(color),
+                            pos.x, pos.y, pos.z,
+                            vel.x, vel.y, vel.z
+                    );
                 }
-                var velUnlen = v.scale(Math.cos(phi))
-                    .add(k.scale(Math.sin(phi) * Math.cos(theta)))
-                    .add(v.cross(k).scale(Math.sin(phi) * Math.sin(theta)));
-                var vel = velUnlen.scale(msg.spray().getVel().length() / 20);
-
-                var color = colProvider.getColor(ClientTickCounter.getTotal(), velUnlen);
-
-                Minecraft.getInstance().level.addParticle(
-                    new ConjureParticleOptions(color),
-                    pos.x, pos.y, pos.z,
-                    vel.x, vel.y, vel.z
-                );
-            }
-        });
+            });
+        }
     }
 }
