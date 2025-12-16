@@ -203,5 +203,8 @@ remapJar {
 tasks.named('processResources') {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+tasks.named('sourcesJar') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
 
 jar.finalizedBy(remapJar)
