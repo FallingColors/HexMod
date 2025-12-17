@@ -26,6 +26,7 @@ import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.item.DyeColor;
@@ -35,6 +36,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.block.Blocks;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -205,7 +207,9 @@ public class HexplatRecipes extends PaucalRecipeProvider {
 
         ring(RecipeCategory.MISC, HexItems.UUID_PIGMENT, 1, HexItems.AMETHYST_DUST, Items.AMETHYST_SHARD)
             .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
-        ring(RecipeCategory.MISC, HexItems.DEFAULT_PIGMENT, 1, HexItems.AMETHYST_DUST, Items.COPPER_INGOT)
+        ringCornerless(RecipeCategory.MISC, HexItems.DEFAULT_PIGMENT, 1, HexItems.AMETHYST_DUST, Items.AMETHYST_SHARD)
+            .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
+        ringCornerless(RecipeCategory.MISC, HexItems.ANCIENT_PIGMENT, 1, HexItems.AMETHYST_DUST, Items.COPPER_INGOT)
             .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, HexItems.SCROLL_SMOL)
@@ -279,13 +283,6 @@ public class HexplatRecipes extends PaucalRecipeProvider {
 
         packing(RecipeCategory.BUILDING_BLOCKS, HexItems.AMETHYST_DUST, HexBlocks.AMETHYST_DUST_BLOCK.asItem(), "amethyst_dust",
             false, recipes);
-
-        ringAll(RecipeCategory.BUILDING_BLOCKS, HexBlocks.AMETHYST_TILES, 8, Blocks.AMETHYST_BLOCK, HexItems.AMETHYST_DUST)
-            .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST)).save(recipes);
-
-        SingleItemRecipeBuilder.stonecutting(Ingredient.of(Blocks.AMETHYST_BLOCK), RecipeCategory.BUILDING_BLOCKS, HexBlocks.AMETHYST_TILES)
-            .unlockedBy("has_item", hasItem(Blocks.AMETHYST_BLOCK))
-            .save(recipes, modLoc("stonecutting/amethyst_tiles"));
 
         ringAll(RecipeCategory.BUILDING_BLOCKS, HexBlocks.SCROLL_PAPER, 8, Items.PAPER, Items.AMETHYST_SHARD)
             .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
@@ -426,6 +423,37 @@ public class HexplatRecipes extends PaucalRecipeProvider {
             .pattern("123")
             .pattern("LPL")
             .unlockedBy("enlightenment", enlightenment).save(recipes);
+
+        // Stone sets
+        stoneSet(recipes, HexBlocks.SLATE_BLOCK.asItem(), HexBlocks.SLATE_BRICKS.asItem(), HexBlocks.SLATE_BRICKS_SMALL.asItem(), HexBlocks.SLATE_TILES.asItem(), HexBlocks.SLATE_PILLAR.asItem());
+        stoneSet(recipes, Blocks.AMETHYST_BLOCK.asItem(), HexBlocks.AMETHYST_BRICKS.asItem(), HexBlocks.AMETHYST_BRICKS_SMALL.asItem(), HexBlocks.AMETHYST_TILES.asItem(), HexBlocks.AMETHYST_PILLAR.asItem());
+        stoneSet(recipes, HexBlocks.QUENCHED_ALLAY.asItem(), HexBlocks.QUENCHED_ALLAY_BRICKS.asItem(), HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL.asItem(), HexBlocks.QUENCHED_ALLAY_TILES.asItem(), null);
+
+        // Stone sets in stonecutter
+        stoneCutterFromTag(recipes, HexTags.Items.SLATE_BLOCKS, HexBlocks.SLATE_BRICKS.asItem(), HexBlocks.SLATE_BRICKS_SMALL.asItem(), HexBlocks.SLATE_TILES.asItem(), HexBlocks.SLATE_PILLAR.asItem());
+        stoneCutterFromTag(recipes, HexTags.Items.AMETHYST_BLOCKS, HexBlocks.AMETHYST_BRICKS.asItem(), HexBlocks.AMETHYST_BRICKS_SMALL.asItem(), HexBlocks.AMETHYST_TILES.asItem(), HexBlocks.AMETHYST_PILLAR.asItem());
+        stoneCutterFromTag(recipes, HexTags.Items.QUENCHED_ALLAY_BLOCKS, HexBlocks.QUENCHED_ALLAY_BRICKS.asItem(), HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL.asItem(), HexBlocks.QUENCHED_ALLAY_TILES.asItem());
+
+        // Slate & Amethyst block set
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, HexBlocks.SLATE_AMETHYST_BRICKS.asItem(), 2)
+                .requires(HexBlocks.SLATE_BRICKS)
+                .requires(HexBlocks.AMETHYST_BRICKS)
+                .unlockedBy("has_item", has(HexBlocks.SLATE)).save(recipes);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, HexBlocks.SLATE_AMETHYST_BRICKS_SMALL.asItem(), 2)
+                .requires(HexBlocks.SLATE_BRICKS_SMALL)
+                .requires(HexBlocks.AMETHYST_BRICKS_SMALL)
+                .unlockedBy("has_item", has(HexBlocks.SLATE)).save(recipes);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, HexBlocks.SLATE_AMETHYST_TILES.asItem(), 2)
+                .requires(HexBlocks.SLATE_TILES)
+                .requires(HexBlocks.AMETHYST_TILES)
+                .unlockedBy("has_item", has(HexBlocks.SLATE)).save(recipes);
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, HexBlocks.SLATE_AMETHYST_PILLAR.asItem(), 2)
+                .requires(HexBlocks.SLATE_PILLAR)
+                .requires(HexBlocks.AMETHYST_PILLAR)
+                .unlockedBy("has_item", has(HexBlocks.SLATE)).save(recipes);
 
         new BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.AMETHYST_BLOCK),
             new VillagerIngredient(null, null, 3),
@@ -569,5 +597,53 @@ public class HexplatRecipes extends PaucalRecipeProvider {
     private void specialRecipe(Consumer<FinishedRecipe> consumer, SimpleCraftingRecipeSerializer<?> serializer) {
         var name = BuiltInRegistries.RECIPE_SERIALIZER.getKey(serializer);
         SpecialRecipeBuilder.special(serializer).save(consumer, HexAPI.MOD_ID + ":dynamic" + name.getPath());
+    }
+
+    private void stoneSet(Consumer<FinishedRecipe> recipes, Item base, Item bricks, Item smallBricks, Item tiles, @Nullable Item pillar) {
+        // Bricks from base block
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, bricks, 4)
+                .define('#', base)
+                .pattern("##")
+                .pattern("##")
+                .unlockedBy("has_item", hasItem(base))
+                .save(recipes);
+
+        // Bricks from small bricks
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, bricks)
+                .requires(smallBricks)
+                .unlockedBy("has_item", hasItem(base))
+                .save(recipes, modLoc(bricks + "_from_" + smallBricks));
+
+        // Small bricks from bricks
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, smallBricks)
+                .requires(bricks)
+                .unlockedBy("has_item", hasItem(base))
+                .save(recipes, modLoc(smallBricks + "_from_" + bricks));
+
+        // Tiles from bricks
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, tiles, 4)
+                .define('#', bricks)
+                .pattern("##")
+                .pattern("##")
+                .unlockedBy("has_item", hasItem(base))
+                .save(recipes);
+
+        // Pillar from base block
+        if (pillar != null) {
+            ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, pillar, 2)
+                    .define('#', base)
+                    .pattern("#")
+                    .pattern("#")
+                    .unlockedBy("has_item", hasItem(base))
+                    .save(recipes);
+        }
+    }
+
+    private void stoneCutterFromTag(Consumer<FinishedRecipe> recipes, TagKey<Item> tagKey, Item ...results) {
+        for (Item result : results) {
+            SingleItemRecipeBuilder.stonecutting(Ingredient.of(tagKey), RecipeCategory.BUILDING_BLOCKS, result)
+                    .unlockedBy("has_item", hasItem(tagKey))
+                    .save(recipes, modLoc("stonecutting/" + result));
+        }
     }
 }

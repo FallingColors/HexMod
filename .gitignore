@@ -1,3 +1,6 @@
+# datagen cache
+.cache/
+
 # hexdoc
 doc/**/_export/generated/
 /_site/

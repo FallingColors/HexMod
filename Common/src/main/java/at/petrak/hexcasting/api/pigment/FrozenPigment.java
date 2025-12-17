@@ -23,6 +23,9 @@ public record FrozenPigment(ItemStack item, UUID owner) {
     public static final Supplier<FrozenPigment> DEFAULT =
         () -> new FrozenPigment(new ItemStack(HexItems.DEFAULT_PIGMENT), Util.NIL_UUID);
 
+    public static final Supplier<FrozenPigment> ANCIENT =
+        () -> new FrozenPigment(new ItemStack(HexItems.ANCIENT_PIGMENT), Util.NIL_UUID);
+
     public CompoundTag serializeToNBT() {
         var out = new CompoundTag();
         out.put(TAG_STACK, this.item.save(new CompoundTag()));
