@@ -56,6 +56,14 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
     }
 
     @Override
+    public String getSomeKindOfReasonableIDForEmi() {
+        var resloc = BuiltInRegistries.ENTITY_TYPE.getKey(this.entityType);
+        return resloc.getNamespace()
+                + "//"
+                + resloc.getPath();
+    }
+
+    @Override
     public Entity exampleEntity(Level level) {
         return this.entityType.create(level);
     }

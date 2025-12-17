@@ -58,13 +58,13 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
     public static final ComponentKey<CCVariantItem> VARIANT_ITEM = ComponentRegistry.getOrCreate(modLoc("variant_item"),
         CCVariantItem.class);
 
-    public static final ItemApiLookup<ADMediaHolder, Void> MEDIA_HOLDER_LOOKUP = ItemApiLookup.get(modLoc("media_holder"), ADMediaHolder.class, Void.class);
+    public static final ItemApiLookup<ADMediaHolder, Void> MEDIA_HOLDER_LOOKUP = ItemApiLookup.get(modLoc("media_holder_item"), ADMediaHolder.class, Void.class);
 
-    public static final ItemApiLookup<ADIotaHolder, Void> IOTA_HOLDER_LOOKUP = ItemApiLookup.get(modLoc("iota_holder"), ADIotaHolder.class, Void.class);
+    public static final ItemApiLookup<ADIotaHolder, Void> IOTA_HOLDER_LOOKUP = ItemApiLookup.get(modLoc("iota_holder_item"), ADIotaHolder.class, Void.class);
 
     public static final ItemApiLookup<ADPigment, Void> PIGMENT_ITEM_LOOKUP = ItemApiLookup.get(modLoc("pigment_item"), ADPigment.class, Void.class);
 
-    public static final ItemApiLookup<ADHexHolder, Void> HEX_HOLDER_LOOKUP = ItemApiLookup.get(modLoc("hex_holder"), ADHexHolder.class, Void.class);
+    public static final ItemApiLookup<ADHexHolder, Void> HEX_HOLDER_LOOKUP = ItemApiLookup.get(modLoc("hex_holder_item"), ADHexHolder.class, Void.class);
 
     public static final ItemApiLookup<ADVariantItem, Void> VARIANT_ITEM_LOOKUP = ItemApiLookup.get(modLoc("variant_item"), ADVariantItem.class, Void.class);
 

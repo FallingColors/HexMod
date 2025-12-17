@@ -70,6 +70,11 @@ public class BrainsweepeeIngredients {
         }
 
         @Override
+        public String getSomeKindOfReasonableIDForEmi() {
+            return "none";
+        }
+
+        @Override
         public @Nullable Entity exampleEntity(Level level) {
             return null;
         }

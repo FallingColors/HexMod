@@ -78,6 +78,14 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
     }
 
     @Override
+    public String getSomeKindOfReasonableIDForEmi() {
+        var resloc = this.entityTypeTag.location();
+        return resloc.getNamespace()
+                + "//"
+                + resloc.getPath();
+    }
+
+    @Override
     public Entity exampleEntity(Level level) {
         var someEntityTys = BuiltInRegistries.ENTITY_TYPE.getTagOrEmpty(this.entityTypeTag).iterator();
         if (someEntityTys.hasNext()) {

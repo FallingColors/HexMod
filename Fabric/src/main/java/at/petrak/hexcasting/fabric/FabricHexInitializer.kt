@@ -1,13 +1,19 @@
 package at.petrak.hexcasting.fabric
 
-import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.HexAPI.modLoc
 import at.petrak.hexcasting.api.addldata.ADMediaHolder
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
+import at.petrak.hexcasting.api.casting.ActionRegistryEntry
 import at.petrak.hexcasting.api.casting.iota.DoubleIota
+import at.petrak.hexcasting.api.item.HexHolderItem
+import at.petrak.hexcasting.api.item.IotaHolderItem
+import at.petrak.hexcasting.api.item.PigmentItem
+import at.petrak.hexcasting.api.item.VariantItem
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexStatistics
+import at.petrak.hexcasting.api.mod.HexTags
+import at.petrak.hexcasting.api.utils.isOfTag
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting
 import at.petrak.hexcasting.common.blocks.behavior.HexStrippables
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest
@@ -16,6 +22,7 @@ import at.petrak.hexcasting.common.casting.actions.spells.great.OpAltiora
 import at.petrak.hexcasting.common.command.PatternResKeyArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
+import at.petrak.hexcasting.common.items.storage.ItemScroll
 import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.lib.hex.*
 import at.petrak.hexcasting.common.misc.AkashicTreeGrower
@@ -26,13 +33,19 @@ import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredients
 import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredients
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents
+import at.petrak.hexcasting.fabric.cc.adimpl.CCHexHolder
+import at.petrak.hexcasting.fabric.cc.adimpl.CCIotaHolder
+import at.petrak.hexcasting.fabric.cc.adimpl.CCItemIotaHolder
 import at.petrak.hexcasting.fabric.cc.adimpl.CCMediaHolder
+import at.petrak.hexcasting.fabric.cc.adimpl.CCPigment
+import at.petrak.hexcasting.fabric.cc.adimpl.CCVariantItem
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.loot.FabricHexLootModJankery
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import at.petrak.hexcasting.fabric.recipe.FabricModConditionalIngredient
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient
 import at.petrak.hexcasting.fabric.storage.FabricImpetusStorage
+import at.petrak.hexcasting.fabric.xplat.FabricXplatImpl
 import at.petrak.hexcasting.interop.HexInterop
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.fabricmc.api.ModInitializer
@@ -46,20 +59,26 @@ import net.fabricmc.fabric.api.event.player.UseEntityCallback
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents
+import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResult
+import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.player.Player
+import net.minecraft.world.item.Item
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.state.properties.BlockSetType
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator
 import java.util.function.BiConsumer
+import java.util.function.Function
 
 object FabricHexInitializer : ModInitializer {
     lateinit var CONFIG: FabricHexConfig
@@ -132,30 +151,56 @@ object FabricHexInitializer : ModInitializer {
             }
         }
 
-        ItemGroupEvents.MODIFY_ENTRIES_ALL.register { tab, entries ->
-            HexBlocks.registerBlockCreativeTab(entries::accept, tab)
-            HexItems.registerItemCreativeTab(entries, tab)
+        ItemGroupEvents.modifyEntriesEvent(HexCreativeTabs.SCROLLS_KEY).register { r ->
+            val keyList = ArrayList<ResourceKey<ActionRegistryEntry?>?>()
+            val regi = FabricXplatImpl.INSTANCE.getActionRegistry()
+            for (key in regi.registryKeySet()) if (isOfTag<ActionRegistryEntry?>(
+                    regi,
+                    key,
+                    HexTags.Actions.PER_WORLD_PATTERN
+                )
+            ) keyList.add(key)
+            keyList.sortWith(Comparator.comparing<ResourceKey<ActionRegistryEntry?>?, ResourceLocation?>(Function { obj: ResourceKey<ActionRegistryEntry?>? -> obj!!.location() }))
+            for (key in keyList) {
+                r.accept(
+                    ItemScroll.withPerWorldPattern(
+                        ItemStack(HexItems.SCROLL_LARGE),
+                        key
+                    )
+                )
+            }
+        }
+        ItemGroupEvents.modifyEntriesEvent(HexCreativeTabs.HEX_KEY).register { r ->
+            for (item in this.itemsToAddToCreativeTab) {
+                r.accept(item)
+            }
         }
     }
 
     private fun initRegistries() {
-        fabricOnlyRegistration()
-
         HexBlockSetTypes.registerBlocks(BlockSetType::register)
 
         HexCreativeTabs.registerCreativeTabs(bind(BuiltInRegistries.CREATIVE_MODE_TAB))
 
         HexSounds.registerSounds(bind(BuiltInRegistries.SOUND_EVENT))
         HexBlocks.registerBlocks(bind(BuiltInRegistries.BLOCK))
-        HexBlocks.registerBlockItems(bind(BuiltInRegistries.ITEM))
+        HexBlocks.registerBlockItems(boundForItem)
         HexBlockEntities.registerTiles(bind(BuiltInRegistries.BLOCK_ENTITY_TYPE))
-        HexItems.registerItems(bind(BuiltInRegistries.ITEM))
+        HexItems.registerItems(boundForItem)
         // Registry.register(IngredientDeserializer.REGISTRY, FabricModConditionalIngredient.ID, FabricModConditionalIngredient.Deserializer.INSTANCE)
         CustomIngredientSerializer.register(FabricUnsealedIngredient.Serializer.INSTANCE);
         CustomIngredientSerializer.register(FabricModConditionalIngredient.Serializer.INSTANCE);
 
         HexEntities.registerEntities(bind(BuiltInRegistries.ENTITY_TYPE))
         HexAttributes.register()
+        FabricDefaultAttributeRegistry.register(EntityType.PLAYER,
+            Player.createAttributes()
+                .add(HexAttributes.GRID_ZOOM)
+                .add(HexAttributes.SCRY_SIGHT)
+                .add(HexAttributes.FEEBLE_MIND)
+                .add(HexAttributes.AMBIT_RADIUS)
+                .add(HexAttributes.MEDIA_CONSUMPTION_MODIFIER)
+                .add(HexAttributes.SENTINEL_RADIUS))
         HexMobEffects.register(bind(BuiltInRegistries.MOB_EFFECT))
         HexPotions.registerPotions(bind(BuiltInRegistries.POTION))
         HexDataComponents.registerDataComponents(bind(BuiltInRegistries.DATA_COMPONENT_TYPE))
@@ -186,6 +231,8 @@ object FabricHexInitializer : ModInitializer {
         butYouCouldBeFire()
 
         HexStatistics.register()
+
+        fabricOnlyRegistration()
     }
 
     // sorry lex (not sorry)
@@ -194,6 +241,29 @@ object FabricHexInitializer : ModInitializer {
             it.modify(Items.PUMPKIN_PIE, {
                 it.set(HexDataComponents.IOTA, DoubleIota(Math.PI))
             })
+        }
+
+        for (item in BuiltInRegistries.ITEM) {
+            if (item is PigmentItem) {
+                HexCardinalComponents.PIGMENT_ITEM_LOOKUP.registerForItems({
+                    item, _ -> CCPigment.ItemBased(item);
+                }, item)
+            }
+            if (item is IotaHolderItem) {
+                HexCardinalComponents.IOTA_HOLDER_LOOKUP.registerForItems({
+                    item, _ -> CCItemIotaHolder.ItemBased(item);
+                }, item)
+            }
+            if (item is HexHolderItem) {
+                HexCardinalComponents.HEX_HOLDER_LOOKUP.registerForItems({
+                    item, _ -> CCHexHolder.ItemBased(item);
+                }, item)
+            }
+            if (item is VariantItem) {
+                HexCardinalComponents.VARIANT_ITEM_LOOKUP.registerForItems({
+                    item, _ -> CCVariantItem.ItemBased(item);
+                }, item)
+            }
         }
 
         HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
@@ -216,6 +286,14 @@ object FabricHexInitializer : ModInitializer {
                 stack, _ -> CCMediaHolder.Static({ MediaConstants.QUENCHED_BLOCK_UNIT }, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, stack)
         }, HexBlocks.QUENCHED_ALLAY.asItem())
     }
+
+    private val itemsToAddToCreativeTab : MutableSet<Item> = mutableSetOf()
+
+	private val boundForItem : BiConsumer<Item, ResourceLocation> = BiConsumer {
+        t, id -> this.itemsToAddToCreativeTab.add(t)
+        Registry.register(BuiltInRegistries.ITEM, id, t)
+    }
+
 
     private fun butYouCouldBeFire() {
         val flameOn = FlammableBlockRegistry.getDefaultInstance()

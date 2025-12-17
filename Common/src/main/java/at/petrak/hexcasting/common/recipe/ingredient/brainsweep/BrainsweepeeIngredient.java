@@ -30,6 +30,8 @@ public abstract class BrainsweepeeIngredient {
 
     public abstract List<Component> getTooltip(boolean advanced);
 
+    public abstract String getSomeKindOfReasonableIDForEmi();
+
     /**
      * For the benefit of showing to the client, return an example of the entity.
      * <p>

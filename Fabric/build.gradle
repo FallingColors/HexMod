@@ -49,7 +49,7 @@ loom {
         }
 
         configureEach {
-            runDir "run"
+            runDir "Fabric/run"
             ideConfigGenerated(true)
         }
     }
@@ -121,7 +121,7 @@ dependencies {
     shadowBundle project(path: ':Common', configuration: 'transformProductionFabric')
 
     // === MANDATORY DEPS ===
-    modCompileOnly("at.petra-k:paucal:$paucalVersion+$minecraftVersion-common")
+    modCompileOnly("at.petra-k:paucal:$paucalVersion+$minecraftVersion-fabric")
     // dear mod devs, don't put the platform in the middle of your version code
     modImplementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-FABRIC-SNAPSHOT"
     modImplementation "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"

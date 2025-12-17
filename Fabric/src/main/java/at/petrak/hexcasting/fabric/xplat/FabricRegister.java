@@ -5,6 +5,8 @@ import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.core.Holder;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.RegistrationInfo;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 
 import java.util.HashMap;
@@ -14,44 +16,40 @@ import java.util.function.Supplier;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class FabricRegister<B> implements IXplatRegister<B> {
-    private final MappedRegistry<B> register;
+    private final Registry<B> register;
     private final Map<String, B> map;
 
-    public FabricRegister(MappedRegistry<B> register) {
-        this.register = register;
+    @SuppressWarnings("unchecked")
+    public FabricRegister(ResourceKey<Registry<B>> registryKey) {
+        this.register = (Registry<B>) BuiltInRegistries.REGISTRY.get(registryKey.location());
         this.map = new HashMap<>();
     }
 
-    public FabricRegister(MappedRegistry<B> register, Map<String, B> map) {
-        this.register = register;
+    @SuppressWarnings("unchecked")
+    public FabricRegister(ResourceKey<Registry<B>> registryKey, Map<String, B> map) {
+        this.register = (Registry<B>) BuiltInRegistries.REGISTRY.get(registryKey.location());
         this.map = map;
     }
 
+
     @Override
     public <T extends B> Supplier<T> register(String id, Supplier<T> provider) {
-        var key = ResourceKey.create(
-                register.key(),
-                modLoc(id)
-        );
-        var value = provider.get();
-        var info = RegistrationInfo.BUILT_IN;
-        register.register(key, value, info);
-        return provider;
+        T value = provider.get();
+        Registry.register(register, modLoc(id), value);
+        return () -> value;
     }
 
     @Override
     public <T extends B> Holder<B> registerHolder(String id, Supplier<T> provider) {
-        map.put(id, provider.get());
-        return register.wrapAsHolder(provider.get());
+        T value = provider.get();
+        map.put(id, value);
+        return register.wrapAsHolder(value);
     }
 
     @Override
     public void registerAll() {
-        map.forEach((string, provider) ->
-                register.register(
-                        ResourceKey.create(
-                                register.key(), modLoc(string)
-                        ), provider, RegistrationInfo.BUILT_IN)
-                );
+        map.forEach((string, value) ->
+                Registry.register(register, modLoc(string), value)
+        );
     }
 }

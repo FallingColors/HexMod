@@ -131,6 +131,31 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
     }
 
     @Override
+    public String getSomeKindOfReasonableIDForEmi() {
+        var bob = new StringBuilder();
+        if (this.profession != null) {
+            var profLoc = BuiltInRegistries.VILLAGER_PROFESSION.getKey(this.profession);
+            bob.append(profLoc.getNamespace())
+                    .append("//")
+                    .append(profLoc.getPath());
+        } else {
+            bob.append("null");
+        }
+        bob.append("_");
+        if (this.biome != null) {
+            var biomeLoc = BuiltInRegistries.VILLAGER_TYPE.getKey(this.biome);
+            bob.append(biomeLoc.getNamespace())
+                    .append("//")
+                    .append(biomeLoc.getPath());
+        } else {
+            bob.append("null");
+        }
+
+        bob.append(this.minLevel);
+        return bob.toString();
+    }
+
+    @Override
     public Component getName() {
         MutableComponent component = Component.literal("");
 

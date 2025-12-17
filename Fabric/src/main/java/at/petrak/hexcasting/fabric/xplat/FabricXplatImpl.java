@@ -278,7 +278,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public ColorProvider getColorProvider(FrozenPigment pigment) {
-        var cc = HexCardinalComponents.PIGMENT.maybeGet(pigment.item());
+        var cc = Optional.ofNullable(HexCardinalComponents.PIGMENT_ITEM_LOOKUP.find(pigment.item(), null));
         return cc.map(col -> col.provideColor(pigment.owner())).orElse(ColorProvider.MISSING);
     }
 
@@ -525,7 +525,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public <B> IXplatRegister<B> createRegistar(ResourceKey<Registry<B>> registryKey) {
-        return new FabricRegister<>(FabricRegistryBuilder.createSimple(registryKey).buildAndRegister());
+        return new FabricRegister<>(registryKey);
     }
 
     private static PehkuiInterop.ApiAbstraction PEHKUI_API = null;

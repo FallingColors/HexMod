@@ -26,9 +26,7 @@ public class BrainsweepeeEmiStack extends EmiStack {
 
     public BrainsweepeeEmiStack(BrainsweepeeIngredient ingr) {
         this.ingredient = ingr;
-
-        var bareId = this.ingredient.toString();
-        this.id = modLoc(bareId);
+        this.id = modLoc(this.ingredient.getSomeKindOfReasonableIDForEmi());
     }
 
     @Override
