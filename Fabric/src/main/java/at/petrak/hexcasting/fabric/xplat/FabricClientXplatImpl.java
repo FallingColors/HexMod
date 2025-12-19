@@ -44,7 +44,7 @@ public class FabricClientXplatImpl implements IClientXplatAbstractions {
 
     @Override
     public void initPlatformSpecific() {
-        if (IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Fabric.TRINKETS_API_ID)) {
+        if (IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Fabric.ACCESSORIES_API_ID)) {
             AccessoriesApiInterop.clientInit();
         }
     }

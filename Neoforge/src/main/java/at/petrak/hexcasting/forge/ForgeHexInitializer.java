@@ -125,7 +125,7 @@ public class ForgeHexInitializer {
         bind(Registries.ENTITY_TYPE, HexEntities::registerEntities);
         // Testing out new registration system
         HexAttributes.register();
-        bind(Registries.MOB_EFFECT, HexMobEffects::register);
+        HexMobEffects.register();
         bind(Registries.POTION, HexPotions::registerPotions);
         bind(Registries.PARTICLE_TYPE, HexParticles::registerParticles);
 

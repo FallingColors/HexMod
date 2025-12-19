@@ -53,8 +53,6 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.*;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -84,7 +82,6 @@ import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.phys.Vec3;
-import org.apache.commons.codec.binary.Hex;
 import org.jetbrains.annotations.Nullable;
 import virtuoel.pehkui.api.ScaleTypes;
 
@@ -113,7 +110,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public void initPlatformSpecific() {
-        if (this.isModPresent(HexInterop.Fabric.TRINKETS_API_ID)) {
+        if (this.isModPresent(HexInterop.Fabric.ACCESSORIES_API_ID)) {
             AccessoriesApiInterop.init();
         }
     }

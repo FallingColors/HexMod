@@ -20,7 +20,7 @@ public class HexInterop {
     }
 
     public static final class Fabric {
-        public static final String TRINKETS_API_ID = "trinkets";
+        public static final String ACCESSORIES_API_ID = "accessories";
     }
 
     public static void init() {

@@ -20,18 +20,18 @@ public class HexPotions {
     private static final Map<ResourceLocation, Potion> POTIONS = new LinkedHashMap<>();
 
     public static final Potion ENLARGE_GRID = make("enlarge_grid",
-        new Potion("enlarge_grid", new MobEffectInstance(Holder.direct(HexMobEffects.ENLARGE_GRID), 3600)));
+        new Potion("enlarge_grid", new MobEffectInstance(HexMobEffects.ENLARGE_GRID, 3600)));
     public static final Potion ENLARGE_GRID_LONG = make("enlarge_grid_long",
-        new Potion("enlarge_grid_long", new MobEffectInstance(Holder.direct(HexMobEffects.ENLARGE_GRID), 9600)));
+        new Potion("enlarge_grid_long", new MobEffectInstance(HexMobEffects.ENLARGE_GRID, 9600)));
     public static final Potion ENLARGE_GRID_STRONG = make("enlarge_grid_strong",
-        new Potion("enlarge_grid_strong", new MobEffectInstance(Holder.direct(HexMobEffects.ENLARGE_GRID), 1800, 1)));
+        new Potion("enlarge_grid_strong", new MobEffectInstance(HexMobEffects.ENLARGE_GRID, 1800, 1)));
 
     public static final Potion SHRINK_GRID = make("shrink_grid",
-        new Potion("shrink_grid", new MobEffectInstance(Holder.direct(HexMobEffects.SHRINK_GRID), 3600)));
+        new Potion("shrink_grid", new MobEffectInstance(HexMobEffects.SHRINK_GRID, 3600)));
     public static final Potion SHRINK_GRID_LONG = make("shrink_grid_long",
-        new Potion("shrink_grid_long", new MobEffectInstance(Holder.direct(HexMobEffects.SHRINK_GRID), 9600)));
+        new Potion("shrink_grid_long", new MobEffectInstance(HexMobEffects.SHRINK_GRID, 9600)));
     public static final Potion SHRINK_GRID_STRONG = make("shrink_grid_strong",
-        new Potion("shrink_grid_strong", new MobEffectInstance(Holder.direct(HexMobEffects.SHRINK_GRID), 1800, 1)));
+        new Potion("shrink_grid_strong", new MobEffectInstance(HexMobEffects.SHRINK_GRID, 1800, 1)));
 
     public static void registerPotions(BiConsumer<Potion, ResourceLocation> r) {
         for (var e : POTIONS.entrySet()) {
