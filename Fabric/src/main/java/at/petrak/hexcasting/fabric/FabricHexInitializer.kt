@@ -22,6 +22,7 @@ import at.petrak.hexcasting.common.casting.actions.spells.great.OpAltiora
 import at.petrak.hexcasting.common.command.PatternResKeyArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
+import at.petrak.hexcasting.common.items.magic.ItemMediaBattery
 import at.petrak.hexcasting.common.items.storage.ItemScroll
 import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.lib.hex.*
@@ -172,7 +173,15 @@ object FabricHexInitializer : ModInitializer {
         }
         ItemGroupEvents.modifyEntriesEvent(HexCreativeTabs.HEX_KEY).register { r ->
             for (item in this.itemsToAddToCreativeTab) {
-                r.accept(item)
+                if (item is ItemMediaBattery) {
+                    r.accept(HexItems.BATTERY_DUST_STACK.get())
+                    r.accept(HexItems.BATTERY_SHARD_STACK.get())
+                    r.accept(HexItems.BATTERY_CRYSTAL_STACK.get())
+                    r.accept(HexItems.BATTERY_QUENCHED_SHARD_STACK.get())
+                    r.accept(HexItems.BATTERY_QUENCHED_BLOCK_STACK.get())
+                } else {
+                    r.accept(item)
+                }
             }
         }
     }
@@ -201,7 +210,7 @@ object FabricHexInitializer : ModInitializer {
                 .add(HexAttributes.AMBIT_RADIUS)
                 .add(HexAttributes.MEDIA_CONSUMPTION_MODIFIER)
                 .add(HexAttributes.SENTINEL_RADIUS))
-        HexMobEffects.register(bind(BuiltInRegistries.MOB_EFFECT))
+        HexMobEffects.register()
         HexPotions.registerPotions(bind(BuiltInRegistries.POTION))
         HexDataComponents.registerDataComponents(bind(BuiltInRegistries.DATA_COMPONENT_TYPE))
 
@@ -237,12 +246,6 @@ object FabricHexInitializer : ModInitializer {
 
     // sorry lex (not sorry)
     private fun fabricOnlyRegistration() {
-        DefaultItemComponentEvents.MODIFY.register {
-            it.modify(Items.PUMPKIN_PIE, {
-                it.set(HexDataComponents.IOTA, DoubleIota(Math.PI))
-            })
-        }
-
         for (item in BuiltInRegistries.ITEM) {
             if (item is PigmentItem) {
                 HexCardinalComponents.PIGMENT_ITEM_LOOKUP.registerForItems({
@@ -285,6 +288,12 @@ object FabricHexInitializer : ModInitializer {
         HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
                 stack, _ -> CCMediaHolder.Static({ MediaConstants.QUENCHED_BLOCK_UNIT }, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, stack)
         }, HexBlocks.QUENCHED_ALLAY.asItem())
+
+        HexCardinalComponents.IOTA_HOLDER_LOOKUP.registerForItems({
+            stack, _ -> CCItemIotaHolder.Static(stack) {
+            return@Static DoubleIota(Math.PI)
+        }
+        }, Items.PUMPKIN_PIE)
     }
 
     private val itemsToAddToCreativeTab : MutableSet<Item> = mutableSetOf()

@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.items.storage;
 
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.iota.Iota;
+import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
@@ -187,5 +188,11 @@ public class ItemScroll extends Item implements IotaHolderItem {
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public @Nullable Iota readIota(ItemStack stack) {
+        var pattern = stack.get(HexDataComponents.PATTERN);
+        return pattern != null ? new PatternIota(pattern) : null;
     }
 }

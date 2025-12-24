@@ -190,6 +190,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             this.executionState.getTickSpeed());
         serverLevel.setBlockAndUpdate(this.getBlockPos(),
             this.getBlockState().setValue(BlockCircleComponent.ENERGIZED, true));
+        ICircleComponent.sfx(this.getBlockPos(), this.getBlockState(), this.level, this, true);
     }
 
     @Contract(pure = true)
