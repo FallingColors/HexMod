@@ -9,7 +9,9 @@ import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
@@ -52,7 +54,7 @@ public class WorldlyPatternRenderHelpers {
         ps.pushPose();
         ps.translate(-blockSize / 2f, -blockSize / 2f, 1f / 32f);
         // there's almost certainly a better way to do this, but we're just flipping the y and z axes to fix normals
-        ps.last().normal().mul(new Matrix3f(1, 0, 0, 0, 0, 1, 0, 1, 0));
+        // no need for this anymore :D
         renderPattern(pattern, showStrokeOrder ? READABLE_SCROLL_SETTINGS : SCROLL_SETTINGS,
                 showStrokeOrder ? PatternColors.READABLE_SCROLL_COLORS : PatternColors.DEFAULT_PATTERN_COLOR,
                 scroll.getPos().hashCode(), ps, bufSource, null, null, light, blockSize);
@@ -61,7 +63,7 @@ public class WorldlyPatternRenderHelpers {
 
     private static final int[] WALL_ROTATIONS = {180, 270, 0, 90};
     private static final Vec3i[] SLATE_FACINGS = {new Vec3i(0, -1, 0), new Vec3i(-1, -1, 0), new Vec3i(-1, -1, 1), new Vec3i(0, -1 , 1)};
-    private static final Vec3[] WALL_NORMALS = {new Vec3(0, 0, -1), new Vec3(-1, 0, 0), new Vec3(0, 0, -1), new Vec3(-1, 0, 0)};
+    private static final Vec3[] WALL_NORMALS = {new Vec3(0, 0, 1), new Vec3(-1, 0, 0), new Vec3(0, 0, -1), new Vec3(1, 0, 0)};
     private static final Vec3i[] SLATE_FLOORCEIL_FACINGS = {new Vec3i(0,0,0), new Vec3i(1,0,0), new Vec3i(1,0,1), new Vec3i(0,0,1)};
 
     public static void renderPatternForSlate(BlockEntitySlate tile, HexPattern pattern, PoseStack ps, MultiBufferSource buffer, int light, BlockState bs)
@@ -89,12 +91,17 @@ public class WorldlyPatternRenderHelpers {
             ps.mulPose(Axis.YP.rotationDegrees(facing*-90));
             ps.mulPose(Axis.XP.rotationDegrees(90 * (isOnCeiling ? -1 : 1)));
             if(isOnCeiling) ps.translate(0,-1,1);
+
+            // Set the normal for floor/ceiling slates so lighting is correct
+            // Floor faces up, ceiling faces down
+            normal = isOnCeiling ? new Vec3(0, -1, 0) : new Vec3(0, 1, 0);
         }
 
+        int actualLight = LevelRenderer.getLightColor(tile.getLevel(), tile.getBlockPos().relative(Direction.getNearest(normal)));
         renderPattern(pattern,
-                wombly ? WORLDLY_SETTINGS_WOBBLY : WORLDLY_SETTINGS,
-                wombly ? PatternColors.SLATE_WOBBLY_PURPLE_COLOR : PatternColors.DEFAULT_PATTERN_COLOR,
-                tile.getBlockPos().hashCode(), ps, buffer, normal, null, light, 1);
+            wombly ? WORLDLY_SETTINGS_WOBBLY : WORLDLY_SETTINGS,
+            wombly ? PatternColors.SLATE_WOBBLY_PURPLE_COLOR : PatternColors.DEFAULT_PATTERN_COLOR,
+            tile.getBlockPos().hashCode(), ps, buffer, normal, null, actualLight, 1);
         ps.popPose();
     }
 

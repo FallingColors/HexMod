@@ -5,6 +5,7 @@ import com.samsthenerd.inline.api.client.GlowHandling;
 import com.samsthenerd.inline.api.client.InlineRenderer;
 import com.samsthenerd.inline.impl.InlineStyle;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 
@@ -61,7 +62,8 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
         drawContext.pose().pushPose();
         drawContext.pose().translate(isGlowy ? -1f : 0, isGlowy ? -1.5f : -0.5f, 0f);
         int color = trContext.usableColor();
-        PatternRenderer.renderPattern(data.pattern, drawContext.pose(), new PatternRenderer.WorldlyBits(drawContext.bufferSource(), trContext.light(), null),
+        boolean isFlat = InlineRenderer.isFlat(drawContext.pose(), trContext.layerType());
+        PatternRenderer.renderPattern(data.pattern, drawContext.pose(), !isFlat ? new PatternRenderer.WorldlyBits(drawContext.bufferSource(), trContext.light(), null) : null,
                 isGlowy ? INLINE_SETTINGS_GLOWY : INLINE_SETTINGS,
                 isGlowy ? new PatternColors(color, 0xFF_000000 | glowyParentColor) : PatternColors.singleStroke(color),
                 0, INLINE_TEXTURE_RES);
