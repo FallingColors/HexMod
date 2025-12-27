@@ -60,3 +60,8 @@ mandatory = true
 versionRange = "[1.21.1-1.2.2,)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.hexcasting]]
+modId = "accessories"
+mandatory = false
+versionRange = "[1.1.0-beta.16+1.21.1,)"

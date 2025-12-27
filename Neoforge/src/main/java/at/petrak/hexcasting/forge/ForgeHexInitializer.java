@@ -30,6 +30,7 @@ import at.petrak.hexcasting.forge.network.ForgePacketHandler;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import com.samsthenerd.inline.utils.cradles.EntTypeCradle;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -76,6 +77,8 @@ import java.util.function.Consumer;
 public class ForgeHexInitializer {
     public ForgeHexInitializer(ModContainer modContainer) {
         initConfig(modContainer);
+        // workaround for Inline EntTypeCradles not being available on server, related to https://github.com/SamsTheNerd/inline/issues/34
+        EntTypeCradle.fromTypeId(ResourceLocation.fromNamespaceAndPath("minecraft", "pig")).get().getType();
         initRegistries();
         initRegistry();
         initListeners();

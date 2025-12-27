@@ -8,8 +8,8 @@ import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
-import com.mojang.authlib.minecraft.client.MinecraftClient;
 import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.advancements.AdvancementNode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponentType;
@@ -84,6 +84,7 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     }
 
     public static Component infiniteMedia(Level level) {
+
         String prefix = "item.hexcasting.creative_unlocker.";
 
         String emphasis = Language.getInstance().getOrDefault(prefix + "for_emphasis");
@@ -235,7 +236,8 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
 
     private static MutableComponent rainbow(MutableComponent component, int shift, Level level) {
         if (level == null) {
-            return component.withStyle(ChatFormatting.WHITE);
+            return component.withStyle((s) -> s.withColor(
+                    TextColor.fromRgb(Mth.hsvToRgb((((float) Util.getMillis() / 50) + shift) * 2 % 360 / 360F, 1F, 1F))));
         }
 
         return component.withStyle((s) -> s.withColor(
@@ -245,7 +247,7 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents,
         TooltipFlag isAdvanced) {
-        Component emphasized = infiniteMedia(Minecraft.getInstance().level);
+        Component emphasized = infiniteMedia(null);
 
         MutableComponent modName = Component.translatable("item.hexcasting.creative_unlocker.mod_name").withStyle(
             (s) -> s.withColor(ItemMediaHolder.HEX_COLOR));

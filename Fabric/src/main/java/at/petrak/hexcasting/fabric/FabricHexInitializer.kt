@@ -49,6 +49,8 @@ import at.petrak.hexcasting.fabric.storage.FabricImpetusStorage
 import at.petrak.hexcasting.fabric.xplat.FabricXplatImpl
 import at.petrak.hexcasting.interop.HexInterop
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import com.samsthenerd.inline.utils.EntityCradle
+import com.samsthenerd.inline.utils.cradles.EntTypeCradle
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
@@ -86,6 +88,8 @@ object FabricHexInitializer : ModInitializer {
 
     override fun onInitialize() {
         this.CONFIG = FabricHexConfig.setup()
+        // workaround for Inline EntTypeCradles not being available on server, related to https://github.com/SamsTheNerd/inline/issues/34
+        EntTypeCradle.fromTypeId(ResourceLocation.fromNamespaceAndPath("minecraft", "pig")).get().getType();
         FabricPacketHandler.initPackets()
         FabricPacketHandler.init()
 

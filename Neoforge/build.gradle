@@ -90,7 +90,7 @@ dependencies {
     modImplementation "at.petra-k:paucal:$paucalVersion+$minecraftVersion-neoforge"
     modImplementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-NEOFORGE-SNAPSHOT"
     modImplementation "com.illusivesoulworks.caelus:caelus-neoforge:$caelusVersion"
-    modImplementation "com.samsthenerd.inline:inline-common:1.21.1-1.2.2-74"
+    modImplementation "com.samsthenerd.inline:inline-neoforge:1.21.1-1.2.2-74"
     // needed for inline to run
     modRuntimeOnly("me.shedaniel.cloth:cloth-config-forge:$clothConfigVersion")
     modRuntimeOnly "com.samsthenerd.inline:inline-neoforge:$minecraftVersion-$inlineVersion"
