@@ -155,6 +155,11 @@ public class PatternIota extends Iota {
         public int color() {
             return 0xff_ffaa00;
         }
+
+        @Override
+        public boolean omitCommas() {
+            return true;
+        }
     };
 
     public static PatternIota deserialize(Tag tag) throws IllegalArgumentException {

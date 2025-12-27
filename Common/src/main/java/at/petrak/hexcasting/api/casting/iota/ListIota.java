@@ -132,12 +132,13 @@ public class ListIota extends Iota {
                 out.append(IotaType.getDisplay(csub));
 
                 // only add a comma between 2 non-patterns (commas don't look good with Inline patterns)
-                // TODO: maybe add a method on IotaType to allow it to opt out of commas?
                 if (i < list.size() - 1) {
-                    var thisIotaNeedsComma = IotaType.getTypeFromTag(csub) != PatternIota.TYPE;
-                    var nextIotaNeedsComma = IotaType.getTypeFromTag(HexUtils.downcast(list.get(i+1), CompoundTag.TYPE)) != PatternIota.TYPE;
+                    var thisType = IotaType.getTypeFromTag(csub);
+                    var nextType = IotaType.getTypeFromTag(HexUtils.downcast(list.get(i+1), CompoundTag.TYPE));
+                    var thisIotaOmitsComma = thisType != null && thisType.omitCommas();
+                    var nextIotaOmitsComma = nextType != null && nextType.omitCommas();
                     var alwaysShowCommas = HexConfig.client() != null && HexConfig.client().alwaysShowListCommas();
-                    if (thisIotaNeedsComma || nextIotaNeedsComma || alwaysShowCommas)
+                    if (!thisIotaOmitsComma || !nextIotaOmitsComma || alwaysShowCommas)
                         out.append(", ");
                 }
             }
