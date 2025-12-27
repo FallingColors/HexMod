@@ -63,7 +63,7 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
         drawContext.pose().translate(isGlowy ? -1f : 0, isGlowy ? -1.5f : -0.5f, 0f);
         int color = trContext.usableColor();
         boolean isFlat = InlineRenderer.isFlat(drawContext.pose(), trContext.layerType());
-        PatternRenderer.renderPattern(data.pattern, drawContext.pose(), !isFlat ? new PatternRenderer.WorldlyBits(drawContext.bufferSource(), trContext.light(), null) : null,
+        PatternRenderer.renderPattern(data.pattern, drawContext.pose(), !isFlat ? new PatternRenderer.WorldlyBits(drawContext.bufferSource(), LightTexture.FULL_BRIGHT, null) : null,
                 isGlowy ? INLINE_SETTINGS_GLOWY : INLINE_SETTINGS,
                 isGlowy ? new PatternColors(color, 0xFF_000000 | glowyParentColor) : PatternColors.singleStroke(color),
                 0, INLINE_TEXTURE_RES);
