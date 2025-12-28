@@ -2,11 +2,6 @@ architectury {
     common(["fabric", "neoforge"])
 }
 
-pkSubproj {
-    platform = "common"
-    pkPublish = false
-}
-
 repositories {
     mavenCentral()
 

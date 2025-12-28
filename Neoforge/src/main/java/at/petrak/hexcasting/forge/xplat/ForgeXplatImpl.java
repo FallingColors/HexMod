@@ -220,7 +220,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public void setStaffcastImage(ServerPlayer player, @Nullable CastingImage image) {
-        player.getPersistentData().put(TAG_HARNESS, image == null ? new CompoundTag() : image.serializeToNbt());
+        player.getPersistentData().put(TAG_VM, image == null ? new CompoundTag() : image.serializeToNbt());
     }
 
     @Override
@@ -285,9 +285,9 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public CastingVM getStaffcastVM(ServerPlayer player, InteractionHand hand) {
-        // This is always from a staff because we don't need to load the harness when casting from item
+        // This is always from a staff because we don't need to load the VM when casting from item
         var ctx = new StaffCastEnv(player, hand);
-        return new CastingVM(CastingImage.loadFromNbt(player.getPersistentData().getCompound(TAG_HARNESS),
+        return new CastingVM(CastingImage.loadFromNbt(player.getPersistentData().getCompound(TAG_VM),
             player.serverLevel()), ctx);
     }
 
@@ -305,7 +305,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public void clearCastingData(ServerPlayer player) {
-        player.getPersistentData().remove(TAG_HARNESS);
+        player.getPersistentData().remove(TAG_VM);
         player.getPersistentData().remove(TAG_PATTERNS);
     }
 
@@ -585,6 +585,6 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     public static final UUID ALTIORA_ATTRIBUTE_ID = UUID.fromString("91897c79-3ebb-468c-a265-40418ed01c41");
 
-    public static final String TAG_HARNESS = "hexcasting:spell_harness";
+    public static final String TAG_VM = "hexcasting:spell_harness";
     public static final String TAG_PATTERNS = "hexcasting:spell_patterns";
 }

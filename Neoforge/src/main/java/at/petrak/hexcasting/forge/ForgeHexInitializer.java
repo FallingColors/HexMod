@@ -277,6 +277,10 @@ public class ForgeHexInitializer {
         modBus.addListener((EntityAttributeModificationEvent e) -> {
             e.add(EntityType.PLAYER, HexAttributes.GRID_ZOOM);
             e.add(EntityType.PLAYER, HexAttributes.SCRY_SIGHT);
+            e.add(EntityType.PLAYER, HexAttributes.FEEBLE_MIND);
+            e.add(EntityType.PLAYER, HexAttributes.MEDIA_CONSUMPTION_MODIFIER);
+            e.add(EntityType.PLAYER, HexAttributes.AMBIT_RADIUS);
+            e.add(EntityType.PLAYER, HexAttributes.SENTINEL_RADIUS);
         });
 
         if (ModList.get().isLoaded(HexInterop.Forge.CURIOS_API_ID)) {

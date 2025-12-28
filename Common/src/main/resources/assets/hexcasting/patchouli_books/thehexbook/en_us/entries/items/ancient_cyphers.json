@@ -1,0 +1,23 @@
+{
+    "name": "hexcasting.entry.ancient_cyphers",
+    "category": "hexcasting:items",
+    "icon": "hexcasting:ancient_cypher",
+    "sortnum": 7,
+    "advancement": "hexcasting:root",
+    "pages": [
+        {
+            "type": "patchouli:text",
+            "text": "hexcasting.page.ancient_cyphers.1"
+        },
+        {
+            "type": "patchouli:spotlight",
+            "text": "hexcasting.page.ancient_cyphers.2",
+            "item": "hexcasting:ancient_cypher{variant:0},hexcasting:ancient_cypher{variant:1},hexcasting:ancient_cypher{variant:2},hexcasting:ancient_cypher{variant:3},hexcasting:ancient_cypher{variant:4},hexcasting:ancient_cypher{variant:5},hexcasting:ancient_cypher{variant:6},hexcasting:ancient_cypher{variant:7}"
+        },
+        {
+            "type": "patchouli:crafting",
+            "recipe": "hexcasting:ancient_colorizer",
+            "text": "hexcasting.page.ancient_cyphers.3"
+        }
+    ]
+  }

@@ -26,7 +26,6 @@ import at.petrak.hexcasting.common.casting.actions.local.OpPushLocal;
 import at.petrak.hexcasting.common.casting.actions.math.OpCoerceToAxial;
 import at.petrak.hexcasting.common.casting.actions.math.OpRandom;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpBoolIf;
-import at.petrak.hexcasting.common.casting.actions.math.logic.OpBoolNot;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpCoerceToBool;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpEquality;
 import at.petrak.hexcasting.common.casting.actions.queryentity.*;
@@ -170,6 +169,8 @@ public class HexActions {
         new OperationAction(HexPattern.fromAngles("wdw", HexDir.NORTH_EAST)));
     public static final ActionRegistryEntry OR = make("or",
         new OperationAction(HexPattern.fromAngles("waw", HexDir.SOUTH_EAST)));
+    public static final ActionRegistryEntry NOT = make("not",
+        new OperationAction(HexPattern.fromAngles("dw", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry XOR = make("xor",
         new OperationAction(HexPattern.fromAngles("dwa", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry GREATER = make("greater", new OperationAction(
@@ -188,8 +189,6 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("ad", HexDir.EAST), new OpEquality(false)));
     public static final ActionRegistryEntry NOT_EQUALS = make("not_equals",
         new ActionRegistryEntry(HexPattern.fromAngles("da", HexDir.EAST), new OpEquality(true)));
-    public static final ActionRegistryEntry NOT = make("not",
-        new ActionRegistryEntry(HexPattern.fromAngles("dw", HexDir.NORTH_WEST), OpBoolNot.INSTANCE));
     public static final ActionRegistryEntry BOOL_COERCE = make("bool_coerce",
         new ActionRegistryEntry(HexPattern.fromAngles("aw", HexDir.NORTH_EAST), OpCoerceToBool.INSTANCE));
     public static final ActionRegistryEntry IF = make("if",
@@ -275,16 +274,16 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("adaa", HexDir.WEST), OpBeep.INSTANCE));
 
     public static final ActionRegistryEntry CRAFT$CYPHER = make("craft/cypher", new ActionRegistryEntry(
-        HexPattern.fromAngles("waqqqqq", HexDir.EAST), new OpMakePackagedSpell<>(HexItems.CYPHER,
-        MediaConstants.CRYSTAL_UNIT)
+        HexPattern.fromAngles("waqqqqq", HexDir.EAST), 
+        new OpMakePackagedSpell(s -> (s.is(HexItems.CYPHER)||s.is(HexItems.ANCIENT_CYPHER)), HexItems.CYPHER::getDescription, MediaConstants.CRYSTAL_UNIT)
     ));
     public static final ActionRegistryEntry CRAFT$TRINKET = make("craft/trinket", new ActionRegistryEntry(
-        HexPattern.fromAngles(
-            "wwaqqqqqeaqeaeqqqeaeq", HexDir.EAST), new OpMakePackagedSpell<>(HexItems.TRINKET,
-        5 * MediaConstants.CRYSTAL_UNIT)));
+        HexPattern.fromAngles("wwaqqqqqeaqeaeqqqeaeq", HexDir.EAST), 
+        new OpMakePackagedSpell(HexItems.TRINKET, 5 * MediaConstants.CRYSTAL_UNIT)
+    ));
     public static final ActionRegistryEntry CRAFT$ARTIFACT = make("craft/artifact", new ActionRegistryEntry(
         HexPattern.fromAngles("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", HexDir.EAST),
-        new OpMakePackagedSpell<>(HexItems.ARTIFACT, 10 * MediaConstants.CRYSTAL_UNIT)
+        new OpMakePackagedSpell(HexItems.ARTIFACT, 10 * MediaConstants.CRYSTAL_UNIT)
     ));
     public static final ActionRegistryEntry CRAFT$BATTERY = make("craft/battery", new ActionRegistryEntry(
         HexPattern.fromAngles("aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw", HexDir.SOUTH_WEST), OpMakeBattery.INSTANCE));

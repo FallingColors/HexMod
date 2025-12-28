@@ -13,6 +13,7 @@ import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.common.lib.HexAttributes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -28,8 +29,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-
-import static at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv.SENTINEL_RADIUS;
 
 public class CircleCastEnv extends CastingEnvironment {
     protected final CircleExecutionState execState;
@@ -73,7 +72,7 @@ public class CircleCastEnv extends CastingEnvironment {
         ResourceLocation key = actionKey(match);
 
         if (!HexConfig.server().isActionAllowedInCircles(key)) {
-            throw new MishapDisallowedSpell("disallowed_circle");
+            throw new MishapDisallowedSpell("disallowed_circle", key);
         }
     }
 
@@ -133,6 +132,7 @@ public class CircleCastEnv extends CastingEnvironment {
     public boolean isVecInRangeEnvironment(Vec3 vec) {
         var caster = this.execState.getCaster(this.world);
         if (caster != null) {
+            double sentinelRadius = caster.getAttributeValue(HexAttributes.SENTINEL_RADIUS);
             if (vec.distanceToSqr(caster.position()) <= caster.getBbHeight() * caster.getBbHeight()) {
                 return true;
             }
@@ -141,7 +141,7 @@ public class CircleCastEnv extends CastingEnvironment {
             if (sentinel != null
                 && sentinel.extendsRange()
                 && caster.level().dimension() == sentinel.dimension()
-                && vec.distanceToSqr(sentinel.position()) <= SENTINEL_RADIUS * SENTINEL_RADIUS + 0.00000000001
+                && vec.distanceToSqr(sentinel.position()) <= sentinelRadius * sentinelRadius + 0.00000000001
             ) {
                 return true;
             }

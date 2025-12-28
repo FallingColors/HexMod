@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.actions.spells.great
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
@@ -75,7 +76,8 @@ object OpBrainsweep : SpellAction {
         override fun cast(env: CastingEnvironment) {
             env.world.setBlockAndUpdate(pos, BrainsweepRecipe.copyProperties(state, recipe.result))
 
-            IXplatAbstractions.INSTANCE.setBrainsweepAddlData(sacrifice)
+            HexAPI.instance().brainsweep(sacrifice)
+
             if (sacrifice is Villager && HexConfig.server().doVillagersTakeOffenseAtMindMurder()) {
                 env.castingEntity?.let { sacrifice.tellWitnessesThatIWasMurdered(it) }
             }

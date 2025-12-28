@@ -3,12 +3,23 @@ architectury {
     neoForge()
 }
 
+// FIXME: update dependencies/versions before releasing 0.12
 pkSubproj {
-    platform = "neoforge"
+    pkPublish = true
     curseforgeJar = jar.archiveFile
-    curseforgeDependencies[]
+    curseforgeDependencies([
+        "paucal",
+        "patchouli",
+        "caelus",
+        "inline",
+    ])
     modrinthJar = jar.archiveFile
-    modrinthDependencies[]
+    modrinthDependencies([
+        "paucal:HyBiJPtT", // 0.6.0-forge
+        "patchouli:1.20.1-80-forge",
+        "caelus:3.1.0+1.20",
+        "inline:1.20.1-1.0.1-forge",
+    ])
 }
 
 configurations {

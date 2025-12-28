@@ -7,7 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
 
 /**
- * The result of doing something to a cast harness.
+ * The result of doing something to a casting VM.
  *
  * Contains the iota that was executed to produce this CastResult,
  * the next thing to execute after this is finished, the modified state of the stack,
