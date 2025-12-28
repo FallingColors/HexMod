@@ -12,18 +12,21 @@ import at.petrak.hexcasting.client.render.shader.HexShaders;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.lib.HexParticles;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
+import at.petrak.hexcasting.forge.lib.ForgeHexAttachments;
 import at.petrak.hexcasting.interop.HexInterop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
@@ -72,6 +75,13 @@ public class ForgeHexClientInitializer {
         evBus.addListener((ClientTickEvent.Post e) -> {
             ClientTickCounter.clientTickEnd();
             ShiftScrollListener.clientTickEnd();
+            ClientLevel level = Minecraft.getInstance().level;
+            if (level != null) {
+                for (Player player : level.players()) {
+                    if (!player.hasData(ForgeHexAttachments.CLIENT_CASTING_STACK.get())) continue;
+                    player.getData(ForgeHexAttachments.CLIENT_CASTING_STACK.get()).tick();
+                }
+            }
         });
 
         evBus.addListener((InputEvent.MouseScrollingEvent e) -> {

@@ -99,7 +99,7 @@ public class ConjureParticle extends TextureSheetParticle {
 
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
             var tex = texMan.getTexture(TextureAtlas.LOCATION_PARTICLES);
-            IClientXplatAbstractions.INSTANCE.setFilterSave(tex, true, false);
+            IClientXplatAbstractions.INSTANCE.setFilterSave(tex, false, false);
             RenderSystem.enableDepthTest();
             return tess.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
         }
