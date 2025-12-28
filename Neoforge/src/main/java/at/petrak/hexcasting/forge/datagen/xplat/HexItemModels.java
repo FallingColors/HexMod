@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiFunction;
@@ -156,8 +157,10 @@ public class HexItemModels extends PaucalItemModelProvider {
         }
         singleTexture(getPath(HexItems.UUID_PIGMENT), ResourceLocation.withDefaultNamespace("item/generated"),
             "layer0", modLoc("item/colorizer/uuid"));
-        singleTexture(getPath(HexItems.DEFAULT_PIGMENT), ResourceLocation.withDefaultNamespace("item/generated"),
-            "layer0", modLoc("item/colorizer/uuid"));
+        singleTexture(getPath(HexItems.DEFAULT_PIGMENT), new ResourceLocation("item/generated"),
+            "layer0", modLoc("item/colorizer/default"));
+        singleTexture(getPath(HexItems.ANCIENT_PIGMENT), new ResourceLocation("item/generated"),
+            "layer0", modLoc("item/colorizer/ancient"));
 
         simpleItem(modLoc("slate_blank"));
         simpleItem(modLoc("slate_written"));
@@ -278,11 +281,14 @@ public class HexItemModels extends PaucalItemModelProvider {
         var name = getPath(item);
         var builder = getBuilder(name);
         for (int i = 0; i < numVariants; i++) {
-            var plain = i == 0 ? singleTexture(name, ResourceLocation.withDefaultNamespace("item/generated"),
+
+            var parent_tag = Arrays.asList(PACKAGED_SPELL_HANDHELD_VARIANTS).contains(i) ? "item/handheld_rod" : "item/generated";
+
+            var plain = i == 0 ? singleTexture(name, new ResourceLocation(parent_tag),
                     "layer0", modLoc("item/cad/" + i + "_" + stub))
-                    : withExistingParent(name + "_" + i, ResourceLocation.withDefaultNamespace("item/generated"))
+                    : withExistingParent(name + "_" + i, new ResourceLocation(parent_tag))
                     .texture("layer0", modLoc("item/cad/" + i + "_" + stub));
-            var filled = withExistingParent(name + "_" + i + "_filled", ResourceLocation.withDefaultNamespace("item/generated"))
+            var filled = withExistingParent(name + "_" + i + "_filled", new ResourceLocation(parent_tag))
                 .texture("layer0", modLoc("item/cad/" + i + "_" + stub))
                 .texture("layer1", modLoc("item/cad/" + i + "_" + stub + "_overlay"));
             builder.override().predicate(ItemFocus.VARIANT_PRED, i).predicate(ItemPackagedHex.HAS_PATTERNS_PRED, -0.01f)

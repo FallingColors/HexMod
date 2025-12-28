@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.iota.GarbageIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.pigment.FrozenPigment
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
 
@@ -23,11 +24,17 @@ class MishapInvalidIota(
         stack[stack.size - 1 - reverseIdx] = GarbageIota.INSTANCE;
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error(
-            "invalid_value", expected, reverseIdx,
-            perpetrator.display()
+    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component? {
+        val perpKey = HexIotaTypes.REGISTRY.getKey(perpetrator.getType())
+        val perpDesc = Component.translatableWithFallback(
+            "hexcasting.iota.${perpKey}.desc",
+            "hexcasting.mishap.invalid_value.class.${perpKey?.getPath()}"
         )
+        return error(
+            "invalid_value", expected, reverseIdx,
+            perpDesc, perpetrator.display()
+        )
+    }
 
     companion object {
         @JvmStatic

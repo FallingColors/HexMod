@@ -55,6 +55,9 @@ public class HexItemTagProvider extends ItemTagsProvider {
         this.copy(HexTags.Blocks.IMPETI, HexTags.Items.IMPETI);
         this.copy(HexTags.Blocks.DIRECTRICES, HexTags.Items.DIRECTRICES);
         this.copy(HexTags.Blocks.MINDFLAYED_CIRCLE_COMPONENTS, HexTags.Items.MINDFLAYED_CIRCLE_COMPONENTS);
+        this.copy(HexTags.Blocks.SLATE_BLOCKS, HexTags.Items.SLATE_BLOCKS);
+        this.copy(HexTags.Blocks.AMETHYST_BLOCKS, HexTags.Items.AMETHYST_BLOCKS);
+        this.copy(HexTags.Blocks.QUENCHED_ALLAY_BLOCKS, HexTags.Items.QUENCHED_ALLAY_BLOCKS);
         this.copy(BlockTags.LOGS_THAT_BURN, ItemTags.LOGS_THAT_BURN);
         this.copy(BlockTags.LOGS, ItemTags.LOGS);
         this.copy(BlockTags.PLANKS, ItemTags.PLANKS);

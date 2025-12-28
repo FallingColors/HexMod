@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.items.magic.ItemAncientCypher;
 import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexLootFunctions;

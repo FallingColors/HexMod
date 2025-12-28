@@ -136,6 +136,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private double gridSnapThreshold = DEFAULT_GRID_SNAP_THRESHOLD;
         @ConfigEntry.Gui.Tooltip
         private boolean clickingTogglesDrawing = DEFAULT_CLICKING_TOGGLES_DRAWING;
+        @ConfigEntry.Gui.Tooltip
+        private boolean alwaysShowListCommas = DEFAULT_ALWAYS_SHOW_LIST_COMMAS;
 
         @Override
         public void validatePostLoad() throws ValidationException {
@@ -165,6 +167,11 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @Override
         public boolean clickingTogglesDrawing() {
              return clickingTogglesDrawing;
+        }
+
+        @Override
+        public boolean alwaysShowListCommas() {
+             return alwaysShowListCommas;
         }
     }
 

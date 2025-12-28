@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.fabric.network;
+spackage at.petrak.hexcasting.fabric.network;
 
 import at.petrak.hexcasting.common.msgs.*;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

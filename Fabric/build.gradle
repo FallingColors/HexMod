@@ -1,4 +1,4 @@
-plugins {
+splugins {
     // id 'fabric-loom' version "1.8.9"
     id 'com.gradleup.shadow'
 }
@@ -8,21 +8,29 @@ architectury {
     fabric()
 }
 
+// FIXME: update dependencies/versions before releasing 0.12
 pkSubproj {
     platform = "fabric"
     pkPublish = true
-
     curseforgeJar = remapJar.archiveFile
     curseforgeDependencies([
-            "paucal:0.6.0", "patchouli:1.20.1-80", "fabric-language-kotlin:1.9.4+kotlin.1.8.21",
-            "inline:1.20.1-1.0.1", "cloth-config:11.1.0",
-            "cardinal-components-api:5.2.1", "fabric-api:0.84"
+        "paucal",
+        "patchouli",
+        "fabric-language-kotlin",
+        "inline",
+        "cloth-config",
+        "cardinal-components-api",
+        "fabric-api",
     ])
     modrinthJar = remapJar.archiveFile
     modrinthDependencies([
-            "paucal:0.6.0", "patchouli:1.20.1-80", "fabric-language-kotlin:1.9.4+kotlin.1.8.21",
-            "inline:1.20.1-1.0.1", "cloth-config:11.1.0",
-            "cardinal-components-api:5.2.1", "fabric-api:0.84"
+        "paucal:dabyDTwJ", // 0.6.0-fabric
+        "patchouli:1.20.1-80-fabric",
+        "fabric-language-kotlin:1.9.4+kotlin.1.8.21",
+        "inline:1.20.1-1.0.1-fabric",
+        "cloth-config:11.1.106+fabric",
+        "cardinal-components-api:5.2.1",
+        "fabric-api:0.84.0+1.20.1",
     ])
 }
 

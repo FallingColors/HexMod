@@ -5,17 +5,14 @@
     "C": {
       "item": "hexcasting:amethyst_dust"
     },
-    "D": {
-      "item": "hexcasting:amethyst_dust"
-    },
     "I": {
-      "item": "minecraft:copper_ingot"
+      "item": "minecraft:amethyst_shard"
     }
   },
   "pattern": [
-    "DCD",
+    " C ",
     "CIC",
-    "DCD"
+    " C "
   ],
   "result": {
     "count": 1,

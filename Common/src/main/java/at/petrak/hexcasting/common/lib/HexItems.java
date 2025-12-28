@@ -9,10 +9,7 @@ import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.items.ItemStaff;
 import at.petrak.hexcasting.common.items.magic.*;
-import at.petrak.hexcasting.common.items.pigment.ItemAmethystAndCopperPigment;
-import at.petrak.hexcasting.common.items.pigment.ItemDyePigment;
-import at.petrak.hexcasting.common.items.pigment.ItemPridePigment;
-import at.petrak.hexcasting.common.items.pigment.ItemUUIDPigment;
+import at.petrak.hexcasting.common.items.pigment.*;
 import at.petrak.hexcasting.common.items.storage.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.base.Suppliers;
@@ -58,7 +55,7 @@ public class HexItems {
     public static final Item AMETHYST_DUST = make("amethyst_dust", new Item(props()));
     public static final Item CHARGED_AMETHYST = make("charged_amethyst", new Item(props()));
 
-    public static final Item QUENCHED_SHARD = make("quenched_allay_shard", new Item(props()));
+    public static final Item QUENCHED_SHARD = make("quenched_allay_shard", new Item(props().rarity(Rarity.UNCOMMON)));
 
     public static final ItemStaff STAFF_OAK = make("staff/oak", new ItemStaff(unstackable()));
     public static final ItemStaff STAFF_SPRUCE = make("staff/spruce", new ItemStaff(unstackable()));
@@ -72,9 +69,9 @@ public class HexItems {
     public static final ItemStaff STAFF_CHERRY = make("staff/cherry", new ItemStaff(unstackable()));
     public static final ItemStaff STAFF_BAMBOO = make("staff/bamboo", new ItemStaff(unstackable()));
     public static final ItemStaff STAFF_EDIFIED = make("staff/edified", new ItemStaff(unstackable()));
-    public static final ItemStaff STAFF_QUENCHED = make("staff/quenched", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_QUENCHED = make("staff/quenched", new ItemStaff(unstackable().rarity(Rarity.UNCOMMON)));
     // mindsplice staffaratus
-    public static final ItemStaff STAFF_MINDSPLICE = make("staff/mindsplice", new ItemStaff(unstackable()));
+    public static final ItemStaff STAFF_MINDSPLICE = make("staff/mindsplice", new ItemStaff(unstackable().rarity(Rarity.UNCOMMON)));
 
     public static final ItemLens SCRYING_LENS = make("lens", new ItemLens(
             IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
@@ -153,7 +150,9 @@ public class HexItems {
 
     public static final Item UUID_PIGMENT = make("uuid_colorizer", new ItemUUIDPigment(unstackable()));
     public static final Item DEFAULT_PIGMENT = make("default_colorizer",
-            new ItemAmethystAndCopperPigment(unstackable()));
+        new ItemAmethystPigment(unstackable()));
+    public static final Item ANCIENT_PIGMENT = make("ancient_colorizer",
+        new ItemAmethystAndCopperPigment(unstackable()));
 
     // BUFF SANDVICH
     public static final Item SUBMARINE_SANDWICH = make("sub_sandwich",

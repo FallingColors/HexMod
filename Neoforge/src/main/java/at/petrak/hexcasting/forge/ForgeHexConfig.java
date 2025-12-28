@@ -102,6 +102,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             clickingTogglesDrawing = builder.comment(
                             "Whether you click to start and stop drawing instead of clicking and dragging")
                     .define("clickingTogglesDrawing", DEFAULT_CLICKING_TOGGLES_DRAWING);
+            alwaysShowListCommas = builder.comment(
+                            "Whether all iota types should be comma-separated in lists (by default, pattern iotas don't use commas)")
+                    .define("alwaysShowListCommas", DEFAULT_ALWAYS_SHOW_LIST_COMMAS);
         }
 
         @Override
@@ -127,6 +130,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public boolean clickingTogglesDrawing() {
             return clickingTogglesDrawing.get();
+        }
+
+        @Override
+        public boolean alwaysShowListCommas() {
+            return alwaysShowListCommas.get();
         }
     }
 
@@ -173,6 +181,10 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             traderScrollChance = builder.comment("The chance for wandering traders to sell an Ancient Scroll")
                 .defineInRange("traderScrollChance", DEFAULT_TRADER_SCROLL_CHANCE, 0.0, 1.0);
 
+            // builders for loot (eg. scroll/lore/cypher pools and chances) should go here
+
+            builder.pop();
+
             actionDenyList = builder.comment(
                     "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
                 .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
@@ -189,7 +201,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 .defineList("tpDimDenyList", DEFAULT_DIM_TP_DENYLIST, Server::isValidReslocArg);
 
             doesTrueNameHaveAmbit = builder.comment(
-                    "when false makes player reference iotas behave as normal entity reference iotas")
+                    "When false, makes player reference iotas behave as normal entity reference iotas")
                 .define("doesTrueNameHaveAmbit", DEFAULT_TRUE_NAME_HAS_AMBIT);
         }
 

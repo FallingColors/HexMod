@@ -12,7 +12,6 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
-import at.petrak.hexcasting.common.msgs.MsgBlinkS2C
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.core.component.DataComponents
@@ -38,8 +37,14 @@ object OpTeleport : SpellAction {
         val delta = args.getVec3(1, argc)
         env.assertEntityInRange(teleportee)
 
-        if (!teleportee.canUsePortal(true) || teleportee.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
+        if (teleportee.type.`is`(HexTags.Entities.CANNOT_TELEPORT))
             throw MishapImmuneEntity(teleportee)
+
+        if (teleportee.type.`is`(HexTags.Entities.STICKY_TELEPORTERS)) {
+            val immunePassengers = teleportee.passengers.filter { it.type.`is`(HexTags.Entities.CANNOT_TELEPORT) }
+            if (!immunePassengers.isEmpty()) 
+                throw MishapImmuneEntity(immunePassengers.get(0))
+        }
 
         val targetPos = teleportee.position().add(delta)
         if (!HexConfig.server().canTeleportInThisDimension(env.world.dimension()))
@@ -102,43 +107,13 @@ object OpTeleport : SpellAction {
             return
         }
 
-        val playersToUpdate = mutableListOf<ServerPlayer>()
         val target = teleportee.position().add(delta)
 
-        val cannotTeleport = teleportee.passengers.any { it.type.`is`(HexTags.Entities.CANNOT_TELEPORT) }
-        if (cannotTeleport)
-            return
-
         // A "sticky" entity teleports itself and its riders
-        val sticky = teleportee.type.`is`(HexTags.Entities.STICKY_TELEPORTERS)
-
-        // TODO: this probably does funky things with stacks of passengers. I doubt this will come up in practice
-        // though
-        if (sticky) {
-            teleportee.stopRiding()
-            teleportee.indirectPassengers.filterIsInstance<ServerPlayer>().forEach(playersToUpdate::add)
-            // this handles teleporting the passengers
-            teleportee.teleportTo(target.x, target.y, target.z)
-        } else {
-            // Snap everyone off the stacks
-            teleportee.stopRiding()
+        // This is the default behavior for teleportTo(), so we remove the riders if the teleportee *isn't* sticky
+        teleportee.stopRiding()
+        if (!teleportee.type.`is`(HexTags.Entities.STICKY_TELEPORTERS)) 
             teleportee.passengers.forEach(Entity::stopRiding)
-            if (teleportee is ServerPlayer) {
-                playersToUpdate.add(teleportee)
-            } else {
-                teleportee.setPos(teleportee.position().add(delta))
-            }
-        }
-
-        for (player in playersToUpdate) {
-            // See TeleportCommand
-            val chunkPos = ChunkPos(BlockPos.containing(delta))
-            // the `1` is apparently for "distance." i'm not sure what it does but this is what
-            // /tp does
-            world.chunkSource.addRegionTicket(TicketType.POST_TELEPORT, chunkPos, 1, player.id)
-            player.connection.resetPosition()
-            player.setPos(target)
-            IXplatAbstractions.INSTANCE.sendPacketToPlayer(player, MsgBlinkS2C(delta))
-        }
+        teleportee.teleportTo(target.x, target.y, target.z)
     }
 }

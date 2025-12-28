@@ -12,6 +12,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.phys.Vec2
+import kotlin.jvm.Throws
 
 /**
  * Sequence of angles to define a pattern traced.
@@ -124,11 +125,12 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
 
     companion object {
         @JvmField
-        val CODEC: Codec<HexPattern> = RecordCodecBuilder.create({instance -> instance.group(
-            Codec.STRING.fieldOf("start_dir").forGetter(HexPattern::anglesSignature),
-            HexDir.CODEC.fieldOf("angles").forGetter(HexPattern::startDir)
-        ).apply(instance, HexPattern::fromAngles)
-        })
+        val CODEC: Codec<HexPattern> = RecordCodecBuilder.create { instance ->
+            instance.group(
+                Codec.STRING.fieldOf(TAG_START_DIR).forGetter(HexPattern::anglesSignature),
+                HexDir.CODEC.fieldOf(TAG_ANGLES).forGetter(HexPattern::startDir)
+            ).apply(instance, HexPattern::fromAnglesUnchecked)
+        }
 
         @JvmField
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, HexPattern> = StreamCodec.composite(
@@ -137,30 +139,61 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
             HexPattern::fromAngles
         )
 
+        /**
+         * Construct a [HexPattern] from an angle signature and starting direction.
+         *
+         * Throws if the signature contains an invalid character, or if the resulting pattern would contain overlaps.
+         */
         @JvmStatic
+        @Throws(IllegalArgumentException::class, IllegalStateException::class)
         fun fromAngles(signature: String, startDir: HexDir): HexPattern {
             val out = HexPattern(startDir)
+
+            var cursor = HexCoord.Origin
             var compass = startDir
+            val linesSeen = mutableSetOf(
+                cursor to compass,
+                cursor + compass to compass.rotatedBy(HexAngle.BACK),
+            )
 
             for ((idx, c) in signature.withIndex()) {
-                val angle = when (c) {
-                    'w' -> HexAngle.FORWARD
-                    'e' -> HexAngle.RIGHT
-                    'd' -> HexAngle.RIGHT_BACK
-                    // for completeness ...
-                    's' -> HexAngle.BACK
-                    'a' -> HexAngle.LEFT_BACK
-                    'q' -> HexAngle.LEFT
-                    else -> throw IllegalArgumentException("Cannot match $c at idx $idx to a direction")
-                }
+                val angle = HexAngle.fromChar(c)
+                    ?: throw IllegalArgumentException("Cannot match $c at idx $idx to a direction")
+
+                cursor += compass
                 compass *= angle
-                val success = out.tryAppendDir(compass)
-                if (!success) {
+
+                if (
+                    !linesSeen.add(cursor to compass)
+                    // Line from here to there also blocks there to here
+                    || !linesSeen.add(cursor + compass to compass.rotatedBy(HexAngle.BACK))
+                ) {
                     throw IllegalStateException("Adding the angle $c at index $idx made the pattern invalid by looping back on itself")
                 }
+
+                out.angles.add(angle)
             }
+
             return out
         }
 
+        /**
+         * Construct a [HexPattern] from an angle signature and starting direction, without checking for overlaps.
+         *
+         * Throws if the signature contains an invalid character.
+         */
+        @JvmStatic
+        @Throws(IllegalArgumentException::class)
+        fun fromAnglesUnchecked(signature: String, startDir: HexDir): HexPattern {
+            val out = HexPattern(startDir)
+
+            for ((idx, c) in signature.withIndex()) {
+                val angle = HexAngle.fromChar(c)
+                    ?: throw IllegalArgumentException("Cannot match $c at idx $idx to a direction")
+                out.angles.add(angle)
+            }
+
+            return out
+        }
     }
 }

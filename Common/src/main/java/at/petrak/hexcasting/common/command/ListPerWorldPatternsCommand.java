@@ -101,7 +101,7 @@ public class ListPerWorldPatternsCommand {
                     var found = save.lookupReverse(key);
                     var signature = found.getFirst();
                     var startDir = found.getSecond().canonicalStartDir();
-                    var pat = HexPattern.fromAngles(signature, startDir);
+                    var pat = HexPattern.fromAnglesUnchecked(signature, startDir);
 
                     var stack = new ItemStack(HexItems.SCROLL_LARGE);
                     stack.set(HexDataComponents.ACTION, key);

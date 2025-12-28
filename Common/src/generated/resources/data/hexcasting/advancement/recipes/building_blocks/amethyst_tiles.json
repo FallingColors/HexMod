@@ -5,7 +5,9 @@
       "conditions": {
         "items": [
           {
-            "items": "hexcasting:amethyst_dust"
+            "items": [
+              "minecraft:amethyst_block"
+            ]
           }
         ]
       },

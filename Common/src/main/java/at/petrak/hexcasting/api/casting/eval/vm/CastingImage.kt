@@ -108,6 +108,7 @@ data class CastingImage(
                 true
             } else {
                 marked.putBoolean(entity.stringUUID, true)
+                userData.putCompound(HexAPI.MARKED_MOVED_USERDATA, marked)
                 false
             }
         }

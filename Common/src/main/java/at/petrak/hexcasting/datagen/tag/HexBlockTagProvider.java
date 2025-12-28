@@ -133,6 +133,13 @@ public class HexBlockTagProvider extends TagsProvider<Block> {
         add(tag(HexTags.Blocks.CHEAP_TO_BREAK_BLOCK),
             HexBlocks.CONJURED_BLOCK, HexBlocks.CONJURED_LIGHT);
 
+        add(tag(HexTags.Blocks.SLATE_BLOCKS),
+            HexBlocks.SLATE_BLOCK, HexBlocks.SLATE_BRICKS, HexBlocks.SLATE_BRICKS_SMALL, HexBlocks.SLATE_TILES, HexBlocks.SLATE_PILLAR);
+        add(tag(HexTags.Blocks.AMETHYST_BLOCKS),
+            Blocks.AMETHYST_BLOCK, HexBlocks.AMETHYST_BRICKS, HexBlocks.AMETHYST_BRICKS_SMALL, HexBlocks.AMETHYST_TILES, HexBlocks.AMETHYST_PILLAR);
+        add(tag(HexTags.Blocks.QUENCHED_ALLAY_BLOCKS),
+            HexBlocks.QUENCHED_ALLAY, HexBlocks.QUENCHED_ALLAY_BRICKS, HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL, HexBlocks.QUENCHED_ALLAY_TILES);
+
         // this is a hack but fixes #532
         var createBrittle = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("create", "brittle"));
         tag(createBrittle).addOptionalTag(BuiltInRegistries.BLOCK.getKey(HexBlocks.SLATE));
