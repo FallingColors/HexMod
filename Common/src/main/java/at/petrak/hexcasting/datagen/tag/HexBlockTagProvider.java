@@ -35,9 +35,6 @@ public class HexBlockTagProvider extends TagsProvider<Block> {
             .addTag(HexTags.Blocks.IMPETI)
             .addTag(HexTags.Blocks.DIRECTRICES);
 
-        tag(HexTags.Blocks.HEX_UNBREAKABLE)
-                .addOptionalTag(BlockTags.NEEDS_DIAMOND_TOOL.location());
-
         add(tag(BlockTags.MINEABLE_WITH_PICKAXE),
             HexBlocks.SLATE_BLOCK, HexBlocks.SLATE_TILES, HexBlocks.SLATE_BRICKS,
             HexBlocks.SLATE_BRICKS_SMALL, HexBlocks.SLATE_PILLAR, HexBlocks.SLATE,
