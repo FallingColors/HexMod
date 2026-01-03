@@ -1,4 +1,4 @@
-spackage at.petrak.hexcasting.fabric.network;
+package at.petrak.hexcasting.fabric.network;
 
 import at.petrak.hexcasting.common.msgs.*;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -23,7 +23,6 @@ public class FabricPacketHandler {
         PayloadTypeRegistry.playS2C().register(MsgBeepS2C.TYPE, MsgBeepS2C.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(MsgShiftScrollC2S.TYPE, MsgShiftScrollC2S.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(MsgCastParticleS2C.TYPE, MsgCastParticleS2C.STREAM_CODEC);
-        PayloadTypeRegistry.playS2C().register(MsgBlinkS2C.TYPE, MsgBlinkS2C.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(MsgClearSpiralPatternsS2C.TYPE, MsgClearSpiralPatternsS2C.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(MsgNewWallScrollS2C.TYPE, MsgNewWallScrollS2C.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(MsgRecalcWallScrollDisplayS2C.TYPE, MsgRecalcWallScrollDisplayS2C.STREAM_CODEC);
@@ -45,8 +44,6 @@ public class FabricPacketHandler {
     public static void initClient() {
         ClientPlayNetworking.registerGlobalReceiver(MsgNewSpellPatternS2C.TYPE,
             makeClientBoundHandler(MsgNewSpellPatternS2C::handle));
-        ClientPlayNetworking.registerGlobalReceiver(
-            MsgBlinkS2C.TYPE, makeClientBoundHandler(MsgBlinkS2C::handle));
         ClientPlayNetworking.registerGlobalReceiver(MsgCastParticleS2C.TYPE,
             makeClientBoundHandler(MsgCastParticleS2C::handle));
         ClientPlayNetworking.registerGlobalReceiver(MsgOpenSpellGuiS2C.TYPE,

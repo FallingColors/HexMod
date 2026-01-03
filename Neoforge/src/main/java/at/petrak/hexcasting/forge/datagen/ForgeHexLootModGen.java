@@ -23,6 +23,9 @@ public class ForgeHexLootModGen extends GlobalLootModifierProvider {
         super(output, registries, HexAPI.MOD_ID);
     }
 
+    public static final ResourceLocation RANDOM_SCROLL_TABLE = modLoc("random_scroll");
+    public static final ResourceLocation RANDOM_CYPHER_TABLE = modLoc("random_cypher");
+
     @Override
     protected void start() {
         for (var injection : HexLootHandler.DEFAULT_SCROLL_INJECTS) {

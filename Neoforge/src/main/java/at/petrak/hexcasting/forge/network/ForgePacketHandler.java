@@ -27,8 +27,6 @@ public class ForgePacketHandler {
             // Server -> client
             registar.playToClient(MsgNewSpellPatternS2C.TYPE, MsgNewSpellPatternS2C.STREAM_CODEC,
                     makeClientBoundHandler(MsgNewSpellPatternS2C::handle));
-            registar.playToClient(MsgBlinkS2C.TYPE, MsgBlinkS2C.STREAM_CODEC,
-                    makeClientBoundHandler(MsgBlinkS2C::handle));
             registar.playToClient(MsgSentinelStatusUpdateAck.TYPE, MsgSentinelStatusUpdateAck.STREAM_CODEC,
                     makeClientBoundHandler(MsgSentinelStatusUpdateAck::handle));
             registar.playToClient(MsgPigmentUpdateAck.TYPE, MsgPigmentUpdateAck.STREAM_CODEC,

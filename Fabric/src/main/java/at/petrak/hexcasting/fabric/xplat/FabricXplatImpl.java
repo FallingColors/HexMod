@@ -270,7 +270,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public boolean isPigment(ItemStack stack) {
-        return stack.get(HexDataComponents.PIGMENT) != null;
+        return HexCardinalComponents.PIGMENT_ITEM_LOOKUP.find(stack, null) != null;
     }
 
     @Override

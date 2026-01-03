@@ -460,7 +460,7 @@ public class HexplatRecipes extends RecipeProvider {
                 .requires(HexBlocks.AMETHYST_PILLAR)
                 .unlockedBy("has_item", has(HexBlocks.SLATE)).save(recipes);
 
-        new BrainsweepRecipeBuilder(StateIngredientHelper.of(Blocks.AMETHYST_BLOCK),
+        new BrainsweepRecipeBuilder(StateIngredients.of(Blocks.AMETHYST_BLOCK),
             new VillagerIngredient(null, null, 3),
             Blocks.BUDDING_AMETHYST.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
@@ -744,7 +744,9 @@ public class HexplatRecipes extends RecipeProvider {
         return item == null ? null : Ingredient.of(item);
     }
 
-    private void stoneSet(Consumer<FinishedRecipe> recipes, Item base, Item bricks, Item smallBricks, Item tiles, @Nullable Item pillar) {
+    private void stoneSet(RecipeOutput recipes, Item base, Item bricks, Item smallBricks, Item tiles, @Nullable Item pillar) {
+        String smallBricksPath = BuiltInRegistries.ITEM.getKey(smallBricks).getPath();
+        String bricksPath = BuiltInRegistries.ITEM.getKey(bricks).getPath();
         // Bricks from base block
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, bricks, 4)
                 .define('#', base)
@@ -757,13 +759,13 @@ public class HexplatRecipes extends RecipeProvider {
         ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, bricks)
                 .requires(smallBricks)
                 .unlockedBy("has_item", hasItem(base))
-                .save(recipes, modLoc(bricks + "_from_" + smallBricks));
+                .save(recipes, modLoc(bricksPath + "_from_" + smallBricksPath));
 
         // Small bricks from bricks
         ShapelessRecipeBuilder.shapeless(RecipeCategory.BUILDING_BLOCKS, smallBricks)
                 .requires(bricks)
                 .unlockedBy("has_item", hasItem(base))
-                .save(recipes, modLoc(smallBricks + "_from_" + bricks));
+                .save(recipes, modLoc(smallBricksPath + "_from_" + bricksPath));
 
         // Tiles from bricks
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, tiles, 4)
@@ -784,11 +786,12 @@ public class HexplatRecipes extends RecipeProvider {
         }
     }
 
-    private void stoneCutterFromTag(Consumer<FinishedRecipe> recipes, TagKey<Item> tagKey, Item ...results) {
+    private void stoneCutterFromTag(RecipeOutput recipes, TagKey<Item> tagKey, Item ...results) {
         for (Item result : results) {
+            var resultPath = BuiltInRegistries.ITEM.getKey(result).getPath();
             SingleItemRecipeBuilder.stonecutting(Ingredient.of(tagKey), RecipeCategory.BUILDING_BLOCKS, result)
                     .unlockedBy("has_item", hasItem(tagKey))
-                    .save(recipes, modLoc("stonecutting/" + result));
+                    .save(recipes, modLoc("stonecutting/" + resultPath));
         }
     }
 }

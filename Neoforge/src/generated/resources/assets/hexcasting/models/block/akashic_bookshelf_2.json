@@ -1,6 +1,0 @@
-{
-  "parent": "hexcasting:block/akashic_bookshelf",
-  "textures": {
-    "overlay": "hexcasting:block/akashic_bookshelf_overlay_2"
-  }
-}

@@ -1,7 +1,10 @@
 package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.api.casting.SpellList;
+import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -104,14 +107,35 @@ public class ListIota extends Iota {
 
             out.append(sub.display());
 
-                // only add a comma between 2 non-patterns (commas don't look good with Inline patterns)
-                // TODO: maybe add a config? maybe add a method on IotaType to allow it to opt out of commas
-                if (i < list.size() - 1 && (IotaType.getTypeFromTag(csub) != PatternIota.TYPE
-                        || IotaType.getTypeFromTag(HexUtils.downcast(list.get(i+1), CompoundTag.TYPE)) != PatternIota.TYPE)) {
+            // only add a comma between 2 non-patterns (commas don't look good with Inline patterns)
+            // TODO: maybe add a method on IotaType to allow it to opt out of commas?
+            if (i < list.size() - 1) {
+                var thisIotaNeedsComma = sub.type != PatternIota.TYPE;
+                var nextIotaNeedsComma = list.getAt(i + 1).type != PatternIota.TYPE;
+                var alwaysShowCommas = HexConfig.client() != null && HexConfig.client().alwaysShowListCommas();
+                if (thisIotaNeedsComma || nextIotaNeedsComma || alwaysShowCommas)
                     out.append(", ");
-                }
             }
-            return Component.translatable("hexcasting.tooltip.list_contents", out).withStyle(ChatFormatting.DARK_PURPLE);
+        }
+        return Component.translatable("hexcasting.tooltip.list_contents", out).withStyle(ChatFormatting.DARK_PURPLE);
+    }
+
+    public static IotaType<ListIota> TYPE = new IotaType<>() {
+
+        public static final MapCodec<ListIota> CODEC = SpellList.getCODEC()
+                .xmap(ListIota::new, ListIota::getList)
+                .fieldOf("list");
+        public static final StreamCodec<RegistryFriendlyByteBuf, ListIota> STREAM_CODEC =
+                SpellList.getSTREAM_CODEC().map(ListIota::new, ListIota::getList);
+
+        @Override
+        public MapCodec<ListIota> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, ListIota> streamCodec() {
+            return STREAM_CODEC;
         }
 
         @Override

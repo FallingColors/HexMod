@@ -37,6 +37,7 @@ public class HexItemModels extends PaucalItemModelProvider {
     }
 
     private static final String[] PHIAL_SIZES = {"small", "medium", "large", "larger", "largest"};
+    private static final Integer[] PACKAGED_SPELL_HANDHELD_VARIANTS = {5};
 
     // TODO port: maybe consider using registry lookup? But it's completable future... Not sure
     private String getPath(Item item) {
@@ -157,9 +158,9 @@ public class HexItemModels extends PaucalItemModelProvider {
         }
         singleTexture(getPath(HexItems.UUID_PIGMENT), ResourceLocation.withDefaultNamespace("item/generated"),
             "layer0", modLoc("item/colorizer/uuid"));
-        singleTexture(getPath(HexItems.DEFAULT_PIGMENT), new ResourceLocation("item/generated"),
+        singleTexture(getPath(HexItems.DEFAULT_PIGMENT), ResourceLocation.withDefaultNamespace("item/generated"),
             "layer0", modLoc("item/colorizer/default"));
-        singleTexture(getPath(HexItems.ANCIENT_PIGMENT), new ResourceLocation("item/generated"),
+        singleTexture(getPath(HexItems.ANCIENT_PIGMENT), ResourceLocation.withDefaultNamespace("item/generated"),
             "layer0", modLoc("item/colorizer/ancient"));
 
         simpleItem(modLoc("slate_blank"));
@@ -284,11 +285,11 @@ public class HexItemModels extends PaucalItemModelProvider {
 
             var parent_tag = Arrays.asList(PACKAGED_SPELL_HANDHELD_VARIANTS).contains(i) ? "item/handheld_rod" : "item/generated";
 
-            var plain = i == 0 ? singleTexture(name, new ResourceLocation(parent_tag),
+            var plain = i == 0 ? singleTexture(name, ResourceLocation.withDefaultNamespace(parent_tag),
                     "layer0", modLoc("item/cad/" + i + "_" + stub))
-                    : withExistingParent(name + "_" + i, new ResourceLocation(parent_tag))
+                    : withExistingParent(name + "_" + i, ResourceLocation.withDefaultNamespace(parent_tag))
                     .texture("layer0", modLoc("item/cad/" + i + "_" + stub));
-            var filled = withExistingParent(name + "_" + i + "_filled", new ResourceLocation(parent_tag))
+            var filled = withExistingParent(name + "_" + i + "_filled", ResourceLocation.withDefaultNamespace(parent_tag))
                 .texture("layer0", modLoc("item/cad/" + i + "_" + stub))
                 .texture("layer1", modLoc("item/cad/" + i + "_" + stub + "_overlay"));
             builder.override().predicate(ItemFocus.VARIANT_PRED, i).predicate(ItemPackagedHex.HAS_PATTERNS_PRED, -0.01f)

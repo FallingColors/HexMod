@@ -40,7 +40,7 @@ public class EmiPhialRecipe implements EmiRecipe {
 
     @Override
     public @Nullable ResourceLocation getId() {
-        return HexEMIPlugin.PHIAL_ID;
+        return modLoc("/craft/battery");
     }
 
     @Override

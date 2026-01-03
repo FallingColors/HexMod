@@ -124,6 +124,9 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
     }
 
     companion object {
+        const val TAG_START_DIR = "start_dir"
+        const val TAG_ANGLES = "angles"
+
         @JvmField
         val CODEC: Codec<HexPattern> = RecordCodecBuilder.create { instance ->
             instance.group(

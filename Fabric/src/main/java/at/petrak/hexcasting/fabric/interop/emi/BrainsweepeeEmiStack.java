@@ -23,10 +23,16 @@ import static at.petrak.hexcasting.client.render.RenderLib.renderEntity;
 public class BrainsweepeeEmiStack extends EmiStack {
     public final BrainsweepeeIngredient ingredient;
     private final ResourceLocation id;
+    private final DataComponentPatch componentChanges;
 
     public BrainsweepeeEmiStack(BrainsweepeeIngredient ingr) {
+        this(ingr, DataComponentPatch.EMPTY);
+    }
+
+    public BrainsweepeeEmiStack(BrainsweepeeIngredient ingr, DataComponentPatch patches) {
         this.ingredient = ingr;
         this.id = modLoc(this.ingredient.getSomeKindOfReasonableIDForEmi());
+        this.componentChanges = patches;
     }
 
     @Override
@@ -41,7 +47,7 @@ public class BrainsweepeeEmiStack extends EmiStack {
 
     @Override
     public DataComponentPatch getComponentChanges() {
-        return null;
+        return componentChanges;
     }
 
     @Override

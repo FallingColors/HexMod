@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "hexcasting:block/deco/quenched_allay_bricks_small_0"
-  }
-}

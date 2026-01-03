@@ -52,7 +52,10 @@ public class HexEMIPlugin implements EmiPlugin {
 				.map(EmiStack::of).toList());
 			var inputEntity = new BrainsweepeeEmiStack(recipe.value().entityIn());
 			var output = EmiStack.of(recipe.value().result().getBlock());
-			registry.addRecipe(new EmiBrainsweepRecipe(inputBlocks, inputEntity, output, recipe.id()));
+            var outputId = output.getId().getNamespace().equals("minecraft") ? output.getId().getPath() : output.getId().toString();
+            var inputEntityId = inputEntity.getName().getString().toLowerCase().replaceAll(" ", "_");
+            var recipeId = modLoc("/brainsweep/" + (outputId.replaceAll(":", "/")) + "_from_" + inputEntityId);
+			registry.addRecipe(new EmiBrainsweepRecipe(inputBlocks, inputEntity, output, recipeId));
 		}
 
 		if (PhialRecipeStackBuilder.shouldAddRecipe()) {

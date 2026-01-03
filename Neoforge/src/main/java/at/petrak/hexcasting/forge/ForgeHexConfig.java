@@ -83,6 +83,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ModConfigSpec.BooleanValue invertAbacusScrollDirection;
         private static ModConfigSpec.DoubleValue gridSnapThreshold;
         private static ModConfigSpec.BooleanValue clickingTogglesDrawing;
+        private static ModConfigSpec.BooleanValue alwaysShowListCommas;
 
         public Client(ModConfigSpec.Builder builder) {
             ctrlTogglesOffStrokeOrder = builder.comment(
