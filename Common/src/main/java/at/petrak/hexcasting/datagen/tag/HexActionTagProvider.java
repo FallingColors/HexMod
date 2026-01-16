@@ -35,6 +35,14 @@ public class HexActionTagProvider extends TagsProvider<ActionRegistryEntry> {
             tag(ersatzActionTag(HexTags.Actions.PER_WORLD_PATTERN)).add(key);
         }
         // deciding that akashic write can be just a normal spell (as a treat)
+
+        for (var actionID : new String[]{
+            "hexal:wisp/summon/projectile", "hexal:wisp/summon/ticking", "hexical:conjure_gummy", "hexical:charm", 
+            "hexical:recharge_lamp", "lapisworks:deposit", "lapisworks:imbue_lap", "yaha:time_bomb"
+        }) {
+            var loc = ResourceLocation.tryParse(actionID);
+            tag(ersatzActionTag(HexTags.Actions.CANNOT_MODIFY_COST)).addOptional(loc);
+        }
     }
 
     private static TagKey<ActionRegistryEntry> ersatzActionTag(TagKey<ActionRegistryEntry> real) {

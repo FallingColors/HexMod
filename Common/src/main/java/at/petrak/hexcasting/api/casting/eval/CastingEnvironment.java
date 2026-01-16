@@ -242,6 +242,8 @@ public abstract class CastingEnvironment {
         return false;
     }
 
+    public boolean costModifierAllowed = true;
+
     /**
      * Attempt to extract the given amount of media. Returns the amount of media left in the cost.
      * <p>
@@ -250,7 +252,8 @@ public abstract class CastingEnvironment {
      */
     public long extractMedia(long cost, boolean simulate) {
         if (this instanceof PlayerBasedCastEnv 
-        && this.getCastingEntity() != null) {
+        && this.getCastingEntity() != null 
+        && costModifierAllowed) {
             cost = (long) (cost * this.getCastingEntity().getAttributeValue(HexAttributes.MEDIA_CONSUMPTION_MODIFIER));
         }
         for (var extractMediaComponent : preMediaExtract)
