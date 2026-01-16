@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.casting.eval;
 
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
+import at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation;
@@ -248,7 +249,8 @@ public abstract class CastingEnvironment {
      * positive.
      */
     public long extractMedia(long cost, boolean simulate) {
-        if (this.getCastingEntity() != null){
+        if (this instanceof PlayerBasedCastEnv 
+        && this.getCastingEntity() != null) {
             cost = (long) (cost * this.getCastingEntity().getAttributeValue(HexAttributes.MEDIA_CONSUMPTION_MODIFIER));
         }
         for (var extractMediaComponent : preMediaExtract)
