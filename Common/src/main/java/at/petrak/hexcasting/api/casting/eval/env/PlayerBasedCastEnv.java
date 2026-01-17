@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.casting.eval.env;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
+import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
@@ -66,11 +67,13 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
-    protected double checkCostModifier(ResourceLocation loc) {
-        if (this.getCastingEntity() != null && !isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), loc, HexTags.Actions.CANNOT_MODIFY_COST)) {
-            return this.getCastingEntity().getAttributeValue(HexAttributes.MEDIA_CONSUMPTION_MODIFIER);
+    protected double getCostModifier(PatternShapeMatch match) {
+        ResourceLocation loc = actionKey(match);
+        if (isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), loc, HexTags.Actions.CANNOT_MODIFY_COST)) {
+            return 1.0;
+        } else {
+            return this.caster.getAttributeValue(HexAttributes.MEDIA_CONSUMPTION_MODIFIER);
         }
-        return 1.0;
     }
 
     @Override

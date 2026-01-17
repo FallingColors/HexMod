@@ -193,13 +193,13 @@ public abstract class CastingEnvironment {
             throw new MishapDisallowedSpell("disallowed", loc);
         }
 
-        costModifier = this.checkCostModifier(loc);
+        costModifier = this.getCostModifier(match);
     }
 
     /**
      * Casting env subclasses can override this to modify the cost for a given action
      */
-    protected double checkCostModifier(ResourceLocation loc) {
+    protected double getCostModifier(PatternShapeMatch match) {
         return 1.0;
     }
 
@@ -251,7 +251,7 @@ public abstract class CastingEnvironment {
         return false;
     }
 
-    protected double costModifier = 1.0;
+    private double costModifier = 1.0;
 
     /**
      * Attempt to extract the given amount of media. Returns the amount of media left in the cost.
