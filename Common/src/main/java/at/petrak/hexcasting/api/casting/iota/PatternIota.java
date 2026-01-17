@@ -94,16 +94,9 @@ public class PatternIota extends Iota {
                     // this gets caught down below
                     throw new MishapUnenlightened();
                 }
-
-                if (isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), key, HexTags.Actions.CANNOT_MODIFY_COST)) {
-                    vm.getEnv().costModifierAllowed = false;
-                } else {
-                    vm.getEnv().costModifierAllowed = true;
-                }
             } else if (lookup instanceof PatternShapeMatch.Special special) {
                 castedName = special.handler::getName;
                 action = special.handler.act();
-                vm.getEnv().costModifierAllowed = true;
             } else if (lookup instanceof PatternShapeMatch.Nothing) {
                 throw new MishapInvalidPattern(this.getPattern());
             } else throw new IllegalStateException();

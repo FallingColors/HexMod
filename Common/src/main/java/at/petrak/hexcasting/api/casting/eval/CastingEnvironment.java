@@ -187,11 +187,20 @@ public abstract class CastingEnvironment {
     public void precheckAction(PatternShapeMatch match) throws Mishap {
         // TODO: this doesn't let you select special handlers.
         // Might be worth making a "no casting" tag on each thing
-        ResourceLocation key = actionKey(match);
+        ResourceLocation loc = actionKey(match);
 
-        if (!HexConfig.server().isActionAllowed(key)) {
-            throw new MishapDisallowedSpell("disallowed", key);
+        if (!HexConfig.server().isActionAllowed(loc)) {
+            throw new MishapDisallowedSpell("disallowed", loc);
         }
+
+        costModifier = this.checkCostModifier(loc);
+    }
+
+    /**
+     * Casting env subclasses can override this to modify the cost for a given action
+     */
+    protected double checkCostModifier(ResourceLocation loc) {
+        return 1.0;
     }
 
     @Nullable
@@ -242,7 +251,7 @@ public abstract class CastingEnvironment {
         return false;
     }
 
-    public boolean costModifierAllowed = true;
+    protected double costModifier = 1.0;
 
     /**
      * Attempt to extract the given amount of media. Returns the amount of media left in the cost.
@@ -251,11 +260,7 @@ public abstract class CastingEnvironment {
      * positive.
      */
     public long extractMedia(long cost, boolean simulate) {
-        if (this instanceof PlayerBasedCastEnv 
-        && this.getCastingEntity() != null 
-        && costModifierAllowed) {
-            cost = (long) (cost * this.getCastingEntity().getAttributeValue(HexAttributes.MEDIA_CONSUMPTION_MODIFIER));
-        }
+        cost = (long) (cost * costModifier);
         for (var extractMediaComponent : preMediaExtract)
             cost = extractMediaComponent.onExtractMedia(cost, simulate);
         cost = extractMediaEnvironment(cost, simulate);
