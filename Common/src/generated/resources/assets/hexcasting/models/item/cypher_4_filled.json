@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "hexcasting:item/cad/4_cypher",
+    "layer1": "hexcasting:item/cad/4_cypher_overlay"
+  }
+}
