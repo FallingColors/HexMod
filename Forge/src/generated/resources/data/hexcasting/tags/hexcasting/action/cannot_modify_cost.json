@@ -1,36 +1,3 @@
 {
-  "values": [
-    {
-      "id": "hexal:wisp/summon/projectile",
-      "required": false
-    },
-    {
-      "id": "hexal:wisp/summon/ticking",
-      "required": false
-    },
-    {
-      "id": "hexical:conjure_gummy",
-      "required": false
-    },
-    {
-      "id": "hexical:charm",
-      "required": false
-    },
-    {
-      "id": "hexical:recharge_lamp",
-      "required": false
-    },
-    {
-      "id": "lapisworks:deposit",
-      "required": false
-    },
-    {
-      "id": "lapisworks:imbue_lap",
-      "required": false
-    },
-    {
-      "id": "yaha:time_bomb",
-      "required": false
-    }
-  ]
+  "values": []
 }
