@@ -4,11 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## `0.11.4` - ???
+## [UNRELEASED]
 
 ### Fixed
 
-- Fixed a crash loop when trying to generate a creative-mode ancient scroll for a Great Spell whose per-world pattern hasn't been calculated yet, by Robotgiggle in [992](https://github.com/FallingColors/HexMod/pull/992)
+- Fixed a crash loop when trying to generate a creative-mode ancient scroll for a Great Spell whose per-world pattern hasn't been calculated yet, by Robotgiggle in [992](https://github.com/FallingColors/HexMod/pull/992).
 
 ## `0.11.3` - 2025-11-22
 
