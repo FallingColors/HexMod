@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.casting.eval.env;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
+import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
@@ -11,6 +12,7 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexStatistics;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
@@ -21,6 +23,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -34,6 +37,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
+import static at.petrak.hexcasting.api.utils.HexUtils.isOfTag;
 
 public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     public static final double DEFAULT_AMBIT_RADIUS = 32.0;
@@ -60,6 +64,16 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     @Override
     public ServerPlayer getCaster() {
         return this.caster;
+    }
+
+    @Override
+    protected double getCostModifier(PatternShapeMatch match) {
+        ResourceLocation loc = actionKey(match);
+        if (isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), loc, HexTags.Actions.CANNOT_MODIFY_COST)) {
+            return 1.0;
+        } else {
+            return this.caster.getAttributeValue(HexAttributes.MEDIA_CONSUMPTION_MODIFIER);
+        }
     }
 
     @Override
