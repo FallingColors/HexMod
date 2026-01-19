@@ -13,13 +13,13 @@ import dev.emi.trinkets.api.client.TrinketRendererRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class TrinketsApiInterop {
     public static void init() {
@@ -37,6 +37,16 @@ public class TrinketsApiInterop {
             }
         });
 
+        DiscoveryHandlers.addExtraEquipmentDiscoverer(player -> {
+            Optional<TrinketComponent> optional = TrinketsApi.getTrinketComponent(player);
+            if (optional.isPresent()) {
+                TrinketComponent component = optional.get();
+                return component.getEquipped(i -> true).stream()
+                        .map(Tuple::getB)
+                        .toList();
+            }
+            return List.of();
+        });
 
         DiscoveryHandlers.addDebugItemDiscoverer((player, type) -> {
             Optional<TrinketComponent> optional = TrinketsApi.getTrinketComponent(player);
