@@ -41,7 +41,7 @@ public class TrinketsApiInterop {
             Optional<TrinketComponent> optional = TrinketsApi.getTrinketComponent(player);
             if (optional.isPresent()) {
                 TrinketComponent component = optional.get();
-                return component.getEquipped(i -> true).stream()
+                return component.getEquipped(i -> !i.isEmpty()).stream()
                         .map(Tuple::getB)
                         .toList();
             }
