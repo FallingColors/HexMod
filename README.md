@@ -44,6 +44,10 @@ We publish artifacts on Maven at [https://maven.blamejared.com/at/petra-k/hexcas
 
 > `hexcasting-[PLATFORM]-[MC VERSION]/[MOD VERSION]`
 
+> Example : ` implementation "at.petra-k.hexcasting:hexcasting-forge-1.20.1:0.11.3" ` in dependencies.
+> `maven { url = "https://maven.blamejared.com/" }` in repositories.
+
+
 There are some other folders in the `hexcasting` folder from old CI configurations; ignore those, they're stale.
 
 Please only use things in the `at.petrak.hexcasting.api` package. (We do try to keep the API fairly stable, but we don't
