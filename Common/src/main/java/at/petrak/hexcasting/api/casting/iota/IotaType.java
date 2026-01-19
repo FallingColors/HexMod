@@ -3,7 +3,6 @@ package at.petrak.hexcasting.api.casting.iota;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.nbt.CompoundTag;
@@ -51,6 +50,13 @@ public abstract class IotaType<T extends Iota> {
         var key = HexIotaTypes.REGISTRY.getKey(this);
         return Component.translatable("hexcasting.iota." + key)
             .withStyle(style -> style.withColor(TextColor.fromRgb(color())));
+    }
+
+    /**
+     * If commas should be omitted when the iota is inside of a list iota
+     */
+    public boolean omitCommas() {
+        return false;
     }
 
     public static CompoundTag serialize(Iota iota) {
