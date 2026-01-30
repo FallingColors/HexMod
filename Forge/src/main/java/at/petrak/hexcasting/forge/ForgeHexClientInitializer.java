@@ -50,8 +50,11 @@ public class ForgeHexClientInitializer {
 
         var evBus = MinecraftForge.EVENT_BUS;
 
-        evBus.addListener((ClientPlayerNetworkEvent.LoggingIn e) ->
-            PatternRegistryManifest.processRegistry(null));
+        evBus.addListener((ClientPlayerNetworkEvent.LoggingIn e) -> {
+            if (ForgeHexInitializer.patternRegistryIsProcessed) return;
+            PatternRegistryManifest.processRegistry(null);
+            ForgeHexInitializer.patternRegistryIsProcessed = true;
+        });
 
         evBus.addListener((RenderLevelStageEvent e) -> {
             if (e.getStage().equals(RenderLevelStageEvent.Stage.AFTER_PARTICLES)) {

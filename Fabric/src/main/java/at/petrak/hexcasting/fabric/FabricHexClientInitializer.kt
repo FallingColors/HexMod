@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.fabric
 
+import at.petrak.hexcasting.api.HexAPI
+
 import at.petrak.hexcasting.client.ClientTickCounter
 import at.petrak.hexcasting.client.RegisterClientStuff
 import at.petrak.hexcasting.client.ShiftScrollListener
@@ -27,6 +29,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import java.util.function.Function
 
 object FabricHexClientInitializer : ClientModInitializer {
+    private var patternRegistryIsProcessed: Boolean = false
     override fun onInitializeClient() {
         FabricPacketHandler.initClient()
 
@@ -41,7 +44,10 @@ object FabricHexClientInitializer : ClientModInitializer {
         }
         TooltipComponentCallback.EVENT.register(PatternTooltipComponent::tryConvert)
         ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
-            PatternRegistryManifest.processRegistry(null)
+            if (patternRegistryIsProcessed) {
+                PatternRegistryManifest.processRegistry(null)
+                patternRegistryIsProcessed = true
+            }
         }
 
         MouseScrollCallback.EVENT.register(ShiftScrollListener::onScrollInGameplay)
