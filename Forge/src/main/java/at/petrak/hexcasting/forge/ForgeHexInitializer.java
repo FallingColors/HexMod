@@ -159,6 +159,7 @@ public class ForgeHexInitializer {
         });
     }
 
+    private static boolean patternRegistryIsProcessed = false;
     private static void initListeners() {
         var modBus = getModEventBus();
         var evBus = MinecraftForge.EVENT_BUS;
@@ -225,8 +226,11 @@ public class ForgeHexInitializer {
             }
         });
 
-        evBus.addListener((ServerStartedEvent evt) ->
-            PatternRegistryManifest.processRegistry(evt.getServer().overworld()));
+        evBus.addListener((ServerStartedEvent evt) -> {
+            if (patternRegistryIsProcessed) return;
+            PatternRegistryManifest.processRegistry(evt.getServer().overworld());
+            patternRegistryIsProcessed = true;
+        });
 
         evBus.addListener((RegisterCommandsEvent evt) -> HexCommands.register(evt.getDispatcher()));
 

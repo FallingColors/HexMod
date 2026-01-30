@@ -39,6 +39,7 @@ public class ForgeHexClientInitializer {
     public static ItemColors GLOBAL_ITEM_COLORS;
     public static BlockColors GLOBAL_BLOCK_COLORS;
 
+    private static boolean patternRegistryIsProcessed = false;
     @SubscribeEvent
     public static void clientInit(FMLClientSetupEvent evt) {
         evt.enqueueWork(() -> {
@@ -50,8 +51,11 @@ public class ForgeHexClientInitializer {
 
         var evBus = MinecraftForge.EVENT_BUS;
 
-        evBus.addListener((ClientPlayerNetworkEvent.LoggingIn e) ->
-            PatternRegistryManifest.processRegistry(null));
+        evBus.addListener((ClientPlayerNetworkEvent.LoggingIn e) -> {
+            if (patternRegistryIsProcessed) return;
+            PatternRegistryManifest.processRegistry(null);
+            patternRegistryIsProcessed = true;
+        });
 
         evBus.addListener((RenderLevelStageEvent e) -> {
             if (e.getStage().equals(RenderLevelStageEvent.Stage.AFTER_PARTICLES)) {

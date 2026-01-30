@@ -71,6 +71,7 @@ object FabricHexInitializer : ModInitializer {
         RegisterMisc.register()
     }
 
+    private var patternRegistryIsProcessed: Boolean = false
     fun initListeners() {
         UseEntityCallback.EVENT.register(BrainsweepingEvents::interactWithBrainswept)
         VillagerConversionCallback.EVENT.register(BrainsweepingEvents::copyBrainsweepPostTransformation)
@@ -85,8 +86,12 @@ object FabricHexInitializer : ModInitializer {
             }
         }
 
+
         ServerLifecycleEvents.SERVER_STARTED.register { server ->
-            PatternRegistryManifest.processRegistry(server.overworld())
+            if (!patternRegistryIsProcessed) {
+                PatternRegistryManifest.processRegistry(server.overworld())
+                patternRegistryIsProcessed = true
+            }
         }
 
         ServerTickEvents.END_WORLD_TICK.register(PlayerPositionRecorder::updateAllPlayers)
