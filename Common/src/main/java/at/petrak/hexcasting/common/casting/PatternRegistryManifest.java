@@ -57,9 +57,9 @@ public class PatternRegistryManifest {
             }
         }
 
-        HexAPI.LOGGER.info(("We've loaded the pattern registry! " +
+        HexAPI.LOGGER.info(("We've loaded the pattern registry on the %s first! " +
             "Loaded %d regular actions, %d per-world actions, and %d special handlers").formatted(
-            NORMAL_ACTION_LOOKUP.size(), perWorldActionCount,
+            (overworld == null) ? "client" : "server", NORMAL_ACTION_LOOKUP.size(), perWorldActionCount,
             IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry().size()
         ));
     }
