@@ -71,7 +71,9 @@ object FabricHexInitializer : ModInitializer {
         RegisterMisc.register()
     }
 
-    private var patternRegistryIsProcessed: Boolean = false
+    // this global is for both server and client because PatternRegistryManifest.processRegistry
+    // doesn't have separate processing for each
+    internal var patternRegistryIsProcessed: Boolean = false
     fun initListeners() {
         UseEntityCallback.EVENT.register(BrainsweepingEvents::interactWithBrainswept)
         VillagerConversionCallback.EVENT.register(BrainsweepingEvents::copyBrainsweepPostTransformation)

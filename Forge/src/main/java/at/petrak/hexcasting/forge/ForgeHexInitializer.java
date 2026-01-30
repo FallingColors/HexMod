@@ -159,7 +159,9 @@ public class ForgeHexInitializer {
         });
     }
 
-    private static boolean patternRegistryIsProcessed = false;
+    // this global is for both server and client because PatternRegistryManifest.processRegistry
+    // doesn't have separate processing for each
+    protected static boolean patternRegistryIsProcessed = false;
     private static void initListeners() {
         var modBus = getModEventBus();
         var evBus = MinecraftForge.EVENT_BUS;

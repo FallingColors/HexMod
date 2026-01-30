@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.fabric
 
+import at.petrak.hexcasting.api.HexAPI
+
 import at.petrak.hexcasting.client.ClientTickCounter
 import at.petrak.hexcasting.client.RegisterClientStuff
 import at.petrak.hexcasting.client.ShiftScrollListener
@@ -42,7 +44,7 @@ object FabricHexClientInitializer : ClientModInitializer {
         }
         TooltipComponentCallback.EVENT.register(PatternTooltipComponent::tryConvert)
         ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
-            if (!patternRegistryIsProcessed) {
+            if (patternRegistryIsProcessed) {
                 PatternRegistryManifest.processRegistry(null)
                 patternRegistryIsProcessed = true
             }
