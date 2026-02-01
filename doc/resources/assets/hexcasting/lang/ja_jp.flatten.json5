@@ -1,0 +1,48 @@
+{
+  hexdoc: {
+    hexcasting: {
+      title: "Hex Book",
+      description: "Hex Book すべてをここ1箇所で",
+    },
+
+    renderer: {
+      renders: "描画",
+      palettes: "パレット",
+
+      animated: "動画",
+      monocolor: "単色",
+      gradient: "階調",
+      segment: "分割",
+
+      default: "デフォルト",
+      turbo: "turbo",
+      dark2: "dark2",
+      tab10: "tab10",
+    },
+
+    pattern: {
+      show: "クリックしてスペルを表示する",
+      hide: "クリックしてスペルを非表示にする",
+
+      multiplier: "${speedScale()}x",
+      paused: "停止",
+
+      not_supported: "お使いのブラウザはパターンの視覚化をサポートしていません。パターンコード: {}",
+    },
+
+    villager_requirements: {
+      any: "{level}以上の村人が必須",
+      professional: "{level}以上の{profession}の村人が必須",
+    },
+  },
+
+  "block.hexcasting": {
+    slate: "空白の石板",
+  },
+
+  "tag.item.c": {
+    brown_dye: "茶色の染料",
+    glowstone_dusts: "グロウストーンダスト",
+    wood_sticks: "木の棒",
+  },
+}
