@@ -43,7 +43,7 @@ public class BooleanIota extends Iota {
 
     @Override
     public Component display() {
-        return BooleanIota.display(getBool());
+        return BooleanIota.display(value);
     }
 
     public static IotaType<BooleanIota> TYPE = new IotaType<>() {
@@ -69,11 +69,6 @@ public class BooleanIota extends Iota {
             return 0xff_ffff55;
         }
     };
-
-    public static BooleanIota deserialize(Tag tag) throws IllegalArgumentException {
-        var dtag = HexUtils.downcast(tag, ByteTag.TYPE);
-        return new BooleanIota(dtag.getAsByte() != 0);
-    }
 
     public static Component display(boolean b) {
         return Component.translatable(b ? "hexcasting.tooltip.boolean_true" : "hexcasting.tooltip.boolean_false")

@@ -12,14 +12,12 @@ import net.minecraft.network.codec.StreamCodec;
  * this is LITERALLY a copy of NullIota but I can't see how to do it any better, i hate java generics
  */
 public class GarbageIota extends Iota {
-    public static final GarbageIota INSTANCE = new GarbageIota();
-
     private static final Object NULL_SUBSTITUTE = new Object();
 
     public static final Component DISPLAY = Component.literal("arimfexendrapuse")
         .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.OBFUSCATED);
 
-    private GarbageIota() {
+    public GarbageIota() {
         // We have to pass *something* here, but there's nothing that actually needs to go there,
         // so we just do this i guess
         super(() -> HexIotaTypes.GARBAGE);
@@ -46,9 +44,9 @@ public class GarbageIota extends Iota {
     }
 
     public static IotaType<GarbageIota> TYPE = new IotaType<>() {
-        public static final MapCodec<GarbageIota> CODEC = MapCodec.unit(GarbageIota.INSTANCE);
+        public static final MapCodec<GarbageIota> CODEC = MapCodec.unit(new GarbageIota());
         public static final StreamCodec<RegistryFriendlyByteBuf, GarbageIota> STREAM_CODEC =
-                StreamCodec.unit(GarbageIota.INSTANCE);
+                StreamCodec.unit(new GarbageIota());
 
         @Override
         public MapCodec<GarbageIota> codec() {

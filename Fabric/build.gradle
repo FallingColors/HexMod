@@ -10,7 +10,6 @@ architectury {
 
 // FIXME: update dependencies/versions before releasing 0.12
 pkSubproj {
-    platform = "fabric"
     pkPublish = true
     curseforgeJar = remapJar.archiveFile
     curseforgeDependencies([
@@ -154,7 +153,8 @@ dependencies {
     modLocalRuntime "dev.architectury:architectury-fabric:$architecturyVersion"
     modLocalRuntime "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
     modLocalRuntime "at.petra-k:paucal:$paucalVersion+$minecraftVersion-fabric"
-    localRuntime "hexcasting:jankson:1.2.3"
+    // fuck you jankson fuck you jankson fuck you jankson (jankson loves to crash Fabric:runClient with a NoSuchMethodException for no reason and then act like nothing happened)
+    localRuntime "blue.endless:jankson:1.2.3"
 
 
 //    modImplementation "maven.modrinth:gravity-api:$gravityApiVersion"

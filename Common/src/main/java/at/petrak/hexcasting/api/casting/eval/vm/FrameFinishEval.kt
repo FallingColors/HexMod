@@ -27,7 +27,7 @@ object FrameFinishEval : ContinuationFrame {
         harness: CastingVM
     ): CastResult {
         return CastResult(
-            NullIota.INSTANCE,
+            NullIota(),
             continuation,
             null,
             listOf(),

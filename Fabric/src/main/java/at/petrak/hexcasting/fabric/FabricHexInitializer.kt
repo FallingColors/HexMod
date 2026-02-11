@@ -157,15 +157,15 @@ object FabricHexInitializer : ModInitializer {
         }
 
         ItemGroupEvents.modifyEntriesEvent(HexCreativeTabs.SCROLLS_KEY).register { r ->
-            val keyList = ArrayList<ResourceKey<ActionRegistryEntry?>?>()
+            val keyList = ArrayList<ResourceKey<ActionRegistryEntry>>()
             val regi = FabricXplatImpl.INSTANCE.getActionRegistry()
-            for (key in regi.registryKeySet()) if (isOfTag<ActionRegistryEntry?>(
+            for (key in regi.registryKeySet()) if (isOfTag<ActionRegistryEntry>(
                     regi,
                     key,
                     HexTags.Actions.PER_WORLD_PATTERN
                 )
             ) keyList.add(key)
-            keyList.sortWith(Comparator.comparing<ResourceKey<ActionRegistryEntry?>?, ResourceLocation?>(Function { obj: ResourceKey<ActionRegistryEntry?>? -> obj!!.location() }))
+            keyList.sortWith(Comparator.comparing<ResourceKey<ActionRegistryEntry>, ResourceLocation>(Function { obj: ResourceKey<ActionRegistryEntry> -> obj.location() }))
             for (key in keyList) {
                 r.accept(
                     ItemScroll.withPerWorldPattern(

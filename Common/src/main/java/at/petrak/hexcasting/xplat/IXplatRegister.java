@@ -5,8 +5,9 @@ import net.minecraft.core.Holder;
 import java.util.function.Supplier;
 
 /**
- * Handles registration
- * @param <B>
+ * A platform-agnostic registry of type {B} <br>
+ * FabricRegister registers directly while ForgeRegister uses deferred registry instead
+ * @param <B> The Type the IXplatRegister is registering
  */
 public interface IXplatRegister<B> {
 

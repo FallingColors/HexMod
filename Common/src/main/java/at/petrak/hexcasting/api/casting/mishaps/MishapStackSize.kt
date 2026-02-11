@@ -16,7 +16,7 @@ class MishapStackSize() : Mishap() {
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         stack.clear()
-        stack.add(GarbageIota.INSTANCE)
+        stack.add(new GarbageIota())
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =

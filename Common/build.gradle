@@ -6,11 +6,6 @@ loom {
     accessWidenerPath = file("src/main/resources/hexplat.accesswidener")
 }
 
-pkSubproj {
-    platform = "common"
-    pkPublish = false
-}
-
 repositories {
     mavenCentral()
     mavenLocal()
@@ -33,10 +28,6 @@ repositories {
     maven { url 'https://maven.wispforest.io/releases' }
     // EMI
     maven { url = "https://maven.terraformersmc.com/releases/" }
-}
-
-loom {
-    accessWidenerPath = file("src/main/resources/hexplat.accesswidener")
 }
 
 dependencies {

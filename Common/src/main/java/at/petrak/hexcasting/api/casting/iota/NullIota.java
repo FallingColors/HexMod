@@ -16,13 +16,11 @@ import org.jetbrains.annotations.Nullable;
  * An iota with no data associated with it.
  */
 public class NullIota extends Iota {
-    public static final NullIota INSTANCE = new NullIota();
-    private static final Object NULL_SUBSTITUTE = new Object();
 
     public static final Component DISPLAY =
         Component.translatable("hexcasting.tooltip.null_iota").withStyle(ChatFormatting.GRAY);
 
-    private NullIota() {
+    public NullIota() {
         super(() -> HexIotaTypes.NULL);
     }
 
@@ -37,9 +35,7 @@ public class NullIota extends Iota {
     }
 
     @Override
-    public int hashCode() {
-        return NULL_SUBSTITUTE.hashCode();
-    }
+    public int hashCode() { return 0; }
 
     @Override
     public Component display() {
@@ -47,9 +43,9 @@ public class NullIota extends Iota {
     }
 
     public static IotaType<NullIota> TYPE = new IotaType<>() {
-        public static final MapCodec<NullIota> CODEC = MapCodec.unit(NullIota.INSTANCE);
+        public static final MapCodec<NullIota> CODEC = MapCodec.unit(new NullIota());
         public static final StreamCodec<RegistryFriendlyByteBuf, NullIota> STREAM_CODEC =
-                StreamCodec.unit(NullIota.INSTANCE);
+                StreamCodec.unit(new NullIota());
 
         @Override
         public MapCodec<NullIota> codec() {

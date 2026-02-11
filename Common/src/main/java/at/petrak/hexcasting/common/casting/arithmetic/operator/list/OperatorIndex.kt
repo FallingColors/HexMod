@@ -15,7 +15,7 @@ object OperatorIndex : OperatorBasic(2, IotaMultiPredicate.pair(IotaPredicate.of
         val it = iotas.iterator()
         val list = downcast(it.next(), LIST).list.toMutableList()
         val index = downcast(it.next(), DOUBLE).double
-        val x = list.getOrElse(index.roundToInt()) { NullIota.INSTANCE }
+        val x = list.getOrElse(index.roundToInt()) { NullIota() }
         return listOf(x)
     }
 }

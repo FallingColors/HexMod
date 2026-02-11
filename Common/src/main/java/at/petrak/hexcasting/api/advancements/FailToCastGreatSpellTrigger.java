@@ -24,10 +24,10 @@ public class FailToCastGreatSpellTrigger extends SimpleCriterionTrigger<FailToCa
 
     public static record Instance(Optional<ContextAwarePredicate> player) implements SimpleCriterionTrigger.SimpleInstance {
         public static final Codec<FailToCastGreatSpellTrigger.Instance> CODEC = RecordCodecBuilder.create(
-                p_337348_ -> p_337348_.group(
+                triggerInstance -> triggerInstance.group(
                                 EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(FailToCastGreatSpellTrigger.Instance::player)
                         )
-                        .apply(p_337348_, FailToCastGreatSpellTrigger.Instance::new)
+                        .apply(triggerInstance, FailToCastGreatSpellTrigger.Instance::new)
         );
 
         @Override

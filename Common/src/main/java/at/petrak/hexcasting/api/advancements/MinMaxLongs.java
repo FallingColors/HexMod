@@ -10,19 +10,13 @@ import java.util.function.Function;
 
 public record MinMaxLongs(
         Optional<Long> min,
-        Optional<Long> max,
-        Optional<Long> minSq,
-        Optional<Long> maxSq
+        Optional<Long> max
 ) implements MinMaxBounds<Long> {
     public static final Codec<MinMaxLongs> CODEC =
             MinMaxBounds.<Long, MinMaxLongs>createCodec(Codec.LONG, MinMaxLongs::new);
 
     public static final MinMaxLongs ANY =
             new MinMaxLongs(Optional.empty(), Optional.empty());
-
-    private MinMaxLongs(Optional<Long> min, Optional<Long> max) {
-        this(min, max, squareOpt(min), squareOpt(max));
-    }
 
     private static MinMaxLongs create(StringReader reader, Optional<Long> min, Optional<Long> max)
             throws CommandSyntaxException {
@@ -56,11 +50,6 @@ public record MinMaxLongs(
     public boolean matches(long value) {
         return (this.min.isEmpty() || this.min.get() <= value)
                 && (this.max.isEmpty() || this.max.get() >= value);
-    }
-
-    public boolean matchesSqr(long value) {
-        return (this.minSq.isEmpty() || this.minSq.get() <= value)
-                && (this.maxSq.isEmpty() || this.maxSq.get() >= value);
     }
 
     public static MinMaxLongs fromReader(StringReader reader) throws CommandSyntaxException {

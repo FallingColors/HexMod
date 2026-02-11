@@ -21,7 +21,7 @@ class MishapInvalidIota(
         dyeColor(DyeColor.GRAY)
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        stack[stack.size - 1 - reverseIdx] = GarbageIota.INSTANCE;
+        stack[stack.size - 1 - reverseIdx] = new GarbageIota();
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component? {

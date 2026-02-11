@@ -18,7 +18,7 @@ object OpPeekLocal : Action {
         val rm = if (image.userData.contains(HexAPI.RAVENMIND_USERDATA)) {
             IotaType.TYPED_CODEC.parse(NbtOps.INSTANCE, image.userData.getCompound(HexAPI.RAVENMIND_USERDATA)).getOrThrow()
         } else {
-            NullIota.INSTANCE
+            NullIota()
         }
         stack.add(rm)
 

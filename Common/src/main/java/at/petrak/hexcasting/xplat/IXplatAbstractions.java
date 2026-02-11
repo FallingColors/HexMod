@@ -191,6 +191,12 @@ public interface IXplatAbstractions {
 
     boolean isPlacingAllowed(ServerLevel world, BlockPos pos, ItemStack blockStack, @Nullable Player player);
 
+    /**
+     * Takes a ResourceKey representing a Registry for type B, returns an IXplatRegister of type B
+     * @param registryKey
+     * @return {@code IXplatRegister<B>}
+     * @param <B>
+     */
     <B> IXplatRegister<B> createRegistar(ResourceKey<Registry<B>> registryKey);
 
     // interop

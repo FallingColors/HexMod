@@ -20,7 +20,7 @@ class MishapInvalidPattern(val pattern: HexPattern?) : Mishap() {
     override fun resolutionType(ctx: CastingEnvironment) = ResolvedPatternType.INVALID
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        stack.add(GarbageIota.INSTANCE)
+        stack.add(new GarbageIota())
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component? {

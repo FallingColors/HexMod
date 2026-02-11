@@ -111,17 +111,6 @@ subprojects {
         it.options.release = 21
     }
 
-    compileKotlin {
-        kotlinOptions {
-            jvmTarget = "21"
-        }
-    }
-    compileTestKotlin {
-        kotlinOptions {
-            jvmTarget = "21"
-        }
-    }
-
     // Disables Gradle's custom module metadata from being published to maven. The
     // metadata includes mapped dependencies which are not reasonably consumable by
     // other mod developers.
@@ -143,17 +132,6 @@ allprojects {
 
     // disable most javadoc warnings
     javadoc.options.addStringOption('Xdoclint:none', '-quiet')
-}
-
-compileKotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.JVM_21
-    }
-}
-compileTestKotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.JVM_21
-    }
 }
 
 tasks.register("runAllDatagen") {

@@ -13,7 +13,7 @@ class MishapLocationInWrongDimension(val properDimension: ResourceLocation) : Mi
         dyeColor(DyeColor.MAGENTA)
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        stack.add(GarbageIota.INSTANCE)
+        stack.add(new GarbageIota())
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component =

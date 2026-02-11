@@ -13,7 +13,7 @@ object OpIndex : ConstMediaAction {
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val list = args.getList(0, argc).toMutableList()
         val index = args.getDouble(1, argc)
-        val x = list.getOrElse(index.roundToInt()) { NullIota.INSTANCE }
+        val x = list.getOrElse(index.roundToInt()) { NullIota() }
         return listOf(x)
     }
 }

@@ -317,7 +317,7 @@ fun evaluatable(datum: Iota, reverseIdx: Int): Either<Iota, SpellList> =
         )
     }
 
-fun Iota?.orNull() = this ?: NullIota.INSTANCE
+fun Iota?.orNull() = this ?: NullIota()
 
 // TODO do we make this work on lists
 // there should probably be some way to abstract function application over lists, vecs, and numbers,
@@ -339,5 +339,5 @@ inline val BlockPos.asActionResult get() = listOf(Vec3Iota(Vec3.atCenterOf(this)
 inline val Vector3f.asActionResult get() = listOf(Vec3Iota(Vec3(this)))
 inline val Vec3.asActionResult get() = listOf(Vec3Iota(this))
 
-inline val Entity?.asActionResult get() = listOf(if (this == null) NullIota.INSTANCE else EntityIota(this))
+inline val Entity?.asActionResult get() = listOf(if (this == null) NullIota() else EntityIota(this))
 inline val HexPattern.asActionResult get() = listOf(PatternIota(this))

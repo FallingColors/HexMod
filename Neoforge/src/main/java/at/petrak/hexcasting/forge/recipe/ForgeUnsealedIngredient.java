@@ -69,7 +69,7 @@ public class ForgeUnsealedIngredient implements ICustomIngredient {
         if (this.stack.getItem() == input.getItem() && this.stack.getDamageValue() == input.getDamageValue()) {
             ADIotaHolder holder = IXplatAbstractions.INSTANCE.findDataHolder(this.stack);
             if (holder != null) {
-                return holder.readIota() != null && holder.writeIota(NullIota.INSTANCE, true);
+                return holder.readIota() != null && holder.writeIota(new NullIota(), true);
             }
         }
 

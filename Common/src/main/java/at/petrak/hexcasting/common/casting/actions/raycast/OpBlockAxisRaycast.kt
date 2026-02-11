@@ -35,7 +35,7 @@ object OpBlockAxisRaycast : ConstMediaAction {
         return if (blockHitResult.type == HitResult.Type.BLOCK && env.isVecInRange(Vec3.atCenterOf(blockHitResult.blockPos))) {
             blockHitResult.direction.step().asActionResult
         } else {
-            listOf(NullIota.INSTANCE)
+            listOf(NullIota())
         }
     }
 }

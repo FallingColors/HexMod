@@ -17,6 +17,8 @@ import at.petrak.hexcasting.datagen.HexAdvancements;
 import at.petrak.hexcasting.datagen.IXplatConditionsBuilder;
 import at.petrak.hexcasting.datagen.IXplatIngredients;
 import at.petrak.hexcasting.datagen.recipe.builders.BrainsweepRecipeBuilder;
+import at.petrak.hexcasting.datagen.recipe.builders.CreateCrushingRecipeBuilder;
+import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightCuttingRecipeBuilder;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -25,6 +27,9 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
@@ -510,7 +515,7 @@ public class HexplatRecipes extends RecipeProvider {
             .save(recipes, modLoc("quench_allay"));
 
         // Create compat
-        /*this.conditions.apply(new CreateCrushingRecipeBuilder()
+        this.conditions.apply(new CreateCrushingRecipeBuilder()
                 .withInput(Blocks.AMETHYST_CLUSTER)
                 .duration(150)
                 .withOutput(Items.AMETHYST_SHARD, 7)
@@ -568,7 +573,7 @@ public class HexplatRecipes extends RecipeProvider {
                 .withTool(ingredients.axeDig())
                 .withOutput(HexBlocks.EDIFIED_PLANKS))
             .whenModLoaded("farmersdelight")
-            .save(recipes, modLoc("compat/farmersdelight/cutting/akashic_door"));*/
+            .save(recipes, modLoc("compat/farmersdelight/cutting/akashic_door"));
     }
 
     private void staffRecipe(RecipeOutput recipes, ItemStaff staff, Item plank) {

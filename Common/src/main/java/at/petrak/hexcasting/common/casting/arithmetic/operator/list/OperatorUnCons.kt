@@ -17,6 +17,6 @@ object OperatorUnCons : OperatorBasic(1, IotaMultiPredicate.all(IotaPredicate.of
         val list = it.nextList(arity)
         if (list.nonEmpty)
             return listOf(ListIota(list.cdr), list.car)
-        return listOf(ListIota(list), NullIota.INSTANCE)
+        return listOf(ListIota(list), NullIota())
     }
 }
