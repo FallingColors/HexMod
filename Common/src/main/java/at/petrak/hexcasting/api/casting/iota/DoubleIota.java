@@ -25,7 +25,7 @@ public class DoubleIota extends Iota {
     }
 
     public double getDouble() {
-        return HexUtils.fixNAN((Double) value);
+        return HexUtils.fixNAN(value);
     }
 
     @Override

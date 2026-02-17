@@ -9,12 +9,14 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
 import java.util.*
 
-class MishapEntityUnavailable(val entityId: UUID, val entityName: Component?) : Mishap() {
+class MishapEntityNotFound(val entityId: UUID, val entityName: Component?) : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BROWN)
 
-    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {}
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+        env.mishapEnvironment.nauseate(3 * 20)
+    }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("unavailable_entity", entityName?.plainCopy()?.aqua ?: Component.literal(entityId.toString()).withStyle(ChatFormatting.AQUA))
+        error("entity_not_found", entityName?.plainCopy()?.aqua ?: Component.literal(entityId.toString()).withStyle(ChatFormatting.AQUA))
 }

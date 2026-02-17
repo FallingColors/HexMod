@@ -19,5 +19,3 @@ import java.util.UUID;
 public interface PigmentItem {
     ColorProvider provideColor(ItemStack stack, UUID owner);
 }
-
-

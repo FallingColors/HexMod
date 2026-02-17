@@ -53,8 +53,6 @@ public class WorldlyPatternRenderHelpers {
     {
         ps.pushPose();
         ps.translate(-blockSize / 2f, -blockSize / 2f, 1f / 32f);
-        // there's almost certainly a better way to do this, but we're just flipping the y and z axes to fix normals
-        // no need for this anymore :D
         renderPattern(pattern, showStrokeOrder ? READABLE_SCROLL_SETTINGS : SCROLL_SETTINGS,
                 showStrokeOrder ? PatternColors.READABLE_SCROLL_COLORS : PatternColors.DEFAULT_PATTERN_COLOR,
                 scroll.getPos().hashCode(), ps, bufSource, null, null, light, blockSize);

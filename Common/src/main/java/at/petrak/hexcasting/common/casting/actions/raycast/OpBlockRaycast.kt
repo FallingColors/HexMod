@@ -39,7 +39,7 @@ object OpBlockRaycast : ConstMediaAction {
             // TODO some action that has the "weird" version?
             blockHitResult.blockPos.asActionResult
         } else {
-            listOf(NullIota.INSTANCE)
+            listOf(NullIota())
         }
     }
 }

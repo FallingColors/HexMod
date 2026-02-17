@@ -51,13 +51,17 @@ public class EntityIota extends Iota {
     public Entity getOrFindEntity(ServerLevel level) {
         // First, let's try to get it from weak reference
         var entity = getCachedEntity();
-        if (entity != null)
+        if (entity != null && !entity.isRemoved())
             return entity;
         // Now let's try to fetch it from the world
         entity = level.getEntity(entityId);
         // Store in weak reference
-        if (entity != null)
+        if (entity != null) {
             cachedEntity = new WeakReference<>(entity);
+            if (entity.isRemoved())
+                return null;
+        }
+
         return entity;
     }
 

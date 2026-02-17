@@ -18,7 +18,7 @@ class MishapInvalidOperatorArgs(val perpetrators: List<Iota>) : Mishap() {
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         for (i in perpetrators.indices) {
-            stack[stack.size - 1 - i] = new GarbageIota()
+            stack[stack.size - 1 - i] = GarbageIota()
         }
     }
 

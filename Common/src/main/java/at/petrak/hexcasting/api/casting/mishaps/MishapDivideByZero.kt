@@ -17,7 +17,7 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
         dyeColor(DyeColor.RED)
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        stack.add(new GarbageIota())
+        stack.add(GarbageIota())
         env.mishapEnvironment.damage(0.5f)
     }
 

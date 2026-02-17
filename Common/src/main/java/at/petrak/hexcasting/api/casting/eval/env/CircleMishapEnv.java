@@ -42,4 +42,9 @@ public class CircleMishapEnv extends MishapEnvironment {
     public void blind(int ticks) {
 
     }
+
+    @Override
+    public void nauseate(int ticks) {
+
+    }
 }
