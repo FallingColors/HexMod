@@ -1,10 +1,7 @@
 package at.petrak.hexcasting.fabric.xplat;
 
 import at.petrak.hexcasting.xplat.IXplatRegister;
-import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.core.Holder;
-import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;

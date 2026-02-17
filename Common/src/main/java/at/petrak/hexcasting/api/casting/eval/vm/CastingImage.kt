@@ -1,25 +1,16 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
 import at.petrak.hexcasting.api.HexAPI
-import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
-import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota.Companion.TAG_ESCAPED
-import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota.Companion.TAG_IOTAS
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
-import at.petrak.hexcasting.api.casting.iota.ListIota
-import at.petrak.hexcasting.api.utils.*
+import at.petrak.hexcasting.api.utils.getOrCreateCompound
+import at.petrak.hexcasting.api.utils.putCompound
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.Tag
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.server.level.ServerLevel
-import net.minecraft.util.ExtraCodecs
 import net.minecraft.world.entity.Entity
-import java.util.Optional
-import kotlin.jvm.optionals.getOrNull
 
 /**
  * The state of a casting VM, containing the stack and all

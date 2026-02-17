@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.forge;
 
-import at.petrak.hexcasting.api.client.ClientCastingStack;
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.RegisterClientStuff;
 import at.petrak.hexcasting.client.ShiftScrollListener;
@@ -17,7 +16,6 @@ import at.petrak.hexcasting.interop.HexInterop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
-import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;

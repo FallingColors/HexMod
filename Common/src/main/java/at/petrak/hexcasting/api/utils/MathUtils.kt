@@ -2,7 +2,8 @@ package at.petrak.hexcasting.api.utils
 
 import org.joml.Quaternionf
 import org.joml.Vector3f
-import kotlin.math.*
+import kotlin.math.cos
+import kotlin.math.sin
 
 object MathUtils {
     @JvmStatic

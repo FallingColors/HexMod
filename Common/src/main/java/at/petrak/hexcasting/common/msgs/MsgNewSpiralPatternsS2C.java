@@ -3,21 +3,15 @@ package at.petrak.hexcasting.common.msgs;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.UUIDUtil;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public record MsgNewSpiralPatternsS2C(UUID playerUUID, List<HexPattern> patterns, int lifetime) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MsgNewSpiralPatternsS2C> TYPE = new CustomPacketPayload.Type<>(HexAPI.modLoc("spi_pats_sc"));

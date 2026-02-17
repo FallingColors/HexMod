@@ -18,7 +18,6 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
-import java.lang.RuntimeException
 
 abstract class Mishap : RuntimeException() {
     /** Mishaps spray half-red, half-this-color. */

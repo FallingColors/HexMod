@@ -2,7 +2,6 @@ package at.petrak.hexcasting.common.items.armor;
 
 import at.petrak.hexcasting.api.HexAPI;
 import net.minecraft.core.Holder;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ArmorItem;
 
 /**

@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
+
 import java.util.Arrays;
 import java.util.List;
 

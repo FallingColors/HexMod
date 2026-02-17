@@ -1,9 +1,6 @@
 package at.petrak.hexcasting.api.item;
 
 import at.petrak.hexcasting.api.pigment.ColorProvider;
-import com.mojang.serialization.Codec;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 

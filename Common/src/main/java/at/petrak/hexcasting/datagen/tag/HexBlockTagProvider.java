@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.datagen.tag;
 
-import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.xplat.IXplatTags;

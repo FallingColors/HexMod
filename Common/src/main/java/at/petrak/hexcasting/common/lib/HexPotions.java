@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.lib;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;

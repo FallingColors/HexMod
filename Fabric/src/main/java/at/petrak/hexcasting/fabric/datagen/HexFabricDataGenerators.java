@@ -8,9 +8,7 @@ import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightToolIngredient
 import at.petrak.hexcasting.datagen.tag.HexActionTagProvider;
 import at.petrak.hexcasting.datagen.tag.HexBlockTagProvider;
 import at.petrak.hexcasting.datagen.tag.HexItemTagProvider;
-import at.petrak.hexcasting.fabric.FabricHexInitializer;
 import at.petrak.hexcasting.fabric.recipe.FabricModConditionalIngredient;
-import at.petrak.hexcasting.fabric.xplat.FabricXplatImpl;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonObject;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;

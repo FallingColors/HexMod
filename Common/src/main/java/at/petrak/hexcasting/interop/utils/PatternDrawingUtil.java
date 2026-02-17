@@ -6,7 +6,6 @@ import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.client.render.RenderLib;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;

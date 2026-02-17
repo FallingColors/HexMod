@@ -3,11 +3,8 @@
 package at.petrak.hexcasting.api.utils
 
 import net.minecraft.advancements.AdvancementHolder
-import net.minecraft.core.component.DataComponents
 import net.minecraft.nbt.*
 import net.minecraft.server.ServerAdvancementManager
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.component.CustomData
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 

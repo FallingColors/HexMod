@@ -2,12 +2,10 @@ package at.petrak.hexcasting.fabric.cc.adimpl;
 
 import at.petrak.hexcasting.api.addldata.ADVariantItem;
 import at.petrak.hexcasting.api.item.VariantItem;
-import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.Item;
-import org.ladysnake.cca.api.v3.component.Component;
 import net.minecraft.world.item.ItemStack;
+import org.ladysnake.cca.api.v3.component.Component;
 
 public abstract class CCVariantItem implements ADVariantItem, Component {
     final ItemStack stack;

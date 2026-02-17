@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.fabric.loot;
 
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.loot.AddPerWorldPatternToScrollFunc;
 import at.petrak.hexcasting.common.loot.AddHexToAncientCypherFunc;
+import at.petrak.hexcasting.common.loot.AddPerWorldPatternToScrollFunc;
 import at.petrak.hexcasting.fabric.FabricHexInitializer;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;

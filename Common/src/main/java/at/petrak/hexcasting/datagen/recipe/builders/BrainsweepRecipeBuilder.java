@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.datagen.recipe.builders;
 
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
-import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredient;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRequirements;
 import net.minecraft.advancements.AdvancementRewards;

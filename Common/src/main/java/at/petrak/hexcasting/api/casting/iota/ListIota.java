@@ -2,7 +2,6 @@ package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.api.casting.SpellList;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;

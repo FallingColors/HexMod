@@ -1,18 +1,13 @@
 package at.petrak.hexcasting.api.casting.math
 
-import at.petrak.hexcasting.api.utils.NBTBuilder
 import at.petrak.hexcasting.api.utils.coordToPx
 import at.petrak.hexcasting.api.utils.findCenter
-import at.petrak.hexcasting.api.utils.getSafe
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.Tag
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.phys.Vec2
-import kotlin.jvm.Throws
 
 /**
  * Sequence of angles to define a pattern traced.

@@ -11,7 +11,6 @@ import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.advancements.AdvancementNode;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.locale.Language;

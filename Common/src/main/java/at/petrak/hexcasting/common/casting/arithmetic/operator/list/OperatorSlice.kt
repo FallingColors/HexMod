@@ -1,15 +1,15 @@
 package at.petrak.hexcasting.common.casting.arithmetic.operator.list
 
+import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorBasic
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate
-import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator
-import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorBasic
 import at.petrak.hexcasting.api.casting.asActionResult
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.common.casting.arithmetic.operator.nextList
 import at.petrak.hexcasting.common.casting.arithmetic.operator.nextPositiveIntUnderInclusive
-import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.*
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.DOUBLE
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.LIST
 import kotlin.math.max
 import kotlin.math.min
 

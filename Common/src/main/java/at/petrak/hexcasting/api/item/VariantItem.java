@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.api.item;
 
-import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexDataComponents;
 import net.minecraft.world.item.ItemStack;
 

@@ -6,13 +6,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import at.petrak.hexcasting.common.items.storage.ItemScroll;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-import static at.petrak.hexcasting.api.HexAPI.MOD_ID;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexCreativeTabs {

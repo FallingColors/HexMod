@@ -4,12 +4,12 @@ import at.petrak.hexcasting.api.casting.eval.env.StaffCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.NbtOps;
-import org.ladysnake.cca.api.v3.component.Component;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import org.jetbrains.annotations.Nullable;
+import org.ladysnake.cca.api.v3.component.Component;
 
 public class CCStaffcastImage implements Component {
     public static final String TAG_VM = "harness";

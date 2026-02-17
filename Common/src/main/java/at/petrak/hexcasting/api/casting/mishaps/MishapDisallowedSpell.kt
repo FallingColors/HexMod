@@ -5,8 +5,8 @@ import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.pigment.FrozenPigment
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.DyeColor
 
 class MishapDisallowedSpell(val type: String, val actionKey: ResourceLocation?) : Mishap() {

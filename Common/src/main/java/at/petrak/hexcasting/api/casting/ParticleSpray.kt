@@ -4,7 +4,6 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment
 import at.petrak.hexcasting.common.msgs.MsgCastParticleS2C
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import at.petrak.paucal.api.PaucalCodecs
-import io.netty.buffer.ByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec

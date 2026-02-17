@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.fabric.datagen;
 
 import at.petrak.hexcasting.datagen.IXplatConditionsBuilder;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceCondition;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
 import net.fabricmc.fabric.impl.datagen.FabricDataGenHelper;

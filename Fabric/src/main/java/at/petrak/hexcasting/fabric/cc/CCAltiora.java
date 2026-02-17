@@ -2,11 +2,11 @@ package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import net.minecraft.core.HolderLookup;
-import org.ladysnake.cca.api.v3.component.Component;
-import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.Nullable;
+import org.ladysnake.cca.api.v3.component.Component;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
 public class CCAltiora implements Component, AutoSyncedComponent {
     public static final String

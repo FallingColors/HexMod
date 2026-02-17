@@ -2,20 +2,11 @@ package at.petrak.hexcasting.common.msgs;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 /**
  * Sent S->C to have a wall scroll recalculate its pattern, to get readability offset.

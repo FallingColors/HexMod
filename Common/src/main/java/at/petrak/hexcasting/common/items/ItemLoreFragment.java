@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.common.lib.HexSounds;
-import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.network.chat.Component;

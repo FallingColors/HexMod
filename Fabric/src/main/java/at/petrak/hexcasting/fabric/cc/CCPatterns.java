@@ -2,13 +2,13 @@ package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.NbtOps;
-import org.ladysnake.cca.api.v3.component.Component;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import org.ladysnake.cca.api.v3.component.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;

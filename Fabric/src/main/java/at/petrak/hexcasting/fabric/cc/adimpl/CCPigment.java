@@ -3,9 +3,8 @@ package at.petrak.hexcasting.fabric.cc.adimpl;
 import at.petrak.hexcasting.api.addldata.ADPigment;
 import at.petrak.hexcasting.api.item.PigmentItem;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
-import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
-import org.ladysnake.cca.api.v3.component.TransientComponent;
 import net.minecraft.world.item.ItemStack;
+import org.ladysnake.cca.api.v3.component.TransientComponent;
 
 import java.util.UUID;
 

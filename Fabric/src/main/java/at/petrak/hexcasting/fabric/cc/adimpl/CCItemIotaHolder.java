@@ -1,14 +1,12 @@
 package at.petrak.hexcasting.fabric.cc.adimpl;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
-import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import net.minecraft.core.HolderLookup;
-import org.ladysnake.cca.api.v3.component.Component;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+import org.ladysnake.cca.api.v3.component.Component;
 
 import java.util.function.Function;
 

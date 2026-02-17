@@ -2,12 +2,10 @@ package at.petrak.hexcasting.forge.lib;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.forge.loot.ForgeHexAmethystLootMod;
+import at.petrak.hexcasting.forge.loot.ForgeHexCypherLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexLoreLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexScrollLootMod;
-import at.petrak.hexcasting.forge.loot.ForgeHexCypherLootMod;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;

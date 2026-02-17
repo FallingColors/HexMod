@@ -3,13 +3,13 @@ package at.petrak.hexcasting.fabric.cc;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import net.minecraft.core.HolderLookup;
-import org.ladysnake.cca.api.v3.component.Component;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.Nullable;
+import org.ladysnake.cca.api.v3.component.Component;
 
 public class CCFlight implements Component {
     public static final String

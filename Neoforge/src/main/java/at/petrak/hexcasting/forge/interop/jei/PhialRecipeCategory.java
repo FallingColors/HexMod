@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.forge.interop.jei;
 
 import at.petrak.hexcasting.api.mod.HexTags;
-import at.petrak.hexcasting.common.casting.actions.spells.OpEdifySapling;
 import at.petrak.hexcasting.common.casting.actions.spells.OpMakeBattery;
 import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;

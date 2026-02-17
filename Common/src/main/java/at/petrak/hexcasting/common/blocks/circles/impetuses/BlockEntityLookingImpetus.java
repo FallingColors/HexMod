@@ -17,7 +17,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
 
 public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
     public static final int MAX_LOOK_AMOUNT = 30;

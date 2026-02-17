@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.common.recipe;
 
-import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredient;
-import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredients;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredients;
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredient;
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredients;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

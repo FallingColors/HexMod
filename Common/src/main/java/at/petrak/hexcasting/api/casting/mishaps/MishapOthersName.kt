@@ -3,7 +3,6 @@ package at.petrak.hexcasting.api.casting.mishaps
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.EntityIota
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.pigment.FrozenPigment
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.player.Player

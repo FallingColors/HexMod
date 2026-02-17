@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.lib;
 
-import at.petrak.hexcasting.common.loot.AddPerWorldPatternToScrollFunc;
 import at.petrak.hexcasting.common.loot.AddHexToAncientCypherFunc;
+import at.petrak.hexcasting.common.loot.AddPerWorldPatternToScrollFunc;
 import at.petrak.hexcasting.common.loot.AmethystReducerFunc;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
