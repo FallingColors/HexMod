@@ -49,6 +49,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 public class ItemScroll extends Item implements IotaHolderItem {
     public static final String TAG_OP_ID = "op_id";
     public static final String TAG_PATTERN = "pattern";
+    public static final String TAG_RECALC_WARNING = "recalc_warning";
     public static final String TAG_NEEDS_PURCHASE = "needs_purchase";
     public static final ResourceLocation ANCIENT_PREDICATE = modLoc("ancient");
 
@@ -180,6 +181,12 @@ public class ItemScroll extends Item implements IotaHolderItem {
             }
             var patternKey = ResourceKey.create(IXplatAbstractions.INSTANCE.getActionRegistry().key(), opID);
             var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(patternKey, pEntity.getServer().overworld());
+            if (pat == null) {
+                // if pat is null, the per-world order hasn't been registered; remove the op_id and warn the player
+                NBTHelper.putString(pStack, TAG_RECALC_WARNING, NBTHelper.getString(pStack, TAG_OP_ID));
+                NBTHelper.remove(pStack, TAG_OP_ID);
+                return;
+            }
             NBTHelper.put(pStack, TAG_PATTERN, pat.serializeToNBT());
         }
     }
@@ -190,6 +197,12 @@ public class ItemScroll extends Item implements IotaHolderItem {
         if (NBTHelper.getBoolean(pStack, TAG_NEEDS_PURCHASE)) {
             var needsPurchase = Component.translatable("hexcasting.tooltip.scroll.needs_purchase");
             pTooltipComponents.add(needsPurchase.withStyle(ChatFormatting.GRAY));
+        } else if (NBTHelper.hasString(pStack, TAG_RECALC_WARNING)) {
+            var spellName = Component.translatable("hexcasting.action." + ResourceLocation.tryParse(NBTHelper.getString(pStack, TAG_RECALC_WARNING)));
+            var line1 = Component.translatable("hexcasting.tooltip.scroll.recalc_warning.line1", spellName);
+            var line2 = Component.translatable("hexcasting.tooltip.scroll.recalc_warning.line2");
+            pTooltipComponents.add(line1.withStyle(ChatFormatting.RED));
+            pTooltipComponents.add(line2.withStyle(ChatFormatting.RED));
         } else if (NBTHelper.hasString(pStack, TAG_OP_ID) && !NBTHelper.hasCompound(pStack, TAG_PATTERN)) {
             var notLoaded = Component.translatable("hexcasting.tooltip.scroll.pattern_not_loaded");
             pTooltipComponents.add(notLoaded.withStyle(ChatFormatting.GRAY));

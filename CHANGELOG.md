@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [UNRELEASED]
+
+### Added
+
+- Added the `cannot_modify_cost` tag for patterns that should ignore the `media_consumption` attribute when calculating cost, by Robotgiggle in [987](https://github.com/FallingColors/HexMod/pull/987).
+
+### Changed
+
+- Changed the `media_consumption` attribute to only apply to player-based casting, by Robotgiggle in [987](https://github.com/FallingColors/HexMod/pull/987).
+
+### Fixed
+
+- Fixed a crash loop when trying to generate a creative-mode ancient scroll for a Great Spell whose per-world pattern hasn't been calculated yet, by Robotgiggle in [992](https://github.com/FallingColors/HexMod/pull/992).
+
 ## `0.11.3` - 2025-11-22
 
 ### Added
