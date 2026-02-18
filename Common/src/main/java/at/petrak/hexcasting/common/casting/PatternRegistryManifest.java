@@ -90,6 +90,7 @@ public class PatternRegistryManifest {
      *                                      order
      *                                      for a per-world pattern.
      */
+    @Deprecated
     public static PatternShapeMatch matchPattern(HexPattern pat, CastingEnvironment environment,
         boolean checkForAlternateStrokeOrders) {
         // I am PURPOSELY checking normal actions before special handlers
@@ -117,6 +118,10 @@ public class PatternRegistryManifest {
         }
 
         return new PatternShapeMatch.Nothing();
+    }
+
+    public static PatternShapeMatch matchPattern(HexPattern pattern, CastingEnvironment environment){
+        return matchPattern(pattern, environment, false);
     }
 
     @Nullable
