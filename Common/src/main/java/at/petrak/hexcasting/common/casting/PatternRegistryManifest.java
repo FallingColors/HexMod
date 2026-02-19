@@ -86,9 +86,7 @@ public class PatternRegistryManifest {
      * Try to match this pattern to an action, whether via a normal pattern, a per-world pattern, or the machinations
      * of a special handler.
      *
-     * @param checkForAlternateStrokeOrders if this is true, will check if the pattern given is an erroneous stroke
-     *                                      order
-     *                                      for a per-world pattern.
+     * @deprecated Giving this method a true will cause it to throw if it cannot find a normal or per-world pattern match. Use the bool-less overload instead.
      */
     @Deprecated
     public static PatternShapeMatch matchPattern(HexPattern pat, CastingEnvironment environment,
@@ -120,6 +118,10 @@ public class PatternRegistryManifest {
         return new PatternShapeMatch.Nothing();
     }
 
+    /**
+     * Try to match this pattern to an action, whether via a normal pattern, a per-world pattern, or the machinations
+     * of a special handler. Will never attempt to check alternate stroke orders, which always throws.
+    */
     public static PatternShapeMatch matchPattern(HexPattern pattern, CastingEnvironment environment){
         return matchPattern(pattern, environment, false);
     }
