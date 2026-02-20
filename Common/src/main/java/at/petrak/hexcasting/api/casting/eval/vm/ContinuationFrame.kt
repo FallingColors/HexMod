@@ -46,6 +46,8 @@ interface ContinuationFrame {
      * Return the number of iotas contained inside this frame, used for determining whether it is valid to serialise.
      */
     fun size(): Int
+    fun depth(): Int
+    fun subIotas(): Iterable<Iota>?
 
     val type: Type<*>
 

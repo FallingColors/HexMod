@@ -15,8 +15,10 @@ import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.*
 import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
+import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
+import kotlin.math.max
 
 /**
  * The virtual machine! This is the glue that determines the next iteration of a [CastingImage], using a
@@ -52,7 +54,10 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             // get caught and folded into CastResult by evaluate.
             val image2 = next.evaluate(continuation.next, world, this).let { result ->
                 // if stack is unable to be serialized, have the result be an error
-                if (result.newData != null && IotaType.isTooLargeToSerialize(result.newData.stack)) {
+                val data = result.newData ?: this.image
+                val size = data.size() + result.continuation.size()
+                val depth = max(data.depth(), result.continuation.depth())
+                if (depth >= HexIotaTypes.MAX_SERIALIZATION_DEPTH || size >= HexIotaTypes.MAX_SERIALIZATION_TOTAL) {
                     result.copy(
                         newData = null,
                         sideEffects = listOf(OperatorSideEffect.DoMishap(MishapStackSize(), Mishap.Context(null, null))),

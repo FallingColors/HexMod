@@ -14,6 +14,7 @@ import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
+import kotlin.math.max
 
 /**
  * A frame representing all the state for a Thoth evaluation.
@@ -89,7 +90,41 @@ data class FrameForEach(
         "accumulator" %= acc.serializeToNBT()
     }
 
-    override fun size() = data.size() + code.size() + acc.size + (baseStack?.size ?: 0)
+    private val size: Int
+    private val depth: Int
+
+    init {
+        var maxChildDepth = 0
+        var totalSize = 1
+        for (iota in data) {
+            totalSize += iota.size()
+            maxChildDepth = max(maxChildDepth, iota.depth())
+        }
+        for (iota in code) {
+            totalSize += iota.size()
+            maxChildDepth = max(maxChildDepth, iota.depth())
+        }
+        for (iota in acc) {
+            totalSize += iota.size()
+            maxChildDepth = max(maxChildDepth, iota.depth())
+        }
+        if (baseStack != null) {
+            for (iota in baseStack) {
+                totalSize += iota.size()
+                maxChildDepth = max(maxChildDepth, iota.depth())
+            }
+        }
+        depth = maxChildDepth
+        size = totalSize
+    }
+
+    override fun size() = size
+    override fun depth() = depth
+    override fun subIotas(): Iterable<Iota> =
+        if (baseStack != null)
+            listOf(data, code, acc, baseStack).flatten()
+        else
+            listOf(data, code, acc).flatten()
 
     override val type: ContinuationFrame.Type<*> = TYPE
 

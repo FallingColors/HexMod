@@ -13,6 +13,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -57,16 +58,18 @@ public class ContinuationIota extends Iota {
     }
 
     @Override
-    public int size() {
-        var continuation = this.getContinuation();
-        var size = 0;
-        while (continuation instanceof SpellContinuation.NotDone notDone) {
-            size += 1;
-            size += notDone.component1().size();
-            continuation = notDone.component2();
-        }
+    public @Nullable Iterable<Iota> subIotas() {
+        return this.getContinuation().subIotas();
+    }
 
-        return Math.min(size, 1);
+    @Override
+    public int size() {
+        return Math.min(this.getContinuation().size(), 1);
+    }
+
+    @Override
+    public int depth() {
+        return this.getContinuation().depth() + 1;
     }
 
     public static IotaType<ContinuationIota> TYPE = new IotaType<>() {
