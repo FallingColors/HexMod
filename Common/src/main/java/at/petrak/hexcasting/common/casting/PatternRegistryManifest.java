@@ -88,7 +88,7 @@ public class PatternRegistryManifest {
      *
      * @deprecated Giving this method a true will cause it to throw if it cannot find a normal or per-world pattern match. Use the bool-less overload instead.
      */
-    @Deprecated
+    @Deprecated(since = "0.11.4")
     public static PatternShapeMatch matchPattern(HexPattern pat, CastingEnvironment environment,
         boolean checkForAlternateStrokeOrders) {
         // I am PURPOSELY checking normal actions before special handlers
