@@ -50,7 +50,7 @@ public class InlinePatternData implements InlineData<InlinePatternData>{
 
     public static Component getPatternName(HexPattern pattern){
         try {
-            PatternShapeMatch shapeMatch = PatternRegistryManifest.matchPattern(pattern, null, false);
+            PatternShapeMatch shapeMatch = PatternRegistryManifest.matchPattern(pattern, null);
             if(shapeMatch instanceof PatternShapeMatch.Normal normMatch){
                 return HexAPI.instance().getActionI18n(normMatch.key, false);
             }
