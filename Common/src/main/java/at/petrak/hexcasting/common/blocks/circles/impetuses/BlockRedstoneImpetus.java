@@ -70,7 +70,7 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
                 if (datumContainer != null) {
                     var stored = datumContainer.readIota();
                     if (stored instanceof EntityIota eieio) {
-                        var entity = eieio.getOrFindEntity(sLevel);
+                        var entity = eieio.getEntity(sLevel);
                         if (entity instanceof Player iotaPlayer) {
                             // phew, we got something
                             tile.setPlayer(iotaPlayer.getGameProfile(), entity.getUUID());

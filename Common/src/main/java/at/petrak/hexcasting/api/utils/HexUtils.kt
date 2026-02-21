@@ -2,7 +2,12 @@
 
 package at.petrak.hexcasting.api.utils
 
+import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.iota.IotaType
+import at.petrak.hexcasting.api.casting.iota.ListIota
+import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.casting.math.HexCoord
+import at.petrak.hexcasting.api.casting.validateSubIotas
 import net.minecraft.ChatFormatting
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
@@ -12,6 +17,7 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.TagKey
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
@@ -302,4 +308,16 @@ fun <T> isOfTag(registry: Registry<T>, loc: ResourceLocation, tag: TagKey<T>): B
     return isOfTag(registry, key, tag)
 }
 
+
+@Suppress("UNCHECKED_CAST")
+fun <T : Iota> validateIota(iota: T, serverLevel: ServerLevel): Iota {
+    return when (iota) {
+        is ListIota -> iota.validateSubIotas(serverLevel)
+        else -> if ((iota.type as IotaType<T>).validate(iota, serverLevel)) iota else NullIota()
+    }
+}
+
+fun <T : Iota> validateIotaList(iotaList: List<T>, serverLevel: ServerLevel): List<Iota> {
+    return iotaList.map { validateIota(it, serverLevel) }
+}
 

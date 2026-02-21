@@ -4,10 +4,10 @@ package at.petrak.hexcasting.api.casting
 
 import at.petrak.hexcasting.api.casting.iota.*
 import at.petrak.hexcasting.api.casting.math.HexPattern
-import at.petrak.hexcasting.api.casting.mishaps.MishapEntityNotFound
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
+import at.petrak.hexcasting.api.utils.validateIota
 import com.mojang.datafixers.util.Either
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
@@ -37,25 +37,7 @@ fun List<Iota>.getDouble(idx: Int, argc: Int = 0): Double {
 fun List<Iota>.getEntity(level: ServerLevel, idx: Int, argc: Int = 0): Entity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        return x.getOrFindEntity(level) ?: throw MishapEntityNotFound(x.entityId, x.cachedEntityName)
-    } else {
-        throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity")
-    }
-}
-
-fun List<Iota>.getOrFindEntity(level: ServerLevel, idx: Int, argc: Int = 0): Entity? {
-    val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
-    if (x is EntityIota) {
-        return x.getOrFindEntity(level)
-    } else {
-        throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity")
-    }
-}
-
-fun List<Iota>.getCachedEntity(idx: Int, argc: Int = 0): Entity? {
-    val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
-    if (x is EntityIota) {
-        return x.cachedEntity;
+        return x.getEntity(level)
     } else {
         throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity")
     }
@@ -102,7 +84,7 @@ fun List<Iota>.getBool(idx: Int, argc: Int = 0): Boolean {
 fun List<Iota>.getItemEntity(level: ServerLevel, idx: Int, argc: Int = 0): ItemEntity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = x.getOrFindEntity(level) ?: throw MishapEntityNotFound(x.entityId, x.cachedEntityName)
+        val e = x.getEntity(level)
         if (e is ItemEntity)
             return e
     }
@@ -112,7 +94,7 @@ fun List<Iota>.getItemEntity(level: ServerLevel, idx: Int, argc: Int = 0): ItemE
 fun List<Iota>.getPlayer(level: ServerLevel, idx: Int, argc: Int = 0): ServerPlayer {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = x.getOrFindEntity(level) ?: throw MishapEntityNotFound(x.entityId, x.cachedEntityName)
+        val e = x.getEntity(level)
         if (e is ServerPlayer)
             return e
     }
@@ -122,7 +104,7 @@ fun List<Iota>.getPlayer(level: ServerLevel, idx: Int, argc: Int = 0): ServerPla
 fun List<Iota>.getMob(level: ServerLevel, idx: Int, argc: Int = 0): Mob {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = x.getOrFindEntity(level) ?: throw MishapEntityNotFound(x.entityId, x.cachedEntityName)
+        val e = x.getEntity(level)
         if (e is Mob)
             return e
     }
@@ -132,7 +114,7 @@ fun List<Iota>.getMob(level: ServerLevel, idx: Int, argc: Int = 0): Mob {
 fun List<Iota>.getLivingEntityButNotArmorStand(level: ServerLevel, idx: Int, argc: Int = 0): LivingEntity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = x.getOrFindEntity(level) ?: throw MishapEntityNotFound(x.entityId, x.cachedEntityName)
+        val e = x.getEntity(level)
         if (e is LivingEntity && e !is ArmorStand)
             return e
     }
@@ -327,6 +309,12 @@ fun aplKinnie(operatee: Either<Double, Vec3>, fn: DoubleUnaryOperator): Iota =
         { num -> DoubleIota(fn.applyAsDouble(num)) },
         { vec -> Vec3Iota(Vec3(fn.applyAsDouble(vec.x), fn.applyAsDouble(vec.y), fn.applyAsDouble(vec.z))) }
     )
+
+// Can't define the validateSubIotas helper method for ListIotas in its' IotaType, so I'm doing it here instead
+fun ListIota.validateSubIotas(level: ServerLevel) : ListIota {
+    val list = this.list.toList().map { iota -> validateIota(iota, level) }
+    return ListIota(list)
+}
 
 inline val Boolean.asActionResult get() = listOf(BooleanIota(this))
 inline val Double.asActionResult get() = listOf(DoubleIota(this))

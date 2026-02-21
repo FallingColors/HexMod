@@ -28,13 +28,10 @@ import java.util.UUID;
 public class EntityIota extends Iota {
     private final UUID entityId;
     @Nullable
-    private WeakReference<Entity> cachedEntity;
-    @Nullable
-    private Component entityName;
+    private final Component entityName;
 
     public EntityIota(@NotNull Entity e) {
         this(e.getUUID(), getEntityNameWithInline(e));
-        this.cachedEntity = new WeakReference<>(e);
     }
 
     public EntityIota(UUID entityId, @Nullable Component entityName) {
@@ -47,46 +44,11 @@ public class EntityIota extends Iota {
         return entityId;
     }
 
-    @Nullable
-    public Entity getOrFindEntity(ServerLevel level) {
-        // First, let's try to get it from weak reference
-        var entity = getCachedEntity();
-        if (entity != null && !entity.isRemoved())
-            return entity;
-        // Now let's try to fetch it from the world
-        entity = level.getEntity(entityId);
-        // Store in weak reference
-        if (entity != null) {
-            cachedEntity = new WeakReference<>(entity);
-            if (entity.isRemoved())
-                return null;
-        }
-
-        return entity;
-    }
-
-    @Nullable
-    public Entity getCachedEntity() {
-        if (cachedEntity != null)
-            if (!cachedEntity.refersTo(null))
-                return cachedEntity.get();
-            else
-                cachedEntity = null; // Clear weakref
-        return null;
+    public Entity getEntity(ServerLevel level) {
+        return level.getEntity(entityId);
     }
 
     public @Nullable Component getEntityName() {
-        var ent = getCachedEntity();
-        if(ent != null) {
-            var name = getEntityNameWithInline(ent);
-            this.entityName = name;
-            return name;
-        }
-
-        return getCachedEntityName();
-    }
-
-    public @Nullable Component getCachedEntityName() {
         return entityName;
     }
 
@@ -104,7 +66,7 @@ public class EntityIota extends Iota {
 
     @Override
     public Component display() {
-        var name = getCachedEntityName();
+        var name = getEntityName();
         return name != null ? name.copy().withStyle(ChatFormatting.AQUA) : Component.translatable("hexcasting.spelldata.entity.whoknows");
     }
 
@@ -125,6 +87,8 @@ public class EntityIota extends Iota {
         return baseName.append(Component.literal(": ")).append(inlineEnt);
     }
 
+
+
     public static IotaType<EntityIota> TYPE = new IotaType<>() {
         public static final MapCodec<EntityIota> CODEC = RecordCodecBuilder.mapCodec(inst ->
                 inst.group(
@@ -137,6 +101,12 @@ public class EntityIota extends Iota {
                         ByteBufCodecs.optional(ComponentSerialization.STREAM_CODEC), iota -> Optional.ofNullable(iota.getEntityName()),
                         (a, b) -> new EntityIota(a, b.orElse(null))
                 );
+
+        @Override
+        public boolean validate(EntityIota iota, ServerLevel level) {
+            var entity = iota.getEntity(level);
+            return entity != null;
+        }
 
         @Override
         public MapCodec<EntityIota> codec() {

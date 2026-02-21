@@ -11,6 +11,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerLevel;
 
 import java.util.List;
 import java.util.function.Function;
@@ -56,6 +57,10 @@ public abstract class IotaType<T extends Iota> {
     public static final StreamCodec<RegistryFriendlyByteBuf, Iota> TYPED_STREAM_CODEC = ByteBufCodecs
             .registry(HexRegistries.IOTA_TYPE)
             .dispatch(Iota::getType, IotaType::streamCodec);
+
+    public boolean validate(T iota, ServerLevel level) {
+        return true;
+    }
 
     /**
      * Checks if an Iterable Iota object is too large for deserde.

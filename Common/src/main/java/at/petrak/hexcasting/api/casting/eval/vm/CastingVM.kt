@@ -15,8 +15,12 @@ import at.petrak.hexcasting.api.casting.mishaps.Mishap
 import at.petrak.hexcasting.api.casting.mishaps.MishapInternalException
 import at.petrak.hexcasting.api.casting.mishaps.MishapStackSize
 import at.petrak.hexcasting.api.casting.mishaps.MishapTooManyCloseParens
+import at.petrak.hexcasting.api.utils.validateIota
+import at.petrak.hexcasting.api.utils.validateIotaList
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
+import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 
 /**
@@ -40,6 +44,9 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
      * Mutates this
      */
     fun queueExecuteAndWrapIotas(iotas: List<Iota>, world: ServerLevel): ExecutionClientView {
+        this.image = image.copy(
+            stack = validateIotaList(this.image.stack, world)
+        )
         // Initialize the continuation stack to a single top-level eval for all iotas.
         var continuation = SpellContinuation.Done.pushFrame(FrameEvaluate(SpellList.LList(0, iotas), false))
         // Begin aggregating info
@@ -87,9 +94,15 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 if (lastResolutionType.success) ResolvedPatternType.EVALUATED else ResolvedPatternType.ERRORED
         }
 
-        val ravenmind: CompoundTag? = image.userData
-            ?.takeIf { it.contains(HexAPI.RAVENMIND_USERDATA) }
+        var ravenmind: CompoundTag? = image.userData
+            .takeIf { it.contains(HexAPI.RAVENMIND_USERDATA) }
             ?.getCompound(HexAPI.RAVENMIND_USERDATA)
+
+        if (ravenmind != null) {
+            val test = IotaType.TYPED_CODEC.parse<Tag?>(NbtOps.INSTANCE, ravenmind).getOrThrow()
+            val newIota = validateIota(test, world)
+            ravenmind = IotaType.TYPED_CODEC.encodeStart<Tag?>(NbtOps.INSTANCE, newIota).getOrThrow() as CompoundTag?
+        }
 
         val isStackClear = image.stack.isEmpty() && image.parenCount == 0 && !image.escapeNext && ravenmind == null
 
