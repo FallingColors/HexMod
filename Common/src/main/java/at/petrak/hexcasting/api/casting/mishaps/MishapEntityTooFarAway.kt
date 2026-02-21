@@ -16,5 +16,5 @@ class MishapEntityTooFarAway(val entity: Entity) : Mishap() {
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component =
-        error("entity_too_far", entity.displayName!!)
+        error("entity_too_far", entity.displayName?.plainCopy() ?: entity.type.description)
 }

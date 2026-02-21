@@ -1,11 +1,9 @@
 package at.petrak.hexcasting.client;
 
-import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
-import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.entity.WallScrollRenderer;
 import at.petrak.hexcasting.client.render.GaslightingTracker;
 import at.petrak.hexcasting.client.render.ScryingLensOverlays;
@@ -22,6 +20,7 @@ import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
 import at.petrak.hexcasting.common.items.storage.*;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import at.petrak.hexcasting.common.lib.HexBlocks;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import net.minecraft.client.color.block.BlockColor;
@@ -30,7 +29,8 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.core.Registry;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -56,10 +56,10 @@ public class RegisterClientStuff {
 
     public static void init() {
         registerSealableDataHolderOverrides(HexItems.FOCUS,
-            stack -> HexItems.FOCUS.readIotaTag(stack) != null,
+            stack -> stack.has(HexDataComponents.IOTA),
             ItemFocus::isSealed);
         registerSealableDataHolderOverrides(HexItems.SPELLBOOK,
-            stack -> HexItems.SPELLBOOK.readIotaTag(stack) != null,
+            stack -> HexItems.SPELLBOOK.readIota(stack) != null,
             ItemSpellbook::isSealed);
         registerVariantOverrides(HexItems.FOCUS, HexItems.FOCUS::getVariant);
         registerVariantOverrides(HexItems.SPELLBOOK, HexItems.SPELLBOOK::getVariant);
@@ -69,7 +69,7 @@ public class RegisterClientStuff {
         registerVariantOverrides(HexItems.ARTIFACT, HexItems.ARTIFACT::getVariant);
         IClientXplatAbstractions.INSTANCE.registerItemProperty(HexItems.THOUGHT_KNOT, ItemThoughtKnot.WRITTEN_PRED,
             (stack, level, holder, holderID) -> {
-                if (NBTHelper.contains(stack, ItemThoughtKnot.TAG_DATA)) {
+                if (stack.has(HexDataComponents.IOTA)) {
                     return 1;
                 } else {
                     return 0;
@@ -134,7 +134,7 @@ public class RegisterClientStuff {
 
         x.registerEntityRenderer(HexEntities.WALL_SCROLL, WallScrollRenderer::new);
 
-//        for (var tex : new ResourceLocation[]{
+//        for (var tex : ResourceLocation.fromNamespaceAndPath[]{
 //                PatternTooltipComponent.PRISTINE_BG,
 //                PatternTooltipComponent.ANCIENT_BG,
 //                PatternTooltipComponent.SLATE_BG
@@ -166,11 +166,11 @@ public class RegisterClientStuff {
                 // this gets called for particles for some irritating reason
                 return 0xff_ffffff;
             }
-            var iotaTag = beas.getIotaTag();
-            if (iotaTag == null) {
+            var iota = beas.getIota();
+            if (iota == null) {
                 return 0xff_ffffff;
             }
-            return IotaType.getColor(iotaTag);
+            return iota.getType().color();
         }, HexBlocks.AKASHIC_BOOKSHELF);
     }
 
@@ -192,7 +192,7 @@ public class RegisterClientStuff {
         Predicate<ItemStack> isSealed) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.OVERLAY_PRED,
             (stack, level, holder, holderID) -> {
-                if (!hasIota.test(stack) && !NBTHelper.hasString(stack, IotaHolderItem.TAG_OVERRIDE_VISUALLY)) {
+                if (!hasIota.test(stack) && !stack.has(HexDataComponents.VISUAL_OVERRIDE)) {
                     return 0;
                 }
                 if (!isSealed.test(stack)) {
@@ -209,7 +209,7 @@ public class RegisterClientStuff {
 
     private static void registerScrollOverrides(ItemScroll scroll) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty(scroll, ItemScroll.ANCIENT_PREDICATE,
-            (stack, level, holder, holderID) -> NBTHelper.hasString(stack, ItemScroll.TAG_OP_ID) ? 1f : 0f);
+            (stack, level, holder, holderID) -> stack.has(HexDataComponents.ACTION) ? 1f : 0f);
     }
 
     private static void registerPackagedSpellOverrides(ItemPackagedHex item) {
@@ -222,7 +222,7 @@ public class RegisterClientStuff {
     private static void registerWandOverrides(ItemStaff item) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty(item, ItemStaff.FUNNY_LEVEL_PREDICATE,
             (stack, level, holder, holderID) -> {
-                if (!stack.hasCustomHoverName()) {
+                if (!stack.has(DataComponents.CUSTOM_NAME)) {
                     return 0;
                 }
                 var name = stack.getHoverName().getString().toLowerCase(Locale.ROOT);
@@ -256,7 +256,7 @@ public class RegisterClientStuff {
             BlockEntityRendererProvider<? super T> berp);
     }
 
-    public static void onModelRegister(ResourceManager recMan, Consumer<ResourceLocation> extraModels) {
+    public static void onModelRegister(ResourceManager recMan, Consumer<ModelResourceLocation> extraModels) {
         for (var type : QUENCHED_ALLAY_TYPES.entrySet()) {
             var blockLoc = BuiltInRegistries.BLOCK.getKey(type.getKey());
             var locStart = "block/";
@@ -264,12 +264,30 @@ public class RegisterClientStuff {
                 locStart += "deco/";
 
             for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
-                extraModels.accept(modLoc( locStart + blockLoc.getPath() + "_" + i));
+                extraModels.accept(new ModelResourceLocation(modLoc( locStart + blockLoc.getPath() + "_" + i), IClientXplatAbstractions.INSTANCE.getModelLocVariant()));
             }
         }
     }
 
-    public static void onModelBake(ModelBakery loader, Map<ResourceLocation, BakedModel> map) {
+    @FunctionalInterface
+    public interface FabricModelContext {
+        void add(ResourceLocation id);
+    }
+
+    public static void onModelRegister(FabricModelContext context) {
+        for (var type : QUENCHED_ALLAY_TYPES.entrySet()) {
+            var blockLoc = BuiltInRegistries.BLOCK.getKey(type.getKey());
+            var locStart = "block/";
+            if (type.getValue())
+                locStart += "deco/";
+
+            for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
+                context.add(modLoc( locStart + blockLoc.getPath() + "_" + i));
+            }
+        }
+    }
+
+    public static void onModelBake(ModelBakery loader, Map<ModelResourceLocation, BakedModel> map) {
         for (var type : QUENCHED_ALLAY_TYPES.entrySet()) {
             var blockLoc = BuiltInRegistries.BLOCK.getKey(type.getKey());
             var locStart = "block/";
@@ -278,7 +296,7 @@ public class RegisterClientStuff {
 
             var list = new ArrayList<BakedModel>();
             for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
-                var variantLoc = modLoc(locStart + blockLoc.getPath() + "_" + i);
+                var variantLoc = new ModelResourceLocation(modLoc(locStart + blockLoc.getPath() + "_" + i), IClientXplatAbstractions.INSTANCE.getModelLocVariant());
                 var model = map.get(variantLoc);
                 list.add(model);
             }

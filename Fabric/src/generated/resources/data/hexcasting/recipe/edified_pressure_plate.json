@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "W": {
+      "tag": "hexcasting:edified_planks"
+    }
+  },
+  "pattern": [
+    "WW"
+  ],
+  "result": {
+    "count": 1,
+    "id": "hexcasting:edified_pressure_plate"
+  }
+}

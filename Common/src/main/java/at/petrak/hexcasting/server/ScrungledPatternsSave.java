@@ -7,10 +7,12 @@ import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.saveddata.SavedData;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,7 +63,7 @@ public class ScrungledPatternsSave extends SavedData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
         // We don't save the reverse lookup cause we can reconstruct it when loading.
         this.lookup.forEach((sig, entry) -> {
             var inner = new CompoundTag();
@@ -72,7 +74,7 @@ public class ScrungledPatternsSave extends SavedData {
         return tag;
     }
 
-    private static ScrungledPatternsSave load(CompoundTag tag) {
+    private static ScrungledPatternsSave load(CompoundTag tag, HolderLookup.Provider lookup) {
         var registryKey = IXplatAbstractions.INSTANCE.getActionRegistry().key();
 
         var map = new HashMap<String, PerWorldEntry>();
@@ -83,7 +85,7 @@ public class ScrungledPatternsSave extends SavedData {
             var rawKey = inner.getString(TAG_KEY);
 
             var dir = HexDir.values()[rawDir];
-            var key = ResourceKey.create(registryKey, new ResourceLocation(rawKey));
+            var key = ResourceKey.create(registryKey, ResourceLocation.parse(rawKey));
 
             map.put(sig, new PerWorldEntry(key, dir));
         }
@@ -116,8 +118,11 @@ public class ScrungledPatternsSave extends SavedData {
 
     public static ScrungledPatternsSave open(ServerLevel overworld) {
         return overworld.getDataStorage().computeIfAbsent(
-            ScrungledPatternsSave::load,
-            () -> ScrungledPatternsSave.createFromScratch(overworld.getSeed()),
+            new SavedData.Factory<>(
+                    () -> ScrungledPatternsSave.createFromScratch(overworld.getSeed()),
+                    ScrungledPatternsSave::load,
+                    DataFixTypes.PLAYER
+            ),
             TAG_SAVED_DATA);
     }
 

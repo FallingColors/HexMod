@@ -12,14 +12,11 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
-import at.petrak.hexcasting.xplat.IXplatAbstractions
-import net.minecraft.core.BlockPos
+import net.minecraft.core.component.DataComponents
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.server.level.TicketType
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.item.enchantment.EnchantmentHelper
-import net.minecraft.world.level.ChunkPos
+import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.phys.Vec3
 
 // TODO while we're making breaking changes I *really* want to have the vector in the entity's local space
@@ -27,11 +24,11 @@ import net.minecraft.world.phys.Vec3
 object OpTeleport : SpellAction {
     override val argc = 2
     override fun execute(
-        args: List<Iota>,
-        env: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
 
-        val teleportee = args.getEntity(0, argc)
+        val teleportee = args.getEntity(env.world, 0, argc)
         val delta = args.getVec3(1, argc)
         env.assertEntityInRange(teleportee)
 
@@ -77,7 +74,7 @@ object OpTeleport : SpellAction {
                 // having to rearrange those. Also it makes sense for LORE REASONS probably, since the caster is more
                 // aware of items they use often.
                 for (armorItem in teleportee.inventory.armor) {
-                    if (EnchantmentHelper.hasBindingCurse(armorItem))
+                    if (armorItem.get(DataComponents.ENCHANTMENTS)?.keySet()?.any { e -> e.`is`(Enchantments.BINDING_CURSE) } == true)
                         continue
 
                     if (Math.random() < baseDropChance * 0.25) {

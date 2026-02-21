@@ -2,9 +2,10 @@ import at.petrak.pkpcpbp.MiscUtil
 
 plugins {
     // used for something??
-    id 'dev.architectury.loom' version '1.7-SNAPSHOT' apply false
+    id 'dev.architectury.loom' version '1.13-SNAPSHOT' apply false
     // used for multi-loader stuff, NOT for the archi API
     id 'architectury-plugin' version '3.4-SNAPSHOT'
+    id 'com.gradleup.shadow' version '8.3.6' apply false
 
     id "org.jetbrains.kotlin.jvm"
 
@@ -109,24 +110,12 @@ subprojects {
         it.options.release = 21
     }
 
-    compileKotlin {
-        kotlinOptions {
-            jvmTarget = "21"
-        }
-    }
-    compileTestKotlin {
-        kotlinOptions {
-            jvmTarget = "21"
-        }
-    }
-
     // Disables Gradle's custom module metadata from being published to maven. The
     // metadata includes mapped dependencies which are not reasonably consumable by
     // other mod developers.
-    tasks.withType(GenerateModuleMetadata) {
+    tasks.withType(GenerateModuleMetadata).configureEach {
         enabled = false
     }
-
 }
 
 allprojects {
@@ -135,7 +124,7 @@ allprojects {
     }
 
     gradle.projectsEvaluated {
-        tasks.withType(JavaCompile) {
+        tasks.withType(JavaCompile).configureEach {
             options.compilerArgs << "-Xmaxerrs" << "1000"
         }
     }
@@ -145,7 +134,7 @@ allprojects {
 }
 
 tasks.register("runAllDatagen") {
-    dependsOn ":Forge:runXplatDatagen"
-    dependsOn ":Forge:runForgeDatagen"
+    dependsOn ":Neoforge:runXplatDatagen"
+    dependsOn ":Neoforge:runDatagen"
     dependsOn ":Fabric:runDatagen"
 }

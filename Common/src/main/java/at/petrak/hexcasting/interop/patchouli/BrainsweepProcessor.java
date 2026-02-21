@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,13 +27,13 @@ public class BrainsweepProcessor implements IComponentProcessor {
 
 	@Override
 	public void setup(Level level, IVariableProvider vars) {
-		var id = new ResourceLocation(vars.get("recipe").asString());
+		var id = ResourceLocation.parse(vars.get("recipe", level.registryAccess()).asString());
 
 		var recman = level.getRecipeManager();
 		var brainsweepings = recman.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE);
 		for (var poisonApples : brainsweepings) {
-			if (poisonApples.getId().equals(id)) {
-				this.recipe = poisonApples;
+			if (poisonApples.id().equals(id)) {
+				this.recipe = poisonApples.value();
 				break;
 			}
 		}
@@ -46,14 +47,14 @@ public class BrainsweepProcessor implements IComponentProcessor {
 
 		switch (key) {
 			case "header" -> {
-				return IVariable.from(this.recipe.result().getBlock().getName());
+				return IVariable.from(this.recipe.result().getBlock().getName(), level.registryAccess());
 			}
 			case "input" -> {
 				var inputStacks = this.recipe.blockIn().getDisplayedStacks();
-				return IVariable.from(inputStacks.toArray(new ItemStack[0]));
+				return IVariable.from(inputStacks.toArray(new ItemStack[0]), level.registryAccess());
 			}
 			case "result" -> {
-				return IVariable.from(new ItemStack(this.recipe.result().getBlock()));
+				return IVariable.from(new ItemStack(this.recipe.result().getBlock()), level.registryAccess());
 			}
 
 			case "entity" -> {
@@ -79,8 +80,8 @@ public class BrainsweepProcessor implements IComponentProcessor {
 				return IVariable.wrapList(this.recipe.entityIn()
 					.getTooltip(mc.options.advancedItemTooltips)
 					.stream()
-					.map(IVariable::from)
-					.toList());
+					.map(v -> IVariable.from(v, level.registryAccess()))
+					.toList(), level.registryAccess());
 			}
 			case "mediaCost" -> {
 				record ItemCost(Item item, int cost) {
@@ -98,14 +99,14 @@ public class BrainsweepProcessor implements IComponentProcessor {
 				List<IVariable> validItemStacks = Arrays.stream(costs)
 						.filter(itemCost -> itemCost.dividesEvenly((int)this.recipe.mediaCost()))
 						.map(validItemCost -> new ItemStack(validItemCost.item, (int) this.recipe.mediaCost() / validItemCost.cost))
-						.map(IVariable::from)
+						.map(v -> IVariable.from(v, level.registryAccess()))
 						.toList();
 
 				if (!validItemStacks.isEmpty()) {
-					return IVariable.wrapList(validItemStacks);
+					return IVariable.wrapList(validItemStacks, level.registryAccess());
 				}
 				// fallback: display in terms of dust
-				return IVariable.from(new ItemStack(HexItems.AMETHYST_DUST, (int) (this.recipe.mediaCost() / MediaConstants.DUST_UNIT)));
+				return IVariable.from(new ItemStack(HexItems.AMETHYST_DUST, (int) (this.recipe.mediaCost() / MediaConstants.DUST_UNIT)), level.registryAccess());
 			}
 			default -> {
 				return null;

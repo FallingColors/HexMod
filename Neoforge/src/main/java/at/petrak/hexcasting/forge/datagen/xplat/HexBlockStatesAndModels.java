@@ -7,23 +7,28 @@ import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockBooleanDirectrix;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockRedstoneDirectrix;
 import at.petrak.hexcasting.common.lib.HexBlocks;
-import at.petrak.paucal.api.forge.datagen.PaucalBlockStateAndModelProvider;
+import at.petrak.paucal.forge.api.datagen.PaucalBlockStateAndModelProvider;
 import net.minecraft.core.Direction;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelBuilder;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.ModelBuilder;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
-import static net.minecraftforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
+import static net.neoforged.neoforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
 
 public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
     public HexBlockStatesAndModels(PackOutput output, ExistingFileHelper exFileHelper) {
         super(output, HexAPI.MOD_ID, exFileHelper);
+    }
+
+    @Override
+    protected void blockAndItem(Block block, BlockModelBuilder model) {
+        simpleBlock(block, model);
+        simpleBlockItem(block, model);
     }
 
     @Override
@@ -125,7 +130,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         });
 
 
-        blockAndItem(HexBlocks.SLATE_BLOCK, models().cubeAll("slate_block", modLoc("block/slate")));
+        blockAndItem(HexBlocks.SLATE_BLOCK, models().cubeAll("slate_block", modLoc("block/slate_block")));
         blockAndItem(HexBlocks.SLATE_TILES, models().cubeAll("block/deco/slate_tiles", modLoc("block/deco/slate_tiles")));
         blockAndItem(HexBlocks.SLATE_BRICKS, models().cubeAll("block/deco/slate_bricks", modLoc("block/deco/slate_bricks")));
         blockAndItem(HexBlocks.SLATE_BRICKS_SMALL, models().cubeAll("block/deco/slate_bricks_small", modLoc("block/deco/slate_bricks_small")));
@@ -186,7 +191,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         blockAndItem(HexBlocks.EDIFIED_PANEL, models().cubeAll("edified_panel", modLoc("block/edified_panel")));
         blockAndItem(HexBlocks.EDIFIED_TILE, models().cubeAll("edified_tile", modLoc("block/edified_tile")));
 
-        ResourceLocation leavesParent = new ResourceLocation("block/leaves");
+        ResourceLocation leavesParent = ResourceLocation.withDefaultNamespace("block/leaves");
         blockAndItem(HexBlocks.AMETHYST_EDIFIED_LEAVES,
             models().withExistingParent("amethyst_edified_leaves", leavesParent)
                 .texture("all", modLoc("block/amethyst_edified_leaves"))
@@ -289,7 +294,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
     }
 
     private void impetus(Block block, String name, String stub, boolean itemModelIsLit) {
-        arrowCircleBlock(block, name, modLoc("block/slate"),
+        arrowCircleBlock(block, name, modLoc("block/slate_block"),
             "impetus/" + stub + "/front",
             "impetus/" + stub + "/top",
             "impetus/" + stub + "/left",
@@ -300,7 +305,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
     }
 
     private void doAllTheDirectrices() {
-        arrowCircleBlock(HexBlocks.EMPTY_DIRECTRIX, "directrix/empty", modLoc("block/slate"),
+        arrowCircleBlock(HexBlocks.EMPTY_DIRECTRIX, "directrix/empty", modLoc("block/slate_block"),
             "directrix/empty/front", "directrix/empty/top", "directrix/empty/left",
             "directrix/empty/right", "directrix/empty/back", false);
 
@@ -339,7 +344,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
             var modelName = "block/circle/directrix/redstone/" + litness + "_" + poweredness + "_" + dir.getName();
             var model = models().cube(modelName, modLoc(bottom), modLoc(top), modLoc(front), modLoc(back),
                     modLoc(left), modLoc(right))
-                .texture("particle", modLoc("block/slate"));
+                .texture("particle", modLoc("block/slate_block"));
 
             if (isLit && !isPowered && dir == Direction.EAST) {
                 // getBuilder does not add the block/etc to the front if the path contains any slashes
@@ -396,7 +401,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
             var modelName = "block/circle/directrix/boolean/" + litness + "_" + boolStateString + "_" + dir.getName();
             var model = models().cube(modelName, modLoc(bottom), modLoc(top), modLoc(front), modLoc(back),
                             modLoc(left), modLoc(right))
-                    .texture("particle", modLoc("block/slate"));
+                    .texture("particle", modLoc("block/slate_block"));
 
             if (isLit && boolState == BlockBooleanDirectrix.State.FALSE && dir == Direction.EAST) {
                 // getBuilder does not add the block/etc to the front if the path contains any slashes

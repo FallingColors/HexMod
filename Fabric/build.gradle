@@ -1,5 +1,6 @@
 plugins {
     // id 'fabric-loom' version "1.8.9"
+    id 'com.gradleup.shadow'
 }
 
 architectury {
@@ -81,13 +82,23 @@ configurations {
 
 repositories {
     mavenCentral()
+    mavenLocal()
+
+    // serialization hooks
+    maven { url = "https://maven.hexxy.media" }
 
     // paucal and patchi
     maven { url = 'https://maven.blamejared.com' }
     // modmenu and clothconfig
     maven { url "https://maven.shedaniel.me/" }
     // Cardinal Components
-    maven { url 'https://maven.ladysnake.org/releases' }
+    maven {
+        url = "https://jitpack.io"
+        content {
+            includeGroupAndSubgroups 'com.github'
+        }
+    }
+    maven { url = "https://maven.ladysnake.org/releases" }
     maven { url "https://mvn.devos.one/snapshots/" }
     // EMI
     maven { url = "https://maven.terraformersmc.com/releases/" }
@@ -113,26 +124,23 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${fabricLoaderVersion}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabricVersion}"
 
-    common(project(path: ':Common', configuration: 'namedElements')) { transitive false }
+    implementation(project(path: ':Common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':Common', configuration: 'transformProductionFabric')
 
     // === MANDATORY DEPS ===
-    modImplementation "at.petra-k:paucal:$paucalVersion+$minecraftVersion-fabric"
+    modCompileOnly("at.petra-k:paucal:$paucalVersion+$minecraftVersion-fabric")
     // dear mod devs, don't put the platform in the middle of your version code
     modImplementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-FABRIC-SNAPSHOT"
-//    modImplementation "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
+    modImplementation "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
     modImplementation "io.wispforest:accessories-fabric:$accessoriesVersion"
 
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:$cardinalComponentsVersion"
-//    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-util:$cardinalComponentsVersion"
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:$cardinalComponentsVersion"
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-item:$cardinalComponentsVersion"
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-block:$cardinalComponentsVersion"
+    modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-base:$cardinalComponentsVersion"
+//    modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-util:$cardinalComponentsVersion"
+    modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-entity:$cardinalComponentsVersion"
+    modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-item:$cardinalComponentsVersion"
+    modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-block:$cardinalComponentsVersion"
 
-    // apparently the 1.18 version Just Works on 1.19
-    modImplementation "${modID}:serialization-hooks:$serializationHooksVersion"
-    include "${modID}:serialization-hooks:$serializationHooksVersion"
-    implementation(include("com.github.LlamaLad7:MixinExtras:0.1.1"))
+    include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.5.0")))
 
     // === OPTIONAL DEPS ===
 
@@ -141,6 +149,13 @@ dependencies {
     }
     modCompileOnly "dev.emi:emi-fabric:${emiVersion}:api"
     modLocalRuntime "dev.emi:emi-fabric:${emiVersion}"
+
+    modLocalRuntime "dev.architectury:architectury-fabric:$architecturyVersion"
+    modLocalRuntime "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
+    modLocalRuntime "at.petra-k:paucal:$paucalVersion+$minecraftVersion-fabric"
+    // fuck you jankson fuck you jankson fuck you jankson (jankson loves to crash Fabric:runClient with a NoSuchMethodException for no reason and then act like nothing happened)
+    localRuntime "blue.endless:jankson:1.2.3"
+
 
 //    modImplementation "maven.modrinth:gravity-api:$gravityApiVersion"
     modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {
@@ -155,21 +170,15 @@ dependencies {
     // i am speed
     // sodium is causing frustum mixin errors so don't use it
 //    modImplementation "maven.modrinth:sodium:${sodiumVersion}"
-    modImplementation "maven.modrinth:lithium:${lithiumVersion}"
+    modImplementation "maven.modrinth:lithium:${lithiumVersion}-fabric"
 //    modImplementation "maven.modrinth:phosphor:${phosphorVersion}"
+
 
     // === OTHER STUFF ===
     compileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
     testCompileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
     compileOnly "com.demonwav.mcdev:annotations:1.0"
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-}
-
-tasks.withType(JavaCompile) {
-    source(project(":Common").sourceSets.main.allSource)
-}
-compileKotlin {
-    source(project(":Common").sourceSets.main.kotlin)
 }
 
 sourcesJar {
@@ -188,3 +197,22 @@ processResources {
         expand "version": project.version
     }
 }
+
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
+}
+
+remapJar {
+    inputFile.set shadowJar.archiveFile
+    dependsOn shadowJar
+}
+
+tasks.named('processResources') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+tasks.named('sourcesJar') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+jar.finalizedBy(remapJar)

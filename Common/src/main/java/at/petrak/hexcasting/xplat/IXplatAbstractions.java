@@ -19,13 +19,16 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.player.AltioraAbility;
 import at.petrak.hexcasting.api.player.FlightAbility;
 import at.petrak.hexcasting.api.player.Sentinel;
-import at.petrak.hexcasting.common.msgs.IMessage;
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredientType;
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredientType;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -56,6 +59,7 @@ import java.util.stream.Collectors;
 /**
  * more like IHexplatAbstracts lmaooooooo
  */
+
 public interface IXplatAbstractions {
     Platform platform();
 
@@ -65,14 +69,14 @@ public interface IXplatAbstractions {
 
     void initPlatformSpecific();
 
-    void sendPacketToPlayer(ServerPlayer target, IMessage packet);
+    void sendPacketToPlayer(ServerPlayer target, CustomPacketPayload packet);
 
-    void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, IMessage packet);
+    void sendPacketNear(Vec3 pos, double radius, ServerLevel dimension, CustomPacketPayload packet);
 
-    void sendPacketTracking(Entity entity, IMessage packet);
+    void sendPacketTracking(Entity entity, CustomPacketPayload packet);
 
     // https://github.com/VazkiiMods/Botania/blob/13b7bcd9cbb6b1a418b0afe455662d29b46f1a7f/Xplat/src/main/java/vazkii/botania/xplat/IXplatAbstractions.java#L157
-    Packet<ClientGamePacketListener> toVanillaClientboundPacket(IMessage message);
+    Packet<ClientGamePacketListener> toVanillaClientboundPacket(CustomPacketPayload message);
 
 //    double getReachDistance(Player player);
 
@@ -116,9 +120,6 @@ public interface IXplatAbstractions {
     ADMediaHolder findMediaHolder(ItemStack stack);
 
     @Nullable
-    ADMediaHolder findMediaHolder(ServerPlayer player);
-
-    @Nullable
     ADIotaHolder findDataHolder(ItemStack stack);
 
     @Nullable
@@ -127,7 +128,7 @@ public interface IXplatAbstractions {
     @Nullable
     ADHexHolder findHexHolder(ItemStack stack);
 
-    @Nullable ADVariantItem findVariantHolder(ItemStack stack);
+    ADVariantItem findVariantHolder(ItemStack stack);
 
     // coooollooorrrs
 
@@ -180,11 +181,23 @@ public interface IXplatAbstractions {
 
     Registry<EvalSound> getEvalSoundRegistry();
 
+    Registry<StateIngredientType<?>> getStateIngredientRegistry();
+
+    Registry<BrainsweepeeIngredientType<?>> getBrainsweepeeIngredientRegistry();
+
     GameProfile HEXCASTING = new GameProfile(UUID.fromString("8BE7E9DA-1667-11EE-BE56-0242AC120002"), "[HexCasting]");
 
     boolean isBreakingAllowed(ServerLevel world, BlockPos pos, BlockState state, @Nullable Player player);
 
     boolean isPlacingAllowed(ServerLevel world, BlockPos pos, ItemStack blockStack, @Nullable Player player);
+
+    /**
+     * Takes a ResourceKey representing a Registry for type B, returns an IXplatRegister of type B
+     * @param registryKey
+     * @return {@code IXplatRegister<B>}
+     * @param <B>
+     */
+    <B> IXplatRegister<B> createRegistar(ResourceKey<Registry<B>> registryKey);
 
     // interop
 

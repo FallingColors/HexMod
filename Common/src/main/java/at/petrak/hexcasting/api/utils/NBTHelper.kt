@@ -1,12 +1,12 @@
 @file:JvmName("NBTHelper")
 
-// TODO this entire file needs to be HEAVILY refactored. also i need to understand components
-
 package at.petrak.hexcasting.api.utils
 
+import net.minecraft.advancements.AdvancementHolder
 import net.minecraft.nbt.*
-import net.minecraft.world.item.ItemStack
+import net.minecraft.server.ServerAdvancementManager
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 private inline fun <T : Any, K, E> T?.getIf(key: K, predicate: T?.(K) -> Boolean, get: T.(K) -> E): E? =
     getIf(key, predicate, get, null)
@@ -15,6 +15,16 @@ private inline fun <T : Any, K, E> T?.getIf(key: K, predicate: T?.(K) -> Boolean
     if (this != null && predicate(key))
         return get(key)
     return default
+}
+
+fun AdvancementHolder.isChildOf(root: AdvancementHolder, serverAdvancementManager: ServerAdvancementManager): Boolean {
+    var current = this
+    while (true) {
+        if (current.equals(root)) return true
+        var parentOpt = serverAdvancementManager.get(current.value.parent.getOrNull() ?: return false) ?: return false
+
+        current = parentOpt
+    }
 }
 
 // ======================================================================================================== CompoundTag
@@ -117,12 +127,9 @@ fun CompoundTag.getList(key: String, objType: Byte): ListTag = getList(key, objT
 
 // Get-or-create
 
-fun CompoundTag.getOrCreateCompound(key: String): CompoundTag =
-    getCompound(key) ?: CompoundTag().also { putCompound(key, it) }
-
+fun CompoundTag.getOrCreateCompound(key: String): CompoundTag = getCompound(key) ?: CompoundTag().also { putCompound(key, it) }
 fun CompoundTag.getOrCreateList(key: String, objType: Byte) = getOrCreateList(key, objType.toInt())
-fun CompoundTag.getOrCreateList(key: String, objType: Int): ListTag =
-    if (hasList(key, objType)) getList(key, objType) else ListTag().also { putList(key, it) }
+fun CompoundTag.getOrCreateList(key: String, objType: Int): ListTag = if (hasList(key, objType)) getList(key, objType) else ListTag().also { putList(key, it) }
 
 // ================================================================================================================ Tag
 
@@ -141,12 +148,10 @@ val Tag.asLongArray: LongArray
             val array = this.asIntArray
             LongArray(array.size) { array[it].toLong() }
         }
-
         is ByteArrayTag -> {
             val array = this.asByteArray
             LongArray(array.size) { array[it].toLong() }
         }
-
         else -> LongArray(0)
     }
 
@@ -157,12 +162,10 @@ val Tag.asIntArray: IntArray
             val array = this.asLongArray
             IntArray(array.size) { array[it].toInt() }
         }
-
         is ByteArrayTag -> {
             val array = this.asByteArray
             IntArray(array.size) { array[it].toInt() }
         }
-
         else -> IntArray(0)
     }
 
@@ -173,12 +176,10 @@ val Tag.asByteArray: ByteArray
             val array = this.asLongArray
             ByteArray(array.size) { array[it].toByte() }
         }
-
         is IntArrayTag -> {
             val array = this.asIntArray
             ByteArray(array.size) { array[it].toByte() }
         }
-
         else -> ByteArray(0)
     }
 
@@ -187,98 +188,3 @@ val Tag.asCompound get() = this as? CompoundTag ?: CompoundTag()
 // asString is defined in Tag
 val Tag.asList get() = this as? ListTag ?: ListTag()
 val Tag.asUUID: UUID get() = if (this is IntArrayTag && this.size == 4) NbtUtils.loadUUID(this) else UUID(0, 0)
-
-// ========================================================================================================== ItemStack
-
-// Checks for containment
-
-fun ItemStack.hasNumber(key: String) = tag.hasNumber(key)
-fun ItemStack.hasByte(key: String) = tag.hasByte(key)
-fun ItemStack.hasShort(key: String) = tag.hasShort(key)
-fun ItemStack.hasInt(key: String) = tag.hasInt(key)
-fun ItemStack.hasLong(key: String) = tag.hasLong(key)
-fun ItemStack.hasFloat(key: String) = tag.hasFloat(key)
-fun ItemStack.hasDouble(key: String) = tag.hasDouble(key)
-fun ItemStack.hasLongArray(key: String) = tag.hasLongArray(key)
-fun ItemStack.hasIntArray(key: String) = tag.hasIntArray(key)
-fun ItemStack.hasByteArray(key: String) = tag.hasByteArray(key)
-fun ItemStack.hasCompound(key: String) = tag.hasCompound(key)
-fun ItemStack.hasString(key: String) = tag.hasString(key)
-fun ItemStack.hasList(key: String) = tag.hasList(key)
-fun ItemStack.hasList(key: String, objType: Int) = tag.hasList(key, objType)
-fun ItemStack.hasList(key: String, objType: Byte) = tag.hasList(key, objType)
-fun ItemStack.hasUUID(key: String) = tag.hasUUID(key)
-
-@JvmName("contains")
-fun ItemStack.containsTag(key: String) = tag.contains(key)
-
-@JvmName("contains")
-fun ItemStack.containsTag(key: String, id: Byte) = tag.contains(key, id)
-
-@JvmName("contains")
-fun ItemStack.containsTag(key: String, id: Int) = tag.contains(key, id)
-
-// Puts
-
-fun ItemStack.putBoolean(key: String, value: Boolean) = orCreateTag.putBoolean(key, value)
-fun ItemStack.putByte(key: String, value: Byte) = orCreateTag.putByte(key, value)
-fun ItemStack.putShort(key: String, value: Short) = orCreateTag.putShort(key, value)
-fun ItemStack.putInt(key: String, value: Int) = orCreateTag.putInt(key, value)
-fun ItemStack.putLong(key: String, value: Long) = orCreateTag.putLong(key, value)
-fun ItemStack.putFloat(key: String, value: Float) = orCreateTag.putFloat(key, value)
-fun ItemStack.putDouble(key: String, value: Double) = orCreateTag.putDouble(key, value)
-
-fun ItemStack.putLongArray(key: String, value: LongArray) = orCreateTag.putLongArray(key, value)
-fun ItemStack.putIntArray(key: String, value: IntArray) = orCreateTag.putIntArray(key, value)
-fun ItemStack.putByteArray(key: String, value: ByteArray) = orCreateTag.putByteArray(key, value)
-fun ItemStack.putCompound(key: String, value: CompoundTag) = putTag(key, value)
-fun ItemStack.putString(key: String, value: String) = orCreateTag.putString(key, value)
-fun ItemStack.putList(key: String, value: ListTag) = putTag(key, value)
-fun ItemStack.putUUID(key: String, value: UUID) = orCreateTag.putUUID(key, value)
-
-@JvmName("put")
-fun ItemStack.putTag(key: String, value: Tag) = orCreateTag.put(key, value)
-
-// Remove
-
-fun ItemStack.remove(key: String) = removeTagKey(key)
-
-// Gets
-
-@JvmOverloads
-fun ItemStack.getBoolean(key: String, defaultExpected: Boolean = false) = tag.getBoolean(key, defaultExpected)
-
-@JvmOverloads
-fun ItemStack.getByte(key: String, defaultExpected: Byte = 0) = tag.getByte(key, defaultExpected)
-
-@JvmOverloads
-fun ItemStack.getShort(key: String, defaultExpected: Short = 0) = tag.getShort(key, defaultExpected)
-
-@JvmOverloads
-fun ItemStack.getInt(key: String, defaultExpected: Int = 0) = tag.getInt(key, defaultExpected)
-
-@JvmOverloads
-fun ItemStack.getLong(key: String, defaultExpected: Long = 0) = tag.getLong(key, defaultExpected)
-
-@JvmOverloads
-fun ItemStack.getFloat(key: String, defaultExpected: Float = 0f) = tag.getFloat(key, defaultExpected)
-
-@JvmOverloads
-fun ItemStack.getDouble(key: String, defaultExpected: Double = 0.0) = tag.getDouble(key, defaultExpected)
-
-fun ItemStack.getLongArray(key: String) = tag.getLongArray(key)
-fun ItemStack.getIntArray(key: String) = tag.getIntArray(key)
-fun ItemStack.getByteArray(key: String) = tag.getByteArray(key)
-fun ItemStack.getCompound(key: String) = tag.getCompound(key)
-fun ItemStack.getString(key: String) = tag.getString(key)
-fun ItemStack.getList(key: String, objType: Int) = tag.getList(key, objType)
-fun ItemStack.getUUID(key: String) = tag.getUUID(key)
-
-@JvmName("get")
-fun ItemStack.getTag(key: String) = tag.get(key)
-
-// Get-or-create
-
-fun ItemStack.getOrCreateCompound(key: String): CompoundTag = getOrCreateTagElement(key)
-fun ItemStack.getOrCreateList(key: String, objType: Byte) = orCreateTag.getOrCreateList(key, objType)
-fun ItemStack.getOrCreateList(key: String, objType: Int) = orCreateTag.getOrCreateList(key, objType)

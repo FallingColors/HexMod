@@ -3,11 +3,11 @@ package at.petrak.hexcasting.datagen.tag;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.xplat.IXplatTags;
-import at.petrak.paucal.api.datagen.PaucalBlockTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -16,12 +16,11 @@ import net.minecraft.world.level.block.Blocks;
 
 import java.util.concurrent.CompletableFuture;
 
-public class HexBlockTagProvider extends PaucalBlockTagProvider {
+public class HexBlockTagProvider extends TagsProvider<Block> {
     public final IXplatTags xtags;
 
-    public HexBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,
-        IXplatTags xtags) {
-        super(output, lookupProvider);
+    public HexBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, IXplatTags xtags) {
+        super(output, Registries.BLOCK, lookupProvider);
         this.xtags = xtags;
     }
 
@@ -141,11 +140,11 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
             HexBlocks.QUENCHED_ALLAY, HexBlocks.QUENCHED_ALLAY_BRICKS, HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL, HexBlocks.QUENCHED_ALLAY_TILES);
 
         // this is a hack but fixes #532
-        var createBrittle = TagKey.create(Registries.BLOCK, new ResourceLocation("create", "brittle"));
+        var createBrittle = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("create", "brittle"));
         tag(createBrittle).addOptionalTag(BuiltInRegistries.BLOCK.getKey(HexBlocks.SLATE));
     }
 
-    void add(TagAppender<Block> appender, Block... blocks) {
+    void add(TagsProvider.TagAppender<Block> appender, Block... blocks) {
         for (Block block : blocks) {
             appender.add(BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow());
         }

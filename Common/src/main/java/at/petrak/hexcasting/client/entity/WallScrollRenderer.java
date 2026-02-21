@@ -14,7 +14,6 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -56,42 +55,41 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
             float margin = 1f / 48f;
             var last = ps.last();
             var mat = last.pose();
-            var norm = last.normal();
 
             RenderType layer = RenderType.entityCutout(this.getTextureLocation(wallScroll));
 
             var verts = bufSource.getBuffer(layer);
             // Remember: CCW
             // Front face
-            vertex(mat, norm, light, verts, 0, 0, dz, 0, 0, 0, 0, -1);
-            vertex(mat, norm, light, verts, 0, dy, dz, 0, 1, 0, 0, -1);
-            vertex(mat, norm, light, verts, dx, dy, dz, 1, 1, 0, 0, -1);
-            vertex(mat, norm, light, verts, dx, 0, dz, 1, 0, 0, 0, -1);
+            vertex(mat, last, light, verts, 0, 0, dz, 0, 0, 0, 0, -1);
+            vertex(mat, last, light, verts, 0, dy, dz, 0, 1, 0, 0, -1);
+            vertex(mat, last, light, verts, dx, dy, dz, 1, 1, 0, 0, -1);
+            vertex(mat, last, light, verts, dx, 0, dz, 1, 0, 0, 0, -1);
             // Back face
-            vertex(mat, norm, light, verts, 0, 0, 0, 0, 0, 0, 0, 1);
-            vertex(mat, norm, light, verts, dx, 0, 0, 1, 0, 0, 0, 1);
-            vertex(mat, norm, light, verts, dx, dy, 0, 1, 1, 0, 0, 1);
-            vertex(mat, norm, light, verts, 0, dy, 0, 0, 1, 0, 0, 1);
+            vertex(mat, last, light, verts, 0, 0, 0, 0, 0, 0, 0, 1);
+            vertex(mat, last, light, verts, dx, 0, 0, 1, 0, 0, 0, 1);
+            vertex(mat, last, light, verts, dx, dy, 0, 1, 1, 0, 0, 1);
+            vertex(mat, last, light, verts, 0, dy, 0, 0, 1, 0, 0, 1);
             // Top face
-            vertex(mat, norm, light, verts, 0, 0, 0, 0, 0, 0, -1, 0);
-            vertex(mat, norm, light, verts, 0, 0, dz, 0, margin, 0, -1, 0);
-            vertex(mat, norm, light, verts, dx, 0, dz, 1, margin, 0, -1, 0);
-            vertex(mat, norm, light, verts, dx, 0, 0, 1, 0, 0, -1, 0);
+            vertex(mat, last, light, verts, 0, 0, 0, 0, 0, 0, -1, 0);
+            vertex(mat, last, light, verts, 0, 0, dz, 0, margin, 0, -1, 0);
+            vertex(mat, last, light, verts, dx, 0, dz, 1, margin, 0, -1, 0);
+            vertex(mat, last, light, verts, dx, 0, 0, 1, 0, 0, -1, 0);
             // Left face
-            vertex(mat, norm, light, verts, 0, 0, 0, 0, 0, -1, 0, 0);
-            vertex(mat, norm, light, verts, 0, dy, 0, 0, 1, -1, 0, 0);
-            vertex(mat, norm, light, verts, 0, dy, dz, margin, 1, -1, 0, 0);
-            vertex(mat, norm, light, verts, 0, 0, dz, margin, 0, -1, 0, 0);
+            vertex(mat, last, light, verts, 0, 0, 0, 0, 0, -1, 0, 0);
+            vertex(mat, last, light, verts, 0, dy, 0, 0, 1, -1, 0, 0);
+            vertex(mat, last, light, verts, 0, dy, dz, margin, 1, -1, 0, 0);
+            vertex(mat, last, light, verts, 0, 0, dz, margin, 0, -1, 0, 0);
             // Right face
-            vertex(mat, norm, light, verts, dx, 0, dz, 1 - margin, 0, 1, 0, 0);
-            vertex(mat, norm, light, verts, dx, dy, dz, 1 - margin, 1, 1, 0, 0);
-            vertex(mat, norm, light, verts, dx, dy, 0, 1, 1, 1, 0, 0);
-            vertex(mat, norm, light, verts, dx, 0, 0, 1, 0, 1, 0, 0);
+            vertex(mat, last, light, verts, dx, 0, dz, 1 - margin, 0, 1, 0, 0);
+            vertex(mat, last, light, verts, dx, dy, dz, 1 - margin, 1, 1, 0, 0);
+            vertex(mat, last, light, verts, dx, dy, 0, 1, 1, 1, 0, 0);
+            vertex(mat, last, light, verts, dx, 0, 0, 1, 0, 1, 0, 0);
             // Bottom face
-            vertex(mat, norm, light, verts, 0, dy, dz, 0, 1 - margin, 0, 1, 0);
-            vertex(mat, norm, light, verts, 0, dy, 0, 0, 1, 0, 1, 0);
-            vertex(mat, norm, light, verts, dx, dy, 0, 1, 1, 0, 1, 0);
-            vertex(mat, norm, light, verts, dx, dy, dz, 1, 1 - margin, 0, 1, 0);
+            vertex(mat, last, light, verts, 0, dy, dz, 0, 1 - margin, 0, 1, 0);
+            vertex(mat, last, light, verts, 0, dy, 0, 0, 1, 0, 1, 0);
+            vertex(mat, last, light, verts, dx, dy, 0, 1, 1, 0, 1, 0);
+            vertex(mat, last, light, verts, dx, dy, dz, 1, 1 - margin, 0, 1, 0);
 
             ps.popPose();
 
@@ -124,13 +122,14 @@ public class WallScrollRenderer extends EntityRenderer<EntityWallScroll> {
         }
     }
 
-    private static void vertex(Matrix4f mat, Matrix3f normal, int light, VertexConsumer verts, float x, float y,
+    private static void vertex(Matrix4f mat, PoseStack.Pose last, int light, VertexConsumer verts, float x, float y,
                                float z, float u,
                                float v, float nx, float ny, float nz) {
-        verts.vertex(mat, x, y, z)
-                .color(0xffffffff)
-                .uv(u, v).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(light)
-                .normal(normal, nx, ny, nz)
-                .endVertex();
+        verts.addVertex(mat, x, y, z)
+                .setColor(0xffffffff)
+                .setUv(u, v)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(light)
+                .setNormal(last, nx, ny, nz);
     }
 }

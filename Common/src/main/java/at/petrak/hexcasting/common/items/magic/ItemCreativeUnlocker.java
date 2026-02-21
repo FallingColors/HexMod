@@ -4,12 +4,15 @@ import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
 import at.petrak.hexcasting.api.misc.MediaConstants;
-import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.ItemLoreFragment;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.ChatFormatting;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.Util;
+import net.minecraft.advancements.AdvancementNode;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -27,7 +30,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,7 +72,7 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     }
 
     public static boolean isDebug(ItemStack stack, String flag) {
-        if (!stack.is(HexItems.CREATIVE_UNLOCKER) || !stack.hasCustomHoverName()) {
+        if (!stack.is(HexItems.CREATIVE_UNLOCKER) || !stack.has(DataComponents.CUSTOM_NAME)) {
             return false;
         }
         var keywords = Arrays.asList(stack.getHoverName().getString().toLowerCase(Locale.ROOT).split(" "));
@@ -81,6 +83,7 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     }
 
     public static Component infiniteMedia(Level level) {
+
         String prefix = "item.hexcasting.creative_unlocker.";
 
         String emphasis = Language.getInstance().getOrDefault(prefix + "for_emphasis");
@@ -124,31 +127,17 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
         return true;
     }
 
-    public static void addToIntArray(ItemStack stack, String tag, int n) {
-        int[] arr = NBTHelper.getIntArray(stack, tag);
-        if (arr == null) {
-            arr = new int[0];
-        }
-        int[] newArr = Arrays.copyOf(arr, arr.length + 1);
-        newArr[newArr.length - 1] = n;
-        NBTHelper.putIntArray(stack, tag, newArr);
-    }
-
-    public static void addToLongArray(ItemStack stack, String tag, long n) {
-        long[] arr = NBTHelper.getLongArray(stack, tag);
-        if (arr == null) {
-            arr = new long[0];
-        }
-        long[] newArr = Arrays.copyOf(arr, arr.length + 1);
-        newArr[newArr.length - 1] = n;
-        NBTHelper.putLongArray(stack, tag, newArr);
+    public static void addToLongArray(ItemStack stack, DataComponentType<List<Long>> type, long n) {
+        var list = stack.getOrDefault(type, new ArrayList<Long>());
+        list.add(n);
+        stack.set(type, list);
     }
 
     @Override
     public long withdrawMedia(ItemStack stack, long cost, boolean simulate) {
         // In case it's withdrawn through other means
         if (!simulate && isDebug(stack, DISPLAY_MEDIA)) {
-            addToLongArray(stack, TAG_EXTRACTIONS, cost);
+            addToLongArray(stack, HexDataComponents.MEDIA_EXTRACTIONS, cost);
         }
 
         return cost < 0 ? getMedia(stack) : cost;
@@ -158,7 +147,7 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     public long insertMedia(ItemStack stack, long amount, boolean simulate) {
         // In case it's inserted through other means
         if (!simulate && isDebug(stack, DISPLAY_MEDIA)) {
-            addToLongArray(stack, TAG_INSERTIONS, amount);
+            addToLongArray(stack, HexDataComponents.MEDIA_INSERTIONS, amount);
         }
 
         return amount < 0 ? getMaxMedia(stack) : amount;
@@ -172,16 +161,16 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
         if (isDebug(stack, DISPLAY_MEDIA) && !level.isClientSide) {
-            debugDisplay(stack, TAG_EXTRACTIONS, "withdrawn", "all_media", entity);
-            debugDisplay(stack, TAG_INSERTIONS, "inserted", "infinite_media", entity);
+            debugDisplay(stack, HexDataComponents.MEDIA_EXTRACTIONS, "withdrawn", "all_media", entity);
+            debugDisplay(stack, HexDataComponents.MEDIA_INSERTIONS, "inserted", "infinite_media", entity);
         }
     }
 
-    private void debugDisplay(ItemStack stack, String tag, String langKey, String allKey, Entity entity) {
-        long[] arr = NBTHelper.getLongArray(stack, tag);
-        if (arr != null) {
-            NBTHelper.remove(stack, tag);
-            for (long i : arr) {
+    private void debugDisplay(ItemStack stack, DataComponentType<List<Long>> type, String langKey, String allKey, Entity entity) {
+        var list = stack.get(type);
+        if (list != null) {
+            stack.remove(type);
+            for (long i : list) {
                 if (i < 0) {
                     entity.sendSystemMessage(Component.translatable("hexcasting.debug.media_" + langKey,
                             stack.getDisplayName(),
@@ -217,19 +206,21 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
             var names = new ArrayList<>(ItemLoreFragment.NAMES);
             names.add(0, modLoc("root"));
             for (var name : names) {
-                var rootAdv = slevel.getServer().getAdvancements().getAdvancement(name);
+                var rootAdv = slevel.getServer().getAdvancements().tree().get(name);
                 if (rootAdv != null) {
-                    var children = new ArrayList<Advancement>();
+                    var children = new ArrayList<AdvancementNode>();
                     children.add(rootAdv);
-                    addChildren(rootAdv, children);
+                    collectChildrenRecursively(rootAdv, children);
 
                     var adman = player.getAdvancements();
 
+
+
                     for (var kid : children) {
-                        var progress = adman.getOrStartProgress(kid);
+                        var progress = adman.getOrStartProgress(kid.holder());
                         if (!progress.isDone()) {
                             for (String crit : progress.getRemainingCriteria()) {
-                                adman.award(kid, crit);
+                                adman.award(kid.holder(), crit);
                             }
                         }
                     }
@@ -244,7 +235,8 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
 
     private static MutableComponent rainbow(MutableComponent component, int shift, Level level) {
         if (level == null) {
-            return component.withStyle(ChatFormatting.WHITE);
+            return component.withStyle((s) -> s.withColor(
+                    TextColor.fromRgb(Mth.hsvToRgb((((float) Util.getMillis() / 50) + shift) * 2 % 360 / 360F, 1F, 1F))));
         }
 
         return component.withStyle((s) -> s.withColor(
@@ -252,9 +244,9 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents,
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents,
         TooltipFlag isAdvanced) {
-        Component emphasized = infiniteMedia(level);
+        Component emphasized = infiniteMedia(null);
 
         MutableComponent modName = Component.translatable("item.hexcasting.creative_unlocker.mod_name").withStyle(
             (s) -> s.withColor(ItemMediaHolder.HEX_COLOR));
@@ -264,10 +256,10 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
         tooltipComponents.add(Component.translatable("item.hexcasting.creative_unlocker.tooltip", modName).withStyle(ChatFormatting.GRAY));
     }
 
-    private static void addChildren(Advancement root, List<Advancement> out) {
-        for (Advancement kiddo : root.getChildren()) {
+    private static void collectChildrenRecursively(AdvancementNode root, List<AdvancementNode> out) {
+        for (AdvancementNode kiddo : root.children()) {
             out.add(kiddo);
-            addChildren(kiddo, out);
+            collectChildrenRecursively(kiddo, out);
         }
     }
 }

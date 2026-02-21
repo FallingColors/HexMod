@@ -230,7 +230,7 @@ public abstract class CastingEnvironment {
      * Return whether this env can cast great spells.
      */
     public boolean isEnlightened() {
-        var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("enlightenment"));
+        var adv = this.world.getServer().getAdvancements().get(modLoc("enlightenment"));
         if (adv == null)
             return false;
 

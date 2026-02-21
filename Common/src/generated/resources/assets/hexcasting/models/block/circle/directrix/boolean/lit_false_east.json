@@ -4,7 +4,7 @@
     "down": "hexcasting:block/circle/bottom",
     "east": "hexcasting:block/circle/directrix/boolean/left_false",
     "north": "hexcasting:block/circle/directrix/boolean/front_lit_false",
-    "particle": "hexcasting:block/slate",
+    "particle": "hexcasting:block/slate_block",
     "south": "hexcasting:block/circle/directrix/boolean/back_not_true",
     "up": "hexcasting:block/circle/directrix/boolean/top_false",
     "west": "hexcasting:block/circle/directrix/boolean/right_false"

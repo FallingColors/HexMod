@@ -3,25 +3,28 @@ package at.petrak.hexcasting.forge.datagen;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.forge.loot.ForgeHexAmethystLootMod;
+import at.petrak.hexcasting.forge.loot.ForgeHexCypherLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexLoreLootMod;
 import at.petrak.hexcasting.forge.loot.ForgeHexScrollLootMod;
-import at.petrak.hexcasting.forge.loot.ForgeHexCypherLootMod;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.data.GlobalLootModifierProvider;
-import net.minecraftforge.common.loot.LootTableIdCondition;
+import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
+import net.neoforged.neoforge.common.loot.LootTableIdCondition;
+
+import java.util.concurrent.CompletableFuture;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class ForgeHexLootModGen extends GlobalLootModifierProvider {
+    public ForgeHexLootModGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, registries, HexAPI.MOD_ID);
+    }
+
     public static final ResourceLocation RANDOM_SCROLL_TABLE = modLoc("random_scroll");
     public static final ResourceLocation RANDOM_CYPHER_TABLE = modLoc("random_cypher");
-    
-    public ForgeHexLootModGen(PackOutput output) {
-        super(output, HexAPI.MOD_ID);
-    }
 
     @Override
     protected void start() {
@@ -55,7 +58,7 @@ public class ForgeHexLootModGen extends GlobalLootModifierProvider {
         }, 1));  // 1 chance = guaranteed spawn
 
         add("amethyst_cluster", new ForgeHexAmethystLootMod(new LootItemCondition[]{
-            LootTableIdCondition.builder(Blocks.AMETHYST_CLUSTER.getLootTable()).build()
+            LootTableIdCondition.builder(Blocks.AMETHYST_CLUSTER.getLootTable().location()).build()
         }, HexLootHandler.DEFAULT_SHARD_MODIFICATION));
     }
 }

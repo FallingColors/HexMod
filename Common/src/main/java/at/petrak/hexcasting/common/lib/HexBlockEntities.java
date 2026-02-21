@@ -80,7 +80,7 @@ public class HexBlockEntities {
     private static <T extends BlockEntity> BlockEntityType<T> register(String id,
         BiFunction<BlockPos, BlockState, T> func, Block... blocks) {
         var ret = IXplatAbstractions.INSTANCE.createBlockEntityType(func, blocks);
-        var old = BLOCK_ENTITIES.put(new ResourceLocation(HexAPI.MOD_ID, id), ret);
+        var old = BLOCK_ENTITIES.put(ResourceLocation.fromNamespaceAndPath(HexAPI.MOD_ID, id), ret);
         if (old != null) {
             throw new IllegalArgumentException("Duplicate id " + id);
         }

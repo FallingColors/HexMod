@@ -1,0 +1,15 @@
+{
+  "type": "hexcasting:brainsweep",
+  "blockIn": {
+    "type": "hexcasting:block",
+    "block": "minecraft:amethyst_block"
+  },
+  "cost": 1000000,
+  "entityIn": {
+    "type": "hexcasting:villager",
+    "minLevel": 3
+  },
+  "result": {
+    "Name": "minecraft:budding_amethyst"
+  }
+}

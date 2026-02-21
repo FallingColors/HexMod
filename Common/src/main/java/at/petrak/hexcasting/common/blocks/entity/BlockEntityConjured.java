@@ -7,7 +7,9 @@ import at.petrak.hexcasting.common.blocks.BlockConjuredLight;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -89,13 +91,13 @@ public class BlockEntityConjured extends HexBlockEntity {
     }
 
     @Override
-    protected void saveModData(CompoundTag tag) {
-        tag.put(TAG_COLORIZER, this.colorizer.serializeToNBT());
+    protected void saveModData(CompoundTag tag, HolderLookup.Provider registries) {
+        tag.put(TAG_COLORIZER, FrozenPigment.CODEC.encodeStart(NbtOps.INSTANCE, colorizer).getOrThrow());
     }
 
     @Override
-    protected void loadModData(CompoundTag tag) {
-        this.colorizer = FrozenPigment.fromNBT(tag.getCompound(TAG_COLORIZER));
+    protected void loadModData(CompoundTag tag, HolderLookup.Provider registries) {
+        this.colorizer = FrozenPigment.CODEC.parse(NbtOps.INSTANCE, tag.getCompound(TAG_COLORIZER)).getOrThrow();
     }
 
     public FrozenPigment getColorizer() {

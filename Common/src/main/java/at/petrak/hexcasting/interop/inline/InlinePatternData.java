@@ -9,6 +9,7 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import com.mojang.serialization.Codec;
 import com.samsthenerd.inline.api.InlineData;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
@@ -42,7 +43,7 @@ public class InlinePatternData implements InlineData<InlinePatternData>{
     public Style getExtraStyle() {
         ItemStack scrollStack = new ItemStack(HexItems.SCROLL_MEDIUM);
         HexItems.SCROLL_MEDIUM.writeDatum(scrollStack, new PatternIota(pattern));
-        scrollStack.setHoverName(getPatternName(pattern).copy().withStyle(ChatFormatting.WHITE));
+        scrollStack.set(DataComponents.ITEM_NAME, getPatternName(pattern).copy().withStyle(ChatFormatting.WHITE));
         HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new HoverEvent.ItemStackInfo(scrollStack));
         ClickEvent ce = new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, pattern.toString());
         return Style.EMPTY.withHoverEvent(he).withClickEvent(ce);
@@ -70,7 +71,7 @@ public class InlinePatternData implements InlineData<InlinePatternData>{
     }
 
     public static class InlinePatternDataType implements InlineDataType<InlinePatternData> {
-        private static final ResourceLocation ID = new ResourceLocation(HexAPI.MOD_ID, "pattern");
+        private static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(HexAPI.MOD_ID, "pattern");
         public static final InlinePatternDataType INSTANCE = new InlinePatternDataType();
 
         @Override

@@ -28,12 +28,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.ToolActions;
-import net.minecraftforge.common.data.DatapackBuiltinEntriesProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.ItemAbilities;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -43,12 +43,12 @@ import java.util.stream.Stream;
 public class ForgeHexDataGenerators {
     @SubscribeEvent
     public static void generateData(GatherDataEvent ev) {
-        if (System.getProperty("hexcasting.xplat_datagen") != null) {
+        //if (System.getProperty("hexcasting.xplat_datagen") != null) {
             configureXplatDatagen(ev);
-        }
-        if (System.getProperty("hexcasting.forge_datagen") != null) {
-            configureForgeDatagen(ev);
-        }
+        //}
+        //if (System.getProperty("hexcasting.neoforge_datagen") != null) {
+            configureNeoforgeDatagen(ev);
+        //}
     }
 
     private static void configureXplatDatagen(GatherDataEvent ev) {
@@ -80,31 +80,32 @@ public class ForgeHexDataGenerators {
     }
 
     @SuppressWarnings({"DataFlowIssue", "UnreachableCode"})
-    private static void configureForgeDatagen(GatherDataEvent ev) {
-        HexAPI.LOGGER.info("Starting Forge-specific datagen");
+    private static void configureNeoforgeDatagen(GatherDataEvent ev) {
+        HexAPI.LOGGER.info("Starting NeoForge-specific datagen");
 
         DataGenerator gen = ev.getGenerator();
         var output = gen.getPackOutput();
         var lookup = ev.getLookupProvider();
         ExistingFileHelper efh = ev.getExistingFileHelper();
         gen.addProvider(ev.includeServer(), new LootTableProvider(
-            output, Set.of(), List.of(new LootTableProvider.SubProviderEntry(HexLootTables::new, LootContextParamSets.ALL_PARAMS))
+            output, Set.of(), List.of(new LootTableProvider.SubProviderEntry(HexLootTables::new, LootContextParamSets.ALL_PARAMS)), ev.getLookupProvider()
         ));
-        gen.addProvider(ev.includeServer(), new HexplatRecipes(output, INGREDIENTS, ForgeHexConditionsBuilder::new));
+        gen.addProvider(ev.includeServer(), new HexplatRecipes(output, lookup, INGREDIENTS, ForgeHexConditionsBuilder::new));
 
         // TODO: refactor?
         var xtags = IXplatAbstractions.INSTANCE.tags();
+
         var blockTagProvider = new HexBlockTagProvider(output, lookup, xtags);
         ((TagsProviderEFHSetter) blockTagProvider).setEFH(efh);
         gen.addProvider(ev.includeServer(), blockTagProvider);
-        var itemTagProvider = new HexItemTagProvider(output, lookup, blockTagProvider, IXplatAbstractions.INSTANCE.tags());
+        var itemTagProvider = new HexItemTagProvider(output, lookup, blockTagProvider.contentsGetter(), IXplatAbstractions.INSTANCE.tags());
         ((TagsProviderEFHSetter) itemTagProvider).setEFH(efh);
         gen.addProvider(ev.includeServer(), itemTagProvider);
         var hexTagProvider = new HexActionTagProvider(output, lookup);
         ((TagsProviderEFHSetter) hexTagProvider).setEFH(efh);
         gen.addProvider(ev.includeServer(), hexTagProvider);
 
-        gen.addProvider(ev.includeServer(), new ForgeHexLootModGen(output));
+        gen.addProvider(ev.includeServer(), new ForgeHexLootModGen(output, ev.getLookupProvider()));
     }
 
     private static final IXplatIngredients INGREDIENTS = new IXplatIngredients() {
@@ -115,7 +116,7 @@ public class ForgeHexDataGenerators {
 
         @Override
         public Ingredient leather() {
-            return Ingredient.of(Tags.Items.LEATHER);
+            return Ingredient.of(Tags.Items.LEATHERS);
         }
 
         @Override
@@ -156,13 +157,13 @@ public class ForgeHexDataGenerators {
         public Ingredient stick() {
             return Ingredient.fromValues(Stream.of(
                 new Ingredient.ItemValue(new ItemStack(Items.STICK)),
-                new Ingredient.TagValue(ItemTags.create(new ResourceLocation("forge", "rods/wooden")))
+                new Ingredient.TagValue(ItemTags.create(ResourceLocation.fromNamespaceAndPath("forge", "rods/wooden")))
             ));
         }
 
         @Override
         public Ingredient whenModIngredient(Ingredient defaultIngredient, String modid, Ingredient modIngredient) {
-            return ForgeModConditionalIngredient.of(defaultIngredient, modid, modIngredient);
+            return ForgeModConditionalIngredient.of(defaultIngredient, modid, modIngredient).toVanilla();
         }
 
         // https://github.com/vectorwing/FarmersDelight/blob/1.18.2/src/generated/resources/data/farmersdelight/recipes/cutting/amethyst_block.json
@@ -171,7 +172,7 @@ public class ForgeHexDataGenerators {
             return () -> {
                 JsonObject object = new JsonObject();
                 object.addProperty("type", "farmersdelight:tool_action");
-                object.addProperty("action", ToolActions.AXE_STRIP.name());
+                object.addProperty("action", ItemAbilities.AXE_STRIP.name());
                 return object;
             };
         }
@@ -181,7 +182,7 @@ public class ForgeHexDataGenerators {
             return () -> {
                 JsonObject object = new JsonObject();
                 object.addProperty("type", "farmersdelight:tool_action");
-                object.addProperty("action", ToolActions.AXE_DIG.name());
+                object.addProperty("action", ItemAbilities.AXE_DIG.name());
                 return object;
             };
         }

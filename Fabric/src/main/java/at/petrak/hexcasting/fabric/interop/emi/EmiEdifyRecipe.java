@@ -46,7 +46,7 @@ public class EmiEdifyRecipe implements EmiRecipe {
 
     @Override
     public @Nullable ResourceLocation getId() {
-        return HexEMIPlugin.EDIFY_ID;
+        return modLoc("/edify");
     }
 
     @Override

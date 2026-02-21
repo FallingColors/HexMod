@@ -1,16 +1,18 @@
 package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
@@ -22,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Special case for villagers so we can have biome/profession/level reqs
@@ -39,6 +42,23 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
         this.profession = profession;
         this.biome = biome;
         this.minLevel = minLevel;
+    }
+
+    @Override
+    public BrainsweepeeIngredientType<?> getType() {
+        return BrainsweepeeIngredients.VILLAGER;
+    }
+
+    public @Nullable VillagerProfession getProfession() {
+        return profession;
+    }
+
+    public @Nullable VillagerType getBiome() {
+        return biome;
+    }
+
+    public int getMinLevel() {
+        return minLevel;
     }
 
     @Override
@@ -106,6 +126,31 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
     }
 
     @Override
+    public String getSomeKindOfReasonableIDForEmi() {
+        var bob = new StringBuilder();
+        if (this.profession != null) {
+            var profLoc = BuiltInRegistries.VILLAGER_PROFESSION.getKey(this.profession);
+            bob.append(profLoc.getNamespace())
+                    .append("//")
+                    .append(profLoc.getPath());
+        } else {
+            bob.append("null");
+        }
+        bob.append("_");
+        if (this.biome != null) {
+            var biomeLoc = BuiltInRegistries.VILLAGER_TYPE.getKey(this.biome);
+            bob.append(biomeLoc.getNamespace())
+                    .append("//")
+                    .append(biomeLoc.getPath());
+        } else {
+            bob.append("null");
+        }
+
+        bob.append(this.minLevel);
+        return bob.toString();
+    }
+
+    @Override
     public Component getName() {
         MutableComponent component = Component.literal("");
 
@@ -150,97 +195,6 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
     }
 
     @Override
-    public JsonObject serialize() {
-        var obj = new JsonObject();
-        obj.addProperty("type", Type.VILLAGER.getSerializedName());
-
-        if (this.profession != null) {
-            obj.addProperty("profession", this.profession.toString());
-        }
-        if (this.biome != null) {
-            obj.addProperty("biome", this.biome.toString());
-        }
-        obj.addProperty("minLevel", this.minLevel);
-        return obj;
-    }
-
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        if (this.profession != null) {
-            buf.writeVarInt(1);
-            buf.writeVarInt(BuiltInRegistries.VILLAGER_PROFESSION.getId(this.profession));
-        } else {
-            buf.writeVarInt(0);
-        }
-        if (this.biome != null) {
-            buf.writeVarInt(1);
-            buf.writeVarInt(BuiltInRegistries.VILLAGER_TYPE.getId(this.biome));
-        } else {
-            buf.writeVarInt(0);
-        }
-        buf.writeInt(this.minLevel);
-    }
-
-    public static VillagerIngredient deserialize(JsonObject json) {
-        VillagerProfession profession = null;
-        if (json.has("profession") && !json.get("profession").isJsonNull()) {
-            profession = BuiltInRegistries.VILLAGER_PROFESSION.get(new ResourceLocation(GsonHelper.getAsString(json,
-                "profession")));
-        }
-        VillagerType biome = null;
-        if (json.has("biome") && !json.get("biome").isJsonNull()) {
-            biome = BuiltInRegistries.VILLAGER_TYPE.get(new ResourceLocation(GsonHelper.getAsString(json, "biome")));
-        }
-        int minLevel = GsonHelper.getAsInt(json, "minLevel");
-        return new VillagerIngredient(profession, biome, minLevel);
-    }
-
-    public static VillagerIngredient read(FriendlyByteBuf buf) {
-        VillagerProfession profession = null;
-        var hasProfession = buf.readVarInt();
-        if (hasProfession != 0) {
-            profession = BuiltInRegistries.VILLAGER_PROFESSION.byId(buf.readVarInt());
-        }
-        VillagerType biome = null;
-        var hasBiome = buf.readVarInt();
-        if (hasBiome != 0) {
-            biome = BuiltInRegistries.VILLAGER_TYPE.byId(buf.readVarInt());
-        }
-        int minLevel = buf.readInt();
-        return new VillagerIngredient(profession, biome, minLevel);
-    }
-
-    @Override
-    public Type ingrType() {
-        return Type.VILLAGER;
-    }
-
-    @Override
-    public String getSomeKindOfReasonableIDForEmi() {
-        var bob = new StringBuilder();
-        if (this.profession != null) {
-            var profLoc = BuiltInRegistries.VILLAGER_PROFESSION.getKey(this.profession);
-            bob.append(profLoc.getNamespace())
-                .append("//")
-                .append(profLoc.getPath());
-        } else {
-            bob.append("null");
-        }
-        bob.append("_");
-        if (this.biome != null) {
-            var biomeLoc = BuiltInRegistries.VILLAGER_TYPE.getKey(this.biome);
-            bob.append(biomeLoc.getNamespace())
-                .append("//")
-                .append(biomeLoc.getPath());
-        } else {
-            bob.append("null");
-        }
-
-        bob.append(this.minLevel);
-        return bob.toString();
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -252,5 +206,30 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
     @Override
     public int hashCode() {
         return Objects.hash(profession, biome, minLevel);
+    }
+
+
+    public static class Type implements BrainsweepeeIngredientType<VillagerIngredient> {
+        public static final MapCodec<VillagerIngredient> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                BuiltInRegistries.VILLAGER_PROFESSION.byNameCodec().optionalFieldOf("profession").forGetter(ing -> Optional.ofNullable(ing.getProfession())),
+                BuiltInRegistries.VILLAGER_TYPE.byNameCodec().optionalFieldOf("biome").forGetter(ing -> Optional.ofNullable(ing.getBiome())),
+                Codec.INT.fieldOf("minLevel").forGetter(VillagerIngredient::getMinLevel)
+        ).apply(instance, (a, b, c) -> new VillagerIngredient(a.orElse(null), b.orElse(null), c)));
+        public static final StreamCodec<RegistryFriendlyByteBuf, VillagerIngredient> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.optional(ByteBufCodecs.registry(Registries.VILLAGER_PROFESSION)), ing -> Optional.ofNullable(ing.getProfession()),
+                ByteBufCodecs.optional(ByteBufCodecs.registry(Registries.VILLAGER_TYPE)), ing -> Optional.ofNullable(ing.getBiome()),
+                ByteBufCodecs.VAR_INT, VillagerIngredient::getMinLevel,
+                (a, b, c) -> new VillagerIngredient(a.orElse(null), b.orElse(null), c)
+        );
+
+        @Override
+        public MapCodec<VillagerIngredient> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, VillagerIngredient> streamCodec() {
+            return STREAM_CODEC;
+        }
     }
 }

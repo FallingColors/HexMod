@@ -1,33 +1,24 @@
 package at.petrak.hexcasting.common.loot;
 
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
-import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
-import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.utils.HexUtils;
-import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
-import at.petrak.hexcasting.api.pigment.FrozenPigment;
-import at.petrak.hexcasting.common.items.magic.ItemAncientCypher;
-import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
-import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexLootFunctions;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import net.minecraft.Util;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.RandomSource;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 
+import java.util.Arrays;
 import java.util.List;
-import com.mojang.datafixers.util.Pair;
+import java.util.stream.Collectors;
 
 /**
  * Add a random preset hex to the ancient cypher, and select a random variant.
@@ -36,7 +27,12 @@ import com.mojang.datafixers.util.Pair;
  * is used on both sides
  */
 public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
-    public AddHexToAncientCypherFunc(LootItemCondition[] lootItemConditions) {
+    public static final MapCodec<AddHexToAncientCypherFunc> CODEC = RecordCodecBuilder.mapCodec(
+            p_344674_ -> commonFields(p_344674_)
+                    .apply(p_344674_, AddHexToAncientCypherFunc::new)
+    );
+
+    public AddHexToAncientCypherFunc(List<LootItemCondition> lootItemConditions) {
         super(lootItemConditions);
     }
 
@@ -45,23 +41,15 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
      */
     public static ItemStack doStatic(ItemStack stack, RandomSource rand) {
         var hex = LOOT_HEXES.get(rand.nextInt(LOOT_HEXES.size()));
-        var patsTag = new ListTag();
-        for (var patString : hex.getSecond()){
-            var pieces = patString.split(" ");
-            var pat = HexPattern.fromAnglesUnchecked(pieces[1],HexDir.fromString(pieces[0]));
-            patsTag.add(IotaType.serialize(new PatternIota(pat)));
-        }
-        
-        var tag = new CompoundTag();
 
-        tag.putString(ItemAncientCypher.TAG_HEX_NAME, hex.getFirst());
-        tag.put(ItemAncientCypher.TAG_PATTERNS, patsTag);
-        tag.put(ItemPackagedHex.TAG_PIGMENT, FrozenPigment.ANCIENT.get().serializeToNBT());
-        tag.putLong(ItemAncientCypher.TAG_MEDIA, 32*MediaConstants.SHARD_UNIT);
-        tag.putLong(ItemAncientCypher.TAG_MAX_MEDIA, 32*MediaConstants.SHARD_UNIT);
-        tag.putInt(VariantItem.TAG_VARIANT, rand.nextInt(8));
-        
-        stack.getOrCreateTag().merge(tag);
+        stack.set(HexDataComponents.HEX_NAME, hex.getFirst());
+        stack.set(HexDataComponents.MEDIA, 32 * MediaConstants.SHARD_UNIT);
+        stack.set(HexDataComponents.MEDIA_MAX, 32 * MediaConstants.SHARD_UNIT);
+        stack.set(HexDataComponents.VARIANT, rand.nextInt(8));
+        stack.set(HexDataComponents.PATTERNS, Arrays.stream(hex.getSecond()).map(el -> {
+            var pieces = el.split(" ");
+            return new PatternIota(HexPattern.fromAngles(pieces[1],HexDir.fromString(pieces[0])));
+        }).collect(Collectors.toList()));
 
         return stack;
     }
@@ -72,21 +60,8 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
     }
 
     @Override
-    public LootItemFunctionType getType() {
+    public LootItemFunctionType<? extends LootItemConditionalFunction> getType() {
         return HexLootFunctions.HEX_CYPHER;
-    }
-
-    public static class Serializer extends LootItemConditionalFunction.Serializer<AddHexToAncientCypherFunc> {
-        @Override
-        public void serialize(JsonObject json, AddHexToAncientCypherFunc value, JsonSerializationContext ctx) {
-            super.serialize(json, value, ctx);
-        }
-
-        @Override
-        public AddHexToAncientCypherFunc deserialize(JsonObject object, JsonDeserializationContext ctx,
-            LootItemCondition[] conditions) {
-            return new AddHexToAncientCypherFunc(conditions);
-        }
     }
 
     // TODO: make this datapackable

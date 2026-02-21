@@ -33,10 +33,10 @@ object OpBrainsweep : SpellAction {
     override fun hasCastingSound(ctx: CastingEnvironment) = false
 
     override fun execute(
-        args: List<Iota>,
-        env: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
-        val sacrifice = args.getMob(0, argc)
+        val sacrifice = args.getMob(env.world, 0, argc)
         val vecPos = args.getVec3(1, argc)
         val pos = BlockPos.containing(vecPos)
 
@@ -55,9 +55,10 @@ object OpBrainsweep : SpellAction {
         val state = env.world.getBlockState(pos)
 
         val recman = env.world.recipeManager
-        // TODO they changed recipes again
         val recipes = recman.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE)
-        val recipe = recipes.find { it.matches(state, sacrifice, env.world) }
+        val recipe = recipes.asSequence()
+            .map { it.value }
+            .find { it.matches(state, sacrifice, env.world) }
             ?: throw MishapBadBrainsweep(sacrifice, pos)
 
         return SpellAction.Result(

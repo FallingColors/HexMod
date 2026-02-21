@@ -1,13 +1,14 @@
 package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
-import com.google.gson.JsonObject;
-import net.minecraft.core.Registry;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
@@ -20,6 +21,15 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
 
     public EntityTypeIngredient(EntityType<?> entityType) {
         this.entityType = entityType;
+    }
+
+    @Override
+    public BrainsweepeeIngredientType<?> getType() {
+        return BrainsweepeeIngredients.ENTITY_TYPE;
+    }
+
+    public EntityType<?> getEntityType() {
+        return entityType;
     }
 
     @Override
@@ -42,48 +52,16 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
     }
 
     @Override
-    public Entity exampleEntity(Level level) {
-        return this.entityType.create(level);
-    }
-
-    @Override
-    public JsonObject serialize() {
-        var obj = new JsonObject();
-        obj.addProperty("type", Type.ENTITY_TYPE.getSerializedName());
-        obj.addProperty("entityType", BuiltInRegistries.ENTITY_TYPE.getKey(this.entityType).toString());
-
-        return obj;
-    }
-
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeVarInt(BuiltInRegistries.ENTITY_TYPE.getId(this.entityType));
-    }
-
-    public static EntityTypeIngredient deserialize(JsonObject obj) {
-        var typeLoc = ResourceLocation.tryParse(GsonHelper.getAsString(obj, "entityType"));
-        if (typeLoc == null || !BuiltInRegistries.ENTITY_TYPE.containsKey(typeLoc)) {
-            throw new IllegalArgumentException("unknown entity type " + typeLoc);
-        }
-        return new EntityTypeIngredient(BuiltInRegistries.ENTITY_TYPE.get(typeLoc));
-    }
-
-    public static EntityTypeIngredient read(FriendlyByteBuf buf) {
-        var tyId = buf.readVarInt();
-        return new EntityTypeIngredient(BuiltInRegistries.ENTITY_TYPE.byId(tyId));
-    }
-
-    @Override
-    public Type ingrType() {
-        return Type.ENTITY_TYPE;
-    }
-
-    @Override
     public String getSomeKindOfReasonableIDForEmi() {
         var resloc = BuiltInRegistries.ENTITY_TYPE.getKey(this.entityType);
         return resloc.getNamespace()
-            + "//"
-            + resloc.getPath();
+                + "//"
+                + resloc.getPath();
+    }
+
+    @Override
+    public Entity exampleEntity(Level level) {
+        return this.entityType.create(level);
     }
 
     @Override
@@ -97,5 +75,26 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
     @Override
     public int hashCode() {
         return Objects.hash(entityType);
+    }
+
+
+    public static class Type implements BrainsweepeeIngredientType<EntityTypeIngredient> {
+        public static final MapCodec<EntityTypeIngredient> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                BuiltInRegistries.ENTITY_TYPE.byNameCodec().fieldOf("entityType").forGetter(EntityTypeIngredient::getEntityType)
+        ).apply(instance, EntityTypeIngredient::new));
+        public static final StreamCodec<RegistryFriendlyByteBuf, EntityTypeIngredient> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.registry(Registries.ENTITY_TYPE), EntityTypeIngredient::getEntityType,
+                EntityTypeIngredient::new
+        );
+
+        @Override
+        public MapCodec<EntityTypeIngredient> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, EntityTypeIngredient> streamCodec() {
+            return STREAM_CODEC;
+        }
     }
 }

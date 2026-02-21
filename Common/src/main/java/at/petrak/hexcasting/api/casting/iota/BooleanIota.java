@@ -1,22 +1,23 @@
 package at.petrak.hexcasting.api.casting.iota;
 
-import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.ByteTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
 public class BooleanIota extends Iota {
+    private boolean value;
     public BooleanIota(boolean d) {
-        super(HexIotaTypes.BOOLEAN, d);
+        super(() -> HexIotaTypes.BOOLEAN);
+        this.value = d;
     }
 
     public boolean getBool() {
-        return (boolean) this.payload;
+        return value;
     }
 
     @Override
@@ -32,21 +33,30 @@ public class BooleanIota extends Iota {
     }
 
     @Override
-    public @NotNull Tag serialize() {
-        // there is no boolean tag :(
-        return ByteTag.valueOf(this.getBool());
+    public int hashCode() {
+        return Boolean.hashCode(value);
+    }
+
+    @Override
+    public Component display() {
+        return BooleanIota.display(value);
     }
 
     public static IotaType<BooleanIota> TYPE = new IotaType<>() {
-        @Nullable
+        public static final MapCodec<BooleanIota> CODEC = Codec.BOOL
+                .xmap(BooleanIota::new, BooleanIota::getBool)
+                .fieldOf("value");
+        public static final StreamCodec<RegistryFriendlyByteBuf, BooleanIota> STREAM_CODEC =
+                ByteBufCodecs.BOOL.map(BooleanIota::new, BooleanIota::getBool).mapStream(buffer -> buffer);
+
         @Override
-        public BooleanIota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            return BooleanIota.deserialize(tag);
+        public MapCodec<BooleanIota> codec() {
+            return CODEC;
         }
 
         @Override
-        public Component display(Tag tag) {
-            return BooleanIota.display(BooleanIota.deserialize(tag).getBool());
+        public StreamCodec<RegistryFriendlyByteBuf, BooleanIota> streamCodec() {
+            return STREAM_CODEC;
         }
 
         @Override
@@ -55,11 +65,6 @@ public class BooleanIota extends Iota {
             return 0xff_ffff55;
         }
     };
-
-    public static BooleanIota deserialize(Tag tag) throws IllegalArgumentException {
-        var dtag = HexUtils.downcast(tag, ByteTag.TYPE);
-        return new BooleanIota(dtag.getAsByte() != 0);
-    }
 
     public static Component display(boolean b) {
         return Component.translatable(b ? "hexcasting.tooltip.boolean_true" : "hexcasting.tooltip.boolean_false")

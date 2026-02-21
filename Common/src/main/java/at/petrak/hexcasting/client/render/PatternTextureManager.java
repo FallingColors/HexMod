@@ -10,7 +10,6 @@ import net.minecraft.util.Tuple;
 import net.minecraft.world.phys.Vec2;
 
 import java.awt.geom.Line2D;
-import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
 

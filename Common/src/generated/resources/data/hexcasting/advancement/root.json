@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "has_charged_amethyst": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#hexcasting:grants_root_advancement"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "background": "minecraft:textures/block/calcite.png",
+    "description": {
+      "translate": "advancement.hexcasting:root.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "minecraft:budding_amethyst"
+    },
+    "title": {
+      "translate": "advancement.hexcasting:root"
+    }
+  },
+  "requirements": [
+    [
+      "has_charged_amethyst"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

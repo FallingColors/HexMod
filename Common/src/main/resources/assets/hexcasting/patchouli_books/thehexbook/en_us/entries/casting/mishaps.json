@@ -85,6 +85,11 @@
     },
     {
       "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.entity_not_found.title",
+      "text": "hexcasting.page.mishaps.entity_not_found"
+    },
+    {
+      "type": "patchouli:text",
       "title": "hexcasting.page.mishaps.disabled.title",
       "text": "hexcasting.page.mishaps.disabled"
     },

@@ -142,7 +142,7 @@
     akashic_: {
       record: "Akashic Record",
       bookshelf: "Akashic Bookshelf",
-      connector: "Akashic Ligature",
+      ligature: "Akashic Ligature",
     },
     
     slate: {
@@ -1022,6 +1022,7 @@
       
       wrong_dimension: "cannot see %s from %s",
       entity_too_far: "%s is out of range",
+      entity_not_found: "%s was not found, either dead or unloaded",
       immune_entity: "cannot alter %s",
       eval_too_much: "Evaluated too many patterns",
       no_item: "needs %s but got nothing",
@@ -1491,10 +1492,13 @@
         
         "true_name.title": "Transgress Other",
         true_name: "I attempted to $(l:patterns/readwrite#hexcasting:write)$(action)save a reference/$ to another player to a permanent medium.$(br2)Causes black sparks, and robs me of my sight for approximately one minute.",
-        
+
+        "entity_not_found.title": "Entity Not Found",
+        entity_not_found: "I attempted to affect an entity that doesn't exist. Two cases for this; one is if the entity is simply dead. The other, and more peculiar to me, is if it is unable to be \"observed\" from afar.$(br2)Causes brown sparks, and causes me to feel sick for a moment, as if I had stood up too fast.",
+
         "disabled.title": "Disallowed Action",
         disabled: "I tried to cast an action that has been disallowed by a server administrator.$(br2)Causes black sparks.",
-        
+
         "other.title": "Catastrophic Failure",
         other: "A bug in the mod caused an iota of an invalid type or otherwise caused the spell to crash. $(l:https://github.com/gamma-delta/HexMod/issues)Please open a bug report!/$$(br2)Causes black sparks.",
       },

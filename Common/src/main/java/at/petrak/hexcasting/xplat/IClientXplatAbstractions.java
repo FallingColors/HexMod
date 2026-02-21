@@ -2,11 +2,11 @@ package at.petrak.hexcasting.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.client.ClientCastingStack;
-import at.petrak.hexcasting.common.msgs.IMessage;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -19,7 +19,7 @@ import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
 public interface IClientXplatAbstractions {
-    void sendPacketToServer(IMessage packet);
+    void sendPacketToServer(CustomPacketPayload packet);
 
     void setRenderLayer(Block block, RenderType type);
 
@@ -39,6 +39,8 @@ public interface IClientXplatAbstractions {
     boolean fabricAdditionalQuenchFrustumCheck(AABB aabb);
 
     IClientXplatAbstractions INSTANCE = find();
+
+    String getModelLocVariant();
 
     private static IClientXplatAbstractions find() {
         var providers = ServiceLoader.load(IClientXplatAbstractions.class).stream().toList();

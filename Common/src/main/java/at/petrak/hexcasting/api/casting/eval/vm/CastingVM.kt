@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
 import at.petrak.hexcasting.api.HexAPI
-import at.petrak.hexcasting.api.casting.PatternShapeMatch.*
 import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.*
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
@@ -12,10 +11,16 @@ import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.iota.PatternIota
 import at.petrak.hexcasting.api.casting.math.HexDir
 import at.petrak.hexcasting.api.casting.math.HexPattern
-import at.petrak.hexcasting.api.casting.mishaps.*
-import at.petrak.hexcasting.api.utils.*
+import at.petrak.hexcasting.api.casting.mishaps.Mishap
+import at.petrak.hexcasting.api.casting.mishaps.MishapInternalException
+import at.petrak.hexcasting.api.casting.mishaps.MishapStackSize
+import at.petrak.hexcasting.api.casting.mishaps.MishapTooManyCloseParens
+import at.petrak.hexcasting.api.utils.validateIota
+import at.petrak.hexcasting.api.utils.validateIotaList
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
+import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
 
 /**
@@ -39,6 +44,9 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
      * Mutates this
      */
     fun queueExecuteAndWrapIotas(iotas: List<Iota>, world: ServerLevel): ExecutionClientView {
+        this.image = image.copy(
+            stack = validateIotaList(this.image.stack, world)
+        )
         // Initialize the continuation stack to a single top-level eval for all iotas.
         var continuation = SpellContinuation.Done.pushFrame(FrameEvaluate(SpellList.LList(0, iotas), false))
         // Begin aggregating info
@@ -86,12 +94,20 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 if (lastResolutionType.success) ResolvedPatternType.EVALUATED else ResolvedPatternType.ERRORED
         }
 
-        val (stackDescs, ravenmind) = generateDescs()
+        var ravenmind: CompoundTag? = image.userData
+            .takeIf { it.contains(HexAPI.RAVENMIND_USERDATA) }
+            ?.getCompound(HexAPI.RAVENMIND_USERDATA)
+
+        if (ravenmind != null) {
+            val test = IotaType.TYPED_CODEC.parse<Tag?>(NbtOps.INSTANCE, ravenmind).getOrThrow()
+            val newIota = validateIota(test, world)
+            ravenmind = IotaType.TYPED_CODEC.encodeStart<Tag?>(NbtOps.INSTANCE, newIota).getOrThrow() as CompoundTag?
+        }
 
         val isStackClear = image.stack.isEmpty() && image.parenCount == 0 && !image.escapeNext && ravenmind == null
 
         this.env.postCast(image)
-        return ExecutionClientView(isStackClear, lastResolutionType, stackDescs, ravenmind)
+        return ExecutionClientView(isStackClear, lastResolutionType, image.stack, ravenmind)
     }
 
     /**
@@ -156,14 +172,6 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
         for (haskellProgrammersShakingandCryingRN in sideEffects) {
             haskellProgrammersShakingandCryingRN.performEffect(this)
         }
-    }
-
-    fun generateDescs(): Pair<List<CompoundTag>, CompoundTag?> {
-        val stackDescs = this.image.stack.map { IotaType.serialize(it) }
-        val ravenmind = if (this.image.userData.contains(HexAPI.RAVENMIND_USERDATA)) {
-            this.image.userData.getCompound(HexAPI.RAVENMIND_USERDATA)
-        } else null
-        return Pair(stackDescs, ravenmind)
     }
 
     /**

@@ -1,18 +1,21 @@
 package at.petrak.hexcasting.common.recipe;
 
-import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
-import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
-import com.google.gson.JsonObject;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredients;
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredient;
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredients;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -23,19 +26,13 @@ import org.jetbrains.annotations.NotNull;
 
 // God I am a horrible person
 public record BrainsweepRecipe(
-	ResourceLocation id,
 	StateIngredient blockIn,
 	BrainsweepeeIngredient entityIn,
 	long mediaCost,
 	BlockState result
-) implements Recipe<Container> {
+) implements Recipe<RecipeInput> {
 	public boolean matches(BlockState blockIn, Entity victim, ServerLevel level) {
 		return this.blockIn.test(blockIn) && this.entityIn.test(victim, level);
-	}
-
-	@Override
-	public ResourceLocation getId() {
-		return id;
 	}
 
 	@Override
@@ -51,22 +48,22 @@ public record BrainsweepRecipe(
 	// in order to get this to be a "Recipe" we need to do a lot of bending-over-backwards
 	// to get the implementation to be satisfied even though we never use it
 	@Override
-	public boolean matches(Container pContainer, Level pLevel) {
+	public boolean matches(RecipeInput input, Level level) {
 		return false;
 	}
 
 	@Override
-	public ItemStack assemble(Container pContainer, RegistryAccess access) {
+	public ItemStack assemble(RecipeInput input, HolderLookup.Provider registries) {
 		return ItemStack.EMPTY;
 	}
 
-	@Override
+    @Override
 	public boolean canCraftInDimensions(int pWidth, int pHeight) {
 		return false;
 	}
 
 	@Override
-	public ItemStack getResultItem(RegistryAccess registryAccess) {
+	public ItemStack getResultItem(HolderLookup.Provider registries) {
 		return ItemStack.EMPTY.copy();
 	}
 
@@ -84,30 +81,31 @@ public record BrainsweepRecipe(
 	}
 
 	public static class Serializer extends RecipeSerializerBase<BrainsweepRecipe> {
+		public static MapCodec<BrainsweepRecipe> CODEC = RecordCodecBuilder.mapCodec(inst ->
+			inst.group(
+				StateIngredients.TYPED_CODEC.fieldOf("blockIn").forGetter(BrainsweepRecipe::blockIn),
+				BrainsweepeeIngredients.TYPED_CODEC.fieldOf("entityIn").forGetter(BrainsweepRecipe::entityIn),
+				Codec.LONG.fieldOf("cost").forGetter(BrainsweepRecipe::mediaCost),
+				BlockState.CODEC.fieldOf("result").forGetter(BrainsweepRecipe::result)
+			).apply(inst, BrainsweepRecipe::new)
+		);
+		public static StreamCodec<RegistryFriendlyByteBuf, BrainsweepRecipe> STREAM_CODEC = StreamCodec.composite(
+				StateIngredients.TYPED_STREAM_CODEC, BrainsweepRecipe::blockIn,
+				BrainsweepeeIngredients.TYPED_STREAM_CODEC, BrainsweepRecipe::entityIn,
+				ByteBufCodecs.VAR_LONG, BrainsweepRecipe::mediaCost,
+				ByteBufCodecs.VAR_INT, (recipe) -> Block.getId(recipe.result),
+				(state, ent, cost, stateId) ->
+						new BrainsweepRecipe(state, ent, cost, Block.stateById(stateId))
+		);
+
 		@Override
-		public @NotNull BrainsweepRecipe fromJson(ResourceLocation recipeID, JsonObject json) {
-			var blockIn = StateIngredientHelper.deserialize(GsonHelper.getAsJsonObject(json, "blockIn"));
-			var villagerIn = BrainsweepeeIngredient.deserialize(GsonHelper.getAsJsonObject(json, "entityIn"));
-			var cost = GsonHelper.getAsInt(json, "cost");
-			var result = StateIngredientHelper.readBlockState(GsonHelper.getAsJsonObject(json, "result"));
-			return new BrainsweepRecipe(recipeID, blockIn, villagerIn, cost, result);
+		public @NotNull MapCodec<BrainsweepRecipe> codec() {
+			return CODEC;
 		}
 
 		@Override
-		public void toNetwork(FriendlyByteBuf buf, BrainsweepRecipe recipe) {
-			recipe.blockIn.write(buf);
-			recipe.entityIn.wrapWrite(buf);
-			buf.writeVarLong(recipe.mediaCost);
-			buf.writeVarInt(Block.getId(recipe.result));
+		public @NotNull StreamCodec<RegistryFriendlyByteBuf, BrainsweepRecipe> streamCodec() {
+			return STREAM_CODEC;
 		}
-
-		@Override
-		public @NotNull BrainsweepRecipe fromNetwork(ResourceLocation recipeID, FriendlyByteBuf buf) {
-			var blockIn = StateIngredientHelper.read(buf);
-			var brainsweepeeIn = BrainsweepeeIngredient.read(buf);
-			var cost = buf.readVarLong();
-			var result = Block.stateById(buf.readVarInt());
-			return new BrainsweepRecipe(recipeID, blockIn, brainsweepeeIn, cost, result);
-		}
-	}
+    }
 }

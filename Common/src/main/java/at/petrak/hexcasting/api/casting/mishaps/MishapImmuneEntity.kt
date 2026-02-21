@@ -16,5 +16,5 @@ class MishapImmuneEntity(val entity: Entity) : Mishap() {
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("immune_entity", entity.displayName!!.plainCopy().aqua)
+        error("immune_entity", entity.displayName?.plainCopy()?.aqua ?: entity.type.description.plainCopy().aqua)
 }
