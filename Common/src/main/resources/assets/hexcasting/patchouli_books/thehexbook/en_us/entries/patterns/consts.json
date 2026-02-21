@@ -121,6 +121,14 @@
       "input": "",
       "output": "num",
       "text": "hexcasting.page.consts.const/double/e"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:const/double/phi",
+      "anchor": "hexcasting:const/double/phi",
+      "input": "",
+      "output": "num",
+      "text": "hexcasting.page.consts.const/double/phi"
     }
   ]
 }
