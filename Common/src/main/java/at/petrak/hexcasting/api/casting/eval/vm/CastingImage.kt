@@ -3,14 +3,17 @@ package at.petrak.hexcasting.api.casting.eval.vm
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
+import at.petrak.hexcasting.api.utils.getCompound
 import at.petrak.hexcasting.api.utils.getOrCreateCompound
 import at.petrak.hexcasting.api.utils.putCompound
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.Tag
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.entity.Entity
+import java.util.Optional
 
 /**
  * The state of a casting VM, containing the stack and all
@@ -64,6 +67,15 @@ data class CastingImage(
      * Returns a copy of this with escape/paren-related fields cleared.
      */
     fun withResetEscape() = this.copy(parenCount = 0, parenthesized = listOf(), escapeNext = false)
+
+    /**
+     * Returns this image's ravenmind in an Optional wrapper.
+     */
+    fun ravenmind() : Optional<CompoundTag> {
+        return Optional.ofNullable(userData.getCompound(HexAPI.RAVENMIND_USERDATA))
+    }
+
+
 
     companion object {
         @JvmStatic

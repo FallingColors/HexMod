@@ -127,7 +127,8 @@ public interface IXplatAbstractions {
 
     @Nullable
     ADHexHolder findHexHolder(ItemStack stack);
-
+    
+    @Nullable
     ADVariantItem findVariantHolder(ItemStack stack);
 
     // coooollooorrrs

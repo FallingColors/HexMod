@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
+import at.petrak.hexcasting.common.lib.HexBrainsweepeeIngredients;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -25,7 +26,7 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
 
     @Override
     public BrainsweepeeIngredientType<?> getType() {
-        return BrainsweepeeIngredients.ENTITY_TYPE;
+        return HexBrainsweepeeIngredients.ENTITY_TYPE;
     }
 
     public EntityType<?> getEntityType() {

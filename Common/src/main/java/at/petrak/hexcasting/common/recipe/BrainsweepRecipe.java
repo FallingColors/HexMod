@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.common.recipe;
 
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
-import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredients;
+import at.petrak.hexcasting.common.lib.HexBrainsweepeeIngredients;
 import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredient;
-import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredients;
+import at.petrak.hexcasting.common.lib.HexStateIngredients;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -83,15 +83,15 @@ public record BrainsweepRecipe(
 	public static class Serializer extends RecipeSerializerBase<BrainsweepRecipe> {
 		public static MapCodec<BrainsweepRecipe> CODEC = RecordCodecBuilder.mapCodec(inst ->
 			inst.group(
-				StateIngredients.TYPED_CODEC.fieldOf("blockIn").forGetter(BrainsweepRecipe::blockIn),
-				BrainsweepeeIngredients.TYPED_CODEC.fieldOf("entityIn").forGetter(BrainsweepRecipe::entityIn),
+				HexStateIngredients.TYPED_CODEC.fieldOf("blockIn").forGetter(BrainsweepRecipe::blockIn),
+				HexBrainsweepeeIngredients.TYPED_CODEC.fieldOf("entityIn").forGetter(BrainsweepRecipe::entityIn),
 				Codec.LONG.fieldOf("cost").forGetter(BrainsweepRecipe::mediaCost),
 				BlockState.CODEC.fieldOf("result").forGetter(BrainsweepRecipe::result)
 			).apply(inst, BrainsweepRecipe::new)
 		);
 		public static StreamCodec<RegistryFriendlyByteBuf, BrainsweepRecipe> STREAM_CODEC = StreamCodec.composite(
-				StateIngredients.TYPED_STREAM_CODEC, BrainsweepRecipe::blockIn,
-				BrainsweepeeIngredients.TYPED_STREAM_CODEC, BrainsweepRecipe::entityIn,
+				HexStateIngredients.TYPED_STREAM_CODEC, BrainsweepRecipe::blockIn,
+				HexBrainsweepeeIngredients.TYPED_STREAM_CODEC, BrainsweepRecipe::entityIn,
 				ByteBufCodecs.VAR_LONG, BrainsweepRecipe::mediaCost,
 				ByteBufCodecs.VAR_INT, (recipe) -> Block.getId(recipe.result),
 				(state, ent, cost, stateId) ->

@@ -1,7 +1,7 @@
-package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
+package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.common.lib.HexRegistries;
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class BrainsweepeeIngredients {
+public class HexBrainsweepeeIngredients {
     public static final Codec<BrainsweepeeIngredient> TYPED_CODEC = Codec.lazyInitialized(() -> IXplatAbstractions.INSTANCE
             .getBrainsweepeeIngredientRegistry()
             .byNameCodec()

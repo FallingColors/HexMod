@@ -42,7 +42,6 @@ public class BlockRightClickImpetus extends BlockAbstractImpetus {
             var tile = level.getBlockEntity(pos);
             if (tile instanceof BlockEntityRightClickImpetus impetus) {
                 if (player instanceof ServerPlayer sPlayer) {
-//                    impetus.activateSpellCircle(serverPlayer);
                     impetus.startExecution(sPlayer);
                 }
                 return InteractionResult.SUCCESS;

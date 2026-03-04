@@ -45,10 +45,8 @@ public class ItemStaff extends Item {
             var vm = IXplatAbstractions.INSTANCE.getStaffcastVM(serverPlayer, hand);
             var patterns = IXplatAbstractions.INSTANCE.getPatternsSavedInUi(serverPlayer);
 
-            var userData = vm.getImage().getUserData();
-            CompoundTag ravenmind = null;
-            if(userData.contains(HexAPI.RAVENMIND_USERDATA))
-                ravenmind = userData.getCompound(HexAPI.RAVENMIND_USERDATA);
+            CompoundTag ravenmind = vm.getImage().ravenmind().orElse(new CompoundTag());
+
 
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(serverPlayer,
                 new MsgOpenSpellGuiS2C(hand, patterns, vm.getImage().getStack(), ravenmind,

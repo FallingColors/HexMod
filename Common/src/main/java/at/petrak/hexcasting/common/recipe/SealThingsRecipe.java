@@ -100,7 +100,7 @@ public class SealThingsRecipe extends CustomRecipe {
         public boolean isCorrectSealee(ItemStack stack) {
             return switch (this) {
                 case FOCUS -> stack.is(HexItems.FOCUS)
-                    && stack.has(HexDataComponents.IOTA)
+                    && stack.has(HexDataComponents.IOTA_HOLDER_IOTA)
                     && !ItemFocus.isSealed(stack);
                 case SPELLBOOK -> stack.is(HexItems.SPELLBOOK)
                     && HexItems.SPELLBOOK.readIota(stack) != null

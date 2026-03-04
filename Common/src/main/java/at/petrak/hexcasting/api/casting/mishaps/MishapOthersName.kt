@@ -41,7 +41,7 @@ class MishapOthersName(val confidant: Player) : Mishap() {
                 val datumToCheck = poolToSearch.removeFirst()
 
                 if(datumToCheck is EntityIota) {
-                    var ent = datumToCheck.getEntity(level)
+                    val ent = datumToCheck.getEntity(level)
                     if(ent is Player && ent != caster)
                         return ent
                 }

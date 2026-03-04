@@ -22,6 +22,8 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.NbtOps
 import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
+import kotlin.jvm.optionals.getOrElse
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * The virtual machine! This is the glue that determines the next iteration of a [CastingImage], using a
@@ -94,9 +96,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 if (lastResolutionType.success) ResolvedPatternType.EVALUATED else ResolvedPatternType.ERRORED
         }
 
-        var ravenmind: CompoundTag? = image.userData
-            .takeIf { it.contains(HexAPI.RAVENMIND_USERDATA) }
-            ?.getCompound(HexAPI.RAVENMIND_USERDATA)
+        var ravenmind: CompoundTag? = image.ravenmind().getOrNull()
 
         if (ravenmind != null) {
             val test = IotaType.TYPED_CODEC.parse<Tag?>(NbtOps.INSTANCE, ravenmind).getOrThrow()

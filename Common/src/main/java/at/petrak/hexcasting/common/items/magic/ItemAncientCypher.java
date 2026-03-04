@@ -37,7 +37,7 @@ public class ItemAncientCypher extends ItemCypher {
         // display media fullness as usual
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
 
-        var patterns = stack.get(HexDataComponents.PATTERNS);
+        var patterns = stack.get(HexDataComponents.HEX_HOLDER_PATTERNS);
 
         // also show contained spell
         if(patterns != null) {

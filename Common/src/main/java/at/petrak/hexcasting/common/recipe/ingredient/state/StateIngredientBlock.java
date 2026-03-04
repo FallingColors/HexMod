@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.recipe.ingredient.state;
 
+import at.petrak.hexcasting.common.lib.HexStateIngredients;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -25,7 +26,7 @@ public class StateIngredientBlock implements StateIngredient {
 
     @Override
     public StateIngredientType<?> getType() {
-        return StateIngredients.BLOCK_TYPE;
+        return HexStateIngredients.BLOCK_TYPE;
     }
 
     @Override

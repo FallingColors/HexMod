@@ -62,6 +62,7 @@ public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> 
         drawContext.pose().pushPose();
         drawContext.pose().translate(isGlowy ? -1f : 0, isGlowy ? -1.5f : -0.5f, 0f);
         int color = trContext.usableColor();
+        // Why are patterns rendering either fullbright or too dark on signs, this is bullshit
         boolean isFlat = InlineRenderer.isFlat(drawContext.pose(), trContext.layerType());
         PatternRenderer.renderPattern(data.pattern, drawContext.pose(), !isFlat ? new PatternRenderer.WorldlyBits(drawContext.bufferSource(), LightTexture.FULL_BRIGHT, null) : null,
                 isGlowy ? INLINE_SETTINGS_GLOWY : INLINE_SETTINGS,

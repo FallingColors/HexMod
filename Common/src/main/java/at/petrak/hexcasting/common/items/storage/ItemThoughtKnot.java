@@ -24,7 +24,7 @@ public class ItemThoughtKnot extends Item implements IotaHolderItem {
 
     @Override
     public boolean writeable(ItemStack stack) {
-        return !stack.has(HexDataComponents.IOTA);
+        return !stack.has(HexDataComponents.IOTA_HOLDER_IOTA);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ItemThoughtKnot extends Item implements IotaHolderItem {
     @Override
     public void writeDatum(ItemStack stack, @Nullable Iota iota) {
         if (iota != null) {
-            stack.set(HexDataComponents.IOTA, iota);
+            stack.set(HexDataComponents.IOTA_HOLDER_IOTA, iota);
         }
     }
 

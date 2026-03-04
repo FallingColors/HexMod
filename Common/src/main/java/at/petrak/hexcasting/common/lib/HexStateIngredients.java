@@ -1,7 +1,7 @@
-package at.petrak.hexcasting.common.recipe.ingredient.state;
+package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.common.lib.HexRegistries;
+import at.petrak.hexcasting.common.recipe.ingredient.state.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.BiConsumer;
 
-public class StateIngredients {
+public class HexStateIngredients {
     public static final Codec<StateIngredient> TYPED_CODEC = Codec.lazyInitialized(() -> IXplatAbstractions.INSTANCE
             .getStateIngredientRegistry()
             .byNameCodec()

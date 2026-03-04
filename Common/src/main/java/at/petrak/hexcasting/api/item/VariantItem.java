@@ -14,12 +14,12 @@ public interface VariantItem {
     int numVariants();
 
     default int getVariant(ItemStack stack) {
-        var variant = stack.get(HexDataComponents.VARIANT);
+        var variant = stack.get(HexDataComponents.ITEM_VARIANT);
         return variant != null ? variant : 0;
     }
 
     default void setVariant(ItemStack stack, int variant) {
-        stack.set(HexDataComponents.VARIANT, clampVariant(variant));
+        stack.set(HexDataComponents.ITEM_VARIANT, clampVariant(variant));
     }
 
     default int clampVariant(int variant) {

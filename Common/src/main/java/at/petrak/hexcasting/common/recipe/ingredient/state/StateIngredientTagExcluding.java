@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.recipe.ingredient.state;
 
+import at.petrak.hexcasting.common.lib.HexStateIngredients;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.registries.Registries;
@@ -28,7 +29,7 @@ public class StateIngredientTagExcluding extends StateIngredientTag {
 
     @Override
     public StateIngredientType<?> getType() {
-        return StateIngredients.TAG_EXCLUDING;
+        return HexStateIngredients.TAG_EXCLUDING;
     }
 
     @Override
@@ -97,11 +98,11 @@ public class StateIngredientTagExcluding extends StateIngredientTag {
     public static class Type implements StateIngredientType<StateIngredientTagExcluding> {
         public static final MapCodec<StateIngredientTagExcluding> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
                 TagKey.hashedCodec(Registries.BLOCK).fieldOf("tag").forGetter(StateIngredientTagExcluding::getTag),
-                StateIngredients.TYPED_CODEC.listOf().fieldOf("excludes").forGetter(StateIngredientTagExcluding::getExcludes)
+                HexStateIngredients.TYPED_CODEC.listOf().fieldOf("excludes").forGetter(StateIngredientTagExcluding::getExcludes)
         ).apply(instance, StateIngredientTagExcluding::new));
         public static final StreamCodec<RegistryFriendlyByteBuf, StateIngredientTagExcluding> STREAM_CODEC = StreamCodec.composite(
                 ResourceLocation.STREAM_CODEC.map(id -> TagKey.create(Registries.BLOCK, id), TagKey::location), StateIngredientTagExcluding::getTag,
-                StateIngredients.TYPED_STREAM_CODEC.apply(ByteBufCodecs.list()), StateIngredientTagExcluding::getExcludes,
+                HexStateIngredients.TYPED_STREAM_CODEC.apply(ByteBufCodecs.list()), StateIngredientTagExcluding::getExcludes,
                 StateIngredientTagExcluding::new
         );
 

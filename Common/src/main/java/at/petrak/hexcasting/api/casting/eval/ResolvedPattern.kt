@@ -16,7 +16,7 @@ data class ResolvedPattern(val pattern: HexPattern, val origin: HexCoord, var ty
     companion object {
         @JvmField
         val CODEC: Codec<ResolvedPattern> = RecordCodecBuilder.create({instance -> instance.group(
-            HexPattern.CODEC.fieldOf("pattern").forGetter { it.pattern },
+            HexPattern.CODEC.fieldOf("Pattern").forGetter { it.pattern },
             Codec.INT.fieldOf("OriginQ").forGetter { it.origin.q },
             Codec.INT.fieldOf("OriginR").forGetter { it.origin.r },
             Codec.STRING.xmap(
@@ -33,7 +33,7 @@ data class ResolvedPattern(val pattern: HexPattern, val origin: HexCoord, var ty
             ByteBufCodecs.VAR_INT, { it.origin.r },
             ByteBufCodecs.STRING_UTF8.map(
                 { ResolvedPatternType.fromString(it) },
-                { it.name.lowercase() }
+                { it.name }
             ), ResolvedPattern::type,
             ::ResolvedPattern
         )

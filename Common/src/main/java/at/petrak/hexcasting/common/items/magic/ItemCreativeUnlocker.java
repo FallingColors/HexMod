@@ -31,6 +31,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -233,14 +234,9 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
         return copy;
     }
 
-    private static MutableComponent rainbow(MutableComponent component, int shift, Level level) {
-        if (level == null) {
-            return component.withStyle((s) -> s.withColor(
-                    TextColor.fromRgb(Mth.hsvToRgb((((float) Util.getMillis() / 50) + shift) * 2 % 360 / 360F, 1F, 1F))));
-        }
-
+    private static MutableComponent rainbow(MutableComponent component, int shift, @Nullable Level level) {
         return component.withStyle((s) -> s.withColor(
-            TextColor.fromRgb(Mth.hsvToRgb((level.getGameTime() + shift) * 2 % 360 / 360F, 1F, 1F))));
+            TextColor.fromRgb(Mth.hsvToRgb((level != null ? (level.getGameTime() + shift) : ((float) Util.getMillis() / 50)) * 2 % 360 / 360F, 1F, 1F))));
     }
 
     @Override

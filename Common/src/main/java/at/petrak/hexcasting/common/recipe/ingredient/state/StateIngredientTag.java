@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.recipe.ingredient.state;
 
+import at.petrak.hexcasting.common.lib.HexStateIngredients;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -32,7 +33,7 @@ public class StateIngredientTag extends StateIngredientBlocks {
 
 	@Override
 	public StateIngredientType<?> getType() {
-		return StateIngredients.TAG;
+		return HexStateIngredients.TAG;
 	}
 
 	public Stream<Block> resolve() {

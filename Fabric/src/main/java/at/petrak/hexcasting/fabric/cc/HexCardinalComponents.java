@@ -92,15 +92,15 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
     public void registerItemComponentMigrations(ItemComponentMigrationRegistry registry) {
         registry.registerMigration(modLoc("pigment"), HexDataComponents.PIGMENT);
 
-        registry.registerMigration(modLoc("iota_holder"), HexDataComponents.IOTA);
+        registry.registerMigration(modLoc("iota_holder"), HexDataComponents.IOTA_HOLDER_IOTA);
         // oh havoc, you think you're so funny
         // the worst part is you're /right/
 
         registry.registerMigration(modLoc("media_holder"), HexDataComponents.MEDIA);
 
-        registry.registerMigration(modLoc("hex_holder"), HexDataComponents.PATTERNS);
+        registry.registerMigration(modLoc("hex_holder"), HexDataComponents.HEX_HOLDER_PATTERNS);
 
-        registry.registerMigration(modLoc("variant_item"), HexDataComponents.VARIANT);
+        registry.registerMigration(modLoc("variant_item"), HexDataComponents.ITEM_VARIANT);
     }
 
     private <E extends Entity> ComponentFactory<E, CCEntityIotaHolder.Wrapper> wrapItemEntityDelegate(Function<E,

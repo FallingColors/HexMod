@@ -12,13 +12,15 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.SealThingsRecipe;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.EntityTypeIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.VillagerIngredient;
-import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredients;
+import at.petrak.hexcasting.common.lib.HexStateIngredients;
 import at.petrak.hexcasting.datagen.HexAdvancements;
 import at.petrak.hexcasting.datagen.IXplatConditionsBuilder;
 import at.petrak.hexcasting.datagen.IXplatIngredients;
 import at.petrak.hexcasting.datagen.recipe.builders.BrainsweepRecipeBuilder;
 import at.petrak.hexcasting.datagen.recipe.builders.CreateCrushingRecipeBuilder;
 import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightCuttingRecipeBuilder;
+import at.petrak.paucal.api.PaucalAPI;
+import at.petrak.paucal.api.datagen.PaucalAdvancementSubProvider;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -467,56 +469,57 @@ public class HexplatRecipes extends RecipeProvider {
                 .requires(HexBlocks.AMETHYST_PILLAR)
                 .unlockedBy("has_item", has(HexBlocks.SLATE)).save(recipes);
 
-        new BrainsweepRecipeBuilder(StateIngredients.of(Blocks.AMETHYST_BLOCK),
+        new BrainsweepRecipeBuilder(HexStateIngredients.of(Blocks.AMETHYST_BLOCK),
             new VillagerIngredient(null, null, 3),
             Blocks.BUDDING_AMETHYST.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
             .save(recipes, modLoc("budding_amethyst"));
 
-        new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.IMPETUS_EMPTY),
+        new BrainsweepRecipeBuilder(HexStateIngredients.of(HexBlocks.IMPETUS_EMPTY),
             new VillagerIngredient(VillagerProfession.TOOLSMITH, null, 2),
             HexBlocks.IMPETUS_RIGHTCLICK.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
             .save(recipes, modLoc("impetus_rightclick"));
 
-        new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.IMPETUS_EMPTY),
+        new BrainsweepRecipeBuilder(HexStateIngredients.of(HexBlocks.IMPETUS_EMPTY),
             new VillagerIngredient(VillagerProfession.FLETCHER, null, 2),
             HexBlocks.IMPETUS_LOOK.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
             .save(recipes, modLoc("impetus_look"));
 
-        new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.IMPETUS_EMPTY),
+        new BrainsweepRecipeBuilder(HexStateIngredients.of(HexBlocks.IMPETUS_EMPTY),
             new VillagerIngredient(VillagerProfession.CLERIC, null, 2),
             HexBlocks.IMPETUS_REDSTONE.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
             .save(recipes, modLoc("impetus_storedplayer"));
 
-        new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.EMPTY_DIRECTRIX),
+        new BrainsweepRecipeBuilder(HexStateIngredients.of(HexBlocks.EMPTY_DIRECTRIX),
             new VillagerIngredient(VillagerProfession.MASON, null, 1),
             HexBlocks.DIRECTRIX_REDSTONE.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
             .save(recipes, modLoc("directrix_redstone"));
 
-        new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.EMPTY_DIRECTRIX),
+        new BrainsweepRecipeBuilder(HexStateIngredients.of(HexBlocks.EMPTY_DIRECTRIX),
                 new VillagerIngredient(VillagerProfession.SHEPHERD, null, 1),
                 HexBlocks.DIRECTRIX_BOOLEAN.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
                 .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
                 .save(recipes, modLoc("directrix_boolean"));
 
-        new BrainsweepRecipeBuilder(StateIngredients.of(HexBlocks.AKASHIC_LIGATURE),
+        new BrainsweepRecipeBuilder(HexStateIngredients.of(HexBlocks.AKASHIC_LIGATURE),
             new VillagerIngredient(VillagerProfession.LIBRARIAN, null, 5),
             HexBlocks.AKASHIC_RECORD.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
             .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
             .save(recipes, modLoc("akashic_record"));
 
         // Temporary tests
-        new BrainsweepRecipeBuilder(StateIngredients.of(Blocks.AMETHYST_BLOCK),
+        new BrainsweepRecipeBuilder(HexStateIngredients.of(Blocks.AMETHYST_BLOCK),
             new EntityTypeIngredient(EntityType.ALLAY),
             HexBlocks.QUENCHED_ALLAY.defaultBlockState(), MediaConstants.CRYSTAL_UNIT)
             .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
             .save(recipes, modLoc("quench_allay"));
 
-        // Create compat
+        // Create compat; will need to be Neo only as Create 1.21 will not exist on Fabric
+        /**
         this.conditions.apply(new CreateCrushingRecipeBuilder()
                 .withInput(Blocks.AMETHYST_CLUSTER)
                 .duration(150)
@@ -541,6 +544,7 @@ public class HexplatRecipes extends RecipeProvider {
                 .withOutput(0.5f, HexItems.AMETHYST_DUST))
             .whenModLoaded("create")
             .save(recipes, modLoc("compat/create/crushing/amethyst_shard"));
+         */
 
         // FD compat
         for (var log : EDIFIED_LOGS) {
@@ -611,18 +615,19 @@ public class HexplatRecipes extends RecipeProvider {
         SpecialRecipeBuilder.special(recipeFunc::apply).save(consumer, HexAPI.MOD_ID + ":dynamic" + name.getPath());
     }
 
-    protected static Criterion<InventoryChangeTrigger.TriggerInstance> hasItem(ItemLike p_125978_) {
-        return paucalInventoryTrigger(ItemPredicate.Builder.item().of(p_125978_).build());
+    protected static Criterion<InventoryChangeTrigger.TriggerInstance> hasItem(ItemLike itemLike) {
+        return paucalInventoryTrigger(ItemPredicate.Builder.item().of(itemLike).build());
     }
 
-    protected static Criterion<InventoryChangeTrigger.TriggerInstance> hasItem(TagKey<Item> p_206407_) {
-        return paucalInventoryTrigger(ItemPredicate.Builder.item().of(p_206407_).build());
+    protected static Criterion<InventoryChangeTrigger.TriggerInstance> hasItem(TagKey<Item> itemLike) {
+        return paucalInventoryTrigger(ItemPredicate.Builder.item().of(itemLike).build());
     }
 
     /**
      * Prefixed with {@code paucal} to avoid collisions when Forge ATs {@link RecipeProvider#inventoryTrigger}.
      */
     protected static Criterion<InventoryChangeTrigger.TriggerInstance> paucalInventoryTrigger(ItemPredicate... $$0) {
+
         return new Criterion<>(
                 CriteriaTriggers.INVENTORY_CHANGED,
                 new InventoryChangeTrigger.TriggerInstance(Optional.empty(), InventoryChangeTrigger.TriggerInstance.Slots.ANY, List.of($$0))

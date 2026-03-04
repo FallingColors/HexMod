@@ -53,24 +53,24 @@ public class HexDataComponents {
             DataComponentType.<Optional<IotaType<?>>>builder()
                     .networkSynchronized(ByteBufCodecs.optional(ByteBufCodecs.registry(HexRegistries.IOTA_TYPE)))
                     .build());
-    public static final DataComponentType<Integer> VARIANT = register("variant",
+    public static final DataComponentType<Integer> ITEM_VARIANT = register("variant",
             DataComponentType.<Integer>builder()
                     .persistent(Codec.intRange(0, Integer.MAX_VALUE))
                     .networkSynchronized(ByteBufCodecs.VAR_INT)
                     .build());
-    public static final DataComponentType<Unit> SEALED = register("sealed",
+    public static final DataComponentType<Unit> SEALED_IOTA_HOLDER = register("sealed",
             DataComponentType.<Unit>builder()
                     .persistent(Codec.unit(Unit.INSTANCE))
                     .networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
                     .build());
     // TODO port: Data components must implement equals and hashCode. Keep in mind they must also be immutable
-    public static final DataComponentType<Iota> IOTA = register("iota",
+    public static final DataComponentType<Iota> IOTA_HOLDER_IOTA = register("iota",
             DataComponentType.<Iota>builder()
                     .persistent(IotaType.TYPED_CODEC)
                     .networkSynchronized(IotaType.TYPED_STREAM_CODEC)
                     .build());
 
-    public static final DataComponentType<List<Iota>> PATTERNS = register("patterns",
+    public static final DataComponentType<List<Iota>> HEX_HOLDER_PATTERNS = register("patterns",
             DataComponentType.<List<Iota>>builder()
                     .persistent(IotaType.TYPED_CODEC.listOf())
                     .networkSynchronized(IotaType.TYPED_STREAM_CODEC.apply(ByteBufCodecs.list()))
@@ -103,13 +103,13 @@ public class HexDataComponents {
                     .networkSynchronized(ByteBufCodecs.DOUBLE)
                     .build());
 
-    public static final DataComponentType<Integer> SELECTED_PAGE = register("page_idx",
+    public static final DataComponentType<Integer> SELECTED_SPELLBOOK_PAGE = register("page_idx",
             DataComponentType.<Integer>builder()
                     .persistent(Codec.INT)
                     .networkSynchronized(ByteBufCodecs.INT)
                     .build());
 
-    public static final DataComponentType<Map<String, Iota>> PAGES = register("pages",
+    public static final DataComponentType<Map<String, Iota>> SPELLBOOK_PAGES = register("pages",
             DataComponentType.<Map<String, Iota>>builder()
                     .persistent(Codec.unboundedMap(Codec.STRING, IotaType.TYPED_CODEC))
                     .networkSynchronized(ByteBufCodecs.map(
@@ -119,7 +119,7 @@ public class HexDataComponents {
                     ))
                     .build());
 
-    public static final DataComponentType<Map<String, Component>> PAGE_NAMES = register("page_names",
+    public static final DataComponentType<Map<String, Component>> SPELLBOOK_PAGE_NAMES = register("page_names",
             DataComponentType.<Map<String, Component>>builder()
                     .persistent(Codec.unboundedMap(Codec.STRING, ComponentSerialization.CODEC))
                     .networkSynchronized(ByteBufCodecs.map(
@@ -129,7 +129,7 @@ public class HexDataComponents {
                     ))
                     .build());
 
-    public static final DataComponentType<Map<String, Boolean>> PAGE_SEALS = register("sealed_pages",
+    public static final DataComponentType<Map<String, Boolean>> SPELLBOOK_PAGE_SEALS = register("sealed_pages",
             DataComponentType.<Map<String, Boolean>>builder()
                     .persistent(Codec.unboundedMap(Codec.STRING, Codec.BOOL))
                     .networkSynchronized(ByteBufCodecs.map(

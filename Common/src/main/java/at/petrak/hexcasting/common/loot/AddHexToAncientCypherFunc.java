@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
  */
 public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
     public static final MapCodec<AddHexToAncientCypherFunc> CODEC = RecordCodecBuilder.mapCodec(
-            p_344674_ -> commonFields(p_344674_)
-                    .apply(p_344674_, AddHexToAncientCypherFunc::new)
+            codecInstance -> commonFields(codecInstance)
+                    .apply(codecInstance, AddHexToAncientCypherFunc::new)
     );
 
     public AddHexToAncientCypherFunc(List<LootItemCondition> lootItemConditions) {
@@ -45,8 +45,8 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
         stack.set(HexDataComponents.HEX_NAME, hex.getFirst());
         stack.set(HexDataComponents.MEDIA, 32 * MediaConstants.SHARD_UNIT);
         stack.set(HexDataComponents.MEDIA_MAX, 32 * MediaConstants.SHARD_UNIT);
-        stack.set(HexDataComponents.VARIANT, rand.nextInt(8));
-        stack.set(HexDataComponents.PATTERNS, Arrays.stream(hex.getSecond()).map(el -> {
+        stack.set(HexDataComponents.ITEM_VARIANT, rand.nextInt(8));
+        stack.set(HexDataComponents.HEX_HOLDER_PATTERNS, Arrays.stream(hex.getSecond()).map(el -> {
             var pieces = el.split(" ");
             return new PatternIota(HexPattern.fromAngles(pieces[1],HexDir.fromString(pieces[0])));
         }).collect(Collectors.toList()));

@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
+import at.petrak.hexcasting.common.lib.HexBrainsweepeeIngredients;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -46,7 +47,7 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
 
     @Override
     public BrainsweepeeIngredientType<?> getType() {
-        return BrainsweepeeIngredients.VILLAGER;
+        return HexBrainsweepeeIngredients.VILLAGER;
     }
 
     public @Nullable VillagerProfession getProfession() {

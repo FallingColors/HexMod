@@ -39,7 +39,11 @@ public interface IClientXplatAbstractions {
     boolean fabricAdditionalQuenchFrustumCheck(AABB aabb);
 
     IClientXplatAbstractions INSTANCE = find();
-
+    /**
+     * Returns a block model variant string, either INVENTORY_VARIANT or STANDALONE_VARIANT depending on the mod loader.
+     * Used for ModelResourceLocations.
+     * On Fabric, the STANDALONE_VARIANT does not exist, so we grab the INVENTORY_VARIANT instead.
+     */
     String getModelLocVariant();
 
     private static IClientXplatAbstractions find() {

@@ -29,7 +29,7 @@ public class ItemFocus extends Item implements IotaHolderItem, VariantItem {
 
     @Override
     public String getDescriptionId(ItemStack stack) {
-        return super.getDescriptionId(stack) + (stack.has(HexDataComponents.SEALED) ? ".sealed" : "");
+        return super.getDescriptionId(stack) + (stack.has(HexDataComponents.SEALED_IOTA_HOLDER) ? ".sealed" : "");
     }
 
     @Override
@@ -45,10 +45,10 @@ public class ItemFocus extends Item implements IotaHolderItem, VariantItem {
     @Override
     public void writeDatum(ItemStack stack, Iota datum) {
         if (datum == null) {
-            stack.remove(HexDataComponents.IOTA);
-            stack.remove(HexDataComponents.SEALED);
+            stack.remove(HexDataComponents.IOTA_HOLDER_IOTA);
+            stack.remove(HexDataComponents.SEALED_IOTA_HOLDER);
         } else if (!isSealed(stack)) {
-            stack.set(HexDataComponents.IOTA, datum);
+            stack.set(HexDataComponents.IOTA_HOLDER_IOTA, datum);
         }
     }
 
@@ -58,11 +58,11 @@ public class ItemFocus extends Item implements IotaHolderItem, VariantItem {
     }
 
     public static boolean isSealed(ItemStack stack) {
-        return stack.has(HexDataComponents.SEALED);
+        return stack.has(HexDataComponents.SEALED_IOTA_HOLDER);
     }
 
     public static void seal(ItemStack stack) {
-        stack.set(HexDataComponents.SEALED, Unit.INSTANCE);
+        stack.set(HexDataComponents.SEALED_IOTA_HOLDER, Unit.INSTANCE);
     }
 
     @Override

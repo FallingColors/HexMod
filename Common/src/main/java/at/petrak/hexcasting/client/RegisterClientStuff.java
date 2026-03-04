@@ -56,7 +56,7 @@ public class RegisterClientStuff {
 
     public static void init() {
         registerSealableDataHolderOverrides(HexItems.FOCUS,
-            stack -> stack.has(HexDataComponents.IOTA),
+            stack -> stack.has(HexDataComponents.IOTA_HOLDER_IOTA),
             ItemFocus::isSealed);
         registerSealableDataHolderOverrides(HexItems.SPELLBOOK,
             stack -> HexItems.SPELLBOOK.readIota(stack) != null,
@@ -69,7 +69,7 @@ public class RegisterClientStuff {
         registerVariantOverrides(HexItems.ARTIFACT, HexItems.ARTIFACT::getVariant);
         IClientXplatAbstractions.INSTANCE.registerItemProperty(HexItems.THOUGHT_KNOT, ItemThoughtKnot.WRITTEN_PRED,
             (stack, level, holder, holderID) -> {
-                if (stack.has(HexDataComponents.IOTA)) {
+                if (stack.has(HexDataComponents.IOTA_HOLDER_IOTA)) {
                     return 1;
                 } else {
                     return 0;

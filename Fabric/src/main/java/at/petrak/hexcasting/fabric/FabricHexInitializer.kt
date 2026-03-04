@@ -31,8 +31,8 @@ import at.petrak.hexcasting.common.misc.BrainsweepingEvents
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
 import at.petrak.hexcasting.common.misc.RegisterMisc
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
-import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredients
-import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredients
+import at.petrak.hexcasting.common.lib.HexBrainsweepeeIngredients
+import at.petrak.hexcasting.common.lib.HexStateIngredients
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents
 import at.petrak.hexcasting.fabric.cc.adimpl.*
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
@@ -224,8 +224,8 @@ object FabricHexInitializer : ModInitializer {
         HexArithmetics.register(bind(IXplatAbstractions.INSTANCE.arithmeticRegistry))
         HexContinuationTypes.registerContinuations(bind(IXplatAbstractions.INSTANCE.continuationTypeRegistry))
         HexEvalSounds.register(bind(IXplatAbstractions.INSTANCE.evalSoundRegistry))
-        StateIngredients.register(bind(IXplatAbstractions.INSTANCE.stateIngredientRegistry))
-        BrainsweepeeIngredients.register(bind(IXplatAbstractions.INSTANCE.brainsweepeeIngredientRegistry))
+        HexStateIngredients.register(bind(IXplatAbstractions.INSTANCE.stateIngredientRegistry))
+        HexBrainsweepeeIngredients.register(bind(IXplatAbstractions.INSTANCE.brainsweepeeIngredientRegistry))
 
 
         // Because of Java's lazy-loading of classes, can't use Kotlin static initialization for

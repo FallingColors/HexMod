@@ -29,7 +29,7 @@ public interface IotaHolderItem {
             throw new IllegalArgumentException("stack's item must be an IotaHolderItem but was " + stack.getItem());
         }
 
-        return stack.get(HexDataComponents.IOTA);
+        return stack.get(HexDataComponents.IOTA_HOLDER_IOTA);
     }
 
     /**

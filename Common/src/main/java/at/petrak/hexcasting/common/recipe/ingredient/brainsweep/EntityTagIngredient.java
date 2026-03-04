@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
+import at.petrak.hexcasting.common.lib.HexBrainsweepeeIngredients;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.ChatFormatting;
@@ -29,7 +30,7 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
 
     @Override
     public BrainsweepeeIngredientType<?> getType() {
-        return BrainsweepeeIngredients.TAG;
+        return HexBrainsweepeeIngredients.TAG;
     }
 
     public TagKey<EntityType<?>> getTag() {

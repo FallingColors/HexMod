@@ -58,17 +58,17 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
 
     @Override
     public boolean hasHex(ItemStack stack) {
-        return stack.has(HexDataComponents.PATTERNS);
+        return stack.has(HexDataComponents.HEX_HOLDER_PATTERNS);
     }
 
     @Override
     public @Nullable List<Iota> getHex(ItemStack stack, ServerLevel level) {
-        return stack.get(HexDataComponents.PATTERNS);
+        return stack.get(HexDataComponents.HEX_HOLDER_PATTERNS);
     }
 
     @Override
     public void writeHex(ItemStack stack, List<Iota> program, @Nullable FrozenPigment pigment, long media) {
-        stack.set(HexDataComponents.PATTERNS, program);
+        stack.set(HexDataComponents.HEX_HOLDER_PATTERNS, program);
         if (pigment != null)
             stack.set(HexDataComponents.PIGMENT, pigment);
 
@@ -77,7 +77,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
 
     @Override
     public void clearHex(ItemStack stack) {
-        stack.remove(HexDataComponents.PATTERNS);
+        stack.remove(HexDataComponents.HEX_HOLDER_PATTERNS);
         stack.remove(HexDataComponents.PIGMENT);
         stack.remove(HexDataComponents.MEDIA);
         stack.remove(HexDataComponents.MEDIA_MAX);

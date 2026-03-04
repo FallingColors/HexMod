@@ -18,8 +18,8 @@ import at.petrak.hexcasting.common.misc.BrainsweepingEvents;
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder;
 import at.petrak.hexcasting.common.misc.RegisterMisc;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
-import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredients;
-import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredients;
+import at.petrak.hexcasting.common.lib.HexBrainsweepeeIngredients;
+import at.petrak.hexcasting.common.lib.HexStateIngredients;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.ForgeCapabilityHandler;
 import at.petrak.hexcasting.forge.datagen.ForgeHexDataGenerators;
@@ -143,8 +143,8 @@ public class ForgeHexInitializer {
         bind(HexRegistries.ARITHMETIC, HexArithmetics::register);
         bind(HexRegistries.CONTINUATION_TYPE, HexContinuationTypes::registerContinuations);
         bind(HexRegistries.EVAL_SOUND, HexEvalSounds::register);
-        bind(HexRegistries.STATE_INGREDIENT, StateIngredients::register);
-        bind(HexRegistries.BRAINSWEEPEE_INGREDIENT, BrainsweepeeIngredients::register);
+        bind(HexRegistries.STATE_INGREDIENT, HexStateIngredients::register);
+        bind(HexRegistries.BRAINSWEEPEE_INGREDIENT, HexBrainsweepeeIngredients::register);
 
         ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
         ForgeHexLootMods.REGISTRY.register(getModEventBus());

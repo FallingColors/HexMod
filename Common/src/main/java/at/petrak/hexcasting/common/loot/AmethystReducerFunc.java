@@ -15,11 +15,11 @@ import java.util.List;
 
 public class AmethystReducerFunc extends LootItemConditionalFunction {
     public static final MapCodec<AmethystReducerFunc> CODEC = RecordCodecBuilder.mapCodec(
-            p_344674_ -> commonFields(p_344674_)
+            codecInstance -> commonFields(codecInstance)
                     .and(
                             Codec.DOUBLE.fieldOf("delta").forGetter(AmethystReducerFunc::getDelta)
                     )
-                    .apply(p_344674_, AmethystReducerFunc::new)
+                    .apply(codecInstance, AmethystReducerFunc::new)
     );
 
     private final double delta;
