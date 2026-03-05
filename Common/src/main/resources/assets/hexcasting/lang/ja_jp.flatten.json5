@@ -1,0 +1,2248 @@
+// A work in progress
+{
+  "item.hexcasting": {
+    book: "六角術の手記",
+    
+    staff: {
+      oak: "オークの杖",
+      spruce: "トウヒの杖",
+      birch: "シラカバの杖",
+      jungle: "ジャングルの杖",
+      acacia: "アカシアの杖",
+      dark_oak: "ダークオークの杖",
+      crimson: "真紅の杖",
+      warped: "歪んだ杖",
+      mangrove: "マングローブの杖",
+      cherry: "サクラの杖",
+      bamboo: "竹の杖",
+      edified: "教化された杖",
+      quenched: "鎮静片の杖",
+      mindsplice: "精神接合の杖",
+    },
+    
+    amethyst_dust: "アメジストダスト",
+    charged_amethyst: "蓄力アメジスト",
+    quenched_allay_shard: "鎮静アレイの欠片",
+    
+    scroll_small: {
+      "": "小さな巻物",
+      of: "この%sのアイテムをどうやって手に入れたのか",
+      empty: "白紙の小さな巻物",
+    },
+    
+    scroll_medium: {
+      "": "中くらいの巻物",
+      of: "この%sのアイテムをどうやって手に入れたのか",
+      empty: "白紙の中くらいの巻物",
+    },
+    
+    scroll: {
+      "": "大きな巻物",
+      of: "古代の「%s」の巻物",
+      empty: "白紙の大きな巻物",
+    },
+    
+    focus: {
+      "": "焦点具",
+      sealed: "封印された焦点具",
+    },
+
+    ancient_cypher: {
+      "": "古代のサイファー",
+      preset: "古代のサイファー: %s",
+    },
+    
+    thought_knot: "念いの結び目",
+    spellbook: "魔法書",
+    cypher: "サイファー",
+    trinket: "トリンケット",
+    artifact: "アーティファクト",
+    battery: "メディアの薬瓶",
+    lens: "念視鏡",
+    abacus: "そろばん",
+    jeweler_hammer: "宝石細工の金鎚",
+    sub_sandwich: "サブマリンサンドイッチ",
+    
+    dye_colorizer_: {
+      white: "白色の色素",
+      orange: "橙色の色素",
+      magenta: "赤紫色の色素",
+      light_blue: "水色の色素",
+      yellow: "黄色の色素",
+      lime: "黄緑色の色素",
+      pink: "桃色の色素",
+      gray: "灰色の色素",
+      light_gray: "薄灰色の色素",
+      cyan: "青緑色の色素",
+      purple: "紫色の色素",
+      blue: "青色の色素",
+      brown: "茶色の色素",
+      green: "緑色の色素",
+      red: "赤色の色素",
+      black: "黒色の色素",
+    },
+    
+    pride_colorizer_: {
+      agender: "アジェンダーの色素",
+      aroace: "アロエースの色素",
+      aromantic: "アロマンティックの色素",
+      asexual: "アセクシュアルの色素",
+      bisexual: "バイセクシュアルの色素",
+      demiboy: "デミボーイの色素",
+      demigirl: "デミガールの色素",
+      gay: "ゲイの色素",
+      genderfluid: "ジェンダーフルイドの色素",
+      genderqueer: "ジェンダークィアの色素",
+      intersex: "インターセックスの色素",
+      lesbian: "レズビアンの色素",
+      nonbinary: "ノンバイナリーの色素",
+      pansexual: "パンセクシュアルの色素",
+      plural: "プルーラルの色素",
+      transgender: "トランスジェンダーの色素",
+    },
+    
+    uuid_colorizer: "魂輝の色素",
+    default_colorizer: "空白の色素",
+    ancient_colorizer: "古代の色素",
+    
+    creative_unlocker: {
+      "": "メディアキューブ",
+      for_emphasis: "無限のメディア",
+      tooltip: "食べると%sのすべての知識を解放できる。",
+      mod_name: "Hexcasting",
+    },
+    
+    lore_fragment: {
+      "": "伝承の断片",
+      all: "このワールドが述べる伝承はすべて見つけたようだ。",
+    },
+  },
+  
+  "entity.hexcasting": {
+    wall_scroll: "壁掛けの巻物",
+  },
+  
+  "block.hexcasting": {
+    conjured_light: "魔法光源",
+    conjured_block: "魔法ブロック",
+    
+    directrix: {
+      empty: "空の指導石",
+      redstone: "石工の指導石",
+      boolean: "羊飼いの指導石",
+    },
+    
+    impetus: {
+      empty: "空の原動石",
+      rightclick: "道具鍛冶の原動石",
+      look: "矢師の原動石",
+      redstone: "聖職者の原動石",
+    },
+    
+    akashic_: {
+      record: "虚空記録媒体",
+      bookshelf: "虚空の本棚",
+      connector: "虚空の留め具",
+    },
+    
+    slate: {
+      "": "石板",
+      blank: "空白の石板",
+      written: "パターンの石板",
+    },
+    
+    slate_: {
+      block: "石板ブロック",
+      tiles: "石板タイル",
+      bricks: "石板レンガ",
+      bricks_small: "小さな石板レンガ",
+      pillar: "石板の柱",
+    },
+    
+    amethyst_: {
+      dust_block: "アメジストダストブロック",
+      tiles: "アメジストタイル",
+      bricks: "アメジストレンガ",
+      bricks_small: "小さなアメジストレンガ",
+      pillar: "アメジストの柱",
+    },
+    
+    slate_amethyst_: {
+      tiles: "石板アメジストタイル",
+      bricks: "石板アメジストレンガ",
+      bricks_small: "小さな石板アメジストレンガ",
+      pillar: "石板アメジストの柱",
+    },
+    
+    scroll_paper: "巻物の紙",
+    ancient_scroll_paper: "古代の巻物の紙",
+    scroll_paper_lantern: "提灯",
+    ancient_scroll_paper_lantern: "古代の提灯",
+    amethyst_sconce: "アメジストの燭台",
+    
+    edified_: {
+      log: "教化された原木",
+      log_amethyst: "アメジストの教化された原木",
+      log_aventurine: "アベンチュリンの教化された原木",
+      log_citrine: "シトリンの教化された原木",
+      log_purple: "紫色の教化された原木",
+      wood: "教化された木",
+      planks: "教化された板材",
+      panel: "教化されたパネル",
+      tile: "教化されたタイル",
+      door: "教化されたドア",
+      trapdoor: "教化されたトラップドア",
+      stairs: "教化された階段",
+      slab: "教化されたハーフブロック",
+      button: "教化されたボタン",
+      pressure_plate: "教化された感圧版",
+      fence: "教化されたフェンス",
+      fence_gate: "教化されたフェンスゲート",
+    },
+    
+    stripped_edified_log: "樹皮を剥いだ教化された原木",
+    stripped_edified_wood: "樹皮を剥いだ教化された木",
+    
+    amethyst_edified_leaves: "アメジストの教化された葉",
+    aventurine_edified_leaves: "アベンチュリンの教化された葉",
+    citrine_edified_leaves: "シトリンの教化された葉",
+    
+    quenched_allay: "鎮静アレイ",
+    
+    quenched_allay_: {
+      tiles: "鎮静アレイタイル",
+      bricks: "鎮静アレイレンガ",
+      bricks_small: "小さな鎮静アレイレンガ",
+    },
+  },
+  
+  "effect.hexcasting": {
+    enlarge_grid: "グリッド拡張",
+    shrink_grid: "グリッド縮小",
+  },
+  
+  "item.minecraft.potion.effect": {
+    enlarge_grid: "透徹のポーション",
+    enlarge_grid_long: "透徹のポーション",
+    enlarge_grid_strong: "透徹のポーション",
+    shrink_grid: "混濁のポーション",
+    shrink_grid_long: "混濁のポーション",
+    shrink_grid_strong: "混濁のポーション",
+  },
+  
+  "item.minecraft.splash_potion.effect": {
+    enlarge_grid: "透徹のスプラッシュポーション",
+    enlarge_grid_long: "透徹のスプラッシュポーション",
+    enlarge_grid_strong: "透徹のスプラッシュポーション",
+    shrink_grid: "混濁のスプラッシュポーション",
+    shrink_grid_long: "混濁のスプラッシュポーション",
+    shrink_grid_strong: "混濁のスプラッシュポーション",
+  },
+  
+  "item.minecraft.lingering_potion.effect": {
+    enlarge_grid: "透徹の残留ポーション",
+    enlarge_grid_long: "透徹の残留ポーション",
+    enlarge_grid_strong: "透徹の残留ポーション",
+    shrink_grid: "混濁の残留ポーション",
+    shrink_grid_long: "混濁の残留ポーション",
+    shrink_grid_strong: "混濁の残留ポーション",
+  },
+  
+  "item.minecraft.tipped_arrow.effect": {
+    enlarge_grid: "透徹の矢",
+    enlarge_grid_long: "透徹の矢",
+    enlarge_grid_strong: "透徹の矢",
+    shrink_grid: "混濁の矢",
+    shrink_grid_long: "混濁の矢",
+    shrink_grid_strong: "混濁の矢",
+  },
+  
+  "itemGroup.hexcasting": {
+    hexcasting: "Hex Casting",
+    scrolls: "Hex Casting (巻物)",
+  },
+  
+  "gui.hexcasting": {
+    spellcasting: "呪紋グリッド",
+  },
+  
+  "tag.hexcasting": {
+    staves: "呪紋の杖",
+    edified_logs: "教化された原木",
+    edified_planks: "教化された板材",
+    phial_base: "空の薬瓶",
+  },
+  
+  "tag.item.hexcasting": {
+    brainswept_circle_components: "魔法陣の素材",
+    directrices: "指導石",
+    grants_root_advancement: "基本の進捗を付与",
+    impeti: "原動石",
+    seal_materials: "封の素材",
+  },
+  
+  "emi.category.hexcasting": {
+    brainsweep: "精神切除",
+    "craft.battery": "薬瓶作成",
+    edify: "苗木の教化",
+    villager_leveling: "取引レベル",
+    villager_profession: "村人の職業",
+  },
+  
+  "text.autoconfig.hexcasting": {
+    title: "Hexcastingの設定",
+    
+    category: {
+      common: "共通",
+      client: "クライアント",
+      server: "サーバー",
+    },
+    
+    option: {
+      common: {
+        dustMediaAmount: {
+          "": "ダストのメディア量",
+          "@Tooltip": "1個のアメジストダストが何メディアに相当するか",
+        },
+        shardMediaAmount: {
+          "": "欠片のメディア量",
+          "@Tooltip": "1個のアメジストの欠片が何メディアに相当するか",
+        },
+        chargedCrystalMediaAmount: {
+          "": "蓄力のメディア量",
+          "@Tooltip": "1個の蓄力アメジストが何メディアに相当するか",
+        },
+        mediaToHealthRate: {
+          "": "体力のメディア量",
+          "@Tooltip": "HPで術を行うときハート半分が何メディアに相当するか",
+        },
+        cypherCooldown: {
+          "": "サイファーのクールダウン",
+          "@Tooltip": "サイファーのクールダウンのティック数",
+        },
+        trinketCooldown: {
+          "": "トリンケットのクールダウン",
+          "@Tooltip": "トリンケットのクールダウンのティック数",
+        },
+        artifactCooldown: {
+          "": "アーティファクトのクールダウン",
+          "@Tooltip": "アーティファクトのクールダウンのティック数",
+        },
+      },
+      
+      client: {
+        ctrlTogglesOffStrokeOrder: {
+          "": "Ctrlで書き順をオフにする",
+          "@Tooltip": "Ctrlキーでパターンの色のグラデーションを*オフ*にするか",
+        },
+        invertSpellbookScrollDirection: {
+          "": "魔法書スクロール方向の反転",
+          "@Tooltip": "(下ではなく)上にスクロールすると魔法書のページ数が増加する(逆もしかり)かどうか",
+        },
+        invertAbacusScrollDirection: {
+          "": "そろばんスクロール方向の反転",
+          "@Tooltip": "(下ではなく)上にスクロールするとそろばんの数が増加する(逆もしかり)かどうか",
+        },
+        gridSnapThreshold: {
+          "": "グリッドスナップのしきい値",
+          "@Tooltip": "杖を使用するとき、点から次の点にスナップするために移動する必要がある距離\n0.5は50%の距離を意味する (0.5-1)",
+        },
+        clickingTogglesDrawing: {
+          "": "クリックで描画を切り替える",
+          "@Tooltip": "クリックしてドラッグして描画するのではなく、クリックで描画の開始と停止をするかどうか",
+        },
+        alwaysShowListCommas: {
+          "": "リストのコンマを常に表示する",
+          "@Tooltip": "リストに表示したときにすべてのイオタタイプをコンマで区切るかどうか\n(デフォルトでは、パターンイオタはコンマを使用しない)",
+        },
+      },
+      
+      server: {
+        opBreakHarvestLevel: {
+          "": "破壊の採掘レベル",
+          "@Tooltip": "ブロック破壊スペルの採掘レベル\n0 = 木、 1 = 石、 2 = 鉄、 3 = ダイヤモンド、 4 = ネザライト",
+        },
+        maxOpCount: {
+          "": "最大アクション数",
+          "@Tooltip": "サーバーのハングアップを防ぐため、1ティックで実行できるアクションの最大数",
+        },
+        maxSpellCircleLength: {
+          "": "最大魔法陣長",
+          "@Tooltip": "魔法陣の石板の最大数",
+        },
+        actionDenyList: {
+          "": "アクション拒否リスト",
+          "@Tooltip": "許可されていないアクションのリソース位置\nこれらのいずれかを発動しようとすると変事が発生する\nたとえば hexcasting:get_caster は 精神の反射 を防ぐ",
+        },
+        circleActionDenyList: {
+          "": "魔法陣のアクション拒否リスト",
+          "@Tooltip": "魔法陣内で許可されていないアクションのリソース位置\n魔法陣からこれらのいずれかを発動しようとすると変事が発生する",
+        },
+        greaterTeleportSplatsItems: {
+          "": "高位転送がアイテムを散らす",
+          "@Tooltip": "高位転送を使用するときにアイテムがプレイヤーのインベントリから飛び出すかどうか"
+        },
+        doesTrueNameHaveAmbit: {
+          "": "真名の範囲の有無",
+          "@Tooltip": "真名(プレイヤーのエンティティ参照)が通常の範囲外であっても参照されたプレイヤーを対象にできるかどうか",
+        },
+        tpDimDenylist: {
+          "": "テレポートのディメンション拒否リスト",
+          "@Tooltip": "テレポートが許可されていないディメンションのリソース位置",
+        },
+        villagersOffendedByMindMurder: {
+          "": "村人が精神殺しに敵対する",
+          "@Tooltip": "村人が、他の村人が精神切除されたときにプレイヤーに怒るかどうか",
+        },
+        traderScrollChance: {
+          "": "行商人の巻物の確率",
+          "@Tooltip": "行商人が古代の巻物を売る確率",
+        },
+        scrollInjectionsRaw: {
+          "": "巻物の追加の重み",
+          "@Tooltip": "ルートテーブルの名前を、そこに入れるワールドごとのパターンの巻物の量にマッピングする\nここでマークされているチェストから巻物を入手できる確率は約50%で\nこれに当たると、1からその数までの巻物が生成される",
+        },
+        loreInjectionsRaw: {
+          "": "伝承の断片を追加する場所",
+          "@Tooltip": "伝承の断片を追加するルートテーブルのリスト",
+        },
+        loreChance: {
+          "": "伝承の断片の確率",
+          "@Tooltip": "伝承の断片が上記のルートテーブルのいずれかに出現する確率",
+        },
+        cypherInjectionsRaw: {
+          "": "古代のサイファーを追加する場所",
+          "@Tooltip": "古代のサイファーを追加するルートテーブルのリスト",
+        },
+        cypherChance: {
+          "": "古代のサイファーの確率",
+          "@Tooltip": "古代のサイファーが上記のルートテーブルのいずれかに出現する確率",
+        },
+        amethystShardModification: {
+          "": "アメジストの欠片のドロップ率変更",
+          "@Tooltip": "塊からドロップするアメジストの欠片の数がどれだけ増加/減少するか",
+        },
+      },
+    },
+  },
+  
+  "advancement.hexcasting:": {
+    root: {
+      "": "六角術の研究",
+      desc: "地下深くで成長している濃縮されたメディア見つけて採掘する。",
+    },
+    creative_unlocker: {
+      "": "かぎりなきぱわぁ",
+      "desc": "クリエイティブのデバッグアイテムを見つける。"
+    },
+    enlightenment: {
+      "": "啓示を受ける",
+      desc: "ほぼすべての体力を使って呪紋を描いて壁を打ち破る。",
+    },
+    wasteful_cast: {
+      "": "無駄がなければ...",
+      desc: "呪紋を描くときに大量のメディアを無駄にする。",
+    },
+    big_cast: {
+      "": "...不足もない",
+      desc: "本当に大量のメディアを必要とする単一の呪紋を描く。",
+    },
+    y_u_no_cast_angy: {
+      "": "見えない迂回路",
+      desc: "巻物のスペルを描いて、失敗する。",
+    },
+    opened_eyes: {
+      "": "開眼",
+      desc: "呪紋の対価として自然界に精神の一部を受け取ってもらう。これ以上やると何が起こるだろうか？",
+    },
+    lore: {
+      "": "六角術の伝承",
+      desc: "伝承の断片を読む",
+    },
+    "lore/": {
+      cardamom1: {
+        "": "カルダモン・S. #1",
+        desc: "カルダモン・スティールスから父への手紙 #1",
+      },
+      cardamom2: {
+        "": "カルダモン・S. #2",
+        desc: "カルダモン・スティールスから父への手紙 #2",
+      },
+      cardamom3: {
+        "": "カルダモン・S. #3",
+        desc: "カルダモン・スティールスから父への手紙 #3 1/2",
+      },
+      cardamom4: {
+        "": "カルダモン・S. #3 pt2",
+        desc: "カルダモン・スティールスから父への手紙 #3 2/2",
+      },
+      cardamom5: {
+        "": "カルダモン・S. #4",
+        desc: "カルダモン・スティールスから父への手紙 #4",
+      },
+      experiment1: "ウールアイの事例メモ",
+      experiment2: "ウールアイの対談記録",
+      inventory: "修復記録 72",
+    },
+  },
+  
+  "stat.hexcasting": {
+    media_used: "消費したメディア(ダスト)",
+    media_overcast: "超過したメディア (ダスト)",
+    patterns_drawn: "描かれたパターン",
+    spells_cast: "発動したスペル",
+  },
+  
+  "death.attack.hexcasting": {
+    overcast: {
+      "": "%sの精神はエネルギーに取り込まれた",
+      player: "%sの精神は%sと戦いながらエネルギーに取り込まれた",
+    },
+  },
+  
+  "command.hexcasting": {
+    recalc: "パターンを再計算しました",
+    
+    pats: {
+      listing: "このワールドのパターン:",
+      all: "%d 個すべての巻物を %s に与えました",
+      "specific.success": "%s を ID %s で %s に与えました",
+    },
+    
+    brainsweep: {
+      "": "%s の精神を切除しました",
+      "fail.badtype": "%s はMobではありません",
+      "fail.already": "%s は既に空です",
+    },
+  },
+  
+  // === Inline ! ===
+  "matcher.hexcasting.pattern": {
+    "title": "Hex Pattern",
+    "title.styled": "Hex Pattern <se,deaqq>",
+    "description": "視覚的な六角術のパターン",
+    "example": "<ne,qaq><e,aa><ne,qaq><e,wa><e,wqaawdd><e,aawaawaa>"
+  },
+  
+  hexcasting: {
+    "pattern.unknown": "リソース位置 %s の不明なパターン",
+    
+    debug: {
+      media_withdrawn: "%s - 引き出したメディア: %s",
+      "media_withdrawn.with_dust": "%s - 引き出したメディア: %s (%sダスト)",
+      media_inserted: "%s - 入れたメディア: %s",
+      "media_inserted.with_dust": "%s - 入れたメディア: %s (%sダスト)",
+      all_media: "全内容",
+      infinite_media: "無限",
+    },
+    
+    loot_hex: {
+      "shatter": "破砕",
+      "kindle": "火起こし",
+      "illuminate": "照明",
+      "growth": "成長",
+      "lunge": "突進",
+      "sidestep": "回避",
+      "ascend": "上昇",
+      "blink": "瞬間移動",
+      "blastoff": "打ち上げ",
+      "radar": "探知",
+      "beckon": "引き寄せ",
+      "detonate": "爆破",
+      "shockwave": "衝撃波",
+      "heat_wave": "熱波",
+      "wither_wave": "衰弱波",
+      "flight_zone": "飛行領域",
+    },
+
+    // TODO: post-eigengrau make these less anticlimactic
+    message: {
+      cant_overcast: "その呪紋は自分が持っているよりも多くのメディアが必要だ...計算を見直してみよう。",
+      cant_great_spell: "スペルはなぜか失敗した...技量が足りていないのだろうか？",
+    },
+    
+    tooltip: {
+      spellbook: {
+        page: {
+          "": "選択されたページ: %d/%d",
+          sealed: "選択されたページ: %d/%d (%s)",
+        },
+        page_with_name: {
+          "": "選択されたページ: %d/%d (\"%s\")",
+          sealed: "選択されたページ: %d/%d (\"%s\") (%s)",
+        },
+        empty: {
+          "": "白紙",
+          sealed: "白紙 (%s)",
+        },
+        sealed: "封",
+      },
+
+      scroll: {
+        needs_purchase: "購入するとパターンが表示される",
+        pattern_not_loaded: "インベントリに置いてパターンを読み込む",
+        "recalc_warning.line1": "%s のワールドごとのパターンはまだ未計算です！",
+        "recalc_warning.line2": "/hexcasting recalcPatterns を実行してから、新しく巻物を入手してください。",
+      },
+      
+      abacus: {
+        "": "%d",
+        reset: "0にリセット",
+        "reset.nice": "nice",
+      },
+      
+      circle: {
+        no_exit: "メディアフローは%sからの出口を見つけられなかった",
+        many_exits: "メディアフローの%sからの出口が多すぎる",
+        no_closure: "メディアフローは%sから原動石に戻ることができない",
+      },
+      
+      lens: {
+        "pattern.invalid": "無効なパターン",
+        bee: {
+          "": "%s匹のミツバチ",
+          single: "%s匹のミツバチ",
+        },
+        "impetus.redstone.bound": {
+          "": "%sに設定済み",
+          none: "未設定",
+        },
+        akashic: {
+          "bookshelf.location": "%sに記録",
+          "record.count": {
+            "": "%s個のイオタが保存されている",
+            single: "%s個のイオタが保存されている",
+          },
+        },
+      },
+      
+      brainsweep: {
+        min_level: "レベル %s 以上",
+        level: "レベル %s",
+        product: "精神のない身体",
+      },
+      
+      media: "%dダスト",
+      media_amount: "内容: %s (%s)",
+      "media_amount.advanced": "内容: %s/%s (%s)",
+      stored_hex: "呪紋: ",
+      
+      list_contents: "[%s]",
+      null_iota: "Null",
+      jump_iota: "[Jump]",
+      pattern_iota: "HexPattern(%s)",
+      boolean_true: "True",
+      boolean_false: "False",
+    },
+    // ^ tooltip
+    spelldata: {
+      onitem: "内容: %s",
+      anything: "任意",
+      unknown: "破損したイオタ",
+      "entity.whoknows": "不明なエンティティ",
+      "akashic.nopos": "所有している記録媒体はここのイオタを知らない(これはバグです)",
+    },
+    
+    subtitles: {
+      casting: {
+        pattern: {
+          start: "パターンを描き始める",
+          add_segment: "線を描き足す",
+        },
+        cast: {
+          fail: "変事が発生する",
+          normal: "アクションが発動する",
+          spell: "スペルが発動する",
+          hermes: "ヘルメスが発動する",
+          thoth: "トートが発動する",
+        },
+      },
+      
+      ambiance: "呪紋グリッドが現れる",
+      "staff.reset": "描画がリセットされる",
+      
+      abacus: {
+        "": "そろばんを弾く",
+        shake: "そろばんを振る",
+      },
+      "spellcircle.add_pattern": "魔法陣が動く",
+      "spellcircle.fail": "魔法陣が止まる",
+      "scroll.dust": "巻物にダストをかける",
+      "scroll.scribble": "巻物が書き込まれる",
+      "impetus.fletcher.tick": "矢師の原動石が見られている",
+      "impetus.redstone.register": "聖職者の原動石が設定される",
+      "impetus.redstone.clear": "聖職者の原動石の設定が取り消される",
+      "lore_fragment.read": "伝承の断片を読む",
+      "flight.ambience": "プレイヤーが飛び立つ",
+      "flight.finish": "飛行が終わる",
+    },
+    
+    attributes: {
+      grid_zoom: "呪紋グリッドサイズ",
+      media_consumption: "消費メディア",
+      ambit_radius: "プレイヤーの領域半径",
+      sentinel_radius: "センチネルの領域半径",
+      // TODO: the +1 is kind of janky
+      scry_sight: "念視力",
+      feeble_mind: "脆弱な精神"
+    },
+    
+    // Action localizations
+    
+    action: {
+      "hexcasting:": {
+        "const/": {
+          "null": "無の反射",
+          "true": "真の反射",
+          "false": "偽の反射",
+          
+          "vec/": {
+            px: "方向の反射 +X",
+            py: "方向の反射 +Y",
+            pz: "方向の反射 +Z",
+            nx: "方向の反射 -X",
+            ny: "方向の反射 -Y",
+            nz: "方向の反射 -Z",
+            "0": "方向の反射 0",
+          },
+          
+          "double/": {
+            pi: "弧の反射",
+            tau: "円の反射",
+            "e": "オイラーの反射",
+          },
+        },
+        
+        get_caster: "精神の反射",
+        "entity_pos/eye": "羅針盤の浄化",
+        "entity_pos/foot": "羅針盤の浄化 II",
+        get_entity_look: "示方規の浄化",
+        get_entity_height: "身長計の浄化",
+        get_entity_velocity: "歩調の浄化",
+        raycast: "射手の蒸溜",
+        "raycast/axis": "建築家の蒸溜",
+        "raycast/entity": "斥候の蒸溜",
+        
+        "circle/": {
+          impetus_pos: "ウェイストーンの反射",
+          impetus_dir: "ロードストーンの反射",
+          "bounds/min": "小弯の反射",
+          "bounds/max": "大弯の反射",
+        },
+        
+        append: "統合の蒸溜",
+        unappend: "導出の分解",
+        index: "選択の蒸溜",
+        singleton: "単体の浄化",
+        empty_list: "空白の反射",
+        reverse: "逆行の浄化",
+        last_n_list: "会衆の仕掛",
+        splat: "会衆の崩壊",
+        index_of: "探知の蒸溜",
+        remove_from: "除去の蒸溜",
+        slice: "選択の昂揚",
+        replace: "外科医の昂揚",
+        construct: "演説者の蒸溜",
+        deconstruct: "演説者の分解",
+        
+        get_entity: "実体の浄化",
+        "get_entity/": {
+          animal: "実体の浄化: 動物",
+          monster: "実体の浄化: モンスター",
+          item: "実体の浄化: アイテム",
+          player: "実体の浄化: プレイヤー",
+          living: "実体の浄化: 生物",
+        },
+        
+        zone_entity: "地帯の蒸溜: 全",
+        "zone_entity/": {
+          animal: "地帯の蒸溜: 動物",
+          monster: "地帯の蒸溜: モンスター",
+          item: "地帯の蒸溜: アイテム",
+          player: "地帯の蒸溜: プレイヤー",
+          living: "地帯の蒸溜: 生物",
+          not_animal: "地帯の蒸溜: 非動物",
+          not_monster: "地帯の蒸溜: 非モンスター",
+          not_item: "地帯の蒸溜: 非アイテム",
+          not_player: "地帯の蒸溜: 非プレイヤー",
+          not_living: "地帯の蒸溜: 非生物",
+        },
+        
+        swap: "道化の仕掛",
+        rotate: "回転の仕掛",
+        rotate_reverse: "回転の仕掛 II",
+        duplicate: "双子の分解",
+        over: "探鉱者の仕掛",
+        tuck: "葬儀屋の仕掛",
+        "2dup": "ディオスクーロイの仕掛",
+        duplicate_n: "双子の仕掛",
+        stack_len: "会衆の反射",
+        fisherman: "釣り人の仕掛",
+        "fisherman/copy": "釣り人の仕掛 II",
+        swizzle: "詐欺師の仕掛",
+        
+        unique: "一意の浄化",
+        and: "連言の蒸溜",
+        or: "選言の蒸溜",
+        xor: "排他の蒸溜",
+        
+        greater: "最大の蒸溜",
+        less: "最小の蒸溜",
+        greater_eq: "最大の蒸溜 II",
+        less_eq: "最小の蒸溜 II",
+        equals: "等式の蒸溜",
+        not_equals: "不等式の蒸溜",
+        not: "否定の浄化",
+        bool_coerce: "予言者の浄化",
+        if: "予言者の昂揚",
+        
+        add: "加算の蒸溜",
+        sub: "減算の蒸溜",
+        mul: "乗算の蒸溜",
+        div: "除算の蒸溜",
+        abs: "丈の浄化",
+        pow: "べき乗の蒸溜",
+        floor: "床の浄化",
+        ceil: "天井の浄化",
+        modulo: "剰余の蒸溜",
+        construct_vec: "方向の昂揚",
+        deconstruct_vec: "方向の崩壊",
+        sin: "正弦の浄化",
+        cos: "余弦の浄化",
+        tan: "正接の浄化",
+        arcsin: "逆正弦の浄化",
+        arccos: "逆余弦の浄化",
+        arctan: "逆正接の浄化",
+        arctan2: "逆正接の蒸溜",
+        random: "エントロピーの反射",
+        logarithm: "対数の蒸溜",
+        coerce_axial: "軸の浄化",
+        
+        read: "筆記者の反射",
+        "read/entity": "年代史家の浄化",
+        "read/local": "ムニンの反射",
+        
+        write: "筆記者の仕掛",
+        "write/entity": "年代史家の仕掛",
+        "write/local": "フギンの仕掛",
+        
+        readable: "監査人の反射",
+        "readable/entity": "監査人の浄化",
+        writable: "査定人の反射",
+        "writable/entity": "査定人の浄化",
+        "akashic/read": "虚空の蒸溜",
+        "akashic/write": "虚空の仕掛",
+        
+        print: "開示",
+        beep: "演奏",
+        explode: "爆発",
+        "explode/fire": "火球",
+        add_motion: "推進",
+        blink: "瞬間移動",
+        break_block: "ブロック破壊",
+        place_block: "ブロック設置",
+        
+        "craft/cypher": "サイファー作成",
+        "craft/trinket": "トリンケット作成",
+        "craft/artifact": "アーティファクト作成",
+        "craft/battery": "薬瓶作成",
+        
+        recharge: "アイテム再充填",
+        erase: "アイテム取消",
+        create_water: "水生成",
+        destroy_water: "液体破壊",
+        ignite: "点火",
+        extinguish: "範囲消火",
+        conjure_block: "ブロック生成",
+        conjure_light: "光源生成",
+        bonemeal: "繁茂",
+        edify: "苗木教化",
+        colorize: "色素吸収",
+        cycle_variant: "術者の見栄",
+        
+        "sentinel/": {
+          create: "センチネル召喚",
+          "create/great": "高位センチネル召喚",
+          destroy: "センチネル追放",
+          get_pos: "センチネル特定",
+          wayfind: "センチネル案内",
+        },
+        
+        "potion/": {
+          weakness: "白の太陽の天底",
+          levitation: "青の太陽の天底",
+          wither: "黒の太陽の天底",
+          poison: "赤の太陽の天底",
+          slowness: "緑の太陽の天底",
+          
+          regeneration: "白の太陽の頂点",
+          night_vision: "青の太陽の頂点",
+          absorption: "黒の太陽の頂点",
+          haste: "赤の太陽の頂点",
+          strength: "緑の太陽の頂点",
+        },
+        
+        flight: "アルティオラ",
+        "flight/range": "隠者の飛行",
+        "flight/time": "旅人の飛行",
+        "flight/can_fly": "飛行士の浄化",
+        
+        lightning: "落雷",
+        summon_rain: "雨乞い",
+        dispel_rain: "雨止み",
+        create_lava: "溶岩生成",
+        "teleport/great": "高位転送",
+        brainsweep: "精神切除",
+        
+        eval: "ヘルメスの仕掛",
+        "eval/cc": "イリスの仕掛",
+        for_each: "トートの仕掛",
+        halt: "カロンの仕掛",
+        thanatos: "タナトスの反射",
+        
+        "interop/": {
+          "gravity/": {
+            get: "重力の浄化",
+            set: "重力変更",
+          },
+          
+          "pehkui/": {
+            get: "ガリバーの浄化",
+            set: "縮尺変更",
+          },
+        },
+      },
+      
+      // hexcasting.action.book.[resloc] override the name of that pattern in the patchi book, for abbreviations
+      "book.hexcasting:": {
+        get_entity_height: "身長計の浄化",
+        
+        "get_entity/": {
+          animal: "実体の浄化: 動物",
+          monster: "実体の浄化: モンスター",
+          item: "実体の浄化: アイテム",
+          player: "実体の浄化: プレイヤー",
+          living: "実体の浄化: 生物",
+        },
+        
+        zone_entity: "地帯の蒸溜: 全",
+        "zone_entity/": {
+          animal: "地帯の蒸溜: 動物",
+          monster: "地帯の蒸溜: モンスター",
+          item: "地帯の蒸溜: アイテム",
+          player: "地帯の蒸溜: プレイヤー",
+          living: "地帯の蒸溜: 生物",
+          not_animal: "地帯の蒸溜: 非動物",
+          not_monster: "地帯の蒸溜: 非モンスター",
+          not_item: "地帯の蒸溜: 非アイテム",
+          not_player: "地帯の蒸溜: 非プレイヤー",
+          not_living: "地帯の蒸溜: 非生物",
+        },
+        
+        mul: "乗算の蒸溜",
+        div: "除算の蒸溜",
+        arcsin: "逆正弦の浄化",
+        arccos: "逆余弦の浄化",
+        arctan: "逆正接の浄化",
+        arctan2: "逆正接の蒸溜",
+        
+        "const/vec/": {
+          x: "方向の反射 +X/-X",
+          y: "方向の反射 +Y/-Y",
+          z: "方向の反射 +Z/-Z",
+        },
+        
+        "read/entity": "年代史家の浄化",
+        bool_to_number: "数霊術師の浄化",
+        number: "数値の反射",
+        mask: "簿記係の仕掛",
+      },
+    },
+    // ^ action
+    
+    "special.hexcasting:": {
+      number: "数値の反射: %s",
+      mask: "簿記係の仕掛: %s",
+    },
+    
+    "rawhook.hexcasting:": {
+      open_paren: "内省",
+      close_paren: "回想",
+      escape: "検討",
+      undo: "消失",
+    },
+
+    "iota.hexcasting:": {
+      null: {
+        "": "Null",
+        desc: "Null",
+      },
+      double: {
+        "": "数値",
+        desc: "数値",
+      },
+      boolean: {
+        "": "論理型",
+        desc: "論理型",
+      },
+      entity: {
+        "": "エンティティ",
+        desc: "エンティティ",
+      },
+      list: {
+        "": "リスト",
+        desc: "リスト",
+      },
+      pattern: {
+        "": "パターン",
+        desc: "パターン",
+      },
+      garbage: {
+        "": "ガベージ",
+        desc: "ガベージ",
+      },
+      vec3: {
+        "": "ベクトル",
+        desc: "ベクトル",
+      },
+      continution: {
+        "": "継続",
+        desc: "ジャンプイオタ",
+      },
+    },
+    
+    mishap: {
+      "": "%s: %s",
+      
+      invalid_pattern: "パターン %s はどのアクションにも結び付いていない",
+      invalid_pattern_generic: "そのパターンはどのアクションにも結び付いていない",
+      unescaped: "パターンの評価が予期されたが、%sが評価された",
+      
+      not_enough_args: "%s個以上の引数が予期されたが、スタックの高さは%sだった",
+      no_args: "%s個以上の引数が予期されたが、スタックは空だった",
+      too_many_close_parens: "先に内省が使用されていない",
+      
+      wrong_dimension: "%sは%sからは見えない",
+      entity_too_far: "%sは範囲外だ",
+      immune_entity: "%sは改変できない",
+      eval_too_much: "評価されたパターンが多すぎる",
+      no_item: "%sが必要だが、何も取得できなかった",
+      "no_item.offhand": "反対側の手に%sが必要だが、何も取得できなかった",
+      bad_entity: "%sが必要だが、%sを取得した",
+      bad_brainsweep: "%sはその存在の精神を拒絶した",
+      already_brainswept: "精神は既に使用済みだ",
+      no_spell_circle: "スペルサークルが必要だ",
+      others_name: "%sの魂のプライバシーを侵害しようとした",
+      "others_name.self": "無謀にも自分の名を漏らそうとした",
+      
+      divide_by_zero: {
+        divide: "%sを%sで割ろうとした",
+        project: "%sを%sに射影しようとした",
+        exponent: "%sを%sでべき乗しようとした",
+        logarithm: "%sの対数を%sを底として取得しようとした",
+        
+        zero: {
+          "": "0",
+          power: "0のべき乗",
+          vec: "0ベクトル",
+        },
+        power: "%sのべき乗",
+        sin: "%sの正弦",
+        cos: "%sの余弦",
+      },
+      
+      invalid_operator_args: {
+        one: "スタックのインデックス%dで予期しないイオタを取得した: %s",
+        many: "%d個の予期しないイオタをスタックのインデックス%dから%dで取得した: %s",
+      },
+      
+      no_akashic_record: "%sに虚空記録媒体はない",
+      disallowed: "%sはサーバー管理者によって禁止されている",
+      disallowed_generic: "そのパターンはサーバー管理者によって禁止されている",
+      disallowed_circle: "%sはサーバー管理者によって魔法陣での使用が禁止されている",
+      disallowed_circle_generic: "そのパターンはサーバー管理者によって魔法陣での使用が禁止されている",
+      invalid_spell_datum_type: "SpellDatumとして無効な型の値を使用しようとした: %s (クラス %s)。これはModのバグです。",
+      unknown: "例外(%s)がスローされた。これはModのバグです。",
+      stack_size: "スタックのサイズ制限を超過した",
+      bad_caster: "高位の精神を必要とするパターンを描画しようとした",
+      
+      invalid_value: {
+        "": "%sがスタックのインデックス%sで予期されたが、%sを取得した: %s",
+        
+        class: {
+          double: "数値",
+          boolean: "論理型",
+          vector: "ベクトル",
+          list: "リスト",
+          pattern: "パターン",
+          continuation: "ジャンプイオタ",
+          garbage: "ガベージ",
+          null: "Null",
+          
+          entity: {
+            "": "エンティティ",
+            mob: "Mob",
+            item: "アイテムエンティティ",
+            player: "プレイヤー",
+            living: "生きているエンティティ",
+          },
+          
+          entity_or_vector: "エンティティまたはベクトル",
+          
+          unknown: "(不明、ありゃ、これはバグだ)",
+        },
+        
+        numvec: "数値またはベクトル",
+        numlist: "整数またはリスト",
+        "list.pattern": "パターンのリスト",
+        
+        double: {
+          positive: {
+            "": "正の数値",
+            less: "%d未満の正の数値",
+            "less.equal": "%d以下の正の数値",
+          },
+          between: "%dから%dまでの数値",
+        },
+        
+        int: {
+          "": "整数",
+          positive: {
+            "": "正の整数",
+            less: "%d未満の正の整数",
+            "less.equal": "%d以下の正の整数",
+          },
+          between: "%dから%dまでの整数",
+        },
+        
+        evaluatable: "評価可能なもの",
+        bool_commute: "論理型、0、または1",
+      },
+      
+      location_: {
+        too_far: "%sは範囲外だ",
+        out_of_world: "%sはワールド内ではない",
+        too_close_to_out: "%sはワールドボーダーに近すぎる",
+        forbidden: "%sは禁止されている",
+        bad_dimension: "このディメンションでそのアクションは禁止されている",
+      },
+      
+      bad_item: {
+        "": "%sが必要だが%d個の%sを取得した",
+        offhand: "反対側の手に%sが必要だが%d個の%sを取得した",
+        
+        iota: {
+          "": "イオタを保存する場所",
+          read: "イオタを読み込む場所",
+          write: "イオタを書き込む場所",
+          readonly: "%sを受け入れる場所",
+        },
+        
+        media: "メディアを含むアイテム",
+        media_for_battery: "未加工のメディアアイテム",
+        only_one: "丁度1個のアイテム",
+        eraseable: "取り消し可能なアイテム",
+        bottle: "ガラス瓶",
+        rechargable: "再充填可能なアイテム",
+        colorizer: "色素",
+        variant: "別の形があるアイテム",
+      },
+      
+      bad_block: {
+        "": "%sが%sで予期されたが、%sを取得した",
+        sapling: "苗木",
+        replaceable: "ブロックを設置する場所",
+      },
+      
+      "circle.bool_directrix": {
+        no_bool: "%sで直面したイオタは論理型ではなく%sだった",
+        empty_stack: "%sでスタックは空だった",
+      },
+    },
+    // ^ mishap
+    
+    circles: {
+      no_exit: "メディアフローは%sからの出口を見つけられなかった",
+      many_exits: "メディアフローの%sからの出口が多すぎる",
+    },
+    
+    
+    // === Patchi stuff! ===
+    
+    
+    landing: "六角形のグリッドに奇妙で突飛な図形を描くという、新しい魔術の手法を発見したようだ。\
+      興味深い。自分の考えや発見の記録を書き始めることにした。\
+      $(br2)$(l:https://forum.petra-k.at/index.php)フォーラムのリンク/$",
+    
+    category: {
+      basics: {
+        "": "はじめに",
+        desc: "この術の実行者は$(l:items/staff)$(item)杖/$で空中に奇妙な図形を描いて、いわゆる$(hex)呪紋/$を放ったり、\
+          描画を行うための$(l:items/hexcasting)$(item)強力な魔法のアイテム/$を作成したりした。\
+          どうすれば同じことができるだろうか？",
+      },
+      casting: {
+        "": "六角術",
+        desc: "古の大魔術師がどのようにして$(hex)呪紋/$を描くのか分かってきた！ 少し複雑だが、\
+          きっと理解できるはずだ。見てみよう...",
+      },
+      items: {
+        "": "アイテム",
+        desc: "この章では研究中に遭遇するかもしれない神秘的な魔法のアイテムについて取り上げる。",
+      },
+      
+      greatwork: {
+        "": "偉業",
+        desc: "視た...多くのものを。消滅と...分解と...再構築を体験した。\
+          世界の原子が転化されて、破壊されて、エネルギーに堕ちて叫ぶのを視た。\
+          視た視た視た視た視た視た視$(k)get stick bugged lmao/$",
+        // alwinfy you think you're so funny
+      },
+      
+      lore: {
+        "": "伝承",
+        desc: "術には直接関係のない手紙や文書を発見した。\
+          しかし、これらから世界の歴史の一部を推測できるかもしれない。見てみよう...",
+      },
+      
+      interop: {
+        "": "Mod間の互換性",
+        desc: "Hex Castingと相互運用できるModが導入されているようだ！ここにそれらの詳細を記してある。",
+      },
+      
+      patterns: {
+        "": "パターン",
+        desc: "発見したすべてのパターン、およびそれらの機能の一覧。",
+      },
+      spells: {
+        "": "スペル",
+        desc: "世界に魔法の効果をもたらすパターンとアクション。",
+      },
+      great_spells: {
+        "": "高位スペル",
+        desc: "ここに記載されているスペルは伝説的な難易度と威力を持つとされている。\
+          それらは$(l:items/scroll)まばらに/$しか記録されていないようだ(正当な理由があると本文は主張している)。\
+          だがそれは絶滅した伝統主義者の戯言に過ぎないだろう。$(br)パターンはパターンだ。$(br2)\
+          なにも心配することはない。",
+      },
+    },
+    // ^ categories
+    
+    entry: {
+      media: "メディア",
+      creative_items: "クリエイティブアイテム",
+      geodes: "ジオード",
+      couldnt_cast: "挫折",
+      start_to_see: "何を視たか",
+      "101": "六角術の基礎",
+      vectors: "ベクトルの入門書",
+      mishaps: "変事",
+      stack: "スタック",
+      naming: "アクションの呼称",
+      influences: "作用",
+      mishaps2: "啓示された変事",
+      amethyst: "アメジスト",
+      
+      staff: "杖",
+      lens: "念視鏡",
+      jeweler_hammer: "宝石細工の金鎚",
+      
+      thought_knot: "念いの結び目",
+      focus: "焦点具",
+      abacus: "そろばん",
+      spellbook: "魔法書",
+      
+      scroll: "巻物",
+      slate: "石板",
+      
+      // why is this called "hexcasting"?
+      hexcasting: "魔術用具",
+      ancient_cyphers: "古代のサイファー",
+      phials: "メディアの薬瓶",
+      potions: "呪紋のポーション",
+      pigments: "色素",
+      
+      edified: "教化された木",
+      decoration: "装飾ブロック",
+      
+      the_work: "成果",
+      brainsweeping: "精神の切除について",
+      spellcircles: "魔法陣",
+      impetus: "原動石",
+      directrix: "指導石",
+      akashiclib: "虚空図書館",
+      quenching_allays: "アレイの鎮静化",
+      fanciful_staves: "空想的な杖",
+      
+      // and the actions
+      readers_guide: "この章の読み方",
+      // ops
+      basics_pattern: "基本的なパターン",
+      numbers: "数値リテラル",
+      math: "数学",
+      advanced_math: "高度な数学",
+      sets: "集合",
+      consts: "定数",
+      stackmanip: "スタックの操作",
+      logic: "論理演算子",
+      entities: "エンティティ",
+      lists: "リストの操作",
+      patterns_as_iotas: "エスケープパターン",
+      readwrite: "読み込みと書き込み",
+      meta: "メタ評価",
+      circle_patterns: "魔法陣のパターン",
+      akashic_patterns: "虚空のパターン",
+      
+      // spells
+      itempicking: "アイテムの活用",
+      basic_spell: "基本的なスペル",
+      blockworks: "ブロックの操作",
+      nadirs: "天底",
+      hexcasting_spell: "魔術用具の作成",
+      sentinels: "センチネル",
+      // internalize pigment uses the action name
+      flights: "飛行",
+      
+      // great spells usually use the action name
+      weather_manip: "天候の操作",
+      zeniths: "頂点",
+      
+      lore: {
+        cardamom1: "カルダモン・S. #1",
+        cardamom2: "カルダモン・S. #2",
+        cardamom3: "カルダモン・S. #3",
+        cardamom4: "カルダモン・S. #4",
+        cardamom5: "カルダモン・S. #5",
+        experiment1: "ウールアイの事例メモ",
+        experiment2: "ウールアイの対談記録",
+        inventory: "修復記録 #72",
+      },
+      
+      interop: {
+        "": "Mod間の相互作用",
+        gravity: "Gravity Changer",
+        pehkui: "Pehkui",
+        // TODO: add something about Switchy once that PR gets merged
+        // https://github.com/sisby-folk/switchy/pull/44
+        // i can't WAIT for all the hilarious people on the github issues about this one
+      },
+    },
+    // ^ entries
+    
+    page: {
+      creative_items: {
+        "1": "$(italic)クリエイティブ/$な手段でのみ入手できる凝ったアイテムを発明した。",
+        creative_unlocker: "$(#74b3f2)メディアキューブ/$はほぼ無限の力の源であり、描きたいあらゆる$(hex)呪紋/$への無限の$(media)メディア/$源として機能する。かなり美味しそうにも見える。食べると世界についてさらに明らかになり、ネタバレの領域に入ることを可能にするかもしれない...",
+        "2": "さらに、金床で$(#74b3f2)メディアキューブ/$の名前を変更すると、$(hex)呪紋/$をさらにテストして理解するために役立つようだ。もし世界のどこかで、何らかの方法でクリエイティブの力を得たら、次のどれかをやる前に止めたいと思うかもしれない。",
+        debug_media: {
+          // do not localize 'debug media' in the title or description, the item must be named exactly that
+          // TODO: we can remove the title if hexdoc-dev/hexdoc#85 is implemented, since the title in Patchouli already defaults to the item name
+          title: "debug media",
+          desc: "$(#74b3f2)メディアキューブ/$の名前を「debug media」に変更すると、チャット画面に消費されたメディアの量に関するフィードバックが表示される。",
+        },
+        // NOTE: The following feature documented is broken in the current implementation. It should be uncommented and the page in patchouli should be updated when the feature is fixed.
+        //debug_patterns: "$(#74b3f2)メディアキューブ/$の名前を「debug patterns」に変更すると、チャット画面に実行されたパターンの順序に関するフィードバックが表示される。"
+      },
+      media: {
+        "1": "$(media)メディア/$とは、精神の表面にある知的エネルギーの形態である。すべての生物は何かを考えるとき微量の$(media)メディア/$を生成し、思考が終了すると$(media)メディア/$は環境に放出される。$(br2)$(hex)呪紋/$を描画する術とは、要求を満たすために$(media)メディア/$を操作することである。",
+        "2": "$(media)メディア/$は他のメディアに影響を与えることができる。影響の強度と種類は$(media)メディア/$を図形に描くことで操作できる。$(p)この術の学者は濃縮された$(media)メディア/$の塊を棒の先端に使用し、それを正確な形に振ることで、世界自体に影響を与えるのに十分な$(media)メディア/$を十分な精度で操作することを、$(hex)呪紋/$という形で可能にした。",
+        "3": "残念ながら、(おそらく自分のような)完全に知覚を持った存在であっても、微量の$(media)メディア/$しか生成できない。自分自身の脳力を使用して呪紋を実行しようとするのは非常に非現実的だ。$(br2)しかし一説によると、$(media)メディア/$が徐々に蓄積し、結晶状に成長する地下鉱床があるらしい。$(p)それを1つでも見つけられれば...",
+      },
+      
+      geodes: {
+        "1": "地下深くを採掘しているときに、エネルギーと共鳴する巨大なジオードを発見した。そのエネルギーに頭蓋骨と思考が圧倒された。今、その圧力を固体として手にしている。これで証明された。ここが$(media)メディア/$が蓄積するといわれている場所に$(italic)違いない/$。$(br2)これらの$(l:items/amethyst)$(item)アメジストの結晶/$が$(l:items/amethyst)$(thing)便利な固化形態の$(media)メディア/$なのだろう。",
+        "2": "どうやら、見覚えのある$(l:items/amethyst)$(item)アメジストの欠片/$に加えて、これらの結晶は粉末状の$(l:items/amethyst)$(item)アメジストダスト/$や、$(l:items/amethyst)$(item)蓄力アメジスト/$もドロップすることがあるようだ。幸運のツルハシを使用すると$(l:items/amethyst)$(item)蓄力アメジスト/$が見つかる確率が高いようだ。",
+        "3": "結晶の美しさに見惚れていると、心の中に激しく光る結び付きを感じる。まるで、空気中の$(media)メディア/$が自分に流れ込み、力を与え、聡明にしてくれるかのような...不思議な感覚だ。$(br2)ようやく、神秘への探究が意味を成し始めた！$(p)古い伝承を読み返してみよう。今なら理解できる。",
+      },
+      
+      couldnt_cast: {
+        "1": "なぜスペルを発動できない?!$(br2)見つけた巻物には本物の響きがある。巻物の中で鳴っているのが$(italic)感じ/$られる。パターンは正確、あるいは限りなく正確に近い。スペルは$(italic)すぐそこにある/$。$(p)しかし、薄い膜の向こう側にあるようだ。それを呼び出した、実現させようとした、でも$(italic)できなかった/$。",
+        "2": "スペルで振るった力によって、壁がわずかに薄くなったように感じたが、最大限の尽力、最深の集中、最高級のアメジスト、正確無比な描画にもかかわらず、それは壁を超えることを$(italic)拒絶/$した。腹立たしい。$(p)神秘の研究は$(italic)これ/$で終わりなのか？無力感に苛まれ、本来の力を失くすことで？$(br2)深呼吸だ。大したことでなくても、これまで何を学んだかよく考えるのだ...",
+        "3": "...考えを巡らせた末に...自分自身の変化に気づいた。$(p)どうやら...$(l:items/amethyst)$(item)アメジスト/$の代わりに、自分の精神と生命力でスペルを描く能力が解放されたようだ...言い伝え通りに。$(p)なぜできるのかは分からない。ただ...真相への重圧は常にあった。今なら分かる。知っている。耐えている。$(br2)幸い、限界も感じている。体力が最大であれば、$(l:items/amethyst)$(item)蓄力アメジスト/$約2個分の$(media)メディア/$が得られるだろう。",
+        "4": "考えるだけで身震いする。今までの研究では、自分の精神はほぼ無傷だった。だが事実として、希薄な接続の片側が生じている。$(p)どこかの、心の傷によって境界が揺らいだ何かの向こう側と繋がっている。単純な行為が永遠の栄光を述べる場所。$(p)自分のためにそれを望むのは間違っているだろうか？",
+      },
+      
+      start_to_see: {
+        "1": "文書は嘘ではなかった。自然界は対価を受け取った。",
+        "2": "あれ...あれは...$(p)...あれは$(italic)今まで/$経験した中で$(italic)最悪/$の出来事だった。自然界に計画を示したら堅い笑顔と引き裂く感覚が返ってきた。雨の中のアメジストダストのように、自分の一部が剥がれ落ちた。$(p)$(italic)生き延び/$られて幸いだったが、書き表せるほど聡明ではない。この件は終わりとして、今後は$(hex)呪紋/$を描く前に計算を再確認し、二度とこのような間違いを犯さないようにしよう。",
+        "3": "...だが。$(br2)だがほんの一瞬、自分の一部が...$(italic)視た/$のだ...$(l:greatwork/the_work)$(thing)何か/$を。場所...構造、だろうか？(そのような差異は関係ないようだった...あれの前では。)$(p)そして...膜、壁、皮膚の境が、純粋な思考が流れる光のエネルギーの領域から自身を隔てている。覚えている...視た、考えた、思い出した、感じた...壁の端がぼやけていた。$(p)$(italic)向こう側/$に行きたかった。",
+        "4": "駄目だ。駄目だと$(italic)分かる/$。危険だ。危険すぎる。力が必要だ...$(italic)一撃/$で自身を死の淵に至らせなければならない。$(br2)でも。だから。 $(italic)完了する/$。$(p)$(italic)これ/$がこの術の最高点だ。$(br)探し求めていた$(#54398a)啓示/$なのだ。$(br2)さらに欲しい。もう一度視なければ。視ると$(italic)決めた/$。$(p)不滅の栄光と比べて自分の死すべき心が何だというのだ？",
+      },
+      
+      casting: {
+        overview: {
+          "1": "常に最初から上手くいくのが良いと思う。そこで、自分が見ている位置に小規模な爆発を起こす$(hex)呪紋/$のパターンをまとめた。この$(hex)呪紋/$の中身を調べることは良い勉強になるだろう。",
+        },
+        
+        grid: {
+          "1": "通常は$(l:items/staff)$(item)杖/$を介して自然界にパターンを提供する。\
+            手に持って$(thing)$(k:use)/$を押すと目の前に六角形の点のグリッドが現れる。\
+            それからクリックし、点から点へドラッグし、放すことでパターンを描ける。$(br2)\
+            パターンを提示すると、それが実行される(次の章を参照)。",
+          "2": "$(thing)$(k:escape)/$を押すとグリッドが保存されて閉じ、次に杖を使用するとき、すべてのパターンとイオタがある。$(br2)\
+            描画の状態をリセットしたい場合は、スニークしながらグリッドを開けば良い。",
+        },
+        "patterns&actions": {
+          "1": "$(thing)パターン/$とは$(media)メディア/$のグリッドで描き出した道筋である。パターンの6回対称性が、この術の名前の由来なのだろう。$(br2)\
+            その一方で、$(thing)アクション/$はパターンが$(italic)やる/$ことである。",
+          "2": "この違いは$(italic)言葉/$と$(italic)意味/$の違いに似ている。\
+            文字を混ぜれば言葉ができるが、そのほとんど(「xnopyt」など)は何も意味しない。\
+            同様に、$(media)メディア/$で引かれた曲線は厳密にはパターンだが、そのほとんどは何もしない。",
+          "3": "アクションは宇宙を統治する壮大な秩序の法則(「自然界」として擬人化している文書を見たことがある)への指令のようなものだ。\
+            それらはおおむね以下のいずれかを実行する:\
+              $(li)エンティティの位置を取得するなどの、世界に関する情報の収集。\
+              $(li)2つの位置間の距離を取得するなどの、収集した情報の操作。\
+              $(li)稲妻や爆発を起こすなど、世界に何らかの魔法の効果を与える。$(br)\
+            後の種類のアクションは「スペル」と呼ばれ、大抵はこれが人々をこの術に呼び込む。",
+          "4": "従って、$(hex)呪紋/$とは自然界へ順番に提供される有効なパターンの配列である。\
+            自然界はこれらのパターンを1つずつ読み取り、理解できたなら、世界を思いつきの通りに\
+            (あるいは思いつきを自然が考えた通りに)変える。",
+          "5": "一部のアクションは簡単に実行できるが、一部のアクションには結合された$(media)メディア/$の形で費用がかかる。\
+            集中した精神のエネルギーが自然界への引数の選別に使用され、要求通りに動くように納得させるのだと思われる。\
+            ほとんどのスペルでこの支払いが必要だが、スペルではない一部のアクションでも同様である。$(br2)\
+            費用が掛かる場合は、それを各アクションのページに記録してある。",
+        },
+        iotas: {
+          "1": "自然界の言語における「名詞」を$(thing)イオタ/$という。\
+            最も基本的なレベルでは、六角術はイオタを操作する技術だ。$(br2)\
+            イオタにはさまざまな種類がある:\
+              $(li)数値 (一部の文献では「doubles」とも呼ばれている)。\
+              $(li)ベクトル: 位置、動作、方向を表し、3つの数値から成る。\
+              $(li)論理型(Boolean)、略して「bool」: 抽象的な真(True)か偽(False)を表す。\
+              $(li)エンティティ: 自分、ニワトリ、トロッコなど。",
+          "2": "$(li)作用: 難解なアイデアを表わすと思われる独特な種のイオタ。\
+              $(li)パターン: 魔法のアイテムを作成したり、$(italic)他のスペルを描くスペル/$のような、本当に驚異的な芸当に使用される。\
+              $(li)リスト: 上記の幾つかを1つのイオタにまとめたもの。",
+          "3": "通常は、アクションにイオタを提供する。\
+            例えば、$(l:patterns/spells/basic#hexcasting:explode)$(action)爆発/$で考える。\
+            このスペルは強度を示す数値のイオタと、位置を示すベクトルのイオタを必要とする。$(br2)\
+            あるいは$(l:patterns/basic#hexcasting:get_pos)$(action)羅針盤の浄化/$で考える。\
+            これはエンティティのイオタを取得し、そのエンティティの位置を示すベクトルのイオタに変換する。",
+        },
+      },
+      
+      // Casting
+      "101": {
+        "1": "$(hex)呪紋/$を形作るのはかなり難しい...この技術が廃れていったのも無理はない！この記録を慎重に見直そう。$(br2) $(l:items/staff)$(item)杖/$を手に持ち、$(k:use)を押せば$(hex)呪紋/$を始められる。すると目の前に六角形の点のグリッドが現れる。点から点へドラッグして、グリッドに$(media)メディア/$のパターンを描ける。パターンを描き上げると、それに対応するアクション(詳細は後程)が実行される。",
+        "2": "スペルを放つのに十分なパターンを描けば、グリッドは消失し、蓄えていた$(media)メディア/$が解放される。$(k:sneak)を押しながら$(l:items/staff)$(item)杖/$を使用することでもグリッドは空になる。$(br2)では、パターンはどのように機能するか？平たく言えば:$(li)$(italic)パターン/$が実行するのが...$(li)$(italic)アクション/$、それで操作するのが...$(li)$(l:casting/stack)$(italic)スタック/$、それに載っているのが...$(li)$(italic)イオタ/$、これらは単純な情報の単位だ。",
+        "3": "まずは$(thing)パターン/$。欠かせないものだ。これらを用いて自分の周囲の$(media)メディア/$を操作する。特定のパターンが描かれると、$(thing)アクション/$が発生する。アクションが実際に魔法を$(italic)かける/$のだ。すべてのパターンは決まった方法でメディアに影響を与え、それらの影響が最終的に有用であるとき、それをアクションと呼ぶ。$(br2)$(media)メディア/$は不安定だ。無効なパターンを描くと、スタックのどこかに$(l:casting/influences)$(action)ガベージ/$が生じる(詳細は後程)。",
+        "4.header": "例",
+        "4": "興味深いことに、パターンは$(italic)回転/$させても全く問題ないようだ。例えば、これら2つのパターンはどちらも$(l:patterns/basics#hexcasting:get_caster)$(action)精神の反射/$というアクションを果たす。",
+        "5": "$(hex)呪紋/$は(有効な)アクションを順番に描くことで構成される。各アクションはおおむね以下のいずれかを実行する:$(li)周囲の情報を集め、それをスタックの1番上に残す。$(li)集めた情報を操作する(2つの数字を足すなど)。$(li)雷を召喚したり爆発したりといった魔法の効果を行使する(これらのアクションは「スペル」と呼ばれる)。$(p)$(hex)呪紋/$を描き始めると、空のスタックが生成される。アクションはスタックの1番上を操作する。",
+        "6": "例として、$(l:patterns/basics#hexcasting:get_caster)$(action)精神の反射/$は$(italic)自分/$、術者を表すイオタを生成し、スタックの1番上に追加する。$(l:patterns/basics#hexcasting:entity_pos/eye)$(action)羅針盤の浄化/$はスタックの1番上のイオタを取得し、それがエンティティを表すものであれば、そのエンティティの位置を表すイオタに変換する。つまり、これらのパターンを順番に描くと、スタックには自分の位置を表すイオタが生じる。",
+        "7": "$(thing)イオタ/$は自分自身や自分がいる位置などを表せるが、アクションで操作できる別の種類のものもある。包括的な一覧は以下のとおり:$(li)数値 (一部の文献では「doubles」とも呼ばれている)。$(li)ベクトル: 位置、動作、方向を表し、3つの数値から成る。$(li)論理型(Boolean)、略して「bool」: 抽象的な真(True)か偽(False)を表す。",
+        "8": "$(li)エンティティ: 自分、ニワトリ、トロッコなど。$(li)作用: 難解なアイデアを表わすと思われる独特な種のイオタ。$(li)パターン: 魔法のアイテムを作成したり、$(italic)他のスペルを描くスペル/$のような、本当に驚異的な芸当に使用される。$(li)リスト: 上記の幾つかを1つのイオタにまとめたもの。",
+        "9": "当然、対価なしで得られる物などない。すべてのスペルと一部のアクションには対価として$(media)メディア/$が必要だ。$(br2)理解できる限りでは、$(hex)呪紋/$は自然界に提示したアクションの計画に少し似ている。この例えでは、$(media)メディア/$はそれを支える引数を提供するために使用され、自然界は計画を受け入れて実行する。",
+        "10": "それはさておき、特定の数の$(l:items/amethyst)$(item)アメジスト/$に$(italic)どれくらいの/$価値があるのか正確には調査されていないようだ。言える限りでは、$(l:items/amethyst)$(item)アメジストの欠片/$は$(l:items/amethyst)$(item)アメジストダスト/$約5個分、$(l:items/amethyst)$(item)蓄力アメジスト/$は約10個分だ。$(br2)奇妙なことに、他の形状の$(l:items/amethyst)$(item)アメジスト/$は$(hex)呪紋/$の構成に使用することには適さないようだ。ブロック全体や結晶は固すぎて簡単には$(media)メディア/$に解けないと思われる。",
+        "11": "各アクションは必要な$(media)メディア/$を呪紋の終了時に一括ではなく、即座に消費することも注目に値する。また、アクションは常にアイテム全体を消費する。$(l:items/amethyst)$(item)アメジストダスト/$1個分のみの$(media)メディア/$を必要とするアクションは、インベントリに$(l:items/amethyst)$(item)蓄力アメジスト/$しかなければ、それ全体を消費する。$(br2)故に、スペルを描くためにダストも持っておくのが良いだろう。無駄がなければ、不足もない...",
+        "12": "インベントリに十分なアメジストがあるかどうかにも注意するべきだ。古い文献には、自然界は自分の精神を喜んで対価の代わりに使うと書かれている。彼らはその感覚を、恐ろしいが奇妙な多幸感がある、「[...] 光とエネルギーに溶けていくような熱狂的な...」と表現している。おそらくそれが、この術のかつての実行者全員が発狂した理由だ。力のために自分の精神の一部を灼くことが$(italic)健全/$だとは思えない。",
+        "13": "だが、何かが変わったのかもしれない。実験では、それができたことはない。$(media)メディア/$が尽きると、まるで何かの壁が害を防いでいるかのように、スペルは単に不発となる。$(br2)その謎の真相に迫ることには興味をそそられるだろうが、今のところはそれが安全を守ってくれるはずだ。",
+        "14": "なぜ一般的に多くの魔法の実行者が発狂しているように見えるのかについての面白い記事も見つけた。こちらの世界においては公式ではない、軽くて味のある読み物として気に入るかもしれない。$(br2)$(italic)コンテンツに関する警告: 身体的恐怖と暗示的な要素が含まれています。/$",
+        "14.link_text": "Goblin Punch",
+        "15": "最後に、スペルの影響範囲は最大で自分の位置から約32ブロックのようだ。その外側のものに影響を与えようとするとスペルは失敗する。$(br2)とはいえ、プレイヤーの参照があれば、どこからでも影響を与えられる。ただし、これは影響を直接与える場合に限る。対象が範囲外にいると、これを使用して対象の周囲の世界に影響を与えることはできない。$(br)そのような参照を明け渡すときには用心するべきだ。友好的な$(hex)六角術師/$はそれを多大な効果や実用性のために使用できるが、悪意ある者がこれで何をするか考えるだけでも恐ろしい。",
+      },
+      
+      vectors: {
+        "1": "研究で何かを達成するには、ベクトルを使いこなす必要があるようだ。扱い方が分からないときのために、ベクトルに関する資料をまとめた。$(br2)まずは、この題材の教育動画だ。",
+        "1.link_text": "3blue1brown",
+        "2": "他にも$(thing)Psiエネルギー/$を操作する魔術師(いわゆる$(br)「スペルスリンガー」)が、乏しいネーミングセンスとは裏腹に、信徒に教えるための非常に効果的なベクトルの授業を行っていたようだ。勝手ながら、次のページに彼らの文書へのリンクを用意した。$(br2)彼らは魔術のために別の言語を使用していたようだ:$(li)「ピース」はアクション$(li)「作動式」はスペル$(li)「演算子」はスペルではないアクション",
+        "3": "これがリンクだ。",
+        "3.link_text": "Psi Codex",
+      },
+      
+      mishaps: {
+        "1": "残念ながら、自分は(まだ)完璧ではない。$(hex)呪紋/$の研究や描画で間違うこともある。例えば、パターンを描き間違えたり、間違ったイオタでアクションを起こそうとする。そして自然界は通常、間違いを甘く見てはくれず、いわゆる$(italic)変事/$を引き起こす。",
+        "2": "変事の原因となるパターンはグリッド内で赤く光る。間違いの種類に応じて、ある程度の有害な影響が出たり、間違った扱われ方をした$(media)メディア/$が特定の色の光に凝結して、赤などの色の光が散ることもある。",
+        "3": "幸いなことに、変事による悪影響は確かに$(italic)迷惑/$だが、長期的な破壊を伴うものは特にない。気を取り直して再試行する他ない...が、より上手くできるように励むのが良い。$(br2)次がまとめた変事の一覧だ。",
+        
+        "invalid_pattern.title": "無効なパターン",
+        invalid_pattern: "描かれたパターンがどのアクションにも結び付いていない。$(br2)黄色の光が散り、$(l:casting/influences)$(action)ガベージ/$がスタックの1番上に入る。",
+        
+        "not_enough_iotas.title": "イオタ不足",
+        not_enough_iotas: "アクションがスタック上にあるよりも多くのイオタを要していた。$(br2)薄灰色の光が散り、引数の数を満たすために必要なだけ$(l:casting/influences)$(action)ガベージ/$が入る。",
+        
+        "stack_size.title": "イオタ過多",
+        "stack_size": "スタックのサイズ制限を超えるスペルを描こうとした。$(br2)黒色の光が散り、スタック全体が単一の$(l:casting/influences)$(action)ガベージ/$に置き換えられる。",
+        
+        "incorrect_iota.title": "不正なイオタ",
+        incorrect_iota: "実行されたアクションは引数として特定のタイプのイオタを予期していたが、無効なものを取得した。複数のイオタが無効な場合、エラーメッセージはスタックの最深部のエラーについてのみ表示する。$(br2)灰色の光が散り、無効なイオタが$(l:casting/influences)$(action)ガベージ/$に置き換えられる。",
+        
+        "vector_out_of_range.title": "範囲外のベクトル",
+        vector_out_of_range: "アクションが範囲外の地点で世界に影響を与えようとした。$(br2)赤紫色の光が散り、手に持っているアイテムが問題の位置に向かって投げ出される。",
+        
+        "entity_out_of_range.title": "範囲外のエンティティ",
+        entity_out_of_range: "アクションが範囲外のエンティティに影響を与えようとした。$(br2)桃色の光が散り、手に持っているアイテムが問題のエンティティに向かって投げ出される。",
+        
+        "entity_immune.title": "影響を受けないエンティティ",
+        entity_immune: "アクションが改変できないエンティティに影響を与えようとした。$(br2)青色の光が散り、手に持っているアイテムが問題のエンティティに向かって投げ出される。",
+        
+        "math_error.title": "数学的エラー",
+        math_error: "アクションが0で割るなどの、数学の法則に反することをした。$(br2)赤色の光が散り、$(l:casting/influences)$(action)ガベージ/$がスタックに入り、精神が消耗し、残っている活力の半分が取られる。自然界はそのような演算に腹を立て、報復として$(italic)自分/$を除算するようだ。",
+        
+        "incorrect_item.title": "不正なアイテム",
+        incorrect_item: "アクションには何らかのアイテムが必要だが、指定したアイテムが適切ではなかった。$(br2)茶色の光が散る。問題のあるアイテムを手に持っている場合は、それが床に投げ出される。エンティティの形である場合は、それが空中に飛ばされる。",
+        
+        "incorrect_block.title": "不正なブロック",
+        incorrect_block: "アクションには対象の位置に何らかのブロックが必要だが、指定したブロックが適切ではなかった。$(br2)明るい緑色の光が散り、指定された位置で一時的な爆発が起こる。爆発は自分や世界などに害を及ぼさず、驚かせるだけのようだ。",
+        
+        "retrospection.title": "早計な回想",
+        retrospection: "先に$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$を描かずに$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)回想/$を描こうとした。$(br2)橙色の光が散り、$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)回想/$のパターンがパターンイオタとしてスタックに入る。",
+        
+        "too_many_patterns.title": "思考に沈む",
+        too_many_patterns: "1度の$(hex)呪紋/$で多すぎるパターンを評価しようとした。多くの場合、誤って無限ループを生成したために発生する。$(br2)暗い青色の光が散り、空気がすべてなくなり、窒息する。",
+        
+        "true_name.title": "他者の侵害",
+        true_name: "他のプレイヤーへの参照を恒久的な媒体に$(l:patterns/readwrite#hexcasting:write)$(action)保存/$しようとした。$(br2)黒色の光が散り、約1分間視界が奪われる。",
+        
+        "disabled.title": "許可されていないアクション",
+        disabled: "サーバー管理者によって禁止されているアクションを実行しようとした。$(br2)黒色の光が散る。",
+        
+        "other.title": "致命的な不具合",
+        other: "Modのバグによって無効な型のイオタが生じたか、スペルがクラッシュを引き起こした。$(l:https://github.com/gamma-delta/HexMod/issues)バグを報告してください！/$$(br2)黒色の光が散る。",
+      },
+      
+      stack: {
+        "1": "$(thing)スタック/$、またの名を「LIFO」とは、計算機科学から取り入れた概念である。手短に言えば、最後に使用したもののみを操作できるように設計された堆積物である。$(br2)上から新しい皿を乗せる皿の山を考えてみよう。山の途中の皿を動かしたければ、それをつかむために上の皿をどかさなければならない。",
+        "2": "スタックは非常にシンプル故に、できることは限られている:$(li)$(italic)何かを追加する/$。形式上はプッシュという。$(li)$(italic)最後に追加した要素を削除する/$。ポップともいう。$(li)$(italic)最後に追加した要素の検査か変更/$。ピークともいう。$(br)皿の例えに従って、最後に追加された要素をスタックの「1番上」と呼ぶ。$(p)例えば、スタックに1をプッシュし、次に2をプッシュし、ポップすると、スタックの1番上は1になる。",
+        "3": "アクションは(ほとんどの場合)これらの方法で術のスタックと相互作用することに限られる。それらは関連するイオタ(「引数」や「パラメータ」ともいう)をポップし、処理し、一定数の結果をプッシュする。$(br2)もちろん、一部のアクション($(l:patterns/basics#hexcasting:get_caster)$(action)精神の反射/$など)は引数をポップせず、一部のアクション(特にスペル)は後に何もプッシュしない場合がある。",
+        "4": "さらに複雑なアクションであっても、プッシュ、ポップ、ピークなどの用語で表現できる。例えば、$(l:patterns/stackmanip#hexcasting:swap)$(action)道化の仕掛/$はスタックの上から2つの項目を入れ替える。これは2つの項目をポップして逆の順番でプッシュすると考えられる。他にも、$(l:patterns/stackmanip#hexcasting:duplicate)$(action)双子の分解/$はスタックの1番上を複製する。言い換えると、スタックをピークして見つけたもののコピーをプッシュする。",
+      },
+      
+      naming: {
+        "1": "古代人がアクションにつけた名前はたしかに風変わりだが、そこにはある種の道理があると思われる。$(br2)スタックから削除したり追加したりするイオタの数に応じて名付けられた、一般的な名前から成る特定のアクションのグループがあるようだ。",
+        "2": "$(li)$(thing)反射/$は何も取り出さず、1つのイオタを入れる。$(li)$(thing)浄化/$は1つ取り出し、1つ入れる。$(li)$(thing)蒸溜/$は2つ取り出し、1つ入れる。$(li)$(thing)昂揚/$は3つ以上取り出し、1つ入れる。$(li)$(thing)分解/$は1つの引数を取り出し、2つ入れる。$(li)$(thing)崩壊/$は1つ取り出し、3つ以上入れる。$(li)$(thing)仕掛/$は他の数値を入れるか取り出す(または他の方法でスタックを再配置する)。",
+        "3": "スペルはこの命名法が適用されていないようで、多かれ少なかれその動作に応じて名付けられている。結局のところ、単に$(l:patterns/spells/basic#hexcasting:explode)$(action)爆発/$と言えるのに、$(action)デモマンの仕掛/$と呼ばなくていいだろう？",
+      },
+      
+      influences: {
+        "1": "作用は...控えめに言っても奇妙だ。大半のイオタは世界についての何かを示すようだが、作用はさらに...抽象的、あるいは無定形の何かを示す。$(br2)例えば、$(l:casting/influences)$(thing)Null/$と名付けた作用は何も示していないようだ。空に向かって$(l:patterns/basics#hexcasting:raycast)$(action)射手の蒸溜/$をするなど、尋ねた質問に対する適切な解答がないときに生成される。",
+        "2": "さらに、$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)検討/$、$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$、$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)回想/$、$(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)消失/$と名付けた興味深い4つの作用を発見した。それらはパターンと他の作用の両方の特性を持っているようだが、大きく異なる動作をする。これらを使用すると、パターンをアクションに照合する代わりに、イオタとしてスタックに追加できる。$(l:patterns/patterns_as_iotas)それについてここに書き留めた/$。",
+        "3": "最後に、乱雑にもつれた$(media)メディア/$のように見える、無限の作用群があるようだ。まったく実用性がないため、$(l:casting/influences)$(action)ガベージ/$と名付けた。それらは$(l:casting/mishaps)$(thing)変事/$に応じてスタックのさまざまな場所に出現するようで、感覚的には無意味な寄せ集めのように見える。",
+      },
+      
+      mishaps2: {
+        "1": "新たな恐ろしい失敗の形を発見した。それらに屈してはならない。",
+        
+        "bad_mindflay.title": "不活性な精神切除",
+        bad_mindflay: "すでに使用したか、対象のブロックに適さない生物の精神を剥ごうとした。$(br2)暗い緑色の光が散り、対象を殺害する。村人がそれを見たら、好意的には捉えないだろう。",
+        
+        "no_circle.title": "魔法陣欠如",
+        no_circle: "魔法陣が必要なアクションを魔法陣なしで発動しようとした。$(br2)空色の光が散り、インベントリの中身が地面に飛び出す。",
+        
+        "no_record.title": "虚空記録媒体欠如",
+        no_record: "$(l:greatwork/akashiclib)$(item)虚空記録媒体/$が存在しない場所に接続しようとした。$(br2)紫色の光が散り、経験値が少量取られる。",
+
+        "bad_shepherd.title": "不適切な羊飼い",
+        bad_shepherd: "スタックの1番上に論理型がない状態で$(l:greatwork/directrix)$(item)羊飼いの指導石/$を起動しようとした。$(br2)赤色と白色の光が散り、羊飼いの指導石が魔法陣から排出される。幸い、これで壊れることはないが、必ず取りに行き、あるべき場所に戻す必要がある。",
+      },
+      
+      
+      // Items
+      
+      amethyst: {
+        dust: "ジオード内の結晶を割ると、3つの異なる形のアメジストが見つかるようだ。最小単位はきらめく粉の小さな山に見え、比較的少量の$(media)メディア/$に相当する。",
+        shard: "2つ目はアメジストの欠片、$(hex)六角術師/$でない人にとって馴染みのある形だ。$(l:items/amethyst)$(item)アメジストダスト/$約5個分の$(media)メディア/$を有している。",
+        crystal: "最後は、稀に見つかるエネルギーが漲る大きな結晶だ。$(l:items/amethyst)$(item)アメジストダスト/$約10個分(または$(l:items/amethyst)$(item)アメジストの欠片/$約2個分)の$(media)メディア/$を有している。",
+        lore: "$(italic)老人はため息をつき、火に向かって手を掲げた。彼は周囲の山々の記憶を宿す脳の一部を解放した。テリシア市でドラフナ、ハーキル、最高機構長、そして象牙の塔の他の魔道士たちから学んだように、それらの土地からエネルギーを引き出した。集中すると、炎が丸太からもがくように立ち上り、身をよじり、ついに柔らかな笑みを浮かべた。/$",
+      },
+      
+      staff: {
+        "1": "$(l:items/staff)$(item)杖/$は大小すべての$(hex)呪紋/$を描くための入り口である。手にもって$(thing)$(k:use)/$を押すと、$(hex)呪紋/$の描画が始まり、クリックしてドラッグでパターンを描くことができる。$(br2)棒の先端に付けた$(media)メディア/$の塊に過ぎないが、結局必要なのはそれだけなのだ。",
+        "crafting.header": "杖",
+        "crafting.desc": "$(italic)抗争を仕舞えよ 炎と光よ 煌々と燃え立たせよ/$",
+      },
+      
+      lens: {
+        "1": "$(media)メディア/$は特定の状況において、あらゆる種類の情報に独特の影響を与えることがある。それの薄いフィルムでガラスを覆えば...洞察の解明に繋げられる。$(br2)$(l:items/lens)$(item)念視鏡/$を手に持つと、特定のブロックを見るときに追加情報が表示される。",
+        "2": "例えば、$(item)レッドストーン/$の部品を見ると、その信号強度が表示される。術の研究を進めていけば、さらなる洞察をもたらす他のブロックも発見するだろう。$(br2)さらに、それを持ちながら$(l:items/staff)$(item)杖/$での描画をするとドットの間隔が縮まり、グリッドにより多く描画できるようになる。$(br2)少し奇抜な片眼鏡として頭部に着けることもできる。",
+        "crafting.desc": "$(italic)学習せよ...見ているものを視るために。/$",
+      },
+      
+      thought_knot: {
+        "1": "忘れん坊はしばしば大事なことを覚えるために指に紐を結ぶ。この発想は術に利用できると思われる。特別な結び方をした紐はスタックと関係なく、単一のイオタを安定して保持できるはずだ。$(br2)この発明を$(item)念いの結び目/$と呼ぼう。",
+        "2": "クラフトしたときには、イオタは保存されていない。$(item)念いの結び目/$を反対側の手に持ち、$(l:patterns/readwrite#hexcasting:write)$(action)筆記者の仕掛/$を使用すると、スタックの1番上が削除されて$(item)念いの結び目/$に保存される。$(l:patterns/readwrite#hexcasting:read)$(action)筆記者の反射/$を使用すると、$(item)念いの結び目/$内のイオタがコピーされ、スタックに追加される。$(br2)$(item)念いの結び目/$は1度書き込まれると消えないほどもつれ、何度でもイオタを読み込めるが、消去や上書きをする方法はない。幸いなことに、それらは高価ではない。",
+        "3": "また、エンティティを$(item)念いの結び目/$に保存し、参照されたエンティティが死亡または消失した後にそれを呼び出そうとすると、$(l:patterns/readwrite#hexcasting:read)$(action)筆記者の反射/$は代わりに$(l:casting/influences)$(thing)Null/$をスタックに追加する。",
+        "crafting.desc": "$(italic)誰かが「私は魅力的でハンサムです」という看板を着けているあなたを見たらどう思うだろうか？/$",
+      },
+      
+      focus: {
+        "1": "$(item)焦点具/$は$(l:items/thought_knot)$(item)念いの結び目/$と同様に、イオタの書き込みと読み込みができる。しかし、焦点具の利点は$(italic)使い回せる/$ことである。$(item)焦点具/$に書き込むイオタを間違えたなら、再度$(l:patterns/readwrite#hexcasting:write)$(action)筆記者の仕掛/$を描いて中のイオタを上書きすれば良い。",
+        "2": "$(l:items/focus)$(item)焦点具/$が誤って上書きされることを防ぎたければ、$(item)ハニカム/$と共にクラフトすると蝋で封印できる。封印された焦点具に$(l:patterns/readwrite#hexcasting:write)$(action)筆記者の仕掛/$を使用しようとすると失敗する。$(br2)$(l:patterns/spells/hexcasting#hexcasting:erase)$(action)アイテム取消/$はこの封印を内容と共に削除する。",
+        "3": "はっきり言って、$(l:items/thought_knot)$(item)念いの結び目/$が$(item)焦点具/$を上回っている点は、$(item)焦点具/$の作成がより高価であるところだけである。調査によると、この術の初期の実践者は$(item)焦点具/$のみを使用しており、$(l:items/thought_knot)$(item)念いの結び目/$は自分独自の作品のようだ。$(br2)古代の人々が誰であったにせよ、非常に裕福だったのだろう。",
+        "crafting.desc": "$(italic)毒のリンゴに、毒の虫。/$",
+      },
+      
+      abacus: {
+        "1": "$(l:patterns/numbers)$(action)数値を描くためのパターン/$はあるが、控えめに言っても...面倒くさいと思う。$(br2)幸い、この術の古の熟練者たちは魔法に数値を提供するために、$(l:items/abacus)$(item)そろばん/$という精巧な道具を作ってくれた。望みの数値をセットしたら、$(l:items/thought_knot)$(item)念いの結び目/$や$(l:items/focus)$(item)焦点具/$から読み込むのと同様に、$(l:patterns/readwrite#hexcasting:read)$(action)筆記者の反射/$を使用して値を読み込む。",
+        "2": "操作するには、それを持ってスニークしてスクロールすれば良い。メインハンドでは、数値は1ずつ上下し、$(k:sprint)も押していると10ずつ上下する。オフハンドでは、数値は0.1ずつ上下し、$(k:sprint)も押していると0.001ずつ上下する。$(br2)スニーク右クリックをすると、そろばんを振って0にリセットできる。",
+        "crafting.desc": "$(italic)数学？インテリのためのものだろう？/$",
+      },
+      
+      spellbook: {
+        "1": "$(l:items/spellbook)$(item)魔法書/$はこの術の集大成であり、すべての$(l:items/focus)$(item)焦点具/$の書庫のように機能する。正確には$(thing)64/$個分である。$(br2)各ページが1つのイオタを保持でき、動作するページ(イオタの保存先またはコピー元のページ)を選ぶには、手に持ってスニークしてスクロールするか、オフハンドに持って$(hex)呪紋/$を描く傍らでスクロールすれば良い。",
+        "2": "$(l:items/focus)$(item)焦点具/$と同様に、誤って上書きすることを防ぐ簡単な方法が存在する。$(item)ハニカム/$と共にクラフトすると現在のページが塗装され、$(l:patterns/readwrite#hexcasting:write)$(action)筆記者の仕掛/$が内容を変更するのを防ぐ。また、$(l:items/focus)$(item)焦点具/$と同様に、$(l:patterns/spells/hexcasting#hexcasting:erase)$(action)アイテム取消/$を使用すると塗装が内容と共に削除される。$(br2)金床で各ページに個別の名前を付けることもできる。見やすさのために、名付けは現在選択されているページの名前のみ変更する。",
+        "crafting.desc": "$(italic)魔法使いは言葉を愛している。彼らの多くはよく本を読むし、何かを読まないと眠れないことは、まさに魔法使いの素質を示す強い兆候の1つだ。",
+      },
+
+      scroll: {
+        "1": "$(l:items/scroll)$(item)巻物/$はパターンを他者と共有する便利な方法である。$(l:patterns/readwrite#hexcasting:write)$(action)筆記者の仕掛/$でパターンをコピーでき、それがツールチップに表示される。$(br2)装飾や教育として、絵画のように1x1から3x3ブロックまでのサイズで壁に掛けることができる。これらの巻物に$(l:items/amethyst)$(item)アメジストダスト/$を使用すると描き順が表示される。",
+        "2": "さらに、世界中のダンジョンや要塞で$(l:items/scroll)$(item)古代の巻物/$が見つかることもある。これらには$(thing)高位スペル/$の描き順が記されているが、それは定命の者の手と精神には強すぎると噂されている強力な魔法だ...$(br2)「定命の者」には使えないなら、それらを知る価値はあるのだろうか。",
+        "crafting.desc": "$(italic)教え子の秘密を占いながら、わらわは純白の羊皮紙に書き付ける。刃のようなペンと、その教え子の血を使って。/$",
+      },
+      
+      slate: {
+        "1": "$(l:items/slate)$(item)石板/$は$(l:items/scroll)$(item)巻物/$に似て、パターンをコピーし、配置してパターンを表示できる。$(br2)しかし、$(l:items/slate)$(item)石板/$の大規模な構造について、曖昧な話を読んだことがある。$(l:items/staff)$(item)杖/$では処理できないほど強力な$(l:greatwork/spellcircles)$(thing)儀式/$を行うために使用されるらしい。",
+        "2": "おそらく、この知識は時間と共に明らかになっていくだろう。だが今のところは、趣のある装飾品であると思うことにする。$(br2)少なくとも、$(l:items/scroll)$(item)巻物/$とは違ってブロックのどの面にでも置くことができる。",
+        "crafting.desc": "$(italic)これが「あ」という文字だよ。覚えてね。/$",
+        "3": "他のタイプの$(l:items/slate)$(item)石板/$も知っている。パターンはないが他の...奇妙な...異質なものが散りばめられているように見える石板だ。考えると頭が痛くなる。まるで思考がそれらの設計に沿って曲げられ、道筋を辿り、入り組んだ深みを曲がって横切り、辿って辿って辿って導かれて処理されて$(br2)...我を忘れるところだった。これらの研究は後にしたほうがいいかもしれない。",
+      },
+      
+      // roll credits
+      hexcasting: {
+        "1": "$(l:items/staff)$(item)杖/$で$(hex)呪紋/$を出先で描ける柔軟性は非常に便利だが、簡単な目的を果たすためだけに何度も振り回さなければならないのは非常に面倒である。共通のスペルを保存して後で再利用できれば、大幅に扱いやすくなり、$(hex)呪紋/$を仲間と共有することも可能になる。",
+        "2": "これを行うには3種類の魔法のアイテム、$(l:items/hexcasting)$(item)サイファー/$、$(l:items/hexcasting)$(item)トリンケット/$、$(l:items/hexcasting)$(item)アーティファクト/$の内の1つを作成すれば良い。それらはすべて指定された$(hex)呪紋/$のパターンを、$(media)メディア/$を含む小型バッテリーと共に保持している。$(br2)これを持って$(thing)$(k:use)/$を押すと、内部バッテリーを使用して、杖で描いたかのように内部のパターンが発動する。",
+        "3": "各アイテムには固有の特徴がある:$(br2)$(l:items/hexcasting)$(item)サイファー/$は脆く、内部の$(media)メディア/$の蓄えがなくなると破壊され、再充填は$(italic)できない/$。$(br2)$(l:items/hexcasting)$(item)トリンケット/$は十分な$(media)メディア/$が残っている限り好きなだけ発動できるが、その後は再充填されるまで使用できなくなる。",
+        "4": "$(l:items/hexcasting)$(item)アーティファクト/$はこの中で最も強力で、$(media)メディア/$を使い果たした後は$(l:items/staff)$(item)杖/$で描画するときと同様に、インベントリの$(l:items/amethyst)$(item)アメジスト/$で$(hex)呪紋/$の対価を払うことができる。$(br2)普通の作業台で空の魔術用具を作り、そのアイテムに(他ではなく)適したスペルを使用して$(hex)呪紋/$を注入する。$(l:patterns/spells/hexcasting)ここでパターンを一覧にした。/$",
+        "5": "各注入のスペルにはエンティティと、パターンのリストがスタックに必要である。エンティティは$(media)メディア/$を持つアイテムのエンティティ(つまり地面にドロップされた$(l:items/amethyst)$(item)アメジスト/$)を必要とし、消費されてバッテリーを形成する。$(br2)便利なことに、バッテリーの$(media)メディア/$は$(l:items/staff)$(item)杖/$で描画するときのようにまとまって消費されず、一続きの蓄えに「溶ける」ようだ。従って、$(l:items/amethyst)$(item)アメジストダスト/$1個分の$(media)メディア/$を要する$(hex)呪紋/$を保存する場合、$(l:items/amethyst)$(item)蓄力アメジスト/$を使用すると10回発動できるようになる。",
+        "crafting.desc": "$(italic)我々の分野には「魔法に非ず」ということわざがある。それは「ただ動作する」ものではなく、考えたことに応じるものでもなく、火の玉を撃ったり、無から夕食を作ったり、大勢の悪党をカエルやカタツムリに変えたりもできない。/$",
+      },
+
+      ancient_cyphers: {
+        "1": "冒険中に、古代の$(hex)六角術師/$に作られた$(l:items/hexcasting)$(item)サイファー/$と思われるものを発見した。これらの$(item)古代のサイファー/$は自分で作れるものと同様に機能し、再充填できず、$(media)メディア/$の蓄えがなくなると壊れる。しかし、自分の$(l:items/hexcasting)$(item)サイファー/$とは異なり、その朽ちた構造が、保存されている$(hex)呪紋/$を垣間見ることを可能にしている。",
+        "2": "これらは新たな技術を学ぶことに役立つかもしれない。術の古代の達人以上に上手に教えてくれる者などいないだろう。$(br2)代わりに、内容を取り消して自分の$(hex)呪紋/$を保存し、機能を明示する魔術用具を作ることもできる。",
+        "3": "これらの遺物で固めた$(l:items/pigments)$(item)色素/$は紫色と橙色の独特な混合で、銅とアメジストの外観によく似合う。上記のレシピを使用してそれを再現できる。",
+      },
+      
+      phials: {
+        "1": "自分の作業に自然界がお釣りをくれないのは非常に...煩わしい。手元に$(l:items/amethyst)$(item)蓄力アメジスト/$しかなければ、最小の$(l:patterns/basics#hexcasting:raycast)$(action)射手の蒸溜/$ですら結晶全体を消費し、残りの$(media)メディア/$は無駄になる。$(br2)幸いなことに、この問題をいくらか緩和する方法を見つけたようだ。",
+        "2": "$(media)メディア/$が注入された$(item)ガラス瓶/$について記載された古い巻物を見つけた。$(hex)呪紋/$を描くと、スペルは薬瓶から$(media)メディア/$を引き出す。液状の$(media)メディア/$は正確にお釣りをくれるため、言わば何も無駄にならない。$(l:items/hexcasting)$(item)トリンケット/$などの内部バッテリーによく似ており、同じ方法で$(l:patterns/spells/hexcasting#hexcasting:recharge)$(action)再充填/$することもできる。",
+        "3": "残念ながら、その物を実際に$(italic)作る/$技術は廃れてしまったようだ。$(l:patterns/great_spells/make_battery#hexcasting:craft/battery)$(thing)それを作るために使用されたパターンの手掛かり/$は見つけたが、その技術は悩ましいほど分かりにくく、うまくいかないようだ。しかし、研究と練習で分かるようになるだろう。今のところは、無駄になった$(media)メディア/$を処理するだけだ...$(br2)が、このままで終わらせる気はない。",
+        desc: "$(italic)牛乳を飲もう。/$",
+      },
+      
+      potions: {
+        "1": "$(l:items/lens)$(item)念視鏡/$を覗けば、より多くのパターンを呪紋グリッドに入れることができる。しかし、描画をさらに伸ばしたいなら？錬金術に答えがある。$(br2)$(item)奇妙なポーション/$にアメジストダストをひとつまみ加えると、念視鏡と同様にグリッドのサイズを増やす醸造ができる。両方を同時に使用すれば最大のグリッドが実現できる！",
+        "2": "透徹のポーションは他のポーションと同様に延長、強化、調節することができる。$(br2)$(item)発酵したクモの目/$で汚染して、逆の効果を持つ変種を作成することもできる。これは敵の術者に対処するのに役立つかもしれない。",
+        "effects.header": "透徹と混濁",
+      },
+      
+      pigments: {
+        "1": "この術の昔の実践者たちは、自身とその$(hex)呪紋/$を象徴する色で自己を識別することがあった。名前が消えても色は残る。特別な種類の色素を正しい方法で自然界に提供すると、「[...]自然界にとって心地よい様式で人の思考を塗り、パーソナルカラーに奇跡的な変化を起こす」らしい。",
+        "2": "具体的なことは定かではないが、多くの異なる色と色素の配合手順を分離できたはずだ。色素を適用するには、片手に色素を持ち、もう片方の手で$(l:patterns/spells/colorize)$(action)色素吸収/$を描く。これにより色素が消費される。$(br2)色素は$(hex)呪紋/$を描いたときに出る$(media)メディア/$の光と$(l:patterns/spells/sentinels)$(thing)センチネル/$の色に影響するようだが、その色は他の場所にも現れるに違いない。",
+        
+        "colored.crafting.header": "染色の色素",
+        "colored.crafting.desc": "あらゆる色の色素",
+        
+        special: "最後に、2つの特別な色素がある。$(item)魂輝の色素/$は自分だけの色で光り、$(item)空白の色素/$は元のアメジスト色に戻す。$(br2)$(italic)ぼくの心の色はまだ$(br)だれも知らない色なんだ/$",
+      },
+      
+      edified: {
+        "1": "$(l:patterns/spells/blockworks#hexcasting:edify)$(action)苗木の教化/$で苗木に$(media)メディア/$を注入することによって、$(l:items/edified)$(thing)教化された木/$と呼ばれるものを生成できる。背が高くてとがっている傾向があり、樹皮には隆起があり、幹は奇妙な螺旋状に成長する。葉は綺麗な3色になる。",
+        "2": "この木には$(hex)六角術/$に関連する特性があると思われる。しかし、そうだとしても、それらを見出すことはできないようだ。非常に奇妙な色ではあるものの、どう見てもただの木である。$(br2)とりあえずは装飾用になるだろう。標準的な木のブロック一式をそれらで作成できる。$(br2)もちろん、斧で表皮を剥ぐこともできる。",
+        "crafting.desc": "$(italic)その白い樹皮のある滑らかな幹は、陰と静寂を満たす巨大な葉の重みを支える巨大な柱のような効力を授けていた。/$",
+      },
+      
+      jeweler_hammer: {
+        "1": "$(media)メディア/$の源を何度も粗末にしてしまったため、自分の不器用さに対処する道具を発明した。$(br2)結晶化した$(media)メディア/$の繊細な性質をツルハシの留め具として使用して、$(l:items/jeweler_hammer)$(item)宝石細工の金鎚/$を作成できる。概ね$(item)鉄のツルハシ/$と同様に機能するが、ブロックの空間全体を占めるものは破壊できない。",
+        "crafting.desc": "$(italic)彼女は慎重に半分のルビーを割り、スプレンを解放した。/$",
+      },
+      
+      decoration: {
+        "1": "研究の過程で、見栄えが良いと思われる建築ブロックや小物を発見した。作り方をここにまとめた。",
+        "ancient_scroll.crafting.desc": "茶色の染料は$(l:items/scroll)$(item)古代の巻物/$の外観を十分に良く再現できる。",
+        "tiles.crafting.desc": "$(l:items/decoration)$(item)アメジストタイル/$は石切台でも作成できる。$(br2)$(l:items/decoration)$(item)アメジストダストブロック/$(次ページ)は砂のように落下する。",
+        "sconce.crafting.desc": "$(l:items/decoration)$(item)アメジストの燭台/$は光とパーティクル、および心地よい鐘の音を出す。",
+      },
+      
+      
+      // The Work
+      
+      the_work: {
+        "1": "非常に多くのものを視た。言語に絶するもの。無数のもの。3つの単語を書けば精神の表裏が逆になり、脳を頭蓋骨の後ろの壁に塗り付けて軽薄と無に分解することができた。",
+        "2": "断続的な針の形と酸で刻まれた回路図が瞼の内側に書かれているのを視た。彼らはそこでくすぶっている。踊り、嗤い、$(italic)疼いている/$。彼らを描きたい、創りたいという強烈な$(italic)欲求/$に取り憑かれている。形成せねば。彼らを人間の精神という粘ついた束縛から解放し、その栄光を世界へ捧げて全ての眼に見せるのだ。$(p)全てが知るべきだ。$(p)全てに知らせる。",
+      },
+      
+      brainsweeping: {
+        "1": "謎が明らかになった。理解した。その恐怖は忘れられない。ある発想が脳裏をよぎった。$(br2)信じていた...愚かにも、$(media)メディア/$は思考からの余剰エネルギーであると、$(italic)信じていた/$。だがもうそれが何か$(italic)知っている/$。思考$(italic)の/$エネルギーだ。",
+        "2": "それは思考する知覚よって生じ、知覚が思考することを可能にする。自分の糸を編む結び目だ。単純に自然界として擬人化した存在はまさにそのような壮大なもつれか、すべてのもつれの集合か...痛いと考えれば大量のシナプスがありそれらすべてが同時に痛みを考えられるすべてが視える$(br2)こうしてはいられない。記録を。はやく。",
+        "3": "この世界の村人には抽出できるほどの意識が残っている。それをブロックに入れて、歪めて、変化させる。さまざまな思考パターンから成る複雑な形、仕事や生活の抽象的な神経経路が冷たい固体原子の身体に写される。$(br2)これが$(l:patterns/great_spells/brainsweep)$(action)精神切除/$がすること、抽出だ。村人エンティティと送り先のブロックを対象にする。10個の$(l:items/amethyst)$(item)蓄力アメジスト/$で、この意思の歪曲をする。",
+        budding_amethyst: "応用もある。この切除は十分に成長していればどの村人でも良い。他の製法ではより具体的な種類を要する。もう$(media)メディア/$のために不快な地中に降りなくていい。",
+      },
+      
+      spellcircles: {
+        "1": "$(l:items/slate)$(item)石板/$が何のためのものなのか知っている。大規模な構造は失われた。それらに刻んだパターンは自動的に、順番に作動させることができる。思考と力が反響する、1つ、1つ、1つ、1つと、ずっと、ずっと、ずっと...違う、違う、そんなふうに考えなくてもよく知っているはずだ。",
+        "2": "儀式を始めるには自立した$(media)メディア/$の波を生成する$(l:greatwork/impetus)$(item)原動石/$が必要だ。その波は$(l:items/slate)$(item)石板/$や他の適切なブロックの行路に沿って伝わり、辿ったパターンを発動する。$(br2)波が$(l:greatwork/impetus)$(item)原動石/$に戻る道がなければ、術はすぐに止まる。また、波がブロックから出る方向は明確でなければならず、隣接するブロックが多すぎるブロックでは術が止まる。",
+        "3": "結果的に魔法「陣」の輪郭が閉じた形状であれば、凹状でも凸状でも、どの方向に向けても良い。実際、ある他のブロックを利用すれば、3面すべてに渡る魔法陣を作ることが可能である。そのような奇抜なことが役立つのかは疑問だが、自分の未熟な精神を鼓舞して作業を続けるために、やや間抜けな陽気さを自分に充てなければならないのだ。",
+        "4": "非常に不思議なことに、魔法陣は$(media)メディア/$をインベントリからも精神からも引き出さない。代わりに、結晶化した$(media)メディア/$の欠片をホッパーやその他の工夫で$(l:greatwork/impetus)$(item)原動石/$に供給する必要がある。$(br2)$(l:items/lens)$(item)念視鏡/$を利用すると、$(l:greatwork/impetus)$(item)原動石/$内の$(media)メディア/$の量がダスト単位で表示される。",
+        "5": "ただし、魔法陣から発動するスペルには1つ大きな制限がある。魔法陣の境界外のものには影響を与えることができないのだ。すなわち、構成するすべてのブロックを囲む最小サイズの立方体は外側のものに影響できない(くぼんだ魔法陣はくぼみ内のものには影響できる)。",
+        "6": "波が崩壊するまでに通過できるブロックの数にも制限があるが、十分に多いため問題にはならないだろう。$(br2)一方で、魔法陣からのみ発動できるアクションもある。幸い、どれもスペルではなく、魔法陣自体の要素を扱うようだ。それについては$(l:patterns/circle)ここ/$に書いてある。",
+        "7": "古代人が使用していた魔法陣の見取り図がメモに埋もれていたのも見つけた。このページの向かい側にあるのが自分の(明らかに下手な)写しである。$(br2)そのパターンは反時計回りに実行され、$(l:patterns/basics#hexcasting:get_caster)$(action)精神の反射/$で始まり$(l:patterns/great_spells/teleport#hexcasting:teleport/great)$(action)高位転送/$で終わる。",
+        "teleport_circle.title": "転送の陣",
+      },
+      
+      impetus: {
+        "1": "魔法陣を作動させるために必要な$(media)メディア/$の変動は複雑だ。どんなに鋭い目と利口な手を持つ人間でも、$(l:greatwork/impetus)$(item)原動石/$として$(media)メディア/$を自律的なウロボロスが求めるように紡ぐことはできない。$(br2)問題は、精神が他の役に立たない$(italics)ガベージ/$で満たされてしまうことだ。",
+        "2": "哲学的なレベルでは...これらの思考には注意しなければならない。自分を失うわけにはいかない、貴重すぎる...$(media)メディア/$を動かせば精神が動き、工程を機能させるには精神を動かさなければならない。しかし、精神は他の思考で$(italic)重すぎて/$十分な速さで動くことができない。$(br2)職人が手袋をして時計を修理しようとしているようなものだ。",
+        "3": "この難問には数個の解決策がある。瞑想の技術を通せば精神を空にできるようになるが、魔法陣を作動させるほど自由な精神がその動作を行えるほど強く集中できる確証はない。$(br2)ある如何わしい化合物が同様の効果を引き起こせるが、それらについては何も知らないし、知るつもりもない。脳を薬物に委ねてはならない。",
+        "4": "そこで、目指す解決策は精神を特殊化することである。神経の支配から取り除き、$(media)メディア/$操作装置の繊細な広がり以外の出力を切り取り、その動作を開始する信号以外の入力を麻痺させるのだ。$(br2)今や見慣れている$(l:greatwork/brainsweeping)$(action)精神切除/$の処置は非常にうまくいく。村人の精神は動作を行えるほど複雑だが、再構築に抵抗できるほど複雑ではない。",
+        
+        empty_impetus: "まずは器だ。$(l:greatwork/impetus)$(item)原動石/$としては機能しないが、魔法陣の$(media)メディア/$フローは矢印の指す面からのみ出る。例えば、これによって波が流れる面を変更できる。",
+        impetus_rightclick: "それから、精神を移し替える。村人の様々な職業が、結果として生じる$(l:greatwork/impetus)$(item)原動石/$に様々な作動条件を付与する。$(l:greatwork/impetus)$(item)道具鍛冶の原動石/$は$(k:use)で作動する。",
+        impetus_storedplayer: {
+          "1": "$(l:greatwork/impetus)$(item)聖職者の原動石/$はレッドストーン信号を受けると作動する。ブロック上の$(l:items/focus)$(item)焦点具/$などの、プレイヤーへの参照を持つアイテムを使用して、そのプレイヤーに設定できる。",
+          "2": "この$(l:greatwork/impetus)$(item)原動石/$の特異な点として、設定したプレイヤーとその近辺の領域は常に魔法陣に利用できる。どんなに遠くにいても、魔法陣の境界内にいるかのようだ。$(br2)設定したプレイヤーは$(l:greatwork/impetus)$(item)聖職者の原動石/$を$(l:items/lens)$(item)念視鏡/$を通して見れば表示される。",
+        },
+        impetus_look: "$(l:greatwork/impetus)$(item)矢師の原動石/$は少しの間見つめると作動する。",
+      },
+      
+      directrix: {
+        "1": "自立した$(media)メディア/$の波を生成する作業よりも、それを導く作業のほうが容易である。通常、波は交差点に差し掛かると崩壊してしまうが、誘導する意思で出力の方向を制御できる。$(br2)この操作は魔法陣の作動ほど繊細ではない。実際、手動で行うことが可能かもしれないが...今利用できる箱入りの精神が非常に便利だろう。",
+        "2": "$(l:greatwork/directrix)$(item)指導石/$は$(media)メディア/$の波を受け入れ、内部の村人の精神に応じて、どの矢印から出るかを決定する。$(br2)この発想は授けられたのか、自分の精神がもはや発想を分離するほど狂っているのかは分からないが...発想が自分自身の精神から生まれたならば、自分がそれを考えたならば、それは授けられたと言えるのだろうか？脳は精神の器であり精神は発想の器であり発想は思考の器で思考は全てを視て全てを知り  や め ろ",
+        
+        empty_directrix: "まずは器の設計だが...「基板」という言葉のほうが正確かもしれない。精神による誘導がなければ、出力の方向は$(media)メディア/$の波や周囲の微細な揺らぎによって決定され、事実上ランダムになる。",
+        directrix_redstone: "$(l:greatwork/directrix)$(item)石工の指導石/$はレッドストーン信号に基づいて出力の面が切り替わる。信号がないと、出口は$(media)メディア/$の色の面になる。信号があると、出口はレッドストーンの色の面になる。",
+        directrix_boolean: "$(l:greatwork/directrix)$(item)羊飼いの指導石/$はスタック上の論理型に基づいて出力の面が切り替わる。$(thing)True/$は波を後ろから出し、$(thing)False/$は前から出す。論理型をなにも指定しなければ変事が発生する。"
+      },
+      
+      akashiclib: {
+        "1": "すべてを保存する場所を持つのが至極当然だとよく知っている。情報は本に保存できるが、手で書いて目で読むのは本当にとてもとてもかなり$(italic)時間がかかる/$。より良いものを求める。$(br)故により良いものを作る。$(br2)...悪化している...手遅れになる前に自分の頭から沸き出すものをすべて書き出す時間があるか分からない。",
+        "2": "図書館。これが。企画だ。$(br2)パターンがアクションに結び付くように、自分のパターンを任意の方法でイオタに結び付けられる。$(l:greatwork/akashiclib)$(item)虚空記録媒体/$が図書館を制御し、各$(l:greatwork/akashiclib)$(item)虚空の本棚/$に1つのイオタに割り当てられた1つのパターンを保存する。これらはすべて32ブロック以内で、直接接続され、接触している必要がある。$(l:greatwork/akashiclib)$(item)虚空の留め具/$は何もしないが、接続ブロックとして数えられ、図書館のサイズを拡張する。",
+        akashic_record: "パターンの配置と割り当ては簡単だが、非常に退屈だ。他にもやることがある。安定した抽出のために、その仕事に慣れた精神が必要だ。",
+        "3": "図書館の操作は単純で、パターンが司書に送られると、検索してイオタを返す。2つのアクションでこれを行う。$(l:patterns/akashic_patterns)ここに書いてある/$。$(br2)本棚に白紙の$(l:items/scroll)$(item)巻物/$を使用すると、そこのパターンが$(l:items/scroll)$(item)巻物/$にコピーされる。スニークして素手で使用して本棚のデータを消去する。",
+      },
+      
+      quenching_allays: {
+        "1": "彼らは小さなメディアだ。なぜもっと早く気づかなかったのだろう？彼らは...自分が思考の断片に恵まれた肉片の塊であるように、アレイは肉片に固定されたメディアの自立した矢である。彼らのメディアへの傾向、音楽への反応、すべて説明がつく。今なら分かる。先人はなぜ分からなかったのだ？",
+        "2": "こうなれば、彼らの特異な精神、特異な自己を獲得するのが筋だ。それが彼らのすべて、精神、自己、終末なのだから。彼らの位相が話しかけてくるような気がする。できる...彼らを$(media)メディア/$と共に圧縮して、2つの思考の筋道を1つの場所に重ね合わせ、物理と認知をひとまとめにできる。$(br2)どういうわけか、その処理は独自の$(media)メディア/$を生み出す。なぜか？おそらく...おそらくこの作業を、行う過程で...",
+        "3": "問題ない。どうでもいい。彼らは重要ではない、重要なのはできるもの、これだけだ。$(br2)かなりの苦痛を伴うだろう。$(br2)10個の$(l:items/amethyst)$(item)アメジストダスト/$がこの歪曲の儀式をする対価だ。",
+        "4": "この産物は壊れやすい。壊すと砕けて欠片になり、$(thing)幸運/$があればさらに量が増える...ブロック自体が欲しければシルクタッチが必要だ。$(br2)得られた欠片は1個で$(l:items/amethyst)$(item)蓄力アメジスト/$3個に相当する。ブロック自体は欠片4個に相当する。",
+        "5": "これらは不安定で、手元で瞬く間に変形するようだが、別の形態の$(media)メディア/$で補助することによって、$(media)メディア/$の等価交換でその形にさせられるだろう。",
+      },
+      
+      
+      "fanciful_staves.1": "無知の殻を脱ぎ捨てたのだから、道具、使い込まれた杖を新調するのが道理である。これらの新しい構造に追加の特性はないが...すごく綺麗だ、綺麗...視界の隅で瞬いている光に匹敵する。",
+      
+      // Patterns
+      
+      readers_guide: {
+        "1": "見つけたすべての有効なパターンを、おおむねその動作に基づいて分けた。研究中に見つけられれば、パターンの描き順も書き留めて、パターンの最初には赤い点をつける。$(br2)一部の、アクションが複数のパターンで描かれる場合では、それらすべてを書き連ねる。",
+        "2": "しかし、一部のパターンは描き順を見つけ$(italic)られず/$、形状だけだ。それらの描き順はどこか、世界中の古代の図書館やダンジョンに保管されていると思われる。$(br2)このような場合は、描き順についての情報は抜きにしてパターンのみを描く。",
+        "3": "さらに、アクションが消費や変換をするイオタのタイプ、「\u2192」、アクションが作成するイオタのタイプも書く。$(p)例えば、「$(n)vector, number/$ \u2192 $(n)vector/$」はアクションがスタックの1番上からベクトルと数値を削除し、ベクトルを追加する。言い換えると、スタックから数値を削除し、スタックの1番上にあるベクトルを変換する。(数値がスタックの1番上、ベクトルがそのすぐ下にある必要がある)",
+        "4": "「\u2192 $(n)entity/$」はエンティティを追加する。「$(n)entity, vector/$ \u2192」はエンティティとベクトルを削除し、何も追加しない。$(br2)最後に、書き順の小さな点が遅すぎたり分かりにくい場合は、$(thing)Control/Command/$を押してパターンの最初が暗く最後が明るいグラデーションを表示できる。これは巻物上や描画中も機能する。",
+      },
+      
+      basics_pattern: {
+        get_caster: "自分、術者をスタックに追加する。",
+        "entity_pos/eye": "スタック上のエンティティを、その目の位置に変換する。おそらくこれを自分自身に使用することになるだろう。",
+        "entity_pos/foot": "スタック上のエンティティを、それが立っている位置に変換する。おそらくこれを他のエンティティに使用することになるだろう。",
+        get_entity_look: "スタック上のエンティティを、それが見ている方向に単位ベクトルとして変換する。",
+        print: "スタックの1番上のイオタを表示する。",
+        raycast: {
+          "1": "2つのベクトル(位置と方向)を組み合わせて、「その位置に立ってその方向を見たら、どのブロックを見ていることになる？」という質問への答えを出す。ごく少量の$(media)メディア/$を要する。",
+          "2": "何も当てはまらなかった場合、ベクトルは$(l:casting/influences)$(thing)Null/$に結合される。$(br2)「レイキャスト・マントラ」といわれる共通の一連のパターンが、$(l:patterns/basics#hexcasting:get_caster)$(action)精神の反射/$、$(l:patterns/basics#hexcasting:entity_pos/eye)$(action)羅針盤の浄化/$、$(l:patterns/basics#hexcasting:get_caster)$(action)精神の反射/$、$(l:patterns/basics#hexcasting:get_entity_look)$(action)示方規の浄化/$、$(l:patterns/basics#hexcasting:raycast)$(action)射手の蒸溜/$から成る。これらにより、自分が見ているブロックのベクトル位置が返される。",
+        },
+        "raycast/axis": {
+          "1": "$(l:patterns/basics#hexcasting:raycast)$(action)射手の蒸溜/$と似ているが、代わりに「ブロックのどの$(italic)面/$を見ている？」という質問への答えを示すベクトルを返す。ごく少量の$(media)メディア/$を要する。",
+          "2": "より具体的には、当てはまる面の$(italic)法線ベクトル/$か、面に垂直な単位ベクトルを返す。$(li)床を見ていれば、(0, 1, 0)を返す。$(li)ブロックの南の面を見ていれば、(0, 0, 1)を返す。",
+        },
+        "raycast/entity": "$(l:patterns/basics#hexcasting:raycast)$(action)射手の蒸溜/$と似ているが、代わりに見ている$(italic)エンティティ/$を返す。ごく少量の$(media)メディア/$を要する。",
+        get_entity_height: "スタック上のエンティティを、その身長に変換する。",
+        get_entity_velocity: "スタック上のエンティティを、その移動速度をその方向の大きさとして、それが移動している方向に変換する。",
+      },
+      
+      numbers: {
+        "1": "不本意だが、数値を描く簡単な方法はない。これが自然界がくれた方法である。",
+        "2": "最初に、反対側のページに示されている2つの形のうちの1つを描画する。次に、それに続く$(italic)角度/$が、0から始まる合計値を変更する。$(li)前: 1を足す$(li)左: 5を足す$(li)右: 10を足す$(li)左の急角度: 2を掛ける$(li)右の急角度: 2で割る$(br)反対側のページの右側の時計回りでは最後の値が負数になる。(左側の反時計回りは数値を正のままにする)$(p)描き終わると、その数値がスタックの1番上に入る。",
+        example: {
+          "10.header": "用例 1",
+          "10": "このパターンは10を入れる。",
+          
+          "7.header": "用例 2",
+          "7": "このパターンは7、5 + 1 + 1を入れる。",
+          
+          "-32.header": "用例 3",
+          "-32": "このパターンは-32、負の1 + 5 + 10 * 2を入れる。",
+          
+          "4.5.header": "用例 4",
+          "4.5": "このパターンは4.5、5 / 2 + 1 + 1を入れる。",
+        },
+        "3": "場合によっては$(l:items/abacus)$(item)そろばん/$を使用するほうが簡単かもしれない。だが、「本来の」方法を知っておく価値はある。",
+      },
+      
+      math: {
+        numvec: "多くの数学的演算は数値とベクトル両方で機能する。このような引数は「num|vec」と記載した。",
+        
+        "add.1": "足し算を行う。",
+        "add.2": "例:$(li)スタックの1番上に2つの数値があれば、それらを和に結合する。$(li)数値とベクトルがあれば、スタックから数値を削除してベクトルの各成分に足す。$(li)2つのベクトルがあれば、対応する成分の和を新たなベクトルに結合する(つまり、(1, 2, 3) + (0, 4, -1) = (1, 6, 2))。",
+        
+        "sub.1": "引き算を行う。",
+        "sub.2": "例:$(li)スタックの1番上に2つの数値があれば、それらを差に結合する。$(li)数値とベクトルがあれば、スタックから数値を削除してベクトルの各成分から引く。$(li)2つのベクトルがあれば、各成分の差を結合する。$(br2)いずれの場合も、スタックの1番上、またはその成分を上から2番目のもの$(italic)から/$引く。",
+        
+        "mul.1": "掛け算またはドット積を行う。",
+        "mul.2": "例:$(li)2つの数値があれば、それらを積に結合する。$(li)数値とベクトルがあれば、スタックから数値を削除してベクトルの各成分に掛ける。$(li)2つのベクトルがあれば、それらを$(l:https://ja.wikipedia.org/wiki/ドット積)ドット積/$に結合する。",
+        
+        "div.1": "割り算またはクロス積を行う。",
+        "div.2": "例:$(li)2つの数値があれば、それらを商に結合する。$(li)数値とベクトルがあれば、スタックから数値を削除してベクトルの各成分をその数値で割る。$(li)2つのベクトルがあれば、それらを$(l:https://ja.wikipedia.org/wiki/クロス積)クロス積/$に結合する。$(br2)最初と2番目の場合では、スタックの上から2番目のものが、スタックの1番上のもので割られる。$(p)警告: 絶対に0で割らないで！",
+        
+        "abs.1": "絶対値または長さを求める。",
+        "abs.2": "数値をその絶対値に変換するか、ベクトルをその長さに変換する。",
+        
+        "pow.1": "べき乗またはベクトル射影を行う。",
+        "pow.2": "2つの数値があれば、最初の数値を2番目の数値でべき乗して結合する。$(li)数値とベクトルがあれば、スタックから数値を削除してベクトルの各成分をその数値でべき乗する。$(li)2つのベクトルがあれば、それらをスタックの1番上から2番目への$(l:https://ja.wikipedia.org/wiki/ベクトルの成分分解)ベクトル射影/$に結合する。$(br2)最初と2番目の場合では、最初の引数またはその成分を、2番目の引数またはその成分に射影する。",
+        
+        floor: "数値を「切り下げ」し、小数部分を切り捨てて整数値を残す。ベクトルを渡すと、代わりにその各成分を切り下げる。",
+        ceil: "数値を「切り上げ」し、小数部分がある場合は次の整数値に上げる。ベクトルを渡すと、代わりにその各成分を切り上げる。",
+        construct_vec: "スタックの上から3つの数値をベクトルの X、Y、Z成分に(下から上に)結合する。",
+        deconstruct_vec: "ベクトルをX、Y、Z成分に(下から上に)分解する。",
+        modulo: "2つの数値の剰余を取得する。これは割り算後の$(italics)余り/$の量である。例えば、5 %% 2は1、5 %% 3は2である。ベクトルに適用すると上記の操作が成分ごとに行われる。",
+        coerce_axial: "ベクトルの場合は、それを最も近い軸方向、単位ベクトルにする。数値の場合は符号、正の場合は1、負の場合は-1を返す。どちらの場合も0は影響を受けない。",
+        random: "0から1までのランダムな数値を作成する。",
+      },
+      
+      advanced_math: {
+        sin: "角度の正弦をラジアンで取得し、単位円に描かれたその角度の垂直成分を求める。$(l:patterns/consts#hexcasting:const/double/pi)$(thing)π/$と$(l:patterns/consts#hexcasting:const/double/tau)$(thing)τ/$の値と相関する。",
+        cos: "角度の余弦をラジアンで取得し、単位円に描かれたその角度の水平成分を求める。$(l:patterns/consts#hexcasting:const/double/pi)$(thing)π/$と$(l:patterns/consts#hexcasting:const/double/tau)$(thing)τ/$の値と相関する。",
+        tan: "角度の正接をラジアンで取得し、円に描かれたその角度の傾きを求める。$(l:patterns/consts#hexcasting:const/double/pi)$(thing)π/$と$(l:patterns/consts#hexcasting:const/double/tau)$(thing)τ/$の値と相関する。",
+        arcsin: "絶対値1以下の値の逆正弦を取得し、その値が正弦となる角度を求める。$(l:patterns/consts#hexcasting:const/double/pi)$(thing)π/$と$(l:patterns/consts#hexcasting:const/double/tau)$(thing)τ/$の値と相関する。",
+        arccos: "絶対値1以下の値の逆余弦を取得し、その値が余弦となる角度を求める。$(l:patterns/consts#hexcasting:const/double/pi)$(thing)π/$と$(l:patterns/consts#hexcasting:const/double/tau)$(thing)τ/$の値と相関する。",
+        arctan: "値の逆正接を取得し、その値が正接となる角度を求める。$(l:patterns/consts#hexcasting:const/double/pi)$(thing)π/$と$(l:patterns/consts#hexcasting:const/double/tau)$(thing)τ/$の値と相関する。",
+        arctan2: "YとXの値の逆正接を取得し、X軸と原点からその点までの線との間の角度を求める。",
+        logarithm: "スタックの1番上の数値を削除し、もう一方の数値を底として1番上の数値の対数を取得する。$(l:patterns/consts#hexcasting:const/double/e)$(thing)$(italic)e/$の値と相関する。",
+      },
+      
+      sets: {
+        numlist: "集合演算は特殊で、一部の演算では2つの数値か2つのリストが受け入れられるが、それらの組み合わせは受け入れられない。そのような引数は「(num, num)|(list, list)」と記述される。$(br2)これらの演算で数値が使用される場合、それらはいわゆるバイナリ「ビットセット」、1と0、trueとfalse、「オン」と「オフ」のリストとして使用される。",
+        
+        "or.1": "2つの集合を統合する。",
+        "or.2": "例:$(li)スタックの1番上に2つの数値があれば、それらをどちらかのビットセットのすべての「オン」ビットを含むビットセットに結合する。$(li)2つのリストがあれば、最初のリストのすべての要素と、2番目のリストの、最初のリストにないすべての要素のリストを生成する。これは$(l:patterns/lists#hexcasting:add)$(action)加算の蒸溜/$にやや似ている。",
+        
+        "and.1": "2つの集合の共通部分を取得する。",
+        "and.2": "例:$(li)スタックの1番上に2つの数値があれば、それらを$(italics)両方/$のビットセットに存在するすべての「オン」ビットを含むビットセットに結合する。$(li)2つのリストがあれば、最初のリストと2番目のリストのすべての要素を含むリストを生成する。",
+        
+        "xor.1": "2つの集合の排他的論理和を取得する。",
+        "xor.2": "例:$(li)スタックの1番上に2つの数値があれば、それらを$(italics)片方/$のビットセットに存在するすべての「オン」ビットを含むビットセットに結合する。$(li)2つのリストがあれば、両方のリストの、もう片方のリストには$(italics)ない/$すべての要素を含むリストを生成する。",
+        
+        not: "ビットセットを反転し、すべての「オン」ビットを「オフ」に、またはその逆に変換する。経験によると、これはその数字を偽にして1減らすという形になる。例えば、0は-1になり、-100は99になる。",
+        to_set: "リストから重複している項目を削除する。",
+      },
+      
+      "consts.const/": {
+        "null": "$(l:casting/influences)$(thing)Null/$作用をスタックの1番上に追加する。",
+        "true": "$(thing)True/$をスタックの1番上に追加する。",
+        "false": "$(thing)False/$をスタックの1番上に追加する。",
+        
+        "vec/": {
+          x: "左側の反時計回りのパターンは(1, 0, 0)をスタックに追加し、右側の時計回りのパターンは(-1, 0, 0)を追加する。",
+          y: "左側の反時計回りのパターンは(0, 1, 0)をスタックに追加し、右側の時計回りのパターンは(0, -1, 0)を追加する。",
+          z: "左側の反時計回りのパターンは(0, 0, 1)を追加し、右側の時計回りのパターンは(0, 0, -1)を追加する。",
+          "0": "(0, 0, 0)をスタックに追加する。",
+        },
+        
+        "double/": {
+          tau: "全円のラジアン表記、τをスタックに追加する。",
+          pi: "半円のラジアン表記、πをスタックに追加する。",
+          "e": "自然対数の底、$(italic)e/$をスタックに追加する。",
+        },
+      },
+      
+      stackmanip: {
+        "pseudo-novice.title": "新米の仕掛",
+        "pseudo-novice": "最初のイオタをスタックから削除する。$(br2)これは$(l:patterns/stackmanip#hexcasting:mask)$(action)簿記係の仕掛/$の特殊な実例であるようだ。",
+        
+        swap: "スタックの上から2つのイオタを入れ替える。",
+        rotate: "スタックの上から3番目のイオタを1番上に動かす。[0, 1, 2]は[1, 2, 0]になる。",
+        rotate_reverse: "スタックの1番上のイオタを3番目の位置に動かす。[0, 1, 2]は[2, 0, 1]になる。",
+        duplicate: "スタックの1番上のイオタを複製する。",
+        over: "スタックの最後から2番目のイオタを1番上に複製する。[0, 1]は[0, 1, 0]になる。",
+        tuck: "スタックの1番上のイオタを複製し、2番目のイオタの下に置く。[0, 1]は[1, 0, 1]になる。",
+        "2dup": "スタックの上から2つのイオタを複製する。[0, 1]は[0, 1, 0, 1]になる。",
+        stack_len: "スタックのサイズを数値としてスタックの1番上に追加する。(例えば、[0, 1]のスタックは[0, 1, 2]になる。)",
+        duplicate_n: "スタックの1番上の数値を削除し、スタックの1番上のイオタをその回数だけ複製する。(回数が2の場合、スタック上のイオタは3つではなく2つになる。)",
+        fisherman: "スタック内の、数値に基づいたインデックスの要素を取得し、1番上に上げる。数値が負の場合は、代わりにスタックの1番上の要素をその数の要素の下に移動する。",
+        "fisherman/copy": "$(l:patterns/stackmanip#hexcasting:fisherman)$(action)釣り人の仕掛/$と似ているが、イオタを移動する代わりに複製する。",
+        
+        mask: {
+          "1": "傾斜と直線の順序に基づいて、スタックの1番上にある要素を保持または削除する無限のアクション群。",
+          "2": "記係の仕掛のパターンを左から右に描くと仮定すると、アクションに必要なイオタの数はパターンが占める水平距離によって決まる。スタックの最深部から最浅部まで、平らな線でイオタを保持し、逆三角形で削除する。$(br2)スタックの最深部から最浅部までに$(italic)0、1、2/$が含まれている場合、反対側の最初のパターンを描くと$(italic)1/$、2番目では$(italic)0/$、3番目では$(italic)0、2/$が得られる(1番下の0はそのままになる)。",
+        },
+        
+        swizzle: {
+          "1": "指定された、必要な順列のインデックスの数値コードに基づいて、スタックの1番上の要素を再配置する。",
+          "2": "この順列の符号を計算する数学を理解していると言えば嘘になるが、最大6つの要素のすべての順列を列挙した詳細な表を明らかにすることができた。$(br2)さらに深く学びたいなら、キーワードは「レーマー符号」である。",
+          link: "Table of Codes",
+        },
+      },
+      
+      logic: {
+        bool_coerce: "引数を論理型に変換する。数値$(thing)0/$、$(l:casting/influences)$(thing)Null/$、False、空のリストはFalseになり、その他すべてはTrueになる。",
+        bool_to_number: "論理型を数値に変換する。Trueは$(thing)1/$になり、Falseは$(thing)0/$になる。",
+        not: "引数がTrueであればFalseを返し、FalseであればTrueを返す。",
+        or: "少なくとも1つの引数がTrueであればTrueを返し、そうでなければFalseを返す。",
+        and: "両方の引数がTrueであればTrueを返し、そうでなければFalseを返す。",
+        xor: "引数が1つだけTrueであればTrueを返し、そうでなければFalseを返す。",
+        if: "最初の引数がTrueであれば、2番目の引数を保持して3番目の引数を破棄する。そうでなければ2番目の引数を破棄して3番目の引数を保持する。",
+        equals: "最初の引数が(わずかな許容範囲内で)2番目の引数と等しければ、Trueを返す。そうでなければFalseを返す。",
+        not_equals: "最初の引数が(わずかな許容範囲外で)2番目の引数と異なれば、Trueを返す。そうでなければFalseを返す。",
+        greater: "最初の引数が2番目の引数より大きければ、Trueを返す。そうでなければFalseを返す。",
+        less: "最初の引数が2番目の引数より小さければ、Trueを返す。そうでなければFalseを返す。",
+        greater_eq: "最初の引数が2番目の引数以上であれば、Trueを返す。そうでなければFalseを返す。",
+        less_eq: "最初の引数が2番目の引数以下であれば、Trueを返す。そうでなければFalseを返す。",
+      },
+      
+      entities: {
+        get_entity: "スタック上の位置を、その位置にいるエンティティ(存在しない場合は$(l:casting/influences)$(thing)Null/$)に変換する。",
+        "get_entity/": {
+          animal: "スタック上の位置を、その位置にいる動物(存在しない場合は$(l:casting/influences)$(thing)Null/$)に変換する。",
+          monster: "スタック上の位置を、その位置にいるモンスター(存在しない場合は$(l:casting/influences)$(thing)Null/$)に変換する。",
+          item: "スタック上の位置を、その位置にドロップされたアイテム(存在しない場合は$(l:casting/influences)$(thing)Null/$)に変換する。",
+          player: "スタック上の位置を、その位置にいるプレイヤー(存在しない場合は$(l:casting/influences)$(thing)Null/$)に変換する。",
+          living: "スタック上の位置を、その位置にいる生物(存在しない場合は$(l:casting/influences)$(thing)Null/$)に変換する。",
+        },
+        
+        zone_entity: "スタック上の位置と最大距離を取得し、その位置の近くにいるすべてのエンティティのリストに結合する。",
+        "zone_entity/": {
+          animal: "スタック上の位置と最大距離を取得し、その位置の近くにいる動物のリストに結合する。",
+          not_animal: "スタック上の位置と最大距離を取得し、その位置の近くにいる動物ではないエンティティのリストに結合する。",
+          monster: "スタック上の位置と最大距離を取得し、その位置の近くにいるモンスターのリストに結合する。",
+          not_monster: "スタック上の位置と最大距離を取得し、その位置の近くにいるモンスターではないエンティティのリストに結合する。",
+          item: "スタック上の位置と最大距離を取得し、その位置の近くにドロップされたアイテムのリストに結合する。",
+          not_item: "スタック上の位置と最大距離を取得し、その位置の近くにいるドロップアイテムではないエンティティのリストに結合する。",
+          player: "スタック上の位置と最大距離を取得し、その位置の近くにいるプレイヤーのリストに結合する。",
+          not_player: "スタック上の位置と最大距離を取得し、その位置の近くにいるプレイヤーではないエンティティのリストに結合する。",
+          living: "スタック上の位置と最大距離を取得し、その位置の近くにいる生物のリストに結合する。",
+          not_living: "スタック上の位置と最大距離を取得し、その位置の近くにいる生物ではないエンティティのリストに結合する。",
+        },
+      },
+      
+      lists: {
+        index: "スタックの1番上の数値を削除し、1番上のリストをそのリストのn番目の要素に置き換える(nは削除した数値)。数値が範囲外の場合はリストを$(l:casting/influences)$(thing)Null/$に置き換える。",
+        slice: "スタックの上から2つの数値を削除し、それらのインデックス間の、スタックの1番上の下限を含み上限を含まないサブリストを取得する。例えば、[0, 1, 2, 3, 4]の0、 2のサブリストは[0, 1]となる。",
+        append: "スタックの1番上を削除し、それをスタックの1番上のリストの末尾に追加する。",
+        unappend: "スタックの1番上のリストの末尾にあるイオタを削除し、それをスタックの1番上に追加する。",
+        add: "スタックの1番上のリストを削除し、そのすべての要素をスタックの1番上のリストの末尾に追加する。",
+        empty_list: "空のリストをスタックの1番上に追加する。",
+        singleton: "スタックの1番上を削除し、その要素のみを含むリストを追加する。",
+        abs: "スタックの1番上のリストを削除し、そのリスト内の要素の数をスタックに追加する。",
+        reverse: "スタックの1番上のリストを逆順にする。",
+        index_of: "スタックの1番上のイオタを削除し、1番上のリストを、リスト内でそのイオタがある最初のインデックス(0 から始まる)に置き換える。イオタがリストになければリストを-1に置き換える。",
+        remove_from: "スタックの1番上の数値を削除し、スタックの1番上のリストのn番目の要素を削除する(nは削除した数値)。",
+        replace: "スタックの1番上のイオタと数値を削除し、スタックの1番上のリストのn番目の要素をそのイオタにする(nは削除した数値)。数値が範囲外の場合は何もしない。",
+        last_n_list: "スタックからその$(italic)数/$の要素を削除し、スタックの1番上のリストに追加する。",
+        splat: "スタックの1番上のリストを削除し、その内容をスタックに追加する。",
+        construct: "1番上のイオタを削除し、それをスタックの1番上のリストに最初の要素として追加する。",
+        deconstruct: "スタックの1番上のリストから最初のイオタを削除し、そのイオタをスタックに追加する。",
+      },
+      
+      patterns_as_iotas: {
+        "1": "この術の多くの特徴の内の1つは$(italic)パターン自体/$がイオタとして機能できることで、描画中にそれらをスタックに加えることもできる。$(br2)ここで当然の疑問が沸く。$(br)どうやってそれらを表現すれば良い？単にパターンを描くのでは、それをスタックに追加するように自然界に伝えることは望めず、アクションに一致するだけだろう。",
+        "2": "幸い、自然界はパターンを直接操作するために使用できる$(l:casting/influences)作用/$一式を提供してくれた。$(br2)端的には、$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)検討/$で1つのパターンをスタックに追加し、$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$と$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)回想/$でリスト全体を追加できる。",
+        escape: {
+          "1": "$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)検討/$を使用するには、それを描いてから、他の任意のパターンを描く。その2つ目のパターンがスタックに追加される。",
+          "2": "計算機科学に精通している人であれば、パターンをスタックに「エスケープする」と考えれば分かりやすいかもしれない。$(br2)これの通常の使用法は、$(l:patterns/readwrite#hexcasting:write)$(action)筆記者の仕掛/$を使用してパターンを$(l:items/scroll)$(item)巻物/$や$(l:items/slate)$(item)石板/$にコピーし、おそらくそれらで装飾することである。",
+        },
+        parens: {
+          "1": "$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$を描くと、パターンの描画が一時的に異なる動作をする。$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)回想/$を描くまで、描いたパターンは保持される。それから$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)回想/$を描くと、それらがリストイオタとしてスタックに追加される。",
+          "2": "もう1つ$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$を描いた場合、それはリストに保存されるが、通常の描画に戻すには$(italic)2つ/$の$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)回想/$を描かなければならない。",
+        },
+        undo: "最後に、$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$と$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)回想/$の内側でパターンを描き間違えたときには$(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)消失/$を描いて、最後に描いたパターンを作成中のパターンリストから削除できる。",
+        further_notes: {
+          title: "追加のメモ",
+          "1": "$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$と$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)回想/$の特別な動作を回避するには、それらの前に$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)検討/$を描けば、描画に戻るために要する$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)回想/$の数に影響を与えず、リストに追加されるだけになる。$(br2)$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$中に2つの$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)検討/$を描くと、1つの$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)検討/$がリストに追加される。",
+          "2": "$(l:patterns/meta#hexcasting:eval)$(action)ヘルメスの仕掛/$やその他のメタ評価パターンで実行されるリストにパターン以外のイオタがあると、通常は変事が発生する。しかし、この章に記載したパターンを使用して、これを回避できる。$(br2)パターンイオタと同様に、ここに記載したパターンで$(o)他の$()種類のイオタを「エスケープ」し、何かがそれを評価しようとしたときに変事を起こさずスタックに追加されるようにできる。",
+          "3": "この手法は、$(hex)呪紋/$で毎回構築したり取得したりせずに、複雑なベクトルやエンティティ参照などの特定のイオタを参照できるようにしたい場合に便利である。$(br2)そのようなイオタをパターンのリストに入れる過程は、最初から多少は複雑になり得る。最も簡単な方法は、リストを組み立てるときには仮のパターンを描き、その後に$(l:patterns/lists#hexcasting:replace)$(action)外科医の昂揚/$で目的のイオタに置き換えることだ。",
+        },
+      },
+      
+      readwrite: {
+        "1": "この章では、より恒久的な媒体での$(thing)イオタ/$の保管について扱う。ほぼすべてのイオタは$(l:items/focus)$(item)焦点具/$や$(l:items/spellbook)$(item)魔法書/$などの適切なアイテムに保存し、後で読み込むことができる。$(l:items/abacus)$(item)そろばん/$などの一部のアイテムは読み込みだけができる。$(br2)イオタは通常、反対側の手から読み書きされるが、アイテムがエンティティとして地面や額縁の中にあるときはアイテムでの読み書きもできる。",
+        "2": "この方法で相互作用できるエンティティが他にもあるかもしれない。例えば、壁に掛けられた$(l:items/scroll)$(item)巻物/$からパターンを読み込むことができる。$(br2)ただし、他のプレイヤーへの参照は保存できず、自分のみができるようだ。エンティティの参照は真名の概念に似ていると考えられる。おそらく自然界が、自分の名を敵の手から守ることを手伝ってくれているのだろう。自分の名を仲間に持ってもらいたければ$(l:items/focus)$(item)焦点具/$を作れば良い。",
+        read: "反対側の手にあるアイテムに保存されているイオタを、コピーしてスタックに追加する。",
+        write: "1番上のイオタをスタックから削除し、反対側の手にあるアイテムに保存する。",
+        "read/entity": "$(l:patterns/readwrite#hexcasting:read)$(action)筆記者の反射/$と似ているが、イオタは自分の反対側の手ではなくエンティティから読み込まれる。",
+        "write/entity": "$(l:patterns/readwrite#hexcasting:read)$(action)筆記者の仕掛/$と似ているが、イオタは自分の反対側の手ではなくエンティティに書き込まれる。$(br2)興味深いことに、このスペルを使用して自分の名を書き込むことはできないようだ。もしそれができたら危険にさらされる気がする。",
+        readable: "反対側の手にあるアイテムが読み込めるイオタを保持していればTrueを返す。そうでなければFalseを返す。",
+        "readable/entity": "$(l:patterns/readwrite#hexcasting:readable)$(action)監査人の反射/$と似ているが、自分の反対側の手ではなくエンティティが読み込めるかどうかを確認する。",
+        writable: "反対側の手にあるアイテムにイオタを保存できるならTrueを返す。そうでなければFalseを返す。",
+        "writable/entity": "$(l:patterns/readwrite#hexcasting:writable)$(action)査定人の反射/$と似ているが、自分の反対側の手ではなくエンティティに書き込めるかどうかを確認する。",
+        "local.title": "レイヴンマインド",
+        local: "とはいえ、情報を保存できる場所はアイテムだけではない。スタックと似て非なるものである、$(hex)呪紋/$自体の$(media)メディア/$に情報を保存することもできる。本文ではこれを$(l:patterns/readwrite#hexcasting:local)$(thing)レイヴンマインド/$と称する。$(l:items/focus)$(item)焦点具/$と同様に1つのイオタを保持し、同様に最初は$(l:casting/influences)$(thing)Null/$である。$(l:patterns/meta#hexcasting:for_each)$(action)トートの仕掛/$の反復間では保持されるが、直前の$(hex)呪紋/$の一部である間のみだ。描画を止めると値は消失する。",
+        "write/local": "1番上のイオタをスタックから削除し、それを$(l:patterns/readwrite#hexcasting:local)$(thing)レイヴンマインド/$に保存し、$(hex)呪紋/$の描画を止めるまで保管する。",
+        "read/local": "$(l:patterns/readwrite#hexcasting:write/local)$(action)フギンの仕掛/$で書き込んだであろうイオタを、$(l:patterns/readwrite#hexcasting:local)$(thing)レイヴンマインド/$からコピーする。",
+      },
+      
+      meta: {
+        "eval.1": "パターンまたはパターンのリストをスタックから削除し、それらを$(l:items/staff)$(item)杖/$で自分で描いたかのように発動する($(l:patterns/meta#hexcasting:halt)$(action)カロンの仕掛/$に差し掛かるまで)。イオタが$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)検討/$や$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)その同類/$でエスケープされると、スタックに追加される。そうしなければ、パターンでないと失敗する。",
+        "eval.2": "これは$(l:items/focus)$(item)焦点具/$と併用すると$(italic)非常に/$強力になり得る。$(br2)見つけたある難解な巻物によると、それは自然界の官僚制度を「チューリング完全」にもしているようだ。$(br2)ただし、$(hex)呪紋/$が自身を発動できる回数には制限があるようだ。自然界は暴走するスペルを大目に見てはくれない。$(br2)さらに、自分で導かなくてもパターンのエネルギーが生じるため、変事が発生すると残りのアクションが非常に不安定になり、すぐに解けてしまう。",
+        
+        "for_each.1": "パターンのリストとリストをスタックから削除し、指定したパターンを2番目のリストの各要素に発動する。",
+        "for_each.2": "より具体的には、2番目のリストの各要素に:$(li)現在のスタック上のすべてとその要素を含む新しいスタックを生成する。$(li)最初のリストのすべてのパターンを描く。$(li)スタックに残っているすべてのイオタをリストに保存する。$(br)その後の続きがすべて終わった後、保存されたイオタのリストをメインのスタックに追加する。$(br2)この技術の実践者が皆発狂するのも不思議ではない。",
+        
+        "halt.1": "このパターンは$(hex)呪紋/$を強制的に停止する。パターンを描くのを止めるか杖を下ろすだけで良いため、それ自体ではほぼ役に立たない。",
+        "halt.2": "しかし、$(l:patterns/meta#hexcasting:eval)$(action)ヘルメス/$や$(l:patterns/meta#hexcasting:for_each)$(action)トートの仕掛/$と組み合わせると、$(italics)はるかに/$興味深いものになる。これらのパターンは停止を「抑制する」役割を果たし、$(hex)呪紋/$全体を終了させるのではなく、代わりにこれらの仕掛を終了する。これで$(l:patterns/meta#hexcasting:for_each)$(action)トートの仕掛/$が指定されたすべてのイオタで動作しないようにできる。いわば狂気からの脱出である。",
+        
+        "eval/cc.1": "$(l:patterns/meta#hexcasting:eval)$(action)ヘルメスの仕掛/$と同様にパターンまたはパターンのリストを発動するが、独自の「ジャンプ」イオタが事前にスタックに追加される。",
+        "eval/cc.2": "「ジャンプ」イオタが実行されると、残りのパターンをスキップし、パターンリストの最後に直接ジャンプする。$(p)$(l:patterns/meta#hexcasting:halt)$(action)カロンの仕掛/$の存在を考慮すると冗長に見えるかもしれないが、カロンでは1つのみを終了できるが、これにより$(italic)入れ子/$$(l:patterns/meta#hexcasting:eval)$(action)ヘルメス/$の発動を制御された方法で終了させることが可能になる。 $(p)「ジャンプ」イオタは実行が終了した後もスタック上に留まるようだ...その影響については考えないほうが良い。",
+        
+        "thanatos.1": "$(hex)呪紋/$がまだ評価できるパターンの数をスタックに追加する。これは$(hex)呪紋/$がパターンを発動する度に1ずつ減る。"
+      },
+      
+      circle_patterns: {
+        disclaimer: "これらのパターンは$(l:greatwork/spellcircles)$(item)魔法陣/$から発動する必要があり、$(l:items/staff)$(item)杖/$を介して発動しようとすると見事に失敗する。",
+        
+        "circle/impetus_pos": "この魔法陣の$(l:greatwork/impetus)$(item)原動石/$の位置を返す。",
+        "circle/impetus_dir": "この魔法陣の$(l:greatwork/impetus)$(item)原動石/$が向いている方向を単位ベクトルとして返す。",
+        "circle/bounds/min": "この魔法陣の境界の北西の下側の隅の位置を返す。",
+        "circle/bounds/max": "この魔法陣の境界の南東の上側の隅の位置を返す。",
+      },
+      
+      akashic_patterns: {
+        "akashic/read": "$(l:greatwork/akashiclib)$(item)虚空図書館/$から、指定された位置にある$(l:greatwork/akashiclib)$(item)記録媒体/$で、指定されたパターンに結び付いたイオタを読み取る。範囲に制限はない。約1個の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+        "akashic/write": "$(l:greatwork/akashiclib)$(item)虚空図書館/$に、指定された位置にある$(l:greatwork/akashiclib)$(item)記録媒体/$で、指定されたパターンでイオタを結び付ける。範囲に制限は$(italic)ある/$。約1個の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+      },
+      
+      // Normal Spells
+      
+      itempicking: {
+        "1": "$(l:patterns/spells/blockworks#hexcasting:place_block)$(action)ブロック設置/$などの特定のスペルは、インベントリから追加でアイテムを消費する。これが発生すると、スペルはまず使用するアイテムを探し、次にインベントリ内のすべての該当するアイテムから引き出す。$(br2)この処理は「アイテムの選定」と呼ばれる。",
+        "2": "より具体的には:$(li)最初に、スペルはホットバー内の$(l:items/staff)$(item)杖/$の$(italic)右側/$から有効なアイテムを検索し、右側に回り込み、$(l:items/staff)$(item)杖/$がオフハンドにある場合は最初のスロットから開始する。$(li)次に、スペルは可能な限り$(italic)インベントリの後ろ/$から、ホットバーよりもメインのインベントリを優先してアイテムを引き出す。",
+        "3": "こうすることで、ホットバーに「選択用」アイテムを持ってスペルに何を使用するかを指示し、残りのインベントリをそのアイテムで満たしてスペルに十分な蓄えをすることができる。",
+      },
+      
+      basic_spell: {
+        "explode.1": "数値とベクトルをスタックから削除し、指定された位置に指定された威力で爆発を引き起こす。",
+        "explode.2": "威力3はクリーパーの爆発とほぼ同等で、威力4はTNTの爆発とほぼ同等である。しかし、自然界は威力10よりも強い爆発を提供することを拒否する。$(br2)不思議なことに、この爆発は自分には害を及ぼさないようだ。おそらく、$(italic)自分/$が爆発しているからだろうか？$(br2)威力0ではごく少量、爆発の威力が1上がるごとに3個追加の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+        
+        "explode.fire.1": "数値とベクトルをスタックから削除し、指定された位置に指定された威力で炎の爆発を引き起こす。",
+        "explode.fire.2": "1個の$(l:items/amethyst)$(item)アメジストダスト/$に、爆発の威力が1上がるごとに約3個追加の$(l:items/amethyst)$(item)アメジストダスト/$を要する。その他は、炎が伴うこと以外は$(l:patterns/spells/basic#hexcasting:explode)$(action)爆発/$と同じである。",
+        
+        add_motion: "エンティティと方向をスタックから削除し、指定されたエンティティを指定された方向に押し進める。推進力はベクトルの長さによって決まる。ベクトルの長さの2乗に、最初に対象を決めたときを除くすべての推進ごとに1個追加の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+        blink: "エンティティと長さをスタックから削除し、指定されたエンティティをその視線の方向に指定された長さだけテレポートする。$(br)2ブロックの移動ごとに約1個の$(l:items/amethyst)$(item)アメジストの欠片/$を要する。",
+        
+        "beep.1": "ベクトルと2つの数値をスタックから削除する。指定された位置で、1つ目の数値で定義された$(thing)楽器/$を、2つ目の数値で定義された$(thing)音符/$で演奏する。ごく少量の$(media)メディア/$を要する。",
+        "beep.2": "16の異なる$(thing)楽器/$と25の異なる$(thing)音符/$があるようだ。どちらも0から示される。$(br2)これらは$(item)音符ブロック/$で作れる楽器と同じようだが、各楽器の番号がなぜそうなっているのかは分からない。$(br2)いずれにせよ、$(l:items/lens)$(item)念視鏡/$を通して$(item)音符ブロック/$を調べれば使用する必要がある数値を見つけることができる。",
+      },
+      
+      blockworks: {
+        place_block: "位置をスタックから削除し、ブロックアイテムを選定して指定された位置に設置する。$(br)約8分の1個の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+        break_block: "位置をスタックから削除し、指定された位置のブロックを破壊する。このスペルはダイヤモンドのツルハシで壊せるほぼすべてのものを壊すことができる。約8分の1個、$(l:patterns/spells/blockworks#hexcasting:conjure_block)$(action)魔法ブロック/$か$(l:patterns/spells/blockworks#hexcasting:conjure_light)$(action)魔法光源/$を破壊するにはごく少量の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+        create_water: "指定された位置のブロックに水ブロックを召喚する(またはバケツ1杯分を入れる)。約1個の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+        destroy_water: "指定された位置の液体容器、または周囲の液体を枯らす。約2個の$(l:items/amethyst)$(item)蓄力アメジスト/$を要する。",
+        conjure_block: "指定された位置に自分の色素で輝く、幽玄だが固体のブロックを生成する。約1個の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+        conjure_light: "指定された位置に自分の色素で柔らかく輝く魔法の光を生成する。約1個の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+        bonemeal: "$(item)骨粉/$を適用したように、対象の位置の植物や苗木の成長を促す。1個強の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+        edify: "対象の位置の苗木に$(media)メディア/$を強制的に注入し、$(l:items/edified)$(thing)教化された木/$に成長させる。約1個の$(l:items/amethyst)$(item)蓄力アメジスト/$を要する。",
+        ignite: "$(item)ファイヤーチャージ/$を適用したように、指定された位置の上に火を起こすか、エンティティに火を点ける。約1個の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+        extinguish: "広範囲のブロックを消化する。約6個の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+      },
+      
+      nadirs: {
+        "1": "この一連のスペルはすべてエンティティに負のポーション効果を付与する。これらはすべて、受取先のエンティティと1つか2つの数値を取得する。1つ目の数値は持続時間で、2つ目の数値は、存在するならば効力(1から始まる)である。$(br2)それぞれに「基本対価」があり、実際の対価はその基本対価に効力の2乗を掛けたものと同等になる。",
+        "2": "ある一説によると、これらのスペルとその姉妹である$(l:patterns/great_spells/zeniths)$(action)頂点/$は「[...] この世界に近い、強力な魔法使いたちが土地から魔法を集め、死ぬまで決闘を繰り広げる世界から着想を得たが、残念ながら、その多くは翻訳中に失われてしまった...」とのことだ。$(br2)おそらくそれが、それらの独特な名前の理由なのだろう。",
+        
+        "potion/weakness": "$(thing)弱体化/$を付与する。基本対価は10秒ごとに1個の$(l:items/amethyst)$(item)アメジストダスト/$。",
+        "potion/levitation": "$(thing)浮遊/$を付与する。基本対価は5秒ごとに1個の$(l:items/amethyst)$(item)アメジストダスト/$。",
+        "potion/wither": "$(thing)衰弱/$を付与する。基本対価は1秒ごとに1個の$(l:items/amethyst)$(item)アメジストダスト/$。",
+        "potion/poison": "$(thing)毒/$を付与する。基本対価は3秒ごとに1個の$(l:items/amethyst)$(item)アメジストダスト/$。",
+        "potion/slowness": "$(thing)移動速度低下/$を付与する。基本対価は5秒ごとに1個の$(l:items/amethyst)$(item)アメジストダスト/$。",
+      },
+      
+      hexcasting_spell: {
+        basics: "これら3つのスペルはそれぞれ$(l:items/hexcasting)$(hex)呪紋$(thing)を発動するアイテム/$を作成する。$(br)これらはすべて空のアイテムをオフハンドに持つ必要があり、発動するパターンのリストと、アイテムのバッテリーを形成するためのドロップされた$(l:items/amethyst)$(item)アメジスト/$のスタックを表すエンティティの2つが必要である。$(br2)詳細については$(l:items/hexcasting)この項目/$を参照。",
+        "craft/cypher": "約1個の$(l:items/amethyst)$(item)蓄力アメジスト/$を要する。",
+        "craft/trinket": "約5個の$(l:items/amethyst)$(item)蓄力アメジスト/$を要する。",
+        "craft/artifact": "約10個の$(l:items/amethyst)$(item)蓄力アメジスト/$を要する。",
+        
+        "recharge.1": "反対側の手の$(media)メディア/$を含むアイテムを再充填する。アイテムごとに約1個の$(l:items/amethyst)$(item)アメジストの欠片/$を要する。",
+        "recharge.2": "このスペルは作成のスペルと似た方法で発動し、ドロップされた$(l:items/amethyst)$(item)アメジスト/$のスタックを表すエンティティを提供して、反対側の手のアイテムの$(media)メディア/$バッテリーを再充填する。$(br2)このスペルはアイテムの元のバッテリーサイズを超えて再充填することは$(italic)できない/$。",
+        
+        "erase.1": "反対側の手の、$(hex)呪紋/$またはイオタを含むアイテムを空にする。アイテムごとに約1個の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+        "erase.2": "また、このスペルはアイテム内に保存されているすべての$(media)メディア/$を取り消し、自然界に解放してアイテムを完全に白紙の状態に戻す。これにより、間違ったスペルを入れてしまった$(l:items/hexcasting)$(item)トリンケット/$を再利用できたりする。$(br2)$(l:items/focus)$(item)焦点具/$や$(l:items/spellbook)$(item)魔法書/$のページを白紙にし、その過程で封印を剥がす機能も果たす。",
+      },
+      
+      sentinels: {
+        "1": "$(italic)さあ行こう 万事順調$(br)一人離れて 立って見張ろう/$$(br2)$(l:patterns/spells/sentinels)$(thing)センチネル/$は$(hex)呪紋/$の描画を補助するために召喚できる神秘的な力で、使い魔や守護霊のようなものである。自分の目には回転する幾何学模様のように見えるが、他者には見えない。",
+        "2": "これには幾らか興味深い特性がある:$(li)実体がないようで、誰も触れない。$(li)自分の$(hex)呪紋/$のみが相互作用できる。$(li)召喚されると追放されるまでその場に留まる。$(li)十分に近ければ、固形の物体越しでも常に見える。",
+        
+        "sentinel/create": "自分の$(l:patterns/spells/sentinels)$(thing)センチネル/$を指定された位置に召喚する。約1個の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+        "sentinel/destroy": "自分の$(l:patterns/spells/sentinels)$(thing)センチネル/$を追放し、世界から消し去る。ごく少量の$(media)メディア/$を要する。",
+        "sentinel/get_pos": "自分の$(l:patterns/spells/sentinels)$(thing)センチネル/$の位置を、召喚されていなければ$(l:casting/influences)$(thing)Null/$をスタックに追加する。ごく少量の$(media)メディア/$を要する。",
+        "sentinel/wayfind": "スタックの1番上の位置ベクトルを、その位置から自分の$(l:patterns/spells/sentinels)$(thing)センチネル/$を指し示す単位ベクトルに、召喚されていなければ$(l:casting/influences)$(thing)Null/$に変換する。ごく少量の$(media)メディア/$を要する。",
+      },
+      
+      colorize: "このスペルを発動するには反対側の手に$(l:items/pigments)$(item)色素/$を持つ必要がある。すると色素が消費され、精神の色彩が(再度このスペルを描くまでは)恒久的に変化する。約1個の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+      
+      cycle_variant: "自分が作る一部のアイテムは$(media)メディア/$の影響を変わった形で受けるようだ。反対側の手に$(l:items/hexcasting)$(item)サイファー/$、$(l:items/hexcasting)$(item)トリンケット/$、$(l:items/hexcasting)$(item)アーティファクト/$、$(l:items/focus)$(item)焦点具/$、または$(l:items/spellbook)$(item)魔法書/$を持つと、このスペルを使用して外観を変更できる。約1個の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+      
+      flights: {
+        "1": "確かに、無制限の飛行は自分の理解を超えているようだが、それでも空中に留まる方法を幾らか見つけた。それぞれに欠点がある。$(br2)どの形式でも余分な$(media)メディア/$のきらめきが生じ、スペルが終わりに近づくにつれて、さらに赤と黒の光が散る。",
+        "2": "もちろん、他の飛行の形も存在する。例えば、$(l:patterns/spells/basic#hexcasting:add_motion)$(action)推進/$と$(l:patterns/spells/nadirs#hexcasting:potion/levitation)$(action)青の太陽の天底/$の組み合わせが、一種の飛行のために古くから使用されてきた。$(br2)背中に薄い膜を着けて滑空できるようにするとも聞いたことがある。調査によると、高位スペルの$(l:patterns/great_spells/altiora)$(action)アルティオラ/$を使用してそれを模倣できるかもしれない。",
+        
+        "range.1": "範囲が限られている飛行。",
+        "range.2": "2番目の引数はスペルが安定する水平半径のメートル。その半径の外に移動するとスペルが終了し、空から落ちる。しかし、安全地帯の内側にいる限り、スペルは無期限に持続する。追加の$(media)メディア/$のきらめきが安全地帯の原点を示す。$(br2)安全距離1mごとに約1個の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+        
+        "time.1": "時間が限られている飛行。",
+        "time.2": "2番目の引数はスペルが安定する時間の秒数。その時間が過ぎるとスペルが終了し、空から落ちる。$(br2)飛行1秒ごとに約1個の$(l:items/amethyst)$(item)アメジストの欠片/$と比較的高価だが、旅行に最適だと思われる。",
+        
+        // Putting this in this category instead of elsewhere -- see sentinel chapter also containing some reflections/nonspells
+        "can_fly.1": "指定されたプレイヤーが$(l:patterns/spells/flight#hexcasting:flight/range)隠者/$または$(l:patterns/spells/flight#hexcasting:flight/time)旅人の飛行/$の影響下にあるかどうかを返す。",
+        "can_fly.2": "プレイヤーが他の手段で飛行できるかどうかは検知しない。$(br2)これを何に使用するのかは理解し難い。しかし、その実用性は見る人の目の中にあるのだろう。"
+      },
+      
+      create_lava: {
+        "1": "指定された位置のブロックに溶岩ブロックを召喚する(またはバケツ1杯分を入れる)。約1個の$(l:items/amethyst)$(item)蓄力アメジスト/$を要する。",
+        "2": "このスペルに関する知識は秘密にしておくことが賢明かもしれない。ある植物学者の派閥がそれに...敏感である、と聞いたことがある。$(br2)まあ、誰も宇宙の深い秘密を解明するのが楽だとは言っていない。",
+      },
+      
+      weather_manip: {
+        lightning: "天は意のままだ！このスペルは稲妻を召喚して指定した位置の地に落とす。約3個の$(l:items/amethyst)$(item)アメジストの欠片/$を要する。",
+        summon_rain: "雲を操ろう！このスペルは発動した世界全体に雨を降らせる。約1個の$(l:items/amethyst)$(item)蓄力アメジスト/$を要する。すでに雨が降っている場合は何もしない。",
+        dispel_rain: "雨乞いの対を成す。このスペルは発動した世界全体の雨を止ませる。約1個の$(l:items/amethyst)$(item)アメジストの欠片/$を要する。空がすでに晴れている場合は何もしない。",
+      },
+      
+      altiora: {
+        "1": "滑空を可能にするのに十分な実体を備えた、翼を模った$(media)メディア/$の束を自分の周囲に召喚する。",
+        "2": "これらの使用は$(item)エリトラ/$の使用と同じで、対象(プレイヤーでなければならない)が空中に飛んでから、$(k:jump)を押すと翼が展開する。翼は脆く、陸地に触れると壊れる。長距離の飛行には$(l:patterns/spells/basic#hexcasting:add_motion)$(action)推進/$や(大胆ならば)$(item)花火/$が役立つだろう。約1個の$(l:items/amethyst)$(item)蓄力アメジスト/$を要する。",
+      },
+      
+      "teleport/great": {
+        "1": "$(l:patterns/spells/basic#hexcasting:blink)$(action)瞬間移動/$よりもはるかに強力で、このスペルで世界中のほぼどこにでもテレポートできるようになる。制限はあるようだが、慣れている通常の影響範囲よりも$(italic)はるかに/$大きい。",
+        "2": "エンティティは指定されたベクトルにテレポートされる。奇妙だが、このベクトルは世界の絶対位置ではなく、オフセットのようだ。例えば、$(l:patterns/consts#hexcasting:const/vec/x)$(action)方向の反射 +X/$を使用すると、エンティティは元の位置からちょうど1ブロック東に行く。距離に関係なく、常に約10個の$(l:items/amethyst)$(item)蓄力アメジスト/$を要するようだ。$(br2)転送は完璧ではなく、プレイヤーのような複雑なものをテレポートすると、インベントリは結合が$(italic)完全/$には維持できず、目的地の周辺に飛び散る傾向があるようだ。さらに、対象は乗ったり座ったりしている無生物から強制的に降ろされる...が、動物には乗って行けることを示唆する紙片を読んだことがある。",
+      },
+      
+      zeniths: {
+        "1": "この一連のスペルはすべて、$(l:patterns/spells/nadirs)$(action)天底/$に似て、エンティティに正のポーション効果を付与する。ただし、これらの$(media)メディア/$の対価は効力の$(italic)3乗/$で増加する。",
+        
+        "potion/regeneration": "$(thing)再生能力/$を付与する。基本対価は1秒ごとに1個の$(l:items/amethyst)$(item)アメジストダスト/$。",
+        "potion/night_vision": "$(thing)暗視/$を付与する。基本対価は5秒ごとに1個の$(l:items/amethyst)$(item)アメジストダスト/$。",
+        "potion/absorption": "$(thing)衝撃吸収/$を付与する。基本対価は1秒ごとに1個の$(l:items/amethyst)$(item)アメジストダスト/$。",
+        "potion/haste": "$(thing)採掘速度上昇/$を付与する。基本対価は3秒ごとに1個の$(l:items/amethyst)$(item)アメジストダスト/$。",
+        "potion/strength": "$(thing)攻撃力上昇/$を付与する。基本対価は3秒ごとに1個の$(l:items/amethyst)$(item)アメジストダスト/$。",
+      },
+      
+      greater_sentinel: {
+        "1": "自分の$(l:patterns/spells/sentinels)$(thing)センチネル/$の高位版を召喚する。約2個の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
+        "2": "強化された$(l:patterns/spells/sentinels)$(thing)センチネル/$は見た目が少し変わっているが、高位スペルを使用せずに召喚できる通常のものと同様に機能する。しかし、スペルが機能する範囲は自分の高位$(l:patterns/spells/sentinels)$(thing)センチネル/$の周囲の小さな領域、約16ブロックに拡張される。言い換えれば、世界のどこにいても、自分の$(l:patterns/spells/sentinels)$(thing)センチネル/$の周囲のものと相互作用できる(不思議なチャンクローディングの力はさておき)。",
+      },
+      
+      make_battery: {
+        "1": "瓶に$(media)メディア/$を注入して$(l:items/phials)$(item)薬瓶/$を形成する。",
+        "2": "$(l:patterns/spells/hexcasting)$(action)魔術用具を作成する/$スペルと似ており、反対側の手に$(item)ガラス瓶/$を持ち、ドロップされた$(l:items/amethyst)$(item)アメジスト/$のスタックをスぺルに提供する必要がある。詳細については$(l:items/phials)このページ/$を参照。$(br2)約1個の$(l:items/amethyst)$(item)蓄力アメジスト/$を要する。",
+      },
+      
+      "brainsweep_spell.1": "このスペルのことは全く分からない...正直なところ、それで何ができるかを知りたいかどうかも分からない。",
+      
+      
+      lore: {
+        cardamom1: {
+          "1": "$(italic)正式名称: $(br)カルダモン・スティールスから父への手紙 #1/$$(br2)パパへ$(br)お金を貯めて私を大図書館に行かせてくれてありがとう、毎日そう思っている。すごく色々なことを勉強してるの！私の語彙力じゃ、この気持ちは表現しきれないみたい...ここにいられることが、とてもうれしい。",
+          "2": "メインドームで座ってこれを書いている。六角術団がそれを維持してて、私が分かっている限りでは、上のほうにある何か変わった装置で、勉強熱心な生徒たちの机とかから漏れてはぐれた思考エネルギーを捕まえるみたい。寮の友達のアマニタがこの分野を勉強してて、よく私に詳しく説明したがる。私はあまりよく分かってないけど。",
+          "3": "聞いた限りでは、考える過程、つまり私がペンを動かしたり、パパがこの手紙を読んだりする見えない仕組みは、完全には効率的じゃない。ワゴンの車軸が、しばらく回した後に触ると熱くなっているみたいに、エネルギーが少しだけ周りに出る。この余剰エネルギーのことを「メディア」っていう。1人から余るメディアはほんの少しだけど、メインドームにいる大勢の考えている人には相乗効果があって、一種の器用な働きと組み合わせると、紫色の結晶に固められるんだって。",
+          "4": "でも、彼女の勉強についてはもういいよね。今日は地質学団の初めての探検から帰ってきたの！出発する前に手紙を送らなくてごめん。気づいたらもうその日になってた。私たちは大図書館の東にある地面の割れ目に入って、岩と土の下でキャンプしながら夜を過ごした。もちろん、洞窟では明るくて人がよく通る場所にいたし、正直夜の地上よりも安全だっただろうけど、すごく怖かった！",
+          "5": "幸いその夜は事故もなく過ぎて、地元の鉱脈を調べるために洞窟の奥に進んだ。私たちは岩の深くに少しだけ現れるらしい「アメジスト」っていう紫色の結晶の鉱脈を探していた。悲しいけど何も見つけられなくて、眩しい地上に手ぶらで戻った。",
+          "6": "考えてみると、この「アメジスト」の説明はアマニタが話していたメディアの結晶とほぼ同じみたい。思考の塊が地下に自然発生するってどんな感じなんだろう！なんでそうなるのか想像もつかないけど...",
+          "7": "生徒として、私にはアカシックポストで3か月ごとに$(br)1通の手紙を無料で送る権利がある。残念だけど、知っての通り私は金欠だから...$(br)パパと連絡を取る方法はこれしかないの。もちろん、手紙の返事を送るためのお金を一緒に用意してくれたら本当に助かるけど、私たちの連絡には限界があるようね。パパと一緒にいられないのは嫌だけど、ここで得たスキルは返済より大きくなる。想像してみて、私は家族の中で初めて農民以外になるんだよ！",
+          "8": "そんなわけで、また書くのは3ヵ月後になると思う。$(br2)敬具$(br)カルダモン・スティールス",
+        },
+        
+        cardamom2: {
+          "1": "$(italic)正式名称: $(br)カルダモン・スティールスから父への手紙 #2/$$(br2)パパへ$(br)...やれやれ、この3ヵ月を短い手紙にまとめるなんて大変。この完全に無料でもらった奇跡が、私にこんなつらい任務を課してきたなんて！かわいそうな私。",
+          "2": "地質学団での勉強は順調に進んでいる。私たちはさらに探検して、大地の奥深く、滑らかな灰色の石が硬くて薄片状の粘板岩に変わる場所まで行った。足の下から息が詰まるような嫌なホコリが出てくるの...闇の生き物たちを抜きにしても(1、2回出くわしたことがあるけど、私が命がけで戦わないといけないなんて、パパが考えたらどれくらい震えるか分かるから、彼らについては書かないでおく)、足元にいつも敵がいるなんてびっくり。",
+          "3": "でも、やっといくつかアメジストを見つけられた。探検の内の1回では、いくつか傷がついた結晶がある小さな鉱脈があった。どれも持ち続けないですぐ教官に渡すように厳しく言われていた。この出来事は全部かなりばかげてると思う。みんなそれをすごく重大な秘密みたいに扱っているのに、大図書館で6ヵ月くらいしか過ごしてない、12人の生徒の集団が1平方フィートの中で、12本の試掘用ツルハシで10ドラムくらいしかないものを掘り出そうとしてるんだから...",
+          "4": "私も何が目的なのかぜんぜん分からない。図書館員が宝石の百科事典のことを教えてくれたんだけど、アメジストにはほとんど何の目的もなくて、ある特殊な種類のガラスやレンズにだけ使われるとか。$(br2)推測してみるなら、前に書いたように、このアメジストの結晶と、それによく似たメディアは同じものなんじゃないかと思う。",
+          "5": "もしそうなら、教官が質問されるのを嫌がったり、こんなに隠そうとするのは、これが大図書館の独自の研究の1つで、敵勢力の手に渡したくないからかもしれない。$(br2)でも、この理屈はあまりしっくりこない。私が洞窟で扱ったアメジストとアマニタが見せてくれたメディアの結晶は、確かによく似ているようだけど同じじゃないから。念のため見比べてみたいけど、メディアにはアメジストにはない、ブンブンとかゴロゴロする変わった感触があるの。",
+          "6": "洞窟のアメジストにそれを感じられなかったのは地下のストレスのせいだったことも十分あり得るし...なんとか触れたときは手が震えていたけど、感触はとても軽かった。やっぱり私には同じに見えない。光の反射がちょっと違うし。$(br2)もし洞窟の外でアメジストの結晶を手に入れられたら、アマニタにそれで魔法を使えるかどうか聞いてみようと思う。会うたびに彼女は新しくすごい技を持ってきてくれるから。",
+          "7": "先週は何の支えもなしで私を宙に浮かせてくれたし！$(br)服の重さは同じまま、体がピリピリして空気より軽くなって、とても不思議な感覚だったよ...効果が切れる前に彼女がベッドの上に引っ張ってくれて良かった。$(br2)敬具$(br)カルダモン・スティールス",
+        },
+        
+        cardamom3: {
+          "1": "$(italic)正式名称: $(br)カルダモン・スティールス$(br)から父への手紙 #3 1/2/$$(br2)パパへ$(br)前に書いてから、すごく変なことが2つ起こったの。$(br2)まず、六角術団の初級生徒担当の教授が失踪した。彼がどこに行ったのか誰も分からない。オフィスと居住区には鍵がかかっていたけど、まだ普段の混乱状態が続いている。",
+          "2": "もっと変なのが、大図書館の生徒たちが古くて事務的な管理部門を立ち上がらせようとしても、ぜんぜん聞いてくれなかったこと。他の教授たちも彼のことをあまり話したくないみたい。$(br2)たぶん想像通り、アマニタはひどく落ち込んでいる。大図書館が何とか見つけた後任の教授が誰であれ、年寄の教授には気配りとか初心者に対する腕がぜんぜんないし。",
+          "3": "でもなんと、これは私が伝えなきゃいけない2つの変なこととは違うの。私がいつか経験したかった一番すごい出来事が、地質学団の別の探検で起こった。今回、私たちは村の近くで調査する予定だった。",
+          "4": "普段そういうことをするときは、村長や長老との長いやりとりで、許可を得ていることを確認したり、どこに行って何をしていいかの境界線を決めたりしないといけない。でも今回の調査ではそういうことがほとんどなくて、出発のたった2日前に六角術団の教官から行き先を知らされた。",
+          "5": "村の近くでキャンプしたけど、深い森の中だった。近くの平原ならもっと快適だったはずなのに。テントを張った所からは村がほとんど見えなかった。到着した夜に寝袋を置いたとき、妙に静かで心配だった。村が見えなくても、声は聞こえたはずだし。でも私たちが地上にいる間は、ほとんど音がなかった。",
+          "6": "少しだけ聞こえた音はぜんぶ仕事のような、金床でハンマーが鳴る音とか、クワで土を耕す音とかで、話し声はちっとも聞こえなかった。$(br2)次の日の朝に、私たちはランタンを準備して地中に降りた。",
+          "7": "何のために洞窟探検をしているのか正確には知らされていなかったけど、他の生徒の一人が、追加のアメジストを探していると耳にしていて、十分理にかなっていると思った。私は洞窟の壁に紫の斑点がないか目を凝らしていたけど、ちょうど灰色の石が黒い粘板岩に変わっていくときに、信じられないような光景が目の前に広がった。$(br2)それは全体がアメジストでできた部屋で、私の身長の10倍くらい広かった。中は紫色の光とランタンの光で輝いているように見えて、表面はぜんぶギザギザの結晶で覆われていた。ここには、私が大図書館に来てから、私たちのグループ全員がこれまでに発掘したよりもたくさんのアメジストがあった。",
+          "8": "手袋が配られて、採掘するように言われた。一緒にいた教官の一人が不思議な薄紫色の箱を持っていて、大図書館の上層部の人たちが保管に使っているのを見たことがあったから、他の生徒たちも私も素直に洞窟の壁のガラスのような結晶を砕いて、その箱に入れた。周りの脆い結晶の下に2種類の密度が高く成長したものが見えた。1つはルースクリスタルと似た組成に見えたけど、もう1つはそれよりも...何て言えばいいか分からない。",
+          "9": "言いにくいけど、「重要」、それが私の考えた一番いい言葉。それにはある種の...重力があって、表面の暗くくぼんだXに何か神聖な意味があるような感じ。理由が何であれ、私たちはそれらに触れないように厳しく言われていた。時々、間違ってツルハシで砕いてしまって、責任を負った生徒がかなりきつく叱られていた。この作業は大変で、ほとんどの注意力を使ったけど、なんだか...明晰になったように感じたのがどうしても気になった。不思議で複雑な感覚だった。すごく頭が冴えている気がしたけど、もし立ち止まってこの感覚を調べたら、止まれなくなりそうとも思った。",
+          "10": "息を吸うたびに、頭の中に進む道を約束する親切な標識が建って、険しい崖の真下を指し示しているみたいだった。私は首を振って、標識を抑えられそうな採掘作業に没頭した。$(br2)でも何とかして、結晶の欠片をナップザックに隠すことができた。$(br2)私たちはほぼ一日中採掘して、教官の時計でもうすぐ日が沈むことが表示されるまでに、ほとんどの結晶を掘り出した。",
+          "11": "帰るとき、掘らなかった暗い切れ目のある場所の表面に新しい結晶のかすかな芽があって、なぜかそこから成長しているように見えたのが気になった。結晶の地質学について学んだことではどれも、結晶が成長するには何千年もかかるっていわれてたのに、ここでは1日も経たないうちに新しく成長していた。少なくとも、教官のその場所を壊すことへの忠告は理にかなっていたと思う。",
+          "12": "地上に戻る旅は何事もなく、ちょうど日が沈むころにテントに戻った。ごめん、手紙を書くための紙がなくなりそう。1通のアカシックレターに書けることは限られてて...この物語のためならもう1通手紙を買おうと思う。両方同時に送るから、一緒に届くはず。$(br2)敬具$(br)カルダモン・スティールス",
+        },
+        
+        cardamom4: {
+          "1": "$(italic)正式名称: $(br)カルダモン・スティールスから父への手紙 #3 2/2/$$(br2)パパへ$(br)さっき言ったように、話を書く紙を使い切っちゃったから、残りはこの手紙に書くね。私たちはちょうど日が沈む頃にキャンプに戻った。そしてその夜は、この奇妙なお出かけの中で一番恐ろしい出来事だった。",
+          "2": "私は気を紛らわせるために真夜中まで起きていた。月が雲に隠れてて、森の曲がりくねった道に迷ってキャンプへの帰り道が分からなくなった。夜のモンスターが怖くて、村に行ってベッドがあるかどうか確認することにした。少なくとも、そこなら身を守れるだろうし。",
+          "3": "村は簡単に見つけられたけど、音はほとんどしなかった。こんな夜遅くでも宿屋はあるはずだし、活気はなくても、無音ではないはず。でも宿屋のドアから覗いてみても誰もいなかった。$(br2)家のドアをノックしてみても反応がなかった。隣の2軒も完全に空き家のようだった。",
+          "4": "鼓動が早くなってきたから、次の家に入ることに決めた。中にいるのが誰でも、安眠妨害されていると分かっているはずだと思った。少なくとも、屋根の下で一晩泊めてくれなくても、他の声が聞こえれば安心できたのに。$(br2)その家はとても小さくて、製図家用の台とベッドがあるだけだった。ベッドに誰かいるのが見えたから、村のみんなが熟睡しているだけだと自分の気を紛らわせながら、出ていこうと振り返った。",
+          "5": "でも雲が動いて、月明かりがベッドの住人を照らした。$(br2)私が悲鳴を上げたら、その目が見開いた。それは...どう見ても、怖いくらい人間じゃなかった。ひどく退化した人みたいで、額は長すぎるし、体はずんぐりしてて密度が高かった。少なくとも「それ」と言うのがしっくりくると思う。目の前にいるのは私たちに似ていたけど、明らかに人間ほど賢くなかった。",
+          "6": "それの目は私を見つめていた...怖かった、くすんでて知性がなくて、ヒツジみたいだった！それは口を開いたけど、苦しそうに嘲るような言葉を発して、震えて、鼻にかかったうめき声を上げていた。",
+          "7": "逃げた。月の光が出できたから、窓から他の住民たちが見えたけど、私が初めて見た$(italic)もの/$と同じように、みんな歪んでいて簡略化されていた。歪んだ顔の恐ろしい、恐ろしい動物の目から逃げて、森の暗闇の中に転がり込んだ。$(br2)月明かりで見えるようになって、キャンプが見つけやすくなった。私が長い間留守にしていたことに誰も気づいていないようで良かった。寝袋に這い戻って、一晩中がんばって忘れようとした。",
+          "8": "この手紙からわかるように、私はあまり良くないことをした。あの歪んだ顔が今でも夢に出てくる。かつては人間だったかもしれないと考えるとゾッとする。$(br2)大図書館に帰ってから、持ち出した結晶の欠片をアマニタに見せた。彼女が証明してくれた。それは間違いなくメディアの結晶だった。でも、それが詰まった巨大なジオードが地下で何をしているのかまでは分からなかった。",
+          "9": "彼女は他にも面白いことを話してくれた。メディアはの本物のアメジストと同じように、数通前で言っていた特殊なガラスに使えるんだって。両方とも結晶化が起きる物理的な方法はほぼ同じだけど、それはメディアの魔法の特性とは何も関係ないとも言っていた。$(br2)彼女に怪物だらけの村のことは話さないことにした。",
+          "10": "お金に余裕がないことも、大図書館に手紙を返信する費用が高くつくのも分かっているけど、お願い、ひとこと助言を返信して欲しいの。私はかなり混乱しているけど、パパの言葉を読めばずっと元気が出るから。$(br2)敬具$(br)カルダモン・スティールス",
+        },
+        
+        cardamom5: {
+          "1": "$(italic)正式名称: $(br)カルダモン・スティールスから父への手紙 #4/$$(br2)アマニタが失踪した。$(br2)彼女はどこに行っちゃったんだろう、パパ。最後に彼女と会ったのは夕食のときで、ちょうど人が消えることについて誰かと話していた。それから...",
+          "2": "それから...それから彼女もいなくなった。しかも誰も彼女のことを話さなくて、とっても怖いよ、パパ、みんな知っているのかな？みんなにも、跡形もなく無に$(italic)消えた/$友達がいるはず。$(br2)彼らはどこに$(italic)行った/$の？",
+          "3": "またみんなが大事なことを閉ざしてる...地質学団の遠征は何週間も行ってないし、メインドームのメディアを集める装置はぜんぶなくなってるし、薬学団は何ヶ月も開いてないし...まるでシロアリが内側から大図書館を食べて、空になったガワを残してるみたい。$(br2)手紙が検査され始めたかもしれない、私たちが書くものも...",
+          "4": "この手紙を書くのにすごく勇気を出したし、自分で人に伝える勇気はないけど、ここの誰も知識を掴めないなら、パパがこの言葉を発信できることを心から願ってる...これをブラッケンフォールみたいな田舎から広めるのは無理があるけど、どうか頑張って。パパ、この人たちを覚えていて...アマニタ・リベラ、ジャスミン・ワード、テオドール・チア...どうか、覚えていて...怖気づいて責任を押し付けてごめんなさい。",
+          "5": "もう書けない、手がふるえる、おねがい たすけて",
+        },
+        
+        inventory: {
+          "1": "独房39 修復記録 #72$(br)拘置所ベータ$(br2)囚人名: ラファエル・バール$(br)罪状: プロジェクト・ウールアイに関する知識$(br)独房が空く理由: 死亡$(br)追加の記録: 次の文字が壁にほぼ隙間なく殴り書きされていた。",
+          "2": "目を瞑ると六角形が見える$(br2)パターンが、目とまぶたの間の空間、心、夢に入り込んでくる。糸からぶら下がっている結晶のように、私は明晰さの内外で輝き、時には光を捕らえ、時には光に飲み込まれる。",
+          "3": "今日はもっと明晰だ。多分。もう話せない。もう疲れているとさえ言えない。ある時、絶え間なく続く疲労感が去って、別の何かが目に刺さるようになった。疲れを感じられない。でもそこにある。$(br2)骨が弱っている。関節が荒れてとがっている。",
+          "4": "時々なぜ自分がここにいるのか思い出す。自分が知っていることを大声で話しすぎたんだ...かなり明るい部屋で話していた。自分の思考がガラスに凍りついて、砕けて、溶けて再結晶して何度も何度も何度も何度も、裏の目的は私を、私自身を殺しながら生かし続けることよりひどい、私を忘れさせること、観測者がいないただの肉体だから自分のイオタは無意味だが奴らを騙してやった 何とかできた",
+          "5": "奴らは誤魔化しようがないくらい私を壊したと思っていたが、私はきちんと目が覚めていて苦痛も感じられた$(br2)私は寝ないが起きても目のかさぶたは落とせない皮膚が切れそうだし内側の紫色の光を見たくない",
+          "6": "奴らは私を殺さない、なぜなら夫が私の焦点具を持っていて、私が死んだら分かるから。でも彼は六角術師ではないから普通の技能で私を見つけられない。私は範囲外にいる$(br2)思考 は苦痛。まさに文字通り。思考はかなり無駄だ 今では残った筋が100万個の微結晶の上に直接乗っている",
+          "7": "明るい部屋で医師が私に砂のようだがもっと鋭いものを強引に吸わせた とても痛かった。最初は粘膜が破片を吸収しようとする物理的な痛みだけだったがその後は私の刺激反応に爪を立てて言葉でやれた$(br2)キャンプをしていると集団が村の周りに陣取っているのが見えた足元の地面が鳴っていた",
+          "8": "時が流れ出る。私はたまに未来を見ていると思う、理にかなっているように見えるけど今は起こり得ないから私は永遠にここにいると知っているから白い部屋の男たちがそう言ったから。私が倒れて頭蓋骨が半分に割れて中にアメジストではない槍が刺さって血が滴るのが見えるしわが寄った3ポンドの脂肪と肉は蝶になる夢を見ている",
+          "9": "生徒たちには無事でいてほしい。なぜそう思う？無駄だ。奴らは私を無駄だと言った、私を破壊するだけでは満足できない終始私もそれに値すると思わせなければ。骨を砕く棒や石はない、あるのは傷つける言葉のみ。奴らが私を解放しても誰も私を信じない私の身体は完全に検査可能だからただの過剰魔術中毒者に見える$(br2)でも奴らは私を閉じ込めた それが慈悲なのかどうかは分からない",
+          "10": "そこら中にメディアがある 何度も呪紋を描いて私を救い出そうと少なくとも苦しみを消そうとしたが私の心の領域を駆け巡るパターンは手を伸ばそうとすると笑って消えた。忘れるように強制されていた気がする、連結された巨大な知識の構造体が崩れて裂けて無知を強いられた重みでバラバラになった しかし知っていると思って覚えていた忘れていることを思い出そうとするのは非常に辛い",
+          "11": "私は過剰魔術依存性の末末末末期かもしれない、パターンが目とまぶたの間の空間に刻まれていると聞いた、神経の端が紫色だと聞いた。拷問されていないのが真実だと自分に信じ込ませることに意味があるのか。私はこれに値する。もうそのことを議論する相手がいないなら、なぜ試す",
+          "12": "奴らは全世界の全員を殺す気なんだろう大図書館も私と同じくらい食べる必要がある...最後に食べたのはいつだったか$(br2)他の人は皆食べなければならないが世界中の農家が空で農業に関する知識がすべて隠されているならできないまたは少なくとも他の誰かが見つけてそのドヤ顔をろう状に溶かすだろう",
+          "13": "たぶんいつか目が覚めて私たちが彼らに残したものすべてについて思いを巡らせてなぜ地下に何百万マイルものトンネルがあるのにそれらを採掘するのに十分賢い人がいないのか疑問に思うかもしれない$(br2)奴らがこれを読んでいるのが見える 。気にかけるにはもう手遅れだろう",
+        },
+        
+        experiment1: {
+          "1": "$(italic)この記録から発見できたのは、これら5つの項目だけだった。/$$(br2)起爆 #26$(li)場所: カーペンター北部$(li)人口: 174$(li)形成されたノード: 3$(li)中心地とノード間の距離: 縦55-80m、横85-156m$(li)メディア生成: 1320 u\u03b8/分",
+          "2": "起爆 #27$(li)場所: ブラッケンフォール$(li)人口: 79$(li)形成されたノード: 1$(li)中心地とノード間の距離: 縦95m、横67m$(li)メディア生成: 412 u\u03b8/分",
+          "3": "起爆 #28$(li)場所: グレイストン$(li)人口: 約1000$(li)形成されたノード: 18$(li)中心地とノード間の距離: 縦47-110m、横59-289m$(li)メディア生成: 8478 u\u03b8/分",
+          "4": "起爆 #29$(li)場所: 無名; グレイストンから二日分西にある村$(li)人口: 35$(li)形成されたノード: 0$(li)中心地とノード間の距離: N/A$(li)メディア生成: N/A$(br2)注記: 住民は依然として通常通りの影響を受けている",
+          "5": "起爆 #30$(li)場所: ボイリングブルック$(li)人口: 231$(li)形成されたノード: 4$(li)中心地とノード間の距離: 縦61-89m、横78-191m$(li)メディア生成: 1862 u\u03b8/分",
+          "6": "結論: 1つのノードにはおよそ60人が必要である。不足している場合、消費されるがノード形成に十分なエネルギーを供給できない。入力数と幅/深さの間にはわずかに相関関係あり。$(br2)住民への影響、特に身体的影響は単一対象実験よりも一貫して深刻だ。",
+        },
+        
+        experiment2: {
+          "1": "$(italic)これらの文書は大幅に編集されていた。判読可能なテキストをここに写した。/$$(br2)被験者 #1 \"A.E.\"$(br)施術後すぐに苦しまなくなった。顔の表情や手足が緩んでいるが、自力で立つことが可能。放置すると、無意識に以前の職業(グラウンドキーピング)で頻繁に行われていた動作を身振り手振りで表現する。",
+          "2": "施術直後は心拍数が高いが、直前の恐怖状態のため決定的ではない。35 u\u03b8/分の芽が生じた。$(br)...$(br)被験者 #4 \"P.I.\"$(br)P.I.に対して心理テストが実行される。被験者には物体の永続性、空間認識、基本的な計数理解がある。新しいタスクを学ぶのが困難。$(br2) ...",
+          "3": "被験者 #7 \"T.C.\"$(br)施術の数時間後、他の被験者と酷似した結果が得られた。立つことができ、簡単な作業を実行できる...$(br2)被験者 #11 \"R.S.\"$(br)施術前に鎮静状態...$(br2) ...",
+          "4": "被験者 #23 \"A.L.\"$(br)大半の被験者と比較して高レベルの発話能力を保っている。片言で話し、その後数時間以内に「カード」という1単語まで減少した。$(br2)追加の実験: この施術は以前の六角術師と対比して非六角術師にはどのような影響を与えるのだろうか？$(br2) ...",
+        },
+      },
+      // ^ lore
+      
+      interop: {
+        "1": "$(hex)Hexcasting/$の術は多目的に利用できる。自分の世界が他の力によって$(italic)改造/$されていることに気づけば、$(hex)Hexcasting/$をそれらと調和させ、連携して使用できる可能性がある。",
+        "2": "ただし、自然界はこれらの術の側面を作成することへの関心が薄いと思われることを念頭に置くのが良い。奇妙な動作やバグが予想される。Mod開発者がそれらを修正するために最善を尽くすのは確かだが、これは本人にとって重要度の低い娯楽であることを覚えておかねばならない。$(br2)相互運用している力の対価と効果のバランスが著しく無視されていることにも気づくかもしれない。そのような場合は、自分で責任を持って使用を控える必要があるだろう。",
+        "3": "最後に、この世界の伝承や物語に興味を抱いたならば、これらの相互運用を研究する際に編集されたメモは、些細なこと以上の何かとして、よく考えるのが好ましい。",
+        
+        gravity: {
+          "1": "エンティティの重力を取得および設定するアクションを発見した。少し吐き気を催すかもしれないが、興味深く思う。$(br2)面白いことに、$(l:patterns/spells/flight)$(action)飛行/$スペルは範囲や時間に制限があり、同様に重力を操作するが、これらは制限されていない。なぜなのだろうか...もしかしたら、Mod開発者はプレイヤーに一度だけ楽しんでほしかったのかもしれない。",
+          get: "指定されたエンティティを引く主な重力の方向を単位ベクトルとして取得する。ほとんどのエンティティでは下方向、 <0, -1, 0>になる。",
+          set: "指定されたエンティティを引く主な重力の方向を設定する。指定されたベクトルは$(l:patterns/math#hexcasting:coerce_axial)$(action)軸の浄化/$の通りに、最も近い軸になる。約1個の$(l:items/amethyst)$(item)蓄力アメジスト/$を要する。",
+        },
+        
+        pehkui: {
+          "1": "エンティティのサイズの変更と、エンティティの通常からの大小の度合を問う方法を発見した。",
+          get: "エンティティの縮尺を、その通常のサイズに対する比率として取得する。ほとんどのエンティティでは1になる。",
+          set: "エンティティの縮尺を、その通常のサイズに対する比率を渡して設定する。約1個の$(item)アメジストの欠片/$を要する。",
+        },
+      },
+    },
+    // ^ page
+  },
+  // ^ hexcasting
+}
