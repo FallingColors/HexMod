@@ -36,7 +36,8 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
         int prevLookAmt = self.lookAmount;
         int range = 20;
         var players = level.getEntitiesOfClass(ServerPlayer.class,
-            new AABB(pos.offset(-range, -range, -range), pos.offset(range, range, range)));
+            new AABB(net.minecraft.world.phys.Vec3.atLowerCornerOf(pos.offset(-range, -range, -range)),
+                net.minecraft.world.phys.Vec3.atLowerCornerOf(pos.offset(range, range, range))));
 
         ServerPlayer looker = null;
         for (var player : players) {

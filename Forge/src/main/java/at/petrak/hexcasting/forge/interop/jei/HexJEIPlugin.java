@@ -17,6 +17,7 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,8 +57,11 @@ public class HexJEIPlugin implements IModPlugin {
     public void registerRecipes(@NotNull IRecipeRegistration registration) {
         Level level = Minecraft.getInstance().level;
         if (level != null) {
-            registration.addRecipes(BRAINSWEEPING,
-                level.getRecipeManager().getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE));
+            var brainsweepRecipes = level.getRecipeManager().getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE)
+                .stream()
+                .map(RecipeHolder::value)
+                .toList();
+            registration.addRecipes(BRAINSWEEPING, brainsweepRecipes);
         }
 
         if (PhialRecipeStackBuilder.shouldAddRecipe()) {

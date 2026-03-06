@@ -68,13 +68,8 @@ public class PatternTooltipComponent implements ClientTooltipComponent {
     }
 
     private static void renderBG(GuiGraphics graphics, ResourceLocation background) {
-        graphics.blit(
-            background, // texture
-            0, 0, // x, y
-            (int) RENDER_SIZE, (int) RENDER_SIZE, // renderWidth, renderHeight
-            0f, 0f, // u, v (textureCoords)
-            TEXTURE_SIZE, TEXTURE_SIZE, // regionWidth, regionHeight (texture sample dimensions)
-            TEXTURE_SIZE, TEXTURE_SIZE); // textureWidth, textureHeight (total dimensions of texture)
+        graphics.blit(background, 0, 0, (int) RENDER_SIZE, (int) RENDER_SIZE,
+            0f, 0f, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE, TEXTURE_SIZE);
     }
 
     @Override

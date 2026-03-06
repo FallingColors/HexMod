@@ -2,6 +2,7 @@
 
 package at.petrak.hexcasting.api.utils
 
+import at.petrak.hexcasting.common.lib.HexDataComponents
 import net.minecraft.nbt.*
 import net.minecraft.world.item.ItemStack
 import java.util.*
@@ -178,6 +179,28 @@ val Tag.asList get() = this as? ListTag ?: ListTag()
 val Tag.asUUID: UUID get() = if (this is IntArrayTag && this.size == 4) NbtUtils.loadUUID(this) else UUID(0, 0)
 
 // ========================================================================================================== ItemStack
+// 1.21+: ItemStack NBT replaced by data components; we use HexDataComponents.STACK_DATA (CompoundTag).
+
+private val ItemStack.tag: CompoundTag
+    get() = get(HexDataComponents.STACK_DATA) ?: CompoundTag()
+
+fun ItemStack.getOrCreateTag(): CompoundTag = orCreateTagInternal()
+private fun ItemStack.orCreateTagInternal(): CompoundTag {
+    var t = get(HexDataComponents.STACK_DATA)
+    if (t == null) {
+        t = CompoundTag()
+        set(HexDataComponents.STACK_DATA, t)
+    }
+    return t
+}
+
+fun ItemStack.removeTagKey(key: String) {
+    val t = get(HexDataComponents.STACK_DATA) ?: return
+    t.remove(key)
+    if (t.isEmpty) remove(HexDataComponents.STACK_DATA) else set(HexDataComponents.STACK_DATA, t)
+}
+
+private fun ItemStack.getOrCreateTagElement(key: String): CompoundTag = orCreateTagInternal().getOrCreateCompound(key)
 
 // Checks for containment
 
@@ -209,24 +232,24 @@ fun ItemStack.containsTag(key: String, id: Int) = tag.contains(key, id)
 
 // Puts
 
-fun ItemStack.putBoolean(key: String, value: Boolean) = orCreateTag.putBoolean(key, value)
-fun ItemStack.putByte(key: String, value: Byte) = orCreateTag.putByte(key, value)
-fun ItemStack.putShort(key: String, value: Short) = orCreateTag.putShort(key, value)
-fun ItemStack.putInt(key: String, value: Int) = orCreateTag.putInt(key, value)
-fun ItemStack.putLong(key: String, value: Long) = orCreateTag.putLong(key, value)
-fun ItemStack.putFloat(key: String, value: Float) = orCreateTag.putFloat(key, value)
-fun ItemStack.putDouble(key: String, value: Double) = orCreateTag.putDouble(key, value)
+fun ItemStack.putBoolean(key: String, value: Boolean) = getOrCreateTag().putBoolean(key, value)
+fun ItemStack.putByte(key: String, value: Byte) = getOrCreateTag().putByte(key, value)
+fun ItemStack.putShort(key: String, value: Short) = getOrCreateTag().putShort(key, value)
+fun ItemStack.putInt(key: String, value: Int) = getOrCreateTag().putInt(key, value)
+fun ItemStack.putLong(key: String, value: Long) = getOrCreateTag().putLong(key, value)
+fun ItemStack.putFloat(key: String, value: Float) = getOrCreateTag().putFloat(key, value)
+fun ItemStack.putDouble(key: String, value: Double) = getOrCreateTag().putDouble(key, value)
 
-fun ItemStack.putLongArray(key: String, value: LongArray) = orCreateTag.putLongArray(key, value)
-fun ItemStack.putIntArray(key: String, value: IntArray) = orCreateTag.putIntArray(key, value)
-fun ItemStack.putByteArray(key: String, value: ByteArray) = orCreateTag.putByteArray(key, value)
+fun ItemStack.putLongArray(key: String, value: LongArray) = getOrCreateTag().putLongArray(key, value)
+fun ItemStack.putIntArray(key: String, value: IntArray) = getOrCreateTag().putIntArray(key, value)
+fun ItemStack.putByteArray(key: String, value: ByteArray) = getOrCreateTag().putByteArray(key, value)
 fun ItemStack.putCompound(key: String, value: CompoundTag) = putTag(key, value)
-fun ItemStack.putString(key: String, value: String) = orCreateTag.putString(key, value)
+fun ItemStack.putString(key: String, value: String) = getOrCreateTag().putString(key, value)
 fun ItemStack.putList(key: String, value: ListTag) = putTag(key, value)
-fun ItemStack.putUUID(key: String, value: UUID) = orCreateTag.putUUID(key, value)
+fun ItemStack.putUUID(key: String, value: UUID) = getOrCreateTag().putUUID(key, value)
 
 @JvmName("put")
-fun ItemStack.putTag(key: String, value: Tag) = orCreateTag.put(key, value)
+fun ItemStack.putTag(key: String, value: Tag) = getOrCreateTag().put(key, value)
 
 // Remove
 
@@ -269,5 +292,5 @@ fun ItemStack.getTag(key: String) = tag.get(key)
 // Get-or-create
 
 fun ItemStack.getOrCreateCompound(key: String): CompoundTag = getOrCreateTagElement(key)
-fun ItemStack.getOrCreateList(key: String, objType: Byte) = orCreateTag.getOrCreateList(key, objType)
-fun ItemStack.getOrCreateList(key: String, objType: Int) = orCreateTag.getOrCreateList(key, objType)
+fun ItemStack.getOrCreateList(key: String, objType: Byte) = getOrCreateTag().getOrCreateList(key, objType)
+fun ItemStack.getOrCreateList(key: String, objType: Int) = getOrCreateTag().getOrCreateList(key, objType)

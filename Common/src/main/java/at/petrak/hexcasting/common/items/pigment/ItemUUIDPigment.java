@@ -24,13 +24,44 @@ public class ItemUUIDPigment extends Item implements PigmentItem {
         return new MyColorProvider(owner);
     }
 
+    /** Get PaucalAPI - supports instance(), getInstance(), INSTANCE, or get() depending on Paucal version */
+    private static Object getPaucalAPI() {
+        for (var name : new String[]{"instance", "getInstance", "get"}) {
+            try {
+                var method = PaucalAPI.class.getMethod(name);
+                return method.invoke(null);
+            } catch (NoSuchMethodException ignored) {
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        try {
+            return PaucalAPI.class.getField("INSTANCE").get(null);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     protected static class MyColorProvider extends ColorProvider {
         private final int[] colors;
 
         MyColorProvider(UUID owner) {
-            var contributor = PaucalAPI.instance().getContributor(owner);
+            Object contributor = null;
+            var api = getPaucalAPI();
+            if (api != null) {
+                try {
+                    var m = api.getClass().getMethod("getContributor", UUID.class);
+                    contributor = m.invoke(api, owner);
+                } catch (Exception ignored) {}
+            }
             if (contributor != null) {
-                var colorList = contributor.otherVals().getAsJsonArray("hexcasting:colorizer");
+                com.google.gson.JsonArray colorList = null;
+                try {
+                    var otherVals = contributor.getClass().getMethod("otherVals").invoke(contributor);
+                    if (otherVals instanceof com.google.gson.JsonObject jo) {
+                        colorList = jo.getAsJsonArray("hexcasting:colorizer");
+                    }
+                } catch (Exception ignored) {}
                 if (colorList != null) {
                     var colors = new int[colorList.size()];
                     var ok = true;

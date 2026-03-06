@@ -18,7 +18,6 @@ import java.util.OptionalInt;
 
 public class HexFeatureConfigs {
     public static void dumpConfigs() {
-        // Used to generate the tree data json files
         // Call this after the game is properly bootstrapped and copy the output logs to data/hexcasting/worldgen/configured_feature/${name}.json
         // This should be done in DataGen, but I was unable to make that function. - dashkal16
         HexAPI.LOGGER.info(TreeConfiguration.CODEC.encodeStart(JsonOps.INSTANCE, AMETHYST_EDIFIED_TREE_CONFIG));

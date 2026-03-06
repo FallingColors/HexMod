@@ -55,9 +55,10 @@ object OpBrainsweep : SpellAction {
         val state = env.world.getBlockState(pos)
 
         val recman = env.world.recipeManager
-        val recipes = recman.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE)
-        val recipe = recipes.find { it.matches(state, sacrifice, env.world) }
-            ?: throw MishapBadBrainsweep(sacrifice, pos)
+        val recipe = recman.getRecipes().asSequence()
+            .filter { it.value().type == HexRecipeStuffRegistry.BRAINSWEEP_TYPE }
+            .mapNotNull { (it.value() as? BrainsweepRecipe)?.takeIf { r -> r.matches(state, sacrifice, env.world as net.minecraft.server.level.ServerLevel) } }
+            .firstOrNull() ?: throw MishapBadBrainsweep(sacrifice, pos)
 
         return SpellAction.Result(
             Spell(pos, state, sacrifice, recipe),

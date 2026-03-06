@@ -53,7 +53,7 @@ public class ItemAbacus extends Item implements IotaHolderItem {
         var stack = player.getItemInHand(hand);
         if (player.isShiftKeyDown()) {
             double oldNum = NBTHelper.getDouble(stack, TAG_VALUE);
-            stack.removeTagKey(TAG_VALUE);
+            NBTHelper.removeTagKey(stack, TAG_VALUE);
 
             player.playSound(HexSounds.ABACUS_SHAKE, 1f, 1f);
 
@@ -70,8 +70,9 @@ public class ItemAbacus extends Item implements IotaHolderItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pTooltipContext, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {
         IotaHolderItem.appendHoverText(this, pStack, pTooltipComponents, pIsAdvanced);
+        super.appendHoverText(pStack, pTooltipContext, pTooltipComponents, pIsAdvanced);
     }
 }

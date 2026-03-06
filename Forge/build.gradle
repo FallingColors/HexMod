@@ -1,27 +1,9 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        maven {
-            url = 'https://repo.spongepowered.org/repository/maven-public/'
-            content { includeGroup "org.spongepowered" }
-        }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.0.+', changing: true
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-    }
-}
-
 plugins {
     id "java"
     id "maven-publish"
-
     id "at.petra-k.pkpcpbp.PKSubprojPlugin"
+    id "net.neoforged.moddev" version "2.0.140"
 }
-
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.spongepowered.mixin'
 
 pkSubproj {
     pkPublish = true
@@ -30,168 +12,101 @@ pkSubproj {
         "paucal",
         "patchouli",
         "caelus",
-        "inline",
     ])
     modrinthJar = jar.archiveFile
     modrinthDependencies([
-        "paucal:HyBiJPtT", // 0.6.0-forge
+        "paucal:HyBiJPtT",
         "patchouli:1.20.1-80-forge",
         "caelus:3.1.0+1.20",
-        "inline:1.20.1-1.0.1-forge",
     ])
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    flatDir {
-        dir 'libs'
-    }
-
-    maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.dev"
-    }
-    // caelus elytra
+    maven { name = "JEI"; url = "https://maven.blamejared.com" }
+    flatDir { dir 'libs' }
+    maven { name = "Progwml6 maven"; url = "https://dvs1.progwml6.com/files/maven/" }
+    maven { name = "ModMaven"; url = "https://modmaven.dev" }
     maven { url = "https://maven.theillusivec4.top" }
-    // pehkui
     maven { url = "https://jitpack.io" }
-
     maven {
         name = 'Kotlin for Forge'
         url = 'https://thedarkcolour.github.io/KotlinForForge/'
         content { includeGroup "thedarkcolour" }
     }
-
-    maven { url "https://maven.shedaniel.me/" }
+    maven { url = "https://maven.shedaniel.me/" }
+    maven { url = 'https://maven.neoforged.net/releases' }
+    maven { url = 'https://api.modrinth.com/maven' }
+    maven { url = 'https://maven.modrinth.one' }
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraftVersion}-${forgeVersion}"
     compileOnly project(":Common")
-
-    implementation "thedarkcolour:kotlinforforge:$kotlinForForgeVersion"
-
+    implementation "thedarkcolour:kotlinforforge-neoforge:$kotlinForForgeVersion"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    compileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
-    runtimeOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FORGE-SNAPSHOT")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FORGE-SNAPSHOT")
+    compileOnly "at.petrak:paucal-neoforge-${minecraftVersion}:${paucalVersion}"
+    runtimeOnly "at.petrak:paucal-neoforge-${minecraftVersion}:${paucalVersion}"
+    compileOnly files('libs/Patchouli-1.21.1-92-NEOFORGE.jar')
+    runtimeOnly files('libs/Patchouli-1.21.1-92-NEOFORGE.jar')
+    compileOnly files('libs/caelus-neoforge-7.0.1+1.21.1.jar')
+    runtimeOnly files('libs/caelus-neoforge-7.0.1+1.21.1.jar')
 
-    // aughh
-    testCompileOnly fg.deobf("at.petra-k.paucal:paucal-forge-$minecraftVersion:$paucalVersion")
-    testCompileOnly fg.deobf("vazkii.patchouli:Patchouli:$minecraftVersion-$patchouliVersion-FORGE-SNAPSHOT")
+    compileOnly "top.theillusivec4.curios:curios-neoforge:9.4.0+1.21.1"
+    // runtimeOnly "top.theillusivec4.curios:curios-neoforge:9.4.0+1.21.1"
 
-    implementation fg.deobf("top.theillusivec4.caelus:caelus-forge:$caelusVersion")
+    compileOnly "mezz.jei:jei-${minecraftVersion}-neoforge-api:${jeiVersion}"
+    runtimeOnly "mezz.jei:jei-${minecraftVersion}-neoforge:${jeiVersion}"
 
-    implementation fg.deobf("com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion")
+    // compileOnly "maven.modrinth:inline:${minecraftVersion}-${inlineVersion}-neoforge"
 
-    // needed for inline to run
-    runtimeOnly fg.deobf("me.shedaniel.cloth:cloth-config-forge:$clothConfigVersion")
-
-    // Optional interop
-
-    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-common-api:$jeiVersion")
-    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge-api:$jeiVersion")
-    runtimeOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge:$jeiVersion")
-
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion:api")
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion")
-
-    api fg.deobf("com.github.Virtuoel:Pehkui:${pehkuiVersion}-$minecraftVersion-forge")
+    testCompileOnly "at.petrak:paucal-neoforge-${minecraftVersion}:${paucalVersion}"
+    testCompileOnly "vazkii.patchouli:Patchouli:${minecraftVersion}-${patchouliVersion}-NEOFORGE-SNAPSHOT"
 }
 
-minecraft {
-    mappings channel: 'official', version: minecraftVersion
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+def commonMain = project(":Common").sourceSets.main
 
-    if (project.hasProperty('forge_ats_enabled') && project.findProperty('forge_ats_enabled').toBoolean()) {
-        // This location is hardcoded in Forge and can not be changed.
-        // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
-        accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-        project.logger.debug('Forge Access Transformers are enabled for this project.')
-    }
+neoForge {
+    version = project.neoforgeVersion
+    accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
         client {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods {
-                create(modID) {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
-                }
-            }
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', modID
         }
-
         server {
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            mods {
-                create(modID) {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
-                }
-            }
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', modID
         }
-
-        // We have to have a dummy data run to be parented from
-        data {}
-
+        data {
+            data()
+            programArguments.addAll '--mod', modID, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
         xplatDatagen {
-            parent minecraft.runs.data
-
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            args '--mod', modID, '--all', '--output', file('../Common/src/generated/resources/'), '--existing', file('../Common/src/main/resources/')
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            property 'hexcasting.xplat_datagen', 'true'
-
-            mods {
-                create(modID) {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
-                }
-            }
+            data()
+            programArguments.addAll '--mod', modID, '--all', '--output', file('../Common/src/generated/resources/').getAbsolutePath(), '--existing', file('../Common/src/main/resources/').getAbsolutePath()
+            systemProperty 'hexcasting.xplat_datagen', 'true'
         }
-
         forgeDatagen {
-            parent minecraft.runs.data
-
-            workingDirectory project.file('run')
-            ideaModule "${rootProject.name}.${project.name}.main"
-            args '--mod', modID, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            property 'hexcasting.forge_datagen', 'true'
-            mods {
-                create(modID) {
-                    source sourceSets.main
-                    source project(":Common").sourceSets.main
-                }
-            }
+            data()
+            programArguments.addAll '--mod', modID, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+            systemProperty 'hexcasting.forge_datagen', 'true'
+        }
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
         }
     }
-}
 
-
-mixin {
-    add sourceSets.main, "hexcasting.mixins.refmap.json"
-    config "hexplat.mixins.json"
-    config "hexcasting_forge.mixins.json"
+    mods {
+        "${modID}" {
+            sourceSet sourceSets.main
+            sourceSet commonMain
+        }
+    }
 }
 
 compileJava {
@@ -207,16 +122,18 @@ compileTestKotlin {
 sourceSets {
     main.resources.srcDirs += ['src/generated/resources', '../Common/src/generated/resources']
     main.kotlin.srcDirs += 'src/main/java'
+    main.java.exclude 'at/petrak/hexcasting/forge/datagen/**'
     test.kotlin.srcDirs += 'src/main/java'
 }
 
 processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     from project(":Common").sourceSets.main.resources
     inputs.property "version", project.version
-
     filesMatching("mods.toml") {
         expand "version": project.version
     }
+    filesMatching("neoforge.mods.toml") {
+        expand "version": project.version
+    }
 }
-
-jar.finalizedBy('reobfJar')

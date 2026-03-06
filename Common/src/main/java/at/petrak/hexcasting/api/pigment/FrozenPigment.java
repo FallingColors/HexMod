@@ -4,6 +4,8 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.UUID;
@@ -28,7 +30,7 @@ public record FrozenPigment(ItemStack item, UUID owner) {
 
     public CompoundTag serializeToNBT() {
         var out = new CompoundTag();
-        out.put(TAG_STACK, this.item.save(new CompoundTag()));
+        out.putString(TAG_STACK, BuiltInRegistries.ITEM.getKey(this.item.getItem()).toString());
         out.putUUID(TAG_OWNER, this.owner);
         return out;
     }
@@ -38,8 +40,9 @@ public record FrozenPigment(ItemStack item, UUID owner) {
             return FrozenPigment.DEFAULT.get();
         }
         try {
-            CompoundTag stackTag = tag.getCompound(TAG_STACK);
-            var stack = ItemStack.of(stackTag);
+            var itemLoc = ResourceLocation.tryParse(tag.getString(TAG_STACK));
+            var item = itemLoc != null ? BuiltInRegistries.ITEM.get(itemLoc) : HexItems.DEFAULT_PIGMENT;
+            var stack = new ItemStack(item);
             var uuid = tag.getUUID(TAG_OWNER);
             return new FrozenPigment(stack, uuid);
         } catch (NullPointerException exn) {

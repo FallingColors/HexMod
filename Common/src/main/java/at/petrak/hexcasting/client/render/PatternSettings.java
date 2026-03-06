@@ -116,11 +116,6 @@ public class PatternSettings {
     public double getMinWidth(){ return posSets.minWidth; }
     public double getMinHeight(){ return posSets.minHeight; }
 
-    /* these sizing getters take in the final pattern scale so that patterns can vary their stroke width when squished.
-     * the records keep a static value since that's fine for *most* use cases, override these methods if you need to use them.
-     * note that these widths are still in pose space units.
-     */
-
     public double getInnerWidth(double scale){ return strokeSets.innerWidth; }
     public double getOuterWidth(double scale){ return strokeSets.outerWidth; }
 

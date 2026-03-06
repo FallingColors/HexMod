@@ -4,32 +4,35 @@ import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.common.lib.HexAttributes;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import net.minecraft.core.BlockSource;
+import net.minecraft.core.Holder;
+import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 //import net.minecraft.world.item.Wearable;
 import net.minecraft.world.level.block.DispenserBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
+import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class ItemLens extends Item implements HexBaubleItem { // Wearable,
 
     // The 0.1 is *additive*
 
     public static final AttributeModifier GRID_ZOOM = new AttributeModifier(
-        UUID.fromString("59d739b8-d419-45f7-a4ea-0efee0e3adf5"),
-        "Scrying Lens Zoom", 0.33, AttributeModifier.Operation.MULTIPLY_BASE);
+        modLoc("scrying_lens_zoom"),
+        0.33, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
 
     public static final AttributeModifier SCRY_SIGHT = new AttributeModifier(
-        UUID.fromString("e2e6e5d4-f978-4c11-8fdc-82a5af83385c"),
-        "Scrying Lens Sight", 1.0, AttributeModifier.Operation.ADDITION);
+        modLoc("scrying_lens_sight"),
+        1.0, AttributeModifier.Operation.ADD_VALUE);
 
     public ItemLens(Properties pProperties) {
         super(pProperties);
@@ -43,13 +46,21 @@ public class ItemLens extends Item implements HexBaubleItem { // Wearable,
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot slot) {
-        var out = HashMultimap.create(super.getDefaultAttributeModifiers(slot));
-        if (slot == EquipmentSlot.HEAD || slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND) {
-            out.put(HexAttributes.GRID_ZOOM, GRID_ZOOM);
-            out.put(HexAttributes.SCRY_SIGHT, SCRY_SIGHT);
+    public ItemAttributeModifiers getDefaultAttributeModifiers() {
+        var parent = super.getDefaultAttributeModifiers();
+        var builder = ItemAttributeModifiers.builder();
+        for (var e : parent.modifiers()) {
+            builder.add(e.attribute(), e.modifier(), e.slot());
         }
-        return out;
+        var gridZoomHolder = Holder.direct(HexAttributes.GRID_ZOOM);
+        var scrySightHolder = Holder.direct(HexAttributes.SCRY_SIGHT);
+        builder.add(gridZoomHolder, GRID_ZOOM, EquipmentSlotGroup.HEAD);
+        builder.add(scrySightHolder, SCRY_SIGHT, EquipmentSlotGroup.HEAD);
+        builder.add(gridZoomHolder, GRID_ZOOM, EquipmentSlotGroup.MAINHAND);
+        builder.add(scrySightHolder, SCRY_SIGHT, EquipmentSlotGroup.MAINHAND);
+        builder.add(gridZoomHolder, GRID_ZOOM, EquipmentSlotGroup.OFFHAND);
+        builder.add(scrySightHolder, SCRY_SIGHT, EquipmentSlotGroup.OFFHAND);
+        return builder.build();
     }
 
     @Override

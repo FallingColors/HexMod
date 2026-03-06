@@ -2,10 +2,12 @@ package at.petrak.hexcasting.common.msgs;
 
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.client.gui.GuiSpellcasting;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 
@@ -23,21 +25,28 @@ public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> pat
 )
     implements IMessage {
     public static final ResourceLocation ID = modLoc("cgui");
+    public static final CustomPacketPayload.Type<MsgOpenSpellGuiS2C> TYPE = new CustomPacketPayload.Type<>(ID);
+    public static final StreamCodec<RegistryFriendlyByteBuf, MsgOpenSpellGuiS2C> STREAM_CODEC =
+        StreamCodec.ofMember(MsgOpenSpellGuiS2C::serialize, MsgOpenSpellGuiS2C::deserialize);
+
+    @Override
+    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
 
     @Override
     public ResourceLocation getFabricId() {
         return ID;
     }
 
-    public static MsgOpenSpellGuiS2C deserialize(ByteBuf buffer) {
-        var buf = new FriendlyByteBuf(buffer);
+    public static MsgOpenSpellGuiS2C deserialize(FriendlyByteBuf buf) {
 
         var hand = buf.readEnum(InteractionHand.class);
 
-        var patterns = buf.readList(fbb -> ResolvedPattern.fromNBT(fbb.readAnySizeNbt()));
+        var patterns = buf.readList(fbb -> ResolvedPattern.fromNBT(fbb.readNbt()));
 
-        var stack = buf.readList(FriendlyByteBuf::readNbt);
-        var raven = buf.readAnySizeNbt();
+        var stack = buf.readList(fbb -> fbb.readNbt());
+        var raven = buf.readNbt();
 
         var parenCount = buf.readVarInt();
 
@@ -49,7 +58,7 @@ public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> pat
 
         buf.writeCollection(this.patterns, (fbb, pat) -> fbb.writeNbt(pat.serializeToNBT()));
 
-        buf.writeCollection(this.stack, FriendlyByteBuf::writeNbt);
+        buf.writeCollection(this.stack, (fbb, tag) -> fbb.writeNbt(tag));
         buf.writeNbt(this.ravenmind);
 
         buf.writeVarInt(this.parenCount);

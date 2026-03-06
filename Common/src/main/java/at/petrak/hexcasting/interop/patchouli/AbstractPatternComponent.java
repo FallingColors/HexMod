@@ -5,6 +5,7 @@ import at.petrak.hexcasting.client.render.PatternColors;
 import at.petrak.hexcasting.client.render.PatternRenderer;
 import at.petrak.hexcasting.client.render.PatternSettings;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.client.gui.GuiGraphics;
 import vazkii.patchouli.api.IComponentRenderContext;
 import vazkii.patchouli.api.ICustomComponent;
@@ -31,7 +32,7 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
         this.y = y == -1 ? 70 : y;
     }
 
-    public abstract List<HexPattern> getPatterns(UnaryOperator<IVariable> lookup);
+    public abstract List<HexPattern> getPatterns(UnaryOperator<IVariable> lookup, HolderLookup.Provider registries);
 
     public abstract boolean showStrokeOrder();
 
@@ -77,11 +78,10 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
     }
 
     @Override
-    public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
-        this.patterns = this.getPatterns(lookup);
+    public void onVariablesAvailable(UnaryOperator<IVariable> lookup, HolderLookup.Provider registries) {
+        this.patterns = this.getPatterns(lookup, registries);
     }
 
-    // used for deserialization from patchi
     protected static class RawPattern {
         protected String startdir;
         protected String signature;

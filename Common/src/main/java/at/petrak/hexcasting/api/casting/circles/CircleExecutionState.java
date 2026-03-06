@@ -183,21 +183,29 @@ public class CircleExecutionState {
     }
 
     public static CircleExecutionState load(CompoundTag nbt, ServerLevel world) {
-        var startPos = NbtUtils.readBlockPos(nbt.getCompound(TAG_IMPETUS_POS));
+        var startPos = NbtUtils.readBlockPos(nbt, TAG_IMPETUS_POS).orElse(BlockPos.ZERO);
         var startDir = Direction.values()[nbt.getByte(TAG_IMPETUS_DIR)];
 
         var knownPositions = new HashSet<BlockPos>();
-        var knownTag = nbt.getList(TAG_KNOWN_POSITIONS, Tag.TAG_COMPOUND);
-        for (var tag : knownTag) {
-            knownPositions.add(NbtUtils.readBlockPos(HexUtils.downcast(tag, CompoundTag.TYPE)));
+        var knownRaw = nbt.get(TAG_KNOWN_POSITIONS);
+        if (knownRaw instanceof ListTag knownTag) {
+            for (var tag : knownTag) {
+                var tmp = new CompoundTag();
+                tmp.put("p", tag);
+                NbtUtils.readBlockPos(tmp, "p").ifPresent(knownPositions::add);
+            }
         }
         var reachedPositions = new ArrayList<BlockPos>();
-        var reachedTag = nbt.getList(TAG_REACHED_POSITIONS, Tag.TAG_COMPOUND);
-        for (var tag : reachedTag) {
-            reachedPositions.add(NbtUtils.readBlockPos(HexUtils.downcast(tag, CompoundTag.TYPE)));
+        var reachedRaw = nbt.get(TAG_REACHED_POSITIONS);
+        if (reachedRaw instanceof ListTag reachedTag) {
+            for (var tag : reachedTag) {
+                var tmp = new CompoundTag();
+                tmp.put("p", tag);
+                NbtUtils.readBlockPos(tmp, "p").ifPresent(reachedPositions::add);
+            }
         }
 
-        var currentPos = NbtUtils.readBlockPos(nbt.getCompound(TAG_CURRENT_POS));
+        var currentPos = NbtUtils.readBlockPos(nbt, TAG_CURRENT_POS).orElse(startPos);
         var enteredFrom = Direction.values()[nbt.getByte(TAG_ENTERED_FROM)];
         var image = CastingImage.loadFromNbt(nbt.getCompound(TAG_IMAGE), world);
 

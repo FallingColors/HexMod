@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.casting.mishaps
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.pigment.FrozenPigment
+import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
 
 class MishapInternalException(val exception: Exception) : Mishap() {
@@ -13,6 +14,6 @@ class MishapInternalException(val exception: Exception) : Mishap() {
         // NO-OP
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("unknown", exception)
+    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component? =
+        error("unknown", exception.message ?: exception.toString())
 }

@@ -4,27 +4,26 @@ import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.casting.iota.NullIota;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.forge.lib.ForgeHexIngredientTypes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import net.minecraft.network.FriendlyByteBuf;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.crafting.AbstractIngredient;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.IIngredientSerializer;
-import net.minecraftforge.common.crafting.PartialNBTIngredient;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.crafting.ICustomIngredient;
+import net.neoforged.neoforge.common.crafting.IngredientType;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class ForgeUnsealedIngredient extends AbstractIngredient {
+public class ForgeUnsealedIngredient implements ICustomIngredient {
     public static final ResourceLocation ID = modLoc("unsealed");
 
     private final ItemStack stack;
@@ -36,7 +35,6 @@ public class ForgeUnsealedIngredient extends AbstractIngredient {
     }
 
     protected ForgeUnsealedIngredient(ItemStack stack) {
-        super(Stream.of(new Ingredient.ItemValue(createStack(stack))));
         this.stack = stack;
     }
 
@@ -45,6 +43,10 @@ public class ForgeUnsealedIngredient extends AbstractIngredient {
      */
     public static ForgeUnsealedIngredient of(ItemStack stack) {
         return new ForgeUnsealedIngredient(stack);
+    }
+
+    public ItemStack getStack() {
+        return stack;
     }
 
     @Override
@@ -58,7 +60,6 @@ public class ForgeUnsealedIngredient extends AbstractIngredient {
                 return holder.readIotaTag() != null && holder.writeIota(new NullIota(), true);
             }
         }
-
         return false;
     }
 
@@ -68,36 +69,24 @@ public class ForgeUnsealedIngredient extends AbstractIngredient {
     }
 
     @Override
-    public @NotNull IIngredientSerializer<? extends Ingredient> getSerializer() {
-        return ForgeUnsealedIngredient.Serializer.INSTANCE;
+    public @NotNull Stream<ItemStack> getItems() {
+        return Stream.of(createStack(stack));
     }
 
     @Override
-    public @NotNull JsonElement toJson() {
-        JsonObject json = new JsonObject();
-        // TODO: should this be Partial or Strict
-        json.addProperty("type", Objects.toString(CraftingHelper.getID(PartialNBTIngredient.Serializer.INSTANCE)));
-        json.addProperty("item", Objects.toString(ForgeRegistries.ITEMS.getKey(stack.getItem())));
-        return json;
+    public @NotNull IngredientType<?> getType() {
+        return ForgeHexIngredientTypes.UNSEALED.get();
     }
 
+    public static final MapCodec<ForgeUnsealedIngredient> CODEC = RecordCodecBuilder.mapCodec(inst ->
+        inst.group(
+            ResourceLocation.CODEC.xmap(
+                rl -> new ItemStack(BuiltInRegistries.ITEM.get(rl)),
+                s -> BuiltInRegistries.ITEM.getKey(s.getItem())
+            ).fieldOf("item").forGetter(ForgeUnsealedIngredient::getStack)
+        ).apply(inst, ForgeUnsealedIngredient::new)
+    );
 
-    public static class Serializer implements IIngredientSerializer<ForgeUnsealedIngredient> {
-        public static final ForgeUnsealedIngredient.Serializer INSTANCE = new ForgeUnsealedIngredient.Serializer();
-
-        @Override
-        public @NotNull ForgeUnsealedIngredient parse(FriendlyByteBuf buffer) {
-            return new ForgeUnsealedIngredient(buffer.readItem());
-        }
-
-        @Override
-        public @NotNull ForgeUnsealedIngredient parse(@NotNull JsonObject json) {
-            return new ForgeUnsealedIngredient(CraftingHelper.getItemStack(json, true));
-        }
-
-        @Override
-        public void write(FriendlyByteBuf buffer, ForgeUnsealedIngredient ingredient) {
-            buffer.writeItem(ingredient.stack);
-        }
-    }
+    public static final net.minecraft.network.codec.StreamCodec<RegistryFriendlyByteBuf, ForgeUnsealedIngredient> STREAM_CODEC =
+        ByteBufCodecs.fromCodecWithRegistries(CODEC.codec());
 }

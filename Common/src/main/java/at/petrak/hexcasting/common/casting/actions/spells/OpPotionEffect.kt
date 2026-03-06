@@ -4,12 +4,13 @@ import at.petrak.hexcasting.api.casting.*
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
+import net.minecraft.core.Holder
 import net.minecraft.world.effect.MobEffect
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.LivingEntity
 
 class OpPotionEffect(
-    val effect: MobEffect,
+    val effect: Holder<MobEffect>,
     val baseCost: Long,
     val allowPotency: Boolean,
     val potencyCubic: Boolean,
@@ -35,13 +36,13 @@ class OpPotionEffect(
             potency * potency
         }
         return SpellAction.Result(
-            Spell(effect, target, duration, potency),
+            Spell(this.effect, target, duration, potency),
             cost.toLong(),
             listOf(ParticleSpray.cloud(target.position().add(0.0, target.eyeHeight / 2.0, 0.0), 1.0))
         )
     }
 
-    private class Spell(val effect: MobEffect, val target: LivingEntity, val duration: Double, val potency: Double) :
+    private class Spell(val effect: Holder<MobEffect>, val target: LivingEntity, val duration: Double, val potency: Double) :
         RenderedSpell {
         override fun cast(env: CastingEnvironment) {
             if (duration > 1.0 / 20.0) {

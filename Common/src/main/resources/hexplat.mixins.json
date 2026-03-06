@@ -6,6 +6,7 @@
   "package": "at.petrak.hexcasting.mixin",
   "mixins": [
     "MixinAbstractVillager",
+    "MixinLivingEntity",
     "MixinMob",
     "MixinRaider",
     "MixinVillager",
@@ -15,7 +16,6 @@
     "accessor.AccessorEntity",
     "accessor.AccessorLivingEntity",
     "accessor.AccessorLootTable",
-    "accessor.AccessorPotionBrewing",
     "accessor.AccessorUseOnContext",
     "accessor.AccessorVillager",
     "accessor.CriteriaTriggersAccessor"

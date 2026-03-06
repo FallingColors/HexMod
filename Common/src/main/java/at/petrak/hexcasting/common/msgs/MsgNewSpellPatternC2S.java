@@ -3,8 +3,10 @@ package at.petrak.hexcasting.common.msgs;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.env.StaffCastEnv;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,14 +25,21 @@ public record MsgNewSpellPatternC2S(InteractionHand handUsed, HexPattern pattern
                                     List<ResolvedPattern> resolvedPatterns)
     implements IMessage {
     public static final ResourceLocation ID = modLoc("pat_cs");
+    public static final CustomPacketPayload.Type<MsgNewSpellPatternC2S> TYPE = new CustomPacketPayload.Type<>(ID);
+    public static final StreamCodec<RegistryFriendlyByteBuf, MsgNewSpellPatternC2S> STREAM_CODEC =
+        StreamCodec.ofMember(MsgNewSpellPatternC2S::serialize, MsgNewSpellPatternC2S::deserialize);
+
+    @Override
+    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
 
     @Override
     public ResourceLocation getFabricId() {
         return ID;
     }
 
-    public static MsgNewSpellPatternC2S deserialize(ByteBuf buffer) {
-        var buf = new FriendlyByteBuf(buffer);
+    public static MsgNewSpellPatternC2S deserialize(FriendlyByteBuf buf) {
         var hand = buf.readEnum(InteractionHand.class);
         var pattern = HexPattern.fromNBT(buf.readNbt());
 

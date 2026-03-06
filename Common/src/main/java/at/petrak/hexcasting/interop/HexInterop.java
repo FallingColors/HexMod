@@ -1,7 +1,5 @@
 package at.petrak.hexcasting.interop;
 
-import at.petrak.hexcasting.interop.inline.InlineHex;
-import at.petrak.hexcasting.interop.inline.InlineHexClient;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -23,6 +21,8 @@ public class HexInterop {
         public static final String TRINKETS_API_ID = "trinkets";
     }
 
+    public static final String INLINE_ID = "inline";
+
     public static void init() {
         initPatchouli();
 
@@ -33,12 +33,26 @@ public class HexInterop {
 
         xplat.initPlatformSpecific();
 
-        InlineHex.init();
+        if (xplat.isModPresent(INLINE_ID)) {
+            try {
+                Class.forName("at.petrak.hexcasting.interop.inline.InlineHex")
+                    .getMethod("init").invoke(null);
+            } catch (Exception ignored) {
+                // Inline classes excluded from build or mod not loaded
+            }
+        }
     }
 
     public static void clientInit() {
         IClientXplatAbstractions.INSTANCE.initPlatformSpecific();
-        InlineHexClient.init();
+        if (IXplatAbstractions.INSTANCE.isModPresent(INLINE_ID)) {
+            try {
+                Class.forName("at.petrak.hexcasting.interop.inline.InlineHexClient")
+                    .getMethod("init").invoke(null);
+            } catch (Exception ignored) {
+                // Inline classes excluded from build or mod not loaded
+            }
+        }
     }
 
     private static void initPatchouli() {
@@ -72,8 +86,7 @@ public class HexInterop {
             }
         }
 
-        if (anyInterop) {
-            PatchouliAPI.get().setConfigFlag(PATCHOULI_ANY_INTEROP_FLAG, true);
-        }
+        // Always register the flag so Patchouli doesn't warn "Queried for unknown config flag"
+        PatchouliAPI.get().setConfigFlag(PATCHOULI_ANY_INTEROP_FLAG, anyInterop);
     }
 }

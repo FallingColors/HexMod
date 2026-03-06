@@ -3,6 +3,7 @@ package at.petrak.hexcasting.mixin;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.util.RandomSource;
@@ -20,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 // Adds ancient scrolls to the wandering trader by replacing the special trade in the last slot
 @Mixin(WanderingTrader.class)
 public class MixinWanderingTrader {
-	@Inject(method = "updateTrades", at = @At("RETURN"))
+	@Inject(method = "updateTrades", at = @At("RETURN"), remap = false)
 	private void addNewTrades(CallbackInfo ci) {
         var self = (WanderingTrader) (Object) this;
         MerchantOffers offerList = self.getOffers();
@@ -31,7 +32,7 @@ public class MixinWanderingTrader {
             ItemStack scroll = new ItemStack(HexItems.SCROLL_LARGE);
             AddPerWorldPatternToScrollFunc.doStatic(scroll, rand, self.getServer().overworld());
             NBTHelper.putBoolean(scroll, ItemScroll.TAG_NEEDS_PURCHASE, true);
-            offerList.set(5, new MerchantOffer(new ItemStack(Items.EMERALD, 12), scroll, 1, 1, 1));
+            offerList.set(5, new MerchantOffer(new ItemCost(Items.EMERALD, 12), scroll, 1, 1, 1.0F));
         }
     }
 }

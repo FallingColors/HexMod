@@ -45,6 +45,7 @@ public class HexItems {
 
     private static final Map<ResourceLocation, Item> ITEMS = new LinkedHashMap<>(); // preserve insertion order
     private static final Map<CreativeModeTab, List<TabEntry>> ITEM_TABS = new LinkedHashMap<>();
+    private static final List<TabEntry> GENERATED_SCROLL_ENTRIES = new ArrayList<>();
 
 
     public static final Item AMETHYST_DUST = make("amethyst_dust", new Item(props()));
@@ -83,7 +84,7 @@ public class HexItems {
     public static final ItemArtifact ARTIFACT = make("artifact", new ItemArtifact(unstackable().rarity(Rarity.RARE)));
 
     public static final ItemJewelerHammer JEWELER_HAMMER = make("jeweler_hammer",
-        new ItemJewelerHammer(Tiers.IRON, 0, -2.8F, props().stacksTo(1).defaultDurability(Tiers.DIAMOND.getUses())));
+        new ItemJewelerHammer(Tiers.IRON, props().stacksTo(1).durability(Tiers.DIAMOND.getUses())));
 
     public static final ItemScroll SCROLL_SMOL = make("scroll_small", new ItemScroll(props(), 1));
     public static final ItemScroll SCROLL_MEDIUM = make("scroll_medium", new ItemScroll(props(), 2));
@@ -139,7 +140,7 @@ public class HexItems {
 
     // BUFF SANDVICH
     public static final Item SUBMARINE_SANDWICH = make("sub_sandwich",
-        new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationMod(1.2f).build())));
+        new Item(props().food(new FoodProperties.Builder().nutrition(14).saturationModifier(1.2f).build())));
 
     public static final ItemLoreFragment LORE_FRAGMENT = make("lore_fragment",
         new ItemLoreFragment(unstackable()
@@ -148,7 +149,7 @@ public class HexItems {
     public static final ItemCreativeUnlocker CREATIVE_UNLOCKER = make("creative_unlocker",
         new ItemCreativeUnlocker(unstackable()
             .rarity(Rarity.EPIC)
-            .food(new FoodProperties.Builder().nutrition(20).saturationMod(1f).alwaysEat().build())));
+            .food(new FoodProperties.Builder().nutrition(20).saturationModifier(1f).alwaysEdible().build())));
 
     //
 
@@ -161,6 +162,10 @@ public class HexItems {
     }
 
     private static void generateScrollEntries() {
+        var scrollTabEntries = ITEM_TABS.computeIfAbsent(HexCreativeTabs.SCROLLS, t -> new ArrayList<>());
+        scrollTabEntries.removeAll(GENERATED_SCROLL_ENTRIES);
+        GENERATED_SCROLL_ENTRIES.clear();
+
         var keyList = new ArrayList<ResourceKey<ActionRegistryEntry>>();
         Registry<ActionRegistryEntry> regi = IXplatAbstractions.INSTANCE.getActionRegistry();
         for (var key : regi.registryKeySet())
@@ -168,10 +173,13 @@ public class HexItems {
                 keyList.add(key);
         keyList.sort( (a, b) -> a.location().compareTo(b.location()) );
         for (var key : keyList) {
-            addToTab(() -> ItemScroll.withPerWorldPattern(
+            var memoised = Suppliers.memoize(() -> ItemScroll.withPerWorldPattern(
                 new ItemStack(HexItems.SCROLL_LARGE),
                 key.location().toString()
-            ),HexCreativeTabs.SCROLLS);
+            ));
+            var entry = new TabEntry.StackEntry(memoised);
+            scrollTabEntries.add(entry);
+            GENERATED_SCROLL_ENTRIES.add(entry);
         }
     }
 

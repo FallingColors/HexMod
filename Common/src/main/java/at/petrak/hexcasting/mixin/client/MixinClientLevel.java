@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public abstract class MixinClientLevel {
 
     @Inject(method = "doAnimateTick",
+        remap = false,
         at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;animateTick" +
             "(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;" +
             "Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;)V"),

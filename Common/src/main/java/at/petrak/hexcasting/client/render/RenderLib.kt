@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.utils.TAU
 import at.petrak.hexcasting.client.ClientTickCounter
 import at.petrak.hexcasting.client.gui.GuiSpellcasting
 import com.mojang.blaze3d.vertex.DefaultVertexFormat
+import com.mojang.blaze3d.vertex.BufferUploader
 import com.mojang.blaze3d.vertex.PoseStack
 import com.mojang.blaze3d.vertex.Tesselator
 import com.mojang.blaze3d.vertex.VertexFormat
@@ -250,38 +251,27 @@ fun makeZappy(
     barePoints: List<Vec2>, dupIndices: Set<Int>?, hops: Int, variance: Float, speed: Float, flowIrregular: Float,
     readabilityOffset: Float, lastSegmentLenProportion: Float, seed: Double
 ): List<Vec2> {
-    // Nothing in, nothing out
     if (barePoints.isEmpty()) {
         return emptyList()
     }
     fun zappify(points: List<Vec2>, truncateLast: Boolean): List<Vec2> {
         val scaleVariance = { it: Double -> 1.0.coerceAtMost(8 * (0.5 - abs(0.5 - it))) }
         val zSeed = ClientTickCounter.getTotal().toDouble() * speed
-        // Create our output list of zap points
         val zappyPts = ArrayList<Vec2>(points.size * hops)
         zappyPts.add(points[0])
-        // For each segment in the original...
         for ((i, pair) in points.zipWithNext().withIndex()) {
             val (src, target) = pair
             val delta = target.add(src.negated())
-            // Take hop distance
             val hopDist = Mth.sqrt(src.distanceToSqr(target)) / hops
-            // Compute how big the radius of variance should be
             val maxVariance = hopDist * variance
 
-            // for a list of length n, there will be n-1 pairs,
-            // and so the last index will be (n-1)-1
             val maxJ = if (truncateLast && i == points.size - 2) {
                 (lastSegmentLenProportion * hops.toFloat()).roundToInt()
             } else hops
 
             for (j in 1..maxJ) {
                 val progress = j.toDouble() / (hops + 1)
-                // Add the next hop...
                 val pos = src.add(delta.scale(progress.toFloat()))
-                // as well as some random variance...
-                // (We use i, j (segment #, subsegment #) as seeds for the Perlin noise,
-                // and zSeed (i.e. time elapsed) to perturb the shape gradually over time)
                 val minorPerturb = getNoise(i.toDouble(), j.toDouble(), sin(zSeed)) * flowIrregular
                 val theta = (3 * getNoise(
                     i + progress + minorPerturb - zSeed,
@@ -294,12 +284,9 @@ fun makeZappy(
                     seed
                 ) * maxVariance * scaleVariance(progress)).toFloat()
                 val randomHop = Vec2(r * Mth.cos(theta), r * Mth.sin(theta))
-                // Then record the new location.
                 zappyPts.add(pos.add(randomHop))
 
                 if (j == hops) {
-                    // Finally, we hit the destination, add that too
-                    // but we might not hit the destination if we want to stop short
                     zappyPts.add(target)
                 }
             }
@@ -447,19 +434,10 @@ fun renderQuad(
 ) {
     val mat = ps.last().pose()
     val tess = Tesselator.getInstance()
-    val buf = tess.builder
-    buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR)
-    buf.vertex(mat, x, y, 0f)
-        .color(color)
-        .endVertex()
-    buf.vertex(mat, x, y + h, 0f)
-        .color(color)
-        .endVertex()
-    buf.vertex(mat, x + w, y + h, 0f)
-        .color(color)
-        .endVertex()
-    buf.vertex(mat, x + w, y, 0f)
-        .color(color)
-        .endVertex()
-    tess.end()
+    val buf = tess.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR)
+    buf.addVertex(mat, x, y, 0f).setColor(color)
+    buf.addVertex(mat, x, y + h, 0f).setColor(color)
+    buf.addVertex(mat, x + w, y + h, 0f).setColor(color)
+    buf.addVertex(mat, x + w, y, 0f).setColor(color)
+    BufferUploader.drawWithShader(buf.buildOrThrow())
 }

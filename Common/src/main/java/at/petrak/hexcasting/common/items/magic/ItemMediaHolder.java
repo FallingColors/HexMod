@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.world.item.Item;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -87,12 +88,7 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
     }
 
     @Override
-    public boolean canBeDepleted() {
-        return false;
-    }
-
-    @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pTooltipContext, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {
         var maxMedia = getMaxMedia(pStack);
         if (maxMedia > 0) {
@@ -114,6 +110,6 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
                     mediamount, maxCapacity, percentFull));
         }
 
-        super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
+        super.appendHoverText(pStack, pTooltipContext, pTooltipComponents, pIsAdvanced);
     }
 }

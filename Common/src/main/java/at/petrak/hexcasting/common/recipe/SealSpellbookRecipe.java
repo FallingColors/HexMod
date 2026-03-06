@@ -6,9 +6,7 @@ import at.petrak.hexcasting.common.items.storage.ItemSpellbook;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
@@ -32,15 +30,15 @@ public class SealSpellbookRecipe extends ShapelessRecipe {
         return ingredients;
     }
 
-    public SealSpellbookRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, "", category, getSealedStack(), createIngredients());
+    public SealSpellbookRecipe(CraftingBookCategory category) {
+        super("", category, getSealedStack(), createIngredients());
     }
 
     @Override
-    public @NotNull ItemStack assemble(CraftingContainer inv, RegistryAccess access) {
+    public @NotNull ItemStack assemble(CraftingInput inv, HolderLookup.Provider registries) {
         ItemStack out = ItemStack.EMPTY;
 
-        for (int i = 0; i < inv.getContainerSize(); i++) {
+        for (int i = 0; i < inv.size(); i++) {
             var stack = inv.getItem(i);
             if (stack.is(HexItems.SPELLBOOK)) {
                 out = stack.copy();

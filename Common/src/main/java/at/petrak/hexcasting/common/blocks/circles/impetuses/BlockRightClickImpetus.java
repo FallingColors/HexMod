@@ -4,7 +4,8 @@ import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -24,8 +25,8 @@ public class BlockRightClickImpetus extends BlockAbstractImpetus {
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-        BlockHitResult pHit) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState pState, Level pLevel, BlockPos pPos,
+        Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (!pPlayer.isShiftKeyDown()) {
             var tile = pLevel.getBlockEntity(pPos);
             if (tile instanceof BlockEntityRightClickImpetus impetus) {
@@ -33,9 +34,9 @@ public class BlockRightClickImpetus extends BlockAbstractImpetus {
 //                    impetus.activateSpellCircle(serverPlayer);
                     impetus.startExecution(serverPlayer);
                 }
-                return InteractionResult.SUCCESS;
+                return ItemInteractionResult.SUCCESS;
             }
         }
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 }

@@ -4,11 +4,11 @@ import net.minecraft.client.MouseHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(MouseHandler.class)
+@Mixin(value = MouseHandler.class, remap = false)
 public interface AccessorMouseHandler {
-    @Accessor("accumulatedScroll")
+    @Accessor("accumulatedScrollY")
     double hex$getAccumulatedScroll();
 
-    @Accessor("accumulatedScroll")
+    @Accessor("accumulatedScrollY")
     void hex$setAccumulatedScroll(double scroll);
 }

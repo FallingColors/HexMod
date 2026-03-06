@@ -51,20 +51,20 @@ public class StateIngredientHelper {
     public static StateIngredient deserialize(JsonObject object) {
         switch (GsonHelper.getAsString(object, "type")) {
             case "tag":
-                return new StateIngredientTag(new ResourceLocation(GsonHelper.getAsString(object, "tag")));
+                return new StateIngredientTag(ResourceLocation.parse(GsonHelper.getAsString(object, "tag")));
             case "block":
                 return new StateIngredientBlock(
-                        BuiltInRegistries.BLOCK.get(new ResourceLocation(GsonHelper.getAsString(object, "block"))));
+                        BuiltInRegistries.BLOCK.get(ResourceLocation.parse(GsonHelper.getAsString(object, "block"))));
             case "state":
                 return new StateIngredientBlockState(readBlockState(object));
             case "blocks":
                 List<Block> blocks = new ArrayList<>();
                 for (JsonElement element : GsonHelper.getAsJsonArray(object, "blocks")) {
-                    blocks.add(BuiltInRegistries.BLOCK.get(new ResourceLocation(element.getAsString())));
+                    blocks.add(BuiltInRegistries.BLOCK.get(ResourceLocation.parse(element.getAsString())));
                 }
                 return new StateIngredientBlocks(blocks);
             case "tag_excluding":
-                ResourceLocation tag = new ResourceLocation(GsonHelper.getAsString(object, "tag"));
+                ResourceLocation tag = ResourceLocation.parse(GsonHelper.getAsString(object, "tag"));
                 List<StateIngredient> ingr = new ArrayList<>();
                 for (JsonElement element : GsonHelper.getAsJsonArray(object, "exclude")) {
                     ingr.add(deserialize(GsonHelper.convertToJsonObject(element, "exclude entry")));

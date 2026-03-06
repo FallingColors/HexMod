@@ -43,7 +43,7 @@ public class HexActionTagProvider extends TagsProvider<ActionRegistryEntry> {
             // instead of `.../tags/hexcasting/action`.
             // So we pull this bullshit
             var fakeKey = ResourceKey.<ActionRegistryEntry>createRegistryKey(
-                new ResourceLocation("foobar", "hexcasting/tags/action"));
+                ResourceLocation.fromNamespaceAndPath("foobar", "hexcasting/tags/action"));
             return TagKey.create(fakeKey, real.location());
         } else {
             return real;

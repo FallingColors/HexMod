@@ -7,10 +7,9 @@
   "mixins": [
     "ForgeAccessorBuiltInRegistries",
     "ForgeMixinCursedRecipeSerializerBase",
+    "ForgeMixinCustomPacketPayload",
+    "ForgeMixinNetworkRegistry",
     "ForgeMixinTagsProvider"
   ],
-  "client": [
-    "ForgeMixinBlockColors",
-    "ForgeMixinItemColors"
-  ]
+  "client": []
 }

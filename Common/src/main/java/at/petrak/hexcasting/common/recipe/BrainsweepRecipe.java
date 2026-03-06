@@ -4,15 +4,24 @@ import at.petrak.hexcasting.common.recipe.ingredient.StateIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.StateIngredientHelper;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
 import com.google.gson.JsonObject;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Decoder;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.Encoder;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mojang.serialization.JsonOps;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
@@ -28,12 +37,11 @@ public record BrainsweepRecipe(
 	BrainsweepeeIngredient entityIn,
 	long mediaCost,
 	BlockState result
-) implements Recipe<Container> {
+) implements Recipe<RecipeInput> {
 	public boolean matches(BlockState blockIn, Entity victim, ServerLevel level) {
 		return this.blockIn.test(blockIn) && this.entityIn.test(victim, level);
 	}
 
-	@Override
 	public ResourceLocation getId() {
 		return id;
 	}
@@ -51,12 +59,12 @@ public record BrainsweepRecipe(
 	// in order to get this to be a "Recipe" we need to do a lot of bending-over-backwards
 	// to get the implementation to be satisfied even though we never use it
 	@Override
-	public boolean matches(Container pContainer, Level pLevel) {
+	public boolean matches(RecipeInput pContainer, Level pLevel) {
 		return false;
 	}
 
 	@Override
-	public ItemStack assemble(Container pContainer, RegistryAccess access) {
+	public ItemStack assemble(RecipeInput pContainer, HolderLookup.Provider registries) {
 		return ItemStack.EMPTY;
 	}
 
@@ -66,7 +74,7 @@ public record BrainsweepRecipe(
 	}
 
 	@Override
-	public ItemStack getResultItem(RegistryAccess registryAccess) {
+	public ItemStack getResultItem(HolderLookup.Provider registries) {
 		return ItemStack.EMPTY.copy();
 	}
 
@@ -84,30 +92,113 @@ public record BrainsweepRecipe(
 	}
 
 	public static class Serializer extends RecipeSerializerBase<BrainsweepRecipe> {
+		private static final Codec<StateIngredient> STATE_INGREDIENT_CODEC = Codec.of(
+			new Encoder<>() {
+				@Override
+				public <T> DataResult<T> encode(StateIngredient input, DynamicOps<T> ops, T prefix) {
+					try {
+						return DataResult.success(new Dynamic<>(JsonOps.INSTANCE, input.serialize()).convert(ops).getValue());
+					} catch (Exception e) {
+						return DataResult.error(() -> "Failed to encode StateIngredient: " + e.getMessage());
+					}
+				}
+			},
+			new Decoder<>() {
+				@Override
+				public <T> DataResult<com.mojang.datafixers.util.Pair<StateIngredient, T>> decode(DynamicOps<T> ops, T input) {
+					try {
+						JsonObject obj = new Dynamic<>(ops, input).convert(JsonOps.INSTANCE).getValue().getAsJsonObject();
+						return DataResult.success(com.mojang.datafixers.util.Pair.of(
+							StateIngredientHelper.deserialize(obj), input));
+					} catch (Exception e) {
+						return DataResult.error(() -> e.getMessage());
+					}
+				}
+			}
+		);
+
+		private static final Codec<BrainsweepeeIngredient> BRAINSWEEPEE_CODEC = Codec.of(
+			new Encoder<>() {
+				@Override
+				public <T> DataResult<T> encode(BrainsweepeeIngredient input, DynamicOps<T> ops, T prefix) {
+					try {
+						return DataResult.success(new Dynamic<>(JsonOps.INSTANCE, input.serialize()).convert(ops).getValue());
+					} catch (Exception e) {
+						return DataResult.error(() -> "Failed to encode BrainsweepeeIngredient: " + e.getMessage());
+					}
+				}
+			},
+			new Decoder<>() {
+				@Override
+				public <T> DataResult<com.mojang.datafixers.util.Pair<BrainsweepeeIngredient, T>> decode(DynamicOps<T> ops, T input) {
+					try {
+						JsonObject obj = new Dynamic<>(ops, input).convert(JsonOps.INSTANCE).getValue().getAsJsonObject();
+						return DataResult.success(com.mojang.datafixers.util.Pair.of(
+							BrainsweepeeIngredient.deserialize(obj), input));
+					} catch (Exception e) {
+						return DataResult.error(() -> e.getMessage());
+					}
+				}
+			}
+		);
+
+		private static final Codec<BlockState> BLOCKSTATE_JSON_CODEC = Codec.of(
+			new Encoder<>() {
+				@Override
+				public <T> DataResult<T> encode(BlockState input, DynamicOps<T> ops, T prefix) {
+					try {
+						return DataResult.success(new Dynamic<>(JsonOps.INSTANCE, StateIngredientHelper.serializeBlockState(input)).convert(ops).getValue());
+					} catch (Exception e) {
+						return DataResult.error(() -> "Failed to encode BlockState: " + e.getMessage());
+					}
+				}
+			},
+			new Decoder<>() {
+				@Override
+				public <T> DataResult<com.mojang.datafixers.util.Pair<BlockState, T>> decode(DynamicOps<T> ops, T input) {
+					try {
+						JsonObject obj = new Dynamic<>(ops, input).convert(JsonOps.INSTANCE).getValue().getAsJsonObject();
+						return DataResult.success(com.mojang.datafixers.util.Pair.of(
+							StateIngredientHelper.readBlockState(obj), input));
+					} catch (Exception e) {
+						return DataResult.error(() -> e.getMessage());
+					}
+				}
+			}
+		);
+
+		private static final MapCodec<BrainsweepRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
+			ResourceLocation.CODEC.fieldOf("id").forGetter(BrainsweepRecipe::id),
+			STATE_INGREDIENT_CODEC.fieldOf("blockIn").forGetter(BrainsweepRecipe::blockIn),
+			BRAINSWEEPEE_CODEC.fieldOf("entityIn").forGetter(BrainsweepRecipe::entityIn),
+			Codec.LONG.fieldOf("cost").forGetter(BrainsweepRecipe::mediaCost),
+			BLOCKSTATE_JSON_CODEC.fieldOf("result").forGetter(BrainsweepRecipe::result)
+		).apply(inst, BrainsweepRecipe::new));
+
 		@Override
-		public @NotNull BrainsweepRecipe fromJson(ResourceLocation recipeID, JsonObject json) {
-			var blockIn = StateIngredientHelper.deserialize(GsonHelper.getAsJsonObject(json, "blockIn"));
-			var villagerIn = BrainsweepeeIngredient.deserialize(GsonHelper.getAsJsonObject(json, "entityIn"));
-			var cost = GsonHelper.getAsInt(json, "cost");
-			var result = StateIngredientHelper.readBlockState(GsonHelper.getAsJsonObject(json, "result"));
-			return new BrainsweepRecipe(recipeID, blockIn, villagerIn, cost, result);
+		public MapCodec<BrainsweepRecipe> codec() {
+			return MAP_CODEC;
 		}
 
 		@Override
-		public void toNetwork(FriendlyByteBuf buf, BrainsweepRecipe recipe) {
-			recipe.blockIn.write(buf);
-			recipe.entityIn.wrapWrite(buf);
-			buf.writeVarLong(recipe.mediaCost);
-			buf.writeVarInt(Block.getId(recipe.result));
-		}
-
-		@Override
-		public @NotNull BrainsweepRecipe fromNetwork(ResourceLocation recipeID, FriendlyByteBuf buf) {
-			var blockIn = StateIngredientHelper.read(buf);
-			var brainsweepeeIn = BrainsweepeeIngredient.read(buf);
-			var cost = buf.readVarLong();
-			var result = Block.stateById(buf.readVarInt());
-			return new BrainsweepRecipe(recipeID, blockIn, brainsweepeeIn, cost, result);
+		public StreamCodec<RegistryFriendlyByteBuf, BrainsweepRecipe> streamCodec() {
+			return StreamCodec.of(
+				(buf, recipe) -> {
+					buf.writeResourceLocation(recipe.id);
+					recipe.blockIn.write(buf);
+					recipe.entityIn.wrapWrite(buf);
+					buf.writeVarLong(recipe.mediaCost);
+					buf.writeVarInt(Block.getId(recipe.result));
+				},
+				buf -> {
+					var id = buf.readResourceLocation();
+					var blockIn = StateIngredientHelper.read(buf);
+					var brainsweepeeIn = BrainsweepeeIngredient.read(buf);
+					var cost = buf.readVarLong();
+					var result = Block.stateById(buf.readVarInt());
+					return new BrainsweepRecipe(id, blockIn, brainsweepeeIn, cost, result);
+				}
+			);
 		}
 	}
 }

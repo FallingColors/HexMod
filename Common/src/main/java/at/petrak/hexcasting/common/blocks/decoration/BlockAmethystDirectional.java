@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.blocks.decoration;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -13,6 +14,13 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class BlockAmethystDirectional extends DirectionalBlock {
+    public static final MapCodec<BlockAmethystDirectional> CODEC = simpleCodec(BlockAmethystDirectional::new);
+
+    @Override
+    protected MapCodec<? extends DirectionalBlock> codec() {
+        return CODEC;
+    }
+
     public BlockAmethystDirectional(Properties properties) {
         super(properties);
     }

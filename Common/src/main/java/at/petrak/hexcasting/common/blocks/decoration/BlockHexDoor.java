@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockHexDoor extends DoorBlock {
     public BlockHexDoor(Properties $$0) {
-        super($$0, HexBlockSetTypes.EDIFIED_WOOD);
+        super(HexBlockSetTypes.EDIFIED_WOOD, $$0);
     }
 
 

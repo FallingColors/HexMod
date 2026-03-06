@@ -59,7 +59,7 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
 			throw new IllegalStateException("No way of obtaining recipe " + pRecipeId);
 		}
 
-		this.advancement.parent(new ResourceLocation("recipes/root"))
+		this.advancement.parent(ResourceLocation.fromNamespaceAndPath("minecraft", "recipes/root"))
 			.addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pRecipeId))
 			.rewards(AdvancementRewards.Builder.recipe(pRecipeId))
 			.requirements(RequirementsStrategy.OR);
@@ -67,7 +67,7 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
 			pRecipeId,
 			this.blockIn, this.entityIn, this.mediaCost, this.result,
 			this.advancement,
-			new ResourceLocation(pRecipeId.getNamespace(), "recipes/brainsweep/" + pRecipeId.getPath())));
+			ResourceLocation.fromNamespaceAndPath(pRecipeId.getNamespace(), "recipes/brainsweep/" + pRecipeId.getPath())));
 	}
 
 	public record Result(ResourceLocation id, StateIngredient blockIn, BrainsweepeeIngredient villagerIn,
@@ -75,6 +75,7 @@ public class BrainsweepRecipeBuilder implements RecipeBuilder {
 						 ResourceLocation advancementId) implements FinishedRecipe {
 		@Override
 		public void serializeRecipeData(JsonObject json) {
+			json.addProperty("id", this.id.toString());
 			json.add("blockIn", this.blockIn.serialize());
 			json.add("entityIn", this.villagerIn.serialize());
 			json.addProperty("cost", this.mediaCost);

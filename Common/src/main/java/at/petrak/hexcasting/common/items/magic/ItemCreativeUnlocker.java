@@ -9,11 +9,14 @@ import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import net.minecraft.ChatFormatting;
-import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.advancements.AdvancementNode;
+import net.minecraft.advancements.AdvancementTree;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -70,7 +73,7 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     }
 
     public static boolean isDebug(ItemStack stack, String flag) {
-        if (!stack.is(HexItems.CREATIVE_UNLOCKER) || !stack.hasCustomHoverName()) {
+        if (!stack.is(HexItems.CREATIVE_UNLOCKER) || stack.get(DataComponents.CUSTOM_NAME) == null) {
             return false;
         }
         var keywords = Arrays.asList(stack.getHoverName().getString().toLowerCase(Locale.ROOT).split(" "));
@@ -146,7 +149,6 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
 
     @Override
     public long withdrawMedia(ItemStack stack, long cost, boolean simulate) {
-        // In case it's withdrawn through other means
         if (!simulate && isDebug(stack, DISPLAY_MEDIA)) {
             addToLongArray(stack, TAG_EXTRACTIONS, cost);
         }
@@ -156,7 +158,6 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
 
     @Override
     public long insertMedia(ItemStack stack, long amount, boolean simulate) {
-        // In case it's inserted through other means
         if (!simulate && isDebug(stack, DISPLAY_MEDIA)) {
             addToLongArray(stack, TAG_INSERTIONS, amount);
         }
@@ -214,18 +215,21 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity consumer) {
         if (level instanceof ServerLevel slevel && consumer instanceof ServerPlayer player) {
+            var advManager = slevel.getServer().getAdvancements();
+            var tree = advManager.tree();
             var names = new ArrayList<>(ItemLoreFragment.NAMES);
             names.add(0, modLoc("root"));
             for (var name : names) {
-                var rootAdv = slevel.getServer().getAdvancements().getAdvancement(name);
-                if (rootAdv != null) {
-                    var children = new ArrayList<Advancement>();
-                    children.add(rootAdv);
-                    addChildren(rootAdv, children);
+                var rootHolder = advManager.get(name);
+                if (rootHolder != null) {
+                    var children = new ArrayList<AdvancementHolder>();
+                    children.add(rootHolder);
+                    addChildren(tree, rootHolder, children);
 
                     var adman = player.getAdvancements();
 
                     for (var kid : children) {
+                        if (kid == null) continue;
                         var progress = adman.getOrStartProgress(kid);
                         if (!progress.isDone()) {
                             for (String crit : progress.getRemainingCriteria()) {
@@ -252,9 +256,9 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents,
+    public void appendHoverText(ItemStack stack, Item.TooltipContext pTooltipContext, List<Component> tooltipComponents,
         TooltipFlag isAdvanced) {
-        Component emphasized = infiniteMedia(level);
+        Component emphasized = infiniteMedia(null); // TooltipContext has no level in 1.21; rainbow falls back to white
 
         MutableComponent modName = Component.translatable("item.hexcasting.creative_unlocker.mod_name").withStyle(
             (s) -> s.withColor(ItemMediaHolder.HEX_COLOR));
@@ -264,10 +268,13 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
         tooltipComponents.add(Component.translatable("item.hexcasting.creative_unlocker.tooltip", modName).withStyle(ChatFormatting.GRAY));
     }
 
-    private static void addChildren(Advancement root, List<Advancement> out) {
-        for (Advancement kiddo : root.getChildren()) {
-            out.add(kiddo);
-            addChildren(kiddo, out);
+    private static void addChildren(AdvancementTree tree, AdvancementHolder root, List<AdvancementHolder> out) {
+        AdvancementNode node = tree.get(root);
+        if (node != null) {
+            for (AdvancementNode kiddo : node.children()) {
+                out.add(kiddo.holder());
+                addChildren(tree, kiddo.holder(), out);
+            }
         }
     }
 }

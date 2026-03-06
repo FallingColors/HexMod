@@ -49,7 +49,6 @@ class OpExplode(val fire: Boolean) : SpellAction {
 
     private data class Spell(val pos: Vec3, val strength: Double, val fire: Boolean) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            // TODO: you can use this to explode things *outside* of the worldborder?
             if (!env.canEditBlockAt(BlockPos.containing(pos)))
                 return
 

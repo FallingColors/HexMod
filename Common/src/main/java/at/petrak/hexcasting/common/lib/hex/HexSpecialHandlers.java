@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.lib.hex;
 
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
+import at.petrak.hexcasting.common.casting.actions.SpecialHandlerCompat;
 import at.petrak.hexcasting.common.casting.actions.math.SpecialHandlerNumberLiteral;
 import at.petrak.hexcasting.common.casting.actions.stack.SpecialHandlerMask;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +19,8 @@ public class HexSpecialHandlers {
         new SpecialHandlerNumberLiteral.Factory());
     public static final SpecialHandler.Factory<SpecialHandlerMask> MASK = make("mask",
         new SpecialHandlerMask.Factory());
+    public static final SpecialHandler.Factory<SpecialHandlerCompat> COMPAT = make("compat",
+        new SpecialHandlerCompat.Factory());
 
     private static <T extends SpecialHandler> SpecialHandler.Factory<T> make(String name,
         SpecialHandler.Factory<T> handler) {

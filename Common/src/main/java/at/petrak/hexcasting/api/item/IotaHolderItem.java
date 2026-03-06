@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import net.minecraft.nbt.Tag;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
@@ -64,8 +65,11 @@ public interface IotaHolderItem {
         if (NBTHelper.hasString(stack, TAG_OVERRIDE_VISUALLY)) {
             var override = NBTHelper.getString(stack, TAG_OVERRIDE_VISUALLY);
 
-            if (override != null && ResourceLocation.isValidResourceLocation(override)) {
-                var key = new ResourceLocation(override);
+            if (override != null) {
+                var key = ResourceLocation.tryParse(override);
+                if (key == null) {
+                    return 0xFF000000 | Mth.hsvToRgb(ClientTickCounter.getTotal() * 2 % 360 / 360F, 0.75F, 1F);
+                }
                 if (HexIotaTypes.REGISTRY.containsKey(key)) {
                     var iotaType = HexIotaTypes.REGISTRY.get(key);
                     if (iotaType != null) {
@@ -103,7 +107,7 @@ public interface IotaHolderItem {
     static void appendHoverText(IotaHolderItem self, ItemStack stack, List<Component> components,
         TooltipFlag flag) {
         var datumTag = self.readIotaTag(stack);
-        if (datumTag != null) {
+        if (datumTag != null && datumTag.contains(HexIotaTypes.KEY_TYPE, Tag.TAG_STRING) && datumTag.contains(HexIotaTypes.KEY_DATA)) {
             var cmp = IotaType.getDisplay(datumTag);
             components.add(Component.translatable("hexcasting.spelldata.onitem", cmp));
 

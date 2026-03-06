@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import vazkii.patchouli.api.IVariable;
@@ -22,7 +23,7 @@ public class LookupPatternComponent extends AbstractPatternComponent {
     protected boolean strokeOrder;
 
     @Override
-    public List<HexPattern> getPatterns(UnaryOperator<IVariable> lookup) {
+    public List<HexPattern> getPatterns(UnaryOperator<IVariable> lookup, HolderLookup.Provider registries) {
         var key = ResourceKey.create(IXplatAbstractions.INSTANCE.getActionRegistry().key(), this.opName);
         var entry = IXplatAbstractions.INSTANCE.getActionRegistry().get(key);
 
@@ -37,10 +38,10 @@ public class LookupPatternComponent extends AbstractPatternComponent {
     }
 
     @Override
-    public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
-        var opName = lookup.apply(IVariable.wrap(this.opNameRaw)).asString();
+    public void onVariablesAvailable(UnaryOperator<IVariable> lookup, HolderLookup.Provider registries) {
+        var opName = lookup.apply(IVariable.wrap(this.opNameRaw, registries)).asString();
         this.opName = ResourceLocation.tryParse(opName);
 
-        super.onVariablesAvailable(lookup);
+        super.onVariablesAvailable(lookup, registries);
     }
 }

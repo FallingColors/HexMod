@@ -1,9 +1,11 @@
 package at.petrak.hexcasting.common.msgs;
 
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -13,9 +15,16 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  */
 public record MsgRecalcWallScrollDisplayS2C(int entityId, boolean showStrokeOrder) implements IMessage {
     public static final ResourceLocation ID = modLoc("redoscroll");
+    public static final CustomPacketPayload.Type<MsgRecalcWallScrollDisplayS2C> TYPE = new CustomPacketPayload.Type<>(ID);
+    public static final StreamCodec<RegistryFriendlyByteBuf, MsgRecalcWallScrollDisplayS2C> STREAM_CODEC =
+        StreamCodec.ofMember(MsgRecalcWallScrollDisplayS2C::serialize, MsgRecalcWallScrollDisplayS2C::deserialize);
 
-    public static MsgRecalcWallScrollDisplayS2C deserialize(ByteBuf buffer) {
-        var buf = new FriendlyByteBuf(buffer);
+    @Override
+    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
+
+    public static MsgRecalcWallScrollDisplayS2C deserialize(FriendlyByteBuf buf) {
         var id = buf.readVarInt();
         var showStrokeOrder = buf.readBoolean();
         return new MsgRecalcWallScrollDisplayS2C(id, showStrokeOrder);

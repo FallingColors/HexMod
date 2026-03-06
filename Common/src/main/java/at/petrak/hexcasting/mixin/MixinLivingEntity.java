@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 // Nuke the brain at the source
 @Mixin(LivingEntity.class)
 public abstract class MixinLivingEntity {
-    @Inject(method = "getBrain", at = @At("RETURN"))
+    @Inject(method = "getBrain", at = @At("RETURN"), remap = false)
     private void removeBrain(CallbackInfoReturnable<Brain<?>> cir) {
         var self = (LivingEntity) (Object) this;
         if (self instanceof Mob mob && IXplatAbstractions.INSTANCE.isBrainswept(mob)) {

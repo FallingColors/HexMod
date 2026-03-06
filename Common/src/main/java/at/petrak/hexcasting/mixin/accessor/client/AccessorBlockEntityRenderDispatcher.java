@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import java.util.function.Supplier;
 
-@Mixin(BlockEntityRenderDispatcher.class)
+@Mixin(value = BlockEntityRenderDispatcher.class, remap = false)
 public interface AccessorBlockEntityRenderDispatcher {
     @Accessor("blockRenderDispatcher")
     Supplier<BlockRenderDispatcher> hex$getBlockRenderDispatcher();

@@ -49,7 +49,7 @@ public class PatternRegistryManifest {
 
             if (!HexUtils.isOfTag(registry, key, HexTags.Actions.PER_WORLD_PATTERN)) {
                 var old = NORMAL_ACTION_LOOKUP.put(entry.prototype().getAngles(), key);
-                if (old != null) {
+                if (old != null && !old.equals(key)) {
                     HexAPI.LOGGER.warn("Inserted %s which has same signature as %s, overriding it.".formatted(key, old));
                 }
             } else {

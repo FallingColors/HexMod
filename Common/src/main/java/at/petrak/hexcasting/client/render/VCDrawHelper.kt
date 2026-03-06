@@ -2,11 +2,11 @@ package at.petrak.hexcasting.client.render
 
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.client.render.PatternRenderer.WorldlyBits
-import com.ibm.icu.impl.CurrencyData.provider
 import com.mojang.blaze3d.platform.GlStateManager
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.*
 import net.minecraft.client.Minecraft
+import com.mojang.blaze3d.vertex.BufferUploader
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.renderer.LightTexture
 import net.minecraft.client.renderer.MultiBufferSource
@@ -50,9 +50,8 @@ interface VCDrawHelper {
 
         override fun vcSetupAndSupply(vertMode: VertexFormat.Mode): VertexConsumer{
             val tess = Tesselator.getInstance()
-            val buf = tess.builder
-            buf.begin(vertMode, DefaultVertexFormat.POSITION_COLOR_TEX)
-            RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+            val buf = tess.begin(vertMode, DefaultVertexFormat.POSITION_TEX_COLOR)
+            RenderSystem.setShader { GameRenderer.getPositionTexColorShader() }
             RenderSystem.disableCull()
             RenderSystem.enableDepthTest()
             RenderSystem.enableBlend()
@@ -62,10 +61,10 @@ interface VCDrawHelper {
             return buf
         }
         override fun vertex(vc: VertexConsumer, color: Int, pos: Vec2, uv: Vec2, matrix: Matrix4f){
-            vc.vertex(matrix, pos.x, pos.y, z).color(color).uv(uv.x, uv.y).endVertex()
+            vc.addVertex(matrix, pos.x, pos.y, z).setUv(uv.x, uv.y).setColor(color)
         }
         override fun vcEndDrawer(vc: VertexConsumer){
-            Tesselator.getInstance().end()
+            BufferUploader.drawWithShader((vc as BufferBuilder).buildOrThrow())
         }
     }
 
@@ -80,19 +79,19 @@ interface VCDrawHelper {
                 provider.endBatch()
             }
             lastVertMode = vertMode
-            val buf = Tesselator.getInstance().builder
+            val tess = Tesselator.getInstance()
             if(vertMode == VertexFormat.Mode.QUADS){
                 val layer = RenderType.entityTranslucentCull(texture)
                 layer.setupRenderState()
                 if (provider == null) {
-                    buf.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.NEW_ENTITY)
+                    val buf = tess.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.NEW_ENTITY)
                     RenderSystem.setShader { GameRenderer.getRendertypeEntityTranslucentCullShader() }
                     return buf
                 } else {
                     return provider.getBuffer(layer)
                 }
             }
-            buf.begin( vertMode, DefaultVertexFormat.NEW_ENTITY )
+            val buf = tess.begin(vertMode, DefaultVertexFormat.NEW_ENTITY)
             // Generally this would be handled by a RenderLayer, but that doesn't seem to actually work here,,
             RenderSystem.setShaderTexture(0, texture)
             RenderSystem.enableDepthTest()
@@ -105,29 +104,27 @@ interface VCDrawHelper {
             if (Minecraft.useShaderTransparency()) {
                 Minecraft.getInstance().levelRenderer.translucentTarget!!.bindWrite(false)
             }
-            RenderSystem.setShader( GameRenderer::getRendertypeEntityTranslucentCullShader )
+            RenderSystem.setShader { GameRenderer.getRendertypeEntityTranslucentCullShader() }
             return buf
         }
 
         override fun vertex(vc: VertexConsumer, color: Int, pos: Vec2, uv: Vec2, matrix: Matrix4f){
             val nv = worldlyBits.normal?: Vec3(1.0, 1.0, 1.0)
-            vc.vertex(matrix, pos.x, pos.y, z)
-                .color(color)
-                .uv(uv.x, uv.y)
-                .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(worldlyBits.light?: LightTexture.FULL_BRIGHT )
-                .normal(ps.last().normal(), nv.x.toFloat(), nv.y.toFloat(), nv.z.toFloat())
-
-            vc.endVertex()
+            vc.addVertex(matrix, pos.x, pos.y, z)
+                .setColor(color)
+                .setUv(uv.x, uv.y)
+                .setOverlay(OverlayTexture.NO_OVERLAY)
+                .setLight(worldlyBits.light ?: LightTexture.FULL_BRIGHT)
+                .setNormal(ps.last(), nv.x.toFloat(), nv.y.toFloat(), nv.z.toFloat())
         }
         override fun vcEndDrawer(vc: VertexConsumer){
             if(lastVertMode == VertexFormat.Mode.QUADS){
-                if (provider == null) {
+                if (worldlyBits.provider == null) {
                     val layer = RenderType.entityTranslucentCull(texture)
-                    layer.end(Tesselator.getInstance().builder, VertexSorting.ORTHOGRAPHIC_Z)
+                    layer.draw((vc as BufferBuilder).buildOrThrow())
                 }
             } else {
-                Tesselator.getInstance().end()
+                BufferUploader.drawWithShader((vc as BufferBuilder).buildOrThrow())
                 Minecraft.getInstance().gameRenderer.lightTexture().turnOffLightLayer()
                 RenderSystem.disableBlend()
                 RenderSystem.defaultBlendFunc()

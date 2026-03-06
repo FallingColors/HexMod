@@ -9,8 +9,8 @@ import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockHexPressurePlate extends PressurePlateBlock {
-    public BlockHexPressurePlate(Sensitivity $$0, Properties $$1) {
-        super($$0, $$1, HexBlockSetTypes.EDIFIED_WOOD);
+    public BlockHexPressurePlate(Properties properties) {
+        super(HexBlockSetTypes.EDIFIED_WOOD, properties);
     }
 
 

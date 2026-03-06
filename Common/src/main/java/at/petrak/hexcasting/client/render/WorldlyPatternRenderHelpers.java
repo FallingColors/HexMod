@@ -140,7 +140,7 @@ public class WorldlyPatternRenderHelpers {
 
         PoseStack noNormalInv = new PoseStack();
         noNormalInv.scale(1, 1, -1);
-        ps.mulPoseMatrix(noNormalInv.last().pose());
+        ps.mulPose(noNormalInv.last().pose());
 
         PatternRenderer.renderPattern(pattern, ps, new PatternRenderer.WorldlyBits(bufSource, light, normal),
                 patSets, patColors, seed, blockSize * 512);

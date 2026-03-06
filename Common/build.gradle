@@ -9,33 +9,28 @@ minecraft {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
-
     maven { url 'https://maven.blamejared.com' }
-
-    maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.dev"
-    }
-
-    maven { url "https://maven.shedaniel.me/" }
-
+    maven { url = 'https://maven.neoforged.net/releases' }
+    maven { url = 'https://maven.minecraftforge.net' }
+    maven { name = "Progwml6 maven"; url = "https://dvs1.progwml6.com/files/maven/" }
+    maven { name = "ModMaven"; url = "https://modmaven.dev" }
+    maven { url = "https://maven.shedaniel.me/" }
+    maven { url = "https://api.modrinth.com/maven" }
 }
 
 dependencies {
     compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
-    compileOnly "at.petra-k.paucal:paucal-common-$minecraftVersion:$paucalVersion"
-    compileOnly "vazkii.patchouli:Patchouli-xplat:$minecraftVersion-$patchouliVersion-SNAPSHOT"
+    // Paucal: from mavenLocal or includeBuild (groupId at.petrak)
+    compileOnly "at.petrak:paucal-neoforge-$minecraftVersion:$paucalVersion"
+    compileOnly "vazkii.patchouli:Patchouli-xplat:$patchouliVersion-SNAPSHOT"
 
-    compileOnly "com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion"
+    // Optional: Inline (pattern tooltips in chat) - uncomment to enable Inline integration
+    // Also remove 'at/petrak/hexcasting/interop/inline/**' from sourceSets.main.java.exclude in this file
+    // compileOnly "maven.modrinth:inline:$minecraftVersion-$inlineVersion-neoforge"
 
     compileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
     testCompileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"
@@ -53,5 +48,16 @@ processResources {
 
     filesMatching(['pack.mcmeta']) {
         expand buildProps
+    }
+}
+
+// Datagen sources are not required to run the client; exclude to unblock NeoForge port.
+// Inline interop is excluded so the mod compiles without the Inline dependency.
+sourceSets {
+    main {
+        java {
+            exclude 'at/petrak/hexcasting/datagen/**'
+            exclude 'at/petrak/hexcasting/interop/inline/**'
+        }
     }
 }

@@ -79,6 +79,7 @@ object OpDestroyFluid : SpellAction {
                         ) {
                             val success =
                                 if (blockstate.block is BucketPickup && !(blockstate.block as BucketPickup).pickupBlock(
+                                        env.castingEntity as? ServerPlayer,
                                         env.world,
                                         here,
                                         blockstate

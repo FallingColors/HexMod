@@ -17,7 +17,7 @@
     "ruff.lint.args": [
         "--extend-ignore=I", // format on save is enabled, so don't show the squiggles
     ],
-    "python.languageServer": "Pylance",
+    "python.languageServer": "None",
     "python.analysis.diagnosticMode": "workspace",
     "python.analysis.packageIndexDepths": [
         {"name": "hexdoc", "depth": 3},
@@ -31,4 +31,6 @@
         "*.jcss.jinja": "jinja-css", // for files with a lot of jinja stuff, where the linting isn't useful
         "*.json5.jinja": "json5",
     },
+    "cursorpyright.analysis.diagnosticMode": "workspace",
+    "java.configuration.updateBuildConfiguration": "automatic",
 }

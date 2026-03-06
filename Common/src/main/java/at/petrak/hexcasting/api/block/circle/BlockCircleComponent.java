@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
-// Convenience impl of ICircleComponent
 public abstract class BlockCircleComponent extends Block implements ICircleComponent {
     public static final BooleanProperty ENERGIZED = BooleanProperty.create("energized");
 

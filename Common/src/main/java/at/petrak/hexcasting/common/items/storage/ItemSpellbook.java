@@ -6,11 +6,13 @@ import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -24,19 +26,13 @@ import static at.petrak.hexcasting.common.items.storage.ItemFocus.NUM_VARIANTS;
 
 public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     public static String TAG_SELECTED_PAGE = "page_idx";
-    // this is a CompoundTag of string numerical keys to SpellData
-    // it is 1-indexed, so that 0/0 can be the special case of "it is empty"
+    // 1-indexed; 0 = empty
     public static String TAG_PAGES = "pages";
 
-    // this stores the names of pages, to be restored when you scroll
-    // it is 1-indexed, and the 0-case for TAG_PAGES will be treated as 1
     public static String TAG_PAGE_NAMES = "page_names";
 
-    // this stores the sealed status of each page, to be restored when you scroll
-    // it is 1-indexed, and the 0-case for TAG_PAGES will be treated as 1
     public static String TAG_SEALED = "sealed_pages";
 
-    // this stores which variant of the spellbook should be rendered
     public static final String TAG_VARIANT = "variant";
 
     public static final int MAX_PAGES = 64;
@@ -46,7 +42,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip,
+    public void appendHoverText(ItemStack stack, Item.TooltipContext tooltipContext, List<Component> tooltip,
         TooltipFlag isAdvanced) {
         boolean sealed = isSealed(stack);
         boolean empty = false;
@@ -92,7 +88,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
 
         IotaHolderItem.appendHoverText(this, stack, tooltip, isAdvanced);
 
-        super.appendHoverText(stack, level, tooltip, isAdvanced);
+        super.appendHoverText(stack, tooltipContext, tooltip, isAdvanced);
     }
 
     @Override
@@ -103,8 +99,8 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         int shiftedIdx = Math.max(1, index);
         String nameKey = String.valueOf(shiftedIdx);
         CompoundTag names = NBTHelper.getOrCreateCompound(stack, TAG_PAGE_NAMES);
-        if (stack.hasCustomHoverName()) {
-            names.putString(nameKey, Component.Serializer.toJson(stack.getHoverName()));
+        if (stack.get(DataComponents.CUSTOM_NAME) != null) {
+            names.putString(nameKey, Component.Serializer.toJson(stack.getHoverName(), pLevel.registryAccess()));
         } else {
             names.remove(nameKey);
         }
@@ -221,7 +217,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         }).max(Integer::compare).orElse(0);
     }
 
-    public static int rotatePageIdx(ItemStack stack, boolean increase) {
+    public static int rotatePageIdx(ItemStack stack, boolean increase, HolderLookup.Provider registryAccess) {
         int idx = getPage(stack, 0);
         if (idx != 0) {
             idx += increase ? 1 : -1;
@@ -235,9 +231,9 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         String nameKey = String.valueOf(shiftedIdx);
         String name = NBTHelper.getString(names, nameKey);
         if (name != null) {
-            stack.setHoverName(Component.Serializer.fromJson(name));
+            stack.set(DataComponents.CUSTOM_NAME, Component.Serializer.fromJsonLenient(name, registryAccess));
         } else {
-            stack.resetHoverName();
+            stack.remove(DataComponents.CUSTOM_NAME);
         }
 
         return idx;

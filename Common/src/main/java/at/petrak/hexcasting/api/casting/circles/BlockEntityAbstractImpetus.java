@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.block.HexBlockEntity;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.common.items.magic.ItemCreativeUnlocker;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -285,6 +286,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     @Override
     protected void saveModData(CompoundTag tag) {
+        var provider = this.level != null ? this.level.registryAccess() : net.minecraft.core.RegistryAccess.EMPTY;
         if (this.executionState != null) {
             tag.put(TAG_EXECUTION_STATE, this.executionState.save());
         }
@@ -292,10 +294,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         tag.putLong(TAG_MEDIA, this.media);
 
         if (this.displayMsg != null && this.displayItem != null) {
-            tag.putString(TAG_ERROR_MSG, Component.Serializer.toJson(this.displayMsg));
-            var itemTag = new CompoundTag();
-            this.displayItem.save(itemTag);
-            tag.put(TAG_ERROR_DISPLAY, itemTag);
+            tag.putString(TAG_ERROR_MSG, Component.Serializer.toJson(this.displayMsg, provider));
+            tag.put(TAG_ERROR_DISPLAY, HexUtils.serializeToNBT(this.displayItem, provider));
         }
         if (this.pigment != null)
             tag.put(TAG_PIGMENT, this.pigment.serializeToNBT());
@@ -303,6 +303,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     @Override
     protected void loadModData(CompoundTag tag) {
+        var provider = this.level != null ? this.level.registryAccess() : net.minecraft.core.RegistryAccess.EMPTY;
         this.executionState = null;
         if (tag.contains(TAG_EXECUTION_STATE, Tag.TAG_COMPOUND)) {
             this.lazyExecutionState = tag.getCompound(TAG_EXECUTION_STATE);
@@ -315,8 +316,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         }
 
         if (tag.contains(TAG_ERROR_MSG, Tag.TAG_STRING) && tag.contains(TAG_ERROR_DISPLAY, Tag.TAG_COMPOUND)) {
-            var msg = Component.Serializer.fromJson(tag.getString(TAG_ERROR_MSG));
-            var display = ItemStack.of(tag.getCompound(TAG_ERROR_DISPLAY));
+            var msg = Component.Serializer.fromJson(tag.getString(TAG_ERROR_MSG), provider);
+            var display = ItemStack.parseOptional(provider, tag.getCompound(TAG_ERROR_DISPLAY));
             this.displayMsg = msg;
             this.displayItem = display;
         } else {

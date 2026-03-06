@@ -77,7 +77,7 @@ object OpIgnite : SpellAction {
 
     private data class EntitySpell(val entity: Entity) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            entity.setSecondsOnFire(8)
+            entity.setRemainingFireTicks(8 * 20)
         }
     }
 }

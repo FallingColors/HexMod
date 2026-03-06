@@ -184,12 +184,12 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
     public static VillagerIngredient deserialize(JsonObject json) {
         VillagerProfession profession = null;
         if (json.has("profession") && !json.get("profession").isJsonNull()) {
-            profession = BuiltInRegistries.VILLAGER_PROFESSION.get(new ResourceLocation(GsonHelper.getAsString(json,
+            profession = BuiltInRegistries.VILLAGER_PROFESSION.get(ResourceLocation.parse(GsonHelper.getAsString(json,
                 "profession")));
         }
         VillagerType biome = null;
         if (json.has("biome") && !json.get("biome").isJsonNull()) {
-            biome = BuiltInRegistries.VILLAGER_TYPE.get(new ResourceLocation(GsonHelper.getAsString(json, "biome")));
+            biome = BuiltInRegistries.VILLAGER_TYPE.get(ResourceLocation.parse(GsonHelper.getAsString(json, "biome")));
         }
         int minLevel = GsonHelper.getAsInt(json, "minLevel");
         return new VillagerIngredient(profession, biome, minLevel);

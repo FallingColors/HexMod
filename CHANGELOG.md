@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **1.21.1 NeoForge port (draft):** Build system updated to NeoForge (NeoGradle/ModDevGradle), Java 21, Paucal 0.7.x, Patchouli 1.21.1-92, Caelus 7.x. Data component scaffold for Iota/item storage ([HexDataComponents](Common/src/main/java/at/petrak/hexcasting/common/lib/HexDataComponents.java)).
 - Added the `cannot_modify_cost` tag for patterns that should ignore the `media_consumption` attribute when calculating cost, by Robotgiggle in [987](https://github.com/FallingColors/HexMod/pull/987).
 
 ### Changed
@@ -16,6 +17,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Fixed staff/actionable items not opening the spell GUI and "broken iota" on empty containers on NeoForge 21.1.x. NeoForge's payload direction checks rejected client-bound packets (e.g. hexcasting:cgui, hexcasting:clr_spi_pats_sc). Added `ForgeMixinNetworkRegistry` to bypass the check for hex casting payloads.
+- Fixed Patchouli thehexbook failing to load due to malformed `potion_contents` in 1.21.1. Updated potion item strings to use SNBT compound format: `potion_contents={potion:"hexcasting:enlarge_grid"}` (entries: potions.json, nadirs.json, zeniths.json).
+- Fixed media bar/tooltip not updating after amethyst consumption until rejoin. Added `broadcastFullState()` after media extraction to sync inventory to client immediately.
 - Fixed a crash loop when trying to generate a creative-mode ancient scroll for a Great Spell whose per-world pattern hasn't been calculated yet, by Robotgiggle in [992](https://github.com/FallingColors/HexMod/pull/992).
 
 ## `0.11.3` - 2025-11-22

@@ -100,10 +100,10 @@ public abstract class IotaType<T extends Iota> {
             return null;
         }
         var typeKey = tag.getString(HexIotaTypes.KEY_TYPE);
-        if (!ResourceLocation.isValidResourceLocation(typeKey)) {
+        var typeLoc = ResourceLocation.tryParse(typeKey);
+        if (typeLoc == null) {
             return null;
         }
-        var typeLoc = new ResourceLocation(typeKey);
         return HexIotaTypes.REGISTRY.get(typeLoc);
     }
 

@@ -97,11 +97,7 @@ interface ContinuationFrame {
             }
 
             val typeKey = tag.getString(HexContinuationTypes.KEY_TYPE)
-            if (!ResourceLocation.isValidResourceLocation(typeKey)) {
-                return null
-            }
-
-            val typeLoc = ResourceLocation(typeKey)
+            val typeLoc = ResourceLocation.tryParse(typeKey) ?: return null
             return HexContinuationTypes.REGISTRY[typeLoc]
         }
     }

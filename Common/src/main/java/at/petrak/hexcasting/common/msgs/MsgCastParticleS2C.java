@@ -4,9 +4,11 @@ import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
@@ -20,14 +22,21 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  */
 public record MsgCastParticleS2C(ParticleSpray spray, FrozenPigment colorizer) implements IMessage {
     public static final ResourceLocation ID = modLoc("cprtcl");
+    public static final CustomPacketPayload.Type<MsgCastParticleS2C> TYPE = new CustomPacketPayload.Type<>(ID);
+    public static final StreamCodec<RegistryFriendlyByteBuf, MsgCastParticleS2C> STREAM_CODEC =
+        StreamCodec.ofMember(MsgCastParticleS2C::serialize, MsgCastParticleS2C::deserialize);
+
+    @Override
+    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
 
     @Override
     public ResourceLocation getFabricId() {
         return ID;
     }
 
-    public static MsgCastParticleS2C deserialize(ByteBuf buffer) {
-        var buf = new FriendlyByteBuf(buffer);
+    public static MsgCastParticleS2C deserialize(FriendlyByteBuf buf) {
         var posX = buf.readDouble();
         var posY = buf.readDouble();
         var posZ = buf.readDouble();
@@ -37,7 +46,7 @@ public record MsgCastParticleS2C(ParticleSpray spray, FrozenPigment colorizer) i
         var fuzziness = buf.readDouble();
         var spread = buf.readDouble();
         var count = buf.readInt();
-        var tag = buf.readAnySizeNbt();
+        var tag = buf.readNbt();
         var colorizer = FrozenPigment.fromNBT(tag);
         return new MsgCastParticleS2C(
             new ParticleSpray(new Vec3(posX, posY, posZ), new Vec3(velX, velY, velZ), fuzziness, spread, count),

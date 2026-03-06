@@ -4,12 +4,11 @@ import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.items.storage.ItemFocus;
 import at.petrak.hexcasting.common.items.storage.ItemSpellbook;
 import at.petrak.hexcasting.common.lib.HexItems;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
@@ -26,8 +25,8 @@ public class SealThingsRecipe extends CustomRecipe {
     public static final SimpleCraftingRecipeSerializer<SealThingsRecipe> SPELLBOOK_SERIALIZER =
         new SimpleCraftingRecipeSerializer<>(SealThingsRecipe::spellbook);
 
-    public SealThingsRecipe(ResourceLocation id, CraftingBookCategory category, Sealee sealee) {
-        super(id, category);
+    public SealThingsRecipe(CraftingBookCategory category, Sealee sealee) {
+        super(category);
         this.sealee = sealee;
     }
 
@@ -38,11 +37,11 @@ public class SealThingsRecipe extends CustomRecipe {
     }
 
     @Override
-    public boolean matches(CraftingContainer container, Level level) {
+    public boolean matches(CraftingInput container, Level level) {
         boolean foundComb = false;
         boolean foundSealee = false;
 
-        for (int i = 0; i < container.getContainerSize(); i++) {
+        for (int i = 0; i < container.size(); i++) {
             var stack = container.getItem(i);
             if (this.sealee.isCorrectSealee(stack)) {
                 if (foundSealee) return false;
@@ -57,10 +56,10 @@ public class SealThingsRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
+    public ItemStack assemble(CraftingInput inv, HolderLookup.Provider registries) {
         ItemStack sealee = ItemStack.EMPTY;
 
-        for (int i = 0; i < inv.getContainerSize(); i++) {
+        for (int i = 0; i < inv.size(); i++) {
             var stack = inv.getItem(i);
             if (this.sealee.isCorrectSealee(stack)) {
                 sealee = stack.copy();
@@ -84,12 +83,12 @@ public class SealThingsRecipe extends CustomRecipe {
         };
     }
 
-    public static SealThingsRecipe focus(ResourceLocation id, CraftingBookCategory category) {
-        return new SealThingsRecipe(id, category, Sealee.FOCUS);
+    public static SealThingsRecipe focus(CraftingBookCategory category) {
+        return new SealThingsRecipe(category, Sealee.FOCUS);
     }
 
-    public static SealThingsRecipe spellbook(ResourceLocation id, CraftingBookCategory category) {
-        return new SealThingsRecipe(id, category, Sealee.SPELLBOOK);
+    public static SealThingsRecipe spellbook(CraftingBookCategory category) {
+        return new SealThingsRecipe(category, Sealee.SPELLBOOK);
     }
 
     public enum Sealee implements StringRepresentable {

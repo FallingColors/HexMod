@@ -222,7 +222,7 @@ public class RegisterClientStuff {
     private static void registerWandOverrides(ItemStaff item) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty(item, ItemStaff.FUNNY_LEVEL_PREDICATE,
             (stack, level, holder, holderID) -> {
-                if (!stack.hasCustomHoverName()) {
+                if (stack.get(net.minecraft.core.component.DataComponents.CUSTOM_NAME) == null) {
                     return 0;
                 }
                 var name = stack.getHoverName().getString().toLowerCase(Locale.ROOT);

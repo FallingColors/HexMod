@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 import javax.annotation.Nullable;
 
-@Mixin(UseOnContext.class)
+@Mixin(value = UseOnContext.class, remap = false)
 public interface AccessorUseOnContext {
     @Invoker("<init>")
     static UseOnContext hex$new(Level $$0, @Nullable Player $$1, InteractionHand $$2, ItemStack $$3,

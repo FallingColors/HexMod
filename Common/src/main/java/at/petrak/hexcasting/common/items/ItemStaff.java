@@ -18,7 +18,7 @@ import net.minecraft.world.level.Level;
 
 public class ItemStaff extends Item {
     // 0 = normal. 1 = old. 2 = cherry preview
-    public static final ResourceLocation FUNNY_LEVEL_PREDICATE = new ResourceLocation(HexAPI.MOD_ID, "funny_level");
+    public static final ResourceLocation FUNNY_LEVEL_PREDICATE = ResourceLocation.fromNamespaceAndPath(HexAPI.MOD_ID, "funny_level");
 
     public ItemStaff(Properties pProperties) {
         super(pProperties);
@@ -26,7 +26,7 @@ public class ItemStaff extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        if (player.getAttributeValue(HexAttributes.FEEBLE_MIND) > 0){
+        if (player.getAttributeValue(HexAttributes.getHolder(player, HexAttributes.FEEBLE_MIND_KEY)) > 0){
             return InteractionResultHolder.fail(player.getItemInHand(hand));
         }
         if (player.isShiftKeyDown()) {

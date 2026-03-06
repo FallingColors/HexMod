@@ -9,7 +9,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -41,16 +42,15 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
     }
 
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand,
-        BlockHitResult pHit) {
+    protected ItemInteractionResult useItemOn(ItemStack usedStack, BlockState pState, Level pLevel, BlockPos pPos,
+        Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (pLevel instanceof ServerLevel level
             && level.getBlockEntity(pPos) instanceof BlockEntityRedstoneImpetus tile) {
-            var usedStack = pPlayer.getItemInHand(pHand);
             if (usedStack.isEmpty() && pPlayer.isDiscrete()) {
                 tile.clearPlayer();
                 tile.sync();
                 pLevel.playSound(null, pPos, HexSounds.IMPETUS_REDSTONE_CLEAR, SoundSource.BLOCKS, 1f, 1f);
-                return InteractionResult.sidedSuccess(pLevel.isClientSide);
+                return ItemInteractionResult.sidedSuccess(pLevel.isClientSide());
             } else {
                 var datumContainer = IXplatAbstractions.INSTANCE.findDataHolder(usedStack);
                 if (datumContainer != null) {
@@ -64,14 +64,14 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
 
                             pLevel.playSound(null, pPos, HexSounds.IMPETUS_REDSTONE_DING,
                                 SoundSource.BLOCKS, 1f, 1f);
-                            return InteractionResult.sidedSuccess(pLevel.isClientSide);
+                            return ItemInteractionResult.sidedSuccess(pLevel.isClientSide());
                         }
                     }
                 }
             }
         }
 
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override

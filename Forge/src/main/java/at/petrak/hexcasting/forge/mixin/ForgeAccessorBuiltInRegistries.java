@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(BuiltInRegistries.class)
+@Mixin(value = BuiltInRegistries.class, remap = false)
 public interface ForgeAccessorBuiltInRegistries {
     @Invoker("registerDefaulted")
     static <T> DefaultedRegistry<T> hex$registerDefaulted(ResourceKey<? extends Registry<T>> registryName,

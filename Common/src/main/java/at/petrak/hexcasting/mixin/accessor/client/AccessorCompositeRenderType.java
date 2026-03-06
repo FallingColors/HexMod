@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.RenderType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(RenderType.CompositeRenderType.class)
+@Mixin(value = RenderType.CompositeRenderType.class, remap = false)
 public interface AccessorCompositeRenderType {
     @Invoker("state")
     RenderType.CompositeState hex$state();

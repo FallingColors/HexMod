@@ -11,8 +11,6 @@ import net.minecraft.client.model.geom.builders.*;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexRobesModels {
-    // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into
-    // this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(modLoc("robes"), "main");
 
     public static LayerDefinition variant1() {

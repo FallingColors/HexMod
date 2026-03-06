@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.items.storage.ItemScroll;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.server.ScrungledPatternsSave;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -103,13 +104,13 @@ public class ListPerWorldPatternsCommand {
                     tag.put(ItemScroll.TAG_PATTERN, pat.serializeToNBT());
 
                     var stack = new ItemStack(HexItems.SCROLL_LARGE);
-                    stack.setTag(tag);
+                    stack.set(HexDataComponents.STACK_DATA, tag);
 
                     for (var player : targets) {
                         var stackEntity = player.drop(stack, false);
                         if (stackEntity != null) {
                             stackEntity.setNoPickUpDelay();
-                            stackEntity.setThrower(player.getUUID());
+                            stackEntity.setThrower(player);
                         }
 
                         count++;
@@ -137,7 +138,7 @@ public class ListPerWorldPatternsCommand {
             tag.put(ItemScroll.TAG_PATTERN, pat.serializeToNBT());
 
             var stack = new ItemStack(HexItems.SCROLL_LARGE);
-            stack.setTag(tag);
+            stack.set(HexDataComponents.STACK_DATA, tag);
 
             source.sendSuccess(() ->
                 Component.translatable(
@@ -151,7 +152,7 @@ public class ListPerWorldPatternsCommand {
                 var stackEntity = player.drop(stack, false);
                 if (stackEntity != null) {
                     stackEntity.setNoPickUpDelay();
-                    stackEntity.setThrower(player.getUUID());
+                    stackEntity.setThrower(player);
                 }
             }
 

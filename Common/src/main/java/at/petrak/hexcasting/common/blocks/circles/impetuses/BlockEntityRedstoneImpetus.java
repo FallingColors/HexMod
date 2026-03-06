@@ -7,9 +7,9 @@ import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -17,6 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -106,8 +107,7 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
             if (!name.equals(cachedDisplayProfile) || cachedDisplayStack == null) {
                 cachedDisplayProfile = name;
                 var head = new ItemStack(Items.PLAYER_HEAD);
-                NBTHelper.put(head, "SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), name));
-                head.getItem().verifyTagAfterLoad(head.getOrCreateTag());
+                head.set(DataComponents.PROFILE, new ResolvableProfile(name));
                 cachedDisplayStack = head;
             }
             lines.add(new Pair<>(cachedDisplayStack,
@@ -125,7 +125,7 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
             tag.putUUID(TAG_STORED_PLAYER, this.storedPlayer);
         }
         if (this.storedPlayerProfile != null) {
-            tag.put(TAG_STORED_PLAYER_PROFILE, NbtUtils.writeGameProfile(new CompoundTag(), storedPlayerProfile));
+            tag.putString(TAG_STORED_PLAYER_PROFILE, this.storedPlayerProfile.getName());
         }
     }
 
@@ -138,7 +138,11 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
             this.storedPlayer = null;
         }
         if (tag.contains(TAG_STORED_PLAYER_PROFILE, Tag.TAG_COMPOUND)) {
-            this.storedPlayerProfile = NbtUtils.readGameProfile(tag.getCompound(TAG_STORED_PLAYER_PROFILE));
+            // Back-compat: old format no longer supported; clear.
+            this.storedPlayerProfile = null;
+        } else if (tag.contains(TAG_STORED_PLAYER_PROFILE, Tag.TAG_STRING)) {
+            var name = tag.getString(TAG_STORED_PLAYER_PROFILE);
+            this.storedPlayerProfile = this.storedPlayer != null ? new GameProfile(this.storedPlayer, name) : null;
         } else {
             this.storedPlayerProfile = null;
         }

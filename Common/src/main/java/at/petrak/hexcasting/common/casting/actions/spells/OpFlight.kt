@@ -139,7 +139,6 @@ class OpFlight(val type: Type) : SpellAction {
                     val oneDangerParticleCount = Mth.ceil(dangerParticleCount / 2.0)
                     val color = IXplatAbstractions.INSTANCE.getPigment(player)
 
-                    // TODO: have the particles go in the opposite direction of the velocity?
                     ParticleSpray(player.position(), Vec3(0.0, -0.6, 0.0), 0.6, Math.PI * 0.3, count = okParticleCount)
                         .sprayParticles(player.serverLevel(), color)
                     val dangerSpray = ParticleSpray(player.position(), Vec3(0.0, 1.0, 0.0), 0.3, Math.PI * 0.75, count = 0)

@@ -52,8 +52,8 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
         super(caster.serverLevel());
         this.caster = caster;
         this.castingHand = castingHand;
-        this.ambitRadius = caster.getAttributeValue(HexAttributes.AMBIT_RADIUS);
-        this.sentinelRadius = caster.getAttributeValue(HexAttributes.SENTINEL_RADIUS);
+        this.ambitRadius = caster.getAttributeValue(HexAttributes.getHolder(caster, HexAttributes.AMBIT_RADIUS_KEY));
+        this.sentinelRadius = caster.getAttributeValue(HexAttributes.getHolder(caster, HexAttributes.SENTINEL_RADIUS_KEY));
     }
 
     @Override
@@ -69,10 +69,10 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     @Override
     protected double getCostModifier(PatternShapeMatch match) {
         ResourceLocation loc = actionKey(match);
-        if (isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), loc, HexTags.Actions.CANNOT_MODIFY_COST)) {
+        if (loc == null || isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), loc, HexTags.Actions.CANNOT_MODIFY_COST)) {
             return 1.0;
         } else {
-            return this.caster.getAttributeValue(HexAttributes.MEDIA_CONSUMPTION_MODIFIER);
+            return this.caster.getAttributeValue(HexAttributes.getHolder(this.caster, HexAttributes.MEDIA_CONSUMPTION_MODIFIER_KEY));
         }
     }
 
@@ -86,11 +86,11 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
             }
         }
         if (this.caster != null){
-            double ambitAttribute = this.caster.getAttributeValue(HexAttributes.AMBIT_RADIUS);
+            double ambitAttribute = this.caster.getAttributeValue(HexAttributes.getHolder(this.caster, HexAttributes.AMBIT_RADIUS_KEY));
             if (this.ambitRadius != ambitAttribute){
                 this.ambitRadius = ambitAttribute;
             }
-            double sentinelAttribute = this.caster.getAttributeValue(HexAttributes.SENTINEL_RADIUS);
+            double sentinelAttribute = this.caster.getAttributeValue(HexAttributes.getHolder(this.caster, HexAttributes.SENTINEL_RADIUS_KEY));
             if (this.sentinelRadius != sentinelAttribute){
                 this.sentinelRadius = sentinelAttribute;
             }
@@ -186,13 +186,16 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
                     startCost - costLeft,
                     costLeft < 0 ? -costLeft : 0
             );
+            // Sync inventory to client so media bar/tooltip updates immediately
+            this.caster.inventoryMenu.broadcastFullState();
         }
 
         return costLeft;
     }
 
     protected boolean canOvercast() {
-        var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("y_u_no_cast_angy"));
+        var adv = this.world.getServer().getAdvancements().get(modLoc("y_u_no_cast_angy"));
+        if (adv == null) return false;
         var advs = this.caster.getAdvancements();
         return advs.getOrStartProgress(adv).isDone();
     }

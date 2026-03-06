@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 
 import java.util.Optional;
 
-@Mixin(RenderStateShard.EmptyTextureStateShard.class)
+@Mixin(value = RenderStateShard.EmptyTextureStateShard.class, remap = false)
 public interface AccessorEmptyTextureStateShard {
     @Invoker("cutoutTexture")
     Optional<ResourceLocation> hex$cutoutTexture();

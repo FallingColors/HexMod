@@ -1,40 +1,32 @@
 package at.petrak.hexcasting.api.advancements;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.BuiltInExceptionProvider;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.util.GsonHelper;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
-import java.util.function.Function;
+import java.util.Optional;
 
-public class MinMaxLongs extends MinMaxBounds<Long> {
-    public static final MinMaxLongs ANY = new MinMaxLongs(null, null);
-    @Nullable
-    private final Long minSq;
-    @Nullable
-    private final Long maxSq;
+/**
+ * Replacement for the old MinMaxBounds<Long> now that MinMaxBounds is an interface in 1.21.
+ *
+ * JSON form matches vanilla MinMaxBounds: either a number, or an object with "min"/"max".
+ */
+public record MinMaxLongs(Optional<Long> min, Optional<Long> max) implements MinMaxBounds<Long> {
+    public static final MinMaxLongs ANY = new MinMaxLongs(Optional.empty(), Optional.empty());
 
-    private static MinMaxLongs create(StringReader reader, @Nullable Long min, @Nullable Long max) throws CommandSyntaxException {
-        if (min != null && max != null && min > max) {
-            throw ERROR_SWAPPED.createWithContext(reader);
-        } else {
-            return new MinMaxLongs(min, max);
-        }
-    }
+    public static final Codec<MinMaxLongs> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+        Codec.LONG.optionalFieldOf("min").forGetter(MinMaxLongs::min),
+        Codec.LONG.optionalFieldOf("max").forGetter(MinMaxLongs::max)
+    ).apply(inst, MinMaxLongs::new));
 
-    @Nullable
-    private static Long squareOpt(@Nullable Long l) {
-        return l == null ? null : l * l;
-    }
-
-    private MinMaxLongs(@Nullable Long min, @Nullable Long max) {
-        super(min, max);
-        this.minSq = squareOpt(min);
-        this.maxSq = squareOpt(max);
+    public MinMaxLongs(@Nullable Long min, @Nullable Long max) {
+        this(Optional.ofNullable(min), Optional.ofNullable(max));
     }
 
     public static MinMaxLongs exactly(long l) {
@@ -53,33 +45,54 @@ public class MinMaxLongs extends MinMaxBounds<Long> {
         return new MinMaxLongs(null, max);
     }
 
+    public boolean isAny() {
+        return min.isEmpty() && max.isEmpty();
+    }
+
     public boolean matches(long l) {
-        if (this.min != null && this.min > l) {
-            return false;
-        } else {
-            return this.max == null || this.max >= l;
-        }
+        if (min.isPresent() && min.get() > l) return false;
+        return max.isEmpty() || max.get() >= l;
     }
 
     public boolean matchesSqr(long l) {
-        if (this.minSq != null && this.minSq > l) {
-            return false;
-        } else {
-            return this.maxSq == null || this.maxSq >= l;
-        }
+        Long minSq = min.map(v -> v * v).orElse(null);
+        Long maxSq = max.map(v -> v * v).orElse(null);
+        if (minSq != null && minSq > l) return false;
+        return maxSq == null || maxSq >= l;
     }
 
     public static MinMaxLongs fromJson(@Nullable JsonElement json) {
-        return fromJson(json, ANY, GsonHelper::convertToLong, MinMaxLongs::new);
+        if (json == null || json.isJsonNull()) return ANY;
+        if (json.isJsonPrimitive()) {
+            long v = GsonHelper.convertToLong(json, "value");
+            return exactly(v);
+        }
+        JsonObject obj = GsonHelper.convertToJsonObject(json, "range");
+        Long min = obj.has("min") ? GsonHelper.getAsLong(obj, "min") : null;
+        Long max = obj.has("max") ? GsonHelper.getAsLong(obj, "max") : null;
+        return new MinMaxLongs(min, max);
     }
 
     public static MinMaxLongs fromReader(StringReader reader) throws CommandSyntaxException {
-        return fromReader(reader, (l) -> l);
-    }
+        // Minimal parser: supports "5", "5..", "..5", "5..10"
+        int start = reader.getCursor();
+        String remaining = reader.getRemaining();
+        int space = remaining.indexOf(' ');
+        String token = space >= 0 ? remaining.substring(0, space) : remaining;
+        reader.setCursor(start + token.length());
 
-    public static MinMaxLongs fromReader(StringReader reader, Function<Long, Long> map) throws CommandSyntaxException {
-        BuiltInExceptionProvider builtInExceptions = CommandSyntaxException.BUILT_IN_EXCEPTIONS;
-        Objects.requireNonNull(builtInExceptions);
-        return fromReader(reader, MinMaxLongs::create, Long::parseLong, builtInExceptions::readerInvalidInt, map);
+        int dots = token.indexOf("..");
+        if (dots < 0) {
+            long v = Long.parseLong(token);
+            return exactly(v);
+        }
+        String left = token.substring(0, dots);
+        String right = token.substring(dots + 2);
+        Long min = left.isEmpty() ? null : Long.parseLong(left);
+        Long max = right.isEmpty() ? null : Long.parseLong(right);
+        if (min != null && max != null && min > max) {
+            throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.readerInvalidInt().createWithContext(reader, token);
+        }
+        return new MinMaxLongs(min, max);
     }
 }

@@ -4,6 +4,7 @@ import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -18,12 +19,9 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collections;
-import java.util.List;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 import static at.petrak.hexcasting.client.render.RenderLib.renderEntity;
@@ -63,15 +61,12 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
     }
 
     @Override
-    public @NotNull
-    List<Component> getTooltipStrings(@NotNull BrainsweepRecipe recipe,
+    public void getTooltip(@NotNull ITooltipBuilder tooltip, @NotNull BrainsweepRecipe recipe,
         @NotNull IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if (37 <= mouseX && mouseX <= 37 + 26 && 19 <= mouseY && mouseY <= 19 + 48) {
             Minecraft mc = Minecraft.getInstance();
-            return recipe.entityIn().getTooltip(mc.options.advancedItemTooltips);
+            tooltip.addAll(recipe.entityIn().getTooltip(mc.options.advancedItemTooltips));
         }
-
-        return Collections.emptyList();
     }
 
     @Override

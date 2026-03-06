@@ -512,7 +512,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
                 .withOutput(HexItems.AMETHYST_DUST, 5)
                 .withOutput(0.25f, HexItems.CHARGED_AMETHYST))
             .whenModLoaded("create")
-            .save(recipes, new ResourceLocation("create", "crushing/amethyst_cluster"));
+            .save(recipes, ResourceLocation.fromNamespaceAndPath("create", "crushing/amethyst_cluster"));
 
         this.conditions.apply(new CreateCrushingRecipeBuilder()
                 .withInput(Blocks.AMETHYST_BLOCK)
@@ -520,7 +520,7 @@ public class HexplatRecipes extends PaucalRecipeProvider {
                 .withOutput(Items.AMETHYST_SHARD, 3)
                 .withOutput(0.5f, HexItems.AMETHYST_DUST, 4))
             .whenModLoaded("create")
-            .save(recipes, new ResourceLocation("create", "crushing/amethyst_block"));
+            .save(recipes, ResourceLocation.fromNamespaceAndPath("create", "crushing/amethyst_block"));
 
         this.conditions.apply(new CreateCrushingRecipeBuilder()
                 .withInput(Items.AMETHYST_SHARD)

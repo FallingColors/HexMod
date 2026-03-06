@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.interop.patchouli;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -22,14 +22,16 @@ import java.util.stream.Collectors;
  */
 public class PatchouliUtils {
     @SuppressWarnings("unchecked")
-    public static <T extends Recipe<C>, C extends Container> T getRecipe(RecipeType<T> type, ResourceLocation id) {
+    public static <T extends Recipe<?>> T getRecipe(RecipeType<T> type, ResourceLocation id) {
         // PageDoubleRecipeRegistry
         if (Minecraft.getInstance().level == null) {
             return null;
         } else {
             var manager = Minecraft.getInstance().level.getRecipeManager();
             return (T) manager.byKey(id)
-                .filter((recipe) -> recipe.getType() == type).orElse(null);
+                .filter((holder) -> holder.value().getType() == type)
+                .map(h -> (T) h.value())
+                .orElse(null);
         }
     }
 
@@ -40,12 +42,13 @@ public class PatchouliUtils {
      *
      * @param ingredients           List of ingredients in the specific slot
      * @param longestIngredientSize Longest ingredient in the entire recipe
+     * @param registries            HolderLookup.Provider for serialization
      * @return Serialized Patchouli ingredient string
      */
-    public static IVariable interweaveIngredients(List<Ingredient> ingredients, int longestIngredientSize) {
+    public static IVariable interweaveIngredients(List<Ingredient> ingredients, int longestIngredientSize, HolderLookup.Provider registries) {
         if (ingredients.size() == 1) {
-            return IVariable.wrapList(Arrays.stream(ingredients.get(0).getItems()).map(IVariable::from).collect(
-                Collectors.toList()));
+            return IVariable.wrapList(Arrays.stream(ingredients.get(0).getItems()).map(s -> IVariable.from(s, registries)).collect(
+                Collectors.toList()), registries);
         }
 
         ItemStack[] empty = {ItemStack.EMPTY};
@@ -60,17 +63,17 @@ public class PatchouliUtils {
         List<IVariable> list = new ArrayList<>(stacks.size() * longestIngredientSize);
         for (int i = 0; i < longestIngredientSize; i++) {
             for (ItemStack[] stack : stacks) {
-                list.add(IVariable.from(stack[i % stack.length]));
+                list.add(IVariable.from(stack[i % stack.length], registries));
             }
         }
-        return IVariable.wrapList(list);
+        return IVariable.wrapList(list, registries);
     }
 
     /**
      * Overload of the method above that uses the provided list's longest ingredient size.
      */
-    public static IVariable interweaveIngredients(List<Ingredient> ingredients) {
+    public static IVariable interweaveIngredients(List<Ingredient> ingredients, HolderLookup.Provider registries) {
         return interweaveIngredients(ingredients,
-            ingredients.stream().mapToInt(ingr -> ingr.getItems().length).max().orElse(1));
+            ingredients.stream().mapToInt(ingr -> ingr.getItems().length).max().orElse(1), registries);
     }
 }

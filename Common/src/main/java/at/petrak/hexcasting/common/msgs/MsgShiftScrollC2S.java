@@ -6,9 +6,11 @@ import at.petrak.hexcasting.common.items.storage.ItemAbacus;
 import at.petrak.hexcasting.common.items.storage.ItemSpellbook;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -27,15 +29,22 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boolean isCtrl, boolean invertSpellbook,
                                 boolean invertAbacus) implements IMessage {
     public static final ResourceLocation ID = modLoc("scroll");
+    public static final CustomPacketPayload.Type<MsgShiftScrollC2S> TYPE = new CustomPacketPayload.Type<>(ID);
+    public static final StreamCodec<RegistryFriendlyByteBuf, MsgShiftScrollC2S> STREAM_CODEC =
+        StreamCodec.ofMember(MsgShiftScrollC2S::serialize, MsgShiftScrollC2S::deserialize);
+
+    @Override
+    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
 
     @Override
     public ResourceLocation getFabricId() {
         return ID;
     }
 
-    public static MsgShiftScrollC2S deserialize(ByteBuf buffer) {
-        var buf = new FriendlyByteBuf(buffer);
-        var mainHandDelta = buf.readDouble();
+    public static MsgShiftScrollC2S deserialize(FriendlyByteBuf buf) {
+        double mainHandDelta = buf.readDouble();
         var offHandDelta = buf.readDouble();
         var isCtrl = buf.readBoolean();
         var invertSpellbook = buf.readBoolean();
@@ -75,26 +84,26 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
             delta = -delta;
         }
 
-        var newIdx = ItemSpellbook.rotatePageIdx(stack, delta < 0.0);
+        var newIdx = ItemSpellbook.rotatePageIdx(stack, delta < 0.0, sender.registryAccess());
 
         var len = ItemSpellbook.highestPage(stack);
 
         var sealed = ItemSpellbook.isSealed(stack);
 
         MutableComponent component;
-        if (hand == InteractionHand.OFF_HAND && stack.hasCustomHoverName()) {
+        if (hand == InteractionHand.OFF_HAND && stack.get(net.minecraft.core.component.DataComponents.CUSTOM_NAME) != null) {
             if (sealed) {
                 component = Component.translatable("hexcasting.tooltip.spellbook.page_with_name.sealed",
                     Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
                     Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-                    Component.literal("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC)
+                    Component.literal("").withStyle(stack.getRarity().color(), ChatFormatting.ITALIC)
                         .append(stack.getHoverName()),
                     Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
             } else {
                 component = Component.translatable("hexcasting.tooltip.spellbook.page_with_name",
                     Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
                     Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-                    Component.literal("").withStyle(stack.getRarity().color, ChatFormatting.ITALIC)
+                    Component.literal("").withStyle(stack.getRarity().color(), ChatFormatting.ITALIC)
                         .append(stack.getHoverName()));
             }
 

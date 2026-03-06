@@ -89,20 +89,16 @@ public class BlockSconce extends AmethystBlock implements SimpleWaterloggedBlock
             var cx = pPos.getX() + 0.5;
             var cy = pPos.getY() + 0.5;
             var cz = pPos.getZ() + 0.5;
-            //values for particle direction randomization
-            //x 
             var dX = switch(pState.getValue(FACING)){
                     case EAST -> rand.triangle(0.01f, 0.05f);
                     case WEST -> rand.triangle(-0.01f, -0.05f);
                     default -> rand.triangle(-0.01f, 0.01f);
             };
-            //y
             var dY = switch(pState.getValue(FACING)){
                     case UP -> rand.triangle(0.01f, 0.05f);
                     case DOWN -> rand.triangle(-0.01f, -0.05f);
                     default -> rand.triangle(-0.01f, 0.01f);
             };
-            //z
             var dZ = switch(pState.getValue(FACING)){
                     case SOUTH -> rand.triangle(0.01f, 0.05f);
                     case NORTH -> rand.triangle(-0.01f, -0.05f);

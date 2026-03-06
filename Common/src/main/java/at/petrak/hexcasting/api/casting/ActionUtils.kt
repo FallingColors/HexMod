@@ -77,8 +77,6 @@ fun List<Iota>.getBool(idx: Int, argc: Int = 0): Boolean {
     }
 }
 
-// Helpers
-
 fun List<Iota>.getItemEntity(idx: Int, argc: Int = 0): ItemEntity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {

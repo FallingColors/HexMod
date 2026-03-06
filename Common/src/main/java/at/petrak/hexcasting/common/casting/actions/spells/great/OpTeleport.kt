@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.server.level.TicketType
 import net.minecraft.world.entity.Entity
+import net.minecraft.tags.EnchantmentTags
 import net.minecraft.world.item.enchantment.EnchantmentHelper
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.phys.Vec3
@@ -77,7 +78,7 @@ object OpTeleport : SpellAction {
                 // having to rearrange those. Also it makes sense for LORE REASONS probably, since the caster is more
                 // aware of items they use often.
                 for (armorItem in teleportee.inventory.armor) {
-                    if (EnchantmentHelper.hasBindingCurse(armorItem))
+                    if (EnchantmentHelper.hasTag(armorItem, EnchantmentTags.CURSE))
                         continue
 
                     if (Math.random() < baseDropChance * 0.25) {
@@ -107,8 +108,7 @@ object OpTeleport : SpellAction {
 
         val target = teleportee.position().add(delta)
 
-        // A "sticky" entity teleports itself and its riders
-        // This is the default behavior for teleportTo(), so we remove the riders if the teleportee *isn't* sticky
+        // Sticky entities teleport with riders; remove riders for non-sticky
         teleportee.stopRiding()
         if (!teleportee.type.`is`(HexTags.Entities.STICKY_TELEPORTERS)) 
             teleportee.passengers.forEach(Entity::stopRiding)

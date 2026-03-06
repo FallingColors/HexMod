@@ -141,7 +141,7 @@ public class HexBlockTagProvider extends PaucalBlockTagProvider {
             HexBlocks.QUENCHED_ALLAY, HexBlocks.QUENCHED_ALLAY_BRICKS, HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL, HexBlocks.QUENCHED_ALLAY_TILES);
 
         // this is a hack but fixes #532
-        var createBrittle = TagKey.create(Registries.BLOCK, new ResourceLocation("create", "brittle"));
+        var createBrittle = TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("create", "brittle"));
         tag(createBrittle).addOptionalTag(BuiltInRegistries.BLOCK.getKey(HexBlocks.SLATE));
     }
 

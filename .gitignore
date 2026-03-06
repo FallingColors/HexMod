@@ -11,6 +11,9 @@ __gradle_version__.py
 # eclipse
 bin
 *.launch
+
+# vscode - machine-specific run configs
+.vscode/launch.json
 .settings
 .metadata
 .classpath

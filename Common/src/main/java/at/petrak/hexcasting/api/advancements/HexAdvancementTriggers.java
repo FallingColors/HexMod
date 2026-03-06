@@ -8,8 +8,8 @@ public class HexAdvancementTriggers {
     public static final FailToCastGreatSpellTrigger FAIL_GREAT_SPELL_TRIGGER = new FailToCastGreatSpellTrigger();
 
     public static void registerTriggers() {
-        CriteriaTriggersAccessor.hex$register(OVERCAST_TRIGGER);
-        CriteriaTriggersAccessor.hex$register(SPEND_MEDIA_TRIGGER);
-        CriteriaTriggersAccessor.hex$register(FAIL_GREAT_SPELL_TRIGGER);
+        CriteriaTriggersAccessor.hex$register("hexcasting:overcast", OVERCAST_TRIGGER);
+        CriteriaTriggersAccessor.hex$register("hexcasting:spend_media", SPEND_MEDIA_TRIGGER);
+        CriteriaTriggersAccessor.hex$register("hexcasting:fail_to_cast_great_spell", FAIL_GREAT_SPELL_TRIGGER);
     }
 }

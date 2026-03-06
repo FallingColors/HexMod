@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
+import net.minecraft.tags.EnchantmentTags
 import net.minecraft.world.item.enchantment.EnchantmentHelper
 
 class MishapNoSpellCircle : Mishap() {
@@ -32,7 +33,7 @@ class MishapNoSpellCircle : Mishap() {
             dropAll(caster, caster.inventory.items)
             dropAll(caster, caster.inventory.offhand)
             dropAll(caster, caster.inventory.armor) {
-                !EnchantmentHelper.hasBindingCurse(it)
+                !EnchantmentHelper.hasTag(it, EnchantmentTags.CURSE)
             }
         }
     }

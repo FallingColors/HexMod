@@ -1,14 +1,14 @@
 package at.petrak.hexcasting.forge.datagen;
 
 import at.petrak.hexcasting.datagen.IXplatConditionsBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.crafting.ConditionalRecipe;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,8 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class ForgeHexConditionsBuilder implements IXplatConditionsBuilder, IConditionBuilder {
-    private final List<ICondition> conditions = new ArrayList<>();
+/**
+ * Injects neoforge:conditions into recipe JSON, matching the NeoForge 1.21.1
+ * data load conditions format. Replaces the removed ConditionalRecipe API.
+ */
+public class ForgeHexConditionsBuilder implements IXplatConditionsBuilder {
+    private final List<JsonObject> conditionJsons = new ArrayList<>();
     private final RecipeBuilder parent;
 
     public ForgeHexConditionsBuilder(RecipeBuilder parent) {
@@ -26,13 +30,22 @@ public class ForgeHexConditionsBuilder implements IXplatConditionsBuilder, ICond
 
     @Override
     public IXplatConditionsBuilder whenModLoaded(String modid) {
-        conditions.add(modLoaded(modid));
+        JsonObject json = new JsonObject();
+        json.addProperty("type", "neoforge:mod_loaded");
+        json.addProperty("modid", modid);
+        conditionJsons.add(json);
         return this;
     }
 
     @Override
     public IXplatConditionsBuilder whenModMissing(String modid) {
-        conditions.add(not(modLoaded(modid)));
+        JsonObject inner = new JsonObject();
+        inner.addProperty("type", "neoforge:mod_loaded");
+        inner.addProperty("modid", modid);
+        JsonObject json = new JsonObject();
+        json.addProperty("type", "neoforge:not");
+        json.add("value", inner);
+        conditionJsons.add(json);
         return this;
     }
 
@@ -54,11 +67,42 @@ public class ForgeHexConditionsBuilder implements IXplatConditionsBuilder, ICond
 
     @Override
     public void save(@NotNull Consumer<FinishedRecipe> consumer, @NotNull ResourceLocation resourceLocation) {
-        var conditionalBuilder = ConditionalRecipe.builder();
-        for (ICondition condition : conditions) {
-            conditionalBuilder.addCondition(condition);
-        }
-        conditionalBuilder.addRecipe(recipeConsumer -> parent.save(recipeConsumer, resourceLocation))
-            .build(consumer, resourceLocation);
+        Consumer<FinishedRecipe> withConditions = json -> consumer.accept(new FinishedRecipe() {
+            @Override
+            public void serializeRecipeData(@NotNull JsonObject jsonObject) {
+                json.serializeRecipeData(jsonObject);
+                if (!conditionJsons.isEmpty()) {
+                    JsonArray conditions = new JsonArray();
+                    for (JsonObject cond : conditionJsons) {
+                        conditions.add(cond);
+                    }
+                    jsonObject.add("neoforge:conditions", conditions);
+                }
+            }
+
+            @Override
+            public ResourceLocation getId() {
+                return json.getId();
+            }
+
+            @Override
+            public RecipeSerializer<?> getType() {
+                return json.getType();
+            }
+
+            @Nullable
+            @Override
+            public JsonObject serializeAdvancement() {
+                return json.serializeAdvancement();
+            }
+
+            @Nullable
+            @Override
+            public ResourceLocation getAdvancementId() {
+                return json.getAdvancementId();
+            }
+        });
+
+        parent.save(withConditions, resourceLocation);
     }
 }

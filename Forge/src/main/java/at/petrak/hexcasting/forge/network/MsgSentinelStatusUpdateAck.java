@@ -3,10 +3,12 @@ package at.petrak.hexcasting.forge.network;
 import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
@@ -20,14 +22,21 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  */
 public record MsgSentinelStatusUpdateAck(@Nullable Sentinel update) implements IMessage {
     public static final ResourceLocation ID = modLoc("sntnl");
+    public static final CustomPacketPayload.Type<MsgSentinelStatusUpdateAck> TYPE = new CustomPacketPayload.Type<>(ID);
+    public static final StreamCodec<RegistryFriendlyByteBuf, MsgSentinelStatusUpdateAck> STREAM_CODEC =
+        StreamCodec.ofMember(MsgSentinelStatusUpdateAck::serialize, MsgSentinelStatusUpdateAck::deserialize);
+
+    @Override
+    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+        return TYPE;
+    }
 
     @Override
     public ResourceLocation getFabricId() {
         return ID;
     }
 
-    public static MsgSentinelStatusUpdateAck deserialize(ByteBuf buffer) {
-        var buf = new FriendlyByteBuf(buffer);
+    public static MsgSentinelStatusUpdateAck deserialize(FriendlyByteBuf buf) {
 
         var exists = buf.readBoolean();
         if (!exists) {

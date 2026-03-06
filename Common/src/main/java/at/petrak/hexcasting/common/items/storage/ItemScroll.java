@@ -10,7 +10,7 @@ import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
-import at.petrak.hexcasting.interop.inline.InlinePatternData;
+import at.petrak.hexcasting.common.misc.PatternDisplayHelper;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -60,7 +60,6 @@ public class ItemScroll extends Item implements IotaHolderItem {
         this.blockSize = blockSize;
     }
 
-    // this produces a scroll that will load the correct pattern for your world once it ticks
     public static ItemStack withPerWorldPattern(ItemStack stack, String op_id) {
         Item item = stack.getItem();
         if (item instanceof ItemScroll)
@@ -76,7 +75,6 @@ public class ItemScroll extends Item implements IotaHolderItem {
         if (pattern == null) {
             return null;
         }
-        // We store only the data part of the iota; pretend the rest of it's there
         var out = new CompoundTag();
         out.putString(HexIotaTypes.KEY_TYPE, "hexcasting:pattern");
         out.put(HexIotaTypes.KEY_DATA, pattern);
@@ -119,12 +117,6 @@ public class ItemScroll extends Item implements IotaHolderItem {
         scrollStack.setCount(1);
         var scrollEntity = new EntityWallScroll(level, posInFront, direction, scrollStack, false, this.blockSize);
 
-        // i guess
-        var stackTag = itemstack.getTag();
-        if (stackTag != null) {
-            EntityType.updateCustomEntityTag(level, player, scrollEntity, stackTag);
-        }
-
         if (scrollEntity.survives()) {
             if (!level.isClientSide) {
                 scrollEntity.playPlacementSound();
@@ -156,7 +148,7 @@ public class ItemScroll extends Item implements IotaHolderItem {
             var patternLabel = Component.literal("");
             if (compound != null) {
                 var pattern = HexPattern.fromNBT(compound);
-                patternLabel = Component.literal(": ").append(new InlinePatternData(pattern).asText(false));
+                patternLabel = Component.literal(": ").append(PatternDisplayHelper.getDisplayComponent(pattern, false));
             }
             return Component.translatable(descID).append(patternLabel);
         } else {
@@ -166,23 +158,18 @@ public class ItemScroll extends Item implements IotaHolderItem {
 
     @Override
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        // the needs_purchase tag is used so you can't see the pattern on scrolls sold by a wandering trader
-        // once you put the scroll into your inventory, this removes the tag to reveal the pattern
         if (NBTHelper.getBoolean(pStack, TAG_NEEDS_PURCHASE)) {
             NBTHelper.remove(pStack, TAG_NEEDS_PURCHASE);
         }
-        // if op_id is set but there's no stored pattern, attempt to load the pattern on inv tick
         if (NBTHelper.hasString(pStack, TAG_OP_ID) && !NBTHelper.hasCompound(pStack, TAG_PATTERN) && pEntity.getServer() != null) {
             var opID = ResourceLocation.tryParse(NBTHelper.getString(pStack, TAG_OP_ID));
             if (opID == null) {
-                // if the provided op_id is invalid, remove it so we don't keep trying every tick
                 NBTHelper.remove(pStack, TAG_OP_ID);
                 return;
             }
             var patternKey = ResourceKey.create(IXplatAbstractions.INSTANCE.getActionRegistry().key(), opID);
             var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(patternKey, pEntity.getServer().overworld());
             if (pat == null) {
-                // if pat is null, the per-world order hasn't been registered; remove the op_id and warn the player
                 NBTHelper.putString(pStack, TAG_RECALC_WARNING, NBTHelper.getString(pStack, TAG_OP_ID));
                 NBTHelper.remove(pStack, TAG_OP_ID);
                 return;
@@ -192,7 +179,7 @@ public class ItemScroll extends Item implements IotaHolderItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
+    public void appendHoverText(ItemStack pStack, Item.TooltipContext pTooltipContext, List<Component> pTooltipComponents,
         TooltipFlag pIsAdvanced) {
         if (NBTHelper.getBoolean(pStack, TAG_NEEDS_PURCHASE)) {
             var needsPurchase = Component.translatable("hexcasting.tooltip.scroll.needs_purchase");

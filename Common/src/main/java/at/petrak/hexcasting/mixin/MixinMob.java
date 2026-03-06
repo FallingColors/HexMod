@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 // Prevents brainswept mobs from having an AI tick
 @Mixin(Mob.class)
 public class MixinMob {
-    @Inject(method = "serverAiStep", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "serverAiStep", at = @At("HEAD"), cancellable = true, remap = false)
     private void onRegisterBrainGoals(CallbackInfo ci) {
         var self = (Mob) (Object) this;
         if (IXplatAbstractions.INSTANCE.isBrainswept(self)) {
@@ -18,7 +18,7 @@ public class MixinMob {
         }
     }
 
-    @Inject(method = "playAmbientSound", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "playAmbientSound", at = @At("HEAD"), cancellable = true, remap = false)
     protected void onPlayAmbientSound(CallbackInfo ci) {
         var self = (Mob) (Object) this;
         if (IXplatAbstractions.INSTANCE.isBrainswept(self)) {

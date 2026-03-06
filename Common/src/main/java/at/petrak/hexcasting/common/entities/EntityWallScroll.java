@@ -19,6 +19,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -30,6 +31,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,6 +48,7 @@ public class EntityWallScroll extends HangingEntity {
 
     public EntityWallScroll(EntityType<? extends EntityWallScroll> type, Level world) {
         super(type, world);
+        this.scroll = ItemStack.EMPTY;
     }
 
     public EntityWallScroll(Level world, BlockPos pos, Direction dir, ItemStack scroll, boolean showStrokeOrder,
@@ -72,9 +75,8 @@ public class EntityWallScroll extends HangingEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SHOWS_STROKE_ORDER, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(SHOWS_STROKE_ORDER, false);
     }
 
     public boolean getShowsStrokeOrder() {
@@ -86,13 +88,27 @@ public class EntityWallScroll extends HangingEntity {
     }
 
     @Override
-    public int getWidth() {
-        return 16 * blockSize;
-    }
+    protected AABB calculateBoundingBox(BlockPos pos, Direction direction) {
+        double x = pos.getX() + 0.5D;
+        double y = pos.getY() + 0.5D;
+        double z = pos.getZ() + 0.5D;
 
-    @Override
-    public int getHeight() {
-        return 16 * blockSize;
+        // Offset slightly away from the supporting block, same spirit as vanilla hanging entities.
+        double depth = 0.46875D;
+        x -= direction.getStepX() * depth;
+        z -= direction.getStepZ() * depth;
+
+        int widthPx = 16 * this.blockSize;
+        int heightPx = 16 * this.blockSize;
+        double halfW = widthPx / 32.0D;
+        double halfH = heightPx / 32.0D;
+
+        // Thin bounding box; expand along axis perpendicular to facing.
+        double thickness = 1.0D / 32.0D;
+        double dx = direction.getAxis() == Direction.Axis.Z ? halfW : thickness;
+        double dz = direction.getAxis() == Direction.Axis.X ? halfW : thickness;
+
+        return new AABB(x - dx, y - halfH, z - dz, x + dx, y + halfH, z + dz);
     }
 
     @Override
@@ -138,9 +154,9 @@ public class EntityWallScroll extends HangingEntity {
     }
 
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity serverEntity) {
         return IXplatAbstractions.INSTANCE.toVanillaClientboundPacket(
-            new MsgNewWallScrollS2C(new ClientboundAddEntityPacket(this),
+            new MsgNewWallScrollS2C(new ClientboundAddEntityPacket(this, serverEntity),
                 pos, direction, scroll, getShowsStrokeOrder(), blockSize));
     }
 
@@ -160,7 +176,7 @@ public class EntityWallScroll extends HangingEntity {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         tag.putByte("direction", (byte) this.direction.ordinal());
-        tag.put("scroll", HexUtils.serializeToNBT(this.scroll));
+        tag.put("scroll", HexUtils.serializeToNBT(this.scroll, this.level().registryAccess()));
         tag.putBoolean("showsStrokeOrder", this.getShowsStrokeOrder());
         tag.putInt("blockSize", this.blockSize);
         super.addAdditionalSaveData(tag);
@@ -169,7 +185,7 @@ public class EntityWallScroll extends HangingEntity {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         this.direction = Direction.values()[tag.getByte("direction")];
-        this.scroll = ItemStack.of(tag.getCompound("scroll"));
+        this.scroll = ItemStack.parseOptional(this.level().registryAccess(), tag.getCompound("scroll"));
         this.blockSize = tag.getInt("blockSize");
 
         this.setDirection(this.direction);
@@ -187,14 +203,12 @@ public class EntityWallScroll extends HangingEntity {
     }
 
     @Override
-    public void lerpTo(double pX, double pY, double pZ, float pYaw, float pPitch, int pPosRotationIncrements,
-        boolean pTeleport) {
+    public void lerpTo(double pX, double pY, double pZ, float pYaw, float pPitch, int pPosRotationIncrements) {
         BlockPos blockpos = this.pos.offset((int) (pX - this.getX()), (int) (pY - this.getY()), (int) (pZ - this.getZ()));
         this.setPos(blockpos.getX(), blockpos.getY(), blockpos.getZ());
     }
 
     @Nullable
-    @Override
     public ItemStack getPickResult() {
         return this.scroll.copy();
     }

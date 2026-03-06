@@ -22,11 +22,11 @@ public class HexLootFunctions {
     private static final Map<ResourceLocation, LootItemFunctionType> LOOT_FUNCS = new LinkedHashMap<>();
 
     public static final LootItemFunctionType PATTERN_SCROLL = register("pattern_scroll",
-        new LootItemFunctionType(new AddPerWorldPatternToScrollFunc.Serializer()));
+        new LootItemFunctionType(AddPerWorldPatternToScrollFunc.CODEC));
     public static final LootItemFunctionType HEX_CYPHER = register("hex_cypher",
-        new LootItemFunctionType(new AddHexToAncientCypherFunc.Serializer()));
+        new LootItemFunctionType(AddHexToAncientCypherFunc.CODEC));
     public static final LootItemFunctionType AMETHYST_SHARD_REDUCER = register("amethyst_shard_reducer",
-        new LootItemFunctionType(new AmethystReducerFunc.Serializer()));
+        new LootItemFunctionType(AmethystReducerFunc.CODEC));
 
     private static LootItemFunctionType register(String id, LootItemFunctionType lift) {
         var old = LOOT_FUNCS.put(modLoc(id), lift);

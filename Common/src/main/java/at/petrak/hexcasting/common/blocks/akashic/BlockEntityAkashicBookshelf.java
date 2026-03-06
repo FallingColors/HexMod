@@ -16,7 +16,6 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
     public static final String TAG_IOTA = "iota";
     public static final String TAG_DUMMY = "dummy";
 
-    // This is only not null if this stores any data.
     private HexPattern pattern = null;
     // When the world is first loading we can sometimes try to deser this from nbt without the world existing yet.
     // We also need a way to display the iota to the client.

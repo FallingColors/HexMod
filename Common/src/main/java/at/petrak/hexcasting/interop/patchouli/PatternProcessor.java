@@ -11,10 +11,11 @@ public class PatternProcessor implements IComponentProcessor {
 
     @Override
     public void setup(Level level, IVariableProvider vars) {
+        var provider = level.registryAccess();
         if (vars.has("header"))
-            translationKey = vars.get("header").asString();
+            translationKey = vars.get("header", provider).asString();
         else {
-            IVariable key = vars.get("op_id");
+            IVariable key = vars.get("op_id", provider);
             String opName = key.asString();
 
             String prefix = "hexcasting.action.";
@@ -26,7 +27,7 @@ public class PatternProcessor implements IComponentProcessor {
     @Override
     public IVariable process(Level level, String key) {
         if (key.equals("translation_key")) {
-            return IVariable.wrap(translationKey);
+            return IVariable.wrap(translationKey, level.registryAccess());
         }
 
         return null;

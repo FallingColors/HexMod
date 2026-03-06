@@ -1,0 +1,306 @@
+﻿To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.8/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :Paucal
+Architect Plugin: 3.4.162
+Architectury Loom: 1.7.435
+You are using an outdated version of Architectury Loom! This version will not receive any support, please consider updating!
+
+> Configure project :Common
+SpongePowered Vanilla 'GRADLE' Toolset Version '0.2.1-SNAPSHOT'
+Targeting Minecraft '1.21.1' on a 'JOINED' platform
+
+> Task :Common:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :Common:compileKotlin UP-TO-DATE
+> Task :Common:compileJava UP-TO-DATE
+> Task :Common:processResources UP-TO-DATE
+> Task :Common:classes
+> Task :Common:jar
+> Task :Forge:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :Forge:createMinecraftArtifacts UP-TO-DATE
+> Task :Forge:compileKotlin
+
+> Task :Forge:compileJava
+.\gradlew : Note: SpongePowered MIXIN Annotation Processor Version=0.8.5
+At C:\Users\KMService\AppData\Local\Temp\ps-script-a610a53e-070e-45c8-b000-e99144863737.ps1:105 char:69
++ ... ing 1.21.1 neoforge draft"; .\gradlew :Forge:compileJava 2>&1 | Out-F ...
++                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Note: SpongePow...r Version=0.8.5:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Note: Supported obfuscation types: ObfuscationServiceMCP supports [searge,notch]
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\mixin\ForgeMixinBlockColors.java:12: warning: Unable to determine 
+descriptor for @Inject target method
+    @Inject(method = "create", at = @At("RETURN"))
+    ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\mixin\ForgeMixinItemColors.java:13: warning: Unable to determine 
+descriptor for @Inject target method
+    @Inject(method = "create", at = @At("RETURN"))
+    ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\ForgeHexInitializer.java:24: error: package 
+at.petrak.hexcasting.forge.datagen does not exist
+import at.petrak.hexcasting.forge.datagen.ForgeHexDataGenerators;
+                                         ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\ForgeHexInitializer.java:55: error: cannot find symbol
+import net.neoforged.fml.DistExecutor;
+                        ^
+  symbol:   class DistExecutor
+  location: package net.neoforged.fml
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\ForgeHexInitializer.java:58: error: cannot find symbol
+import net.neoforged.neoforge.common.ToolActions;
+                                    ^
+  symbol:   class ToolActions
+  location: package net.neoforged.neoforge.common
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\ForgeHexInitializer.java:63: error: cannot find symbol
+import net.neoforged.neoforge.event.TickEvent;
+                                   ^
+  symbol:   class TickEvent
+  location: package net.neoforged.neoforge.event
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\ForgeHexInitializer.java:71: error: package 
+net.neoforged.neoforge.eventbus.api does not exist
+import net.neoforged.neoforge.eventbus.api.IEventBus;
+                                          ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\ForgeHexInitializer.java:79: error: cannot find symbol
+    private static IEventBus MOD_BUS;
+                   ^
+  symbol:   class IEventBus
+  location: class ForgeHexInitializer
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\ForgeHexInitializer.java:81: error: cannot find symbol
+    public ForgeHexInitializer(IEventBus modBus) {
+                               ^
+  symbol:   class IEventBus
+  location: class ForgeHexInitializer
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\ForgeHexInitializer.java:165: error: cannot find symbol
+    private static void initListeners(IEventBus modBus) {
+                                      ^
+  symbol:   class IEventBus
+  location: class ForgeHexInitializer
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\recipe\ForgeModConditionalIngredient.java:11: error: cannot find 
+symbol
+import net.neoforged.neoforge.common.crafting.AbstractIngredient;
+                                             ^
+  symbol:   class AbstractIngredient
+  location: package net.neoforged.neoforge.common.crafting
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\recipe\ForgeModConditionalIngredient.java:12: error: cannot find 
+symbol
+import net.neoforged.neoforge.common.crafting.IIngredientSerializer;
+                                             ^
+  symbol:   class IIngredientSerializer
+  location: package net.neoforged.neoforge.common.crafting
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\recipe\ForgeModConditionalIngredient.java:21: error: cannot find 
+symbol
+public class ForgeModConditionalIngredient extends AbstractIngredient {
+                                                   ^
+  symbol: class AbstractIngredient
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\recipe\ForgeModConditionalIngredient.java:67: error: cannot find 
+symbol
+    public @NotNull IIngredientSerializer<? extends Ingredient> getSerializer() {
+                    ^
+  symbol:   class IIngredientSerializer
+  location: class ForgeModConditionalIngredient
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\mixin\ForgeMixinTagsProvider.java:3: error: package 
+at.petrak.hexcasting.forge.datagen does not exist
+import at.petrak.hexcasting.forge.datagen.TagsProviderEFHSetter;
+                                         ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\mixin\ForgeMixinTagsProvider.java:14: error: cannot find symbol
+public abstract class ForgeMixinTagsProvider implements TagsProviderEFHSetter {
+                                                        ^
+  symbol: class TagsProviderEFHSetter
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\recipe\ForgeModConditionalIngredient.java:94: error: cannot find 
+symbol
+    public static class Serializer implements IIngredientSerializer<Ingredient> {
+                                              ^
+  symbol:   class IIngredientSerializer
+  location: class ForgeModConditionalIngredient
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\xplat\ForgeXplatImpl.java:76: error: cannot find symbol
+import net.neoforged.neoforge.common.ToolActions;
+                                    ^
+  symbol:   class ToolActions
+  location: package net.neoforged.neoforge.common
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\xplat\ForgeXplatImpl.java:77: error: cannot find symbol
+import net.neoforged.neoforge.common.TierSortingRegistry;
+                                    ^
+  symbol:   class TierSortingRegistry
+  location: package net.neoforged.neoforge.common
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Forge\src\main\java\at\petrak\hexcasting\forge\xplat\ForgeXplatImpl.java:78: error: cannot find symbol
+import net.neoforged.neoforge.common.loot.CanToolPerformAction;
+                                         ^
+  symbol:   class CanToolPerformAction
+  location: package net.neoforged.neoforge.common.loot
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\api\casting\iota\EntityIota.java:5: error: package 
+com.samsthenerd.inline.api does not exist
+import com.samsthenerd.inline.api.InlineAPI;
+                                 ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\api\casting\iota\EntityIota.java:6: error: package 
+com.samsthenerd.inline.api.data does not exist
+import com.samsthenerd.inline.api.data.EntityInlineData;
+                                      ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\api\casting\iota\EntityIota.java:7: error: package 
+com.samsthenerd.inline.api.data does not exist
+import com.samsthenerd.inline.api.data.PlayerHeadData;
+                                      ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\HexPatternMatcher.java:6: error: package 
+com.samsthenerd.inline.api does not exist
+import com.samsthenerd.inline.api.InlineAPI;
+                                 ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\HexPatternMatcher.java:7: error: package 
+com.samsthenerd.inline.api.matching does not exist
+import com.samsthenerd.inline.api.matching.InlineMatch;
+                                          ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\HexPatternMatcher.java:8: error: package 
+com.samsthenerd.inline.api.matching does not exist
+import com.samsthenerd.inline.api.matching.MatchContext;
+                                          ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\HexPatternMatcher.java:9: error: package 
+com.samsthenerd.inline.api.matching does not exist
+import com.samsthenerd.inline.api.matching.MatcherInfo;
+                                          ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\HexPatternMatcher.java:10: error: package 
+com.samsthenerd.inline.api.matching does not exist
+import com.samsthenerd.inline.api.matching.RegexMatcher;
+                                          ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\HexPatternMatcher.java:23: error: cannot find symbol
+public class HexPatternMatcher implements RegexMatcher {
+                                          ^
+  symbol: class RegexMatcher
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\HexPatternMatcher.java:26: error: cannot find symbol
+    private static final MatcherInfo patternMatcherInfo = MatcherInfo.fromId(patternMatcherID);
+                         ^
+  symbol:   class MatcherInfo
+  location: class HexPatternMatcher
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\HexPatternMatcher.java:39: error: cannot find symbol
+    public Tuple<InlineMatch, Integer> getMatchAndGroup(MatchResult regexMatch, MatchContext ctx) {
+                                                                                ^
+  symbol:   class MatchContext
+  location: class HexPatternMatcher
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\HexPatternMatcher.java:39: error: cannot find symbol
+    public Tuple<InlineMatch, Integer> getMatchAndGroup(MatchResult regexMatch, MatchContext ctx) {
+                 ^
+  symbol:   class InlineMatch
+  location: class HexPatternMatcher
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\HexPatternMatcher.java:72: error: cannot find symbol
+    public InlineMatch getMatch(MatchResult mr, MatchContext ctx){
+                                                ^
+  symbol:   class MatchContext
+  location: class HexPatternMatcher
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\HexPatternMatcher.java:72: error: cannot find symbol
+    public InlineMatch getMatch(MatchResult mr, MatchContext ctx){
+           ^
+  symbol:   class InlineMatch
+  location: class HexPatternMatcher
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\HexPatternMatcher.java:76: error: cannot find symbol
+    public MatcherInfo getInfo(){
+           ^
+  symbol:   class MatcherInfo
+  location: class HexPatternMatcher
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\InlineHex.java:3: error: package 
+com.samsthenerd.inline.api does not exist
+import com.samsthenerd.inline.api.InlineAPI;
+                                 ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\InlineHexClient.java:3: error: package 
+com.samsthenerd.inline.api.client does not exist
+import com.samsthenerd.inline.api.client.InlineClientAPI;
+                                        ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\InlinePatternData.java:10: error: package 
+com.samsthenerd.inline.api does not exist
+import com.samsthenerd.inline.api.InlineData;
+                                 ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\InlinePatternData.java:21: error: cannot find symbol
+public class InlinePatternData implements InlineData<InlinePatternData>{
+                                          ^
+  symbol: class InlineData
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\InlinePatternData.java:73: error: cannot find symbol
+    public static class InlinePatternDataType implements InlineDataType<InlinePatternData> {
+                                                         ^
+  symbol:   class InlineDataType
+  location: class InlinePatternData
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\InlinePatternRenderer.java:4: error: package 
+com.samsthenerd.inline.api.client does not exist
+import com.samsthenerd.inline.api.client.GlowHandling;
+                                        ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\InlinePatternRenderer.java:5: error: package 
+com.samsthenerd.inline.api.client does not exist
+import com.samsthenerd.inline.api.client.InlineRenderer;
+                                        ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\InlinePatternRenderer.java:6: error: package 
+com.samsthenerd.inline.impl does not exist
+import com.samsthenerd.inline.impl.InlineStyle;
+                                  ^
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\InlinePatternRenderer.java:11: error: cannot find symbol
+public class InlinePatternRenderer implements InlineRenderer<InlinePatternData> {
+                                              ^
+  symbol: class InlineRenderer
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\InlinePatternRenderer.java:51: error: cannot find symbol
+    public GlowHandling getGlowPreference(InlinePatternData forData) {
+           ^
+  symbol:   class GlowHandling
+  location: class InlinePatternRenderer
+C:\Users\KMService\Documents\hexcasting 1.21.1 neoforge 
+draft\Common\src\main\java\at\petrak\hexcasting\interop\inline\InlinePatternRenderer.java:57: error: cannot find symbol
+    public int render(InlinePatternData data, GuiGraphics drawContext, int index, Style style, int codepoint, 
+TextRenderingContext trContext){
+                                                                                                              ^
+  symbol:   class TextRenderingContext
+  location: class InlinePatternRenderer
+44 errors
+2 warnings
+
+> Task :Forge:compileJava FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':Forge:compileJava'.
+> Compilation failed; see the compiler error output for details.
+
+* Try:
+> Run with --info option to get more log output.
+> Run with --scan to get full insights.
+
+BUILD FAILED in 17s
+8 actionable tasks: 4 executed, 4 up-to-date

@@ -46,7 +46,7 @@ public class HexAdvancements extends PaucalAdvancementSubProvider {
             .display(new DisplayInfo(new ItemStack(Items.BUDDING_AMETHYST),
                 Component.translatable("advancement.hexcasting:root"),
                 Component.translatable("advancement.hexcasting:root.desc"),
-                new ResourceLocation("minecraft", "textures/block/calcite.png"),
+                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/calcite.png"),
                 FrameType.TASK, true, true, true))
             // the only thing making this vaguely tolerable is the knowledge the json files are worse somehow
             .addCriterion("has_charged_amethyst", InventoryChangeTrigger.TriggerInstance.hasItems(
@@ -58,7 +58,7 @@ public class HexAdvancements extends PaucalAdvancementSubProvider {
             .display(new DisplayInfo(new ItemStack(HexItems.CREATIVE_UNLOCKER),
                 Component.translatable("advancement.hexcasting:creative_unlocker"),
                 Component.translatable("advancement.hexcasting:creative_unlocker.desc"),
-                new ResourceLocation("minecraft", "textures/block/calcite.png"),
+                ResourceLocation.fromNamespaceAndPath("minecraft", "textures/block/calcite.png"),
                 FrameType.TASK, true, false, true))
             .parent(root)
             .addCriterion("has_creative_unlocker", InventoryChangeTrigger.TriggerInstance.hasItems(

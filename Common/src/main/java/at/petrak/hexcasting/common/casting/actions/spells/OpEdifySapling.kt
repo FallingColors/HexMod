@@ -47,7 +47,7 @@ object OpEdifySapling : SpellAction {
 
             val bs = env.world.getBlockState(pos)
             for (i in 0 until 8) {
-                val success = AkashicTreeGrower.INSTANCE.growTree(
+                val success = AkashicTreeGrower.growTree(
                     env.world,
                     env.world.chunkSource.generator,
                     pos,

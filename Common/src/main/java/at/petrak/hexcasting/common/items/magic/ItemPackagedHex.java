@@ -167,7 +167,6 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
 
         if (broken) {
             stack.shrink(1);
-            player.broadcastBreakEvent(usedHand);
             return InteractionResultHolder.consume(stack);
         } else {
             return InteractionResultHolder.success(stack);

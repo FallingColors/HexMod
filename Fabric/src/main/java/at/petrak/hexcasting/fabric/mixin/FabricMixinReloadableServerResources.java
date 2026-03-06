@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 @Mixin(ReloadableServerResources.class)
@@ -24,13 +23,12 @@ public class FabricMixinReloadableServerResources {
         cir.setReturnValue(cir.getReturnValue().thenApply((rsr) -> {
             var amethystTable = rsr.getLootData().getLootTable(Blocks.AMETHYST_CLUSTER.getLootTable());
             var theCoolerAmethystTable = (AccessorLootTable) amethystTable;
-            var oldFuncs = theCoolerAmethystTable.hex$getFunctions();
-            var newFuncs = Arrays.copyOf(oldFuncs, oldFuncs.length + 1);
+            var oldFuncs = new java.util.ArrayList<>(theCoolerAmethystTable.hex$getFunctions());
             var shardReducer = rsr.getLootData().getElement(new LootDataId<>(LootDataType.MODIFIER, FabricHexLootModJankery.FUNC_AMETHYST_SHARD_REDUCER));
             if (shardReducer != null) {
-                newFuncs[newFuncs.length - 1] = shardReducer;
-                theCoolerAmethystTable.hex$setFunctions(newFuncs);
-                theCoolerAmethystTable.hex$setCompositeFunction(LootItemFunctions.compose(newFuncs));
+                oldFuncs.add(shardReducer);
+                theCoolerAmethystTable.hex$setFunctions(oldFuncs);
+                theCoolerAmethystTable.hex$setCompositeFunction(LootItemFunctions.compose(oldFuncs));
             } else {
                 HexAPI.LOGGER.warn("{} was not found?", FabricHexLootModJankery.FUNC_AMETHYST_SHARD_REDUCER);
             }

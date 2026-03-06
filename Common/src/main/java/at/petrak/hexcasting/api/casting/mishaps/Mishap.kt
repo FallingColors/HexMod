@@ -58,8 +58,6 @@ abstract class Mishap : RuntimeException() {
         }
     }
 
-    // Useful helper functions
-
     protected fun dyeColor(color: DyeColor): FrozenPigment =
         FrozenPigment(
             ItemStack(HexItems.DYE_PIGMENTS[color]!!),

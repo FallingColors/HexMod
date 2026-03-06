@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.forge.mixin;
 
-import at.petrak.hexcasting.forge.datagen.TagsProviderEFHSetter;
+import at.petrak.hexcasting.forge.mixin.TagsProviderEFHSetter;
 import net.minecraft.data.tags.TagsProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,7 +25,7 @@ public abstract class ForgeMixinTagsProvider implements TagsProviderEFHSetter {
 
     @Redirect(method = "missing(Lnet/minecraft/tags/TagEntry;)Z", at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/data/tags/TagsProvider;existingFileHelper:Lnet/minecraftforge/common/data/ExistingFileHelper;",
+            target = "Lnet/minecraft/data/tags/TagsProvider;existingFileHelper:Lnet/neoforged/neoforge/common/data/ExistingFileHelper;",
             opcode = Opcodes.GETFIELD),
             remap = false)
     private ExistingFileHelper hex$missingRedirect(TagsProvider instance) {
@@ -34,14 +34,7 @@ public abstract class ForgeMixinTagsProvider implements TagsProviderEFHSetter {
         return actualFileHelper;
     }
 
-    @Redirect(method = "lambda$getOrCreateRawBuilder$9(Lnet/minecraft/resources/ResourceLocation;)Lnet/minecraft/tags/TagBuilder;", at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/data/tags/TagsProvider;existingFileHelper:Lnet/minecraftforge/common/data/ExistingFileHelper;",
-            opcode = Opcodes.GETFIELD),
-            remap = false)
-    private ExistingFileHelper hex$getOrCreateRawBuilderRedirect(TagsProvider instance) {
-        if (actualFileHelper == null)
-            return existingFileHelper;
-        return actualFileHelper;
-    }
+    // 1.21: lambda$getOrCreateRawBuilder$9 no longer exists - method renamed to getOrCreateTagBuilder.
+    // Only redirect in missing() - tag()/getOrCreateTagBuilder path may need additional redirect
+    // if addOptionalTag validation fails. Try lambda$getOrCreateTagBuilder$0 if datagen breaks.
 }

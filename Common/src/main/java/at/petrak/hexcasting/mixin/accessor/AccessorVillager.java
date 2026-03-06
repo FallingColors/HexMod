@@ -5,7 +5,7 @@ import net.minecraft.world.entity.npc.Villager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(Villager.class)
+@Mixin(value = Villager.class, remap = false)
 public interface AccessorVillager {
     @Invoker("tellWitnessesThatIWasMurdered")
     void hex$tellWitnessesThatIWasMurdered(Entity murderer);

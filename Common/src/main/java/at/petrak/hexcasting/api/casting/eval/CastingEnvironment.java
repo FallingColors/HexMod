@@ -240,7 +240,7 @@ public abstract class CastingEnvironment {
      * Return whether this env can cast great spells.
      */
     public boolean isEnlightened() {
-        var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("enlightenment"));
+        var adv = this.world.getServer().getAdvancements().get(modLoc("enlightenment"));
         if (adv == null)
             return false;
 
@@ -371,7 +371,7 @@ public abstract class CastingEnvironment {
     }
 
     /**
-     * Convenience function to throw if the vec is out of the world (for GTP)
+     * Convenience function to throw if the vec is out of the world
      */
     public final void assertVecInWorld(Vec3 vec) throws MishapBadLocation {
         if (!this.isVecInWorld(vec)) {

@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.math.HexCoord
 import net.minecraft.ChatFormatting
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
 import net.minecraft.nbt.*
 import net.minecraft.network.chat.Component
@@ -283,10 +284,10 @@ fun <A> List<A>.zipWithDefault(array: ByteArray, default: (idx: Int) -> Byte): L
     return list
 }
 
-// Copy the impl from forge
-fun ItemStack.serializeToNBT(): CompoundTag {
+// 1.21+: ItemStack.save requires HolderLookup.Provider
+fun ItemStack.serializeToNBT(registryAccess: HolderLookup.Provider): CompoundTag {
     val out = CompoundTag()
-    this.save(out)
+    this.save(registryAccess, out)
     return out
 }
 
@@ -309,7 +310,8 @@ fun <T> isOfTag(registry: Registry<T>, key: ResourceKey<T>, tag: TagKey<T>): Boo
     return holder.`is`(tag)
 }
 
-fun <T> isOfTag(registry: Registry<T>, loc: ResourceLocation, tag: TagKey<T>): Boolean {
-    val key = ResourceKey.create(registry.key(), loc);
+fun <T> isOfTag(registry: Registry<T>, loc: ResourceLocation?, tag: TagKey<T>): Boolean {
+    if (loc == null) return false
+    val key = ResourceKey.create(registry.key(), loc)
     return isOfTag(registry, key, tag)
 }

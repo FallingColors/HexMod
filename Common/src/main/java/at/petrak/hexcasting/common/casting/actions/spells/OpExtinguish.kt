@@ -65,7 +65,7 @@ object OpExtinguish : SpellAction {
                                 }
 
                                 is CampfireBlock -> {
-                                    if (blockstate.getValue(CampfireBlock.LIT)) { // check if campfire is lit before putting it out
+                                    if (blockstate.getValue(CampfireBlock.LIT)) {
                                         val wilson =
                                             Items.WOODEN_SHOVEL // summon shovel from the ether to do our bidding
                                         val hereVec = Vec3.atCenterOf(here)
@@ -82,7 +82,7 @@ object OpExtinguish : SpellAction {
                                 }
 
                                 is AbstractCandleBlock -> {
-                                    if (blockstate.getValue(AbstractCandleBlock.LIT)) { // same check for candles
+                                    if (blockstate.getValue(AbstractCandleBlock.LIT)) {
                                         AbstractCandleBlock.extinguish(null, blockstate, env.world, here); true
                                     } else false
                                 }

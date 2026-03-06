@@ -2,6 +2,7 @@ package at.petrak.hexcasting.interop.patchouli;
 
 import com.google.gson.annotations.SerializedName;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import vazkii.patchouli.api.IComponentRenderContext;
@@ -20,15 +21,22 @@ public class CustomComponentTooltip implements ICustomComponent {
 
     transient IVariable tooltipVar;
     transient List<Component> tooltip;
+    transient HolderLookup.Provider registries;
 
     transient int x, y;
+
+    @Override
+    public void onVariablesAvailable(UnaryOperator<IVariable> lookup, HolderLookup.Provider registries) {
+        this.registries = registries;
+        tooltipVar = lookup.apply(tooltipReference);
+    }
 
     @Override
     public void build(int componentX, int componentY, int pageNum) {
         x = componentX;
         y = componentY;
         tooltip = new ArrayList<>();
-        for (IVariable s : tooltipVar.asListOrSingleton()) {
+        for (IVariable s : tooltipVar.asListOrSingleton(registries)) {
             tooltip.add(s.as(Component.class));
         }
     }
@@ -40,8 +48,4 @@ public class CustomComponentTooltip implements ICustomComponent {
         }
     }
 
-    @Override
-    public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
-        tooltipVar = lookup.apply(tooltipReference);
-    }
 }

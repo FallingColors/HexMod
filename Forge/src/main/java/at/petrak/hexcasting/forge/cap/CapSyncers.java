@@ -6,10 +6,17 @@ import at.petrak.hexcasting.forge.network.MsgSentinelStatusUpdateAck;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
+
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CapSyncers {
+    private static final int LOGIN_SYNC_MAX_TICKS = 200;
+    private static final ConcurrentHashMap<UUID, Integer> PENDING_LOGIN_SYNC = new ConcurrentHashMap<>();
+
     @SubscribeEvent
     public static void copyDataOnDeath(PlayerEvent.Clone evt) {
         var eitherSidePlayer = evt.getEntity();
@@ -38,10 +45,9 @@ public class CapSyncers {
         if (!(evt.getEntity() instanceof ServerPlayer player)) {
             return;
         }
-
-        syncSentinel(player);
-        syncPigment(player);
-        syncAltiora(player);
+        // PlayerLoggedInEvent fires before the connection is always ready for play packets.
+        // Retry for a short window until NeoForge allows our payloads.
+        PENDING_LOGIN_SYNC.put(player.getUUID(), LOGIN_SYNC_MAX_TICKS);
     }
 
     @SubscribeEvent
@@ -49,10 +55,37 @@ public class CapSyncers {
         if (!(evt.getEntity() instanceof ServerPlayer player)) {
             return;
         }
-
+        // Respawn is in play phase; sync immediately.
         syncSentinel(player);
         syncPigment(player);
         syncAltiora(player);
+    }
+
+    @SubscribeEvent
+    public static void retryLoginSync(EntityTickEvent.Post evt) {
+        if (!(evt.getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+
+        var uuid = player.getUUID();
+        var remaining = PENDING_LOGIN_SYNC.get(uuid);
+        if (remaining == null) {
+            return;
+        }
+        if (remaining <= 0) {
+            PENDING_LOGIN_SYNC.remove(uuid);
+            return;
+        }
+
+        try {
+            syncSentinel(player);
+            syncPigment(player);
+            syncAltiora(player);
+            PENDING_LOGIN_SYNC.remove(uuid);
+        } catch (UnsupportedOperationException e) {
+            // Still in configuration phase / channels not ready yet.
+            PENDING_LOGIN_SYNC.put(uuid, remaining - 1);
+        }
     }
 
     public static void syncSentinel(ServerPlayer player) {

@@ -2,6 +2,8 @@ package at.petrak.hexcasting.forge;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.RegisterClientStuff;
+import at.petrak.hexcasting.common.msgs.*;
+import at.petrak.hexcasting.forge.network.*;
 import at.petrak.hexcasting.client.ShiftScrollListener;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.client.model.AltioraLayer;
@@ -13,8 +15,8 @@ import at.petrak.hexcasting.common.lib.HexParticles;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import at.petrak.hexcasting.interop.HexInterop;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.block.BlockColors;
-import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.particle.ParticleProvider;
@@ -23,66 +25,59 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraftforge.client.event.*;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 
 import java.io.IOException;
 import java.util.function.Function;
 
 // This is Java because I can't kotlin-fu some of the consumers
 public class ForgeHexClientInitializer {
-    // We copy Fabric's example; it mixes in on the return of the initializer and sticks it in a global variable.
-    // So here's our global.
-    public static ItemColors GLOBAL_ITEM_COLORS;
-    public static BlockColors GLOBAL_BLOCK_COLORS;
 
     @SubscribeEvent
     public static void clientInit(FMLClientSetupEvent evt) {
-        evt.enqueueWork(() -> {
-            RegisterClientStuff.init();
-            RegisterClientStuff.registerColorProviders(
-                (colorizer, item) -> GLOBAL_ITEM_COLORS.register(colorizer, item),
-                (colorizer, block) -> GLOBAL_BLOCK_COLORS.register(colorizer, block));
-        });
+        evt.enqueueWork(RegisterClientStuff::init);
 
-        var evBus = MinecraftForge.EVENT_BUS;
+        var evBus = NeoForge.EVENT_BUS;
 
         evBus.addListener((ClientPlayerNetworkEvent.LoggingIn e) ->
             PatternRegistryManifest.processRegistry(null));
 
         evBus.addListener((RenderLevelStageEvent e) -> {
             if (e.getStage().equals(RenderLevelStageEvent.Stage.AFTER_PARTICLES)) {
-                HexAdditionalRenderers.overlayLevel(e.getPoseStack(), e.getPartialTick());
+                HexAdditionalRenderers.overlayLevel(e.getPoseStack(), e.getPartialTick().getGameTimeDeltaPartialTick(true));
             }
         });
 
         evBus.addListener((RenderGuiEvent.Post e) -> {
-            HexAdditionalRenderers.overlayGui(e.getGuiGraphics(), e.getPartialTick());
+            HexAdditionalRenderers.overlayGui(e.getGuiGraphics(), e.getPartialTick().getGameTimeDeltaPartialTick(true));
         });
 
 
-        evBus.addListener((TickEvent.RenderTickEvent e) -> {
-            if (e.phase == TickEvent.Phase.START) {
-                ClientTickCounter.renderTickStart(e.renderTickTime);
-            }
-        });
+        evBus.addListener((RenderFrameEvent.Pre e) ->
+            ClientTickCounter.renderTickStart(e.getPartialTick().getGameTimeDeltaPartialTick(true)));
 
-        evBus.addListener((TickEvent.ClientTickEvent e) -> {
-            if (e.phase == TickEvent.Phase.END) {
-                ClientTickCounter.clientTickEnd();
-                ShiftScrollListener.clientTickEnd();
-            }
+        evBus.addListener((ClientTickEvent.Post e) -> {
+            ClientTickCounter.clientTickEnd();
+            ShiftScrollListener.clientTickEnd();
         });
 
         evBus.addListener((InputEvent.MouseScrollingEvent e) -> {
-            var cancel = ShiftScrollListener.onScrollInGameplay(e.getScrollDelta());
+            var cancel = ShiftScrollListener.onScrollInGameplay((float) e.getScrollDeltaY());
             e.setCanceled(cancel);
         });
 
         HexInterop.clientInit();
+    }
+
+    @SubscribeEvent
+    public static void registerColors(RegisterColorHandlersEvent.Item evt) {
+        RegisterClientStuff.registerColorProviders(
+            (colorizer, item) -> evt.getItemColors().register(colorizer, item),
+            (colorizer, block) -> evt.getBlockColors().register(colorizer, block));
     }
 
     @SubscribeEvent
@@ -115,12 +110,19 @@ public class ForgeHexClientInitializer {
     @SubscribeEvent
     public static void onModelRegister(ModelEvent.RegisterAdditional evt) {
         var recMan = Minecraft.getInstance().getResourceManager();
-        RegisterClientStuff.onModelRegister(recMan, evt::register);
+        RegisterClientStuff.onModelRegister(recMan,
+            loc -> evt.register(ModelResourceLocation.standalone(loc)));
     }
 
     @SubscribeEvent
-    public static void onModelBake(ModelEvent.BakingCompleted evt) {
-        RegisterClientStuff.onModelBake(evt.getModelBakery(), evt.getModels());
+    public static void onModelBake(ModelEvent.ModifyBakingResult evt) {
+        var models = evt.getModels();
+        var modelMap = new java.util.HashMap<net.minecraft.resources.ResourceLocation, net.minecraft.client.resources.model.BakedModel>();
+        for (var entry : models.entrySet()) {
+            var key = entry.getKey();
+            modelMap.put(key.id(), entry.getValue());
+        }
+        RegisterClientStuff.onModelBake(evt.getModelBakery(), modelMap);
     }
 
     @SubscribeEvent

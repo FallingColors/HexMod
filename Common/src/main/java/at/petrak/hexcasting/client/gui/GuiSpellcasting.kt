@@ -16,6 +16,7 @@ import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.client.ktxt.accumulatedScroll
 import at.petrak.hexcasting.client.render.*
 import at.petrak.hexcasting.client.sound.GridSoundInstance
+import at.petrak.hexcasting.common.items.ItemStaff
 import at.petrak.hexcasting.common.lib.HexAttributes
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.msgs.MsgNewSpellPatternC2S
@@ -52,6 +53,9 @@ class GuiSpellcasting constructor(
     private val usedSpots: MutableSet<HexCoord> = HashSet()
 
     private var ambianceSoundInstance: GridSoundInstance? = null
+
+    /** Skip close check for first few ticks to avoid race with item/tag sync on open */
+    private var ticksOpen: Int = 0
 
     private val randSrc = SoundInstance.createUnseededRandom()
 
@@ -118,11 +122,14 @@ class GuiSpellcasting constructor(
     }
 
     override fun tick() {
+        ticksOpen++
+        if (ticksOpen < 5) return
         val minecraft = Minecraft.getInstance()
         val player = minecraft.player
         if (player != null) {
             val heldItem = player.getItemInHand(handOpenedWith)
-            if (heldItem.isEmpty || !heldItem.`is`(HexTags.Items.STAVES) || player.getAttributeValue(HexAttributes.FEEBLE_MIND) > 0)
+            val isStaff = heldItem.`is`(HexTags.Items.STAVES) || heldItem.item is ItemStaff
+            if (heldItem.isEmpty || !isStaff || player.getAttributeValue(HexAttributes.getHolder(player, HexAttributes.FEEBLE_MIND_KEY)) > 0)
                 closeForReal()
         }
     }
@@ -291,11 +298,12 @@ class GuiSpellcasting constructor(
         return false
     }
 
-    override fun mouseScrolled(pMouseX: Double, pMouseY: Double, pDelta: Double): Boolean {
-        super.mouseScrolled(pMouseX, pMouseY, pDelta)
+    override fun mouseScrolled(pMouseX: Double, pMouseY: Double, pScrollX: Double, pScrollY: Double): Boolean {
+        super.mouseScrolled(pMouseX, pMouseY, pScrollX, pScrollY)
 
         val mouseHandler = Minecraft.getInstance().mouseHandler
 
+        val pDelta = pScrollY
         if (mouseHandler.accumulatedScroll != 0.0 && sign(pDelta) != sign(mouseHandler.accumulatedScroll)) {
             mouseHandler.accumulatedScroll = 0.0
         }
@@ -308,7 +316,7 @@ class GuiSpellcasting constructor(
 
         mouseHandler.accumulatedScroll -= accumulation.toDouble()
 
-        ShiftScrollListener.onScroll(pDelta, false)
+        ShiftScrollListener.onScroll(pScrollY, false)
 
         return true
     }
@@ -487,15 +495,12 @@ class GuiSpellcasting constructor(
         RenderSystem.setShader { prevShader }
     }
 
-    // why the hell is this default true
     override fun isPauseScreen(): Boolean = false
 
     /** Distance between adjacent hex centers */
     fun hexSize(): Float {
-        val scaleModifier = Minecraft.getInstance().player!!.getAttributeValue(HexAttributes.GRID_ZOOM)
+        val scaleModifier = Minecraft.getInstance().player!!.getAttributeValue(HexAttributes.getHolder(Minecraft.getInstance().player!!, HexAttributes.GRID_ZOOM_KEY))
 
-        // Originally, we allowed 32 dots across. Assuming a 1920x1080 screen this allowed like 500-odd area.
-        // Let's be generous and give them 512.
         val baseScale = sqrt(this.width.toDouble() * this.height / 512.0)
         return (baseScale / scaleModifier).toFloat()
     }
@@ -509,13 +514,10 @@ class GuiSpellcasting constructor(
 
 
     private sealed class PatternDrawState {
-        /** We're waiting on the player to right-click again */
         object BetweenPatterns : PatternDrawState()
 
-        /** We just started drawing and haven't drawn the first line yet. */
         data class JustStarted(val start: HexCoord) : PatternDrawState()
 
-        /** We've started drawing a pattern for real. */
         data class Drawing(val start: HexCoord, var current: HexCoord, val wipPattern: HexPattern) : PatternDrawState()
     }
 
