@@ -1028,6 +1028,7 @@
       eval_too_much: "Evaluated too many patterns",
       no_item: "needs %s but got nothing",
       "no_item.offhand": "needs %s in the other hand but got nothing",
+      "no_item.hotbar": "needs %s somewhere in the hotbar but got nothing",
       bad_entity: "needs %s but got %s",
       bad_brainsweep: "The %s rejected the being's mind",
       already_brainswept: "The mind has already been used",
@@ -1130,6 +1131,7 @@
       bad_item: {
         "": "needs %s but got %dx %s",
         offhand: "needs %s in the other hand but got %dx %s",
+        hotbar: "needs %s somewhere in the hotbar but got %dx %s",
         
         iota: {
           "": "a place to store iotas",
@@ -1146,6 +1148,7 @@
         rechargable: "a rechargable item",
         colorizer: "a pigment",
         variant: "an item with variants",
+        placeable: "a placeable item",
       },
       
       bad_block: {

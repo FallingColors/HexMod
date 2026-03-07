@@ -7,7 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getBlockPos
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
-import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadHotbarItem
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
@@ -41,7 +41,7 @@ object OpPlaceBlock : SpellAction {
         val itemUseCtx = env
             .queryForMatchingStack { it.item is BlockItem }
             ?.let { UseOnContext(env.world, env.castingEntity as? ServerPlayer, env.castingHand, it, blockHit) }
-            ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY, "placeable")
+            ?: throw MishapBadHotbarItem.of(ItemStack.EMPTY, "placeable")
         val placeContext = BlockPlaceContext(itemUseCtx)
 
         val worldState = env.world.getBlockState(pos)
