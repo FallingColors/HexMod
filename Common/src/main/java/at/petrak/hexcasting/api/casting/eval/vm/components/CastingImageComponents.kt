@@ -4,10 +4,16 @@ import at.petrak.hexcasting.api.HexAPI.modLoc
 import net.minecraft.resources.ResourceLocation
 
 object CastingImageComponents {
-	val RAVENMIND: ComponentType<GenericIotaComponent> = register(GenericIotaComponentType(modLoc("ravenmind")))
-	val IMPULSE_SCALING: ComponentType<ImpulseScalingComponent> = register(ImpulseScalingComponentType)
+	val RAVENMIND: ComponentType<GenericIotaComponent> = GenericIotaComponentType(modLoc("ravenmind"))
+	val IMPULSE_SCALING: ComponentType<ImpulseScalingComponent> = ImpulseScalingComponentType
 
 	private val registry = HashMap<ResourceLocation, ComponentType<*>>()
+
+	@JvmStatic
+	fun registerComponents() {
+		register(RAVENMIND)
+		register(IMPULSE_SCALING)
+	}
 
 	fun <T : CastingImageComponent> register(type: ComponentType<T>): ComponentType<T> {
 		val existing = registry.putIfAbsent(type.id, type)
