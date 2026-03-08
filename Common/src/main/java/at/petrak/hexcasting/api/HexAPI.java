@@ -173,9 +173,9 @@ public interface HexAPI {
     }
 
     /**
-     * Location in the userdata of the ravenmind
+     * Location in the userdata of the number of ops executed
      */
-    String RAVENMIND_USERDATA = modLoc("ravenmind").toString();
+    String OP_COUNT_USERDATA = modLoc("op_count").toString();
 
     static HexAPI instance() {
         return INSTANCE.get();
