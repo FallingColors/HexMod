@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.misc;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.casting.eval.vm.components.CastingImageComponents;
 import at.petrak.hexcasting.mixin.accessor.AccessorAbstractArrow;
 import at.petrak.hexcasting.mixin.accessor.AccessorVillager;
 import net.minecraft.server.level.ServerPlayer;
@@ -33,6 +34,8 @@ public class RegisterMisc {
             allay.getBrain().eraseMemory(MemoryModuleType.LIKED_PLAYER);
             HexAPI.instance().defaultBrainsweepingBehavior().accept(allay);
         });
+
+        CastingImageComponents.registerComponents();
     }
 
     private static Vec3 arrowVelocitizer(AbstractArrow arrow) {
