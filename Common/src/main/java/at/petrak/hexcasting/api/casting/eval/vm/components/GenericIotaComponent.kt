@@ -1,7 +1,5 @@
-package at.petrak.hexcasting.api.casting.eval.vm.userdata.components
+package at.petrak.hexcasting.api.casting.eval.vm.components
 
-import at.petrak.hexcasting.api.casting.eval.vm.userdata.CastingImageComponent
-import at.petrak.hexcasting.api.casting.eval.vm.userdata.ComponentType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import net.minecraft.nbt.CompoundTag

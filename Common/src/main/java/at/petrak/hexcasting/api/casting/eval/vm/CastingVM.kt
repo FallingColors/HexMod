@@ -7,6 +7,8 @@ import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
 import at.petrak.hexcasting.api.casting.iota.BooleanIota
+import at.petrak.hexcasting.api.casting.eval.vm.components.CastingImageComponents
+import at.petrak.hexcasting.api.casting.eval.vm.components.ComponentType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.PatternIota
@@ -20,6 +22,7 @@ import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.api.utils.validateIota
 import at.petrak.hexcasting.api.utils.validateIotaList
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import kotlin.jvm.optionals.getOrNull
 
@@ -197,6 +200,15 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             haskellProgrammersShakingandCryingRN.performEffect(this)
         }
     }
+
+//    fun generateDescs(): Pair<List<CompoundTag>, CompoundTag?> {
+//        val stackDescs = this.image.stack.map { IotaType.serialize(it) }
+//        val ravenmindComponent = this.image.getComponent(CastingImageComponents.RAVENMIND)
+//        val ravenmind = if (ravenmindComponent != null) {
+//            IotaType.serialize(ravenmindComponent.iota)
+//        } else null
+//        return Pair(stackDescs, ravenmind)
+//    }
 
     data class TempControllerInfo(
         var earlyExit: Boolean,
