@@ -2,7 +2,6 @@ package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.api.HexAPI;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.server.Bootstrap;
 import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.block.Block;

@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.properties.BlockSetType;
 
 public class BlockHexWoodButton extends ButtonBlock {
     public BlockHexWoodButton(Properties $$0) {
-        super($$0, BlockSetType.DARK_OAK, 30, true);
+        super(BlockSetType.DARK_OAK, 30, $$0);
     }
 
 

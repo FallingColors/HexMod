@@ -1,19 +1,18 @@
 package at.petrak.hexcasting.datagen;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.lib.HexBlocks;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.paucal.api.datagen.PaucalLootTableSubProvider;
-import net.minecraft.advancements.critereon.EnchantmentPredicate;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.advancements.critereon.StatePropertiesPredicate;
-import net.minecraft.data.DataProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
@@ -26,23 +25,26 @@ import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
-import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
+import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.*;
-import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
+import java.util.List;
 import java.util.Map;
 
 public class HexLootTables extends PaucalLootTableSubProvider {
-    public HexLootTables() {
+    private final HolderLookup.Provider registries;
+
+    public HexLootTables(HolderLookup.Provider registries) {
         super(HexAPI.MOD_ID);
+        this.registries = registries;
     }
 
     @Override
     protected void makeLootTables(Map<Block, LootTable.Builder> blockTables,
-        Map<ResourceLocation, LootTable.Builder> lootTables) {
+        Map<ResourceKey<LootTable>, LootTable.Builder> lootTables) {
         dropSelf(blockTables, HexBlocks.IMPETUS_EMPTY,
             HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_REDSTONE,
             HexBlocks.EMPTY_DIRECTRIX, HexBlocks.DIRECTRIX_REDSTONE, HexBlocks.DIRECTRIX_BOOLEAN,
@@ -61,17 +63,20 @@ public class HexLootTables extends PaucalLootTableSubProvider {
             HexBlocks.EDIFIED_TRAPDOOR, HexBlocks.EDIFIED_STAIRS, HexBlocks.EDIFIED_FENCE, HexBlocks.EDIFIED_FENCE_GATE, HexBlocks.EDIFIED_PRESSURE_PLATE,
             HexBlocks.EDIFIED_BUTTON);
 
+        HolderLookup.RegistryLookup<Enchantment> enchRegistryLookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
+
         makeSlabTable(blockTables, HexBlocks.EDIFIED_SLAB);
 
-        makeLeafTable(blockTables, HexBlocks.AMETHYST_EDIFIED_LEAVES);
-        makeLeafTable(blockTables, HexBlocks.AVENTURINE_EDIFIED_LEAVES);
-        makeLeafTable(blockTables, HexBlocks.CITRINE_EDIFIED_LEAVES);
+        makeLeafTable(blockTables, HexBlocks.AMETHYST_EDIFIED_LEAVES, enchRegistryLookup);
+        makeLeafTable(blockTables, HexBlocks.AVENTURINE_EDIFIED_LEAVES, enchRegistryLookup);
+        makeLeafTable(blockTables, HexBlocks.CITRINE_EDIFIED_LEAVES, enchRegistryLookup);
 
         var slatePool = LootPool.lootPool()
             .setRolls(ConstantValue.exactly(1))
             .add(LootItem.lootTableItem(HexBlocks.SLATE)
-                .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
-                    .copy(BlockEntitySlate.TAG_PATTERN, "BlockEntityTag." + BlockEntitySlate.TAG_PATTERN)));
+                .apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                        .include(HexDataComponents.PATTERN)
+                ));
         blockTables.put(HexBlocks.SLATE, LootTable.lootTable().withPool(slatePool));
 
         var doorPool = dropThisPool(HexBlocks.EDIFIED_DOOR, 1)
@@ -80,10 +85,13 @@ public class HexLootTables extends PaucalLootTableSubProvider {
             ));
         blockTables.put(HexBlocks.EDIFIED_DOOR, LootTable.lootTable().withPool(doorPool));
 
-
         var silkTouchCond = MatchTool.toolMatches(
-            ItemPredicate.Builder.item().hasEnchantment(
-                new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.ANY)));
+            ItemPredicate.Builder.item().withSubPredicate(
+                    ItemSubPredicates.ENCHANTMENTS,
+                    ItemEnchantmentsPredicate.enchantments(
+                            List.of(new EnchantmentPredicate(enchRegistryLookup.getOrThrow(Enchantments.SILK_TOUCH), MinMaxBounds.Ints.atLeast(1)))
+                    )
+            ));
         var noSilkTouchCond = silkTouchCond.invert();
         var goodAtAmethystingCond = MatchTool.toolMatches(
             ItemPredicate.Builder.item().of(ItemTags.CLUSTER_MAX_HARVESTABLES)
@@ -92,7 +100,7 @@ public class HexLootTables extends PaucalLootTableSubProvider {
         var dustPoolWhenGood = LootPool.lootPool()
             .add(LootItem.lootTableItem(HexItems.AMETHYST_DUST))
             .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4)))
-            .apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))
+            .apply(ApplyBonusCount.addOreBonusCount(enchRegistryLookup.getOrThrow(Enchantments.FORTUNE)))
             .when(noSilkTouchCond).when(goodAtAmethystingCond);
 
         var dustPoolWhenBad = LootPool.lootPool()
@@ -104,7 +112,7 @@ public class HexLootTables extends PaucalLootTableSubProvider {
             .add(LootItem.lootTableItem(HexItems.CHARGED_AMETHYST))
             .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
             .when(noSilkTouchCond).when(goodAtAmethystingCond)
-            .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE,
+            .when(BonusLevelTableCondition.bonusLevelFlatChance(enchRegistryLookup.getOrThrow(Enchantments.FORTUNE),
                 0.25f, 0.35f, 0.5f, 0.75f, 1.0f));
 
         var isThatAnMFingBadBrandonSandersonReference = LootPool.lootPool()
@@ -113,11 +121,15 @@ public class HexLootTables extends PaucalLootTableSubProvider {
             .when(noSilkTouchCond).when(goodAtAmethystingCond.invert())
             .when(LootItemRandomChanceCondition.randomChance(0.125f));
 
+        HexAPI.LOGGER.info("Doing amethyst cluster injection shit");
+
         lootTables.put(HexLootHandler.TABLE_INJECT_AMETHYST_CLUSTER, LootTable.lootTable()
             .withPool(dustPoolWhenGood)
             .withPool(dustPoolWhenBad)
             .withPool(isThatAnMFingBrandonSandersonReference)
             .withPool(isThatAnMFingBadBrandonSandersonReference));
+
+        HexAPI.LOGGER.info("Quenched bugged...?");
 
         // it looks like loot groups are bugged?
         // so instead we add some and then *increment* the amount, gated behind the cond
@@ -126,19 +138,24 @@ public class HexLootTables extends PaucalLootTableSubProvider {
             LootItem.lootTableItem(HexItems.QUENCHED_SHARD)
                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(2f, 4f)))
                 .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1), true)
-                    .when(BonusLevelTableCondition.bonusLevelFlatChance(Enchantments.BLOCK_FORTUNE,
+                    .when(BonusLevelTableCondition.bonusLevelFlatChance(enchRegistryLookup.getOrThrow(Enchantments.FORTUNE),
                         0.25f, 0.5f, 0.75f, 1.0f)))
         ));
         blockTables.put(HexBlocks.QUENCHED_ALLAY, LootTable.lootTable().withPool(quenchedPool));
     }
 
-    private void makeLeafTable(Map<Block, LootTable.Builder> lootTables, Block block) {
+    private void makeLeafTable(Map<Block, LootTable.Builder> lootTables, Block block, HolderLookup.RegistryLookup<Enchantment> enchRegistryLookup) {
         var leafPool = dropThisPool(block, 1)
             .when(AnyOfCondition.anyOf(
                 IXplatAbstractions.INSTANCE.isShearsCondition(),
                 MatchTool.toolMatches(ItemPredicate.Builder.item()
-                    .hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))))
-            ));
+                        .withSubPredicate(
+                                ItemSubPredicates.ENCHANTMENTS,
+                                ItemEnchantmentsPredicate.enchantments(
+                                        List.of(new EnchantmentPredicate(enchRegistryLookup.getOrThrow(Enchantments.SILK_TOUCH), MinMaxBounds.Ints.atLeast(1)))
+                                )
+                        )
+            )));
         lootTables.put(block, LootTable.lootTable().withPool(leafPool));
     }
 

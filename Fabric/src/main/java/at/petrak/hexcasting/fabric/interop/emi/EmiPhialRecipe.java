@@ -2,7 +2,6 @@ package at.petrak.hexcasting.fabric.interop.emi;
 
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;
-import dev.emi.emi.EmiUtil;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
@@ -12,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -23,7 +23,7 @@ public class EmiPhialRecipe implements EmiRecipe {
     private final EmiIngredient bottle;
     private final EmiIngredient outputs;
 
-    private final int uniq = EmiUtil.RANDOM.nextInt();
+    private final int uniq = ThreadLocalRandom.current().nextInt();
 
     public EmiPhialRecipe() {
         var stacks = PhialRecipeStackBuilder.createStacks();
@@ -39,7 +39,7 @@ public class EmiPhialRecipe implements EmiRecipe {
 
     @Override
     public @Nullable ResourceLocation getId() {
-        return HexEMIPlugin.PHIAL_ID;
+        return modLoc("/craft/battery");
     }
 
     @Override

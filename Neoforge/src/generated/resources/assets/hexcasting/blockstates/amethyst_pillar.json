@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "hexcasting:block/deco/amethyst_pillar",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "hexcasting:block/deco/amethyst_pillar",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "hexcasting:block/deco/amethyst_pillar",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "hexcasting:block/deco/amethyst_pillar",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "hexcasting:block/deco/amethyst_pillar"
+    },
+    "facing=west": {
+      "model": "hexcasting:block/deco/amethyst_pillar",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

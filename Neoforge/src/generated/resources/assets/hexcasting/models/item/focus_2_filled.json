@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "hexcasting:item/cad/2_focus_filled",
+    "layer1": "hexcasting:item/cad/2_focus_filled_overlay"
+  }
+}

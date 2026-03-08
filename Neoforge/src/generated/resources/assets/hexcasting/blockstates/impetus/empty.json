@@ -1,0 +1,50 @@
+{
+  "variants": {
+    "energized=false,facing=down": {
+      "model": "hexcasting:block/circle/impetus/empty/dim_down",
+      "x": 90
+    },
+    "energized=false,facing=east": {
+      "model": "hexcasting:block/circle/impetus/empty/dim_east",
+      "y": 90
+    },
+    "energized=false,facing=north": {
+      "model": "hexcasting:block/circle/impetus/empty/dim_north"
+    },
+    "energized=false,facing=south": {
+      "model": "hexcasting:block/circle/impetus/empty/dim_south",
+      "y": 180
+    },
+    "energized=false,facing=up": {
+      "model": "hexcasting:block/circle/impetus/empty/dim_up",
+      "x": -90
+    },
+    "energized=false,facing=west": {
+      "model": "hexcasting:block/circle/impetus/empty/dim_west",
+      "y": 270
+    },
+    "energized=true,facing=down": {
+      "model": "hexcasting:block/circle/impetus/empty/lit_down",
+      "x": 90
+    },
+    "energized=true,facing=east": {
+      "model": "hexcasting:block/circle/impetus/empty/lit_east",
+      "y": 90
+    },
+    "energized=true,facing=north": {
+      "model": "hexcasting:block/circle/impetus/empty/lit_north"
+    },
+    "energized=true,facing=south": {
+      "model": "hexcasting:block/circle/impetus/empty/lit_south",
+      "y": 180
+    },
+    "energized=true,facing=up": {
+      "model": "hexcasting:block/circle/impetus/empty/lit_up",
+      "x": -90
+    },
+    "energized=true,facing=west": {
+      "model": "hexcasting:block/circle/impetus/empty/lit_west",
+      "y": 270
+    }
+  }
+}

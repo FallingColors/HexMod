@@ -1,17 +1,17 @@
 package at.petrak.hexcasting.mixin;
 
-import net.minecraft.world.entity.npc.WanderingTrader;
-import net.minecraft.world.item.trading.MerchantOffers;
-import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.util.RandomSource;
-import net.minecraft.server.MinecraftServer;
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.loot.AddPerWorldPatternToScrollFunc;
-import at.petrak.hexcasting.common.items.storage.ItemScroll;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.Unit;
+import net.minecraft.world.entity.npc.WanderingTrader;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.trading.ItemCost;
+import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.item.trading.MerchantOffers;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -30,8 +30,8 @@ public class MixinWanderingTrader {
         if (rand.nextFloat() < HexConfig.server().traderScrollChance() && self.getServer() != null) {
             ItemStack scroll = new ItemStack(HexItems.SCROLL_LARGE);
             AddPerWorldPatternToScrollFunc.doStatic(scroll, rand, self.getServer().overworld());
-            NBTHelper.putBoolean(scroll, ItemScroll.TAG_NEEDS_PURCHASE, true);
-            offerList.set(5, new MerchantOffer(new ItemStack(Items.EMERALD, 12), scroll, 1, 1, 1));
+            scroll.set(HexDataComponents.NEEDS_PURCHASE, Unit.INSTANCE);
+            offerList.set(5, new MerchantOffer(new ItemCost(Items.EMERALD, 12), scroll, 1, 1, 1));
         }
     }
 }

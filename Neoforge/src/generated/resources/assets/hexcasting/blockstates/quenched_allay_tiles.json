@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "hexcasting:block/quenched_allay_tiles"
+    }
+  }
+}

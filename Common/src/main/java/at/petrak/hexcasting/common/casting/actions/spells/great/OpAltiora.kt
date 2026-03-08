@@ -20,7 +20,7 @@ object OpAltiora : SpellAction {
     override val argc = 1
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
-        val target = args.getPlayer(0, argc)
+        val target = args.getPlayer(env.world, 0, argc)
         env.assertEntityInRange(target)
 
         return SpellAction.Result(

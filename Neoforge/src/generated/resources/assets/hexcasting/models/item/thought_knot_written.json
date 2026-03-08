@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "hexcasting:item/thought_knot",
+    "layer1": "hexcasting:item/thought_knot_overlay"
+  }
+}

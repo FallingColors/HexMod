@@ -15,7 +15,7 @@ object OpTheCoolerWritable : ConstMediaAction {
         args: List<Iota>,
         env: CastingEnvironment
     ): List<Iota> {
-        val target = args.getEntity(0, argc)
+        val target = args.getEntity(env.world, 0, argc)
         env.assertEntityInRange(target)
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(target)

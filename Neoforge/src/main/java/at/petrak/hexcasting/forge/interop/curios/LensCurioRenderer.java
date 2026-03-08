@@ -19,7 +19,7 @@ import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
 public class LensCurioRenderer implements ICurioRenderer {
-    public static final ModelLayerLocation LAYER = new ModelLayerLocation(new ResourceLocation(HexAPI.MOD_ID, "lens"), "lens");
+    public static final ModelLayerLocation LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(HexAPI.MOD_ID, "lens"), "lens");
 
     private final HumanoidModel<LivingEntity> model;
 

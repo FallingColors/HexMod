@@ -35,6 +35,8 @@ public abstract class MishapEnvironment {
 
     public abstract void blind(int ticks);
 
+    public abstract void nauseate(int ticks);
+
     protected void yeetItem(ItemStack stack, Vec3 srcPos, Vec3 delta) {
         var entity = new ItemEntity(
             this.world,

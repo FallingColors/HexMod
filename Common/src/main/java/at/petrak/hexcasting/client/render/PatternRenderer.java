@@ -67,13 +67,15 @@ public class PatternRenderer {
 
             List<Vec2> zappyRenderSpace = staticPoints.scaleVecs(zappyPattern);
 
+            var isGlowyInline = patSets.getName().equals("inlineglowy");
+
             if(FastColor.ARGB32.alpha(patColors.outerEndColor()) != 0 && FastColor.ARGB32.alpha(patColors.outerStartColor()) != 0){
                 RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, (float)patSets.getOuterWidth(staticPoints.finalScale),
                         patColors.outerStartColor(), patColors.outerEndColor(), VCDrawHelper.getHelper(worldlyBits, ps,outerZ));
             }
             if(FastColor.ARGB32.alpha(patColors.innerEndColor()) != 0 && FastColor.ARGB32.alpha(patColors.innerStartColor()) != 0) {
                 RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, (float)patSets.getInnerWidth(staticPoints.finalScale),
-                        patColors.innerStartColor(), patColors.innerEndColor(), VCDrawHelper.getHelper(worldlyBits, ps,innerZ));
+                        patColors.innerStartColor(), patColors.innerEndColor(), VCDrawHelper.getHelper(worldlyBits, ps,isGlowyInline ? 1f : innerZ));
             }
         }
 

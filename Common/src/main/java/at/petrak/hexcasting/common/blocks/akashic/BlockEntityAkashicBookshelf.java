@@ -7,7 +7,9 @@ import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.client.render.HexPatternPoints;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,10 +20,11 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
 
     // This is only not null if this stores any data.
     private HexPattern pattern = null;
+    // TODO port: check if it works
     // When the world is first loading we can sometimes try to deser this from nbt without the world existing yet.
     // We also need a way to display the iota to the client.
     // For both these cases we save just the tag of the iota.
-    private CompoundTag iotaTag = null;
+    private Iota iota = null;
 
     public HexPatternPoints points;
 
@@ -35,14 +38,20 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
     }
 
     @Nullable
-    public CompoundTag getIotaTag() {
-        return iotaTag;
+    public Iota getIota() {
+        return iota;
     }
+
+    /*@Nullable
+    public Tag getIotaTag() {
+        return iotaTag;
+    }*/
 
     public void setNewMapping(HexPattern pattern, Iota iota) {
         var previouslyEmpty = this.pattern == null;
         this.pattern = pattern;
-        this.iotaTag = IotaType.serialize(iota);
+        this.iota = iota;
+        //this.iotaTag = IotaType.TYPED_CODEC.encodeStart(NbtOps.INSTANCE, iota).getOrThrow();
 
         if (previouslyEmpty) {
             var oldBs = this.getBlockState();
@@ -57,7 +66,8 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
     public void clearIota() {
         var previouslyEmpty = this.pattern == null;
         this.pattern = null;
-        this.iotaTag = null;
+        //this.iotaTag = null;
+        this.iota = null;
 
         if (!previouslyEmpty) {
             var oldBs = this.getBlockState();
@@ -70,23 +80,25 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
     }
 
     @Override
-    protected void saveModData(CompoundTag compoundTag) {
-        if (this.pattern != null && this.iotaTag != null) {
-            compoundTag.put(TAG_PATTERN, this.pattern.serializeToNBT());
-            compoundTag.put(TAG_IOTA, this.iotaTag);
+    protected void saveModData(CompoundTag compoundTag, HolderLookup.Provider registries) {
+        if (this.pattern != null && this.iota != null) {
+            compoundTag.put(TAG_PATTERN, HexPattern.CODEC.encodeStart(NbtOps.INSTANCE, pattern).getOrThrow());
+            compoundTag.put(TAG_IOTA, IotaType.TYPED_CODEC.encodeStart(NbtOps.INSTANCE, iota).getOrThrow());
         } else {
             compoundTag.putBoolean(TAG_DUMMY, false);
         }
     }
 
     @Override
-    protected void loadModData(CompoundTag tag) {
+    protected void loadModData(CompoundTag tag, HolderLookup.Provider registries) {
         if (tag.contains(TAG_PATTERN) && tag.contains(TAG_IOTA)) {
-            this.pattern = HexPattern.fromNBT(tag.getCompound(TAG_PATTERN));
-            this.iotaTag = tag.getCompound(TAG_IOTA);
+            this.pattern = HexPattern.CODEC.parse(NbtOps.INSTANCE, tag.getCompound(TAG_PATTERN)).getOrThrow();
+            //this.iotaTag = tag.getCompound(TAG_IOTA);
+            this.iota = IotaType.TYPED_CODEC.parse(NbtOps.INSTANCE, tag.getCompound(TAG_IOTA)).getOrThrow();
         } else if (tag.contains(TAG_DUMMY)) {
             this.pattern = null;
-            this.iotaTag = null;
+            //this.iotaTag = null;
+            this.iota = null;
         }
     }
 }

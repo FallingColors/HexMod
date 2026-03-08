@@ -15,8 +15,8 @@ object OpColorize : SpellAction {
     override val argc = 0
 
     override fun execute(
-        args: List<Iota>,
-        env: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val (handStack) = env.getHeldItemToOperateOn(IXplatAbstractions.INSTANCE::isPigment)
             ?: throw MishapBadOffhandItem.of(ItemStack.EMPTY, "colorizer") // TODO: hack
