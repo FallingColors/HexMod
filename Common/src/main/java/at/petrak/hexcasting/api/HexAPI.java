@@ -214,10 +214,6 @@ public interface HexAPI {
     }
 
     /**
-     * Location in the userdata of the ravenmind
-     */
-    String RAVENMIND_USERDATA = modLoc("ravenmind").toString();
-    /**
      * Location in the userdata of the number of ops executed
      */
     String OP_COUNT_USERDATA = modLoc("op_count").toString();
