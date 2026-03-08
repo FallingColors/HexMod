@@ -6,6 +6,8 @@ import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.*
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
+import at.petrak.hexcasting.api.casting.eval.vm.components.CastingImageComponents
+import at.petrak.hexcasting.api.casting.eval.vm.components.ComponentType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.ListIota
@@ -160,8 +162,9 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
 
     fun generateDescs(): Pair<List<CompoundTag>, CompoundTag?> {
         val stackDescs = this.image.stack.map { IotaType.serialize(it) }
-        val ravenmind = if (this.image.userData.contains(HexAPI.RAVENMIND_USERDATA)) {
-            this.image.userData.getCompound(HexAPI.RAVENMIND_USERDATA)
+        val ravenmindComponent = this.image.getComponent(CastingImageComponents.RAVENMIND)
+        val ravenmind = if (ravenmindComponent != null) {
+            IotaType.serialize(ravenmindComponent.iota)
         } else null
         return Pair(stackDescs, ravenmind)
     }

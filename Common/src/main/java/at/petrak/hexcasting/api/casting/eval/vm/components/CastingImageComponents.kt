@@ -1,10 +1,6 @@
-package at.petrak.hexcasting.api.casting.eval.vm.userdata
+package at.petrak.hexcasting.api.casting.eval.vm.components
 
 import at.petrak.hexcasting.api.HexAPI.modLoc
-import at.petrak.hexcasting.api.casting.eval.vm.userdata.components.GenericIotaComponent
-import at.petrak.hexcasting.api.casting.eval.vm.userdata.components.GenericIotaComponentType
-import at.petrak.hexcasting.api.casting.eval.vm.userdata.components.ImpulseScalingComponent
-import at.petrak.hexcasting.api.casting.eval.vm.userdata.components.ImpulseScalingComponentType
 import net.minecraft.resources.ResourceLocation
 
 object CastingImageComponents {

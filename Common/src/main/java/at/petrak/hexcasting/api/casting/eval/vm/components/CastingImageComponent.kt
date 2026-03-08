@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.api.casting.eval.vm.userdata
+package at.petrak.hexcasting.api.casting.eval.vm.components
 
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
@@ -29,6 +29,8 @@ abstract class ComponentType<T : CastingImageComponent>(val id: ResourceLocation
 	abstract fun serialize(value: T): CompoundTag
 	abstract fun deserialize(tag: CompoundTag, world: ServerLevel): T
 
+	@Suppress("UNCHECKED_CAST")
+	fun uncheckedSerialize(value: Any): CompoundTag = serialize(value as T)
 	fun safeDeserialize(tag: CompoundTag, world: ServerLevel): T? = runCatching { deserialize(tag, world) }.getOrNull()
 	override fun equals(other: Any?) = other is ComponentType<*> && other.id == id
 	override fun hashCode() = id.hashCode()
