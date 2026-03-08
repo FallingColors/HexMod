@@ -73,7 +73,7 @@ public class WorldlyPatternRenderHelpers {
 
         ps.pushPose();
 
-        Vec3 normal = null;
+        Vec3 normal;
         if(isOnWall){
             ps.mulPose(Axis.ZP.rotationDegrees(180));
             Vec3i tV = SLATE_FACINGS[facing % 4];
@@ -97,7 +97,7 @@ public class WorldlyPatternRenderHelpers {
         renderPattern(pattern,
             wombly ? WORLDLY_SETTINGS_WOBBLY : WORLDLY_SETTINGS,
             wombly ? PatternColors.SLATE_WOBBLY_PURPLE_COLOR : PatternColors.DEFAULT_PATTERN_COLOR,
-            tile.getBlockPos().hashCode(), ps, buffer, normal, null, actualLight, 1);
+            tile.getBlockPos().hashCode(), ps, buffer, normal, null, light, 1);
         ps.popPose();
     }
 

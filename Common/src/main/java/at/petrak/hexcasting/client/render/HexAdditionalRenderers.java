@@ -9,10 +9,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -124,10 +121,11 @@ public class HexAdditionalRenderers {
             v.accept(bottom, Icos.TOP_RING[(i + 3) % 5]);
         }
         //tess.end();
-
+        BufferUploader.drawWithShader(buf.buildOrThrow());
         RenderSystem.enableDepthTest();
         RenderSystem.enableCull();
         ps.popPose();
+
     }
 
     private static class Icos {
