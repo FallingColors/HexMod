@@ -32,7 +32,7 @@ import kotlin.jvm.optionals.getOrNull
  */
 class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
     init {
-        env.triggerCreateEvent(image.userData)
+        env.triggerCreateEvent(image)
     }
 
     /**

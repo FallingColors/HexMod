@@ -29,8 +29,8 @@ interface SpellAction : Action {
 
     @Throws(Mishap::class)
 
-    fun executeWithUserdata(
-        args: List<Iota>, env: CastingEnvironment, userData: CompoundTag
+    fun executeWithImage(
+        args: List<Iota>, env: CastingEnvironment, image: CastingImage
     ): Result {
         return this.execute(args, env)
     }
@@ -44,8 +44,7 @@ interface SpellAction : Action {
         val stackWithoutArgs = stack.dropRight(this.argc)
 
         // execute!
-        val userDataMut = image.userData.copy()
-        val result = this.executeWithUserdata(args, env, userDataMut)
+        val result = this.executeWithImage(args, env, image.copy(stack = stack))
 
         val sideEffects = mutableListOf<OperatorSideEffect>()
 
@@ -65,7 +64,7 @@ interface SpellAction : Action {
         for (spray in result.particles)
             sideEffects.add(OperatorSideEffect.Particles(spray))
 
-        val image2 = image.copy(stack = stackWithoutArgs, opsConsumed = image.opsConsumed + result.opCount, userData = userDataMut)
+        val image2 = image.copy(stack = stackWithoutArgs, opsConsumed = image.opsConsumed + result.opCount)
 
         val sound = if (this.hasCastingSound(env)) HexEvalSounds.SPELL.get() else HexEvalSounds.MUTE.get()
         return OperationResult(image2, sideEffects, continuation, sound)

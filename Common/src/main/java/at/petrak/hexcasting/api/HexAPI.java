@@ -172,11 +172,6 @@ public interface HexAPI {
         return DUMMY_ARMOR_MATERIAL;
     }
 
-    /**
-     * Location in the userdata of the number of ops executed
-     */
-    String OP_COUNT_USERDATA = modLoc("op_count").toString();
-
     static HexAPI instance() {
         return INSTANCE.get();
     }
