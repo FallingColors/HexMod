@@ -88,6 +88,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 if (lastResolutionType.success) ResolvedPatternType.EVALUATED else ResolvedPatternType.ERRORED
         }
 
+        this.image = this.image.removeTransientComponents()
         val (stackDescs, ravenmind) = generateDescs()
 
         val isStackClear = image.stack.isEmpty() && image.parenCount == 0 && !image.escapeNext && ravenmind == null
