@@ -104,7 +104,8 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 if (lastResolutionType.success) ResolvedPatternType.EVALUATED else ResolvedPatternType.ERRORED
         }
 
-        var ravenmind: Iota? = image.ravenmind().getOrNull()
+        this.image = this.image.removeTransientComponents()
+        var ravenmind = this.image.getComponent(CastingImageComponents.RAVENMIND)?.iota
 
         if (ravenmind != null) {
             ravenmind = validateIota(ravenmind, world)
