@@ -30,9 +30,6 @@ interface Action {
      * remember to increment the op count, sil vous plait.
      *
      * A particle effect at the cast site and various messages and advancements are done automagically.
-     *
-     * The userdata tag is copied for you, so you don't need to worry about mutation messing up things
-     * behind the scenes.
      */
     @Throws(Mishap::class)
     fun operate(
