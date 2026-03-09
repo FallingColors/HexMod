@@ -25,7 +25,7 @@ object ImpulseScalingComponentType : ComponentType<ImpulseScalingComponent>(modL
 
 	override fun deserialize(tag: CompoundTag, world: ServerLevel): ImpulseScalingComponent {
 		val set = HashSet<UUID>()
-		tag.getList("set", Tag.TAG_STRING.toInt()).forEach { tag -> set.add(UUID.fromString(tag.asString)) }
+		tag.getList("set", Tag.TAG_STRING.toInt()).forEach { uuid -> set.add(UUID.fromString(uuid.asString)) }
 		return ImpulseScalingComponent(set)
 	}
 }
