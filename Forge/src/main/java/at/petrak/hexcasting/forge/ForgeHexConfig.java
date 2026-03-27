@@ -85,6 +85,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.DoubleValue gridSnapThreshold;
         private static ForgeConfigSpec.BooleanValue clickingTogglesDrawing;
         private static ForgeConfigSpec.BooleanValue alwaysShowListCommas;
+        private static ForgeConfigSpec.BooleanValue staticActiveSlates;
 
         public Client(ForgeConfigSpec.Builder builder) {
             ctrlTogglesOffStrokeOrder = builder.comment(
@@ -107,6 +108,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             alwaysShowListCommas = builder.comment(
                             "Whether all iota types should be comma-separated in lists (by default, pattern iotas don't use commas)")
                     .define("alwaysShowListCommas", DEFAULT_ALWAYS_SHOW_LIST_COMMAS);
+            staticActiveSlates = builder.comment(
+                            "Whether patterns on slates should always be rendered non-moving")
+                    .define("staticActiveSlates", DEFAULT_STATIC_ACTIVE_SLATES);
         }
 
         @Override
@@ -138,6 +142,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         public boolean alwaysShowListCommas() {
             return alwaysShowListCommas.get();
         }
+
+        @Override
+        public boolean staticActiveSlates() { return staticActiveSlates.get(); }
     }
 
     public static class Server implements HexConfig.ServerConfigAccess {
