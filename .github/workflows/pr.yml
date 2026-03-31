@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
   # trigger on pushes to the default branch (main) to keep the cache up to date
   push:
-    branches: main
+    branches: indev/1.21.1
 
 env:
   JAVA_VERSION: '21.0.5'
