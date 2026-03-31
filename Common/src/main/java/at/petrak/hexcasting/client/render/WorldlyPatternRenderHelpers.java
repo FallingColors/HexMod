@@ -10,7 +10,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
@@ -73,7 +72,7 @@ public class WorldlyPatternRenderHelpers {
 
         ps.pushPose();
 
-        Vec3 normal;
+        Vec3 normal = null;
         if(isOnWall){
             ps.mulPose(Axis.ZP.rotationDegrees(180));
             Vec3i tV = SLATE_FACINGS[facing % 4];
@@ -90,10 +89,7 @@ public class WorldlyPatternRenderHelpers {
 
             // Set the normal for floor/ceiling slates so lighting is correct
             // Floor faces up, ceiling faces down
-            normal = isOnCeiling ? new Vec3(0, -1, 0) : new Vec3(0, 1, 0);
         }
-
-        int actualLight = LevelRenderer.getLightColor(tile.getLevel(), tile.getBlockPos().relative(Direction.getNearest(normal)));
         renderPattern(pattern,
             wombly ? WORLDLY_SETTINGS_WOBBLY : WORLDLY_SETTINGS,
             wombly ? PatternColors.SLATE_WOBBLY_PURPLE_COLOR : PatternColors.DEFAULT_PATTERN_COLOR,
@@ -139,11 +135,6 @@ public class WorldlyPatternRenderHelpers {
 
         ps.translate(0,0, z);
         ps.scale(blockSize, blockSize, 1);
-
-
-        PoseStack noNormalInv = new PoseStack();
-        noNormalInv.scale(1, 1, -1);
-        ps.mulPose(noNormalInv.last().pose());
 
         PatternRenderer.renderPattern(pattern, ps, new PatternRenderer.WorldlyBits(bufSource, light, normal),
                 patSets, patColors, seed, blockSize * 512);
