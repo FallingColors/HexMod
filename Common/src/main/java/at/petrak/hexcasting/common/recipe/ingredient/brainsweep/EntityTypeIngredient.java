@@ -43,7 +43,7 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
 
     @Override
     public Entity exampleEntity(Level level) {
-        return this.entityType.create(level);
+        return getCachedExampleEntity(this.entityType, level);
     }
 
     @Override

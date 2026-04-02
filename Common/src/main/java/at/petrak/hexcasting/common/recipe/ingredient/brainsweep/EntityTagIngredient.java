@@ -76,7 +76,7 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
         if (someEntityTys.size() > 0) {
             long seconds = System.currentTimeMillis();
             var someTy = someEntityTys.get((int) (seconds % someEntityTys.size()));
-            return someTy.value().create(level);
+            return getCachedExampleEntity(someTy.value(), level);
         } else {
             return null;
         }
