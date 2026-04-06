@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.actions.spells
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
@@ -36,7 +37,7 @@ object OpBlink : SpellAction {
                 throw MishapImmuneEntity(immunePassengers.get(0))
         }
 
-        val dvec = target.lookAngle.scale(delta)
+        val dvec = HexAPI.instance().getEntityLookDirSpecial(target).scale(delta)
         val endPos = target.position().add(dvec)
 
         if (!HexConfig.server().canTeleportInThisDimension(env.world.dimension()))
@@ -65,7 +66,7 @@ object OpBlink : SpellAction {
             if (!HexConfig.server().canTeleportInThisDimension(env.world.dimension()))
                 return
 
-            val delta = target.lookAngle.scale(delta)
+            val delta = HexAPI.instance().getEntityLookDirSpecial(target).scale(delta)
             OpTeleport.teleportRespectSticky(target, delta, env.world)
         }
     }
