@@ -5,7 +5,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraft.util.RandomSource;
 
 import java.util.List;
 
@@ -80,6 +79,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
     public static class Client implements HexConfig.ClientConfigAccess {
         private static ForgeConfigSpec.BooleanValue ctrlTogglesOffStrokeOrder;
+        private static ForgeConfigSpec.BooleanValue disableInworldScrolling;
         private static ForgeConfigSpec.BooleanValue invertSpellbookScrollDirection;
         private static ForgeConfigSpec.BooleanValue invertAbacusScrollDirection;
         private static ForgeConfigSpec.DoubleValue gridSnapThreshold;
@@ -90,6 +90,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             ctrlTogglesOffStrokeOrder = builder.comment(
                     "Whether the ctrl key will instead turn *off* the color gradient on patterns")
                 .define("ctrlTogglesOffStrokeOrder", DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER);
+            disableInworldScrolling = builder.comment(
+                    "Disable scrolling input for spellbooks and abaci in the normal world, keeping keybinds and staff screen scrolling normal")
+                .define("disableInworldScrolling", DEFAULT_DISABLE_INWORLD_SCROLLING);
             invertSpellbookScrollDirection = builder.comment(
                     "Whether scrolling up (as opposed to down) will increase the page index of the spellbook, and " +
                         "vice versa")
@@ -107,6 +110,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             alwaysShowListCommas = builder.comment(
                             "Whether all iota types should be comma-separated in lists (by default, pattern iotas don't use commas)")
                     .define("alwaysShowListCommas", DEFAULT_ALWAYS_SHOW_LIST_COMMAS);
+        }
+
+        @Override
+        public boolean disableInworldScrolling() {
+            return disableInworldScrolling.get();
         }
 
         @Override
