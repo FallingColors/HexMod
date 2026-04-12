@@ -265,6 +265,15 @@
   "gui.hexcasting": {
     spellcasting: "Hex Grid",
   },
+
+  "category.hexcasting": {
+    "binds": "Hex Casting",
+  },
+
+  "key.hexcasting": {
+    "spellbook_prev": "Previous Spellbook Page",
+    "spellbook_next": "Next Spellbook Page",
+  },
   
   "tag.hexcasting": {
     staves: "Hex Staves",
