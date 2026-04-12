@@ -131,14 +131,6 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         var vm = CastingVM.empty(ctx);
         var clientView = vm.queueExecuteAndWrapIotas(instrs, sPlayer.serverLevel());
 
-        var patterns = instrs.stream()
-                .filter(i -> i instanceof PatternIota)
-                .map(i -> ((PatternIota) i).getPattern())
-                .toList();
-        var packet = new MsgNewSpiralPatternsS2C(sPlayer.getUUID(), patterns, 140);
-        IXplatAbstractions.INSTANCE.sendPacketToPlayer(sPlayer, packet);
-        IXplatAbstractions.INSTANCE.sendPacketTracking(sPlayer, packet);
-
         boolean broken = breakAfterDepletion() && getMedia(stack) == 0;
 
         Stat<?> stat;
