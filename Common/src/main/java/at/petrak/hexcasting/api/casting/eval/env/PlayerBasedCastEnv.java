@@ -39,6 +39,10 @@ import java.util.function.Predicate;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 import static at.petrak.hexcasting.api.utils.HexUtils.isOfTag;
 
+/**
+ * Player-based casting environment. Consider using {@link PlayerBasedSpiralPatternCastEnv} instead
+ * if executed patterns should be displayed in a spiral around the caster.
+ */
 public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     public static final double DEFAULT_AMBIT_RADIUS = 32.0;
     private double ambitRadius;
