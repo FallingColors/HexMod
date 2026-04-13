@@ -22,6 +22,9 @@ public abstract class PlayerBasedSpiralPatternCastEnv extends PlayerBasedCastEnv
         super(caster, castingHand);
     }
 
+    /**
+     * Returns the duration (in ticks) that patterns should remain visible after being executed by the env.
+     */
     public abstract int getSpiralPatternDuration();
 
     @Override
