@@ -11,12 +11,12 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(ClipContext.class)
 public abstract class FabricClipContextMixin {
 
-    @Redirect(method = "<init>",
+    @Redirect(method = "<init>(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/level/ClipContext$Block;Lnet/minecraft/world/level/ClipContext$Fluid;Lnet/minecraft/world/entity/Entity;)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/phys/shapes/CollisionContext;of" +
                             "(Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/world/phys/shapes/CollisionContext;"))
-    public CollisionContext hex$getCollisionContext(Entity entity) {
+    private static CollisionContext hex$getCollisionContext(Entity entity) {
         if (entity == null)
             return CollisionContext.empty();
         return CollisionContext.of(entity);

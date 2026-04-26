@@ -2,13 +2,15 @@ package at.petrak.hexcasting.fabric.cc.adimpl;
 
 import at.petrak.hexcasting.api.addldata.ADVariantItem;
 import at.petrak.hexcasting.api.item.VariantItem;
-import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
-import dev.onyxstudios.cca.api.v3.item.ItemComponent;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import org.ladysnake.cca.api.v3.component.Component;
 
-public abstract class CCVariantItem extends ItemComponent implements ADVariantItem {
+public abstract class CCVariantItem implements ADVariantItem, Component {
+    final ItemStack stack;
     public CCVariantItem(ItemStack stack) {
-        super(stack, HexCardinalComponents.VARIANT_ITEM);
+        this.stack = stack;
     }
 
     public static class ItemBased extends CCVariantItem {
@@ -36,6 +38,16 @@ public abstract class CCVariantItem extends ItemComponent implements ADVariantIt
         @Override
         public void setVariant(int variant) {
             variantItem.setVariant(this.stack, variant);
+        }
+
+        @Override
+        public void readFromNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
+
+        }
+
+        @Override
+        public void writeToNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
+
         }
     }
 }

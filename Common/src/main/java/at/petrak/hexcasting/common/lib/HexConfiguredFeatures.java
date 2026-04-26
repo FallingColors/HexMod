@@ -12,6 +12,6 @@ public class HexConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> CITRINE_EDIFIED_TREE = createKey("citrine_edified_tree");
 
     private static ResourceKey<ConfiguredFeature<?, ?>> createKey(String name) {
-        return ResourceKey.create(Registries.CONFIGURED_FEATURE, new ResourceLocation(HexAPI.MOD_ID, name));
+        return ResourceKey.create(Registries.CONFIGURED_FEATURE, ResourceLocation.fromNamespaceAndPath(HexAPI.MOD_ID, name));
     }
 }

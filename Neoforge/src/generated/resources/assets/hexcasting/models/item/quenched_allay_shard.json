@@ -1,0 +1,28 @@
+{
+  "overrides": [
+    {
+      "model": "hexcasting:item/quenched_shard_0",
+      "predicate": {
+        "hexcasting:variant": 0.0
+      }
+    },
+    {
+      "model": "hexcasting:item/quenched_shard_1",
+      "predicate": {
+        "hexcasting:variant": 1.0
+      }
+    },
+    {
+      "model": "hexcasting:item/quenched_shard_2",
+      "predicate": {
+        "hexcasting:variant": 2.0
+      }
+    },
+    {
+      "model": "hexcasting:item/quenched_shard_3",
+      "predicate": {
+        "hexcasting:variant": 3.0
+      }
+    }
+  ]
+}

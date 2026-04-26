@@ -1,10 +1,11 @@
 package at.petrak.hexcasting.common.lib;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import at.petrak.hexcasting.common.items.storage.ItemScroll;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -21,11 +22,15 @@ public class HexCreativeTabs {
 
     private static final Map<ResourceLocation, CreativeModeTab> TABS = new LinkedHashMap<>();
 
-    public static final CreativeModeTab HEX = register("hexcasting", CreativeModeTab.builder(CreativeModeTab.Row.TOP, 7)
+    public static final CreativeModeTab HEX = register("hexcasting", CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
             .icon(() -> new ItemStack(HexItems.SPELLBOOK)));
 
-    public static final CreativeModeTab SCROLLS = register("scrolls", CreativeModeTab.builder(CreativeModeTab.Row.TOP, 7)
-            .icon(() -> ItemScroll.withPerWorldPattern(new ItemStack(HexItems.SCROLL_LARGE),"")));
+    public static final ResourceKey<CreativeModeTab> HEX_KEY = ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), modLoc("hexcasting"));
+
+    public static final CreativeModeTab SCROLLS = register("scrolls", CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
+            .icon(() -> new ItemStack(HexItems.SCROLL_LARGE)));
+
+    public static final ResourceKey<CreativeModeTab> SCROLLS_KEY = ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), modLoc("scrolls"));
 
     private static CreativeModeTab register(String name, CreativeModeTab.Builder tabBuilder) {
         var tab = tabBuilder.title(Component.translatable("itemGroup.hexcasting." + name)).build();

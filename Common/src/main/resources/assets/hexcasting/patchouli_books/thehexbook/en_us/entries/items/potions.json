@@ -1,7 +1,7 @@
 {
     "name": "hexcasting.entry.potions",
     "category": "hexcasting:items",
-    "icon": "minecraft:potion{Potion:\"hexcasting:enlarge_grid\"}",
+    "icon": "minecraft:potion[minecraft:potion_contents={potion:\"hexcasting:enlarge_grid\"}]",
     "sortnum": 8,
     "advancement": "hexcasting:root",
     "read_by_default": true,
@@ -14,7 +14,7 @@
         "type": "patchouli:spotlight",
         "title": "hexcasting.page.potions.effects.header",
         "text": "hexcasting.page.potions.2",
-        "item": "minecraft:potion{Potion:\"hexcasting:enlarge_grid\"},minecraft:potion{Potion:\"hexcasting:enlarge_grid_long\"},minecraft:potion{Potion:\"hexcasting:enlarge_grid_strong\"},minecraft:potion{Potion:\"hexcasting:shrink_grid\"},minecraft:potion{Potion:\"hexcasting:shrink_grid_long\"},minecraft:potion{Potion:\"hexcasting:shrink_grid_strong\"}"
+        "item": "minecraft:potion[minecraft:potion_contents={potion:\"hexcasting:enlarge_grid\"}],minecraft:potion[minecraft:potion_contents={potion:\"hexcasting:enlarge_grid_long\"}],minecraft:potion[minecraft:potion_contents={potion:\"hexcasting:enlarge_grid_strong\"}],minecraft:potion[minecraft:potion_contents={potion:\"hexcasting:shrink_grid\"}],minecraft:potion[minecraft:potion_contents={potion:\"hexcasting:shrink_grid_long\"}],minecraft:potion[minecraft:potion_contents={potion:\"hexcasting:shrink_grid_strong\"}]"
       }
     ]
   }

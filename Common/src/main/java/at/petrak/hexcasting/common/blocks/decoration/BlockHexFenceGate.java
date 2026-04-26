@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.common.blocks.decoration;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
-import at.petrak.hexcasting.common.lib.HexBlockSetTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -12,7 +11,7 @@ import net.minecraft.world.level.block.state.properties.WoodType;
 public class BlockHexFenceGate extends FenceGateBlock {
 
     public BlockHexFenceGate(Properties $$0) {
-        super($$0, WoodType.DARK_OAK);
+        super(WoodType.DARK_OAK, $$0);
     }
 
     @SoftImplement("forge")

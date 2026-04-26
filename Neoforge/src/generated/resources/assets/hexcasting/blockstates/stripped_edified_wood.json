@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "hexcasting:block/stripped_edified_wood_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "hexcasting:block/stripped_edified_wood"
+    },
+    "axis=z": {
+      "model": "hexcasting:block/stripped_edified_wood_horizontal",
+      "x": 90
+    }
+  }
+}

@@ -67,13 +67,15 @@ public class PatternRenderer {
 
             List<Vec2> zappyRenderSpace = staticPoints.scaleVecs(zappyPattern);
 
+            var isGlowyInline = patSets.getName().equals("inlineglowy");
+
             if(FastColor.ARGB32.alpha(patColors.outerEndColor()) != 0 && FastColor.ARGB32.alpha(patColors.outerStartColor()) != 0){
                 RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, (float)patSets.getOuterWidth(staticPoints.finalScale),
                         patColors.outerStartColor(), patColors.outerEndColor(), VCDrawHelper.getHelper(worldlyBits, ps,outerZ));
             }
             if(FastColor.ARGB32.alpha(patColors.innerEndColor()) != 0 && FastColor.ARGB32.alpha(patColors.innerStartColor()) != 0) {
                 RenderLib.drawLineSeq(ps.last().pose(), zappyRenderSpace, (float)patSets.getInnerWidth(staticPoints.finalScale),
-                        patColors.innerStartColor(), patColors.innerEndColor(), VCDrawHelper.getHelper(worldlyBits, ps,innerZ));
+                        patColors.innerStartColor(), patColors.innerEndColor(), VCDrawHelper.getHelper(worldlyBits, ps,isGlowyInline ? 1f : innerZ));
             }
         }
 
@@ -98,7 +100,9 @@ public class PatternRenderer {
     }
 
     private static final float outerZ = 0.0005f;
-    private static final float innerZ = 0.001f;
+
+    // Since the Z-flip is no longer needed as normals are fine in 1.21, this variable needs to be negative instead
+    private static final float innerZ = -0.001f;
 
     private static boolean renderPatternTexture(HexPatternLike patternlike, PoseStack ps, @Nullable WorldlyBits worldlyBits, PatternSettings patSets, PatternColors patColors, double seed, int resPerUnit){
         Optional<Map<String, ResourceLocation>> maybeTextures = PatternTextureManager.getTextures(patternlike, patSets, seed, resPerUnit);

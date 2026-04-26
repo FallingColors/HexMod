@@ -4,15 +4,12 @@ import at.petrak.hexcasting.api.item.MediaHolderItem;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.utils.MathUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
-import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -39,8 +36,8 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
     public static ItemStack withMedia(ItemStack stack, long media, long maxMedia) {
         Item item = stack.getItem();
         if (item instanceof ItemMediaHolder) {
-            NBTHelper.putLong(stack, TAG_MEDIA, media);
-            NBTHelper.putLong(stack, TAG_MAX_MEDIA, maxMedia);
+            stack.set(HexDataComponents.MEDIA, media);
+            stack.set(HexDataComponents.MEDIA_MAX, media);
         }
 
         return stack;
@@ -48,23 +45,19 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
 
     @Override
     public long getMedia(ItemStack stack) {
-        if (NBTHelper.hasInt(stack, TAG_MEDIA))
-            return NBTHelper.getInt(stack, TAG_MEDIA);
-
-        return NBTHelper.getLong(stack, TAG_MEDIA);
+        var media = stack.get(HexDataComponents.MEDIA);
+        return media != null ? media : 0L;
     }
 
     @Override
     public long getMaxMedia(ItemStack stack) {
-        if (NBTHelper.hasInt(stack, TAG_MAX_MEDIA))
-            return NBTHelper.getInt(stack, TAG_MAX_MEDIA);
-
-        return NBTHelper.getLong(stack, TAG_MAX_MEDIA);
+        var maxMedia = stack.get(HexDataComponents.MEDIA_MAX);
+        return maxMedia != null ? maxMedia : 0L;
     }
 
     @Override
     public void setMedia(ItemStack stack, long media) {
-        NBTHelper.putLong(stack, TAG_MEDIA, MathUtils.clamp(media, 0, getMaxMedia(stack)));
+        stack.set(HexDataComponents.MEDIA, MathUtils.clamp(media, 0, getMaxMedia(stack)));
     }
 
     @Override
@@ -86,18 +79,18 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
         return MediaHelper.mediaBarWidth(media, maxMedia);
     }
 
-    @Override
+    // TODO port: where did it came from?
+    /*@Override
     public boolean canBeDepleted() {
         return false;
-    }
+    }*/
 
     @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents,
-        TooltipFlag pIsAdvanced) {
-        var maxMedia = getMaxMedia(pStack);
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        var maxMedia = getMaxMedia(stack);
         if (maxMedia > 0) {
-            var media = getMedia(pStack);
-            var fullness = getMediaFullness(pStack);
+            var media = getMedia(stack);
+            var fullness = getMediaFullness(stack);
 
             var color = TextColor.fromRgb(MediaHelper.mediaBarColor(media, maxMedia));
 
@@ -109,11 +102,11 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
             maxCapacity.withStyle(style -> style.withColor(HEX_COLOR));
             percentFull.withStyle(style -> style.withColor(color));
 
-            pTooltipComponents.add(
+            tooltipComponents.add(
                 Component.translatable("hexcasting.tooltip.media_amount.advanced",
                     mediamount, maxCapacity, percentFull));
         }
 
-        super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
     }
 }

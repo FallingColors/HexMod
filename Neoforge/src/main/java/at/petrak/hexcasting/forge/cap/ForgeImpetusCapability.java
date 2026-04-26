@@ -2,7 +2,7 @@ package at.petrak.hexcasting.forge.cap;
 
 import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public record ForgeImpetusCapability(BlockEntityAbstractImpetus impetus) implements IItemHandler {

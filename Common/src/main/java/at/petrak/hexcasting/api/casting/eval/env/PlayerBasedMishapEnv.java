@@ -55,4 +55,9 @@ public class PlayerBasedMishapEnv extends MishapEnvironment {
     public void blind(int ticks) {
         this.caster.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, ticks));
     }
+
+    @Override
+    public void nauseate(int ticks) {
+        this.caster.addEffect(new MobEffectInstance(MobEffects.CONFUSION, ticks));
+    }
 }

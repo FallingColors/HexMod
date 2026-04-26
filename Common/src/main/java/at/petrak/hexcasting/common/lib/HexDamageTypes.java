@@ -9,8 +9,7 @@ import net.minecraft.world.damagesource.DamageType;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexDamageTypes {
-    public static final ResourceKey<DamageType> OVERCAST = ResourceKey.create(Registries.DAMAGE_TYPE, modLoc(
-        "overcast"));
+    public static final ResourceKey<DamageType> OVERCAST = ResourceKey.create(Registries.DAMAGE_TYPE, modLoc("overcast"));
 
     public static void bootstrap(BootstrapContext<DamageType> ctx) {
         ctx.register(OVERCAST, new DamageType(

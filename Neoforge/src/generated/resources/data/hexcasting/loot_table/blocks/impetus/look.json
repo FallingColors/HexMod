@@ -1,0 +1,15 @@
+{
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "hexcasting:impetus/look"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "hexcasting:blocks/impetus/look"
+}

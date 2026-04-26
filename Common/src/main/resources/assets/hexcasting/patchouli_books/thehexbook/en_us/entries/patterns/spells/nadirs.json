@@ -1,7 +1,7 @@
 {
   "name": "hexcasting.entry.nadirs",
   "category": "hexcasting:patterns/spells",
-  "icon": "minecraft:potion{Potion:'minecraft:poison'}",
+  "icon": "minecraft:potion[minecraft:potion_contents={potion:\"minecraft:poison\"}]",
   "advancement": "hexcasting:root",
   "sortnum": 2,
   "read_by_default": true,

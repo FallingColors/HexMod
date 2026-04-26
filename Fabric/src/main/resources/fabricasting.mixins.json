@@ -11,9 +11,7 @@
     "FabricEnchantmentTableBlockMixin",
     "FabricItemEntityMixin",
     "FabricLivingEntityMixin",
-    "FabricMixinReloadableServerResources",
     "FabricMobMixin",
-    "FabricPlayerMixin",
     "FabricVillagerTurnIntoWitchMixin"
   ],
   "client": [

@@ -1,3 +1,8 @@
+
+plugins {
+    id 'com.gradleup.shadow'
+}
+
 architectury {
     platformSetupLoomIde()
     neoForge()
@@ -27,6 +32,7 @@ configurations {
         canBeResolved = true
         canBeConsumed = false
     }
+    shadowCommon
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
     developmentNeoForge.extendsFrom common
@@ -41,17 +47,24 @@ configurations {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
     flatDir {
         dir 'libs'
     }
 
-    maven { url "https://maven.neoforged.net/releases/" }
+    maven { url = "https://maven.neoforged.net/releases/" }
     // paucal and patchi
     maven { url = 'https://maven.blamejared.com' }
-    // caelus elytra
-    maven { url = "https://maven.theillusivec4.top" }
+    maven {
+        name = "Curios"
+        url = uri("https://maven.theillusivec4.top/")
+    }
+    maven {
+        name = "C4's Maven"
+        setUrl("https://maven.theillusivec4.top/")
+    }
     // pehkui
     maven { url = "https://jitpack.io" }
     // EMI
@@ -72,39 +85,61 @@ repositories {
 
 dependencies {
     neoForge "net.neoforged:neoforge:${neoforgeVersion}"
-    common(project(path: ':Common', configuration: 'namedElements')) { transitive false }
+    implementation(project(path: ':Common', configuration: 'namedElements')) { transitive false }
     shadowBundle(project(path: ':Common', configuration: 'transformProductionNeoForge')) { transitive false }
-    implementation "thedarkcolour:kotlinforforge:$kotlinForForgeVersion"
+    modImplementation("thedarkcolour:kotlinforforge-neoforge:$kotlinForForgeVersion") {
+        exclude(group: "net.neoforged.fancymodloader", module: "loader")
+    }
 
     // === MANDATORY DEPS ===
 
-    implementation "at.petra-k:paucal:$paucalVersion+$minecraftVersion-common"
-    implementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-NEOFORGE-SNAPSHOT"
-    implementation "top.theillusivec4.caelus:caelus-forge:$caelusVersion"
-//    implementation("com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion")
+    compileOnly("mezz.jei:jei-$minecraftVersion-neoforge-api:$jeiVersion")
+    runtimeOnly("mezz.jei:jei-$minecraftVersion-neoforge:$jeiVersion")
+
+    compileOnly("top.theillusivec4.curios:curios-neoforge:$curiosVersion+$minecraftVersion:api")
+    runtimeOnly("top.theillusivec4.curios:curios-neoforge:$curiosVersion+$minecraftVersion")
+
+    modImplementation "at.petra-k:paucal:$paucalVersion+$minecraftVersion-neoforge"
+    modImplementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-NEOFORGE-SNAPSHOT"
+    modImplementation "com.illusivesoulworks.caelus:caelus-neoforge:$caelusVersion"
+    modImplementation "com.samsthenerd.inline:inline-neoforge:1.21.1-1.2.2-74"
     // needed for inline to run
-    runtimeOnly("me.shedaniel.cloth:cloth-config-forge:$clothConfigVersion")
+    modRuntimeOnly("me.shedaniel.cloth:cloth-config-forge:$clothConfigVersion")
+    modRuntimeOnly "com.samsthenerd.inline:inline-neoforge:$minecraftVersion-$inlineVersion"
+    modRuntimeOnly "dev.architectury:architectury-neoforge:$architecturyVersion"
+
 
     // === OPTIONAL DEPS ===
 
-    compileOnly "dev.emi:emi-neoforge:${emiVersion}:api"
-    runtimeOnly "dev.emi:emi-neoforge:${emiVersion}"
+    modCompileOnly "dev.emi:emi-neoforge:${emiVersion}:api"
+    modRuntimeOnly "dev.emi:emi-neoforge:${emiVersion}"
     modImplementation "io.wispforest:accessories-neoforge:$accessoriesVersion"
 
-    api("com.github.Virtuoel:Pehkui:${pehkuiVersion}-1.21-neoforge")
+    modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}-1.21-neoforge")
 
     // "Required due to issues with JIJ dependency resolving in arch or something"
     // https://github.com/wisp-forest/accessories
     forgeRuntimeLibrary("io.wispforest:endec:0.1.8")
     forgeRuntimeLibrary("io.wispforest.endec:gson:0.1.5")
     forgeRuntimeLibrary("io.wispforest.endec:netty:0.1.4")
+    forgeRuntimeLibrary("io.wispforest.endec:jankson:0.1.5")
+    forgeRuntimeLibrary("org.jetbrains.kotlin:kotlin-reflect:2.1.20")
+    forgeRuntimeLibrary("org.jetbrains.kotlin:kotlin-stdlib:2.1.20")
+    forgeRuntimeLibrary("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.20")
+    forgeRuntimeLibrary("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.20")
+    forgeRuntimeLibrary("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2")
+    forgeRuntimeLibrary("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.10.2")
+    forgeRuntimeLibrary("org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.8.1")
+    forgeRuntimeLibrary("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.8.1")
+    forgeRuntimeLibrary("blue.endless:jankson:1.2.2")
+    forgeRuntimeLibrary("blue.endless:jankson:0.1.5")
 }
 
 def generatedResources = project(":Common").file("src/generated/resources")
 
 loom {
     runs {
-        create("forgeXplatDatagen") {
+        create("xplatDatagen") {
             data()
             name "Forge Xplat Datagen"
 
@@ -112,8 +147,21 @@ loom {
 
             programArgs "--all", "--mod", project.modID
             programArgs "--output", generatedResources.absolutePath
+            programArgs "--existing", project(":Common").file("src/main/resources").absolutePath
             programArgs "--existing", file("src/main/resources").absolutePath
             programArgs "--existing", generatedResources.absolutePath
+        }
+        create("Datagen") {
+            data()
+            name "NeoForge Datagen"
+
+            vmArg("-Dhexcasting.neoforge_datagen")
+
+            programArgs "--all", "--mod", project.modID
+            programArgs "--output", file("src/generated/resources").absolutePath
+            programArgs "--existing", project(":Common").file("src/main/resources").absolutePath
+            programArgs "--existing", file("src/main/resources").absolutePath
+            programArgs "--existing", file("src/generated/resources").absolutePath
         }
     }
 }
@@ -123,16 +171,6 @@ loom {
 //    config "hexplat.mixins.json"
 //    config "hexcasting_forge.mixins.json"
 //}
-
-compileJava {
-    source(project(":Common").sourceSets.main.allSource)
-}
-compileKotlin {
-    source(project(":Common").sourceSets.main.kotlin)
-}
-compileTestKotlin {
-    source(project(":Common").sourceSets.main.kotlin)
-}
 
 sourceSets {
     main.resources.srcDirs += ['src/generated/resources', '../Common/src/generated/resources']
@@ -149,4 +187,22 @@ processResources {
     }
 }
 
-jar.finalizedBy('reobfJar')
+tasks.named('processResources') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.named('sourcesJar') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
+}
+
+remapJar {
+    inputFile.set shadowJar.archiveFile
+    dependsOn shadowJar
+}
+
+jar.finalizedBy('remapJar')

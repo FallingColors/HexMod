@@ -4,7 +4,7 @@
     "down": "hexcasting:block/circle/bottom",
     "east": "hexcasting:block/circle/impetus/look/left_dim",
     "north": "hexcasting:block/circle/impetus/look/front_dim",
-    "particle": "hexcasting:block/slate",
+    "particle": "hexcasting:block/slate_block",
     "south": "hexcasting:block/circle/impetus/back_dim",
     "up": "hexcasting:block/circle/impetus/look/top_dim",
     "west": "hexcasting:block/circle/impetus/look/right_dim"

@@ -1,80 +1,67 @@
 package at.petrak.hexcasting.forge.network;
 
 import at.petrak.hexcasting.common.msgs.*;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.handling.IPayloadHandler;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.apache.logging.log4j.util.TriConsumer;
 
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class ForgePacketHandler {
-    private static final String PROTOCOL_VERSION = "1";
-    private static final SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(
-        modLoc("main"),
-        () -> PROTOCOL_VERSION,
-        PROTOCOL_VERSION::equals,
-        PROTOCOL_VERSION::equals
-    );
 
-    public static SimpleChannel getNetwork() {
-        return NETWORK;
+    public static void init(IEventBus modBus) {
+        modBus.addListener(RegisterPayloadHandlersEvent.class, ev -> {
+            final PayloadRegistrar registar = ev.registrar("1");
+
+            // Client -> server
+            registar.playToServer(MsgNewSpellPatternC2S.TYPE, MsgNewSpellPatternC2S.STREAM_CODEC,
+                    makeServerBoundHandler(MsgNewSpellPatternC2S::handle));
+            registar.playToServer(MsgShiftScrollC2S.TYPE, MsgShiftScrollC2S.STREAM_CODEC,
+                    makeServerBoundHandler(MsgShiftScrollC2S::handle));
+
+            // Server -> client
+            registar.playToClient(MsgNewSpellPatternS2C.TYPE, MsgNewSpellPatternS2C.STREAM_CODEC,
+                    makeClientBoundHandler(MsgNewSpellPatternS2C::handle));
+            registar.playToClient(MsgSentinelStatusUpdateAck.TYPE, MsgSentinelStatusUpdateAck.STREAM_CODEC,
+                    makeClientBoundHandler(MsgSentinelStatusUpdateAck::handle));
+            registar.playToClient(MsgPigmentUpdateAck.TYPE, MsgPigmentUpdateAck.STREAM_CODEC,
+                    makeClientBoundHandler(MsgPigmentUpdateAck::handle));
+            registar.playToClient(MsgAltioraUpdateAck.TYPE, MsgAltioraUpdateAck.STREAM_CODEC,
+                    makeClientBoundHandler(MsgAltioraUpdateAck::handle));
+            registar.playToClient(MsgCastParticleS2C.TYPE, MsgCastParticleS2C.STREAM_CODEC,
+                    makeClientBoundHandler(MsgCastParticleS2C::handle));
+            registar.playToClient(MsgOpenSpellGuiS2C.TYPE, MsgOpenSpellGuiS2C.STREAM_CODEC,
+                    makeClientBoundHandler(MsgOpenSpellGuiS2C::handle));
+            registar.playToClient(MsgBeepS2C.TYPE, MsgBeepS2C.STREAM_CODEC,
+                    makeClientBoundHandler(MsgBeepS2C::handle));
+            registar.playToClient(MsgBrainsweepAck.TYPE, MsgBrainsweepAck.STREAM_CODEC,
+                    makeClientBoundHandler(MsgBrainsweepAck::handle));
+            registar.playToClient(MsgNewWallScrollS2C.TYPE, MsgNewWallScrollS2C.STREAM_CODEC,
+                    makeClientBoundHandler(MsgNewWallScrollS2C::handle));
+            registar.playToClient(MsgRecalcWallScrollDisplayS2C.TYPE, MsgRecalcWallScrollDisplayS2C.STREAM_CODEC,
+                    makeClientBoundHandler(MsgRecalcWallScrollDisplayS2C::handle));
+            registar.playToClient(MsgNewSpiralPatternsS2C.TYPE, MsgNewSpiralPatternsS2C.STREAM_CODEC,
+                    makeClientBoundHandler(MsgNewSpiralPatternsS2C::handle));
+            registar.playToClient(MsgClearSpiralPatternsS2C.TYPE, MsgClearSpiralPatternsS2C.STREAM_CODEC,
+                    makeClientBoundHandler(MsgClearSpiralPatternsS2C::handle));
+        });
     }
 
-    public static void init() {
-        int messageIdx = 0;
-
-        // Client -> server
-        NETWORK.registerMessage(messageIdx++, MsgNewSpellPatternC2S.class, MsgNewSpellPatternC2S::serialize,
-            MsgNewSpellPatternC2S::deserialize, makeServerBoundHandler(MsgNewSpellPatternC2S::handle));
-        NETWORK.registerMessage(messageIdx++, MsgShiftScrollC2S.class, MsgShiftScrollC2S::serialize,
-            MsgShiftScrollC2S::deserialize, makeServerBoundHandler(MsgShiftScrollC2S::handle));
-
-        // Server -> client
-        NETWORK.registerMessage(messageIdx++, MsgNewSpellPatternS2C.class, MsgNewSpellPatternS2C::serialize,
-            MsgNewSpellPatternS2C::deserialize, makeClientBoundHandler(MsgNewSpellPatternS2C::handle));
-        NETWORK.registerMessage(messageIdx++, MsgSentinelStatusUpdateAck.class, MsgSentinelStatusUpdateAck::serialize,
-            MsgSentinelStatusUpdateAck::deserialize, makeClientBoundHandler(MsgSentinelStatusUpdateAck::handle));
-        NETWORK.registerMessage(messageIdx++, MsgPigmentUpdateAck.class, MsgPigmentUpdateAck::serialize,
-            MsgPigmentUpdateAck::deserialize, makeClientBoundHandler(MsgPigmentUpdateAck::handle));
-        NETWORK.registerMessage(messageIdx++, MsgAltioraUpdateAck.class, MsgAltioraUpdateAck::serialize,
-            MsgAltioraUpdateAck::deserialize, makeClientBoundHandler(MsgAltioraUpdateAck::handle));
-        NETWORK.registerMessage(messageIdx++, MsgCastParticleS2C.class, MsgCastParticleS2C::serialize,
-            MsgCastParticleS2C::deserialize, makeClientBoundHandler(MsgCastParticleS2C::handle));
-        NETWORK.registerMessage(messageIdx++, MsgOpenSpellGuiS2C.class, MsgOpenSpellGuiS2C::serialize,
-            MsgOpenSpellGuiS2C::deserialize, makeClientBoundHandler(MsgOpenSpellGuiS2C::handle));
-        NETWORK.registerMessage(messageIdx++, MsgBeepS2C.class, MsgBeepS2C::serialize,
-            MsgBeepS2C::deserialize, makeClientBoundHandler(MsgBeepS2C::handle));
-        NETWORK.registerMessage(messageIdx++, MsgBrainsweepAck.class, MsgBrainsweepAck::serialize,
-            MsgBrainsweepAck::deserialize, makeClientBoundHandler(MsgBrainsweepAck::handle));
-        NETWORK.registerMessage(messageIdx++, MsgNewWallScrollS2C.class, MsgNewWallScrollS2C::serialize,
-            MsgNewWallScrollS2C::deserialize, makeClientBoundHandler(MsgNewWallScrollS2C::handle));
-        NETWORK.registerMessage(messageIdx++, MsgRecalcWallScrollDisplayS2C.class, MsgRecalcWallScrollDisplayS2C::serialize,
-            MsgRecalcWallScrollDisplayS2C::deserialize, makeClientBoundHandler(MsgRecalcWallScrollDisplayS2C::handle));
-        NETWORK.registerMessage(messageIdx++, MsgNewSpiralPatternsS2C.class, MsgNewSpiralPatternsS2C::serialize,
-                MsgNewSpiralPatternsS2C::deserialize, makeClientBoundHandler(MsgNewSpiralPatternsS2C::handle));
-        NETWORK.registerMessage(messageIdx++, MsgClearSpiralPatternsS2C.class, MsgClearSpiralPatternsS2C::serialize,
-                MsgClearSpiralPatternsS2C::deserialize, makeClientBoundHandler(MsgClearSpiralPatternsS2C::handle));
-    }
-
-    private static <T> BiConsumer<T, Supplier<NetworkEvent.Context>> makeServerBoundHandler(
+    private static <T extends CustomPacketPayload> IPayloadHandler<T> makeServerBoundHandler(
         TriConsumer<T, MinecraftServer, ServerPlayer> handler) {
         return (m, ctx) -> {
-            handler.accept(m, ctx.get().getSender().getServer(), ctx.get().getSender());
-            ctx.get().setPacketHandled(true);
+            handler.accept(m, ctx.player().getServer(), (ServerPlayer) ctx.player());
         };
     }
 
-    private static <T> BiConsumer<T, Supplier<NetworkEvent.Context>> makeClientBoundHandler(Consumer<T> consumer) {
+    private static <T extends CustomPacketPayload> IPayloadHandler<T> makeClientBoundHandler(Consumer<T> consumer) {
         return (m, ctx) -> {
             consumer.accept(m);
-            ctx.get().setPacketHandled(true);
         };
     }
 }

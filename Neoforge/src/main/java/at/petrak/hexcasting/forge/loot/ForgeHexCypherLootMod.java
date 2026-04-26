@@ -5,19 +5,20 @@ import at.petrak.hexcasting.common.loot.AddHexToAncientCypherFunc;
 import at.petrak.hexcasting.forge.lib.ForgeHexLootMods;
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.LootModifier;
+import net.neoforged.neoforge.common.loot.LootModifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
 public class ForgeHexCypherLootMod extends LootModifier {
-    public static final Supplier<Codec<ForgeHexCypherLootMod>> CODEC =
-        Suppliers.memoize(() -> RecordCodecBuilder.create(
+    public static final Supplier<MapCodec<ForgeHexCypherLootMod>> CODEC =
+        Suppliers.memoize(() -> RecordCodecBuilder.mapCodec(
             inst -> codecStart(inst).and(
                 Codec.DOUBLE.fieldOf("chance").forGetter(it -> it.chance)
             ).apply(inst, ForgeHexCypherLootMod::new)
@@ -42,7 +43,7 @@ public class ForgeHexCypherLootMod extends LootModifier {
     }
 
     @Override
-    public Codec<ForgeHexCypherLootMod> codec() {
+    public MapCodec<ForgeHexCypherLootMod> codec() {
         return ForgeHexLootMods.INJECT_CYPHERS.get();
     }
 }

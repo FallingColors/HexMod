@@ -9,10 +9,10 @@ on:
   workflow_dispatch:
   # trigger on pushes to the default branch (main) to keep the cache up to date
   push:
-    branches: main
+    branches: indev/1.21.1
 
 env:
-  JAVA_VERSION: 17
+  JAVA_VERSION: '21.0.5'
 
 jobs:
   build:
@@ -35,7 +35,7 @@ jobs:
       - name: Prepare artifacts for upload
         run: |
           mkdir -p dist
-          cp {Common,Forge,Fabric}/build/libs/*.jar dist
+          cp {Common,Neoforge,Fabric}/build/libs/*.jar dist
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -54,30 +54,30 @@ jobs:
           - client
         modloader:
           - fabric
-          - forge
+          - neoforge
         include:
           - modloader: fabric
             mc-runtime-test: fabric
-            fabric-api: 0.87.0
+            fabric-api: 0.14.21
             dependencies: >-
-              'https://cdn.modrinth.com/data/Ha28R6CL/versions/vlhvI5Li/fabric-language-kotlin-1.10.18%2Bkotlin.1.9.22.jar'
-              'https://cdn.modrinth.com/data/9s6osm5g/versions/s7VTKfLA/cloth-config-11.1.106-fabric.jar'
-              'https://cdn.modrinth.com/data/TZo2wHFe/versions/dabyDTwJ/paucal-0.6.0%2B1.20.1-fabric.jar'
-              'https://cdn.modrinth.com/data/fin1PX4m/versions/fBoxabC2/inline-fabric-1.20.1-1.0.1.jar'
-              'https://cdn.modrinth.com/data/K01OU20C/versions/HykM2Qyv/cardinal-components-api-5.2.1.jar'
-              'https://cdn.modrinth.com/data/nU0bVIaL/versions/Y6tuH1cn/Patchouli-1.20.1-84-FABRIC.jar'
-              'https://cdn.modrinth.com/data/mOgUt4GM/versions/zv46i3PW/modmenu-7.1.0.jar'
-              'https://cdn.modrinth.com/data/5aaWibi9/versions/z8ProfKL/trinkets-3.7.0.jar'
-          - modloader: forge
-            mc-runtime-test: lexforge
+              'https://cdn.modrinth.com/data/Ha28R6CL/versions/vlhvI5Li/fabric-language-kotlin-1.12.3%2Bkotlin.2.0.21.jar'
+              'https://cdn.modrinth.com/data/9s6osm5g/versions/HpMb5wGb/cloth-config-15.0.140-fabric.jar'
+              'https://ci.blamejared.com/job/petrakat/job/PAUCAL/job/1.21/26/artifact/Fabric/build/libs/paucal-0.7.1-pre-26+1.21.1-fabric.jar'
+              'https://cdn.modrinth.com/data/fin1PX4m/versions/SBDJBD0a/inline-fabric-1.21.1-1.2.2.jar'
+              'https://cdn.modrinth.com/data/K01OU20C/versions/nLsCe2VD/cardinal-components-api-6.1.3.jar'
+              'https://cdn.modrinth.com/data/nU0bVIaL/versions/XIjNwQkI/Patchouli-1.21.1-93-FABRIC.jar'
+              'https://cdn.modrinth.com/data/mOgUt4GM/versions/v6Xx3fbU/modmenu-11.0.4.jar'
+              'https://cdn.modrinth.com/data/jtmvUHXj/versions/Xlt4eWBe/accessories-fabric-1.1.0-beta.53%2B1.21.1.jar'
+          - modloader: neoforge
+            mc-runtime-test: neoforge
             fabric-api: none
             dependencies: >-
-              'https://cdn.modrinth.com/data/ordsPcFz/versions/9j6YaPp2/kotlinforforge-4.10.0-all.jar'
-              'https://cdn.modrinth.com/data/9s6osm5g/versions/JoLgnJ0G/cloth-config-11.1.106-forge.jar'
-              'https://cdn.modrinth.com/data/TZo2wHFe/versions/HyBiJPtT/paucal-0.6.0%2B1.20.1-forge.jar'
-              'https://cdn.modrinth.com/data/fin1PX4m/versions/huiPd6Lc/inline-forge-1.20.1-1.0.1.jar'
-              'https://cdn.modrinth.com/data/40FYwb4z/versions/fs9CeXYZ/caelus-forge-3.1.0%2B1.20.jar'
-              'https://cdn.modrinth.com/data/nU0bVIaL/versions/JMtc0mTS/Patchouli-1.20.1-84-FORGE.jar'
+              'https://cdn.modrinth.com/data/ordsPcFz/versions/NrSebcsG/kotlinforforge-5.11.0-all.jar'
+              'https://cdn.modrinth.com/data/9s6osm5g/versions/izKINKFg/cloth-config-15.0.140-neoforge.jar'
+              'https://ci.blamejared.com/job/petrakat/job/PAUCAL/job/1.21/26/artifact/Neoforge/build/libs/paucal-0.7.1-pre-26+1.21.1-neoforge.jar'
+              'https://cdn.modrinth.com/data/fin1PX4m/versions/FhE1RJsR/inline-neoforge-1.21.1-1.2.2.jar'
+              'https://cdn.modrinth.com/data/jtmvUHXj/versions/Fb55Fgjz/accessories-neoforge-1.1.0-beta.53%2B1.21.1.jar'
+              'https://cdn.modrinth.com/data/nU0bVIaL/versions/BIogJv2D/Patchouli-1.21.1-93-NEOFORGE.jar'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-java@v4

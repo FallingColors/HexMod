@@ -2,19 +2,19 @@ package at.petrak.hexcasting.fabric.cc.adimpl;
 
 import at.petrak.hexcasting.api.addldata.ItemDelegatingEntityIotaHolder;
 import at.petrak.hexcasting.api.casting.iota.Iota;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class CCEntityIotaHolder implements CCIotaHolder {
     @Override
-    public void writeToNbt(@NotNull CompoundTag tag) {
+    public void writeToNbt(@NotNull CompoundTag tag, HolderLookup.Provider registryLookup) {
         // NO-OP
     }
 
     @Override
-    public void readFromNbt(@NotNull CompoundTag tag) {
+    public void readFromNbt(@NotNull CompoundTag tag, HolderLookup.Provider registryLookup) {
         // NO-OP
     }
 
@@ -27,8 +27,8 @@ public abstract class CCEntityIotaHolder implements CCIotaHolder {
 
 
         @Override
-        public @Nullable CompoundTag readIotaTag() {
-            return inner.readIotaTag();
+        public @Nullable Iota readIota() {
+            return inner.readIota();
         }
 
         @Override
@@ -39,11 +39,6 @@ public abstract class CCEntityIotaHolder implements CCIotaHolder {
         @Override
         public boolean writeIota(@Nullable Iota iota, boolean simulate) {
             return inner.writeIota(iota, simulate);
-        }
-
-        @Override
-        public @Nullable Iota readIota(ServerLevel world) {
-            return inner.readIota(world);
         }
 
         @Override
