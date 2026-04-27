@@ -17,6 +17,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
+import javax.annotation.Nullable;
+
 public class ItemStaff extends Item {
     // 0 = normal. 1 = old. 2 = cherry preview
     public static final ResourceLocation FUNNY_LEVEL_PREDICATE = ResourceLocation.fromNamespaceAndPath(HexAPI.MOD_ID, "funny_level");
@@ -45,7 +47,7 @@ public class ItemStaff extends Item {
             var vm = IXplatAbstractions.INSTANCE.getStaffcastVM(serverPlayer, hand);
             var patterns = IXplatAbstractions.INSTANCE.getPatternsSavedInUi(serverPlayer);
 
-            CompoundTag ravenmind = vm.getImage().ravenmind().orElse(new CompoundTag());
+            @Nullable CompoundTag ravenmind = vm.getImage().ravenmind().orElse(null);
 
 
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(serverPlayer,
