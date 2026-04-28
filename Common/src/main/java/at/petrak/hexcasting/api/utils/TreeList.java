@@ -13,6 +13,21 @@ import static java.util.Arrays.copyOfRange;
 
 /**
  * Ported from Scala 2.13.16's scala.collection.immutable.Vector
+ * <p>
+ * TreeList is an immutable collection that provides effectively-constant asymptotics for the following operations:
+ * </p>
+ * <ul>
+ *     <li>head (first)</li>
+ *     <li>tail (rest)</li>
+ *     <li>apply (index)</li>
+ *     <li>update</li>
+ *     <li>prepend</li>
+ *     <li>append</li>
+ * </ul>
+ * <p>
+ * It also provides O(min(m, n)) performance for concatenation. This makes it useful as a stack in a VM that requires
+ * serialization of the stack or continuation at any time.
+ * </p>
  */
 @SuppressWarnings("unchecked")
 public sealed abstract class TreeList<A> extends AbstractList<A> implements RandomAccess {
