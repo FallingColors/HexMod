@@ -1,10 +1,14 @@
 package at.petrak.hexcasting.api.utils;
 
+import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
 import static java.util.Arrays.copyOf;
 import static java.util.Arrays.copyOfRange;
@@ -31,6 +35,15 @@ import static java.util.Arrays.copyOfRange;
  */
 @SuppressWarnings("unchecked")
 public sealed abstract class TreeList<A> extends AbstractList<A> implements RandomAccess {
+
+    // TODO: check if these are a hot spot, if they are, building a TreeList from scratch is faster than converting to one
+    public static <A> Codec<TreeList<A>> codecOf(Codec<A> codec) {
+        return codec.listOf().xmap(TreeList::from, Function.identity());
+    }
+
+    public static <B extends ByteBuf, A> StreamCodec.CodecOperation<B, A, TreeList<A>> streamCodecOp() {
+        return (oldCodec) -> oldCodec.apply(ByteBufCodecs.list()).map(TreeList::from, Function.identity());
+    }
 
     private static int copyToArray(Iterable<?> it, Object[] dst, int start) {
         if(it instanceof Collection<?> cc) {

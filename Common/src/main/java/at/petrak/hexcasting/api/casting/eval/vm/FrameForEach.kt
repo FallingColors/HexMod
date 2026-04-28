@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
-import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -27,8 +26,8 @@ import kotlin.jvm.optionals.getOrNull
  * @property acc concatenated list of final stack states after Thoth exit
  */
 data class FrameForEach(
-    val data: SpellList,
-    val code: SpellList,
+    val data: TreeList<Iota>,
+    val code: TreeList<Iota>,
     val baseStack: List<Iota>?,
     val acc: TreeList<Iota>
 ) : ContinuationFrame {
@@ -56,14 +55,14 @@ data class FrameForEach(
         }
 
         // If we still have data to process...
-        val (stackTop, newImage, newCont) = if (data.nonEmpty) {
+        val (stackTop, newImage, newCont) = if (!data.isEmpty()) {
             // push the next datum to the top of the stack,
             val cont2 = continuation
                 // put the next Thoth object back on the stack for the next Thoth cycle,
-                .pushFrame(FrameForEach(data.cdr, code, stack, newAcc))
+                .pushFrame(FrameForEach(data.tail(), code, stack, newAcc))
                 // and prep the Thoth'd code block for evaluation.
                 .pushFrame(FrameEvaluate(code, true))
-            Triple(data.car, harness.image.withUsedOp(), cont2)
+            Triple(data.head(), harness.image.withUsedOp(), cont2)
         } else {
             // Else, dump our final list onto the stack.
             Triple(ListIota(newAcc), harness.image, continuation)
@@ -81,7 +80,7 @@ data class FrameForEach(
         )
     }
 
-    override fun size() = data.size() + code.size() + acc.size + (baseStack?.size ?: 0)
+    override fun size() = data.size + code.size + acc.size + (baseStack?.size ?: 0)
 
     override val type: ContinuationFrame.Type<*> = TYPE
 
@@ -90,23 +89,23 @@ data class FrameForEach(
         val TYPE: ContinuationFrame.Type<FrameForEach> = object : ContinuationFrame.Type<FrameForEach> {
             val CODEC = RecordCodecBuilder.mapCodec<FrameForEach> { inst ->
                 inst.group(
-                    SpellList.CODEC.fieldOf("data").forGetter { it.data },
-                    SpellList.CODEC.fieldOf("code").forGetter { it.code },
+                    TreeList.codecOf(IotaType.TYPED_CODEC).fieldOf("data").forGetter { it.data },
+                    TreeList.codecOf(IotaType.TYPED_CODEC).fieldOf("code").forGetter { it.code },
                     IotaType.TYPED_CODEC.listOf().optionalFieldOf("base").forGetter { Optional.ofNullable(it.baseStack) },
-                    IotaType.TYPED_CODEC.listOf().fieldOf("accumulator").forGetter { it.acc }
+                    TreeList.codecOf(IotaType.TYPED_CODEC).fieldOf("accumulator").forGetter { it.acc }
                 ).apply(inst) { a, b, c, d ->
-                    FrameForEach(a, b, c.getOrNull(), TreeList.from(d))
+                    FrameForEach(a, b, c.getOrNull(), d)
                 }
             }
             val STREAM_CODEC = StreamCodec.composite(
-                SpellList.STREAM_CODEC, FrameForEach::data,
-                SpellList.STREAM_CODEC, FrameForEach::code,
+                IotaType.TYPED_STREAM_CODEC.apply(TreeList.streamCodecOp()), FrameForEach::data,
+                IotaType.TYPED_STREAM_CODEC.apply(TreeList.streamCodecOp()), FrameForEach::code,
                 ByteBufCodecs.optional(IotaType.TYPED_STREAM_CODEC
                     .apply(ByteBufCodecs.list())), { Optional.ofNullable(it.baseStack) },
                 IotaType.TYPED_STREAM_CODEC
-                    .apply(ByteBufCodecs.list()), FrameForEach::acc
+                    .apply(TreeList.streamCodecOp()), FrameForEach::acc
             ) { a, b, c, d ->
-                FrameForEach(a, b, c.getOrNull(), TreeList.from(d))
+                FrameForEach(a, b, c.getOrNull(), d)
             }
 
 
