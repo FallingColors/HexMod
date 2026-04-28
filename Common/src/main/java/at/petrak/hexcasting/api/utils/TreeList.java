@@ -632,6 +632,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
 
     public TreeList<A> reversed() {
         // FIXME: Understand NewVectorIterator / NewTreeListIterator
+        // NewVectorIterator dodges indexing costs. If we could make it run in reverse it could be a lot faster
         TreeListBuilder<A> builder = new TreeListBuilder<>();
         for(int i = this.size() - 1; i >= 0; i--) {
             builder.addOne(this.get(i));
@@ -639,7 +640,8 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         return builder.result();
     }
 
-    // FIXME: Get rid of this
+    // TODO: Get rid of this
+    // Kotlin tries to force a different signature for `reversed` on us. This should remain here as a public alias until that is fixed
     public TreeList<A> reversedVec() {
         return this.reversed();
     }
