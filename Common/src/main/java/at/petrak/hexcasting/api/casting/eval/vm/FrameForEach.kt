@@ -40,6 +40,9 @@ data class FrameForEach(
         acc: MutableList<Iota>
     ) : this(data, code, baseStack, TreeList.from(acc))
 
+    @Deprecated("access immutableAcc instead")
+    val acc: MutableList<Iota> get() = immutableAcc.toMutableList()
+
     /** When halting, we add the stack state at halt to the stack accumulator, then return the original pre-Thoth stack, plus the accumulator. */
     override fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>> {
         val newStack = baseStack?.toMutableList() ?: mutableListOf()
