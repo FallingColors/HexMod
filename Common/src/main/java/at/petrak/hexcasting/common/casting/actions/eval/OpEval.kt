@@ -15,12 +15,12 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 object OpEval : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stack = image.stack.toMutableList()
-        val iota = stack.removeLastOrNull() ?: throw MishapNotEnoughArgs(1, 0)
-        return exec(env, image, continuation, stack, iota)
+        val stack = image.stack
+        val iota = stack.lastOrNull() ?: throw MishapNotEnoughArgs(1, 0)
+        return exec(env, image, continuation, stack.init(), iota)
     }
 
-    fun exec(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation, newStack: MutableList<Iota>, iota: Iota): OperationResult {
+    fun exec(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation, newStack: TreeList<Iota>, iota: Iota): OperationResult {
         // also, never make a break boundary when evaluating just one pattern
         val instrs = evaluatable(iota, 0)
         val newCont =

@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.iota.GarbageIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota
 import at.petrak.hexcasting.api.pigment.FrozenPigment
+import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
@@ -16,9 +17,9 @@ class MishapDivideByZero(val operand1: Component, val operand2: Component, val s
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.RED)
 
-    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        stack.add(GarbageIota())
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: TreeList<Iota>): TreeList<Iota> {
         env.mishapEnvironment.damage(0.5f)
+        return stack.appended(GarbageIota())
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =

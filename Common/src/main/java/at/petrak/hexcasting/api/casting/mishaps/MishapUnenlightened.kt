@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.pigment.FrozenPigment
+import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
@@ -17,7 +18,7 @@ class MishapUnenlightened : Mishap() {
 
     override fun resolutionType(ctx: CastingEnvironment) = ResolvedPatternType.INVALID
 
-    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: TreeList<Iota>): TreeList<Iota> {
         env.mishapEnvironment.dropHeldItems()
         env.castingEntity?.sendSystemMessage("hexcasting.message.cant_great_spell".asTranslatedComponent)
 
@@ -29,6 +30,7 @@ class MishapUnenlightened : Mishap() {
         if (castingPlayer != null) {
             HexAdvancementTriggers.FAIL_GREAT_SPELL_TRIGGER.trigger(castingPlayer)
         }
+        return stack
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = null

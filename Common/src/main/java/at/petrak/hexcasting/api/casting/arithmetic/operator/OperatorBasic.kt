@@ -14,14 +14,14 @@ abstract class OperatorBasic(arity: Int, accepts: IotaMultiPredicate) : Operator
 
     @Throws(Mishap::class)
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stack = image.stack.toMutableList()
-        val args = stack.takeLast(arity)
-        repeat(arity) { stack.removeLast() }
+        val stack = image.stack
+        val args = stack.takeRight(arity)
+        val stackWithoutArgs = stack.dropRight(arity)
 
         val ret = apply(args, env)
-        ret.forEach(Consumer { e: Iota -> stack.add(e) })
+        val stackWithResult = stackWithoutArgs.appendedAll(ret)
 
-        val image2 = image.copy(stack = stack, opsConsumed = image.opsConsumed + 1)
+        val image2 = image.copy(stack = stackWithResult, opsConsumed = image.opsConsumed + 1)
         return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
     }
 

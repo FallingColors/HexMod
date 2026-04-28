@@ -27,7 +27,7 @@ import net.minecraft.server.level.ServerLevel
 data class FrameForEach(
     val data: TreeList<Iota>,
     val code: TreeList<Iota>,
-    val baseStack: List<Iota>?,
+    val baseStack: TreeList<Iota>?,
     val immutableAcc: TreeList<Iota>
 ) : ContinuationFrame {
 
@@ -43,8 +43,8 @@ data class FrameForEach(
     val acc: MutableList<Iota> get() = immutableAcc.toMutableList()
 
     /** When halting, we add the stack state at halt to the stack accumulator, then return the original pre-Thoth stack, plus the accumulator. */
-    override fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>> {
-        val newStack = baseStack?.toMutableList() ?: mutableListOf()
+    override fun breakDownwards(stack: TreeList<Iota>): Pair<Boolean, TreeList<Iota>> {
+        val newStack = baseStack ?: TreeList.empty()
         newStack.add(ListIota(immutableAcc.appendedAll(stack)))
         return true to newStack
     }
@@ -58,7 +58,7 @@ data class FrameForEach(
         // If this isn't the very first Thoth step (i.e. no Thoth computations run yet)...
         val (stack, newAcc) = if (baseStack == null) {
             // init stack to the harness stack...
-            harness.image.stack.toList() to immutableAcc
+            harness.image.stack to immutableAcc
         } else {
             // else save the stack to the accumulator and reuse the saved base stack.
             baseStack to immutableAcc.appendedAll(harness.image.stack)
@@ -77,8 +77,7 @@ data class FrameForEach(
             // Else, dump our final list onto the stack.
             Triple(ListIota(immutableAcc), harness.image, continuation)
         }
-        val tStack = stack.toMutableList()
-        tStack.add(stackTop)
+        val tStack = stack.appended(stackTop)
         return CastResult(
             ListIota(code),
             newCont,
@@ -110,7 +109,7 @@ data class FrameForEach(
                     HexIotaTypes.LIST.deserialize(tag.getList("data", Tag.TAG_COMPOUND), world)!!.list,
                     HexIotaTypes.LIST.deserialize(tag.getList("code", Tag.TAG_COMPOUND), world)!!.list,
                     if (tag.hasList("base", Tag.TAG_COMPOUND))
-                        HexIotaTypes.LIST.deserialize(tag.getList("base", Tag.TAG_COMPOUND), world)!!.list.toList()
+                        HexIotaTypes.LIST.deserialize(tag.getList("base", Tag.TAG_COMPOUND), world)!!.list
                     else
                         null,
                     TreeList.from(HexIotaTypes.LIST.deserialize(
