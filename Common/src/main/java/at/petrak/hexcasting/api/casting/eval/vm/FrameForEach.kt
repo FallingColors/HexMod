@@ -28,15 +28,14 @@ import kotlin.jvm.optionals.getOrNull
 data class FrameForEach(
     val data: TreeList<Iota>,
     val code: TreeList<Iota>,
-    val baseStack: List<Iota>?,
+    val baseStack: TreeList<Iota>?,
     val acc: TreeList<Iota>
 ) : ContinuationFrame {
 
     /** When halting, we add the stack state at halt to the stack accumulator, then return the original pre-Thoth stack, plus the accumulator. */
-    override fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>> {
-        val newStack = baseStack?.toMutableList() ?: mutableListOf()
-        newStack.add(ListIota(acc.appendedAll(stack)))
-        return true to newStack
+    override fun breakDownwards(stack: TreeList<Iota>): Pair<Boolean, TreeList<Iota>> {
+        val newStack = baseStack ?: TreeList.empty()
+        return true to newStack.appended(ListIota(acc.appendedAll(stack)))
     }
 
     /** Step the Thoth computation, enqueueing one code evaluation. */
@@ -48,7 +47,7 @@ data class FrameForEach(
         // If this is the very first Thoth step (i.e. no Thoth computations run yet)...
         val (stack, newAcc) = if (baseStack == null) {
             // init stack to the harness stack...
-            harness.image.stack.toList() to acc
+            harness.image.stack to acc
         } else {
             // else save the stack to the accumulator and reuse the saved base stack.
             baseStack to acc.appendedAll(harness.image.stack)
@@ -67,8 +66,7 @@ data class FrameForEach(
             // Else, dump our final list onto the stack.
             Triple(ListIota(newAcc), harness.image, continuation)
         }
-        val tStack = stack.toMutableList()
-        tStack.add(stackTop)
+        val tStack = stack.appended(stackTop)
         return CastResult(
             ListIota(code),
             newCont,
@@ -91,7 +89,7 @@ data class FrameForEach(
                 inst.group(
                     TreeList.codecOf(IotaType.TYPED_CODEC).fieldOf("data").forGetter { it.data },
                     TreeList.codecOf(IotaType.TYPED_CODEC).fieldOf("code").forGetter { it.code },
-                    IotaType.TYPED_CODEC.listOf().optionalFieldOf("base").forGetter { Optional.ofNullable(it.baseStack) },
+                    TreeList.codecOf(IotaType.TYPED_CODEC).optionalFieldOf("base").forGetter { Optional.ofNullable(it.baseStack) },
                     TreeList.codecOf(IotaType.TYPED_CODEC).fieldOf("accumulator").forGetter { it.acc }
                 ).apply(inst) { a, b, c, d ->
                     FrameForEach(a, b, c.getOrNull(), d)
@@ -101,7 +99,7 @@ data class FrameForEach(
                 IotaType.TYPED_STREAM_CODEC.apply(TreeList.streamCodecOp()), FrameForEach::data,
                 IotaType.TYPED_STREAM_CODEC.apply(TreeList.streamCodecOp()), FrameForEach::code,
                 ByteBufCodecs.optional(IotaType.TYPED_STREAM_CODEC
-                    .apply(ByteBufCodecs.list())), { Optional.ofNullable(it.baseStack) },
+                    .apply(TreeList.streamCodecOp())), { Optional.ofNullable(it.baseStack) },
                 IotaType.TYPED_STREAM_CODEC
                     .apply(TreeList.streamCodecOp()), FrameForEach::acc
             ) { a, b, c, d ->

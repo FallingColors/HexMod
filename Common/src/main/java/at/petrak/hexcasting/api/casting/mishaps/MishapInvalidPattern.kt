@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.PatternIota
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.pigment.FrozenPigment
+import at.petrak.hexcasting.api.utils.TreeList
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
 
@@ -19,8 +20,8 @@ class MishapInvalidPattern(val pattern: HexPattern?) : Mishap() {
 
     override fun resolutionType(ctx: CastingEnvironment) = ResolvedPatternType.INVALID
 
-    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        stack.add(GarbageIota())
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: TreeList<Iota>): TreeList<Iota> {
+        return stack.appended(GarbageIota())
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component? {

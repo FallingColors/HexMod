@@ -5,11 +5,12 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
+import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 object OpHalt : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        var newStack = image.stack.toList()
+        var newStack = image.stack
 
         var done = false
         var newCont = continuation
@@ -23,7 +24,7 @@ object OpHalt : Action {
         // if we hit no continuation boundaries (i.e. thoth/hermes exits), we've TOTALLY cleared the itinerary...
         if (!done) {
             // bomb the stack so we exit
-            newStack = listOf()
+            newStack = TreeList.empty()
         }
 
         val image2 = image.withUsedOp().copy(stack = newStack)

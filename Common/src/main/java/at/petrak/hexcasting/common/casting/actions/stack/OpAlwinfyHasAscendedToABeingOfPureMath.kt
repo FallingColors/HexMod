@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.getPositiveLong
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import it.unimi.dsi.fastutil.longs.LongArrayList
 
@@ -42,7 +43,9 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
             editTarget = editTarget.subList(1, editTarget.size)
         }
 
-        val image2 = image.withUsedOp().copy(stack = stack)
+        // FIXME this is expensive if the stack is incredibly large
+        // someone should rewrite this op to cut and replace a `slice` of the `TreeList` stack
+        val image2 = image.withUsedOp().copy(stack = TreeList.from(stack))
         return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
     }
 
