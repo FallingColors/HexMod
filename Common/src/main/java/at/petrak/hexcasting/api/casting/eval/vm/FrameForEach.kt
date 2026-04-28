@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
-import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -26,16 +25,16 @@ import net.minecraft.server.level.ServerLevel
  * @property immutableAcc concatenated list of final stack states after Thoth exit
  */
 data class FrameForEach(
-    val data: SpellList,
-    val code: SpellList,
+    val data: TreeList<Iota>,
+    val code: TreeList<Iota>,
     val baseStack: List<Iota>?,
     val immutableAcc: TreeList<Iota>
 ) : ContinuationFrame {
 
     @Deprecated("use the primary constructor that accepts a TreeList instead")
     constructor(
-        data: SpellList,
-        code: SpellList,
+        data: TreeList<Iota>,
+        code: TreeList<Iota>,
         baseStack: List<Iota>?,
         acc: MutableList<Iota>
     ) : this(data, code, baseStack, TreeList.from(acc))
@@ -66,14 +65,14 @@ data class FrameForEach(
         }
 
         // If we still have data to process...
-        val (stackTop, newImage, newCont) = if (data.nonEmpty) {
+        val (stackTop, newImage, newCont) = if (!data.isEmpty()) {
             // push the next datum to the top of the stack,
             val cont2 = continuation
                 // put the next Thoth object back on the stack for the next Thoth cycle,
-                .pushFrame(FrameForEach(data.cdr, code, stack, newAcc))
+                .pushFrame(FrameForEach(data.tail(), code, stack, newAcc))
                 // and prep the Thoth'd code block for evaluation.
                 .pushFrame(FrameEvaluate(code, true))
-            Triple(data.car, harness.image.withUsedOp(), cont2)
+            Triple(data.head(), harness.image.withUsedOp(), cont2)
         } else {
             // Else, dump our final list onto the stack.
             Triple(ListIota(immutableAcc), harness.image, continuation)
@@ -99,7 +98,7 @@ data class FrameForEach(
         "accumulator" %= immutableAcc.serializeToNBT()
     }
 
-    override fun size() = data.size() + code.size() + immutableAcc.size + (baseStack?.size ?: 0)
+    override fun size() = data.size + code.size + immutableAcc.size + (baseStack?.size ?: 0)
 
     override val type: ContinuationFrame.Type<*> = TYPE
 
