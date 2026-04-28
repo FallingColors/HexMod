@@ -121,7 +121,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
     private static final int LOG2_CONCAT_FASTER = 5;
     private static final int ALIGN_TO_FASTER = 64;
 
-    private static int vectorSliceDim(int count, int idx) {
+    private static int treeListSliceDim(int count, int idx) {
         final int c = count / 2;
         return c + 1 - Math.abs(idx - c);
     }
@@ -349,7 +349,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
     }
 
     public ListIterator<A> iterator() {
-        return new NewVectorIterator<>(this, this.length(), this.vectorSliceCount());
+        return new NewTreeListIterator<>(this, this.length(), this.treeListSliceCount());
     }
 
     protected TreeList<A> filterImpl(Predicate<A> predicate, boolean isFlipped) {
@@ -401,7 +401,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         int k = knownSize(prefix);
         if(k == 0) return this;
         else if (k >= Integer.MAX_VALUE) {
-            VectorBuilder<A> builder = new VectorBuilder<A>();
+            TreeListBuilder<A> builder = new TreeListBuilder<A>();
             builder.addAll(prefix);
             builder.addAll(this);
             return builder.result();
@@ -412,7 +412,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         int k = knownSize(suffix);
         if(k == 0) return this;
         else if (k >= Integer.MAX_VALUE) {
-            VectorBuilder<A> builder = new VectorBuilder<A>();
+            TreeListBuilder<A> builder = new TreeListBuilder<A>();
             builder.addAll(this);
             builder.addAll(suffix);
             return builder.result();
@@ -421,7 +421,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
 
     protected TreeList<A> prependedAll0(Iterable<A> prefix, int k) {
         // k >= 0, k = prefix.knownSize
-        final int tinyAppendLimit = 4 + this.vectorSliceCount();
+        final int tinyAppendLimit = 4 + this.treeListSliceCount();
         if (k < tinyAppendLimit /*|| k < (this.size >>> Log2ConcatFaster)*/) {
             TreeList<A> v = this;
             Object[] elements = new Object[k];
@@ -438,9 +438,9 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
             for (A a : this) v = v.appended(a);
             return v;
         } else if (k < this.size() - ALIGN_TO_FASTER) {
-            return new VectorBuilder<A>().alignTo(k, this).addAll(prefix).addAll(this).result();
+            return new TreeListBuilder<A>().alignTo(k, this).addAll(prefix).addAll(this).result();
         } else {
-            VectorBuilder<A> builder = new VectorBuilder<A>();
+            TreeListBuilder<A> builder = new TreeListBuilder<A>();
             builder.addAll(prefix);
             builder.addAll(this);
             return builder.result();
@@ -449,7 +449,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
 
     protected TreeList<A> appendedAll0(Iterable<A> suffix, int k) {
         // k >= 0, k = suffix.knownSize
-        final int tinyAppendLimit = 4 + this.vectorSliceCount();
+        final int tinyAppendLimit = 4 + this.treeListSliceCount();
         if (k < tinyAppendLimit) {
             TreeList<A> v = this;
             for(A a : suffix) v = v.appended(a);
@@ -460,8 +460,8 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
             return v;
         } else if (this.size() < k - ALIGN_TO_FASTER && suffix instanceof TreeList<?>) {
             TreeList<A> v = (TreeList<A>) suffix;
-            return new VectorBuilder<A>().alignTo(this.size(), v).addAll(this).addAll(v).result();
-        } else return new VectorBuilder<A>().initFrom(this).addAll(suffix).result();
+            return new TreeListBuilder<A>().alignTo(this.size(), v).addAll(this).addAll(v).result();
+        } else return new TreeListBuilder<A>().initFrom(this).addAll(suffix).result();
     }
 
     public final TreeList<A> take(int n) {
@@ -492,11 +492,11 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
     protected abstract TreeList<A> slice0(int lo, int hi);
 
     /** Number of slices */
-    abstract int vectorSliceCount();
+    abstract int treeListSliceCount();
     /** Slice at index */
-    abstract Object[] vectorSlice(int idx);
+    abstract Object[] treeListSlice(int idx);
     /** Length of all slices up to and including index */
-    abstract int vectorSlicePrefixLength(int idx);
+    abstract int treeListSlicePrefixLength(int idx);
 
     public final A head() {
         if(this.prefix1.length == 0) throw new NoSuchElementException("empty.head");
@@ -508,9 +508,9 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
     }
 
     public void foreach(Consumer<A> f) {
-        final int c = this.vectorSliceCount();
+        final int c = this.treeListSliceCount();
         for(int i = 0; i < c; i++) {
-            foreachRec(vectorSliceDim(c, i) - 1, this.vectorSlice(i), f);
+            foreachRec(treeListSliceDim(c, i) - 1, this.treeListSlice(i), f);
         }
     }
 
@@ -561,7 +561,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
             }
             return new TreeList1<>(a1);
         } else {
-            VectorBuilder<A> builder = new VectorBuilder<>();
+            TreeListBuilder<A> builder = new TreeListBuilder<>();
             builder.addAll(it);
             return builder.result();
         }
@@ -603,7 +603,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
     }
 
     public <B> TreeList<B> flatMap(Function<A, Iterable<B>> func) {
-        VectorBuilder<B> builder = new VectorBuilder<B>();
+        TreeListBuilder<B> builder = new TreeListBuilder<B>();
         for(A a : this) {
             builder.addAll(func.apply(a));
         }
@@ -631,8 +631,8 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
     public abstract <B> TreeList<B> map(Function<A, B> f);
 
     public TreeList<A> reversed() {
-        // FIXME: Understand NewVectorIterator
-        VectorBuilder<A> builder = new VectorBuilder<>();
+        // FIXME: Understand NewVectorIterator / NewTreeListIterator
+        TreeListBuilder<A> builder = new TreeListBuilder<>();
         for(int i = this.size() - 1; i >= 0; i--) {
             builder.addOne(this.get(i));
         }
@@ -687,7 +687,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
                     }
                     final int newLen = i + Integer.bitCount(bitmap);
 
-                    VectorBuilder<A> b = new VectorBuilder<>();
+                    TreeListBuilder<A> b = new TreeListBuilder<>();
                     int k = 0;
                     while (k < i) {
                         b.addOne((A) this.prefix1[k]);
@@ -708,7 +708,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
                 }
                 i += 1;
             }
-            VectorBuilder<A> b = new VectorBuilder<>();
+            TreeListBuilder<A> b = new TreeListBuilder<>();
             b.initFrom(this.prefix1);
             this.foreachRest(v -> {
                 if(predicate.test(v) != isFlipped) b.addOne(v);
@@ -717,9 +717,9 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         }
 
         protected final void foreachRest(Consumer<A> f) {
-            final int c = this.vectorSliceCount();
+            final int c = this.treeListSliceCount();
             for(int i = 1; i < c; i++) {
-                foreachRec(vectorSliceDim(c, i)-1, vectorSlice(i), f);
+                foreachRec(treeListSliceDim(c, i)-1, treeListSlice(i), f);
             }
         }
 
@@ -785,17 +785,17 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         }
 
         @Override
-        int vectorSliceCount() {
+        int treeListSliceCount() {
             return 0;
         }
 
         @Override
-        Object[] vectorSlice(int idx) {
+        Object[] treeListSlice(int idx) {
             return null;
         }
 
         @Override
-        int vectorSlicePrefixLength(int idx) {
+        int treeListSlicePrefixLength(int idx) {
             return 0;
         }
 
@@ -873,17 +873,17 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         }
 
         @Override
-        int vectorSliceCount() {
+        int treeListSliceCount() {
             return 1;
         }
 
         @Override
-        Object[] vectorSlice(int idx) {
+        Object[] treeListSlice(int idx) {
             return this.prefix1;
         }
 
         @Override
-        int vectorSlicePrefixLength(int idx) {
+        int treeListSlicePrefixLength(int idx) {
             return this.prefix1.length;
         }
 
@@ -991,7 +991,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
 
         @Override
         protected TreeList<A> slice0(int lo, int hi) {
-            final VectorSliceBuilder b = new VectorSliceBuilder(lo, hi);
+            final TreeListSliceBuilder b = new TreeListSliceBuilder(lo, hi);
             b.consider(1, this.prefix1);
             b.consider(2, this.data2);
             b.consider(1, this.suffix1);
@@ -1016,12 +1016,12 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         }
 
         @Override
-        int vectorSliceCount() {
+        int treeListSliceCount() {
             return 3;
         }
 
         @Override
-        Object[] vectorSlice(int idx) {
+        Object[] treeListSlice(int idx) {
             return switch(idx) {
                 case 0 -> this.prefix1;
                 case 1 -> this.data2;
@@ -1031,7 +1031,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         }
 
         @Override
-        int vectorSlicePrefixLength(int idx) {
+        int treeListSlicePrefixLength(int idx) {
             return switch(idx) {
                 case 0 -> this.len1;
                 case 1 -> this.length0 - this.suffix1.length;
@@ -1194,7 +1194,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
 
         @Override
         protected TreeList<A> slice0(int lo, int hi) {
-            final VectorSliceBuilder b = new VectorSliceBuilder(lo, hi);
+            final TreeListSliceBuilder b = new TreeListSliceBuilder(lo, hi);
             b.consider(1, this.prefix1);
             b.consider(2, this.prefix2);
             b.consider(3, this.data3);
@@ -1222,12 +1222,12 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         }
 
         @Override
-        int vectorSliceCount() {
+        int treeListSliceCount() {
             return 5;
         }
 
         @Override
-        Object[] vectorSlice(int idx) {
+        Object[] treeListSlice(int idx) {
             return switch(idx) {
                 case 0 -> this.prefix1;
                 case 1 -> this.prefix2;
@@ -1239,7 +1239,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         }
 
         @Override
-        int vectorSlicePrefixLength(int idx) {
+        int treeListSlicePrefixLength(int idx) {
             return switch (idx) {
                 case 0 -> this.len1;
                 case 1 -> this.len12;
@@ -1461,7 +1461,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
 
         @Override
         protected TreeList<A> slice0(int lo, int hi) {
-            final VectorSliceBuilder b = new VectorSliceBuilder(lo, hi);
+            final TreeListSliceBuilder b = new TreeListSliceBuilder(lo, hi);
             b.consider(1, this.prefix1);
             b.consider(2, this.prefix2);
             b.consider(3, this.prefix3);
@@ -1494,12 +1494,12 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         }
 
         @Override
-        int vectorSliceCount() {
+        int treeListSliceCount() {
             return 7;
         }
 
         @Override
-        Object[] vectorSlice(int idx) {
+        Object[] treeListSlice(int idx) {
             return switch(idx) {
                 case 0 -> this.prefix1;
                 case 1 -> this.prefix2;
@@ -1513,7 +1513,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         }
 
         @Override
-        int vectorSlicePrefixLength(int idx) {
+        int treeListSlicePrefixLength(int idx) {
             return switch (idx) {
                 case 0 -> this.len1;
                 case 1 -> this.len12;
@@ -1793,7 +1793,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
 
         @Override
         protected TreeList<A> slice0(int lo, int hi) {
-            final VectorSliceBuilder b = new VectorSliceBuilder(lo, hi);
+            final TreeListSliceBuilder b = new TreeListSliceBuilder(lo, hi);
             b.consider(1, prefix1);
             b.consider(2, prefix2);
             b.consider(3, prefix3);
@@ -1829,12 +1829,12 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         }
 
         @Override
-        int vectorSliceCount() {
+        int treeListSliceCount() {
             return 9;
         }
 
         @Override
-        Object[] vectorSlice(int idx) {
+        Object[] treeListSlice(int idx) {
             return switch(idx) {
                 case 0 -> this.prefix1;
                 case 1 -> this.prefix2;
@@ -1850,7 +1850,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         }
 
         @Override
-        int vectorSlicePrefixLength(int idx) {
+        int treeListSlicePrefixLength(int idx) {
             return switch(idx) {
                 case 0 -> this.len1;
                 case 1 -> this.len12;
@@ -2210,7 +2210,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
 
         @Override
         protected TreeList<A> slice0(int lo, int hi) {
-            final VectorSliceBuilder b = new VectorSliceBuilder(lo, hi);
+            final TreeListSliceBuilder b = new TreeListSliceBuilder(lo, hi);
             b.consider(1, this.prefix1);
             b.consider(2, this.prefix2);
             b.consider(3, this.prefix3);
@@ -2250,12 +2250,12 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         }
 
         @Override
-        int vectorSliceCount() {
+        int treeListSliceCount() {
             return 11;
         }
 
         @Override
-        Object[] vectorSlice(int idx) {
+        Object[] treeListSlice(int idx) {
             return switch(idx) {
                 case 0 -> this.prefix1;
                 case 1 -> this.prefix2;
@@ -2273,7 +2273,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         }
 
         @Override
-        int vectorSlicePrefixLength(int idx) {
+        int treeListSlicePrefixLength(int idx) {
             return switch(idx) {
                 case 0 -> this.len1;
                 case 1 -> this.len12;
@@ -2321,7 +2321,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         }
     }
 
-    private static final class VectorSliceBuilder {
+    private static final class TreeListSliceBuilder {
         private static int prefixIdx(int n) {
             return n - 1;
         }
@@ -2338,7 +2338,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         private int pos;
         private int maxDim;
 
-        public VectorSliceBuilder(int lo, int hi) {
+        public TreeListSliceBuilder(int lo, int hi) {
             this.lo = lo;
             this.hi = hi;
             this.slices = new Object[11][];
@@ -2585,7 +2585,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         }
     }
 
-    public static final class VectorBuilder<A> {
+    public static final class TreeListBuilder<A> {
         private Object[][][][][][] a6;
         private Object[][][][][] a5;
         private Object[][][][] a4;
@@ -2598,7 +2598,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         private boolean prefixIsRightAligned;
         private int depth;
 
-        public VectorBuilder() {
+        public TreeListBuilder() {
             this.clear();
         }
 
@@ -2661,8 +2661,8 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
             }
         }
 
-        VectorBuilder<A> initFrom(TreeList<?> v) {
-            switch(v.vectorSliceCount()) {
+        TreeListBuilder<A> initFrom(TreeList<?> v) {
+            switch(v.treeListSliceCount()) {
                 case 0 -> {}
                 case 1 -> {
                     final TreeList1<?> v1 = (TreeList1<?>) v;
@@ -2768,9 +2768,9 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
             return this;
         }
 
-        public VectorBuilder<A> alignTo(int before, TreeList<A> bigTreeList) {
+        public TreeListBuilder<A> alignTo(int before, TreeList<A> bigTreeList) {
             if(this.len1 != 0 || this.lenRest != 0)
-                throw new UnsupportedOperationException("A non-empty VectorBuilder cannot be aligned retrospectively. Please call .reset() or use a new VectorBuilder.");
+                throw new UnsupportedOperationException("A non-empty TreeListBuilder cannot be aligned retrospectively. Please call .reset() or use a new TreeListBuilder.");
 
             final int prefixLength;
             final int maxPrefixLength;
@@ -2897,7 +2897,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
             this.prefixIsRightAligned = false;
         }
 
-        public VectorBuilder<A> addOne(A elem) {
+        public TreeListBuilder<A> addOne(A elem) {
             if(this.len1 == WIDTH) this.advance();
             this.a1[len1] = elem;
             this.len1++;
@@ -3006,11 +3006,11 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
             }
         }
 
-        private VectorBuilder<A> addVector(TreeList<A> xs) {
-            final int sliceCount = xs.vectorSliceCount();
+        private TreeListBuilder<A> addTreeList(TreeList<A> xs) {
+            final int sliceCount = xs.treeListSliceCount();
             for(int sliceIdx = 0; sliceIdx < sliceCount; sliceIdx++) {
-                final Object[] slice = xs.vectorSlice(sliceIdx);
-                final int n = vectorSliceDim(sliceCount, sliceIdx);
+                final Object[] slice = xs.treeListSlice(sliceIdx);
+                final int n = treeListSliceDim(sliceCount, sliceIdx);
                 if(n == 1) this.addArr1(slice);
                 else if(this.len1 == WIDTH || this.len1 == 0) this.addArrN(slice, n);
                 else foreachRec(n - 2, slice, this::addArr1);
@@ -3018,10 +3018,10 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
             return this;
         }
 
-        public VectorBuilder<A> addAll(Iterable<A> xs) {
+        public TreeListBuilder<A> addAll(Iterable<A> xs) {
             if(xs instanceof TreeList<?> v) {
                 if(this.len1 == 0 && this.lenRest == 0 && !prefixIsRightAligned) this.initFrom(v);
-                else this.addVector((TreeList<A>) v);
+                else this.addTreeList((TreeList<A>) v);
             } else {
                 for(A a : xs) {
                     this.addOne(a);
@@ -3121,7 +3121,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
             final int len = this.len1 + this.lenRest;
             final int realLen = len - this.offset;
             if(realLen == 0) return TreeList.empty();
-            else if(len < 0) throw new IndexOutOfBoundsException("Vector cannot have negative size " + len);
+            else if(len < 0) throw new IndexOutOfBoundsException("TreeList cannot have negative size " + len);
             else if(len <= WIDTH) {
                 return new TreeList1<>(copyIfDifferentSize(this.a1, realLen));
             } else if(len <= WIDTH2) {
@@ -3217,7 +3217,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
 
     }
 
-    private static final class NewVectorIterator<A> implements ListIterator<A> {
+    private static final class NewTreeListIterator<A> implements ListIterator<A> {
 
         private final TreeList<A> v;
         private int totalLength;
@@ -3239,7 +3239,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         private int sliceStart;
         private int sliceEnd;
 
-        public NewVectorIterator(TreeList<A> v, int totalLength, int sliceCount) {
+        public NewTreeListIterator(TreeList<A> v, int totalLength, int sliceCount) {
             this.v = v;
             this.totalLength = totalLength;
             this.sliceCount = sliceCount;
@@ -3279,14 +3279,14 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
             if(!this.hasNext()) Collections.emptyIterator().next();
 
             this.sliceIdx++;
-            Object[] slice = v.vectorSlice(this.sliceIdx);
+            Object[] slice = v.treeListSlice(this.sliceIdx);
             while(slice.length == 0) {
                 this.sliceIdx++;
-                slice = v.vectorSlice(this.sliceIdx);
+                slice = v.treeListSlice(this.sliceIdx);
             }
 
             this.sliceStart = this.sliceEnd;
-            this.sliceDim = vectorSliceDim(this.sliceCount, this.sliceIdx);
+            this.sliceDim = treeListSliceDim(this.sliceCount, this.sliceIdx);
             switch(this.sliceDim) {
                 case 1 -> this.a1 = (Object[]) slice;
                 case 2 -> this.a2 = (Object[][]) slice;
