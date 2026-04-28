@@ -138,16 +138,14 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 val newImage: CastingImage
                 if (this.image.parenCount > 0) {
                     // if we're inside parentheses, add the iota to the list with escaped set to true
-                    val newParens = this.image.parenthesized.toMutableList()
-                    newParens.add(ParenthesizedIota(iota, true))
+                    val newParens = this.image.parenthesized.appended(ParenthesizedIota(iota, true))
                     newImage = this.image.copy(
                         escapeNext = false,
                         parenthesized = newParens
                     )
                 } else {
                     // if we're not in parentheses, just push the iota to the stack
-                    val newStack = this.image.stack.toMutableList()
-                    newStack.add(iota)
+                    val newStack = this.image.stack.appended(iota)
                     newImage = this.image.copy(
                         stack = newStack,
                         escapeNext = false,
