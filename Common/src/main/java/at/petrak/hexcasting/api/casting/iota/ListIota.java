@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.api.casting.SpellList;
+import at.petrak.hexcasting.api.utils.TreeList;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import com.mojang.serialization.MapCodec;
@@ -34,6 +35,10 @@ public class ListIota extends Iota {
         }
         depth = maxChildDepth + 1;
         size = totalSize;
+    }
+
+    public ListIota(@NotNull TreeList<Iota> list) {
+        this(new SpellList.LList(list));
     }
 
     public ListIota(@NotNull List<Iota> list) {
