@@ -44,7 +44,7 @@ data class FrameForEach(
     /** When halting, we add the stack state at halt to the stack accumulator, then return the original pre-Thoth stack, plus the accumulator. */
     override fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>> {
         val newStack = baseStack?.toMutableList() ?: mutableListOf()
-        newStack.add(ListIota(immutableAcc.appendedAll(stack).toList()))
+        newStack.add(ListIota(immutableAcc.appendedAll(stack)))
         return true to newStack
     }
 
@@ -74,7 +74,7 @@ data class FrameForEach(
             Triple(data.car, harness.image.withUsedOp(), cont2)
         } else {
             // Else, dump our final list onto the stack.
-            Triple(ListIota(immutableAcc.toList()), harness.image, continuation)
+            Triple(ListIota(immutableAcc), harness.image, continuation)
         }
         val tStack = stack.toMutableList()
         tStack.add(stackTop)
