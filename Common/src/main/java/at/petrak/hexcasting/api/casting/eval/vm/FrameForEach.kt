@@ -24,19 +24,27 @@ import kotlin.jvm.optionals.getOrNull
  * @property data list of *remaining* datums to ForEach over
  * @property code code to run per datum
  * @property baseStack the stack state at Thoth entry
- * @property acc concatenated list of final stack states after Thoth exit
+ * @property immutableAcc concatenated list of final stack states after Thoth exit
  */
 data class FrameForEach(
     val data: SpellList,
     val code: SpellList,
     val baseStack: List<Iota>?,
-    val acc: TreeList<Iota>
+    val immutableAcc: TreeList<Iota>
 ) : ContinuationFrame {
+
+    @Deprecated("use the primary constructor that accepts a TreeList instead")
+    constructor(
+        data: SpellList,
+        code: SpellList,
+        baseStack: List<Iota>?,
+        acc: MutableList<Iota>
+    ) : this(data, code, baseStack, TreeList.from(acc))
 
     /** When halting, we add the stack state at halt to the stack accumulator, then return the original pre-Thoth stack, plus the accumulator. */
     override fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>> {
         val newStack = baseStack?.toMutableList() ?: mutableListOf()
-        newStack.add(ListIota(acc.appendedAll(stack).toList()))
+        newStack.add(ListIota(immutableAcc.appendedAll(stack).toList()))
         return true to newStack
     }
 
@@ -49,10 +57,10 @@ data class FrameForEach(
         // If this isn't the very first Thoth step (i.e. no Thoth computations run yet)...
         val (stack, nextAcc) = if (baseStack == null) {
             // init stack to the harness stack...
-            harness.image.stack.toList() to acc
+            harness.image.stack.toList() to immutableAcc
         } else {
             // else save the stack to the accumulator and reuse the saved base stack.
-            baseStack to acc.appendedAll(harness.image.stack)
+            baseStack to immutableAcc.appendedAll(harness.image.stack)
         }
 
         // If we still have data to process...
@@ -66,7 +74,7 @@ data class FrameForEach(
             Triple(data.car, harness.image.withUsedOp(), cont2)
         } else {
             // Else, dump our final list onto the stack.
-            Triple(ListIota(acc.toList()), harness.image, continuation)
+            Triple(ListIota(immutableAcc.toList()), harness.image, continuation)
         }
         val tStack = stack.toMutableList()
         tStack.add(stackTop)
@@ -93,9 +101,9 @@ data class FrameForEach(
                     SpellList.CODEC.fieldOf("data").forGetter { it.data },
                     SpellList.CODEC.fieldOf("code").forGetter { it.code },
                     IotaType.TYPED_CODEC.listOf().optionalFieldOf("base").forGetter { Optional.ofNullable(it.baseStack) },
-                    IotaType.TYPED_CODEC.listOf().fieldOf("accumulator").forGetter { it.acc }
+                    IotaType.TYPED_CODEC.listOf().fieldOf("accumulator").forGetter { it.immutableAcc }
                 ).apply(inst) { a, b, c, d ->
-                    FrameForEach(a, b, c.getOrNull(), d)
+                    FrameForEach(a, b, c.getOrNull(), TreeList.from(d))
                 }
             }
             val STREAM_CODEC = StreamCodec.composite(
@@ -104,9 +112,9 @@ data class FrameForEach(
                 ByteBufCodecs.optional(IotaType.TYPED_STREAM_CODEC
                     .apply(ByteBufCodecs.list())), { Optional.ofNullable(it.baseStack) },
                 IotaType.TYPED_STREAM_CODEC
-                    .apply(ByteBufCodecs.list()), FrameForEach::acc
+                    .apply(ByteBufCodecs.list()), FrameForEach::immutableAcc
             ) { a, b, c, d ->
-                FrameForEach(a, b, c.getOrNull(), d)
+                FrameForEach(a, b, c.getOrNull(), TreeList.from(d))
             }
 
 
