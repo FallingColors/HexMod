@@ -54,7 +54,7 @@ data class FrameForEach(
         harness: CastingVM
     ): CastResult {
         // If this isn't the very first Thoth step (i.e. no Thoth computations run yet)...
-        val (stack, nextAcc) = if (baseStack == null) {
+        val (stack, newAcc) = if (baseStack == null) {
             // init stack to the harness stack...
             harness.image.stack.toList() to immutableAcc
         } else {
@@ -67,7 +67,7 @@ data class FrameForEach(
             // push the next datum to the top of the stack,
             val cont2 = continuation
                 // put the next Thoth object back on the stack for the next Thoth cycle,
-                .pushFrame(FrameForEach(data.cdr, code, stack, nextAcc))
+                .pushFrame(FrameForEach(data.cdr, code, stack, newAcc))
                 // and prep the Thoth'd code block for evaluation.
                 .pushFrame(FrameEvaluate(code, true))
             Triple(data.car, harness.image.withUsedOp(), cont2)
