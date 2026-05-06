@@ -213,17 +213,6 @@ public interface HexAPI {
         return DUMMY_ARMOR_MATERIAL;
     }
 
-    /**
-     * Location in the userdata of the ravenmind
-     */
-    String RAVENMIND_USERDATA = modLoc("ravenmind").toString();
-    /**
-     * Location in the userdata of the number of ops executed
-     */
-    String OP_COUNT_USERDATA = modLoc("op_count").toString();
-
-    String MARKED_MOVED_USERDATA = modLoc("impulsed").toString();
-
     static HexAPI instance() {
         return INSTANCE.get();
     }
