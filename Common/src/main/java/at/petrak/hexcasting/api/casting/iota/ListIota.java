@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.api.casting.iota;
 
-import at.petrak.hexcasting.api.casting.SpellList;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.TreeList;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.api.mod.HexConfig;
+import java.util.ListIterator;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -20,13 +20,13 @@ import java.util.List;
 import static java.lang.Math.max;
 
 /**
- * This is a <i>wrapper</i> for {@link SpellList}.
+ * This is a <i>wrapper</i> for {@link TreeList} of {@link Iota}.
  */
 public class ListIota extends Iota {
     private final int depth;
     private final int size;
 
-    public ListIota(@NotNull SpellList list) {
+    public ListIota(@NotNull TreeList<Iota> list) {
         super(HexIotaTypes.LIST, list);
         int maxChildDepth = 0;
         int totalSize = 1;
@@ -38,21 +38,18 @@ public class ListIota extends Iota {
         size = totalSize;
     }
 
-    public ListIota(@NotNull TreeList<Iota> list) {
-        this(new SpellList.LList(list));
-    }
-
     public ListIota(@NotNull List<Iota> list) {
-        this(new SpellList.LList(list));
+        this(TreeList.from(list));
     }
 
-    public SpellList getList() {
-        return (SpellList) this.payload;
+    @SuppressWarnings("unchecked")
+    public TreeList<Iota> getList() {
+        return (TreeList<Iota>) this.payload;
     }
 
     @Override
     public boolean isTruthy() {
-        return this.getList().getNonEmpty();
+        return !this.getList().isEmpty();
     }
 
     @Override
@@ -66,7 +63,7 @@ public class ListIota extends Iota {
         }
         var b = list.getList();
 
-        SpellList.SpellListIterator aIter = a.iterator(), bIter = b.iterator();
+        ListIterator<Iota> aIter = a.iterator(), bIter = b.iterator();
         for (; ; ) {
             if (!aIter.hasNext() && !bIter.hasNext()) {
                 // we ran out together!

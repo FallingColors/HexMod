@@ -17,16 +17,16 @@ import net.minecraft.world.entity.Entity
  * The state of a casting VM, containing the stack and all
  */
 data class CastingImage private constructor(
-    val stack: List<Iota>,
+    val stack: TreeList<Iota>,
 
     val parenCount: Int,
-    val parenthesized: List<ParenthesizedIota>,
+    val parenthesized: TreeList<ParenthesizedIota>,
     val escapeNext: Boolean,
     val opsConsumed: Long,
 
     val userData: CompoundTag
 ) {
-    constructor() : this(listOf(), 0, listOf(), false, 0, CompoundTag())
+    constructor() : this(TreeList.empty(), 0, TreeList.empty(), false, 0, CompoundTag())
 
     data class ParenthesizedIota(val iota: Iota, val escaped: Boolean) {
         companion object {
@@ -70,7 +70,7 @@ data class CastingImage private constructor(
     /**
      * Returns a copy of this with escape/paren-related fields cleared.
      */
-    fun withResetEscape() = this.copy(parenCount = 0, parenthesized = listOf(), escapeNext = false)
+    fun withResetEscape() = this.copy(parenCount = 0, parenthesized = TreeList.empty(), escapeNext = false)
 
     fun serializeToNbt() = NBTBuilder {
         TAG_STACK %= stack.serializeToNBT()
@@ -120,7 +120,7 @@ data class CastingImage private constructor(
                 val escapeNext = tag.getBoolean(TAG_ESCAPE_NEXT)
                 val opsUsed = tag.getLong(TAG_OPS_CONSUMED)
 
-                CastingImage(stack, parenCount, parenthesized, escapeNext, opsUsed, userData)
+                CastingImage(TreeList.from(stack), parenCount, TreeList.from(parenthesized), escapeNext, opsUsed, userData)
             } catch (exn: Exception) {
                 HexAPI.LOGGER.warn("error while loading a CastingImage", exn)
                 CastingImage()

@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.pigment.FrozenPigment
+import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.lightPurple
 import at.petrak.hexcasting.common.lib.HexItems
@@ -38,14 +39,9 @@ abstract class Mishap : RuntimeException() {
      *
      * You can also mess up the stack with this.
      */
-    abstract fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>)
+    abstract fun execute(env: CastingEnvironment, errorCtx: Context, stack: TreeList<Iota>): TreeList<Iota>
 
     protected abstract fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component?
-
-    fun executeReturnStack(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>): List<Iota> {
-        execute(ctx, errorCtx, stack)
-        return stack
-    }
 
     /**
      * Every error message should be prefixed with the name of the action...

@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.GarbageIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.pigment.FrozenPigment
+import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.api.utils.asTextComponent
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.ComponentUtils
@@ -16,10 +17,12 @@ class MishapInvalidOperatorArgs(val perpetrators: List<Iota>) : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.GRAY)
 
-    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: TreeList<Iota>): TreeList<Iota> {
+        var newStack = stack
         for (i in perpetrators.indices) {
-            stack[stack.size - 1 - i] = GarbageIota()
+            newStack = newStack.updated(stack.size - 1 - i, GarbageIota())
         }
+        return newStack
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component {

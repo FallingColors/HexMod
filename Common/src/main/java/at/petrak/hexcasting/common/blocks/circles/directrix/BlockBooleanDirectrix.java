@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.iota.BooleanIota;
 import at.petrak.hexcasting.api.casting.mishaps.circle.MishapBoolDirectrixEmptyStack;
 import at.petrak.hexcasting.api.casting.mishaps.circle.MishapBoolDirectrixNotBool;
+import at.petrak.hexcasting.api.utils.TreeList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -62,7 +63,7 @@ public class BlockBooleanDirectrix extends BlockCircleComponent {
         var outputDir = biota.getBool()
             ? bs.getValue(FACING).getOpposite()
             : bs.getValue(FACING);
-        var imageOut = imageIn.copy(stack, imageIn.getParenCount(), imageIn.getParenthesized(),
+        var imageOut = imageIn.copy(TreeList.from(stack), imageIn.getParenCount(), imageIn.getParenthesized(),
             imageIn.getEscapeNext(), imageIn.getOpsConsumed(), imageIn.getUserData());
 
         return new ControlFlow.Continue(imageOut, List.of(this.exitPositionFromDirection(pos, outputDir)));

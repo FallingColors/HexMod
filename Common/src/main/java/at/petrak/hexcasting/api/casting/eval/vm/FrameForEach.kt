@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
-import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -26,26 +25,26 @@ import net.minecraft.server.level.ServerLevel
  * @property immutableAcc concatenated list of final stack states after Thoth exit
  */
 data class FrameForEach(
-    val data: SpellList,
-    val code: SpellList,
-    val baseStack: List<Iota>?,
+    val data: TreeList<Iota>,
+    val code: TreeList<Iota>,
+    val baseStack: TreeList<Iota>?,
     val immutableAcc: TreeList<Iota>
 ) : ContinuationFrame {
 
     @Deprecated("use the primary constructor that accepts a TreeList instead")
     constructor(
-        data: SpellList,
-        code: SpellList,
+        data: TreeList<Iota>,
+        code: TreeList<Iota>,
         baseStack: List<Iota>?,
         acc: MutableList<Iota>
-    ) : this(data, code, baseStack, TreeList.from(acc))
+    ) : this(data, code, TreeList.from(baseStack), TreeList.from(acc))
 
     @Deprecated("access immutableAcc instead")
     val acc: MutableList<Iota> get() = immutableAcc.toMutableList()
 
     /** When halting, we add the stack state at halt to the stack accumulator, then return the original pre-Thoth stack, plus the accumulator. */
-    override fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>> {
-        val newStack = baseStack?.toMutableList() ?: mutableListOf()
+    override fun breakDownwards(stack: TreeList<Iota>): Pair<Boolean, TreeList<Iota>> {
+        val newStack = baseStack ?: TreeList.empty()
         newStack.add(ListIota(immutableAcc.appendedAll(stack)))
         return true to newStack
     }
@@ -59,27 +58,26 @@ data class FrameForEach(
         // If this isn't the very first Thoth step (i.e. no Thoth computations run yet)...
         val (stack, newAcc) = if (baseStack == null) {
             // init stack to the harness stack...
-            harness.image.stack.toList() to immutableAcc
+            harness.image.stack to immutableAcc
         } else {
             // else save the stack to the accumulator and reuse the saved base stack.
             baseStack to immutableAcc.appendedAll(harness.image.stack)
         }
 
         // If we still have data to process...
-        val (stackTop, newImage, newCont) = if (data.nonEmpty) {
+        val (stackTop, newImage, newCont) = if (!data.isEmpty()) {
             // push the next datum to the top of the stack,
             val cont2 = continuation
                 // put the next Thoth object back on the stack for the next Thoth cycle,
-                .pushFrame(FrameForEach(data.cdr, code, stack, newAcc))
+                .pushFrame(FrameForEach(data.tail(), code, stack, newAcc))
                 // and prep the Thoth'd code block for evaluation.
                 .pushFrame(FrameEvaluate(code, true))
-            Triple(data.car, harness.image.withUsedOp(), cont2)
+            Triple(data.head(), harness.image.withUsedOp(), cont2)
         } else {
             // Else, dump our final list onto the stack.
             Triple(ListIota(immutableAcc), harness.image, continuation)
         }
-        val tStack = stack.toMutableList()
-        tStack.add(stackTop)
+        val tStack = stack.appended(stackTop)
         return CastResult(
             ListIota(code),
             newCont,
@@ -99,7 +97,7 @@ data class FrameForEach(
         "accumulator" %= immutableAcc.serializeToNBT()
     }
 
-    override fun size() = data.size() + code.size() + immutableAcc.size + (baseStack?.size ?: 0)
+    override fun size() = data.size + code.size + immutableAcc.size + (baseStack?.size ?: 0)
 
     override val type: ContinuationFrame.Type<*> = TYPE
 
@@ -111,7 +109,7 @@ data class FrameForEach(
                     HexIotaTypes.LIST.deserialize(tag.getList("data", Tag.TAG_COMPOUND), world)!!.list,
                     HexIotaTypes.LIST.deserialize(tag.getList("code", Tag.TAG_COMPOUND), world)!!.list,
                     if (tag.hasList("base", Tag.TAG_COMPOUND))
-                        HexIotaTypes.LIST.deserialize(tag.getList("base", Tag.TAG_COMPOUND), world)!!.list.toList()
+                        HexIotaTypes.LIST.deserialize(tag.getList("base", Tag.TAG_COMPOUND), world)!!.list
                     else
                         null,
                     TreeList.from(HexIotaTypes.LIST.deserialize(

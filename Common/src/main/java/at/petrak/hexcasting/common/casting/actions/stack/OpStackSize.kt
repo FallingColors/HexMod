@@ -10,7 +10,7 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 object OpStackSize : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stack = image.stack.toMutableList()
+        val stack = image.stack
         stack.add(DoubleIota(stack.size.toDouble()))
         val image2 = image.withUsedOp().copy(stack = stack)
         return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)

@@ -36,12 +36,12 @@ interface SpellAction : Action {
     }
 
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stack = image.stack.toMutableList()
+        val stack = image.stack
 
         if (this.argc > stack.size)
             throw MishapNotEnoughArgs(this.argc, stack.size)
-        val args = stack.takeLast(this.argc)
-        for (_i in 0 until this.argc) stack.removeLast()
+        val args = stack.takeRight(this.argc)
+        val stackWithoutArgs = stack.dropRight(this.argc)
 
         // execute!
         val userDataMut = image.userData.copy()
@@ -65,7 +65,7 @@ interface SpellAction : Action {
         for (spray in result.particles)
             sideEffects.add(OperatorSideEffect.Particles(spray))
 
-        val image2 = image.copy(stack = stack, opsConsumed = image.opsConsumed + result.opCount, userData = userDataMut)
+        val image2 = image.copy(stack = stackWithoutArgs, opsConsumed = image.opsConsumed + result.opCount, userData = userDataMut)
 
         val sound = if (this.hasCastingSound(env)) HexEvalSounds.SPELL else HexEvalSounds.MUTE
         return OperationResult(image2, sideEffects, continuation, sound)
