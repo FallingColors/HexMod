@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.actions.spells
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
@@ -14,6 +15,7 @@ import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.common.casting.actions.spells.great.OpTeleport
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.phys.Vec3
 import kotlin.math.absoluteValue
 import kotlin.math.roundToLong
 
@@ -36,7 +38,7 @@ object OpBlink : SpellAction {
                 throw MishapImmuneEntity(immunePassengers.get(0))
         }
 
-        val dvec = target.lookAngle.scale(delta)
+        val dvec = HexAPI.instance().getEntityLookDirSpecial(target).scale(delta)
         val endPos = target.position().add(dvec)
 
         if (!HexConfig.server().canTeleportInThisDimension(env.world.dimension()))
@@ -51,7 +53,7 @@ object OpBlink : SpellAction {
         val targetMiddlePos = target.position().add(0.0, target.eyeHeight / 2.0, 0.0)
 
         return SpellAction.Result(
-            Spell(target, delta),
+            Spell(target, dvec),
             (MediaConstants.SHARD_UNIT * delta.absoluteValue * 0.5).roundToLong(),
             listOf(
                 ParticleSpray.cloud(targetMiddlePos, 2.0, 50),
@@ -60,13 +62,12 @@ object OpBlink : SpellAction {
         )
     }
 
-    private data class Spell(val target: Entity, val delta: Double) : RenderedSpell {
+    private data class Spell(val target: Entity, val dvec: Vec3) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
             if (!HexConfig.server().canTeleportInThisDimension(env.world.dimension()))
                 return
 
-            val delta = target.lookAngle.scale(delta)
-            OpTeleport.teleportRespectSticky(target, delta, env.world)
+            OpTeleport.teleportRespectSticky(target, dvec, env.world)
         }
     }
 }
