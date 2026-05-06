@@ -37,7 +37,7 @@ data class FrameForEach(
         code: TreeList<Iota>,
         baseStack: List<Iota>?,
         acc: MutableList<Iota>
-    ) : this(data, code, baseStack, TreeList.from(acc))
+    ) : this(data, code, TreeList.from(baseStack), TreeList.from(acc))
 
     @Deprecated("access immutableAcc instead")
     val acc: MutableList<Iota> get() = immutableAcc.toMutableList()
