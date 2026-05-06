@@ -59,6 +59,13 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                         resolutionType = ResolvedPatternType.ERRORED,
                         sound = HexEvalSounds.MISHAP,
                     )
+                } else if (result.newData != null && result.newData.opsConsumed > env.maxOpCount()) {
+                    result.copy(
+                        newData = null,
+                        sideEffects = listOf(OperatorSideEffect.DoMishap(MishapEvalTooMuch(), Mishap.Context(null, null))),
+                        resolutionType = ResolvedPatternType.ERRORED,
+                        sound = HexEvalSounds.MISHAP,
+                    )
                 } else {
                     result
                 }
