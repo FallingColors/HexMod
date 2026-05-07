@@ -355,6 +355,10 @@
           "": "Always Show List Commas",
           "@Tooltip": "Whether all iota types should be comma-separated when displayed in lists (by default, pattern iotas do not use commas)",
         },
+        staticActiveSlates: {
+          "": "Static patterned slates",
+          "@Tooltip": "Whether patterns on slates should always be rendered non-moving",
+        }
       },
       
       server: {
