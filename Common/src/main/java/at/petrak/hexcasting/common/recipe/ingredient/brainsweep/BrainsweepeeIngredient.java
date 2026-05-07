@@ -9,11 +9,11 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 // Partially based on:
 // https://github.com/SlimeKnights/Mantle/blob/1.18.2/src/main/java/slimeknights/mantle/recipe/ingredient/EntityIngredient.java
@@ -82,5 +82,14 @@ public abstract class BrainsweepeeIngredient {
     public static Component getModNameComponent(String namespace) {
         String mod = IXplatAbstractions.INSTANCE.getModName(namespace);
         return Component.literal(mod).withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC);
+    }
+
+    private static Map<EntityType<?>, Entity> cachedExampleEntity = new HashMap<>();
+    protected static Entity getCachedExampleEntity(EntityType<?> type, Level level) {
+        // don't cache for server levels (if any) to prevent wrong side
+        if (!level.isClientSide) {
+            return type.create(level);
+        }
+        return cachedExampleEntity.computeIfAbsent(type, t -> t.create(level));
     }
 }
