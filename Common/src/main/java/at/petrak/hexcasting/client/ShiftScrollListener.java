@@ -17,6 +17,8 @@ public class ShiftScrollListener {
             return false;
         }
 
+        if (HexConfig.client().disableInworldScrolling()) return false;
+
         return onScroll(delta, true);
     }
 

@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.forge;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
+import at.petrak.hexcasting.client.Keybinds;
 import at.petrak.hexcasting.client.RegisterClientStuff;
 import at.petrak.hexcasting.client.ShiftScrollListener;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
@@ -28,6 +29,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.io.IOException;
 import java.util.function.Function;
@@ -73,6 +75,7 @@ public class ForgeHexClientInitializer {
         evBus.addListener((TickEvent.ClientTickEvent e) -> {
             if (e.phase == TickEvent.Phase.END) {
                 ClientTickCounter.clientTickEnd();
+                Keybinds.clientTickEnd();
                 ShiftScrollListener.clientTickEnd();
             }
         });
@@ -135,5 +138,10 @@ public class ForgeHexClientInitializer {
 
             skin.addLayer(new AltioraLayer<>(skin, evt.getEntityModels()));
         });
+    }
+
+    @SubscribeEvent
+    public static void registerBinds(RegisterKeyMappingsEvent event) {
+        Keybinds.ALL_BINDS.forEach(event::register);
     }
 }

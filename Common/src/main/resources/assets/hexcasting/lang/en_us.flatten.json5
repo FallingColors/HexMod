@@ -265,6 +265,15 @@
   "gui.hexcasting": {
     spellcasting: "Hex Grid",
   },
+
+  "category.hexcasting": {
+    "binds": "Hex Casting",
+  },
+
+  "key.hexcasting": {
+    "spellbook_prev": "Previous Spellbook Page",
+    "spellbook_next": "Next Spellbook Page",
+  },
   
   "tag.hexcasting": {
     staves: "Hex Staves",
@@ -335,13 +344,17 @@
           "": "Ctrl Toggles Off Stroke Order",
           "@Tooltip": "Whether the ctrl key will instead turn *off* the color gradient on patterns",
         },
+        disableInworldScrolling: {
+          "": "Disable In-World Scrolling",
+          "@Tooltip": "Disable scrolling input for spellbooks and abaci in the normal world, keeping keybinds and staff screen scrolling normal"
+        },
         invertSpellbookScrollDirection: {
           "": "Invert Spellbook Scroll Direction",
           "@Tooltip": "Whether scrolling up (as opposed to down) will increase the page index of the spellbook, and vice versa",
         },
         invertAbacusScrollDirection: {
           "": "Invert Abacus Scroll Direction",
-          "@Tooltip": "Whether scrolling up (as opposed to down) will increase the page index of the abacus, and vice versa",
+          "@Tooltip": "Whether scrolling up (as opposed to down) will increase the value of the abacus, and vice versa",
         },
         gridSnapThreshold: {
           "": "Grid Snap Threshold",
