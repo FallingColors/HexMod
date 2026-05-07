@@ -147,6 +147,8 @@ public class ForgeHexInitializer {
         HexAdvancementTriggers.registerTriggers();
 
         RegisterMisc.register();
+
+        HexGaslighting.init();
     }
 
     // https://github.com/VazkiiMods/Botania/blob/1.18.x/Forge/src/main/java/vazkii/botania/forge/ForgeCommonInitializer.java
