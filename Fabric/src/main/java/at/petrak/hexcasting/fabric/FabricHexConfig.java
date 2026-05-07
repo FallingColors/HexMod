@@ -131,7 +131,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private boolean invertSpellbookScrollDirection = DEFAULT_INVERT_SPELLBOOK_SCROLL;
         @ConfigEntry.Gui.Tooltip
-        private boolean invertAbacusScrollDirection = DEFAULT_INVERT_SPELLBOOK_SCROLL;
+        private boolean invertAbacusScrollDirection = DEFAULT_INVERT_ABACUS_SCROLL;
         @ConfigEntry.Gui.Tooltip
         private double gridSnapThreshold = DEFAULT_GRID_SNAP_THRESHOLD;
         @ConfigEntry.Gui.Tooltip
