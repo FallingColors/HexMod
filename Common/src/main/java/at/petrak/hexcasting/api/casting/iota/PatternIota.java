@@ -108,10 +108,6 @@ public class PatternIota extends Iota {
                     continuation
             );
 
-            if (result.getNewImage().getOpsConsumed() > vm.getEnv().maxOpCount()) {
-                throw new MishapEvalTooMuch();
-            }
-
             var cont2 = result.getNewContinuation();
             // TODO parens also break prescience
             var sideEffects = result.getSideEffects();
