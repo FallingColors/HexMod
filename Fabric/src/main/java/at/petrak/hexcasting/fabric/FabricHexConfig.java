@@ -138,6 +138,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private boolean clickingTogglesDrawing = DEFAULT_CLICKING_TOGGLES_DRAWING;
         @ConfigEntry.Gui.Tooltip
         private boolean alwaysShowListCommas = DEFAULT_ALWAYS_SHOW_LIST_COMMAS;
+        @ConfigEntry.Gui.Tooltip
+        private boolean staticActiveSlates = DEFAULT_STATIC_ACTIVE_SLATES;
 
         @Override
         public void validatePostLoad() throws ValidationException {
@@ -173,6 +175,9 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         public boolean alwaysShowListCommas() {
              return alwaysShowListCommas;
         }
+
+        @Override
+        public boolean staticActiveSlates() { return staticActiveSlates; }
     }
 
     @Config(name = "server")
