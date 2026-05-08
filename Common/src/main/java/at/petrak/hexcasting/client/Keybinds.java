@@ -23,12 +23,15 @@ public class Keybinds {
     public static List<KeyMapping> ALL_BINDS = List.of(spellbookPrev, spellbookNext);
 
     public static void clientTickEnd() {
+        // because of how mouse scrolling works (scrolling upward moves the page down), a positive
+        // delta value makes the book flip backward while a negative one makes it flip forward
+
         while (spellbookPrev.consumeClick()) {
-            ShiftScrollListener.onScroll(-1, false);
+            ShiftScrollListener.onScroll(1, false);
         }
 
         while (spellbookNext.consumeClick()) {
-            ShiftScrollListener.onScroll(1, false);
+            ShiftScrollListener.onScroll(-1, false);
         }
     }
 }
