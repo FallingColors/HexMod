@@ -356,8 +356,8 @@
           "@Tooltip": "Whether all iota types should be comma-separated when displayed in lists (by default, pattern iotas do not use commas)",
         },
         staticActiveSlates: {
-          "": "Static patterned slates",
-          "@Tooltip": "Whether patterns on slates should always be rendered non-moving",
+          "": "Static Active Slates",
+          "@Tooltip": "Whether patterns on active slates should be rendered without wobble (improves performance with lots of active slates)",
         }
       },
       

@@ -109,7 +109,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                             "Whether all iota types should be comma-separated in lists (by default, pattern iotas don't use commas)")
                     .define("alwaysShowListCommas", DEFAULT_ALWAYS_SHOW_LIST_COMMAS);
             staticActiveSlates = builder.comment(
-                            "Whether patterns on slates should always be rendered non-moving")
+                            "Whether patterns on active slates should be rendered without wobble (improves performance with lots of active slates)")
                     .define("staticActiveSlates", DEFAULT_STATIC_ACTIVE_SLATES);
         }
 
