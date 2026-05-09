@@ -10,7 +10,7 @@ pkSubproj {
         "paucal",
         "patchouli",
         "fabric-language-kotlin",
-        "inline:1.20.1-1.1.1-fabric",
+        "inline",
         "cloth-config",
         "cardinal-components-api",
         "fabric-api",
