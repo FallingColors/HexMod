@@ -15,21 +15,22 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Function;
 
-public record HexPatternOverlayRenderer(Function<ItemStack, HexPattern> patternRetriever) implements ItemOverlayRenderer {
+@FunctionalInterface
+public interface HexPatternOverlayRenderer extends ItemOverlayRenderer {
+    HexPattern getPattern(ItemStack stack);
 
-    public static final HexPatternOverlayRenderer SCROLL_RENDERER = new HexPatternOverlayRenderer((stack) -> {
+    HexPatternOverlayRenderer SCROLL_RENDERER = (stack) -> {
         var compound = NBTHelper.getCompound(stack, ItemScroll.TAG_PATTERN);
         if (compound != null && !NBTHelper.getBoolean(stack, ItemScroll.TAG_NEEDS_PURCHASE)) {
             return HexPattern.fromNBT(compound);
 
         }
         return null;
-    });
+    };
 
-    public static final HexPatternOverlayRenderer SLATE_RENDERER = new HexPatternOverlayRenderer(
-        (stack) -> ItemSlate.getPattern(stack).orElse(null));
+    HexPatternOverlayRenderer SLATE_RENDERER = (stack) -> ItemSlate.getPattern(stack).orElse(null);
 
-    public static final PatternSettings OVERLAY_RENDER_SETTINGS = new PatternSettings("overlay",
+    PatternSettings OVERLAY_RENDER_SETTINGS = new PatternSettings("overlay",
         new PatternSettings.PositionSettings(14, 14, 0.5, 0.5,
             PatternSettings.AxisAlignment.CENTER_FIT, PatternSettings.AxisAlignment.CENTER_FIT, 4.0, 0, 0),
         PatternSettings.StrokeSettings.fromStroke(1.5),
@@ -38,13 +39,13 @@ public record HexPatternOverlayRenderer(Function<ItemStack, HexPattern> patternR
     );
 
     // higher contrast purple based on slate wobble color
-    public static final PatternColors HC_PURPLE_COLOR =
+    PatternColors HC_PURPLE_COLOR =
         new PatternColors(RenderLib.screenCol(0xff_cfa0f3), 0xff_763fa1);
 
     @Override
-    public void render(ItemStack itemStack, GuiGraphics guiGraphics) {
+    default void render(ItemStack itemStack, GuiGraphics guiGraphics) {
         if(!Screen.hasShiftDown()) return;
-        HexPattern pat = patternRetriever().apply(itemStack);
+        HexPattern pat = getPattern(itemStack);
         if(pat == null) return;
         var ps = guiGraphics.pose();
         ps.pushPose();
