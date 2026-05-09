@@ -226,7 +226,7 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
         pressurePlateBlock(HexBlocks.EDIFIED_PRESSURE_PLATE, planks1);
 
         var sconceModel = models().getExistingFile(modLoc("amethyst_sconce"));
-        simpleBlock(HexBlocks.SCONCE, sconceModel);
+        directionalBlock(HexBlocks.SCONCE, sconceModel);
         simpleBlockItem(HexBlocks.SCONCE, sconceModel);
 
         var conjuredModel = models().getBuilder("conjured").texture("particle", mcLoc("block/amethyst_block"))

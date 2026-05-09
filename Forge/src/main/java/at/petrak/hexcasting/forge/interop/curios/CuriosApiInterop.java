@@ -19,7 +19,7 @@ import top.theillusivec4.curios.api.SlotTypeMessage;
 import top.theillusivec4.curios.api.SlotTypePreset;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class CuriosApiInterop {
@@ -55,6 +55,21 @@ public class CuriosApiInterop {
 
 
     public static void init() {
+        DiscoveryHandlers.addExtraEquipmentDiscoverer(player -> {
+            List<ItemStack> result = new ArrayList<>();
+            player.getCapability(CuriosCapability.INVENTORY).ifPresent(handler -> {
+                for (var stacksHandler : handler.getCurios().values()) {
+                    var stacks = stacksHandler.getStacks();
+                    for (int i = 0; i < stacks.getSlots(); i++) {
+                        var stack = stacks.getStackInSlot(i);
+                        if (stack.isEmpty()) continue;
+                        result.add(stack);
+                    }
+                }
+            });
+            return result;
+        });
+
         DiscoveryHandlers.addDebugItemDiscoverer((player, type) -> {
             AtomicReference<ItemStack> result = new AtomicReference<>(ItemStack.EMPTY);
             player.getCapability(CuriosCapability.INVENTORY).ifPresent(handler -> {

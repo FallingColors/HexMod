@@ -1,0 +1,30 @@
+{
+  "name": "hexcasting.entry.creative_items",
+  "icon": "hexcasting:creative_unlocker",
+  "category": "hexcasting:items",
+  "sortnum": 99,
+  "advancement": "hexcasting:creative_unlocker",
+  "secret": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.creative_items.1"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "text": "hexcasting.page.creative_items.creative_unlocker",
+      "item": "hexcasting:creative_unlocker",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.creative_items.2"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "hexcasting.page.creative_items.debug_media.title",
+      "text": "hexcasting.page.creative_items.debug_media.desc",
+      "item": "hexcasting:creative_unlocker{display:{Name:'{\\\"text\\\":\\\"debug media\\\"}'}}"
+    }
+  ]
+}

@@ -84,6 +84,13 @@ public interface HexAPI {
     }
 
     /**
+     * If the entity has a special getter return that, otherwise return its normal look angle
+     */
+    default Vec3 getEntityLookDirSpecial(Entity entity) {
+        return entity.getLookAngle();
+    }
+
+    /**
      * Register an entity with the given ID to have its velocity as perceived by OpEntityVelocity be different
      * than it's "normal" velocity
      */

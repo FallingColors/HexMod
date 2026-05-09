@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:amethyst_block",
+    "hexcasting:amethyst_bricks",
+    "hexcasting:amethyst_bricks_small",
+    "hexcasting:amethyst_tiles",
+    "hexcasting:amethyst_pillar"
+  ]
+}

@@ -1,12 +1,15 @@
 import logging
 import re
+from abc import ABC, abstractmethod
 from pathlib import Path
+from typing import Any, Iterable, Literal
 
 from hexdoc.core import IsVersion, ModResourceLoader, Properties, ResourceLocation
 from hexdoc.minecraft import Tag
 from hexdoc.model import HexdocModel, StripHiddenModel, ValidationContextModel
 from hexdoc.utils import TRACE, RelativePath
-from pydantic import Field
+from pydantic import Field, TypeAdapter
+from typing_extensions import override
 
 from .utils.pattern import Direction, PatternInfo
 
@@ -23,16 +26,101 @@ class PatternMetadata(HexdocModel):
         return Path(f"{modid}.patterns.hexdoc.json")
 
 
-class PatternStubProps(StripHiddenModel):
+class BasePatternStubProps(StripHiddenModel, ABC):
+    type: Any
     path: RelativePath
-    regex: re.Pattern[str]
-    per_world_value: str | None = "true"
     required: bool = True
     """If `True` (the default), raise an error if no patterns were loaded from here."""
 
+    def load_patterns(
+        self,
+        props: Properties,
+        per_world_tag: Tag | None,
+    ) -> list[PatternInfo]:
+        logger.debug(f"Load {self.type} pattern stub from {self.path}")
+
+        patterns = list[PatternInfo]()
+
+        try:
+            for pattern in self._iter_patterns(props):
+                if per_world_tag is not None:
+                    pattern.is_per_world = pattern.id in per_world_tag.values
+                patterns.append(pattern)
+        except Exception as e:
+            # hack: notes don't seem to be working on pydantic exceptions :/
+            logger.error(f"Failed to load {self.type} pattern stub from {self.path}.")
+            raise e
+
+        pretty_path = self.path.resolve().relative_to(Path.cwd())
+
+        if self.required and not patterns:
+            raise ValueError(self._no_patterns_error.format(path=pretty_path))
+
+        logger.info(f"Loaded {len(patterns)} patterns from {pretty_path}")
+        return patterns
+
+    @abstractmethod
+    def _iter_patterns(self, props: Properties) -> Iterable[PatternInfo]:
+        """Loads and iterates over the patterns from this stub.
+
+        Note: the `is_per_world` value returned by this function should be **ignored**
+        in 0.11+, since that information can be found in the per world tag.
+        """
+
+    @property
+    def _no_patterns_error(self) -> str:
+        return "No patterns found in {path}, but required is True"
+
+
+class RegexPatternStubProps(BasePatternStubProps):
+    """Fetches pattern info by scraping source code with regex."""
+
+    type: Literal["regex"] = "regex"
+    regex: re.Pattern[str]
+    per_world_value: str | None = "true"
+
+    @override
+    def _iter_patterns(self, props: Properties) -> Iterable[PatternInfo]:
+        stub_text = self.path.read_text("utf-8")
+
+        for match in self.regex.finditer(stub_text):
+            groups = match.groupdict()
+
+            if ":" in groups["name"]:
+                id = ResourceLocation.from_str(groups["name"])
+            else:
+                id = props.mod_loc(groups["name"])
+
+            yield PatternInfo(
+                id=id,
+                startdir=Direction[groups["startdir"]],
+                signature=groups["signature"],
+                is_per_world=groups.get("is_per_world") == self.per_world_value,
+            )
+
+    @property
+    @override
+    def _no_patterns_error(self):
+        return super()._no_patterns_error + " (check the pattern regex)"
+
+
+class JsonPatternStubProps(BasePatternStubProps):
+    """Fetches pattern info from a JSON file."""
+
+    type: Literal["json"]
+
+    @override
+    def _iter_patterns(self, props: Properties) -> Iterable[PatternInfo]:
+        data = self.path.read_bytes()
+        return TypeAdapter(list[PatternInfo]).validate_json(data)
+
+
+PatternStubProps = RegexPatternStubProps | JsonPatternStubProps
+
 
 class HexProperties(StripHiddenModel):
-    pattern_stubs: list[PatternStubProps]
+    pattern_stubs: list[PatternStubProps] = Field(default_factory=list)
+    allow_duplicates: bool = False
 
 
 # conthext, perhaps
@@ -84,7 +172,7 @@ class HexContext(ValidationContextModel):
 
         # for each stub, load all the patterns in the file
         for stub in self.hex_props.pattern_stubs:
-            for pattern in self._load_stub_patterns(loader.props, stub, per_world):
+            for pattern in stub.load_patterns(loader.props, per_world):
                 self._add_pattern(pattern, signatures)
 
     def _add_patterns_0_10(
@@ -93,7 +181,7 @@ class HexContext(ValidationContextModel):
         props: Properties,
     ):
         for stub in self.hex_props.pattern_stubs:
-            for pattern in self._load_stub_patterns(props, stub, None):
+            for pattern in stub.load_patterns(props, None):
                 self._add_pattern(pattern, signatures)
 
     def _add_pattern(self, pattern: PatternInfo, signatures: dict[str, PatternInfo]):
@@ -103,47 +191,11 @@ class HexContext(ValidationContextModel):
         if duplicate := (
             self.patterns.get(pattern.id) or signatures.get(pattern.signature)
         ):
-            raise ValueError(f"Duplicate pattern {pattern.id}\n{pattern}\n{duplicate}")
+            message = f"pattern {pattern.id}\n{pattern}\n{duplicate}"
+            if self.hex_props.allow_duplicates:
+                logger.warning("Ignoring duplicate " + message)
+                return
+            raise ValueError("Duplicate" + message)
 
         self.patterns[pattern.id] = pattern
         signatures[pattern.signature] = pattern
-
-    def _load_stub_patterns(
-        self,
-        props: Properties,
-        stub: PatternStubProps,
-        per_world_tag: Tag | None,
-    ):
-        # TODO: add Gradle task to generate json with this data. this is dumb and fragile.
-        logger.debug(f"Load pattern stub from {stub.path}")
-        stub_text = stub.path.read_text("utf-8")
-
-        patterns = list[PatternInfo]()
-
-        for match in stub.regex.finditer(stub_text):
-            groups = match.groupdict()
-            id = props.mod_loc(groups["name"])
-
-            if per_world_tag is not None:
-                is_per_world = id in per_world_tag.values
-            else:
-                is_per_world = groups.get("is_per_world") == stub.per_world_value
-
-            patterns.append(
-                PatternInfo(
-                    id=id,
-                    startdir=Direction[groups["startdir"]],
-                    signature=groups["signature"],
-                    is_per_world=is_per_world,
-                )
-            )
-
-        pretty_path = stub.path.resolve().relative_to(Path.cwd())
-
-        if stub.required and not patterns:
-            raise ValueError(
-                f"No patterns found in {pretty_path} (check the pattern regex)"
-            )
-
-        logger.info(f"Loaded {len(patterns)} patterns from {pretty_path}")
-        return patterns

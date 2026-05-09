@@ -72,7 +72,7 @@ public class CircleCastEnv extends CastingEnvironment {
         ResourceLocation key = actionKey(match);
 
         if (!HexConfig.server().isActionAllowedInCircles(key)) {
-            throw new MishapDisallowedSpell("disallowed_circle");
+            throw new MishapDisallowedSpell("disallowed_circle", key);
         }
     }
 

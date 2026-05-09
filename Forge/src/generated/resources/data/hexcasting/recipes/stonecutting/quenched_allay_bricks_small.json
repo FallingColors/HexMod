@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "tag": "hexcasting:quenched_allay_blocks"
+  },
+  "result": "hexcasting:quenched_allay_bricks_small"
+}

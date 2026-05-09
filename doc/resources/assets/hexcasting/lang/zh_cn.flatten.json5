@@ -34,15 +34,6 @@
       any: "必须为{level}级或更高等级的村民",
       professional: "必须为{level}级或更高等级的{profession}",
     },
-
-    pages: {
-      hexcasting: {
-        brainsweep: {
-          description: "书中显示如下事物的意识剥离配方：",
-          separator: "",
-        },
-      },
-    },
   },
 
   "block.hexcasting": {

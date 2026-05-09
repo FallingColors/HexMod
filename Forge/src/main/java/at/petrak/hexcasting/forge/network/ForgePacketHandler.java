@@ -39,8 +39,6 @@ public class ForgePacketHandler {
         // Server -> client
         NETWORK.registerMessage(messageIdx++, MsgNewSpellPatternS2C.class, MsgNewSpellPatternS2C::serialize,
             MsgNewSpellPatternS2C::deserialize, makeClientBoundHandler(MsgNewSpellPatternS2C::handle));
-        NETWORK.registerMessage(messageIdx++, MsgBlinkS2C.class, MsgBlinkS2C::serialize,
-            MsgBlinkS2C::deserialize, makeClientBoundHandler(MsgBlinkS2C::handle));
         NETWORK.registerMessage(messageIdx++, MsgSentinelStatusUpdateAck.class, MsgSentinelStatusUpdateAck::serialize,
             MsgSentinelStatusUpdateAck::deserialize, makeClientBoundHandler(MsgSentinelStatusUpdateAck::handle));
         NETWORK.registerMessage(messageIdx++, MsgPigmentUpdateAck.class, MsgPigmentUpdateAck::serialize,

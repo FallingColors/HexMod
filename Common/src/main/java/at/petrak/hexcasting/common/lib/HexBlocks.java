@@ -163,15 +163,18 @@ public class HexBlocks {
     public static final BlockRightClickImpetus IMPETUS_RIGHTCLICK = blockItem("impetus/rightclick",
         new BlockRightClickImpetus(slateish()
             .pushReaction(PushReaction.BLOCK)
-            .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
+            .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)),
+        HexItems.props().rarity(Rarity.UNCOMMON));
     public static final BlockLookingImpetus IMPETUS_LOOK = blockItem("impetus/look",
         new BlockLookingImpetus(slateish()
             .pushReaction(PushReaction.BLOCK)
-            .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
+            .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)),
+        HexItems.props().rarity(Rarity.UNCOMMON));
     public static final BlockRedstoneImpetus IMPETUS_REDSTONE = blockItem("impetus/redstone",
         new BlockRedstoneImpetus(slateish()
             .pushReaction(PushReaction.BLOCK)
-            .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)));
+            .lightLevel(bs -> bs.getValue(BlockAbstractImpetus.ENERGIZED) ? 15 : 0)),
+        HexItems.props().rarity(Rarity.UNCOMMON));
 
 
     public static final BlockEmptyDirectrix EMPTY_DIRECTRIX = blockItem("directrix/empty",
@@ -179,20 +182,27 @@ public class HexBlocks {
             .pushReaction(PushReaction.BLOCK)));
     public static final BlockRedstoneDirectrix DIRECTRIX_REDSTONE = blockItem("directrix/redstone",
         new BlockRedstoneDirectrix(slateish()
-            .pushReaction(PushReaction.BLOCK)));
+            .pushReaction(PushReaction.BLOCK)),
+        HexItems.props().rarity(Rarity.UNCOMMON));
     public static final BlockBooleanDirectrix DIRECTRIX_BOOLEAN = blockItem("directrix/boolean",
         new BlockBooleanDirectrix(slateish()
-            .pushReaction(PushReaction.BLOCK)));
+            .pushReaction(PushReaction.BLOCK)),
+        HexItems.props().rarity(Rarity.UNCOMMON));
 
     public static final BlockAkashicRecord AKASHIC_RECORD = blockItem("akashic_record",
-        new BlockAkashicRecord(akashicWoodyHard().lightLevel(bs -> 15)));
+        new BlockAkashicRecord(akashicWoodyHard().lightLevel(bs -> 15)),
+        HexItems.props().rarity(Rarity.RARE)
+    );
     public static final BlockAkashicBookshelf AKASHIC_BOOKSHELF = blockItem("akashic_bookshelf",
         new BlockAkashicBookshelf(akashicWoodyHard()
             .lightLevel(bs -> (bs.getValue(BlockAkashicBookshelf.HAS_BOOKS)) ? 4 : 0)));
     public static final BlockAkashicLigature AKASHIC_LIGATURE = blockItem("akashic_connector",
         new BlockAkashicLigature(akashicWoodyHard().lightLevel(bs -> 4)));
 
-    public static final BlockQuenchedAllay QUENCHED_ALLAY = blockItem("quenched_allay", new BlockQuenchedAllay(quenched()));
+    public static final BlockQuenchedAllay QUENCHED_ALLAY = blockItem("quenched_allay", 
+        new BlockQuenchedAllay(quenched()), 
+        HexItems.props().rarity(Rarity.UNCOMMON)
+    );
 
     // Decoration?!
     public static final BlockQuenchedAllay QUENCHED_ALLAY_TILES = blockItem("quenched_allay_tiles", new BlockQuenchedAllay(quenched()));
@@ -233,8 +243,8 @@ public class HexBlocks {
             .mapColor(MapColor.COLOR_PURPLE)
             .sound(SoundType.AMETHYST)
             .strength(1f)
-            .lightLevel($ -> 15)),
-        HexItems.props().rarity(Rarity.RARE));
+            .lightLevel($ -> 15))
+        );
 
     public static final BlockAkashicLog EDIFIED_LOG = blockItem("edified_log",
         new BlockAkashicLog(edifiedWoody()));

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "hexcasting:quenched_allay_bricks_small"
+    }
+  ],
+  "result": {
+    "item": "hexcasting:quenched_allay_bricks"
+  }
+}
