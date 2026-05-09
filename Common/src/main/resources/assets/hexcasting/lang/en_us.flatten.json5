@@ -1028,7 +1028,6 @@
       eval_too_much: "Evaluated too many patterns",
       no_item: "needs %s but got nothing",
       "no_item.offhand": "needs %s in the other hand but got nothing",
-      "no_item.hotbar": "needs %s somewhere in the hotbar but got nothing",
       bad_entity: "needs %s but got %s",
       bad_brainsweep: "The %s rejected the being's mind",
       already_brainswept: "The mind has already been used",
@@ -1131,7 +1130,7 @@
       bad_item: {
         "": "needs %s but got %dx %s",
         offhand: "needs %s in the other hand but got %dx %s",
-        hotbar: "needs %s somewhere in the hotbar but got %dx %s",
+        hotbar: "needs %s somewhere in the hotbar",
         
         iota: {
           "": "a place to store iotas",
@@ -2109,7 +2108,7 @@
       
       "teleport/great": {
         "1": "Far more powerful than $(l:patterns/spells/basic#hexcasting:blink)$(action)Blink/$, this spell lets me teleport an entity to anywhere in the entire world! No matter the distance, it always seems to cost about ten $(l:items/amethyst)$(item)Charged Amethyst/$.",
-        "2": "The provided vector is an offset, not an absolute position in the world; for example, if I use (1, 0, 0), the entity will end up precisely one block east of its original position.$(br2)Unfortunately, it seems that when teleporting myself, I'm unable to maintain a perfect focus. This can cause some of my items to splatter out of my inventory on arrival.$(br2)I should also note that the target will be forcibly removed from anything inanimate they are riding ... but I've read scraps that suggest animals can come along for the ride, so to speak.",
+        "2": "The provided vector is an offset, not an absolute position in the world; for example, if I use (1, 0, 0), the entity will end up precisely one block east of its original position.$(br2)Unfortunately, it seems that when teleporting myself, I'm unable to remain perfectly focused. This can cause some of my items to splatter out of my inventory on arrival.$(br2)I should also note that the target will be forcibly removed from anything inanimate they are riding ... but I've read scraps that suggest animals can come along for the ride, so to speak.",
       },
       
       zeniths: {
