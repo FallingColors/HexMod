@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.ChatFormatting;
@@ -107,7 +108,7 @@ public interface IotaHolderItem {
             var cmp = IotaType.getDisplay(datumTag);
             components.add(Component.translatable("hexcasting.spelldata.onitem", cmp));
 
-            if (flag.isAdvanced()) {
+            if (flag.isAdvanced() && (HexConfig.client() == null || HexConfig.client().advancedTooltipsShowsIotaNBT())) {
                 components.add(Component.literal("").append(NbtUtils.toPrettyComponent(datumTag)));
             }
         } else if (NBTHelper.hasString(stack, IotaHolderItem.TAG_OVERRIDE_VISUALLY)) {
