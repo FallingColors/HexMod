@@ -140,6 +140,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private boolean alwaysShowListCommas = DEFAULT_ALWAYS_SHOW_LIST_COMMAS;
         @ConfigEntry.Gui.Tooltip
+        private boolean advancedTooltipsShowsIotaNBT = DEFAULT_ADVANCED_TOOLTIPS_SHOWS_IOTA_NBT;
+        @ConfigEntry.Gui.Tooltip
         private boolean staticActiveSlates = DEFAULT_STATIC_ACTIVE_SLATES;
 
         @Override
@@ -183,7 +185,14 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         }
 
         @Override
-        public boolean staticActiveSlates() { return staticActiveSlates; }
+        public boolean advancedTooltipsShowsIotaNBT() { 
+          return advancedTooltipsShowsIotaNBT; 
+        }
+      
+        @Override
+        public boolean staticActiveSlates() { 
+          return staticActiveSlates; 
+        }
     }
 
     @Config(name = "server")

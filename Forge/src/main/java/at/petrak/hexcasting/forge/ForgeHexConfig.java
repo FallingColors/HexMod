@@ -85,6 +85,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.DoubleValue gridSnapThreshold;
         private static ForgeConfigSpec.BooleanValue clickingTogglesDrawing;
         private static ForgeConfigSpec.BooleanValue alwaysShowListCommas;
+        private static ForgeConfigSpec.BooleanValue advancedTooltipsShowsIotaNBT;
         private static ForgeConfigSpec.BooleanValue staticActiveSlates;
 
         public Client(ForgeConfigSpec.Builder builder) {
@@ -106,14 +107,18 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                         "means 50% of the way.")
                 .defineInRange("gridSnapThreshold", DEFAULT_GRID_SNAP_THRESHOLD, 0.5, 1.0);
             clickingTogglesDrawing = builder.comment(
-                            "Whether you click to start and stop drawing instead of clicking and dragging")
-                    .define("clickingTogglesDrawing", DEFAULT_CLICKING_TOGGLES_DRAWING);
+                    "Whether you click to start and stop drawing instead of clicking and dragging")
+                .define("clickingTogglesDrawing", DEFAULT_CLICKING_TOGGLES_DRAWING);
             alwaysShowListCommas = builder.comment(
-                            "Whether all iota types should be comma-separated in lists (by default, pattern iotas don't use commas)")
-                    .define("alwaysShowListCommas", DEFAULT_ALWAYS_SHOW_LIST_COMMAS);
+                    "Whether all iota types should be comma-separated in lists (by default, pattern iotas don't use commas)")
+                .define("alwaysShowListCommas", DEFAULT_ALWAYS_SHOW_LIST_COMMAS);
+            advancedTooltipsShowsIotaNBT = builder.comment(
+                    "Whether enabling advanced tooltips (F3+H) should display the full NBT of iotas stored in items " +
+                        "like foci and spellbooks")
+                .define("advancedTooltipsShowsIotaNBT", DEFAULT_ADVANCED_TOOLTIPS_SHOWS_IOTA_NBT);
             staticActiveSlates = builder.comment(
-                            "Whether patterns on active slates should be rendered without wobble (improves performance with lots of active slates)")
-                    .define("staticActiveSlates", DEFAULT_STATIC_ACTIVE_SLATES);
+                    "Whether patterns on active slates should be rendered without wobble (improves performance with lots of active slates)")
+                .define("staticActiveSlates", DEFAULT_STATIC_ACTIVE_SLATES);
         }
 
         @Override
@@ -152,7 +157,14 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         }
 
         @Override
-        public boolean staticActiveSlates() { return staticActiveSlates.get(); }
+        public boolean advancedTooltipsShowsIotaNBT() { 
+          return advancedTooltipsShowsIotaNBT.get(); 
+        }
+      
+        @Override
+        public boolean staticActiveSlates() { 
+          return staticActiveSlates.get(); 
+        }
     }
 
     public static class Server implements HexConfig.ServerConfigAccess {
