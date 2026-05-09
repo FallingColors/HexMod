@@ -1,6 +1,8 @@
 package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
 import com.google.gson.JsonObject;
+import java.util.Set;
+import java.util.stream.Collectors;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Registry;
@@ -69,17 +71,14 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
     }
 
     @Override
-    public Entity exampleEntity(Level level) {
+    public List<Entity> exampleEntities(Level level) {
         var someEntityTysHolder = BuiltInRegistries.ENTITY_TYPE.getTag(this.entityTypeTag);
-        if (someEntityTysHolder.isEmpty()) return null;
+        if (someEntityTysHolder.isEmpty()) return List.of();
         var someEntityTys = someEntityTysHolder.get();
-        if (someEntityTys.size() > 0) {
-            long seconds = System.currentTimeMillis() / 1000;
-            var someTy = someEntityTys.get((int) (seconds % someEntityTys.size()));
-            return getCachedExampleEntity(someTy.value(), level);
-        } else {
-            return null;
-        }
+
+        return someEntityTys.stream()
+                .map(someTy -> getCachedExampleEntity(someTy.value(), level))
+                .toList();
     }
 
     @Override

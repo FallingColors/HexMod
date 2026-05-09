@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 
 import com.google.gson.JsonObject;
+import java.util.Set;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -42,8 +43,8 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
     }
 
     @Override
-    public Entity exampleEntity(Level level) {
-        return getCachedExampleEntity(this.entityType, level);
+    public List<Entity> exampleEntities(Level level) {
+        return List.of(getCachedExampleEntity(this.entityType, level));
     }
 
     @Override
