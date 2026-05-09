@@ -12,7 +12,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ShulkerBullet;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
@@ -30,6 +34,21 @@ public class HexAPIImpl implements HexAPI {
         = new ConcurrentHashMap<>();
     private static final ConcurrentMap<EntityType<?>, Consumer<?>> SPECIAL_BRAINSWEEPS
         = new ConcurrentHashMap<>();
+
+    @Override public Vec3 getEntityLookDirSpecial(Entity entity) {
+        var lookDir = entity.getLookAngle();
+        if (entity instanceof AbstractHurtingProjectile || entity instanceof ShulkerBullet) {
+            // couldn't find a report but these are bugged differently than other projectiles
+            lookDir = new Vec3(-1 * lookDir.x, lookDir.y, -1 * lookDir.z);
+        } else if (entity instanceof Projectile) {
+            // https://bugs.mojang.com/browse/MC/issues/MC-112474
+            lookDir = new Vec3(-1 * lookDir.x, -1 * lookDir.y, lookDir.z);
+        } else if (entity instanceof Phantom) {
+            // https://bugs.mojang.com/browse/MC/issues/MC-134707
+            lookDir = new Vec3(lookDir.x, -1 * lookDir.y, lookDir.z);
+        }
+        return lookDir;
+    }
 
     public <T extends Entity> void registerSpecialVelocityGetter(EntityType<T> key,
         EntityVelocityGetter<T> getter) {
