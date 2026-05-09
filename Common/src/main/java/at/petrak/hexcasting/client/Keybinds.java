@@ -27,11 +27,11 @@ public class Keybinds {
         // delta value makes the book flip backward while a negative one makes it flip forward
 
         while (spellbookPrev.consumeClick()) {
-            ShiftScrollListener.onScroll(1, false);
+            ShiftScrollListener.onScroll(1, false, false);
         }
 
         while (spellbookNext.consumeClick()) {
-            ShiftScrollListener.onScroll(-1, false);
+            ShiftScrollListener.onScroll(-1, false, false);
         }
     }
 }

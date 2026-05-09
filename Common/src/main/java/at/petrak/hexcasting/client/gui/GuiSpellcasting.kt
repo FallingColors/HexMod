@@ -320,10 +320,10 @@ class GuiSpellcasting constructor(
         // because of how mouse scrolling works (scrolling upward moves the page down), a positive
         // delta value makes the book flip backward while a negative one makes it flip forward
         if (Keybinds.spellbookPrev.matches(key, scancode)) {
-            ShiftScrollListener.onScroll(1.0, false)
+            ShiftScrollListener.onScroll(1.0, false, false)
             return true
         } else if (Keybinds.spellbookNext.matches(key, scancode)) {
-            ShiftScrollListener.onScroll(-1.0, false)
+            ShiftScrollListener.onScroll(-1.0, false, false)
             return true
         }
 
