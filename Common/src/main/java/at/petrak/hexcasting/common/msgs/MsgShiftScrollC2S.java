@@ -24,8 +24,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  * Sent client->server when the client shift+scrolls with a shift-scrollable item
  * or scrolls in the spellcasting UI.
  */
-public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boolean isCtrl, boolean invertSpellbook,
-                                boolean invertAbacus) implements IMessage {
+public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boolean isCtrl) implements IMessage {
     public static final ResourceLocation ID = modLoc("scroll");
 
     @Override
@@ -38,17 +37,13 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         var mainHandDelta = buf.readDouble();
         var offHandDelta = buf.readDouble();
         var isCtrl = buf.readBoolean();
-        var invertSpellbook = buf.readBoolean();
-        var invertAbacus = buf.readBoolean();
-        return new MsgShiftScrollC2S(mainHandDelta, offHandDelta, isCtrl, invertSpellbook, invertAbacus);
+        return new MsgShiftScrollC2S(mainHandDelta, offHandDelta, isCtrl);
     }
 
     public void serialize(FriendlyByteBuf buf) {
         buf.writeDouble(this.mainHandDelta);
         buf.writeDouble(this.offHandDelta);
         buf.writeBoolean(this.isCtrl);
-        buf.writeBoolean(this.invertSpellbook);
-        buf.writeBoolean(this.invertAbacus);
     }
 
     public void handle(MinecraftServer server, ServerPlayer sender) {
@@ -71,10 +66,6 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
     }
 
     private void spellbook(ServerPlayer sender, InteractionHand hand, ItemStack stack, double delta) {
-        if (invertSpellbook) {
-            delta = -delta;
-        }
-
         var newIdx = ItemSpellbook.rotatePageIdx(stack, delta < 0.0);
 
         var len = ItemSpellbook.highestPage(stack);
@@ -115,10 +106,6 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
     }
 
     private void abacus(ServerPlayer sender, InteractionHand hand, ItemStack stack, double delta) {
-        if (invertAbacus) {
-            delta = -delta;
-        }
-
         var increase = delta < 0;
         double num = NBTHelper.getDouble(stack, ItemAbacus.TAG_VALUE);
 

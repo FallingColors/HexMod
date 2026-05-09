@@ -17,21 +17,27 @@ plugins {
     id "java"
     id "maven-publish"
 
-    id "at.petra-k.PKSubprojPlugin"
+    id "at.petra-k.pkpcpbp.PKSubprojPlugin"
 }
 
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 pkSubproj {
-    platform "forge"
-    curseforgeJar jar.archiveFile
+    pkPublish = true
+    curseforgeJar = jar.archiveFile
     curseforgeDependencies([
-            "paucal:0.6.0", "patchouli:1.20.1-80", "caelus:3.1.0+1.20", "inline:1.20.1-1.0.1"
+        "paucal",
+        "patchouli",
+        "caelus",
+        "inline",
     ])
-    modrinthJar jar.archiveFile
+    modrinthJar = jar.archiveFile
     modrinthDependencies([
-            "paucal:0.6.0", "patchouli:1.20.1-80", "caelus:3.1.0+1.20", "inline:1.20.1-1.0.1"
+        "paucal:HyBiJPtT", // 0.6.0-forge
+        "patchouli:1.20.1-80-forge",
+        "caelus:3.1.0+1.20",
+        "inline:1.20.1-1.0.1-forge",
     ])
 }
 

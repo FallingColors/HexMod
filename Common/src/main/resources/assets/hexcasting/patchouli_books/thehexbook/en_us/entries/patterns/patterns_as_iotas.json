@@ -49,10 +49,6 @@
       }
     },
     {
-      "type": "patchouli:text",
-      "text": "hexcasting.page.patterns_as_iotas.parens.3"
-    },
-    {
       "type": "hexcasting:manual_pattern",
       "header": "hexcasting.rawhook.hexcasting:undo",
       "anchor": "hexcasting:undo",
@@ -61,6 +57,19 @@
         "startdir": "EAST",
         "signature": "eeedw"
       }
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.patterns_as_iotas.further_notes.title",
+      "text": "hexcasting.page.patterns_as_iotas.further_notes.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.patterns_as_iotas.further_notes.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.patterns_as_iotas.further_notes.3"
     }
   ]
 }

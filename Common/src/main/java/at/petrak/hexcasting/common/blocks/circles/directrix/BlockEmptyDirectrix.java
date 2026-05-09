@@ -43,7 +43,8 @@ public class BlockEmptyDirectrix extends BlockCircleComponent {
 
     @Override
     public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
-        return true;
+        // No entering from either of the output faces
+        return enterDir != bs.getValue(FACING).getOpposite() && enterDir != bs.getValue(FACING);
     }
 
     @Override

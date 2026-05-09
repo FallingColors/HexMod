@@ -71,7 +71,7 @@ public class PatternIota extends Iota {
     public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
         Supplier<@Nullable Component> castedName = () -> null;
         try {
-            var lookup = PatternRegistryManifest.matchPattern(this.getPattern(), vm.getEnv(), false);
+            var lookup = PatternRegistryManifest.matchPattern(this.getPattern(), vm.getEnv());
             vm.getEnv().precheckAction(lookup);
 
             Action action;
@@ -98,7 +98,7 @@ public class PatternIota extends Iota {
                 castedName = special.handler::getName;
                 action = special.handler.act();
             } else if (lookup instanceof PatternShapeMatch.Nothing) {
-                throw new MishapInvalidPattern();
+                throw new MishapInvalidPattern(this.getPattern());
             } else throw new IllegalStateException();
 
             // do the actual calculation!!
@@ -107,10 +107,6 @@ public class PatternIota extends Iota {
                     vm.getImage(),
                     continuation
             );
-
-            if (result.getNewImage().getOpsConsumed() > vm.getEnv().maxOpCount()) {
-                throw new MishapEvalTooMuch();
-            }
 
             var cont2 = result.getNewContinuation();
             // TODO parens also break prescience

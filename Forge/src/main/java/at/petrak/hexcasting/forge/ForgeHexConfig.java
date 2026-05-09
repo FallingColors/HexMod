@@ -5,7 +5,6 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraft.util.RandomSource;
 
 import java.util.List;
 
@@ -80,15 +79,21 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
     public static class Client implements HexConfig.ClientConfigAccess {
         private static ForgeConfigSpec.BooleanValue ctrlTogglesOffStrokeOrder;
+        private static ForgeConfigSpec.BooleanValue disableInworldScrolling;
         private static ForgeConfigSpec.BooleanValue invertSpellbookScrollDirection;
         private static ForgeConfigSpec.BooleanValue invertAbacusScrollDirection;
         private static ForgeConfigSpec.DoubleValue gridSnapThreshold;
         private static ForgeConfigSpec.BooleanValue clickingTogglesDrawing;
+        private static ForgeConfigSpec.BooleanValue alwaysShowListCommas;
+        private static ForgeConfigSpec.BooleanValue staticActiveSlates;
 
         public Client(ForgeConfigSpec.Builder builder) {
             ctrlTogglesOffStrokeOrder = builder.comment(
                     "Whether the ctrl key will instead turn *off* the color gradient on patterns")
                 .define("ctrlTogglesOffStrokeOrder", DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER);
+            disableInworldScrolling = builder.comment(
+                    "Disable scrolling input for spellbooks and abaci in the normal world, keeping keybinds and staff screen scrolling normal")
+                .define("disableInworldScrolling", DEFAULT_DISABLE_INWORLD_SCROLLING);
             invertSpellbookScrollDirection = builder.comment(
                     "Whether scrolling up (as opposed to down) will increase the page index of the spellbook, and " +
                         "vice versa")
@@ -103,6 +108,17 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             clickingTogglesDrawing = builder.comment(
                             "Whether you click to start and stop drawing instead of clicking and dragging")
                     .define("clickingTogglesDrawing", DEFAULT_CLICKING_TOGGLES_DRAWING);
+            alwaysShowListCommas = builder.comment(
+                            "Whether all iota types should be comma-separated in lists (by default, pattern iotas don't use commas)")
+                    .define("alwaysShowListCommas", DEFAULT_ALWAYS_SHOW_LIST_COMMAS);
+            staticActiveSlates = builder.comment(
+                            "Whether patterns on active slates should be rendered without wobble (improves performance with lots of active slates)")
+                    .define("staticActiveSlates", DEFAULT_STATIC_ACTIVE_SLATES);
+        }
+
+        @Override
+        public boolean disableInworldScrolling() {
+            return disableInworldScrolling.get();
         }
 
         @Override
@@ -129,6 +145,14 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         public boolean clickingTogglesDrawing() {
             return clickingTogglesDrawing.get();
         }
+
+        @Override
+        public boolean alwaysShowListCommas() {
+            return alwaysShowListCommas.get();
+        }
+
+        @Override
+        public boolean staticActiveSlates() { return staticActiveSlates.get(); }
     }
 
     public static class Server implements HexConfig.ServerConfigAccess {
@@ -143,11 +167,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> tpDimDenyList;
         private static ForgeConfigSpec.BooleanValue doesTrueNameHaveAmbit;
         private static ForgeConfigSpec.DoubleValue traderScrollChance;
-
-        private static ForgeConfigSpec.ConfigValue<List<? extends String>> fewScrollTables;
-        private static ForgeConfigSpec.ConfigValue<List<? extends String>> someScrollTables;
-        private static ForgeConfigSpec.ConfigValue<List<? extends String>> manyScrollTables;
-
 
         public Server(ForgeConfigSpec.Builder builder) {
             builder.push("Spells");
@@ -174,6 +193,10 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             traderScrollChance = builder.comment("The chance for wandering traders to sell an Ancient Scroll")
                 .defineInRange("traderScrollChance", DEFAULT_TRADER_SCROLL_CHANCE, 0.0, 1.0);
 
+            // builders for loot (eg. scroll/lore/cypher pools and chances) should go here
+
+            builder.pop();
+
             actionDenyList = builder.comment(
                     "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
                 .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
@@ -190,7 +213,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 .defineList("tpDimDenyList", DEFAULT_DIM_TP_DENYLIST, Server::isValidReslocArg);
 
             doesTrueNameHaveAmbit = builder.comment(
-                    "when false makes player reference iotas behave as normal entity reference iotas")
+                    "When false, makes player reference iotas behave as normal entity reference iotas")
                 .define("doesTrueNameHaveAmbit", DEFAULT_TRUE_NAME_HAS_AMBIT);
         }
 

@@ -96,7 +96,7 @@ public class ListPerWorldPatternsCommand {
                     var found = save.lookupReverse(key);
                     var signature = found.getFirst();
                     var startDir = found.getSecond().canonicalStartDir();
-                    var pat = HexPattern.fromAngles(signature, startDir);
+                    var pat = HexPattern.fromAnglesUnchecked(signature, startDir);
 
                     var tag = new CompoundTag();
                     tag.putString(ItemScroll.TAG_OP_ID, key.location().toString());

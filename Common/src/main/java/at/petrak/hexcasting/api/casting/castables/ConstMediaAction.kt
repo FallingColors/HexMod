@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.mishaps.Mishap
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughMedia
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
@@ -18,8 +19,10 @@ interface ConstMediaAction : Action {
     val mediaCost: Long
         get() = 0
 
+    @Throws(Mishap::class)
     fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota>
 
+    @Throws(Mishap::class)
     fun executeWithOpCount(args: List<Iota>, env: CastingEnvironment): CostMediaActionResult {
         val stack = this.execute(args, env)
         return CostMediaActionResult(stack)
@@ -28,14 +31,15 @@ interface ConstMediaAction : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
         val stack = image.stack.toMutableList()
 
-        if (env.extractMedia(this.mediaCost, true) > 0)
-            throw MishapNotEnoughMedia(this.mediaCost)
         if (this.argc > stack.size)
             throw MishapNotEnoughArgs(this.argc, stack.size)
         val args = stack.takeLast(this.argc)
         repeat(this.argc) { stack.removeLast() }
         val result = this.executeWithOpCount(args, env)
         stack.addAll(result.resultStack)
+
+        if (env.extractMedia(this.mediaCost, true) > 0)
+            throw MishapNotEnoughMedia(this.mediaCost)
 
         val sideEffects = mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMedia(this.mediaCost))
 

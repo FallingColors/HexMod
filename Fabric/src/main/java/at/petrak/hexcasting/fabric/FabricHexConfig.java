@@ -15,7 +15,6 @@ import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 
@@ -129,13 +128,19 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private boolean ctrlTogglesOffStrokeOrder = DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER;
         @ConfigEntry.Gui.Tooltip
+        private boolean disableInworldScrolling = DEFAULT_DISABLE_INWORLD_SCROLLING;
+        @ConfigEntry.Gui.Tooltip
         private boolean invertSpellbookScrollDirection = DEFAULT_INVERT_SPELLBOOK_SCROLL;
         @ConfigEntry.Gui.Tooltip
-        private boolean invertAbacusScrollDirection = DEFAULT_INVERT_SPELLBOOK_SCROLL;
+        private boolean invertAbacusScrollDirection = DEFAULT_INVERT_ABACUS_SCROLL;
         @ConfigEntry.Gui.Tooltip
         private double gridSnapThreshold = DEFAULT_GRID_SNAP_THRESHOLD;
         @ConfigEntry.Gui.Tooltip
         private boolean clickingTogglesDrawing = DEFAULT_CLICKING_TOGGLES_DRAWING;
+        @ConfigEntry.Gui.Tooltip
+        private boolean alwaysShowListCommas = DEFAULT_ALWAYS_SHOW_LIST_COMMAS;
+        @ConfigEntry.Gui.Tooltip
+        private boolean staticActiveSlates = DEFAULT_STATIC_ACTIVE_SLATES;
 
         @Override
         public void validatePostLoad() throws ValidationException {
@@ -145,6 +150,11 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @Override
         public boolean ctrlTogglesOffStrokeOrder() {
             return ctrlTogglesOffStrokeOrder;
+        }
+
+        @Override
+        public boolean disableInworldScrolling() {
+            return disableInworldScrolling;
         }
 
         @Override
@@ -166,6 +176,14 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         public boolean clickingTogglesDrawing() {
              return clickingTogglesDrawing;
         }
+
+        @Override
+        public boolean alwaysShowListCommas() {
+             return alwaysShowListCommas;
+        }
+
+        @Override
+        public boolean staticActiveSlates() { return staticActiveSlates; }
     }
 
     @Config(name = "server")
