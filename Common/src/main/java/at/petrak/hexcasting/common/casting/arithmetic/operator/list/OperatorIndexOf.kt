@@ -12,7 +12,7 @@ import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.LIST
 object OperatorIndexOf : OperatorBasic(2, IotaMultiPredicate.pair(IotaPredicate.ofType(LIST), IotaPredicate.TRUE)) {
     override fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator().withIndex()
-        val list = it.nextList(arity).toList()
+        val list = it.nextList(arity)
         val toFind = it.next().value
         return list.indexOfFirst { Iota.tolerates(toFind, it) }.asActionResult
     }

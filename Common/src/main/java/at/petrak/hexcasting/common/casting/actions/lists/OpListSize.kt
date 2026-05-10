@@ -10,6 +10,6 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 object OpListSize : ConstMediaAction {
     override val argc = 1
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
-        return args.getList(0, argc).toList().size.asActionResult // mmm one-liner
+        return args.getList(0, argc).size.asActionResult // mmm one-liner
     }
 }

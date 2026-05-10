@@ -10,5 +10,5 @@ object OpSplat : ConstMediaAction {
         get() = 1
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> =
-        args.getList(0, argc).toList()
+        args.getList(0, argc)
 }

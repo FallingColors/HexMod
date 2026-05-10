@@ -38,6 +38,6 @@ object ListSetArithmetic : Arithmetic {
 
     private fun make2(op: BinaryOperator<List<Iota>>): OperatorBinary = OperatorBinary(all(IotaPredicate.ofType(LIST)))
     { i: Iota, j: Iota -> ListIota(
-            op.apply(downcast(i, LIST).list.toList(), downcast(j, LIST).list.toList())
+            op.apply(downcast(i, LIST).list, downcast(j, LIST).list)
         ) }
 }
