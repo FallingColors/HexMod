@@ -116,6 +116,17 @@ subprojects {
     tasks.withType(GenerateModuleMetadata).configureEach {
         enabled = false
     }
+
+    repositories {
+        exclusiveContent {
+            filter {
+                includeGroup("libs")
+            }
+            forRepository {
+                flatDir { dir(rootProject.file("libs")) }
+            }
+        }
+    }
 }
 
 allprojects {

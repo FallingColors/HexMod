@@ -128,7 +128,7 @@ dependencies {
     shadowBundle project(path: ':Common', configuration: 'transformProductionFabric')
 
     // === MANDATORY DEPS ===
-    modCompileOnly("at.petra-k:paucal:$paucalVersion+$minecraftVersion-fabric")
+    modImplementation("libs:paucal:$paucalVersion+$minecraftVersion-fabric")
     // dear mod devs, don't put the platform in the middle of your version code
     modImplementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-FABRIC-SNAPSHOT"
     modImplementation "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
@@ -152,10 +152,6 @@ dependencies {
 
     modLocalRuntime "dev.architectury:architectury-fabric:$architecturyVersion"
     modLocalRuntime "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
-    modLocalRuntime "at.petra-k:paucal:$paucalVersion+$minecraftVersion-fabric"
-    // fuck you jankson fuck you jankson fuck you jankson (jankson loves to crash Fabric:runClient with a NoSuchMethodException for no reason and then act like nothing happened)
-    localRuntime "blue.endless:jankson:1.2.3"
-
 
 //    modImplementation "maven.modrinth:gravity-api:$gravityApiVersion"
     modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {

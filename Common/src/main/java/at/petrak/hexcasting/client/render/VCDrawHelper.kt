@@ -35,7 +35,7 @@ interface VCDrawHelper {
         @JvmStatic
         fun getHelper(worldlyBits: WorldlyBits?, ps: PoseStack, z: Float, texture: ResourceLocation) : VCDrawHelper {
             if(worldlyBits != null){
-                return Worldly(worldlyBits, ps, z, texture)
+                return Worldly(worldlyBits, ps, z * -1, texture)
             }
             return Basic(z, texture)
         }
