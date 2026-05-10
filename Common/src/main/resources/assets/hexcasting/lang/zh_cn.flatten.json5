@@ -346,7 +346,7 @@
         },
         disableInworldScrolling: {
           "": "禁用世界中滚轮操作",
-          "@Tooltip": "禁用正常世界中的法术书和算盘滚轮输入操作，确保对应键位和法杖界面滚轮操作的功能符合预期"
+          "@Tooltip": "禁用正常世界中法术书和算盘的滚轮输入操作，确保对应键位和法杖界面滚轮操作的功能符合预期"
         },
         invertSpellbookScrollDirection: {
           "": "反转法术书滚轮方向",
