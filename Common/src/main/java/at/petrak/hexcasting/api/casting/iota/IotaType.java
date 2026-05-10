@@ -53,10 +53,10 @@ public abstract class IotaType<T extends Iota> {
     }
 
     /**
-     * If commas should be omitted when the iota is inside of a list iota
+     * If commas should be used when displaying the iota inside a list iota
      */
-    public boolean omitCommas() {
-        return false;
+    public boolean usesListCommas() {
+        return true;
     }
 
     public static CompoundTag serialize(Iota iota) {

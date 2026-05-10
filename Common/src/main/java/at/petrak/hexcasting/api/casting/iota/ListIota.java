@@ -135,10 +135,10 @@ public class ListIota extends Iota {
                 if (i < list.size() - 1) {
                     var thisType = IotaType.getTypeFromTag(csub);
                     var nextType = IotaType.getTypeFromTag(HexUtils.downcast(list.get(i+1), CompoundTag.TYPE));
-                    var thisIotaOmitsComma = thisType != null && thisType.omitCommas();
-                    var nextIotaOmitsComma = nextType != null && nextType.omitCommas();
+                    var thisIotaNeedsComma = thisType == null || thisType.usesListCommas();
+                    var nextIotaNeedsComma = nextType == null || nextType.usesListCommas();
                     var alwaysShowCommas = HexConfig.client() != null && HexConfig.client().alwaysShowListCommas();
-                    if (!thisIotaOmitsComma || !nextIotaOmitsComma || alwaysShowCommas)
+                    if (thisIotaNeedsComma || nextIotaNeedsComma || alwaysShowCommas)
                         out.append(", ");
                 }
             }

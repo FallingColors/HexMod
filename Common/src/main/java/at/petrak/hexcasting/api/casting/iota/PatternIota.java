@@ -157,8 +157,8 @@ public class PatternIota extends Iota {
         }
 
         @Override
-        public boolean omitCommas() {
-            return true;
+        public boolean usesListCommas() {
+            return false;
         }
     };
 
