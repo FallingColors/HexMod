@@ -388,7 +388,7 @@ public abstract class CastingEnvironment {
     /**
      * Get all the item stacks this env can use.
      */
-    protected abstract List<ItemStack> getUsableStacks(StackDiscoveryMode mode);
+    public abstract List<ItemStack> getUsableStacks(StackDiscoveryMode mode);
 
     protected List<ItemStack> getUsableStacksForPlayer(StackDiscoveryMode mode, @Nullable InteractionHand castingHand
         , ServerPlayer caster) {
@@ -456,7 +456,7 @@ public abstract class CastingEnvironment {
     /**
      * Get the primary/secondary item stacks this env can use (i.e. main hand and offhand for the player).
      */
-    protected abstract List<HeldItemInfo> getPrimaryStacks();
+    public abstract List<HeldItemInfo> getPrimaryStacks();
 
     protected List<HeldItemInfo> getPrimaryStacksForPlayer(InteractionHand castingHand, ServerPlayer caster) {
         var primaryItem = caster.getItemInHand(castingHand);
@@ -609,7 +609,7 @@ public abstract class CastingEnvironment {
     /**
      * The order/mode stacks should be discovered in
      */
-    protected enum StackDiscoveryMode {
+    public enum StackDiscoveryMode {
         /**
          * When finding items to pick (hotbar)
          */

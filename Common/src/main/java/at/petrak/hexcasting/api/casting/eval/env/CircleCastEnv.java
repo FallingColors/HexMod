@@ -169,7 +169,7 @@ public class CircleCastEnv extends CastingEnvironment {
 
     @Override
     // TODO: Could do something like get items in inventories adjacent to the circle?
-    protected List<ItemStack> getUsableStacks(StackDiscoveryMode mode) {
+    public List<ItemStack> getUsableStacks(StackDiscoveryMode mode) {
         if (this.getCaster() != null)
             return getUsableStacksForPlayer(mode, null, this.getCaster());
         return new ArrayList<>();
@@ -177,7 +177,7 @@ public class CircleCastEnv extends CastingEnvironment {
 
     @Override
     // TODO: Adjacent inv!
-    protected List<HeldItemInfo> getPrimaryStacks() {
+    public List<HeldItemInfo> getPrimaryStacks() {
         if (this.getCaster() != null)
             return getPrimaryStacksForPlayer(InteractionHand.OFF_HAND, this.getCaster());
         return List.of();
