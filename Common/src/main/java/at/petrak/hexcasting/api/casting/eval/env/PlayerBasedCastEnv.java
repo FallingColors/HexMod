@@ -30,6 +30,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -71,10 +72,9 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
-    protected double getCostModifier(PatternShapeMatch match) {
-        var base = super.getCostModifier(match);
-        ResourceLocation loc = actionKey(match);
-        if (loc != null && isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), loc, HexTags.Actions.CANNOT_MODIFY_COST)) {
+    protected double getCostModifier(@NotNull ResourceLocation loc) {
+        var base = super.getCostModifier(loc);
+        if (isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), loc, HexTags.Actions.CANNOT_MODIFY_COST)) {
             return base;
         }
         return base * this.caster.getAttributeValue(HexAttributes.MEDIA_CONSUMPTION_MODIFIER);

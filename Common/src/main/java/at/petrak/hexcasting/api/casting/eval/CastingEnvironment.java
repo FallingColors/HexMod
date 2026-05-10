@@ -193,15 +193,14 @@ public abstract class CastingEnvironment {
             throw new MishapDisallowedSpell("disallowed", loc);
         }
 
-        costModifier = this.getCostModifier(match);
+        costModifier = (loc != null) ? this.getCostModifier(loc) : 1.0;
     }
 
     /**
      * Gets the cost modifier for a given action. By default, this is based on the cost scaling list
      * in the config. Casting env subclasses can override this to modify the cost in other ways.
      */
-    protected double getCostModifier(PatternShapeMatch match) {
-        ResourceLocation loc = actionKey(match);
+    protected double getCostModifier(@NotNull ResourceLocation loc) {
         return HexConfig.server().getActionCostScaling(loc);
     }
 
