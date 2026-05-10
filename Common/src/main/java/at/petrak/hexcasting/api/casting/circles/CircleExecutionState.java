@@ -102,10 +102,10 @@ public class CircleExecutionState {
         var todo = new Stack<Pair<Direction, BlockPos>>();
         todo.add(Pair.of(impetus.getStartDirection(), impetus.getBlockPos().relative(impetus.getStartDirection())));
         var seenGoodPosSet = new HashSet<BlockPos>();
-        var positiveBlock = new BlockPos.MutableBlockPos();
-        var negativeBlock = new BlockPos.MutableBlockPos();
         var impetusPos = impetus.getBlockPos();
-        var lastBlockPos = new BlockPos.MutableBlockPos(impetusPos.getX(),impetusPos.getY(),impetusPos.getZ());
+        var positiveBlock = impetusPos.mutable();
+        var negativeBlock = impetusPos.mutable();
+        var lastBlockPos = impetusPos.mutable();
 
         while (!todo.isEmpty()) {
             var pair = todo.pop();
