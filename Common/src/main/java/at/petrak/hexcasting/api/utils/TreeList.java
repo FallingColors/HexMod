@@ -488,7 +488,7 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         return this.slice(0, this.length() - 1);
     }
 
-    /** Like slice but parameters must be 0 <= lo < hi < length */
+    /** Like slice but parameters must be 0 &lt;= lo &lt; hi &lt; length */
     protected abstract TreeList<A> slice0(int lo, int hi);
 
     /** Number of slices */
