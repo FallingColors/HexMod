@@ -72,11 +72,12 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
 
     @Override
     protected double getCostModifier(PatternShapeMatch match) {
+        var base = super.getCostModifier(match);
         ResourceLocation loc = actionKey(match);
         if (loc != null && isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), loc, HexTags.Actions.CANNOT_MODIFY_COST)) {
-            return 1.0;
+            return base;
         }
-        return this.caster.getAttributeValue(HexAttributes.MEDIA_CONSUMPTION_MODIFIER);
+        return base * this.caster.getAttributeValue(HexAttributes.MEDIA_CONSUMPTION_MODIFIER);
     }
 
     @Override

@@ -197,10 +197,12 @@ public abstract class CastingEnvironment {
     }
 
     /**
-     * Casting env subclasses can override this to modify the cost for a given action
+     * Gets the cost modifier for a given action. By default, this is based on the cost scaling list
+     * in the config. Casting env subclasses can override this to modify the cost in other ways.
      */
     protected double getCostModifier(PatternShapeMatch match) {
-        return 1.0;
+        ResourceLocation loc = actionKey(match);
+        return HexConfig.server().getActionCostScaling(loc);
     }
 
     @Nullable

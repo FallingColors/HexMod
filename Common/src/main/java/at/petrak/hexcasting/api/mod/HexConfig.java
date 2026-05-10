@@ -79,6 +79,8 @@ public class HexConfig {
 
         boolean isActionAllowedInCircles(ResourceLocation actionID);
 
+        double getActionCostScaling(ResourceLocation actionID);
+
         boolean doesGreaterTeleportSplatItems();
 
         boolean doVillagersTakeOffenseAtMindMurder();
