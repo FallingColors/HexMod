@@ -16,12 +16,12 @@ import kotlin.math.min
 object OperatorSlice : OperatorBasic(3, IotaMultiPredicate.triple(IotaPredicate.ofType(LIST), IotaPredicate.ofType(DOUBLE), IotaPredicate.ofType(DOUBLE))) {
     override fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator().withIndex()
-        val list = it.nextList(arity).toList()
+        val list = it.nextList(arity)
         val index0 = it.nextPositiveIntUnderInclusive(list.size, arity)
         val index1 = it.nextPositiveIntUnderInclusive(list.size, arity)
 
         if (index0 == index1)
             return emptyList<Iota>().asActionResult
-        return list.subList(min(index0, index1), max(index0, index1)).asActionResult
+        return list.slice(min(index0, index1), max(index0, index1)).asActionResult
     }
 }

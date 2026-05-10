@@ -12,11 +12,11 @@ object OpRemove : ConstMediaAction {
         get() = 2
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
-        val list = args.getList(0, argc).toMutableList()
+        val list = args.getList(0, argc)
         val index = args.getInt(1, argc)
         if (index < 0 || index >= list.size)
             return list.asActionResult
-        list.removeAt(index)
-        return list.asActionResult
+
+        return list.take(index).appendedAll(list.drop(index + 1)).asActionResult
     }
 }
