@@ -141,13 +141,15 @@ public class CircleExecutionState {
         if (lastBlockPos == impetus.getBlockPos()) {
             return new Result.Err<>(null);
         } else if (!seenGoodPosSet.contains(impetus.getBlockPos())) {
-            // we can't enter from the side the directrix exits from, so this means we couldn't loop back.
+            // we can't enter from the side the impetus exits from, so this means we couldn't loop back.
             // the last item we tried to examine will always be a terminal slate (b/c if it wasn't,
             // then the *next* slate would be last qed)
             return new Result.Err<>(lastBlockPos);
         }
 
-        seenGoodPosSet.add(impetus.getBlockPos());
+        var reachedPositions = new HashSet<BlockPos>();
+        reachedPositions.add(impetus.getBlockPos());
+
         FrozenPigment colorizer = null;
         UUID casterUUID;
         if (caster == null) {
@@ -158,7 +160,7 @@ public class CircleExecutionState {
         }
         return new Result.Ok<>(
             new CircleExecutionState(impetus.getBlockPos(), impetus.getStartDirection(),
-                seenGoodPosSet, impetus.getBlockPos().offset(impetus.getStartDirection().getNormal()),
+                reachedPositions, impetus.getBlockPos().offset(impetus.getStartDirection().getNormal()),
                 impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer, 0L,
                 positiveBlock.move(1,1,1), negativeBlock));
     }
