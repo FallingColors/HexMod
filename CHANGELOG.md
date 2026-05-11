@@ -13,8 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Changed the `media_consumption` attribute to only apply to player-based casting, by Robotgiggle in [987](https://github.com/FallingColors/HexMod/pull/987).
-- Decreased the cost of Wayfarer's Flight to 2 dust per second, by Robotgiggle in [#1040](https://github.com/FallingColors/HexMod/pull/1040).
-- Increased the cost of Anchorite's Flight to 2 dust per meter and capped the cost at 2 dust for radii below 1 meter, by Robotgiggle in [#1040](https://github.com/FallingColors/HexMod/pull/1040).
+- Changed Wayfarer's Flight and Anchorite's Flight to both cost 2 dust per unit and enforced a minimum cost for Anchorite's Flight, by Robotgiggle in [#1040](https://github.com/FallingColors/HexMod/pull/1040).
 
 ### Fixed
 

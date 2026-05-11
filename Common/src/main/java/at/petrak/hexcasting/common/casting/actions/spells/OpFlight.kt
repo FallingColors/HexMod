@@ -36,9 +36,10 @@ class OpFlight(val type: Type) : SpellAction {
         env.assertEntityInRange(target)
 
         // One block of radius, or one second of duration, costs 2 dust
-        var cost = (theArg * 2 * MediaConstants.DUST_UNIT).roundToLong()
+        val costUnit = 2 * MediaConstants.DUST_UNIT
+        var cost = (theArg * costUnit).roundToLong()
         // Cost for anchorite does not decrease below 1 meter
-        if (type == Type.LimitRange) cost = max(cost, 2 * MediaConstants.DUST_UNIT)
+        if (type == Type.LimitRange) cost = max(cost, costUnit)
 
         // Convert to ticks
         return SpellAction.Result(

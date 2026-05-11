@@ -1124,7 +1124,6 @@
             less: "a positive number less than %d",
             "less.equal": "a positive number less than or equal to %d",
           },
-          "greater.equal": "a number greater than or equal to %d",
           between: "a number between %d and %d",
         },
         
