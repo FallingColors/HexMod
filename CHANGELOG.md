@@ -20,12 +20,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Changed the `media_consumption` attribute to only apply to player-based casting, by Robotgiggle in [#987](https://github.com/FallingColors/HexMod/pull/987).
-- Changed the internal implementation of Thoth's Gambit to be a bit more efficient, by s5bug in [#1031](https://github.com/FallingColors/HexMod/pull/1031).
+- Changed Wayfarer's Flight and Anchorite's Flight to both cost 2 dust per unit, and enforced a minimum cost for Anchorite's Flight, by Robotgiggle in [#1040](https://github.com/FallingColors/HexMod/pull/1040).
 - Changed the pattern limit to also include execution of non-pattern iotas like jumps, by pythonmcpi in [#1035](https://github.com/FallingColors/HexMod/pull/1035).
-- Updated the Flay Mind recipe display in EMI and JEI to cycle through all valid entities if the recipe input is an entity tag, by YukkuriC in [#1023](https://github.com/FallingColors/HexMod/pull/1023).
+- Updated the Flay Mind recipe display in EMI and JEI to cycle through all valid entities if the input is an entity tag, by YukkuriC in [#1023](https://github.com/FallingColors/HexMod/pull/1023).
 - Re-implemented the ability to extract stored media from items in trinket/curio slots, by YukkuriC in [#996](https://github.com/FallingColors/HexMod/pull/996).
-- Updated zh_cn translations, by ChuijkYahus in [#995](https://github.com/FallingColors/HexMod/pull/995).
 - Patterns involving entity look direction now compensate for the vanilla bug that causes projectiles and phantoms to report the wrong direction, by Robotgiggle in [#1025](https://github.com/FallingColors/HexMod/pull/1025).
+- Updated zh_cn translations, by ChuijkYahus in [#995](https://github.com/FallingColors/HexMod/pull/995) and [#1037](https://github.com/FallingColors/HexMod/pull/1037).
 
 ### Fixed
 
@@ -39,6 +39,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Internal
 
+- Changed the internal implementation of Thoth's Gambit to use a `TreeList` for more efficiency, by s5bug in [#1031](https://github.com/FallingColors/HexMod/pull/1031).
 - Deprecated the version of `matchPattern` that takes a boolean argument since it always raises an exception, by beholderface in [#1002](https://github.com/FallingColors/HexMod/pull/1002).
 - Stopped using the AWT library for soulglimmer calculation due to a potential issue on MacOS, by vgskye in [#984](https://github.com/FallingColors/HexMod/pull/984).
 - `Iota` subclasses can now specify whether the iota should be displayed with or without commas when in a list, by TheRobbie73 in [#988](https://github.com/FallingColors/HexMod/pull/988).
