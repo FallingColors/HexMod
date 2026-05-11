@@ -39,12 +39,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Internal
 
-- Deprecated the version of matchPattern that takes a boolean argument since it always raises an exception, by beholderface in [#1002](https://github.com/FallingColors/HexMod/pull/1002).
+- Deprecated the version of `matchPattern` that takes a boolean argument since it always raises an exception, by beholderface in [#1002](https://github.com/FallingColors/HexMod/pull/1002).
 - Stopped using the AWT library for soulglimmer calculation due to a potential issue on MacOS, by vgskye in [#984](https://github.com/FallingColors/HexMod/pull/984).
-- Iota classes can now specify whether the iota should be displayed with or without commas when in a list, by TheRobbie73 in [#988](https://github.com/FallingColors/HexMod/pull/988).
-- Made the getUsableStacks and getPrimaryStacks methods in CastingEnvironment and its subclasses public, by miyucomics in [#907](https://github.com/FallingColors/HexMod/pull/907).
+- `Iota` subclasses can now specify whether the iota should be displayed with or without commas when in a list, by TheRobbie73 in [#988](https://github.com/FallingColors/HexMod/pull/988).
+- Made the `getUsableStacks` and `getPrimaryStacks` methods in `CastingEnvironment` and its subclasses public, by miyucomics in [#907](https://github.com/FallingColors/HexMod/pull/907).
 - Improved handling for duplicate pattern signatures in hexdoc, by object-Object in [#1007](https://github.com/FallingColors/HexMod/pull/1007).
-- CircleExecutionState now stores the shape of the spell circle using two corners rather than an entire list of positions, by Stick404 in [#908](https://github.com/FallingColors/HexMod/pull/908).
+- `CircleExecutionState` now stores the shape of the spell circle using two corners rather than an entire list of positions, by Stick404 in [#908](https://github.com/FallingColors/HexMod/pull/908).
 
 ## `0.11.3` - 2025-11-22
 
