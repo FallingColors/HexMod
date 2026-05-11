@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Changed the `media_consumption` attribute to only apply to player-based casting, by Robotgiggle in [987](https://github.com/FallingColors/HexMod/pull/987).
+- Changed Wayfarer's Flight and Anchorite's Flight to both cost 2 dust per unit and enforced a minimum cost for Anchorite's Flight, by Robotgiggle in [#1040](https://github.com/FallingColors/HexMod/pull/1040).
 
 ### Fixed
 
