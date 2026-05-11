@@ -197,12 +197,14 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             ).define("greaterTeleportSplatsItems", DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS);
 
             actionDenyList = builder.comment(
-                    "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap."
-            ).defineList("actionDenyList", List.of(), Server::isValidReslocArg);
+                    "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap. " +
+                        "For example, \"hexcasting:get_caster\" will prevent Mind's Reflection.")
+                .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
 
             costRescaleList = builder.comment(
-                    "[COST RESCALE LIST]"
-            ).defineList("costRescaleList",  List.of(), Server::isValidReslocDoublePair);
+                    "Maps resource locations to the scaling factor for that action's media cost. " +
+                        "For example, \"hexcasting:add_motion 3\" will make Impulse cost 3x as much.")
+                .defineList("costRescaleList",  List.of(), Server::isValidReslocDoublePair);
             builder.pop();
 
             builder.push("Spell Circles");
@@ -211,7 +213,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
             circleActionDenyList = builder.comment(
                     "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle" +
-                        " will result in a mishap. For example: hexcasting:get_caster will prevent Mind's Reflection.")
+                        " will result in a mishap. For example, \"hexcasting:get_caster\" will prevent Mind's Reflection.")
                 .defineList("circleActionDenyList", List.of(), Server::isValidReslocArg);
             builder.pop();
 

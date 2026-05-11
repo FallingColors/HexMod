@@ -393,11 +393,15 @@
         },
         actionDenyList: {
           "": "Action Deny List",
-          "@Tooltip": "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap. For example, hexcasting:get_caster will prevent Mind's Reflection",
+          "@Tooltip": "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap. For example, hexcasting:get_caster will prevent Mind's Reflection.",
         },
         circleActionDenyList: {
           "": "Circle Action Deny List",
-          "@Tooltip": "Resource locations of disallowed actions within circles. Trying to cast one of these from a circle will result in a mishap.",
+          "@Tooltip": "Resource locations of disallowed actions within circles. Trying to cast one of these from a circle will result in a mishap. For example, hexcasting:get_caster will prevent Mind's Reflection.",
+        },
+        costRescaleListRaw: {
+          "": "Cost Scaling Factors",
+          "@Tooltip": "Maps resource locations to the scaling factor for that action's media cost. For example, hexcasting:add_motion 3 will make Impulse cost 3x as much.",
         },
         greaterTeleportSplatsItems: {
           "": "Greater Teleport Splats Items",
