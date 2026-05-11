@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version "1.6-SNAPSHOT"
+    id 'fabric-loom' version "1.9+"
     id "at.petra-k.pkpcpbp.PKSubprojPlugin"
 }
 
@@ -20,7 +20,7 @@ pkSubproj {
         "paucal:dabyDTwJ", // 0.6.0-fabric
         "patchouli:1.20.1-80-fabric",
         "fabric-language-kotlin:1.9.4+kotlin.1.8.21",
-        "inline:1.20.1-1.1.1-fabric",
+        "inline:1.20.1-1.2.2-fabric",
         "cloth-config:11.1.106+fabric",
         "cardinal-components-api:5.2.1",
         "fabric-api:0.84.0+1.20.1",
