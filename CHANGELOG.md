@@ -8,15 +8,43 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Added the `cannot_modify_cost` tag for patterns that should ignore the `media_consumption` attribute when calculating cost, by Robotgiggle in [987](https://github.com/FallingColors/HexMod/pull/987).
+- Added the `cannot_modify_cost` tag for patterns that should ignore the `media_consumption` attribute when calculating cost, by Robotgiggle in [#987](https://github.com/FallingColors/HexMod/pull/987).
+- Added a config toggle for the pattern wobble animation on active slates to improve performance, by aloaloolaola in [#1017](https://github.com/FallingColors/HexMod/pull/1017).
+- Added keybinds to flip forward and backwards in a spellbook, by pythonmcpi in [#1028](https://github.com/FallingColors/HexMod/pull/1028).
+- Added a config toggle to disable scrolling through spellbooks outside of the staff grid, by pythonmcpi in [#1028](https://github.com/FallingColors/HexMod/pull/1028).
+- Added Harmony Reflection, which pushes the value of the golden ratio, by miyucomics in [#900](https://github.com/FallingColors/HexMod/pull/900).
+- Added a config toggle (default false) for the effect that makes iota-holding items display their entire NBT data when Advanced Tooltips is enabled, by Robotgiggle in [#1021](https://github.com/FallingColors/HexMod/pull/1021).
+- Added a pattern display overlay for pattern-holding items (ie scrolls or slates) while holding shift in the inventory, by SamsTheNerd in [#879](https://github.com/FallingColors/HexMod/pull/879).
+- Added connected textures for Akashic Ligatures when using Continuity or Optifine, by kineticneticat in [#885](https://github.com/FallingColors/HexMod/pull/885).
 
 ### Changed
 
-- Changed the `media_consumption` attribute to only apply to player-based casting, by Robotgiggle in [987](https://github.com/FallingColors/HexMod/pull/987).
+- Changed the `media_consumption` attribute to only apply to player-based casting, by Robotgiggle in [#987](https://github.com/FallingColors/HexMod/pull/987).
+- Changed the internal implementation of Thoth's Gambit to be a bit more efficient, by s5bug in [#1031](https://github.com/FallingColors/HexMod/pull/1031).
+- Changed the pattern limit to also include execution of non-pattern iotas like jumps, by pythonmcpi in [#1035](https://github.com/FallingColors/HexMod/pull/1035).
+- Updated the Flay Mind recipe display in EMI and JEI to cycle through all valid entities if the recipe input is an entity tag, by YukkuriC in [#1023](https://github.com/FallingColors/HexMod/pull/1023).
+- Re-implemented the ability to extract stored media from items in trinket/curio slots, by YukkuriC in [#996](https://github.com/FallingColors/HexMod/pull/996).
+- Updated zh_cn translations, by ChuijkYahus in [#995](https://github.com/FallingColors/HexMod/pull/995).
+- Patterns involving entity look direction now compensate for the vanilla bug that causes projectiles and phantoms to report the wrong direction, by Robotgiggle in [#1025](https://github.com/FallingColors/HexMod/pull/1025).
 
 ### Fixed
 
-- Fixed a crash loop when trying to generate a creative-mode ancient scroll for a Great Spell whose per-world pattern hasn't been calculated yet, by Robotgiggle in [992](https://github.com/FallingColors/HexMod/pull/992).
+- Fixed a crash loop when trying to generate a creative-mode ancient scroll for a Great Spell whose per-world pattern hasn't been calculated yet, by Robotgiggle in [#992](https://github.com/FallingColors/HexMod/pull/992).
+- Fixed Create Water and Create Lava causing the "position is forbidden to you" mishap when the position is actually just out of ambit, by pythonmcpi in [#1029](https://github.com/FallingColors/HexMod/pull/1029).
+- Fixed a broken translation key on the error message from a Shepherd Directrix, by Teal-Wolf-25-v2 in [#1013](https://github.com/FallingColors/HexMod/pull/1013).
+- Fixed the log spam caused by double pattern registration when joining a world, by Real-Luxof in [#999](https://github.com/FallingColors/HexMod/pull/999).
+- Fixed various incorrect documentation in the Hex Book, by Robotgiggle in [#1010](https://github.com/FallingColors/HexMod/pull/1010).
+- Fixed a broken translation key when trying to use Place Block with no placeable items in your hotbar, by Robotgiggle in [#1010](https://github.com/FallingColors/HexMod/pull/1010).
+- Fixed a potential chunkban when leaving a looping spell circle running for long enough, by Stick404 in [#908](https://github.com/FallingColors/HexMod/pull/908).
+
+### Internal
+
+- Deprecated the version of matchPattern that takes a boolean argument since it always raises an exception, by beholderface in [#1002](https://github.com/FallingColors/HexMod/pull/1002).
+- Stopped using the AWT library for soulglimmer calculation due to a potential issue on MacOS, by vgskye in [#984](https://github.com/FallingColors/HexMod/pull/984).
+- Iota classes can now specify whether the iota should be displayed with or without commas when in a list, by TheRobbie73 in [#988](https://github.com/FallingColors/HexMod/pull/988).
+- Made the getUsableStacks and getPrimaryStacks methods in CastingEnvironment and its subclasses public, by miyucomics in [#907](https://github.com/FallingColors/HexMod/pull/907).
+- Improved handling for duplicate pattern signatures in hexdoc, by object-Object in [#1007](https://github.com/FallingColors/HexMod/pull/1007).
+- CircleExecutionState now stores the shape of the spell circle using two corners rather than an entire list of positions, by Stick404 in [#908](https://github.com/FallingColors/HexMod/pull/908).
 
 ## `0.11.3` - 2025-11-22
 
