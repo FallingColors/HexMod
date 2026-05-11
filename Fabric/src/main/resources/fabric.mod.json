@@ -50,7 +50,7 @@
     "java": ">=17",
     "fabricloader": ">=0.14",
     "fabric": ">=0.84",
-    "fabric-language-kotlin": ">=1.9.4+kotlin.1.8.21",
+    "fabric-language-kotlin": ">=1.13.7+kotlin.2.2.21",
     "cardinal-components-base": "~5.2.1",
     "cardinal-components-entity": "~5.2.1",
     "cardinal-components-item": "~5.2.1",
