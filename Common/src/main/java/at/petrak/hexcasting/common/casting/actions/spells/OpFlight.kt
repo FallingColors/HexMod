@@ -4,7 +4,6 @@ import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
-import at.petrak.hexcasting.api.casting.getDoubleAboveInclusive
 import at.petrak.hexcasting.api.casting.getPlayer
 import at.petrak.hexcasting.api.casting.getPositiveDouble
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -33,14 +32,13 @@ class OpFlight(val type: Type) : SpellAction {
             env: CastingEnvironment
     ): SpellAction.Result {
         val target = args.getPlayer(0, argc)
-        val theArg = when (this.type) {
-            Type.LimitRange -> args.getDoubleAboveInclusive(1, 1.0, argc)
-            Type.LimitTime -> args.getPositiveDouble(1, argc)
-        }
+        val theArg = args.getPositiveDouble(1, argc)
         env.assertEntityInRange(target)
 
         // One block of radius, or one second of duration, costs 2 dust
-        val cost = (theArg * 2 * MediaConstants.DUST_UNIT).roundToLong()
+        var cost = (theArg * 2 * MediaConstants.DUST_UNIT).roundToLong()
+        // Cost for anchorite does not decrease below 1 meter
+        if (type == Type.LimitRange) cost = max(cost, 2 * MediaConstants.DUST_UNIT)
 
         // Convert to ticks
         return SpellAction.Result(
