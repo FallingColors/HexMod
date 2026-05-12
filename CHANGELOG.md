@@ -19,6 +19,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Fixed a crash loop when trying to generate a creative-mode ancient scroll for a Great Spell whose per-world pattern hasn't been calculated yet, by Robotgiggle in [992](https://github.com/FallingColors/HexMod/pull/992).
 
+### Internal
+
+- The mod now uses Fabric Loom 1.9, Gradle 8.11, and Kotlin 2.0.20, by Robotgiggle in [#1043](https://github.com/FallingColors/HexMod/pull/1043).
+- Updated Inline dependency from 1.0.1 to 1.2.2, by Robotgiggle in [#1043](https://github.com/FallingColors/HexMod/pull/1043).
+
 ## `0.11.3` - 2025-11-22
 
 ### Added

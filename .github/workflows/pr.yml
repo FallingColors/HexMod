@@ -60,10 +60,10 @@ jobs:
             mc-runtime-test: fabric
             fabric-api: 0.87.0
             dependencies: >-
-              'https://cdn.modrinth.com/data/Ha28R6CL/versions/vlhvI5Li/fabric-language-kotlin-1.10.18%2Bkotlin.1.9.22.jar'
+              'https://cdn.modrinth.com/data/Ha28R6CL/versions/LcgnDDmT/fabric-language-kotlin-1.13.7%2Bkotlin.2.2.21.jar'
               'https://cdn.modrinth.com/data/9s6osm5g/versions/s7VTKfLA/cloth-config-11.1.106-fabric.jar'
               'https://cdn.modrinth.com/data/TZo2wHFe/versions/dabyDTwJ/paucal-0.6.0%2B1.20.1-fabric.jar'
-              'https://cdn.modrinth.com/data/fin1PX4m/versions/oUAVXW1N/inline-fabric-1.20.1-1.1.1.jar'
+              'https://cdn.modrinth.com/data/fin1PX4m/versions/n7VmkBLu/inline-fabric-1.20.1-1.2.2.jar'
               'https://cdn.modrinth.com/data/K01OU20C/versions/HykM2Qyv/cardinal-components-api-5.2.1.jar'
               'https://cdn.modrinth.com/data/nU0bVIaL/versions/Y6tuH1cn/Patchouli-1.20.1-84-FABRIC.jar'
               'https://cdn.modrinth.com/data/mOgUt4GM/versions/zv46i3PW/modmenu-7.1.0.jar'
@@ -72,10 +72,10 @@ jobs:
             mc-runtime-test: lexforge
             fabric-api: none
             dependencies: >-
-              'https://cdn.modrinth.com/data/ordsPcFz/versions/9j6YaPp2/kotlinforforge-4.10.0-all.jar'
+              'https://cdn.modrinth.com/data/ordsPcFz/versions/Zsh14XeQ/kotlinforforge-4.12.0-all.jar'
               'https://cdn.modrinth.com/data/9s6osm5g/versions/JoLgnJ0G/cloth-config-11.1.106-forge.jar'
               'https://cdn.modrinth.com/data/TZo2wHFe/versions/HyBiJPtT/paucal-0.6.0%2B1.20.1-forge.jar'
-              'https://cdn.modrinth.com/data/fin1PX4m/versions/U3ktiRdL/inline-forge-1.20.1-1.1.1.jar'
+              'https://cdn.modrinth.com/data/fin1PX4m/versions/H1jsvy53/inline-forge-1.20.1-1.2.2.jar'
               'https://cdn.modrinth.com/data/40FYwb4z/versions/fs9CeXYZ/caelus-forge-3.1.0%2B1.20.jar'
               'https://cdn.modrinth.com/data/nU0bVIaL/versions/JMtc0mTS/Patchouli-1.20.1-84-FORGE.jar'
     runs-on: ubuntu-latest
