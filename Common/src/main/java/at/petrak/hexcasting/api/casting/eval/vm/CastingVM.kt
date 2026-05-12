@@ -6,9 +6,11 @@ import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.*
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
+import at.petrak.hexcasting.api.casting.getPositiveInt
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.ListIota
+import at.petrak.hexcasting.api.casting.iota.DoubleIota
 import at.petrak.hexcasting.api.casting.iota.PatternIota
 import at.petrak.hexcasting.api.casting.math.HexDir
 import at.petrak.hexcasting.api.casting.math.HexPattern
@@ -246,6 +248,22 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                         }
                     }
 
+                    SpecialPatterns.BIG_INTRO.angles -> {
+                        throw MishapTooManyCloseParens()
+                    }
+
+                    SpecialPatterns.BIG_RETRO.angles -> {
+                        displayDepth = 0
+                        val newStack = this.image.stack.toMutableList()
+                        newStack.add(DoubleIota(this.image.parenCount.toDouble()))
+                        newStack.add(ListIota(this.image.parenthesized.toList().map { it.iota }))
+                        this.image.copy(
+                            stack = newStack,
+                            parenCount = 0,
+                            parenthesized = listOf()
+                        ) to ResolvedPatternType.EVALUATED
+                    }
+
                     else -> {
                         val newParens = this.image.parenthesized.toMutableList()
                         newParens.add(ParenthesizedIota(iota, false))
@@ -277,6 +295,23 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 }
 
                 SpecialPatterns.RETROSPECTION.angles -> {
+                    throw MishapTooManyCloseParens()
+                }
+
+                SpecialPatterns.BIG_INTRO.angles -> {
+                    val newStack = this.image.stack.toMutableList()
+                    val layers = when (val topIota = newStack.removeLastOrNull()) {
+                        null -> throw MishapNotEnoughArgs(1, 0)
+                        else -> listOf(topIota).getPositiveInt(0)
+                    }
+
+                    this.image.copy(
+                        stack = newStack,
+                        parenCount = this.image.parenCount + layers
+                    ) to ResolvedPatternType.EVALUATED
+                }
+
+                SpecialPatterns.BIG_RETRO.angles -> {
                     throw MishapTooManyCloseParens()
                 }
 
