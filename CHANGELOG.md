@@ -47,6 +47,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Improved handling for duplicate pattern signatures in hexdoc, by object-Object in [#1007](https://github.com/FallingColors/HexMod/pull/1007).
 - `CircleExecutionState` now stores the shape of the spell circle using two corners rather than an entire list of positions, by Stick404 in [#908](https://github.com/FallingColors/HexMod/pull/908).
 
+### Internal
+
+- The mod now uses Fabric Loom 1.9, Gradle 8.11, and Kotlin 2.0.20, by Robotgiggle in [#1043](https://github.com/FallingColors/HexMod/pull/1043).
+- Updated Inline dependency from 1.0.1 to 1.2.2, by Robotgiggle in [#1043](https://github.com/FallingColors/HexMod/pull/1043).
+
 ## `0.11.3` - 2025-11-22
 
 ### Added
