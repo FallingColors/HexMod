@@ -101,7 +101,6 @@ public class PatternRenderer {
 
     private static final float outerZ = 0.0005f;
 
-    // Since the Z-flip is no longer needed as normals are fine in 1.21, this variable needs to be negative instead
     private static float innerZ = 0.001f;
 
     private static boolean renderPatternTexture(HexPatternLike patternlike, PoseStack ps, @Nullable WorldlyBits worldlyBits, PatternSettings patSets, PatternColors patColors, double seed, int resPerUnit){
