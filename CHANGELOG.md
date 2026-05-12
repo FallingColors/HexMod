@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Updated the Flay Mind recipe display in EMI and JEI to cycle through all valid entities if the input is an entity tag, by YukkuriC in [#1023](https://github.com/FallingColors/HexMod/pull/1023).
 - Re-implemented the ability to extract stored media from items in trinket/curio slots, by YukkuriC in [#996](https://github.com/FallingColors/HexMod/pull/996).
 - Patterns involving entity look direction now compensate for the vanilla bug that causes projectiles and phantoms to report the wrong direction, by Robotgiggle in [#1025](https://github.com/FallingColors/HexMod/pull/1025).
+- Updated Inline dependency from 1.0.1 to 1.2.2, by Robotgiggle in [#1043](https://github.com/FallingColors/HexMod/pull/1043).
 - Updated zh_cn translations, by ChuijkYahus in [#995](https://github.com/FallingColors/HexMod/pull/995) and [#1037](https://github.com/FallingColors/HexMod/pull/1037).
 
 ### Fixed
@@ -39,6 +40,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Internal
 
+- The mod now uses Fabric Loom 1.9, Gradle 8.11, and Kotlin 2.0.20, by Robotgiggle in [#1043](https://github.com/FallingColors/HexMod/pull/1043).
 - Changed the internal implementation of Thoth's Gambit to use a `TreeList` for more efficiency, by s5bug in [#1031](https://github.com/FallingColors/HexMod/pull/1031).
 - Deprecated the version of `matchPattern` that takes a boolean argument since it always raises an exception, by beholderface in [#1002](https://github.com/FallingColors/HexMod/pull/1002).
 - Stopped using the AWT library for soulglimmer calculation due to a potential issue on MacOS, by vgskye in [#984](https://github.com/FallingColors/HexMod/pull/984).
@@ -46,11 +48,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Made the `getUsableStacks` and `getPrimaryStacks` methods in `CastingEnvironment` and its subclasses public, by miyucomics in [#907](https://github.com/FallingColors/HexMod/pull/907).
 - Improved handling for duplicate pattern signatures in hexdoc, by object-Object in [#1007](https://github.com/FallingColors/HexMod/pull/1007).
 - `CircleExecutionState` now stores the shape of the spell circle using two corners rather than an entire list of positions, by Stick404 in [#908](https://github.com/FallingColors/HexMod/pull/908).
-
-### Internal
-
-- The mod now uses Fabric Loom 1.9, Gradle 8.11, and Kotlin 2.0.20, by Robotgiggle in [#1043](https://github.com/FallingColors/HexMod/pull/1043).
-- Updated Inline dependency from 1.0.1 to 1.2.2, by Robotgiggle in [#1043](https://github.com/FallingColors/HexMod/pull/1043).
 
 ## `0.11.3` - 2025-11-22
 
