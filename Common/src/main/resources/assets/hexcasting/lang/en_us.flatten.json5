@@ -990,8 +990,11 @@
     "rawhook.hexcasting:": {
       open_paren: "Introspection",
       close_paren: "Retrospection",
+      open_n_parens: "[BIG_INTRO]",
+      close_all_parens: "[BIG_RETRO]",
       escape: "Consideration",
       undo: "Evanition",
+      unknown: "Unknown Pattern (this is a bug!)",
     },
 
     "iota.hexcasting:": {
@@ -1043,6 +1046,7 @@
       not_enough_args: "expected %s or more arguments but the stack was only %s tall",
       no_args: "expected %s or more arguments but the stack was empty",
       too_many_close_parens: "Did not first use Introspection",
+      big_intro_in_parens: "Tried to use [BIG_INTRO] after Introspection",
       
       wrong_dimension: "cannot see %s from %s",
       entity_too_far: "%s is out of range",

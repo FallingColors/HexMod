@@ -115,8 +115,9 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 this.handleParentheses(iota)?.let { (data, resolutionType) ->
                     return@executeInner CastResult(iota, continuation, data, listOf(), resolutionType, HexEvalSounds.NORMAL_EXECUTE)
                 }
-            } catch (e: MishapTooManyCloseParens) {
+            } catch (e: Mishap) {
                 // This is ridiculous and needs to be fixed
+                val pattern = (iota as? PatternIota)?.pattern
                 return CastResult(
                     iota,
                     continuation,
@@ -125,8 +126,12 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                         OperatorSideEffect.DoMishap(
                             e,
                             Mishap.Context(
-                                (iota as? PatternIota)?.pattern ?: HexPattern(HexDir.WEST),
-                                HexAPI.instance().getRawHookI18n(HexAPI.modLoc("close_paren"))
+                                pattern ?: HexPattern(HexDir.WEST),
+                                HexAPI.instance().getRawHookI18n(HexAPI.modLoc(when (pattern?.angles) {
+                                    SpecialPatterns.RETROSPECTION.angles -> "close_paren"
+                                    SpecialPatterns.BIG_INTRO.angles -> "open_n_parens"
+                                    else -> "unknown"
+                                }))
                             )
                         )
                     ),
@@ -179,7 +184,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
      * Return a non-null value if we handled this in some sort of parenthesey way,
      * either escaping it onto the stack or changing the parenthese-handling state.
      */
-    @Throws(MishapTooManyCloseParens::class)
+    @Throws(Mishap::class)
     private fun handleParentheses(iota: Iota): Pair<CastingImage, ResolvedPatternType>? {
         val sig = (iota as? PatternIota)?.pattern?.angles
 
@@ -249,7 +254,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                     }
 
                     SpecialPatterns.BIG_INTRO.angles -> {
-                        throw MishapTooManyCloseParens()
+                        throw MishapBigIntroInParens()
                     }
 
                     SpecialPatterns.BIG_RETRO.angles -> {
