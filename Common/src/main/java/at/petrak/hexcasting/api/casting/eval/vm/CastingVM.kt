@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
 import at.petrak.hexcasting.api.HexAPI
-import at.petrak.hexcasting.api.casting.PatternShapeMatch.*
 import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.*
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
@@ -15,7 +14,6 @@ import at.petrak.hexcasting.api.casting.iota.PatternIota
 import at.petrak.hexcasting.api.casting.math.HexDir
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.*
-import at.petrak.hexcasting.api.utils.*
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
@@ -129,7 +127,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                                 pattern ?: HexPattern(HexDir.WEST),
                                 HexAPI.instance().getRawHookI18n(HexAPI.modLoc(when (pattern?.angles) {
                                     SpecialPatterns.RETROSPECTION.angles -> "close_paren"
-                                    SpecialPatterns.BIG_INTRO.angles -> "open_n_parens"
+                                    SpecialPatterns.INTROSPECTION_II.angles -> "open_n_parens"
                                     else -> "unknown"
                                 }))
                             )
@@ -253,11 +251,11 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                         }
                     }
 
-                    SpecialPatterns.BIG_INTRO.angles -> {
-                        throw MishapBigIntroInParens()
+                    SpecialPatterns.INTROSPECTION_II.angles -> {
+                        throw MishapNestedBigParen()
                     }
 
-                    SpecialPatterns.BIG_RETRO.angles -> {
+                    SpecialPatterns.RETROSPECTION_II.angles -> {
                         displayDepth = 0
                         val newStack = this.image.stack.toMutableList()
                         newStack.add(DoubleIota(this.image.parenCount.toDouble()))
@@ -303,7 +301,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                     throw MishapTooManyCloseParens()
                 }
 
-                SpecialPatterns.BIG_INTRO.angles -> {
+                SpecialPatterns.INTROSPECTION_II.angles -> {
                     val newStack = this.image.stack.toMutableList()
                     val layers = when (val topIota = newStack.removeLastOrNull()) {
                         null -> throw MishapNotEnoughArgs(1, 0)
@@ -316,7 +314,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                     ) to ResolvedPatternType.EVALUATED
                 }
 
-                SpecialPatterns.BIG_RETRO.angles -> {
+                SpecialPatterns.RETROSPECTION_II.angles -> {
                     throw MishapTooManyCloseParens()
                 }
 

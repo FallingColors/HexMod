@@ -70,6 +70,28 @@
     {
       "type": "patchouli:text",
       "text": "hexcasting.page.patterns_as_iotas.further_notes.3"
+    },
+    {
+      "type": "hexcasting:manual_pattern",
+      "header": "hexcasting.rawhook.hexcasting:open_n_parens",
+      "anchor": "hexcasting:open_n_parens",
+      "text": "hexcasting.page.patterns_as_iotas.advanced_parens.1",
+      "input": "num",
+      "patterns": {
+        "startdir": "SOUTH_WEST",
+        "signature": "eqqqe"
+      }
+    },
+    {
+      "type": "hexcasting:manual_pattern",
+      "header": "hexcasting.rawhook.hexcasting:close_all_parens",
+      "anchor": "hexcasting:close_all_parens",
+      "text": "hexcasting.page.patterns_as_iotas.advanced_parens.2",
+      "output": "num, [pattern]",
+      "patterns": {
+        "startdir": "SOUTH_EAST",
+        "signature": "qeeeq"
+      }
     }
   ]
 }
