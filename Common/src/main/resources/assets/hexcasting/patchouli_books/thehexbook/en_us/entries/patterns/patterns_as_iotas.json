@@ -50,29 +50,6 @@
     },
     {
       "type": "hexcasting:manual_pattern",
-      "header": "hexcasting.rawhook.hexcasting:undo",
-      "anchor": "hexcasting:undo",
-      "text": "hexcasting.page.patterns_as_iotas.undo",
-      "patterns": {
-        "startdir": "EAST",
-        "signature": "eeedw"
-      }
-    },
-    {
-      "type": "patchouli:text",
-      "title": "hexcasting.page.patterns_as_iotas.further_notes.title",
-      "text": "hexcasting.page.patterns_as_iotas.further_notes.1"
-    },
-    {
-      "type": "patchouli:text",
-      "text": "hexcasting.page.patterns_as_iotas.further_notes.2"
-    },
-    {
-      "type": "patchouli:text",
-      "text": "hexcasting.page.patterns_as_iotas.further_notes.3"
-    },
-    {
-      "type": "hexcasting:manual_pattern",
       "header": "hexcasting.rawhook.hexcasting:open_n_parens",
       "anchor": "hexcasting:open_n_parens",
       "text": "hexcasting.page.patterns_as_iotas.advanced_parens.1",
@@ -92,6 +69,30 @@
         "startdir": "SOUTH_EAST",
         "signature": "qeeeq"
       }
+    },
+    {
+      "type": "hexcasting:manual_pattern",
+      "header": "hexcasting.rawhook.hexcasting:undo",
+      "anchor": "hexcasting:undo",
+      "text": "hexcasting.page.patterns_as_iotas.undo",
+      "patterns": {
+        "startdir": "EAST",
+        "signature": "eeedw"
+      }
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "further_notes",
+      "title": "hexcasting.page.patterns_as_iotas.further_notes.title",
+      "text": "hexcasting.page.patterns_as_iotas.further_notes.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.patterns_as_iotas.further_notes.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.patterns_as_iotas.further_notes.3"
     }
   ]
 }

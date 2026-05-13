@@ -127,7 +127,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                                 pattern ?: HexPattern(HexDir.WEST),
                                 HexAPI.instance().getRawHookI18n(HexAPI.modLoc(when (pattern?.angles) {
                                     SpecialPatterns.RETROSPECTION.angles -> "close_paren"
-                                    SpecialPatterns.INTROSPECTION_II.angles -> "open_n_parens"
+                                    SpecialPatterns.MEDITATION.angles -> "open_n_parens"
                                     else -> "unknown"
                                 }))
                             )
@@ -251,11 +251,14 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                         }
                     }
 
-                    SpecialPatterns.INTROSPECTION_II.angles -> {
-                        throw MishapNestedBigParen()
-                    }
+                    // Meditation is treated as a normal pattern while nested since there's
+                    // no way to determine how many layers it should open
+                    //
+                    // SpecialPatterns.MEDITATION.angles -> {
+                    //     throw MishapTooManyCloseParens()
+                    // }
 
-                    SpecialPatterns.RETROSPECTION_II.angles -> {
+                    SpecialPatterns.RECOLLECTION.angles -> {
                         displayDepth = 0
                         val newStack = this.image.stack.toMutableList()
                         newStack.add(DoubleIota(this.image.parenCount.toDouble()))
@@ -301,7 +304,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                     throw MishapTooManyCloseParens()
                 }
 
-                SpecialPatterns.INTROSPECTION_II.angles -> {
+                SpecialPatterns.MEDITATION.angles -> {
                     val newStack = this.image.stack.toMutableList()
                     val layers = when (val topIota = newStack.removeLastOrNull()) {
                         null -> throw MishapNotEnoughArgs(1, 0)
@@ -314,7 +317,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                     ) to ResolvedPatternType.EVALUATED
                 }
 
-                SpecialPatterns.RETROSPECTION_II.angles -> {
+                SpecialPatterns.RECOLLECTION.angles -> {
                     throw MishapTooManyCloseParens()
                 }
 
