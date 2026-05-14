@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.casting.eval;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 
+@Deprecated(since = "0.11.4")
 public final class SpecialPatterns {
     public static final HexPattern INTROSPECTION = HexPattern.fromAngles("qqq", HexDir.WEST);
     public static final HexPattern RETROSPECTION = HexPattern.fromAngles("eee", HexDir.EAST);

@@ -109,30 +109,32 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
         try {
             // TODO we can have a special intro/retro sound
             // ALSO TODO need to add reader macro-style things
-            try {
-                this.handleParentheses(iota)?.let { (data, resolutionType) ->
-                    return@executeInner CastResult(iota, continuation, data, listOf(), resolutionType, HexEvalSounds.NORMAL_EXECUTE)
+
+            // Handle single-iota escaping (ie via Consideration)
+            // This is here rather than in Iota since this behavior should not be overriden.
+            if (this.image.escapeNext) {
+                val newImage: CastingImage
+                if (this.image.parenCount > 0) {
+                    // if we're inside parentheses, add the iota to the list with escaped set to true
+                    val newParens = this.image.parenthesized.toMutableList()
+                    newParens.add(ParenthesizedIota(iota, true))
+                    newImage = this.image.copy(
+                        escapeNext = false,
+                        parenthesized = newParens
+                    )
+                } else {
+                    // if we're not in parentheses, just push the iota to the stack
+                    val newStack = this.image.stack.toMutableList()
+                    newStack.add(iota)
+                    newImage = this.image.copy(
+                        stack = newStack,
+                        escapeNext = false,
+                    )
                 }
-            } catch (e: MishapTooManyCloseParens) {
-                // This is ridiculous and needs to be fixed
-                return CastResult(
-                    iota,
-                    continuation,
-                    null,
-                    listOf(
-                        OperatorSideEffect.DoMishap(
-                            e,
-                            Mishap.Context(
-                                (iota as? PatternIota)?.pattern ?: HexPattern(HexDir.WEST),
-                                HexAPI.instance().getRawHookI18n(HexAPI.modLoc("close_paren"))
-                            )
-                        )
-                    ),
-                    ResolvedPatternType.ERRORED,
-                    HexEvalSounds.MISHAP
-                )
+                return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.ESCAPED, HexEvalSounds.NORMAL_EXECUTE)
             }
 
+            // Handle normal behavior (including parens escaping)
             return iota.execute(this, world, continuation)
         } catch (exception: Exception) {
             // This means something very bad has happened
@@ -171,133 +173,6 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             this.image.userData.getCompound(HexAPI.RAVENMIND_USERDATA)
         } else null
         return Pair(stackDescs, ravenmind)
-    }
-
-    /**
-     * Return a non-null value if we handled this in some sort of parenthesey way,
-     * either escaping it onto the stack or changing the parenthese-handling state.
-     */
-    @Throws(MishapTooManyCloseParens::class)
-    private fun handleParentheses(iota: Iota): Pair<CastingImage, ResolvedPatternType>? {
-        val sig = (iota as? PatternIota)?.pattern?.angles
-
-        var displayDepth = this.image.parenCount
-
-        val out = if (displayDepth > 0) {
-            if (this.image.escapeNext) {
-                val newParens = this.image.parenthesized.toMutableList()
-                newParens.add(ParenthesizedIota(iota, true))
-                this.image.copy(
-                    escapeNext = false,
-                    parenthesized = newParens
-                ) to ResolvedPatternType.ESCAPED
-            } else {
-
-                when (sig) {
-                    SpecialPatterns.CONSIDERATION.angles -> {
-                        this.image.copy(
-                            escapeNext = true,
-                        ) to ResolvedPatternType.EVALUATED
-                    }
-
-                    SpecialPatterns.EVANITION.angles -> {
-                        val newParens = this.image.parenthesized.toMutableList()
-                        val last = newParens.removeLastOrNull()
-                        val newParenCount = this.image.parenCount + if (last == null || last.escaped || last.iota !is PatternIota) 0 else when (last.iota.pattern) {
-                            SpecialPatterns.INTROSPECTION -> -1
-                            SpecialPatterns.RETROSPECTION -> 1
-                            else -> 0
-                        }
-                        this.image.copy(parenthesized = newParens, parenCount = newParenCount) to if (last == null) ResolvedPatternType.ERRORED else ResolvedPatternType.UNDONE
-                    }
-
-                    SpecialPatterns.INTROSPECTION.angles -> {
-                        // we have escaped the parens onto the stack; we just also record our count.
-                        val newParens = this.image.parenthesized.toMutableList()
-                        newParens.add(ParenthesizedIota(iota, false))
-                        this.image.copy(
-                            parenthesized = newParens,
-                            parenCount = this.image.parenCount + 1
-                        ) to if (this.image.parenCount == 0) ResolvedPatternType.EVALUATED else ResolvedPatternType.ESCAPED
-                    }
-
-                    SpecialPatterns.RETROSPECTION.angles -> {
-                        val newParenCount = this.image.parenCount - 1
-                        displayDepth--
-                        if (newParenCount == 0) {
-                            val newStack = this.image.stack.toMutableList()
-                            newStack.add(ListIota(this.image.parenthesized.toList().map { it.iota }))
-                            this.image.copy(
-                                stack = newStack,
-                                parenCount = newParenCount,
-                                parenthesized = listOf()
-                            ) to ResolvedPatternType.EVALUATED
-                        } else if (newParenCount < 0) {
-                            throw MishapTooManyCloseParens()
-                        } else {
-                            // we have this situation: "(()"
-                            // we need to add the close paren
-                            val newParens = this.image.parenthesized.toMutableList()
-                            newParens.add(ParenthesizedIota(iota, false))
-                            this.image.copy(
-                                parenCount = newParenCount,
-                                parenthesized = newParens
-                            ) to ResolvedPatternType.ESCAPED
-                        }
-                    }
-
-                    else -> {
-                        val newParens = this.image.parenthesized.toMutableList()
-                        newParens.add(ParenthesizedIota(iota, false))
-                        this.image.copy(
-                            parenthesized = newParens
-                        ) to ResolvedPatternType.ESCAPED
-                    }
-                }
-            }
-        } else if (this.image.escapeNext) {
-            val newStack = this.image.stack.toMutableList()
-            newStack.add(iota)
-            this.image.copy(
-                stack = newStack,
-                escapeNext = false,
-            ) to ResolvedPatternType.ESCAPED
-        } else {
-            when (sig) {
-                SpecialPatterns.CONSIDERATION.angles -> {
-                    this.image.copy(
-                        escapeNext = true
-                    ) to ResolvedPatternType.EVALUATED
-                }
-
-                SpecialPatterns.INTROSPECTION.angles -> {
-                    this.image.copy(
-                        parenCount = this.image.parenCount + 1
-                    ) to ResolvedPatternType.EVALUATED
-                }
-
-                SpecialPatterns.RETROSPECTION.angles -> {
-                    throw MishapTooManyCloseParens()
-                }
-
-                else -> {
-                    null
-                }
-            }
-        }
-
-        // TODO: replace this once we can read things from the client
-        /*
-        if (out != null) {
-            val display = if (iota is PatternIota) {
-                PatternNameHelper.representationForPattern(iota.pattern)
-                    .copy()
-                    .withStyle(if (out.second == ResolvedPatternType.ESCAPED) ChatFormatting.YELLOW else ChatFormatting.AQUA)
-            } else iota.display()
-            displayPatternDebug(this.escapeNext, displayDepth, display)
-        }
-        */
-        return out
     }
 
     data class TempControllerInfo(

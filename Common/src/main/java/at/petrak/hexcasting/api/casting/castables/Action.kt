@@ -1,11 +1,16 @@
 package at.petrak.hexcasting.api.casting.castables
 
+import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.OperationResult
+import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.Mishap
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import net.minecraft.world.phys.Vec3
 import java.text.DecimalFormat
 
@@ -40,6 +45,27 @@ interface Action {
         image: CastingImage,
         continuation: SpellContinuation
     ): OperationResult
+
+    /**
+     * The behavior of this action when inside parentheses. By default, this is just to add the pattern
+     * to the parenthesized list without updating the op count or performing any of its usual effects.
+     */
+    @Throws(Mishap::class)
+    fun operateInParens(
+        env: CastingEnvironment,
+        image: CastingImage,
+        continuation: SpellContinuation,
+        thisIota: Iota,
+    ): Pair<OperationResult, ResolvedPatternType> {
+        val newParens = image.parenthesized.toMutableList()
+        newParens.add(ParenthesizedIota(thisIota, false))
+        return OperationResult(
+            image.copy(parenthesized = newParens),
+            listOf(),
+            continuation,
+            HexEvalSounds.NORMAL_EXECUTE
+        ) to ResolvedPatternType.ESCAPED
+    }
 
     companion object {
         // I see why vazkii did this: you can't raycast out to infinity!

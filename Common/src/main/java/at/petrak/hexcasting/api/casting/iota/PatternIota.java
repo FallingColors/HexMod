@@ -5,8 +5,10 @@ import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.castables.Action;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
+import at.petrak.hexcasting.api.casting.eval.OperationResult;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
@@ -27,10 +29,12 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -74,6 +78,8 @@ public class PatternIota extends Iota {
             var lookup = PatternRegistryManifest.matchPattern(this.getPattern(), vm.getEnv());
             vm.getEnv().precheckAction(lookup);
 
+            var inParens = vm.getImage().getParenCount() > 0;
+
             Action action;
             if (lookup instanceof PatternShapeMatch.Normal || lookup instanceof PatternShapeMatch.PerWorld) {
                 ResourceKey<ActionRegistryEntry> key;
@@ -101,12 +107,27 @@ public class PatternIota extends Iota {
                 throw new MishapInvalidPattern(this.getPattern());
             } else throw new IllegalStateException();
 
-            // do the actual calculation!!
-            var result = action.operate(
-                    vm.getEnv(),
-                    vm.getImage(),
-                    continuation
-            );
+            OperationResult result;
+            ResolvedPatternType resolutionType;
+            if (inParens) {
+                // handle parenthetized behavior
+                var resultAndType = action.operateInParens(
+                        vm.getEnv(),
+                        vm.getImage(),
+                        continuation,
+                        this
+                );
+                result = resultAndType.getFirst();
+                resolutionType = resultAndType.getSecond();
+            } else {
+                // do the actual calculation!!
+                result = action.operate(
+                        vm.getEnv(),
+                        vm.getImage(),
+                        continuation
+                );
+                resolutionType = ResolvedPatternType.EVALUATED;
+            }
 
             var cont2 = result.getNewContinuation();
             // TODO parens also break prescience
@@ -117,7 +138,7 @@ public class PatternIota extends Iota {
                 cont2,
                 result.getNewImage(),
                 sideEffects,
-                ResolvedPatternType.EVALUATED,
+                resolutionType,
                 result.getSound());
 
         } catch (Mishap mishap) {
