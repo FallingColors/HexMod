@@ -9,12 +9,12 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
-import at.petrak.hexcasting.api.casting.mishaps.MishapTooManyCloseParens
+import at.petrak.hexcasting.api.casting.mishaps.MishapNeedsParens
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 object OpCloseParen : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        throw MishapTooManyCloseParens()
+        throw MishapNeedsParens()
     }
 
     override fun operateInParens(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation, thisIota: Iota): Pair<OperationResult, ResolvedPatternType> {
@@ -29,7 +29,7 @@ object OpCloseParen : Action {
             )
             return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE) to ResolvedPatternType.EVALUATED
         } else if (newParenCount < 0) {
-            throw MishapTooManyCloseParens()
+            throw MishapNeedsParens()
         } else {
             // we have this situation: "(()"
             // we need to add the close paren
