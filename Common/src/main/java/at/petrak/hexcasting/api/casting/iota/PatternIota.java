@@ -104,7 +104,19 @@ public class PatternIota extends Iota {
                 castedName = special.handler::getName;
                 action = special.handler.act();
             } else if (lookup instanceof PatternShapeMatch.Nothing) {
-                throw new MishapInvalidPattern(this.getPattern());
+                if (inParens) {
+                    // invalid patterns still get added to the list when in parens
+                    return new CastResult(
+                        this,
+                        continuation,
+                        vm.getImage().withNewParenthesized(this, false),
+                        List.of(),
+                        ResolvedPatternType.ESCAPED,
+                        HexEvalSounds.NORMAL_EXECUTE);
+                } else {
+                    // if you draw something invalid outside parens, it mishaps
+                    throw new MishapInvalidPattern(this.getPattern());
+                }
             } else throw new IllegalStateException();
 
             OperationResult result;

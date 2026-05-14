@@ -57,10 +57,8 @@ interface Action {
         continuation: SpellContinuation,
         thisIota: Iota,
     ): Pair<OperationResult, ResolvedPatternType> {
-        val newParens = image.parenthesized.toMutableList()
-        newParens.add(ParenthesizedIota(thisIota, false))
         return OperationResult(
-            image.copy(parenthesized = newParens),
+            image.withNewParenthesized(thisIota, false),
             listOf(),
             continuation,
             HexEvalSounds.NORMAL_EXECUTE

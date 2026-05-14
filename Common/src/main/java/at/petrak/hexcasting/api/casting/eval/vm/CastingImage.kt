@@ -72,6 +72,16 @@ data class CastingImage private constructor(
      */
     fun withResetEscape() = this.copy(parenCount = 0, parenthesized = listOf(), escapeNext = false)
 
+    /**
+     * Returns a copy of this with the provided iota added to the parenthetized list.
+     * [escaped] determines whether the iota should be considered escaped or not.
+     */
+    fun withNewParenthesized(iota: Iota, escaped: Boolean): CastingImage {
+        val newParens = this.parenthesized.toMutableList()
+        newParens.add(ParenthesizedIota(iota, escaped))
+        return this.copy(parenthesized = newParens)
+    }
+
     fun serializeToNbt() = NBTBuilder {
         TAG_STACK %= stack.serializeToNBT()
 
