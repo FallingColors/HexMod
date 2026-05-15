@@ -134,8 +134,13 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.ESCAPED, HexEvalSounds.NORMAL_EXECUTE)
             }
 
-            // Handle normal behavior (including parens escaping)
-            return iota.execute(this, world, continuation)
+            if (this.image.parenCount > 0) {
+                // Handle parens escaping
+                return iota.executeInParens(this, world, continuation)
+            } else {
+                // Handle normal execution behavior
+                return iota.execute(this, world, continuation)
+            }
         } catch (exception: Exception) {
             // This means something very bad has happened
             exception.printStackTrace()

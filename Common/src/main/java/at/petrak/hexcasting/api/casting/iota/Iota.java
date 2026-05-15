@@ -49,34 +49,37 @@ public abstract class Iota {
     abstract public @NotNull Tag serialize();
 
     /**
-     * This method is called when this iota is executed (i.e. Hermes is run on a list containing it).
-     * By default, if the iota is not within parentheses, it will return a {@link CastResult} indicating an error has occurred.
-     * If the iota *is* within parentheses, it will instead be added to the parenthesized list.
-     * Iotas can also be escaped using Consideration, but that's handled in {@link CastingVM#executeInner}.
+     * This method is called when this iota is directly executed (i.e. Hermes is run on a list containing it, unescaped).
+     * By default, it will return a {@link CastResult} indicating an error has occurred.
      */
     public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
-        if (vm.getImage().getParenCount() > 0) {
-            return new CastResult(
+        return new CastResult(
+            this,
+            continuation,
+            null,  // Should never matter
+            List.of(
+                new OperatorSideEffect.DoMishap(
+                    new MishapUnescapedValue(this),
+                    new Mishap.Context(new HexPattern(HexDir.WEST, List.of()), null)
+                )
+            ),
+            ResolvedPatternType.INVALID,
+            HexEvalSounds.MISHAP);
+    }
+
+    /**
+     * This method is called when this iota is executed inside parentheses (i.e. Hermes is run on a list containing Introspection, this, Retrospection).
+     * By default, the iota will be added to the in-progress parenthesized list instead of causing a mishap.
+     * This is specifically for parentheses-based escaping, Consideration escaping is handled in {@link CastingVM#executeInner}.
+     */
+    public @NotNull CastResult executeInParens(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
+        return new CastResult(
                 this,
                 continuation,
                 vm.getImage().withNewParenthesized(this, false),
                 List.of(),
                 ResolvedPatternType.ESCAPED,
                 HexEvalSounds.NORMAL_EXECUTE);
-        } else {
-            return new CastResult(
-                this,
-                continuation,
-                null,  // Should never matter
-                List.of(
-                    new OperatorSideEffect.DoMishap(
-                        new MishapUnescapedValue(this),
-                        new Mishap.Context(new HexPattern(HexDir.WEST, List.of()), null)
-                    )
-                ),
-                ResolvedPatternType.INVALID,
-                HexEvalSounds.MISHAP);
-        }
     }
 
     /**
