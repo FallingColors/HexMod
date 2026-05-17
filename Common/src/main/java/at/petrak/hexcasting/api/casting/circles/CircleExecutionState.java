@@ -26,8 +26,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static at.petrak.hexcasting.api.HexAPI.LOGGER;
-
 /**
  * See {@link BlockEntityAbstractImpetus}, this is what's stored in it
  */
@@ -126,7 +124,6 @@ public class CircleExecutionState {
         }
 
         if (CACHE.containsKey(impetusPos)) {
-            LOGGER.info("Cache hit!");
             final AABB bounds = CACHE.get(impetusPos);
             BlockPos greater = new BlockPos((int) bounds.maxX, (int) bounds.maxY, (int) bounds.maxZ);
             BlockPos lesser = new BlockPos((int) bounds.minX, (int) bounds.minY, (int) bounds.minZ);
@@ -187,7 +184,6 @@ public class CircleExecutionState {
 
         AABB aabb = new AABB(positiveBlock.move(1,1,1), negativeBlock);
 
-        LOGGER.info("Cached for {}.",impetusPos);
         CACHE.put(impetusPos, aabb);
 
         return new Result.Ok<>(

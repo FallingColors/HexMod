@@ -2,6 +2,7 @@
 
 package at.petrak.hexcasting.api.casting
 
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.*
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
