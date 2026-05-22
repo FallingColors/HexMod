@@ -78,6 +78,9 @@ jobs:
               'https://cdn.modrinth.com/data/fin1PX4m/versions/FhE1RJsR/inline-neoforge-1.21.1-1.2.2.jar'
               'https://cdn.modrinth.com/data/jtmvUHXj/versions/Fb55Fgjz/accessories-neoforge-1.1.0-beta.53%2B1.21.1.jar'
               'https://cdn.modrinth.com/data/nU0bVIaL/versions/BIogJv2D/Patchouli-1.21.1-93-NEOFORGE.jar'
+              'https://cdn.modrinth.com/data/lhGA9TYQ/versions/ZxYGwlk0/architectury-13.0.8-neoforge.jar'
+              'https://cdn.modrinth.com/data/40FYwb4z/versions/KsfI4QsR/caelus-neoforge-7.0.1%2B1.21.1.jar'
+              'https://cdn.modrinth.com/data/ccKDOlHs/versions/NMCHU6DZ/owo-lib-neoforge-0.12.15.5-beta.1%2B1.21.jar'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-java@v4
