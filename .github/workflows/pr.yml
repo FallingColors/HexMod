@@ -136,7 +136,7 @@ jobs:
         timeout-minutes: 10
         uses: headlesshq/mc-server-test@1.1.1
         with:
-          java: ${{ env.JAVA_VERSION }}
+          java: 21
           mc: 1.21.1
           modloader: ${{ matrix.modloader }}
           fabric-api: ${{ matrix.fabric-api }}
