@@ -119,10 +119,10 @@ jobs:
       - name: Run MC test client
         if: matrix.env == 'client'
         timeout-minutes: 10
-        uses: headlesshq/mc-runtime-test@3.1.1
+        uses: headlesshq/mc-runtime-test@4.4.0
         with:
           java: ${{ env.JAVA_VERSION }}
-          mc: 1.20.1
+          mc: 1.21.1
           modloader: ${{ matrix.modloader }}
           regex: '.*${{ matrix.modloader }}.*'
           fabric-api: ${{ matrix.fabric-api }}
@@ -131,10 +131,10 @@ jobs:
       - name: Run MC test server
         if: matrix.env == 'server'
         timeout-minutes: 10
-        uses: headlesshq/mc-server-test@1.0.0
+        uses: headlesshq/mc-server-test@1.1.1
         with:
           java: ${{ env.JAVA_VERSION }}
-          mc: 1.20.1
+          mc: 1.21.1
           modloader: ${{ matrix.modloader }}
           fabric-api: ${{ matrix.fabric-api }}
 
