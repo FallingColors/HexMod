@@ -21,39 +21,35 @@ class ChunkScanning(var level: ServerLevel) {
      * @param ChunkPos the chunk to try to cache
      * @return If the function could cache the chunk or not
      */
-    fun cacheChunk(chunk: ChunkPos): Boolean {
+    fun cacheChunk(chunk: ChunkPos): ImposterProtoChunk? {
         val chunkLong = chunk.toLong()
-        // We have the chunk already, so we can skip it
-        if (chunks.contains(chunkLong)){
-            return true
+        // If we have the chunk already, we can skip fetching it
+        val existing = chunks.get(chunkLong)
+        if (existing != null){
+            return existing
         }
         val future = level.chunkSource.getChunkFuture(chunk.x,chunk.z, ChunkStatus.EMPTY,true).get()
         if (future.left().isPresent){
-            chunks.put(chunkLong, future.left().get() as ImposterProtoChunk)
-            return true
+            val next = future.left().get() as ImposterProtoChunk
+            chunks.put(chunkLong, next)
+            return next
         }
         HexAPI.LOGGER.warn("Failed to get chunk at {}!",chunk)
-        return false
+        return null
     }
 
-    fun cacheChunk(chunk: Long): Boolean{
+    fun cacheChunk(chunk: Long): ImposterProtoChunk? {
         return cacheChunk(ChunkPos(chunk))
     }
 
     fun getBlock(blockPos: BlockPos): BlockState? {
         val chunkPos = ChunkPos(blockPos).toLong()
-        if (!cacheChunk(chunkPos)){
-            return null
-        }
-        return chunks.get(chunkPos).getBlockState(blockPos)
+        return cacheChunk(chunkPos)?.getBlockState(blockPos)
     }
 
     fun getBlockEntity(blockPos: BlockPos): BlockEntity? {
         val chunkPos = ChunkPos(blockPos).toLong()
-        if (!cacheChunk(chunkPos)){
-            return null
-        }
-        return chunks.get(chunkPos).getBlockEntity(blockPos)
+        return cacheChunk(chunkPos)?.getBlockEntity(blockPos)
     }
 
     // Maybe not required, but still not a bad idea to have a Clear method
