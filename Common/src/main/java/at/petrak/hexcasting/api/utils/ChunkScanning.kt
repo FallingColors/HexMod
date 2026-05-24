@@ -7,21 +7,21 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.chunk.ChunkAccess
 import net.minecraft.world.level.chunk.ChunkStatus
-import net.minecraft.world.level.chunk.ImposterProtoChunk
 
 /**
  * This is a helper class to efficiently scan chunks in ways Minecraft did not intend for. This is for only reading chunks, not writing
  */
 class ChunkScanning(var level: ServerLevel) {
-    var chunks: Long2ObjectLinkedOpenHashMap<ImposterProtoChunk> = Long2ObjectLinkedOpenHashMap()
+    var chunks: Long2ObjectLinkedOpenHashMap<ChunkAccess> = Long2ObjectLinkedOpenHashMap()
 
     /**
      *  This attempts to cache a chunk to the local [chunks]
      * @param ChunkPos the chunk to try to cache
-     * @return If the function could cache the chunk or not
+     * @return Either the ChunkAccess gained, or null
      */
-    fun cacheChunk(chunk: ChunkPos): ImposterProtoChunk? {
+    fun cacheChunk(chunk: ChunkPos): ChunkAccess? {
         val chunkLong = chunk.toLong()
         // If we have the chunk already, we can skip fetching it
         val existing = chunks.get(chunkLong)
@@ -30,7 +30,7 @@ class ChunkScanning(var level: ServerLevel) {
         }
         val future = level.chunkSource.getChunkFuture(chunk.x,chunk.z, ChunkStatus.EMPTY,true).get()
         if (future.left().isPresent){
-            val next = future.left().get() as ImposterProtoChunk
+            val next = future.left().get()
             chunks.put(chunkLong, next)
             return next
         }
@@ -38,7 +38,7 @@ class ChunkScanning(var level: ServerLevel) {
         return null
     }
 
-    fun cacheChunk(chunk: Long): ImposterProtoChunk? {
+    fun cacheChunk(chunk: Long): ChunkAccess? {
         return cacheChunk(ChunkPos(chunk))
     }
 
