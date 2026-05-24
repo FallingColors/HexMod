@@ -1,0 +1,28 @@
+{
+  "overrides": [
+    {
+      "model": "hexcasting:block/quenched_allay_0",
+      "predicate": {
+        "hexcasting:variant": 0.0
+      }
+    },
+    {
+      "model": "hexcasting:block/quenched_allay_1",
+      "predicate": {
+        "hexcasting:variant": 1.0
+      }
+    },
+    {
+      "model": "hexcasting:block/quenched_allay_2",
+      "predicate": {
+        "hexcasting:variant": 2.0
+      }
+    },
+    {
+      "model": "hexcasting:block/quenched_allay_3",
+      "predicate": {
+        "hexcasting:variant": 3.0
+      }
+    }
+  ]
+}

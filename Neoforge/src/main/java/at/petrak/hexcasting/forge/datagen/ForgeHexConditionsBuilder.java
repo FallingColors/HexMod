@@ -1,20 +1,18 @@
 package at.petrak.hexcasting.forge.datagen;
 
 import at.petrak.hexcasting.datagen.IXplatConditionsBuilder;
-import net.minecraft.advancements.CriterionTriggerInstance;
-import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.data.recipes.RecipeBuilder;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.crafting.ConditionalRecipe;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
+import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.common.conditions.IConditionBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class ForgeHexConditionsBuilder implements IXplatConditionsBuilder, IConditionBuilder {
     private final List<ICondition> conditions = new ArrayList<>();
@@ -38,8 +36,8 @@ public class ForgeHexConditionsBuilder implements IXplatConditionsBuilder, ICond
 
     @Override
     public @NotNull RecipeBuilder unlockedBy(@NotNull String string,
-        @NotNull CriterionTriggerInstance criterionTriggerInstance) {
-        return parent.unlockedBy(string, criterionTriggerInstance);
+        @NotNull Criterion<?> criterion) {
+        return parent.unlockedBy(string, criterion);
     }
 
     @Override
@@ -53,12 +51,9 @@ public class ForgeHexConditionsBuilder implements IXplatConditionsBuilder, ICond
     }
 
     @Override
-    public void save(@NotNull Consumer<FinishedRecipe> consumer, @NotNull ResourceLocation resourceLocation) {
-        var conditionalBuilder = ConditionalRecipe.builder();
-        for (ICondition condition : conditions) {
-            conditionalBuilder.addCondition(condition);
-        }
-        conditionalBuilder.addRecipe(recipeConsumer -> parent.save(recipeConsumer, resourceLocation))
-            .build(consumer, resourceLocation);
+    public void save(RecipeOutput recipeOutput, ResourceLocation id) {
+        var out = recipeOutput.withConditions(conditions.toArray(ICondition[]::new));
+
+        parent.save(out, id);
     }
 }

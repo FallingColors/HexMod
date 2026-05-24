@@ -21,7 +21,7 @@ object OpRecharge : SpellAction {
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
-        val entity = args.getItemEntity(0, argc)
+        val entity = args.getItemEntity(env.world, 0, argc)
 
         val (handStack) = env.getHeldItemToOperateOn {
             val media = IXplatAbstractions.INSTANCE.findMediaHolder(it)

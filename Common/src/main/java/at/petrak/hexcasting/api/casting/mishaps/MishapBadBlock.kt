@@ -8,7 +8,6 @@ import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import net.minecraft.core.BlockPos
 import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
-import net.minecraft.world.level.Explosion
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.Vec3
 

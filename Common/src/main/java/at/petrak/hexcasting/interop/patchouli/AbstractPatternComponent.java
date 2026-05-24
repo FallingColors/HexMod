@@ -6,6 +6,7 @@ import at.petrak.hexcasting.client.render.PatternRenderer;
 import at.petrak.hexcasting.client.render.PatternSettings;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.HolderLookup;
 import vazkii.patchouli.api.IComponentRenderContext;
 import vazkii.patchouli.api.ICustomComponent;
 import vazkii.patchouli.api.IVariable;
@@ -77,7 +78,7 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
     }
 
     @Override
-    public void onVariablesAvailable(UnaryOperator<IVariable> lookup) {
+    public void onVariablesAvailable(UnaryOperator<IVariable> lookup, HolderLookup.RegistryLookup.Provider registries) {
         this.patterns = this.getPatterns(lookup);
     }
 

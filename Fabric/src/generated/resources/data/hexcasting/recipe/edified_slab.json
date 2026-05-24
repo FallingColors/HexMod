@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "W": {
+      "tag": "hexcasting:edified_planks"
+    }
+  },
+  "pattern": [
+    "WWW"
+  ],
+  "result": {
+    "count": 6,
+    "id": "hexcasting:edified_slab"
+  }
+}

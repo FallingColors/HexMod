@@ -23,8 +23,8 @@ import net.minecraft.world.phys.Vec3
 object OpDestroyFluid : SpellAction {
     override val argc = 1
     override fun execute(
-        args: List<Iota>,
-        env: CastingEnvironment
+            args: List<Iota>,
+            env: CastingEnvironment
     ): SpellAction.Result {
         val vecPos = args.getVec3(0, argc)
         val pos = BlockPos.containing(vecPos)
@@ -79,7 +79,7 @@ object OpDestroyFluid : SpellAction {
                         ) {
                             val success =
                                 if (blockstate.block is BucketPickup && !(blockstate.block as BucketPickup).pickupBlock(
-                                        env.caster,
+                                        env.castingEntity as? ServerPlayer,
                                         env.world,
                                         here,
                                         blockstate

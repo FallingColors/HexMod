@@ -11,6 +11,7 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -44,13 +45,16 @@ public class HexEMIPlugin implements EmiPlugin {
 		registry.addWorkstation(PHIAL, EmiIngredient.of(HexTags.Items.STAVES));
 		registry.addWorkstation(EDIFY, EmiIngredient.of(HexTags.Items.STAVES));
 
-		for (BrainsweepRecipe recipe : registry.getRecipeManager()
+		for (RecipeHolder<BrainsweepRecipe> recipe : registry.getRecipeManager()
 			.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE)) {
-			var inputBlocks = EmiIngredient.of(recipe.blockIn().getDisplayedStacks().stream()
+			var inputBlocks = EmiIngredient.of(recipe.value().blockIn().getDisplayedStacks().stream()
 				.map(EmiStack::of).toList());
-			var inputEntity = new BrainsweepeeEmiStack(recipe.entityIn());
-			var output = EmiStack.of(recipe.result().getBlock());
-			registry.addRecipe(new EmiBrainsweepRecipe(inputBlocks, inputEntity, output, recipe.getId()));
+			var inputEntity = new BrainsweepeeEmiStack(recipe.value().entityIn());
+			var output = EmiStack.of(recipe.value().result().getBlock());
+            var outputId = output.getId().getNamespace().equals("minecraft") ? output.getId().getPath() : output.getId().toString();
+            var inputEntityId = inputEntity.getName().getString().toLowerCase().replaceAll(" ", "_");
+            var recipeId = modLoc("/brainsweep/" + (outputId.replaceAll(":", "/")) + "_from_" + inputEntityId);
+			registry.addRecipe(new EmiBrainsweepRecipe(inputBlocks, inputEntity, output, recipeId));
 		}
 
 		if (PhialRecipeStackBuilder.shouldAddRecipe()) {

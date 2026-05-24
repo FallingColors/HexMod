@@ -1,15 +1,13 @@
 package at.petrak.hexcasting.api.casting.math
 
-import at.petrak.hexcasting.api.utils.NBTBuilder
 import at.petrak.hexcasting.api.utils.coordToPx
 import at.petrak.hexcasting.api.utils.findCenter
-import at.petrak.hexcasting.api.utils.getSafe
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.Tag
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.phys.Vec2
-import kotlin.jvm.Throws
 
 /**
  * Sequence of angles to define a pattern traced.
@@ -74,12 +72,6 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
     fun finalDir(): HexDir =
         this.angles.fold(this.startDir) { acc, angle -> acc * angle }
 
-
-    fun serializeToNBT() = NBTBuilder {
-        TAG_START_DIR %= byte(startDir.ordinal)
-        TAG_ANGLES %= byteArray(angles.map(HexAngle::ordinal))
-    }
-
     // Terrible shorthand method for easy matching
     fun anglesSignature(): String {
         return buildString {
@@ -138,18 +130,12 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
             ).apply(instance, HexPattern::fromAnglesUnchecked)
         }
 
-        @JvmStatic
-        fun isPattern(tag: CompoundTag): Boolean {
-            return tag.contains(TAG_START_DIR, Tag.TAG_ANY_NUMERIC.toInt())
-                && tag.contains(TAG_ANGLES, Tag.TAG_BYTE_ARRAY.toInt())
-        }
-
-        @JvmStatic
-        fun fromNBT(tag: CompoundTag): HexPattern {
-            val startDir = HexDir.values().getSafe(tag.getByte(TAG_START_DIR))
-            val angles = tag.getByteArray(TAG_ANGLES).map(HexAngle.values()::getSafe)
-            return HexPattern(startDir, angles.toMutableList())
-        }
+        @JvmField
+        val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, HexPattern> = StreamCodec.composite(
+            ByteBufCodecs.STRING_UTF8, HexPattern::anglesSignature,
+            HexDir.STREAM_CODEC, HexPattern::startDir,
+            HexPattern::fromAngles
+        )
 
         /**
          * Construct a [HexPattern] from an angle signature and starting direction.

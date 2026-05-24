@@ -13,7 +13,7 @@ import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import at.petrak.hexcasting.interop.HexInterop
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
-import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry
+import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry
 import net.fabricmc.fabric.api.client.rendering.v1.*
@@ -31,10 +31,10 @@ object FabricHexClientInitializer : ClientModInitializer {
         FabricPacketHandler.initClient()
 
         WorldRenderEvents.AFTER_TRANSLUCENT.register { ctx ->
-            HexAdditionalRenderers.overlayLevel(ctx.matrixStack(), ctx.tickDelta())
+            HexAdditionalRenderers.overlayLevel(ctx.matrixStack(), ctx.tickCounter().gameTimeDeltaTicks)
         }
         HudRenderCallback.EVENT.register(HexAdditionalRenderers::overlayGui)
-        WorldRenderEvents.START.register { ClientTickCounter.renderTickStart(it.tickDelta()) }
+        WorldRenderEvents.START.register { ClientTickCounter.renderTickStart(it.tickCounter().gameTimeDeltaTicks) }
         ClientTickEvents.END_CLIENT_TICK.register {
             ClientTickCounter.clientTickEnd()
             ShiftScrollListener.clientTickEnd()
@@ -71,6 +71,10 @@ object FabricHexClientInitializer : ClientModInitializer {
         RegisterClientStuff.registerColorProviders(
             { colorizer, item -> ColorProviderRegistry.ITEM.register(colorizer, item) },
             { colorizer, block -> ColorProviderRegistry.BLOCK.register(colorizer, block) })
-        ModelLoadingRegistry.INSTANCE.registerModelProvider(RegisterClientStuff::onModelRegister)
+        ModelLoadingPlugin.register {
+            context -> RegisterClientStuff.onModelRegister {
+                id -> context.addModels(id)
+            }
+        }
     }
 }

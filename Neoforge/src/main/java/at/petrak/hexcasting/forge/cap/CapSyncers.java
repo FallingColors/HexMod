@@ -6,8 +6,8 @@ import at.petrak.hexcasting.forge.network.MsgSentinelStatusUpdateAck;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
 public class CapSyncers {
     @SubscribeEvent

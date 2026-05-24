@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.items.pigment;
 
-import at.petrak.hexcasting.api.addldata.ADPigment;
 import at.petrak.hexcasting.api.item.PigmentItem;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
 import net.minecraft.world.item.Item;

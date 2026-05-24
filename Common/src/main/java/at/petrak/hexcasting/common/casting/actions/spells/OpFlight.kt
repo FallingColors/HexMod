@@ -31,7 +31,7 @@ class OpFlight(val type: Type) : SpellAction {
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
-        val target = args.getPlayer(0, argc)
+        val target = args.getPlayer(env.world, 0, argc)
         val theArg = args.getPositiveDouble(1, argc)
         env.assertEntityInRange(target)
 

@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.items.magic;
 
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import net.minecraft.world.item.ItemStack;
 
 public record DebugUnlockerHolder(ItemStack creativeUnlocker) implements ADMediaHolder {
@@ -41,14 +42,14 @@ public record DebugUnlockerHolder(ItemStack creativeUnlocker) implements ADMedia
 
     @Override
     public long withdrawMedia(long cost, boolean simulate) {
-        ItemCreativeUnlocker.addToLongArray(creativeUnlocker, ItemCreativeUnlocker.TAG_EXTRACTIONS, cost);
+        ItemCreativeUnlocker.addToLongArray(creativeUnlocker, HexDataComponents.MEDIA_EXTRACTIONS, cost);
 
         return cost < 0 ? getMedia() : cost;
     }
 
     @Override
     public long insertMedia(long amount, boolean simulate) {
-        ItemCreativeUnlocker.addToLongArray(creativeUnlocker, ItemCreativeUnlocker.TAG_INSERTIONS, amount);
+        ItemCreativeUnlocker.addToLongArray(creativeUnlocker, HexDataComponents.MEDIA_INSERTIONS, amount);
 
         return amount;
     }

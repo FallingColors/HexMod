@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "tag": "c:ingots/copper"
+    },
+    "I": {
+      "item": "hexcasting:amethyst_dust"
+    }
+  },
+  "pattern": [
+    " C ",
+    "CIC",
+    " C "
+  ],
+  "result": {
+    "count": 1,
+    "id": "hexcasting:cypher"
+  }
+}

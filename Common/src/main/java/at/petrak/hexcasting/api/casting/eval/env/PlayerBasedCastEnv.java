@@ -12,7 +12,6 @@ import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
-import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
 import at.petrak.hexcasting.common.lib.HexAttributes;
 import at.petrak.hexcasting.common.lib.HexDamageTypes;
@@ -23,13 +22,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -154,7 +151,7 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
             } else {
                 var mediaAbleToCastFromHP = this.caster.getHealth() * mediaToHealth;
 
-                Mishap.trulyHurt(this.caster, this.caster.damageSources().source(HexDamageTypes.OVERCAST), (float) healthToRemove);
+                Mishap.trulyHurt(this.caster, this.world.damageSources().source(HexDamageTypes.OVERCAST), (float) healthToRemove);
 
                 var actuallyTaken = Mth.ceil(mediaAbleToCastFromHP - (this.caster.getHealth() * mediaToHealth));
 
@@ -178,9 +175,12 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     protected boolean canOvercast() {
-        var adv = this.world.getServer().getAdvancements().getAdvancement(modLoc("y_u_no_cast_angy"));
-        var advs = this.caster.getAdvancements();
-        return advs.getOrStartProgress(adv).isDone();
+        var adv = this.world.getServer().getAdvancements().get(modLoc("y_u_no_cast_angy"));
+        if(adv != null) {
+            var advs = this.caster.getAdvancements();
+            return advs.getOrStartProgress(adv).isDone();
+        }
+        return false;
     }
 
     @Override

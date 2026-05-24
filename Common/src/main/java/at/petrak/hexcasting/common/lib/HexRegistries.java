@@ -6,6 +6,8 @@ import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredientType;
+import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredientType;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 
@@ -18,4 +20,6 @@ public class HexRegistries {
     public static final ResourceKey<Registry<Arithmetic>> ARITHMETIC = ResourceKey.createRegistryKey(modLoc("arithmetic"));
     public static final ResourceKey<Registry<ContinuationFrame.Type<?>>> CONTINUATION_TYPE = ResourceKey.createRegistryKey(modLoc("continuation_type"));
     public static final ResourceKey<Registry<EvalSound>> EVAL_SOUND = ResourceKey.createRegistryKey(modLoc("eval_sound"));
+    public static final ResourceKey<Registry<StateIngredientType<?>>> STATE_INGREDIENT = ResourceKey.createRegistryKey(modLoc("state_ingredient"));
+    public static final ResourceKey<Registry<BrainsweepeeIngredientType<?>>> BRAINSWEEPEE_INGREDIENT = ResourceKey.createRegistryKey(modLoc("brainsweepee_ingredient"));
 }

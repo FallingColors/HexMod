@@ -2,9 +2,10 @@ package at.petrak.hexcasting.common.casting.arithmetic;
 
 import at.petrak.hexcasting.api.casting.arithmetic.Arithmetic;
 import at.petrak.hexcasting.api.casting.arithmetic.engine.InvalidOperatorException;
+import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
+import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorUnary;
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate;
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate;
-import at.petrak.hexcasting.api.casting.arithmetic.operator.*;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
@@ -18,7 +19,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static at.petrak.hexcasting.api.casting.arithmetic.operator.Operator.downcast;
-import static at.petrak.hexcasting.common.lib.hex.HexIotaTypes.*;
+import static at.petrak.hexcasting.common.lib.hex.HexIotaTypes.DOUBLE;
+import static at.petrak.hexcasting.common.lib.hex.HexIotaTypes.VEC3;
 
 public enum Vec3Arithmetic implements Arithmetic {
 	INSTANCE;

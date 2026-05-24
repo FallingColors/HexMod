@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/leaves",
+  "render_type": "minecraft:cutout_mipped",
+  "textures": {
+    "all": "hexcasting:block/amethyst_edified_leaves"
+  }
+}

@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.casting.arithmetic.engine.InvalidOperatorExcepti
 import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator
 import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator.Companion.downcast
 import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorBinary
-import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate.*
+import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate.all
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota

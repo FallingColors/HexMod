@@ -2,6 +2,9 @@ package at.petrak.hexcasting.api.casting.math
 
 import at.petrak.hexcasting.api.utils.getSafe
 import com.mojang.serialization.Codec
+import io.netty.buffer.ByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 
 enum class HexDir {
     NORTH_EAST, EAST, SOUTH_EAST, SOUTH_WEST, WEST, NORTH_WEST;
@@ -28,6 +31,10 @@ enum class HexDir {
 
     companion object {
         val CODEC: Codec<HexDir> = Codec.STRING.xmap(
+            HexDir::fromString,
+            HexDir::name
+        )
+        val STREAM_CODEC: StreamCodec<ByteBuf, HexDir> = ByteBufCodecs.STRING_UTF8.map(
             HexDir::fromString,
             HexDir::name
         )

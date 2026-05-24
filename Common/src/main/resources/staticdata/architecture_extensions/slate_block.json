@@ -2,7 +2,7 @@
 	"only_if_present": "hexcasting",
 	"name": "slate",
 	"base_block": "hexcasting:slate",
-	"textures": "hexcasting:block/slate",
+	"textures": "hexcasting:block/slate_block",
 	"recipes": "stonecutting",
 	"map_color": "pink",
 	"types_to_generate": [

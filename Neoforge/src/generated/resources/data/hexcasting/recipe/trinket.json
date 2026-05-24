@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "tag": "c:ingots/iron"
+    },
+    "I": {
+      "item": "minecraft:amethyst_shard"
+    }
+  },
+  "pattern": [
+    " C ",
+    "CIC",
+    " C "
+  ],
+  "result": {
+    "count": 1,
+    "id": "hexcasting:trinket"
+  }
+}

@@ -11,7 +11,9 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -187,6 +189,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             this.executionState.getTickSpeed());
         serverLevel.setBlockAndUpdate(this.getBlockPos(),
             this.getBlockState().setValue(BlockCircleComponent.ENERGIZED, true));
+        ICircleComponent.sfx(this.getBlockPos(), this.getBlockState(), this.level, this, true);
     }
 
     @Contract(pure = true)
@@ -284,7 +287,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     }
 
     @Override
-    protected void saveModData(CompoundTag tag) {
+    protected void saveModData(CompoundTag tag, HolderLookup.Provider registries) {
         if (this.executionState != null) {
             tag.put(TAG_EXECUTION_STATE, this.executionState.save());
         }
@@ -292,17 +295,15 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         tag.putLong(TAG_MEDIA, this.media);
 
         if (this.displayMsg != null && this.displayItem != null) {
-            tag.putString(TAG_ERROR_MSG, Component.Serializer.toJson(this.displayMsg));
-            var itemTag = new CompoundTag();
-            this.displayItem.save(itemTag);
-            tag.put(TAG_ERROR_DISPLAY, itemTag);
+            tag.putString(TAG_ERROR_MSG, Component.Serializer.toJson(this.displayMsg, registries));
+            tag.put(TAG_ERROR_DISPLAY, this.displayItem.save(registries, new CompoundTag()));
         }
         if (this.pigment != null)
-            tag.put(TAG_PIGMENT, this.pigment.serializeToNBT());
+            tag.put(TAG_PIGMENT, FrozenPigment.CODEC.encodeStart(NbtOps.INSTANCE, pigment).getOrThrow());
     }
 
     @Override
-    protected void loadModData(CompoundTag tag) {
+    protected void loadModData(CompoundTag tag, HolderLookup.Provider registries) {
         this.executionState = null;
         if (tag.contains(TAG_EXECUTION_STATE, Tag.TAG_COMPOUND)) {
             this.lazyExecutionState = tag.getCompound(TAG_EXECUTION_STATE);
@@ -315,8 +316,8 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         }
 
         if (tag.contains(TAG_ERROR_MSG, Tag.TAG_STRING) && tag.contains(TAG_ERROR_DISPLAY, Tag.TAG_COMPOUND)) {
-            var msg = Component.Serializer.fromJson(tag.getString(TAG_ERROR_MSG));
-            var display = ItemStack.of(tag.getCompound(TAG_ERROR_DISPLAY));
+            var msg = Component.Serializer.fromJson(tag.getString(TAG_ERROR_MSG), registries);
+            var display = ItemStack.parseOptional(registries, tag.getCompound(TAG_ERROR_DISPLAY));
             this.displayMsg = msg;
             this.displayItem = display;
         } else {
@@ -324,7 +325,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             this.displayItem = null;
         }
         if (tag.contains(TAG_PIGMENT, Tag.TAG_COMPOUND))
-            this.pigment = FrozenPigment.fromNBT(tag.getCompound(TAG_PIGMENT));
+            this.pigment = FrozenPigment.CODEC.parse(NbtOps.INSTANCE, tag.getCompound(TAG_PIGMENT)).getOrThrow();
     }
 
     public void applyScryingLensOverlay(List<Pair<ItemStack, Component>> lines,
@@ -373,7 +374,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
 
     // this is a good use of my time
     private static final int[] MAJOR_SCALE = {0, 2, 4, 5, 7, 9, 11, 12};
-    private static final int[] MINOR_SCALE = {0, 2, 3, 5, 7, 8, 11, 12};
+    private static final int[] MINOR_SCALE = {0, 2, 3, 5, 7, 8, 10, 12};
     private static final int[] DORIAN_SCALE = {0, 2, 3, 5, 7, 9, 10, 12};
     private static final int[] MIXOLYDIAN_SCALE = {0, 2, 4, 5, 7, 9, 10, 12};
     private static final int[] BLUES_SCALE = {0, 3, 5, 6, 7, 10, 12};

@@ -2,27 +2,29 @@ package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.LongArrayTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class Vec3Iota extends Iota {
+    private Vec3 value;
     public Vec3Iota(@NotNull Vec3 datum) {
-        super(HexIotaTypes.VEC3, datum);
+        super(() -> HexIotaTypes.VEC3);
+        this.value = datum;
     }
 
     public Vec3 getVec3() {
-        var v = (Vec3) this.payload;
         return new Vec3(
-            HexUtils.fixNAN(v.x),
-            HexUtils.fixNAN(v.y),
-            HexUtils.fixNAN(v.z)
+            HexUtils.fixNAN(value.x),
+            HexUtils.fixNAN(value.y),
+            HexUtils.fixNAN(value.z)
         );
     }
 
@@ -40,20 +42,36 @@ public class Vec3Iota extends Iota {
     }
 
     @Override
-    public @NotNull Tag serialize() {
-        return HexUtils.serializeToNBT(this.getVec3());
+    public int hashCode() {
+        return value.hashCode();
+    }
+
+    @Override
+    public Component display() {
+        return Vec3Iota.display(getVec3());
     }
 
     public static IotaType<Vec3Iota> TYPE = new IotaType<>() {
-        @Nullable
+        public static final MapCodec<Vec3Iota> CODEC = Vec3.CODEC
+                .xmap(Vec3Iota::new, Vec3Iota::getVec3)
+                .fieldOf("value");
+        // TODO replace with Vec3 codec if it will appear somewhere
+        public static final StreamCodec<RegistryFriendlyByteBuf, Vec3Iota> STREAM_CODEC =
+                ByteBufCodecs.DOUBLE.apply(ByteBufCodecs.list())
+                        .map(
+                                l -> new Vec3Iota(new Vec3(l.get(0), l.get(1), l.get(2))),
+                                iota -> List.of(iota.getVec3().x, iota.getVec3().y, iota.getVec3().z)
+                        )
+                        .mapStream(b -> b);
+
         @Override
-        public Vec3Iota deserialize(Tag tag, ServerLevel world) throws IllegalArgumentException {
-            return Vec3Iota.deserialize(tag);
+        public MapCodec<Vec3Iota> codec() {
+            return CODEC;
         }
 
         @Override
-        public Component display(Tag tag) {
-            return Vec3Iota.display(Vec3Iota.deserialize(tag).getVec3());
+        public StreamCodec<RegistryFriendlyByteBuf, Vec3Iota> streamCodec() {
+            return STREAM_CODEC;
         }
 
         @Override
@@ -61,16 +79,6 @@ public class Vec3Iota extends Iota {
             return 0xff_ff3030;
         }
     };
-
-    public static Vec3Iota deserialize(Tag tag) throws IllegalArgumentException {
-        Vec3 vec;
-        if (tag.getType() == LongArrayTag.TYPE) {
-            var lat = HexUtils.downcast(tag, LongArrayTag.TYPE);
-            vec = HexUtils.vecFromNBT(lat.getAsLongArray());
-        } else
-            vec = HexUtils.vecFromNBT(HexUtils.downcast(tag, CompoundTag.TYPE));
-        return new Vec3Iota(vec);
-    }
 
     public static Component display(double x, double y, double z) {
         return Component.literal(String.format("(%.2f, %.2f, %.2f)", x, y, z))

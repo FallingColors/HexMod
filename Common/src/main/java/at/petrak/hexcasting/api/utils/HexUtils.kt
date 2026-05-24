@@ -5,8 +5,11 @@ package at.petrak.hexcasting.api.utils
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.ListIota
+import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.casting.math.HexCoord
+import at.petrak.hexcasting.api.casting.validateSubIotas
 import net.minecraft.ChatFormatting
+import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
 import net.minecraft.nbt.*
 import net.minecraft.network.chat.Component
@@ -14,8 +17,10 @@ import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.TagKey
 import net.minecraft.world.InteractionHand
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import java.lang.ref.WeakReference
@@ -43,7 +48,6 @@ fun vecFromNBT(tag: LongArray): Vec3 = if (tag.size != 3) Vec3.ZERO else
         Double.fromBits(tag[1]),
         Double.fromBits(tag[2])
     )
-
 fun vecFromNBT(tag: CompoundTag): Vec3 {
     return if (!tag.contains("x") || !tag.contains("y") || !tag.contains("z"))
         Vec3.ZERO
@@ -258,15 +262,6 @@ inline operator fun <T> WeakValue<T>.setValue(thisRef: Any?, property: KProperty
     this.value = value
 }
 
-/**
- * Returns an empty list if it's too complicated.
- */
-fun Iterable<Iota>.serializeToNBT() =
-    if (IotaType.isTooLargeToSerialize(this))
-        ListTag()
-    else
-        ListIota(this.toList()).serialize()
-
 fun Iterable<Boolean>.serializeToNBT(): ByteArrayTag {
     val out = ByteArray(if (this is Collection<*>) this.size else 10)
     for ((i, b) in this.withIndex()) {
@@ -282,13 +277,12 @@ fun <A> List<A>.zipWithDefault(array: ByteArray, default: (idx: Int) -> Byte): L
 
     return list
 }
-//
-//// Copy the impl from forge
-//fun ItemStack.serializeToNBT(): CompoundTag {
-//    val out = CompoundTag()
-//    this.save(out)
-//    return out
-//}
+
+fun ItemStack.serializeToNBT(provider: HolderLookup.Provider): CompoundTag {
+    val out = CompoundTag()
+    save(provider, out)
+    return out
+}
 
 @Suppress("UNCHECKED_CAST")
 @Throws(IllegalArgumentException::class)
@@ -313,3 +307,17 @@ fun <T> isOfTag(registry: Registry<T>, loc: ResourceLocation, tag: TagKey<T>): B
     val key = ResourceKey.create(registry.key(), loc);
     return isOfTag(registry, key, tag)
 }
+
+
+@Suppress("UNCHECKED_CAST")
+fun <T : Iota> validateIota(iota: T, serverLevel: ServerLevel): Iota {
+    return when (iota) {
+        is ListIota -> iota.validateSubIotas(serverLevel)
+        else -> if ((iota.type as IotaType<T>).validate(iota, serverLevel)) iota else NullIota()
+    }
+}
+
+fun <T : Iota> validateIotaList(iotaList: List<T>, serverLevel: ServerLevel): List<Iota> {
+    return iotaList.map { validateIota(it, serverLevel) }
+}
+

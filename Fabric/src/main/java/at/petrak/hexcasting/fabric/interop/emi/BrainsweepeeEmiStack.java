@@ -3,13 +3,12 @@ package at.petrak.hexcasting.fabric.interop.emi;
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -22,12 +21,16 @@ import static at.petrak.hexcasting.client.render.RenderLib.renderEntity;
 public class BrainsweepeeEmiStack extends EmiStack {
     public final BrainsweepeeIngredient ingredient;
     private final ResourceLocation id;
+    private final DataComponentPatch componentChanges;
 
     public BrainsweepeeEmiStack(BrainsweepeeIngredient ingr) {
-        this.ingredient = ingr;
+        this(ingr, DataComponentPatch.EMPTY);
+    }
 
-        var bareId = this.ingredient.getSomeKindOfReasonableIDForEmi();
-        this.id = modLoc(bareId);
+    public BrainsweepeeEmiStack(BrainsweepeeIngredient ingr, DataComponentPatch patches) {
+        this.ingredient = ingr;
+        this.id = modLoc(this.ingredient.getSomeKindOfReasonableIDForEmi());
+        this.componentChanges = patches;
     }
 
     @Override
@@ -41,8 +44,8 @@ public class BrainsweepeeEmiStack extends EmiStack {
     }
 
     @Override
-    public CompoundTag getNbt() {
-        return null;
+    public DataComponentPatch getComponentChanges() {
+        return componentChanges;
     }
 
     @Override

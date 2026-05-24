@@ -1,18 +1,17 @@
 package at.petrak.hexcasting.common.recipe;
 
-import at.petrak.hexcasting.api.item.IotaHolderItem;
-import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.items.storage.ItemSpellbook;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public class SealSpellbookRecipe extends ShapelessRecipe {
     public static final SimpleCraftingRecipeSerializer<SealSpellbookRecipe> SERIALIZER =
@@ -21,7 +20,7 @@ public class SealSpellbookRecipe extends ShapelessRecipe {
     private static ItemStack getSealedStack() {
         ItemStack output = new ItemStack(HexItems.SPELLBOOK);
         ItemSpellbook.setSealed(output, true);
-        NBTHelper.putString(output, IotaHolderItem.TAG_OVERRIDE_VISUALLY, "any");
+        output.set(HexDataComponents.VISUAL_OVERRIDE, Optional.empty());
         return output;
     }
 
@@ -32,15 +31,15 @@ public class SealSpellbookRecipe extends ShapelessRecipe {
         return ingredients;
     }
 
-    public SealSpellbookRecipe(ResourceLocation id, CraftingBookCategory category) {
-        super(id, "", category, getSealedStack(), createIngredients());
+    public SealSpellbookRecipe(CraftingBookCategory category) {
+        super("", category, getSealedStack(), createIngredients());
     }
 
     @Override
-    public @NotNull ItemStack assemble(CraftingContainer inv, RegistryAccess access) {
+    public @NotNull ItemStack assemble(CraftingInput inv, HolderLookup.RegistryLookup.@NotNull Provider registryProvider) {
         ItemStack out = ItemStack.EMPTY;
 
-        for (int i = 0; i < inv.getContainerSize(); i++) {
+        for (int i = 0; i < inv.size(); i++) {
             var stack = inv.getItem(i);
             if (stack.is(HexItems.SPELLBOOK)) {
                 out = stack.copy();

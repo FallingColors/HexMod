@@ -14,13 +14,13 @@ object OpTheCoolerReadable : ConstMediaAction {
         args: List<Iota>,
         env: CastingEnvironment
     ): List<Iota> {
-        val target = args.getEntity(0, argc)
+        val target = args.getEntity(env.world, 0, argc)
         env.assertEntityInRange(target)
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(target)
             ?: return false.asActionResult
 
-        datumHolder.readIota(env.world)
+        datumHolder.readIota()
             ?: datumHolder.emptyIota()
             ?: return false.asActionResult
 

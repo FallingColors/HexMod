@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
-import at.petrak.hexcasting.common.items.storage.ItemScroll;
+import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.server.ScrungledPatternsSave;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -14,10 +14,9 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.arguments.ResourceLocationArgument;
 import net.minecraft.core.Registry;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -32,18 +31,18 @@ public class ListPerWorldPatternsCommand {
             .then(Commands.literal("list")
                 .executes(ctx -> list(ctx.getSource())))
             .then(Commands.literal("give")
-                .then(Commands.argument("patternName", PatternResLocArgument.id())
+                .then(Commands.argument("patternName", PatternResKeyArgument.id())
                     .executes(ctx ->
                         giveOne(ctx.getSource(),
                             getDefaultTarget(ctx.getSource()),
-                            ResourceLocationArgument.getId(ctx, "patternName"),
-                            PatternResLocArgument.getPattern(ctx, "patternName")))
+                                PatternResKeyArgument.getPatternKey(ctx, "patternName"),
+                                PatternResKeyArgument.getPattern(ctx, "patternName")))
                     .then(Commands.argument("targets", EntityArgument.players())
                         .executes(ctx ->
                             giveOne(ctx.getSource(),
                                 EntityArgument.getPlayers(ctx, "targets"),
-                                ResourceLocationArgument.getId(ctx, "patternName"),
-                                PatternResLocArgument.getPattern(ctx, "patternName"))))))
+                                    PatternResKeyArgument.getPatternKey(ctx, "patternName"),
+                                    PatternResKeyArgument.getPattern(ctx, "patternName"))))))
             .then(Commands.literal("giveAll")
                 .executes(ctx ->
                     giveAll(ctx.getSource(),
@@ -98,18 +97,15 @@ public class ListPerWorldPatternsCommand {
                     var startDir = found.getSecond().canonicalStartDir();
                     var pat = HexPattern.fromAnglesUnchecked(signature, startDir);
 
-                    var tag = new CompoundTag();
-                    tag.putString(ItemScroll.TAG_OP_ID, key.location().toString());
-                    tag.put(ItemScroll.TAG_PATTERN, pat.serializeToNBT());
-
                     var stack = new ItemStack(HexItems.SCROLL_LARGE);
-                    stack.setTag(tag);
+                    stack.set(HexDataComponents.ACTION, key);
+                    stack.set(HexDataComponents.PATTERN, pat);
 
                     for (var player : targets) {
                         var stackEntity = player.drop(stack, false);
                         if (stackEntity != null) {
                             stackEntity.setNoPickUpDelay();
-                            stackEntity.setThrower(player.getUUID());
+                            stackEntity.setThrower(player);
                         }
 
                         count++;
@@ -130,20 +126,17 @@ public class ListPerWorldPatternsCommand {
     }
 
     private static int giveOne(CommandSourceStack source, Collection<ServerPlayer> targets,
-        ResourceLocation patternName, HexPattern pat) {
+                               ResourceKey<ActionRegistryEntry> actionKey, HexPattern pat) {
         if (!targets.isEmpty()) {
-            var tag = new CompoundTag();
-            tag.putString(ItemScroll.TAG_OP_ID, patternName.toString());
-            tag.put(ItemScroll.TAG_PATTERN, pat.serializeToNBT());
-
             var stack = new ItemStack(HexItems.SCROLL_LARGE);
-            stack.setTag(tag);
+            stack.set(HexDataComponents.ACTION, actionKey);
+            stack.set(HexDataComponents.PATTERN, pat);
 
             source.sendSuccess(() ->
                 Component.translatable(
                     "command.hexcasting.pats.specific.success",
                     stack.getDisplayName(),
-                    patternName,
+                        actionKey.location(),
                     targets.size() == 1 ? targets.iterator().next().getDisplayName() : targets.size()),
                 true);
 
@@ -151,7 +144,7 @@ public class ListPerWorldPatternsCommand {
                 var stackEntity = player.drop(stack, false);
                 if (stackEntity != null) {
                     stackEntity.setNoPickUpDelay();
-                    stackEntity.setThrower(player.getUUID());
+                    stackEntity.setThrower(player);
                 }
             }
 

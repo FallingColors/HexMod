@@ -43,8 +43,9 @@ public class AltioraLayer<M extends EntityModel<AbstractClientPlayer>> extends R
             this.getParentModel().copyPropertiesTo(this.elytraModel);
             this.elytraModel.setupAnim(player, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
             VertexConsumer verts = ItemRenderer.getArmorFoilBuffer(
-                buffer, RenderType.armorCutoutNoCull(TEX_LOC), false, true);
-            this.elytraModel.renderToBuffer(ps, verts, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+                    buffer, RenderType.armorCutoutNoCull(TEX_LOC), true);
+            // TODO port: check color
+            this.elytraModel.renderToBuffer(ps, verts, packedLight, OverlayTexture.NO_OVERLAY, -1);
 
             ps.popPose();
         }

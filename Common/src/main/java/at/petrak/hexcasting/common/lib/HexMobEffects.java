@@ -1,41 +1,28 @@
 package at.petrak.hexcasting.common.lib;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.misc.HexMobEffect;
-import net.minecraft.resources.ResourceLocation;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.xplat.IXplatRegister;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
-
 public class HexMobEffects {
-    public static void register(BiConsumer<MobEffect, ResourceLocation> r) {
-        for (var e : EFFECTS.entrySet()) {
-            r.accept(e.getValue(), e.getKey());
-        }
+
+    private static final IXplatRegister<MobEffect> REGISTER = IXplatAbstractions.INSTANCE
+            .createRegistar(Registries.MOB_EFFECT);
+
+    public static void register() {
+        REGISTER.registerAll();
     }
 
-    private static final Map<ResourceLocation, MobEffect> EFFECTS = new LinkedHashMap<>();
-
-    public static final MobEffect ENLARGE_GRID = make("enlarge_grid",
-        new HexMobEffect(MobEffectCategory.BENEFICIAL, 0xc875ff))
-        .addAttributeModifier(HexAttributes.GRID_ZOOM, "d4afaf0f-df37-4253-9fa7-029e8e4415d9",
-            0.25, AttributeModifier.Operation.MULTIPLY_TOTAL);
-    public static final MobEffect SHRINK_GRID = make("shrink_grid",
-        new HexMobEffect(MobEffectCategory.HARMFUL, 0xc0e660))
-        .addAttributeModifier(HexAttributes.GRID_ZOOM, "1ce492a9-8bf5-4091-a482-c6d9399e448a",
-            -0.2, AttributeModifier.Operation.MULTIPLY_TOTAL);
-
-
-    private static <T extends MobEffect> T make(String id, T effect) {
-        var old = EFFECTS.put(modLoc(id), effect);
-        if (old != null) {
-            throw new IllegalArgumentException("Typo? Duplicate id " + id);
-        }
-        return effect;
-    }
+    public static final Holder<MobEffect> ENLARGE_GRID = REGISTER.registerHolder("enlarge_grid",
+            () ->  new HexMobEffect(MobEffectCategory.BENEFICIAL, 0xc875ff).addAttributeModifier(HexAttributes.GRID_ZOOM, HexAPI.modLoc("enlarge_grid"),
+                    0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+    public static final Holder<MobEffect> SHRINK_GRID = REGISTER.registerHolder("shrink_grid",
+            () -> new HexMobEffect(MobEffectCategory.HARMFUL, 0xc0e660).addAttributeModifier(HexAttributes.GRID_ZOOM, HexAPI.modLoc("shrink_grid"),
+                -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 }

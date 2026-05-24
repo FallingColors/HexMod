@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -14,25 +15,26 @@ public abstract class HexBlockEntity extends BlockEntity {
         super(pType, pWorldPosition, pBlockState);
     }
 
-    protected abstract void saveModData(CompoundTag tag);
+    protected abstract void saveModData(CompoundTag tag, HolderLookup.Provider registries);
 
-    protected abstract void loadModData(CompoundTag tag);
+    protected abstract void loadModData(CompoundTag tag, HolderLookup.Provider registries);
 
     @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        this.saveModData(pTag);
+    protected void saveAdditional(CompoundTag pTag, HolderLookup.Provider registries) {
+        super.saveAdditional(pTag, registries);
+        this.saveModData(pTag, registries);
     }
 
     @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
-        this.loadModData(pTag);
+    public void loadAdditional(CompoundTag pTag, HolderLookup.Provider registries) {
+        super.loadAdditional(pTag, registries);
+        this.loadModData(pTag, registries);
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
+    public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         CompoundTag tag = new CompoundTag();
-        this.saveModData(tag);
+        this.saveModData(tag, registries);
         return tag;
     }
 

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "hexcasting:slate_bricks"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "hexcasting:slate_bricks_small"
+  }
+}

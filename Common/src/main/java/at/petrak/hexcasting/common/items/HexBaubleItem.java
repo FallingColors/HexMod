@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.common.items;
 
 import com.google.common.collect.Multimap;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
@@ -10,5 +11,5 @@ import net.minecraft.world.item.ItemStack;
  * I feel like botnia probably does it this way becase it's older than xplat curios
  */
 public interface HexBaubleItem {
-    Multimap<Attribute, AttributeModifier> getHexBaubleAttrs(ItemStack stack);
+    Multimap<Holder<Attribute>, AttributeModifier> getHexBaubleAttrs(ItemStack stack);
 }

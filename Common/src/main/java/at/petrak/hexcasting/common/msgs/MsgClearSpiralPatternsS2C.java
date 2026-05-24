@@ -1,46 +1,42 @@
 package at.petrak.hexcasting.common.msgs;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 import java.util.UUID;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
+public record MsgClearSpiralPatternsS2C(UUID playerUUID) implements CustomPacketPayload {
+    public static final CustomPacketPayload.Type<MsgClearSpiralPatternsS2C> TYPE = new CustomPacketPayload.Type<>(HexAPI.modLoc("clr_spi_pats_sc"));
 
-public record MsgClearSpiralPatternsS2C(UUID playerUUID) implements IMessage {
-    public static final ResourceLocation ID = modLoc("clr_spi_pats_sc");
-
-    @Override
-    public ResourceLocation getFabricId() {
-        return ID;
-    }
-
-    public static MsgClearSpiralPatternsS2C deserialize(ByteBuf buffer) {
-        var buf = new FriendlyByteBuf(buffer);
-
-        var player = buf.readUUID();
-
-        return new MsgClearSpiralPatternsS2C(player);
-    }
+    public static final StreamCodec<RegistryFriendlyByteBuf, MsgClearSpiralPatternsS2C> STREAM_CODEC = UUIDUtil.STREAM_CODEC.map(
+            MsgClearSpiralPatternsS2C::new,
+            MsgClearSpiralPatternsS2C::playerUUID
+    ).mapStream(b -> b);
 
     @Override
-    public void serialize(FriendlyByteBuf buf) {
-        buf.writeUUID(playerUUID);
+    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
-    public static void handle(MsgClearSpiralPatternsS2C self) {
-        Minecraft.getInstance().execute(new Runnable() {
-            @Override
-            public void run() {
+    public void handle() {
+        Handler.handle(this);
+    }
+
+    public static final class Handler {
+
+        public static void handle(MsgClearSpiralPatternsS2C self) {
+            Minecraft.getInstance().execute(() -> {
                 var mc = Minecraft.getInstance();
                 assert mc.level != null;
                 var player = mc.level.getPlayerByUUID(self.playerUUID);
                 var stack = IClientXplatAbstractions.INSTANCE.getClientCastingStack(player);
                 stack.slowClear();
-            }
-        });
+            });
+        }
     }
 }

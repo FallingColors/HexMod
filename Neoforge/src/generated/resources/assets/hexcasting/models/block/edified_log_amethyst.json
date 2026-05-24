@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "hexcasting:block/edified_log_top",
+    "side": "hexcasting:block/deco/edified_log_amethyst"
+  }
+}

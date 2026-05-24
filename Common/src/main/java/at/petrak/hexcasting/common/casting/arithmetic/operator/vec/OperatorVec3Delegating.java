@@ -1,19 +1,18 @@
 package at.petrak.hexcasting.common.casting.arithmetic.operator.vec;
 
-import at.petrak.hexcasting.api.casting.arithmetic.operator.Operator;
+import at.petrak.hexcasting.api.casting.arithmetic.IterPair;
+import at.petrak.hexcasting.api.casting.arithmetic.TripleIterable;
 import at.petrak.hexcasting.api.casting.arithmetic.operator.OperatorBasic;
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaMultiPredicate;
 import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate;
-import at.petrak.hexcasting.api.casting.arithmetic.IterPair;
-import at.petrak.hexcasting.api.casting.arithmetic.TripleIterable;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
-import at.petrak.hexcasting.api.casting.mishaps.Mishap;
-import at.petrak.hexcasting.api.casting.mishaps.MishapDivideByZero;
-import at.petrak.hexcasting.common.casting.arithmetic.DoubleArithmetic;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.casting.mishaps.Mishap;
+import at.petrak.hexcasting.api.casting.mishaps.MishapDivideByZero;
+import at.petrak.hexcasting.common.casting.arithmetic.DoubleArithmetic;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 

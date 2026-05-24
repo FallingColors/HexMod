@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.common.blocks.akashic;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -45,8 +44,7 @@ public class BlockAkashicRecord extends Block {
         }
     }
 
-    public @Nullable
-    Iota lookupPattern(BlockPos herePos, HexPattern key, ServerLevel slevel) {
+    public @Nullable Iota lookupPattern(BlockPos herePos, HexPattern key, ServerLevel slevel) {
         var foundPos = AkashicFloodfiller.floodFillFor(herePos, slevel,
             (pos, bs, world) ->
                 world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
@@ -56,8 +54,7 @@ public class BlockAkashicRecord extends Block {
         }
 
         var tile = (BlockEntityAkashicBookshelf) slevel.getBlockEntity(foundPos);
-        var tag = tile.getIotaTag();
-        return tag == null ? null : IotaType.deserialize(tag, slevel);
+        return tile != null ? tile.getIota() : null;
     }
 
     // TODO get comparators working again and also cache the number of iotas somehow?

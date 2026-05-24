@@ -1,0 +1,6 @@
+{
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "minecraft:block/amethyst_block"
+  }
+}

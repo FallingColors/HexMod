@@ -3,8 +3,6 @@ package at.petrak.hexcasting.forge.cap.adimpl;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.addldata.ItemDelegatingEntityIotaHolder;
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class CapEntityIotaHolder implements ADIotaHolder {
@@ -13,12 +11,6 @@ public abstract class CapEntityIotaHolder implements ADIotaHolder {
 
         public Wrapper(ItemDelegatingEntityIotaHolder inner) {
             this.inner = inner;
-        }
-
-
-        @Override
-        public @Nullable CompoundTag readIotaTag() {
-            return inner.readIotaTag();
         }
 
         @Override
@@ -32,8 +24,8 @@ public abstract class CapEntityIotaHolder implements ADIotaHolder {
         }
 
         @Override
-        public @Nullable Iota readIota(ServerLevel world) {
-            return inner.readIota(world);
+        public @Nullable Iota readIota() {
+            return inner.readIota();
         }
 
         @Override

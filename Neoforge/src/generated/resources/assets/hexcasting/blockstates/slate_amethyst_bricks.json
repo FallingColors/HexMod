@@ -1,0 +1,15 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "hexcasting:block/deco/slate_amethyst_bricks_0"
+      },
+      {
+        "model": "hexcasting:block/deco/slate_amethyst_bricks_1"
+      },
+      {
+        "model": "hexcasting:block/deco/slate_amethyst_bricks_2"
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "tag": "hexcasting:slate_blocks"
+  },
+  "result": {
+    "count": 1,
+    "id": "hexcasting:slate_bricks_small"
+  }
+}

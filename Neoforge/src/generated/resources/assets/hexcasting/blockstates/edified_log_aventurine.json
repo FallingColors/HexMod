@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "hexcasting:block/edified_log_aventurine_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "hexcasting:block/edified_log_aventurine"
+    },
+    "axis=z": {
+      "model": "hexcasting:block/edified_log_aventurine_horizontal",
+      "x": 90
+    }
+  }
+}

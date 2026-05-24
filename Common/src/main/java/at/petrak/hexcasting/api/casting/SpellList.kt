@@ -1,6 +1,8 @@
 package at.petrak.hexcasting.api.casting
 
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.iota.IotaType
+import net.minecraft.network.codec.ByteBufCodecs
 
 /**
  * Restricted interface for functional lists.
@@ -89,5 +91,18 @@ sealed class SpellList : Iterable<Iota> {
             list = list.cdr
             return car
         }
+    }
+
+    companion object {
+        @JvmStatic
+        val CODEC = IotaType.TYPED_CODEC.listOf().xmap(
+            { list -> LList(list) as SpellList },
+            { b -> b.toList() }
+        )
+        @JvmStatic
+        val STREAM_CODEC = IotaType.TYPED_STREAM_CODEC.apply(ByteBufCodecs.list()).map(
+            { list -> LList(list) as SpellList },
+            { b -> b.toList() }
+        )
     }
 }

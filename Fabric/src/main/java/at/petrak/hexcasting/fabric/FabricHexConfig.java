@@ -15,7 +15,6 @@ import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 
@@ -241,7 +240,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             try {
                 for (var auugh : this.scrollInjectionsRaw) {
                     String[] split = auugh.split(" ");
-                    ResourceLocation loc = new ResourceLocation(split[0]);
+                    ResourceLocation loc = ResourceLocation.parse(split[0]);
                     int count = Integer.parseInt(split[1]);
                     this.scrollInjections.put(loc, count);
                 }
@@ -253,7 +252,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             this.loreInjections = new ArrayList<>();
             try {
                 for (var table : this.loreInjectionsRaw) {
-                    ResourceLocation loc = new ResourceLocation(table);
+                    ResourceLocation loc = ResourceLocation.parse(table);
                     this.loreInjections.add(loc);
                 }
             } catch (Exception e) {
@@ -265,7 +264,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             this.cypherInjections = new ArrayList<>();
             try {
                 for (var table : this.cypherInjectionsRaw) {
-                    ResourceLocation loc = new ResourceLocation(table);
+                    ResourceLocation loc = ResourceLocation.parse(table);
                     this.cypherInjections.add(loc);
                 }
             } catch (Exception e) {

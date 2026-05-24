@@ -24,7 +24,7 @@
       "type": "patchouli:spotlight",
       "title": "hexcasting.page.creative_items.debug_media.title",
       "text": "hexcasting.page.creative_items.debug_media.desc",
-      "item": "hexcasting:creative_unlocker{display:{Name:'{\\\"text\\\":\\\"debug media\\\"}'}}"
+      "item": "hexcasting:creative_unlocker[custom_name='{text:\"debug media\"}']"
     }
   ]
 }

@@ -1,0 +1,176 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "hexcasting:item/focus",
+      "predicate": {
+        "hexcasting:overlay_layer": 0.0,
+        "hexcasting:variant": 0.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_0_filled",
+      "predicate": {
+        "hexcasting:overlay_layer": 1.0,
+        "hexcasting:variant": 0.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_0_sealed",
+      "predicate": {
+        "hexcasting:overlay_layer": 2.0,
+        "hexcasting:variant": 0.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_1",
+      "predicate": {
+        "hexcasting:overlay_layer": 0.0,
+        "hexcasting:variant": 1.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_1_filled",
+      "predicate": {
+        "hexcasting:overlay_layer": 1.0,
+        "hexcasting:variant": 1.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_1_sealed",
+      "predicate": {
+        "hexcasting:overlay_layer": 2.0,
+        "hexcasting:variant": 1.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_2",
+      "predicate": {
+        "hexcasting:overlay_layer": 0.0,
+        "hexcasting:variant": 2.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_2_filled",
+      "predicate": {
+        "hexcasting:overlay_layer": 1.0,
+        "hexcasting:variant": 2.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_2_sealed",
+      "predicate": {
+        "hexcasting:overlay_layer": 2.0,
+        "hexcasting:variant": 2.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_3",
+      "predicate": {
+        "hexcasting:overlay_layer": 0.0,
+        "hexcasting:variant": 3.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_3_filled",
+      "predicate": {
+        "hexcasting:overlay_layer": 1.0,
+        "hexcasting:variant": 3.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_3_sealed",
+      "predicate": {
+        "hexcasting:overlay_layer": 2.0,
+        "hexcasting:variant": 3.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_4",
+      "predicate": {
+        "hexcasting:overlay_layer": 0.0,
+        "hexcasting:variant": 4.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_4_filled",
+      "predicate": {
+        "hexcasting:overlay_layer": 1.0,
+        "hexcasting:variant": 4.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_4_sealed",
+      "predicate": {
+        "hexcasting:overlay_layer": 2.0,
+        "hexcasting:variant": 4.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_5",
+      "predicate": {
+        "hexcasting:overlay_layer": 0.0,
+        "hexcasting:variant": 5.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_5_filled",
+      "predicate": {
+        "hexcasting:overlay_layer": 1.0,
+        "hexcasting:variant": 5.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_5_sealed",
+      "predicate": {
+        "hexcasting:overlay_layer": 2.0,
+        "hexcasting:variant": 5.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_6",
+      "predicate": {
+        "hexcasting:overlay_layer": 0.0,
+        "hexcasting:variant": 6.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_6_filled",
+      "predicate": {
+        "hexcasting:overlay_layer": 1.0,
+        "hexcasting:variant": 6.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_6_sealed",
+      "predicate": {
+        "hexcasting:overlay_layer": 2.0,
+        "hexcasting:variant": 6.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_7",
+      "predicate": {
+        "hexcasting:overlay_layer": 0.0,
+        "hexcasting:variant": 7.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_7_filled",
+      "predicate": {
+        "hexcasting:overlay_layer": 1.0,
+        "hexcasting:variant": 7.0
+      }
+    },
+    {
+      "model": "hexcasting:item/focus_7_sealed",
+      "predicate": {
+        "hexcasting:overlay_layer": 2.0,
+        "hexcasting:variant": 7.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "hexcasting:item/cad/0_focus_empty"
+  }
+}

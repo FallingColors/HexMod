@@ -12,7 +12,7 @@ object OpRead : ConstMediaAction {
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val (handStack) = env.getHeldItemToOperateOn {
             val dataHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
-            dataHolder != null && (dataHolder.readIota(env.world) != null || dataHolder.emptyIota() != null)
+            dataHolder != null && (dataHolder.readIota() != null || dataHolder.emptyIota() != null)
         }
             // If there are no data holders that are readable, find a data holder that isn't readable
             // so that the error message is more helpful.
@@ -24,7 +24,7 @@ object OpRead : ConstMediaAction {
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
             ?: throw MishapBadOffhandItem.of(handStack, "iota.read")
 
-        val datum = datumHolder.readIota(env.world)
+        val datum = datumHolder.readIota()
             ?: datumHolder.emptyIota()
             ?: throw MishapBadOffhandItem.of(handStack, "iota.read")
 

@@ -14,12 +14,12 @@ import at.petrak.hexcasting.api.utils.extractMedia
 import at.petrak.hexcasting.api.utils.isMediaItem
 import at.petrak.hexcasting.common.items.magic.ItemPackagedHex
 import at.petrak.hexcasting.xplat.IXplatAbstractions
+import net.minecraft.network.chat.Component
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
-import net.minecraft.network.chat.Component
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.Predicate
+import java.util.function.Supplier
 
 // TODO: How to handle in circles
 class OpMakePackagedSpell(val isValid: Predicate<ItemStack>, val expectedTypeDesc: Supplier<Component>, val cost: Long) : SpellAction {
@@ -30,7 +30,7 @@ class OpMakePackagedSpell(val isValid: Predicate<ItemStack>, val expectedTypeDes
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
-        val entity = args.getItemEntity(0, argc)
+        val entity = args.getItemEntity(env.world, 0, argc)
         val patterns = args.getList(1, argc).toList()
 
         val (handStack) = env.getHeldItemToOperateOn {
@@ -59,7 +59,7 @@ class OpMakePackagedSpell(val isValid: Predicate<ItemStack>, val expectedTypeDes
             )
         }
 
-        val trueName = MishapOthersName.getTrueNameFromArgs(patterns, env.castingEntity as? ServerPlayer)
+        val trueName = MishapOthersName.getTrueNameFromArgs(env.world, patterns, env.castingEntity as? ServerPlayer)
         if (trueName != null)
             throw MishapOthersName(trueName)
 

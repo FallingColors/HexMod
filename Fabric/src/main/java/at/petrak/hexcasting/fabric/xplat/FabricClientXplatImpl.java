@@ -1,10 +1,9 @@
 package at.petrak.hexcasting.fabric.xplat;
 
 import at.petrak.hexcasting.api.client.ClientCastingStack;
-import at.petrak.hexcasting.common.msgs.IMessage;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.fabric.client.ExtendedTexture;
-import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsApiInterop;
+import at.petrak.hexcasting.fabric.interop.accessories.AccessoriesApiInterop;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -19,6 +18,8 @@ import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -32,8 +33,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class FabricClientXplatImpl implements IClientXplatAbstractions {
     @Override
-    public void sendPacketToServer(IMessage packet) {
-        ClientPlayNetworking.send(packet.getFabricId(), packet.toBuf());
+    public void sendPacketToServer(CustomPacketPayload packet) {
+        ClientPlayNetworking.send(packet);
     }
 
     @Override
@@ -43,8 +44,8 @@ public class FabricClientXplatImpl implements IClientXplatAbstractions {
 
     @Override
     public void initPlatformSpecific() {
-        if (IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Fabric.TRINKETS_API_ID)) {
-            TrinketsApiInterop.clientInit();
+        if (IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Fabric.ACCESSORIES_API_ID)) {
+            AccessoriesApiInterop.clientInit();
         }
     }
 
@@ -97,5 +98,10 @@ public class FabricClientXplatImpl implements IClientXplatAbstractions {
             return true; // fail safe
         }
         return LEVEL_RENDERER_FRUSTUM.isVisible(aabb);
+    }
+
+    @Override
+    public String getModelLocVariant() {
+        return ModelResourceLocation.INVENTORY_VARIANT;
     }
 }

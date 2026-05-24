@@ -1,0 +1,28 @@
+{
+  "overrides": [
+    {
+      "model": "hexcasting:item/staff/quenched_0",
+      "predicate": {
+        "hexcasting:variant": 0.0
+      }
+    },
+    {
+      "model": "hexcasting:item/staff/quenched_1",
+      "predicate": {
+        "hexcasting:variant": 1.0
+      }
+    },
+    {
+      "model": "hexcasting:item/staff/quenched_2",
+      "predicate": {
+        "hexcasting:variant": 2.0
+      }
+    },
+    {
+      "model": "hexcasting:item/staff/quenched_3",
+      "predicate": {
+        "hexcasting:variant": 3.0
+      }
+    }
+  ]
+}

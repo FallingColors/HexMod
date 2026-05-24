@@ -1,0 +1,16 @@
+{
+  "overrides": [
+    {
+      "model": "hexcasting:item/edified_staff",
+      "predicate": {
+        "hexcasting:funny_level": 0.0
+      }
+    },
+    {
+      "model": "hexcasting:item/cherry_staff",
+      "predicate": {
+        "hexcasting:funny_level": 2.0
+      }
+    }
+  ]
+}

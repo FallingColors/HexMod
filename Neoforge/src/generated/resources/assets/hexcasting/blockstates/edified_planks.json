@@ -1,0 +1,17 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "hexcasting:block/edified_planks",
+        "weight": 3
+      },
+      {
+        "model": "hexcasting:block/edified_planks_2",
+        "weight": 3
+      },
+      {
+        "model": "hexcasting:block/edified_planks_3"
+      }
+    ]
+  }
+}

@@ -2,15 +2,17 @@ package at.petrak.hexcasting.fabric.cc.adimpl;
 
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.item.MediaHolderItem;
-import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
-import dev.onyxstudios.cca.api.v3.item.ItemComponent;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import org.ladysnake.cca.api.v3.component.Component;
 
 import java.util.function.Supplier;
 
-public abstract class CCMediaHolder extends ItemComponent implements ADMediaHolder {
+public abstract class CCMediaHolder implements ADMediaHolder, Component {
+    final ItemStack stack;
     public CCMediaHolder(ItemStack stack) {
-        super(stack, HexCardinalComponents.MEDIA_HOLDER);
+        this.stack = stack;
     }
 
     public static class ItemBased extends CCMediaHolder {
@@ -67,6 +69,16 @@ public abstract class CCMediaHolder extends ItemComponent implements ADMediaHold
         @Override
         public long insertMedia(long amount, boolean simulate) {
             return this.mediaHolder.insertMedia(this.stack, amount, simulate);
+        }
+
+        @Override
+        public void readFromNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
+
+        }
+
+        @Override
+        public void writeToNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
+
         }
     }
 
@@ -127,6 +139,16 @@ public abstract class CCMediaHolder extends ItemComponent implements ADMediaHold
                 stack.shrink(itemsUsed);
             }
             return itemsUsed * worth;
+        }
+
+        @Override
+        public void readFromNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
+
+        }
+
+        @Override
+        public void writeToNbt(CompoundTag tag, HolderLookup.Provider registryLookup) {
+
         }
     }
 }

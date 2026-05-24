@@ -1,0 +1,96 @@
+{
+  "variants": {
+    "energized=false,facing=down,powered=false": {
+      "model": "hexcasting:block/circle/directrix/redstone/dim_unpowered_down",
+      "x": 90
+    },
+    "energized=false,facing=down,powered=true": {
+      "model": "hexcasting:block/circle/directrix/redstone/dim_powered_down",
+      "x": 90
+    },
+    "energized=false,facing=east,powered=false": {
+      "model": "hexcasting:block/circle/directrix/redstone/dim_unpowered_east",
+      "y": 90
+    },
+    "energized=false,facing=east,powered=true": {
+      "model": "hexcasting:block/circle/directrix/redstone/dim_powered_east",
+      "y": 90
+    },
+    "energized=false,facing=north,powered=false": {
+      "model": "hexcasting:block/circle/directrix/redstone/dim_unpowered_north"
+    },
+    "energized=false,facing=north,powered=true": {
+      "model": "hexcasting:block/circle/directrix/redstone/dim_powered_north"
+    },
+    "energized=false,facing=south,powered=false": {
+      "model": "hexcasting:block/circle/directrix/redstone/dim_unpowered_south",
+      "y": 180
+    },
+    "energized=false,facing=south,powered=true": {
+      "model": "hexcasting:block/circle/directrix/redstone/dim_powered_south",
+      "y": 180
+    },
+    "energized=false,facing=up,powered=false": {
+      "model": "hexcasting:block/circle/directrix/redstone/dim_unpowered_up",
+      "x": -90
+    },
+    "energized=false,facing=up,powered=true": {
+      "model": "hexcasting:block/circle/directrix/redstone/dim_powered_up",
+      "x": -90
+    },
+    "energized=false,facing=west,powered=false": {
+      "model": "hexcasting:block/circle/directrix/redstone/dim_unpowered_west",
+      "y": 270
+    },
+    "energized=false,facing=west,powered=true": {
+      "model": "hexcasting:block/circle/directrix/redstone/dim_powered_west",
+      "y": 270
+    },
+    "energized=true,facing=down,powered=false": {
+      "model": "hexcasting:block/circle/directrix/redstone/lit_unpowered_down",
+      "x": 90
+    },
+    "energized=true,facing=down,powered=true": {
+      "model": "hexcasting:block/circle/directrix/redstone/lit_powered_down",
+      "x": 90
+    },
+    "energized=true,facing=east,powered=false": {
+      "model": "hexcasting:block/circle/directrix/redstone/lit_unpowered_east",
+      "y": 90
+    },
+    "energized=true,facing=east,powered=true": {
+      "model": "hexcasting:block/circle/directrix/redstone/lit_powered_east",
+      "y": 90
+    },
+    "energized=true,facing=north,powered=false": {
+      "model": "hexcasting:block/circle/directrix/redstone/lit_unpowered_north"
+    },
+    "energized=true,facing=north,powered=true": {
+      "model": "hexcasting:block/circle/directrix/redstone/lit_powered_north"
+    },
+    "energized=true,facing=south,powered=false": {
+      "model": "hexcasting:block/circle/directrix/redstone/lit_unpowered_south",
+      "y": 180
+    },
+    "energized=true,facing=south,powered=true": {
+      "model": "hexcasting:block/circle/directrix/redstone/lit_powered_south",
+      "y": 180
+    },
+    "energized=true,facing=up,powered=false": {
+      "model": "hexcasting:block/circle/directrix/redstone/lit_unpowered_up",
+      "x": -90
+    },
+    "energized=true,facing=up,powered=true": {
+      "model": "hexcasting:block/circle/directrix/redstone/lit_powered_up",
+      "x": -90
+    },
+    "energized=true,facing=west,powered=false": {
+      "model": "hexcasting:block/circle/directrix/redstone/lit_unpowered_west",
+      "y": 270
+    },
+    "energized=true,facing=west,powered=true": {
+      "model": "hexcasting:block/circle/directrix/redstone/lit_powered_west",
+      "y": 270
+    }
+  }
+}

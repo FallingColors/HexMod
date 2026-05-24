@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "hexcasting:block/deco/slate_pillar_end",
+    "side": "hexcasting:block/deco/slate_pillar_side"
+  }
+}

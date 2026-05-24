@@ -1,0 +1,25 @@
+{
+  "parent": "hexcasting:lore",
+  "criteria": {
+    "grant": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": "",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "hexcasting:lore_fragment"
+    },
+    "title": {
+      "translate": "advancement.hexcasting:lore/cardamom3"
+    }
+  },
+  "requirements": [
+    [
+      "grant"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

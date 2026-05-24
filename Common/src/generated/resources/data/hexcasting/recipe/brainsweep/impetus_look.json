@@ -1,0 +1,20 @@
+{
+  "type": "hexcasting:brainsweep",
+  "blockIn": {
+    "type": "hexcasting:block",
+    "block": "hexcasting:impetus/empty"
+  },
+  "cost": 1000000,
+  "entityIn": {
+    "type": "hexcasting:villager",
+    "minLevel": 2,
+    "profession": "minecraft:fletcher"
+  },
+  "result": {
+    "Name": "hexcasting:impetus/look",
+    "Properties": {
+      "energized": "false",
+      "facing": "north"
+    }
+  }
+}

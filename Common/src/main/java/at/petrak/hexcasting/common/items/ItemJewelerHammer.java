@@ -10,8 +10,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class ItemJewelerHammer extends PickaxeItem {
-    public ItemJewelerHammer(Tier tier, int damageMod, float attackSpeedMod, Properties props) {
-        super(tier, damageMod, attackSpeedMod, props);
+    public ItemJewelerHammer(Tier tier, Properties props) {
+        super(tier, props);
     }
 
     public static boolean shouldFailToBreak(Player player, BlockState state, BlockPos pos) {

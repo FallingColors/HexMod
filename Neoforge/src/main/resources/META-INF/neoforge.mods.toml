@@ -22,41 +22,46 @@ config = "hexcasting_forge.mixins.json"
 [[dependencies.hexcasting]]
 modId = "neoforge"
 mandatory = true
-versionRange = "[81,)"
+versionRange = "[21,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.hexcasting]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.20.1,1.21)"
+versionRange = "[1.21.1,1.21.10)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.hexcasting]]
 modId = "paucal"
 mandatory = true
-versionRange = "[0.6.0,0.7.0)"
+versionRange = "[0.7.1,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.hexcasting]]
 modId = "patchouli"
 mandatory = true
-versionRange = "[1.20.1-80,)"
+versionRange = "[1.21-80,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.hexcasting]]
 modId = "caelus"
 mandatory = true
-versionRange = "[3.1.0+1.20,)"
+versionRange = "[7.0.1+1.21.1,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.hexcasting]]
 modId = "inline"
 mandatory = true
-versionRange = "[1.20.1-1.0.1,)"
+versionRange = "[1.21.1-1.2.2,)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.hexcasting]]
+modId = "accessories"
+mandatory = false
+versionRange = "[1.1.0-beta.16+1.21.1,)"
