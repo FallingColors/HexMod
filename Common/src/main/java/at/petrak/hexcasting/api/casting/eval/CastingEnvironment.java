@@ -9,9 +9,11 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
 import at.petrak.hexcasting.api.casting.mishaps.MishapEntityTooFarAway;
 import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexAttributes;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -38,6 +40,7 @@ import java.util.function.Predicate;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 import static at.petrak.hexcasting.api.casting.eval.CastingEnvironmentComponent.*;
+import static at.petrak.hexcasting.api.utils.HexUtils.isOfTag;
 
 /**
  * Environment within which hexes are cast.
@@ -197,11 +200,15 @@ public abstract class CastingEnvironment {
     }
 
     /**
-     * Gets the cost modifier for a given action. By default, this is based on the cost scaling list
+     * Gets the cost modifier for a given action. By default, this is based on the cost scaling values
      * in the config. Casting env subclasses can override this to modify the cost in other ways.
      */
     protected double getCostModifier(@NotNull ResourceLocation loc) {
-        return HexConfig.server().getActionCostScaling(loc);
+        if (isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), loc, HexTags.Actions.CANNOT_MODIFY_COST)) {
+            // blacklisted actions can still be manually scaled in the config, but the global scaling doesn't apply
+            return HexConfig.server().getActionCostScaling(loc);
+        }
+        return HexConfig.server().getActionCostScaling(loc) * HexConfig.server().globalCostScaling();
     }
 
     @Nullable

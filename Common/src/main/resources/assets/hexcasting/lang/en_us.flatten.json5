@@ -399,9 +399,13 @@
           "": "Circle Action Deny List",
           "@Tooltip": "Resource locations of disallowed actions within circles. Trying to cast one of these from a circle will result in a mishap. For example, hexcasting:get_caster will prevent Mind's Reflection.",
         },
+        globalCostScaling: {
+          "": "Global Cost Scaling Factor",
+          "@Tooltip": "All media costs, except for actions in the #hexcasting:cannot_modify_cost tag, will be multiplied by this value. If you want to modify the cost of an action in that tag, use the per-action cost scaling list.",
+        },
         costRescaleListRaw: {
-          "": "Cost Scaling Factors",
-          "@Tooltip": "Maps resource locations to the scaling factor for that action's media cost. For example, hexcasting:add_motion 3 will make Impulse cost 3x as much.",
+          "": "Per-Action Cost Scaling Factors",
+          "@Tooltip": "Maps resource locations to the scaling factor for that specific action's media cost. For example, hexcasting:add_motion 3 will make Impulse cost 3x as much.",
         },
         greaterTeleportSplatsItems: {
           "": "Greater Teleport Splats Items",

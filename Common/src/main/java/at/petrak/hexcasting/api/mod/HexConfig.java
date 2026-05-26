@@ -81,6 +81,8 @@ public class HexConfig {
 
         double getActionCostScaling(ResourceLocation actionID);
 
+        double globalCostScaling();
+
         boolean doesGreaterTeleportSplatItems();
 
         boolean doVillagersTakeOffenseAtMindMurder();
@@ -96,6 +98,7 @@ public class HexConfig {
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
         int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;
 
+        double DEFAULT_GLOBAL_COST_SCALING = 1.0;
         double DEFAULT_TRADER_SCROLL_CHANCE = 0.2;
         boolean DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS = true;
 

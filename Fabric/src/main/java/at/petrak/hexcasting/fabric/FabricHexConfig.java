@@ -214,6 +214,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private List<String> costRescaleListRaw = List.of();
         private transient Object2DoubleMap<ResourceLocation> costRescaleList;
         @ConfigEntry.Gui.Tooltip
+        private double globalCostScaling = DEFAULT_GLOBAL_COST_SCALING;
+        @ConfigEntry.Gui.Tooltip
         private boolean greaterTeleportSplatsItems = DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS;
         @ConfigEntry.Gui.Tooltip
         private boolean villagersOffendedByMindMurder = DEFAULT_VILLAGERS_DISLIKE_MIND_MURDER;
@@ -340,6 +342,9 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         public double getActionCostScaling(ResourceLocation actionID) {
             return this.costRescaleList.getOrDefault(actionID, 1.0);
         }
+
+        @Override
+        public double globalCostScaling() { return globalCostScaling; }
 
         @Override
         public boolean doesGreaterTeleportSplatItems() { return greaterTeleportSplatsItems; }

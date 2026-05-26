@@ -87,7 +87,7 @@ public class HexTags {
         public static final TagKey<ActionRegistryEntry> CAN_START_ENLIGHTEN = create("can_start_enlighten");
 
         /**
-         * Actions that should not be affected by the media_consumption attribute
+         * Actions that should not be affected by the media_consumption attribute or the globalCostScaling config
          */
         public static final TagKey<ActionRegistryEntry> CANNOT_MODIFY_COST = create("cannot_modify_cost");
 

@@ -174,6 +174,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> costRescaleList;
+        private static ForgeConfigSpec.DoubleValue globalCostScaling;
 
         private static ForgeConfigSpec.BooleanValue greaterTeleportSplatsItems;
         private static ForgeConfigSpec.BooleanValue villagersOffendedByMindMurder;
@@ -202,9 +203,14 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
 
             costRescaleList = builder.comment(
-                    "Maps resource locations to the scaling factor for that action's media cost. " +
+                    "Maps resource locations to the scaling factor for that specific action's media cost. " +
                         "For example, \"hexcasting:add_motion 3\" will make Impulse cost 3x as much.")
                 .defineList("costRescaleList",  List.of(), Server::isValidReslocDoublePair);
+
+            globalCostScaling = builder.comment(
+                    "All media costs, except for actions in the #hexcasting:cannot_modify_cost tag, will be multiplied by this value." +
+                        "If you want to modify the cost of an action in that tag, use the per-action list above.")
+                .defineInRange("globalCostScaling", DEFAULT_GLOBAL_COST_SCALING, 0.0, Double.MAX_VALUE);
             builder.pop();
 
             builder.push("Spell Circles");
@@ -271,6 +277,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             }
             return 1.0;
         }
+
+        @Override
+        public double globalCostScaling() { return globalCostScaling.get(); }
 
         @Override
         public boolean doesGreaterTeleportSplatItems() { return greaterTeleportSplatsItems.get(); }
