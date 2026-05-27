@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.casting.actions.escaping
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.OperationResult
+import at.petrak.hexcasting.api.casting.eval.ParenthesizedOperationResult
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
@@ -17,7 +18,7 @@ object OpCloseParen : Action {
         throw MishapNeedsParens()
     }
 
-    override fun operateInParens(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation, thisIota: Iota): Pair<OperationResult, ResolvedPatternType> {
+    override fun operateInParens(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation, thisIota: Iota): ParenthesizedOperationResult {
         val newParenCount = image.parenCount - 1
         if (newParenCount == 0) {
             val newStack = image.stack.toMutableList()
@@ -27,7 +28,7 @@ object OpCloseParen : Action {
                 parenCount = newParenCount,
                 parenthesized = listOf()
             )
-            return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE) to ResolvedPatternType.EVALUATED
+            return ParenthesizedOperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE, ResolvedPatternType.EVALUATED)
         } else {
             // we have this situation: "(()"
             // we need to add the close paren
@@ -37,7 +38,7 @@ object OpCloseParen : Action {
                 parenCount = newParenCount,
                 parenthesized = newParens
             )
-            return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE) to ResolvedPatternType.ESCAPED
+            return ParenthesizedOperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE, ResolvedPatternType.ESCAPED)
         }
     }
 }

@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.casting.actions.escaping
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.OperationResult
+import at.petrak.hexcasting.api.casting.eval.ParenthesizedOperationResult
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
@@ -17,7 +18,7 @@ object OpOpenParen : Action {
         return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
     }
 
-    override fun operateInParens(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation, thisIota: Iota): Pair<OperationResult, ResolvedPatternType> {
+    override fun operateInParens(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation, thisIota: Iota): ParenthesizedOperationResult {
         // we have escaped the parens onto the stack; we just also record our count.
         val newParens = image.parenthesized.toMutableList()
         newParens.add(CastingImage.ParenthesizedIota(thisIota, false))
@@ -25,6 +26,6 @@ object OpOpenParen : Action {
             parenthesized = newParens,
             parenCount = image.parenCount + 1
         )
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE) to ResolvedPatternType.ESCAPED
+        return ParenthesizedOperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE, ResolvedPatternType.ESCAPED)
     }
 }

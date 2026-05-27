@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.casting.actions.escaping
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.OperationResult
+import at.petrak.hexcasting.api.casting.eval.ParenthesizedOperationResult
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
@@ -17,7 +18,7 @@ object OpUndo : Action {
         throw MishapNeedsParens()
     }
 
-    override fun operateInParens(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation, thisIota: Iota): Pair<OperationResult, ResolvedPatternType> {
+    override fun operateInParens(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation, thisIota: Iota): ParenthesizedOperationResult {
         val newParens = image.parenthesized.toMutableList()
         val last = newParens.removeLastOrNull()
         var newParenCount = image.parenCount
@@ -32,8 +33,6 @@ object OpUndo : Action {
             parenthesized = newParens,
             parenCount = newParenCount
         )
-        // TODO: this should properly mishap if there was nothing to remove
-        val resolutionType = if (last == null) ResolvedPatternType.ERRORED else ResolvedPatternType.UNDONE
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE) to resolutionType
+        return ParenthesizedOperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE, ResolvedPatternType.UNDONE)
     }
 }
