@@ -28,6 +28,10 @@ data class CastingImage private constructor(
 ) {
     constructor() : this(listOf(), 0, listOf(), false, 0, CompoundTag())
 
+    /**
+     * `escaped` is used by [OpUndo][at.petrak.hexcasting.common.casting.actions.escaping.OpUndo] to determine whether the paren count
+     * needs to be adjusted when undoing an open or close paren pattern (if the pattern was escaped, no need to change anything).
+     */
     data class ParenthesizedIota(val iota: Iota, val escaped: Boolean) {
         companion object {
             const val TAG_IOTAS = "iotas"

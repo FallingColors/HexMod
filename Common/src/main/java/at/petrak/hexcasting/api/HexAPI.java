@@ -62,6 +62,9 @@ public interface HexAPI {
         return "hexcasting.special.%s".formatted(action.location().toString());
     }
 
+    /**
+     * @deprecated Used to translate the names of patterns outside the standard Action system, none of which exist anymore.
+     */
     @Deprecated(since = "0.11.4")
     default String getRawHookI18nKey(ResourceLocation name) {
         return "hexcasting.rawhook.%s".formatted(name);
@@ -77,6 +80,9 @@ public interface HexAPI {
             .withStyle(ChatFormatting.LIGHT_PURPLE);
     }
 
+    /**
+     * @deprecated Used to translate the names of patterns outside the standard Action system, none of which exist anymore.
+     */
     @Deprecated(since = "0.11.4")
     default Component getRawHookI18n(ResourceLocation name) {
         return Component.translatable(getRawHookI18nKey(name)).withStyle(ChatFormatting.LIGHT_PURPLE);

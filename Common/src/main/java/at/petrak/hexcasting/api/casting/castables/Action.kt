@@ -47,8 +47,8 @@ interface Action {
     ): OperationResult
 
     /**
-     * The behavior of this action when inside parentheses. By default, this is just to add the pattern
-     * to the parenthesized list without updating the op count or performing any of its usual effects.
+     * The behavior of this action when inside parentheses (meaning `image.parenCount` will always be greater than 0).
+     * By default, this just adds the pattern to the parenthesized list without updating the op count or performing any of its effects.
      */
     @Throws(Mishap::class)
     fun operateInParens(
