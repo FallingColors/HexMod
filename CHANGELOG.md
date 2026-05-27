@@ -26,6 +26,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Re-implemented the ability to extract stored media from items in trinket/curio slots ([#996](https://github.com/FallingColors/HexMod/pull/996)) @YukkuriC
 - Patterns involving entity look direction now compensate for the vanilla bug that causes projectiles and phantoms to report the wrong direction ([#1025](https://github.com/FallingColors/HexMod/pull/1025)) @Robotgiggle
 - Updated Inline dependency from 1.0.1 to 1.2.2 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
+- Updated Fabric Language Kotlin dependency from 1.9.4 to 1.13.7 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
+- Updated Kotlin for Forge dependency from 4.3.0 to 4.12.0 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
 - Updated zh_cn translations ([#995](https://github.com/FallingColors/HexMod/pull/995), [#1037](https://github.com/FallingColors/HexMod/pull/1037)) @ChuijkYahus
 
 ### Fixed
@@ -37,13 +39,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed various incorrect documentation in the Hex Book ([#1010](https://github.com/FallingColors/HexMod/pull/1010)) @Robotgiggle
 - Fixed a broken translation key when trying to use Place Block with no placeable items in your hotbar ([#1010](https://github.com/FallingColors/HexMod/pull/1010)) @Robotgiggle
 - Fixed a potential chunkban when leaving a looping spell circle running for long enough ([#908](https://github.com/FallingColors/HexMod/pull/908)) @Stick404
+- Fixed a potential issue on MacOS when calculating soulglimmer color ([#984](https://github.com/FallingColors/HexMod/pull/984)) @vgskye
 
 ### Internal
 
 - The mod now uses Fabric Loom 1.9, Gradle 8.11, and Kotlin 2.0.20 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
 - Changed the internal implementation of Thoth's Gambit to use a `TreeList` for more efficiency ([#1031](https://github.com/FallingColors/HexMod/pull/1031)) @s5bug
 - Deprecated the version of `matchPattern` that takes a boolean argument since it always raises an exception ([#1002](https://github.com/FallingColors/HexMod/pull/1002)) @beholderface
-- Stopped using the AWT library for soulglimmer calculation due to a potential issue on MacOS ([#984](https://github.com/FallingColors/HexMod/pull/984)) @vgskye
 - `Iota` subclasses can now specify whether the iota should be displayed with or without commas when in a list ([#988](https://github.com/FallingColors/HexMod/pull/988)) @TheRobbie73
 - Made the `getUsableStacks` and `getPrimaryStacks` methods in `CastingEnvironment` and its subclasses public ([#907](https://github.com/FallingColors/HexMod/pull/907)) @miyucomics
 - Improved handling for duplicate pattern signatures in hexdoc ([#1007](https://github.com/FallingColors/HexMod/pull/1007)) @object-Object
@@ -68,7 +70,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Updated the spell circle documentation to clarify their new behavior in 0.11.x ([#814](https://github.com/FallingColors/HexMod/pull/814)) @Robotgiggle
 - Added the recipes for bamboo and cherry staves to the notebook entry ([#814](https://github.com/FallingColors/HexMod/pull/814)) @Robotgiggle
 - Renamed the eval limit mishap from "Delve Too Deep" to "Lost in Thought", and updated the description and error message to match ([#814](https://github.com/FallingColors/HexMod/pull/814)) @Robotgiggle
-- Updated zh_cn translations ([#799](https://github.com/FallingColors/HexMod/pull/799), [#828](https://github.com/FallingColors/HexMod/pull/828), [#847](https://github.com/FallingColors/HexMod/pull/847), [#913](https://github.com/FallingColors/HexMod/pull/913), [#953](https://github.com/FallingColors/HexMod/pull/953), [#954](https://github.com/FallingColors/HexMod/pull/954) [#971](https://github.com/FallingColors/HexMod/pull/971)) @ChuijkYahus
+- Updated zh_cn translations ([#799](https://github.com/FallingColors/HexMod/pull/799), [#828](https://github.com/FallingColors/HexMod/pull/828), [#847](https://github.com/FallingColors/HexMod/pull/847), [#913](https://github.com/FallingColors/HexMod/pull/913), [#953](https://github.com/FallingColors/HexMod/pull/953), [#954](https://github.com/FallingColors/HexMod/pull/954), [#971](https://github.com/FallingColors/HexMod/pull/971)) @ChuijkYahus
 - Added apostrophes to Compass' Purification in the notebook ([#867](https://github.com/FallingColors/HexMod/pull/867)) @kineticneticat
 - Updated the description of Ignite to clarify that it works on all entities ([#844](https://github.com/FallingColors/HexMod/pull/844)) @Robotgiggle
 - Improved documentation of iota embedding ([#862](https://github.com/FallingColors/HexMod/pull/862)) @Robotgiggle
