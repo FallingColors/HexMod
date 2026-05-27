@@ -20,10 +20,13 @@ object OpUndo : Action {
     override fun operateInParens(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation, thisIota: Iota): Pair<OperationResult, ResolvedPatternType> {
         val newParens = image.parenthesized.toMutableList()
         val last = newParens.removeLastOrNull()
-        val newParenCount = image.parenCount + if (last == null || last.escaped || last.iota !is PatternIota) 0 else when (last.iota.pattern.angles) {
-            HexActions.OPEN_PAREN.prototype.angles -> -1
-            HexActions.CLOSE_PAREN.prototype.angles -> 1
-            else -> 0
+        var newParenCount = image.parenCount
+        if (last?.iota is PatternIota && !last.escaped) {
+            // adjust paren count if undoing an open or close paren
+            when (last.iota.pattern.angles) {
+                HexActions.OPEN_PAREN.prototype.angles -> newParenCount--
+                HexActions.CLOSE_PAREN.prototype.angles -> newParenCount++
+            }
         }
         val image2 = image.copy(
             parenthesized = newParens,

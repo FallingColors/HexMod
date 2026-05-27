@@ -25,7 +25,6 @@ object OpOpenParen : Action {
             parenthesized = newParens,
             parenCount = image.parenCount + 1
         )
-        val resolutionType = if (image.parenCount == 0) ResolvedPatternType.EVALUATED else ResolvedPatternType.ESCAPED
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE) to resolutionType
+        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE) to ResolvedPatternType.ESCAPED
     }
 }

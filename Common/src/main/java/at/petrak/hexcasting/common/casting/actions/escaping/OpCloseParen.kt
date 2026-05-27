@@ -28,8 +28,6 @@ object OpCloseParen : Action {
                 parenthesized = listOf()
             )
             return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE) to ResolvedPatternType.EVALUATED
-        } else if (newParenCount < 0) {
-            throw MishapNeedsParens()
         } else {
             // we have this situation: "(()"
             // we need to add the close paren

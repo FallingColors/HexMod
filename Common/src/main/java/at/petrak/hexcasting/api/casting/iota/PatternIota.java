@@ -67,12 +67,12 @@ public class PatternIota extends Iota {
 
     @Override
     public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
-        return lookupAndOperate(vm, world, continuation, false);
+        return lookupAndOperate(vm, continuation, false);
     }
 
     @Override
     public @NotNull CastResult executeInParens(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
-        return lookupAndOperate(vm, world, continuation, true);
+        return lookupAndOperate(vm, continuation, true);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class PatternIota extends Iota {
      * In either case, any mishaps thrown during the lookup or operation process will be caught, and an appropriate
      * CastResult will be returned.
      */
-    private @NotNull CastResult lookupAndOperate(CastingVM vm, ServerLevel world, SpellContinuation continuation, boolean inParens) {
+    private @NotNull CastResult lookupAndOperate(CastingVM vm, SpellContinuation continuation, boolean inParens) {
         Supplier<@Nullable Component> castedName = () -> null;
         try {
             var lookup = PatternRegistryManifest.matchPattern(this.getPattern(), vm.getEnv());
