@@ -28,7 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Updated Inline dependency from 1.0.1 to 1.2.2 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
 - Updated Fabric Language Kotlin dependency from 1.9.4 to 1.13.7 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
 - Updated Kotlin for Forge dependency from 4.3.0 to 4.12.0 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
-- Updated zh_cn translations ([#995](https://github.com/FallingColors/HexMod/pull/995), [#1037](https://github.com/FallingColors/HexMod/pull/1037)) @ChuijkYahus
+- Updated zh_cn translations ([#995](https://github.com/FallingColors/HexMod/pull/995), [#1037](https://github.com/FallingColors/HexMod/pull/1037), [#1045](https://github.com/FallingColors/HexMod/pull/1045)) @ChuijkYahus
 
 ### Fixed
 
