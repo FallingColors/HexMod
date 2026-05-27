@@ -8,7 +8,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Added the `cannot_modify_cost` tag for patterns that should ignore the `media_consumption` attribute when calculating cost, by Robotgiggle in [987](https://github.com/FallingColors/HexMod/pull/987).
 - Added the `cannot_modify_cost` tag for patterns that should ignore the `media_consumption` attribute when calculating cost ([#987](https://github.com/FallingColors/HexMod/pull/987)) @Robotgiggle
 - Added a config toggle for the pattern wobble animation on active slates to improve performance ([#1017](https://github.com/FallingColors/HexMod/pull/1017)) @aloaloolaola
 - Added keybinds to flip forward and backwards in a spellbook ([#1028](https://github.com/FallingColors/HexMod/pull/1028)) @pythonmcpi
@@ -24,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Changed the `media_consumption` attribute to only apply to player-based casting ([#987](https://github.com/FallingColors/HexMod/pull/987)) @Robotgiggle
 - Changed Wayfarer's Flight and Anchorite's Flight to both cost 2 dust per unit, and enforced a minimum cost for Anchorite's Flight ([#1040](https://github.com/FallingColors/HexMod/pull/1040)) @Robotgiggle
 - Changed the pattern limit to also include execution of non-pattern iotas like jumps ([#1035](https://github.com/FallingColors/HexMod/pull/1035)) @pythonmcpi
+- Changed the Hasty Retrospection mishap to Absent Introspection as it's now used for anything that only works while parenthesized ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
 - Updated the Flay Mind recipe display in EMI and JEI to cycle through all valid entities if the input is an entity tag ([#1023](https://github.com/FallingColors/HexMod/pull/1023)) @YukkuriC
 - Re-implemented the ability to extract stored media from items in trinket/curio slots ([#996](https://github.com/FallingColors/HexMod/pull/996)) @YukkuriC
 - Patterns involving entity look direction now compensate for the vanilla bug that causes projectiles and phantoms to report the wrong direction ([#1025](https://github.com/FallingColors/HexMod/pull/1025)) @Robotgiggle
@@ -54,7 +54,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Made the `getUsableStacks` and `getPrimaryStacks` methods in `CastingEnvironment` and its subclasses public ([#907](https://github.com/FallingColors/HexMod/pull/907)) @miyucomics
 - Improved handling for duplicate pattern signatures in hexdoc ([#1007](https://github.com/FallingColors/HexMod/pull/1007)) @object-Object
 - `CircleExecutionState` now stores the shape of the spell circle using two corners rather than an entire list of positions ([#908](https://github.com/FallingColors/HexMod/pull/908)) @Stick404
-- Added a method in `Action` to define behavior when inside parentheses, and de-hardcoded the iota-escaping patterns ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
+- Added methods in `Action` and `Iota` to define behavior when inside parentheses, and de-hardcoded the iota-escaping patterns ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
 
 ## `0.11.3` - 2025-11-22
 
