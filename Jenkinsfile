@@ -3,7 +3,7 @@
 pipeline {
     agent any
     tools {
-        jdk "jdk-21.0.5"
+        jdk "jdk-21"
     }
     environment {
         discordWebhook = credentials('discordWebhook')
