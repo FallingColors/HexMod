@@ -1041,6 +1041,7 @@
       not_enough_args: "expected %s or more arguments but the stack was only %s tall",
       no_args: "expected %s or more arguments but the stack was empty",
       needs_parens: "Did not first use Introspection",
+      nothing_to_undo: "No patterns left to remove",
       
       wrong_dimension: "cannot see %s from %s",
       entity_too_far: "%s is out of range",
@@ -1509,7 +1510,10 @@
         
         "needs_parens.title": "Absent Introspection",
         needs_parens: "I attempted to draw $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ or $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ without first drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$.$(br2)Causes orange sparks, and pushes the pattern I tried to draw to the stack as an iota.",
-        
+
+        "nothing_to_undo.title": "Overeager Evanition",
+        nothing_to_undo: "I attempted to draw $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ without any patterns for it to remove.$(br2)Causes orange sparks, and removes some of my health instead.",
+
         "too_many_patterns.title": "Lost in Thought",
         too_many_patterns: "I attempted to evaluate too many patterns in one _Hex. Often, this happens because I've accidentally created an infinite loop.$(br2)Causes dark blue sparks, and chokes all the air out of me.",
         

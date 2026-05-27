@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Added the `cannot_modify_cost` tag for patterns that should ignore the `media_consumption` attribute when calculating cost, by Robotgiggle in [987](https://github.com/FallingColors/HexMod/pull/987).
+- Added the Overeager Evanition mishap when trying to use Evanition with nothing to undo ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
 
 ### Changed
 

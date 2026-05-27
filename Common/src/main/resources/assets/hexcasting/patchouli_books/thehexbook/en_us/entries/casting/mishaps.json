@@ -75,6 +75,11 @@
     },
     {
       "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps.nothing_to_undo.title",
+      "text": "hexcasting.page.mishaps.nothing_to_undo"
+    },
+    {
+      "type": "patchouli:text",
       "title": "hexcasting.page.mishaps.too_many_patterns.title",
       "text": "hexcasting.page.mishaps.too_many_patterns"
     },
