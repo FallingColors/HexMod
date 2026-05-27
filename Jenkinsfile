@@ -3,7 +3,7 @@
 pipeline {
     agent any
     tools {
-        jdk "jdk-17.0.1"
+        jdk "jdk-21.0.5"
     }
     environment {
         discordWebhook = credentials('discordWebhook')
@@ -66,7 +66,7 @@ pipeline {
     post {
         always {
             archiveArtifacts 'Common/build/libs/**.jar'
-            archiveArtifacts 'Forge/build/libs/**.jar'
+            archiveArtifacts 'NeoForge/build/libs/**.jar'
             archiveArtifacts 'Fabric/build/libs/**.jar'
         }
     }
