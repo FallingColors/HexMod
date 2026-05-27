@@ -22,7 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Internal
 
 - The mod now uses Fabric Loom 1.9, Gradle 8.11, and Kotlin 2.0.20, by Robotgiggle in [#1043](https://github.com/FallingColors/HexMod/pull/1043).
-- Added a method in `Action` to define behavior when inside parentheses, and de-hardcoded the iota-escaping patterns, by Robotgiggle in [#1047](https://github.com/FallingColors/HexMod/pull/1047).
+- Added a method in `Action` to define behavior when inside parentheses, and de-hardcoded the iota-escaping patterns ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
 - Updated Inline dependency from 1.0.1 to 1.2.2, by Robotgiggle in [#1043](https://github.com/FallingColors/HexMod/pull/1043).
 
 ## `0.11.3` - 2025-11-22
