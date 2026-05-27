@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.loot;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.utils.HexUtils;
@@ -48,8 +49,15 @@ public class AddPerWorldPatternToScrollFunc extends LootItemConditionalFunction 
             }
         }
         var patternKey = perWorldKeys.get(rand.nextInt(perWorldKeys.size()));
+        var patternID = patternKey.location().toString();
         var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(patternKey, overworld);
-        NBTHelper.putString(stack, ItemScroll.TAG_OP_ID, patternKey.location().toString());
+        if (pat == null) {
+            HexAPI.LOGGER.error("No per-world pattern found for action " + patternID + " while generating loot scroll! " +
+                                "Try running '/hexcasting recalcPatterns' to generate the patterns for this world.");
+            NBTHelper.putString(stack, ItemScroll.TAG_RECALC_WARNING, patternID);
+            return stack;
+        }
+        NBTHelper.putString(stack, ItemScroll.TAG_OP_ID, patternID);
         NBTHelper.put(stack, ItemScroll.TAG_PATTERN, pat.serializeToNBT());
         return stack;
     }
