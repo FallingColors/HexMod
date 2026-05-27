@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Added the `cannot_modify_cost` tag for patterns that should ignore the `media_consumption` attribute when calculating cost, by Robotgiggle in [987](https://github.com/FallingColors/HexMod/pull/987).
-- Added Meditation and Recollection for advanced pattern-list creation, by Robotgiggle in [#1046](https://github.com/FallingColors/HexMod/pull/1046).
+- Added Meditation and Recollection for advanced pattern-list creation ([#1046](https://github.com/FallingColors/HexMod/pull/1046)) @Robotgiggle
 
 ### Changed
 
