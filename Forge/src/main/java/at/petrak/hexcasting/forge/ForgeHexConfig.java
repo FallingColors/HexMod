@@ -173,6 +173,8 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.IntValue maxSpellCircleLength;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
+        private static ForgeConfigSpec.ConfigValue<List<? extends String>> costRescaleList;
+        private static ForgeConfigSpec.DoubleValue globalCostScaling;
 
         private static ForgeConfigSpec.BooleanValue greaterTeleportSplatsItems;
         private static ForgeConfigSpec.BooleanValue villagersOffendedByMindMurder;
@@ -185,10 +187,30 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             maxOpCount = builder.comment("The maximum number of actions that can be executed in one tick, to avoid " +
                     "hanging the server.")
                 .defineInRange("maxOpCount", DEFAULT_MAX_OP_COUNT, 0, Integer.MAX_VALUE);
+
             opBreakHarvestLevel = builder.comment(
                 "The harvest level of the Break Block spell.",
                 "0 = wood, 1 = stone, 2 = iron, 3 = diamond, 4 = netherite."
             ).defineInRange("opBreakHarvestLevel", DEFAULT_OP_BREAK_HARVEST_LEVEL, 0, 4);
+
+            greaterTeleportSplatsItems = builder.comment(
+                    "Should items fly out of the player's inventory when using Greater Teleport?"
+            ).define("greaterTeleportSplatsItems", DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS);
+
+            actionDenyList = builder.comment(
+                    "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap. " +
+                        "For example, \"hexcasting:get_caster\" will prevent Mind's Reflection.")
+                .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
+
+            costRescaleList = builder.comment(
+                    "Maps resource locations to the scaling factor for that specific action's media cost. " +
+                        "For example, \"hexcasting:add_motion 3\" will make Impulse cost 3x as much.")
+                .defineList("costRescaleList",  List.of(), Server::isValidReslocDoublePair);
+
+            globalCostScaling = builder.comment(
+                    "All media costs, except for actions in the #hexcasting:cannot_modify_cost tag, will be multiplied by this value." +
+                        "If you want to modify the cost of an action in that tag, use the per-action list above.")
+                .defineInRange("globalCostScaling", DEFAULT_GLOBAL_COST_SCALING, 0.0, Double.MAX_VALUE);
             builder.pop();
 
             builder.push("Spell Circles");
@@ -197,7 +219,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
             circleActionDenyList = builder.comment(
                     "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle" +
-                        " will result in a mishap. For example: hexcasting:get_caster will prevent Mind's Reflection.")
+                        " will result in a mishap. For example, \"hexcasting:get_caster\" will prevent Mind's Reflection.")
                 .defineList("circleActionDenyList", List.of(), Server::isValidReslocArg);
             builder.pop();
 
@@ -206,16 +228,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 .defineInRange("traderScrollChance", DEFAULT_TRADER_SCROLL_CHANCE, 0.0, 1.0);
 
             // builders for loot (eg. scroll/lore/cypher pools and chances) should go here
-
             builder.pop();
-
-            actionDenyList = builder.comment(
-                    "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
-                .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
-
-            greaterTeleportSplatsItems = builder.comment(
-                    "Should items fly out of the player's inventory when using Greater Teleport?"
-            ).define("greaterTeleportSplatsItems", DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS);
 
             villagersOffendedByMindMurder = builder.comment(
                     "Should villagers take offense when you flay the mind of their fellow villagers?")
@@ -255,6 +268,20 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         }
 
         @Override
+        public double getActionCostScaling(ResourceLocation actionID) {
+            for (var entry : costRescaleList.get()) {
+                String[] split = entry.split(" ");
+                if (actionID.toString().equals(split[0])) {
+                    return Double.parseDouble(split[1]);
+                }
+            }
+            return 1.0;
+        }
+
+        @Override
+        public double globalCostScaling() { return globalCostScaling.get(); }
+
+        @Override
         public boolean doesGreaterTeleportSplatItems() { return greaterTeleportSplatsItems.get(); }
 
         @Override
@@ -279,6 +306,19 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
         private static boolean isValidReslocArg(Object o) {
             return o instanceof String s && ResourceLocation.isValidResourceLocation(s);
+        }
+
+        private static boolean isValidReslocDoublePair(Object o) {
+            if (o instanceof String s) {
+                String[] split = s.split(" ");
+                try {
+                    Double.parseDouble(split[1]);
+                } catch (NumberFormatException e) {
+                    return false;
+                }
+                return ResourceLocation.isValidResourceLocation(split[0]);
+            }
+            return false;
         }
     }
 }
