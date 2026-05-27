@@ -66,7 +66,7 @@ pipeline {
     post {
         always {
             archiveArtifacts 'Common/build/libs/**.jar'
-            archiveArtifacts 'NeoForge/build/libs/**.jar'
+            archiveArtifacts 'Neoforge/build/libs/**.jar'
             archiveArtifacts 'Fabric/build/libs/**.jar'
         }
     }
