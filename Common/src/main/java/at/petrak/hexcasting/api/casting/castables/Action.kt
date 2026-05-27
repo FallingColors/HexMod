@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.casting.castables
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.OperationResult
+import at.petrak.hexcasting.api.casting.eval.ParenthesizedOperationResult
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
@@ -56,13 +57,14 @@ interface Action {
         image: CastingImage,
         continuation: SpellContinuation,
         thisIota: Iota,
-    ): Pair<OperationResult, ResolvedPatternType> {
-        return OperationResult(
-            image.withNewParenthesized(thisIota, false),
+    ): ParenthesizedOperationResult {
+        return ParenthesizedOperationResult(
+            image.withNewParenthesized(thisIota),
             listOf(),
             continuation,
-            HexEvalSounds.NORMAL_EXECUTE
-        ) to ResolvedPatternType.ESCAPED
+            HexEvalSounds.NORMAL_EXECUTE,
+            ResolvedPatternType.ESCAPED
+        )
     }
 
     companion object {

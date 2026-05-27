@@ -4,12 +4,8 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.castables.Action;
-import at.petrak.hexcasting.api.casting.eval.CastResult;
-import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
-import at.petrak.hexcasting.api.casting.eval.OperationResult;
-import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
+import at.petrak.hexcasting.api.casting.eval.*;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
-import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
@@ -127,7 +123,7 @@ public class PatternIota extends Iota {
                     return new CastResult(
                         this,
                         continuation,
-                        vm.getImage().withNewParenthesized(this, false),
+                        vm.getImage().withNewParenthesized(this),
                         List.of(),
                         ResolvedPatternType.ESCAPED,
                         HexEvalSounds.NORMAL_EXECUTE);
@@ -137,18 +133,17 @@ public class PatternIota extends Iota {
                 }
             } else throw new IllegalStateException();
 
-            OperationResult result;
+            IOperationResult result;
             ResolvedPatternType resolutionType;
             if (inParens) {
-                // handle parenthetized behavior
-                var resultAndType = action.operateInParens(
+                // handle parenthesized behavior
+                result = action.operateInParens(
                     vm.getEnv(),
                     vm.getImage(),
                     continuation,
                     this
                 );
-                result = resultAndType.getFirst();
-                resolutionType = resultAndType.getSecond();
+                resolutionType = ((ParenthesizedOperationResult)result).getResolutionType();
             } else {
                 // do the actual calculation!!
                 result = action.operate(

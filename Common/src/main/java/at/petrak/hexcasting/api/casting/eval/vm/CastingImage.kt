@@ -77,12 +77,11 @@ data class CastingImage private constructor(
     fun withResetEscape() = this.copy(parenCount = 0, parenthesized = listOf(), escapeNext = false)
 
     /**
-     * Returns a copy of this with the provided iota added to the parenthetized list.
-     * [escaped] determines whether the iota should be considered escaped or not.
+     * Returns a copy of this with the provided iota added to the parenthesized list.
      */
-    fun withNewParenthesized(iota: Iota, escaped: Boolean): CastingImage {
+    fun withNewParenthesized(iota: Iota): CastingImage {
         val newParens = this.parenthesized.toMutableList()
-        newParens.add(ParenthesizedIota(iota, escaped))
+        newParens.add(ParenthesizedIota(iota, false))
         return this.copy(parenthesized = newParens)
     }
 
