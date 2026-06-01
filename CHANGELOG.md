@@ -16,7 +16,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added a config toggle (default false) for the effect that makes iota-holding items display their entire NBT data when Advanced Tooltips is enabled ([#1021](https://github.com/FallingColors/HexMod/pull/1021)) @Robotgiggle
 - Added a pattern display overlay for pattern-holding items (ie scrolls or slates) while holding shift in the inventory ([#879](https://github.com/FallingColors/HexMod/pull/879)) @SamsTheNerd
 - Added connected textures for Akashic Ligatures when using Continuity or Optifine ([#885](https://github.com/FallingColors/HexMod/pull/885)) @kineticneticat
-- Added the Overeager Evanition mishap when trying to use Evanition with nothing to undo ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
 
 ### Changed
 
@@ -27,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Updated the Flay Mind recipe display in EMI and JEI to cycle through all valid entities if the input is an entity tag ([#1023](https://github.com/FallingColors/HexMod/pull/1023)) @YukkuriC
 - Re-implemented the ability to extract stored media from items in trinket/curio slots ([#996](https://github.com/FallingColors/HexMod/pull/996)) @YukkuriC
 - Patterns involving entity look direction now compensate for the vanilla bug that causes projectiles and phantoms to report the wrong direction ([#1025](https://github.com/FallingColors/HexMod/pull/1025)) @Robotgiggle
+- Drawing Evanition with nothing left to do will now undo the opening Introspection ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
 - Updated Inline dependency from 1.0.1 to 1.2.2 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
 - Updated Fabric Language Kotlin dependency from 1.9.4 to 1.13.7 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
 - Updated Kotlin for Forge dependency from 4.3.0 to 4.12.0 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle

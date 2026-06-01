@@ -19,6 +19,7 @@ import at.petrak.hexcasting.client.render.*
 import at.petrak.hexcasting.client.sound.GridSoundInstance
 import at.petrak.hexcasting.common.lib.HexAttributes
 import at.petrak.hexcasting.common.lib.HexSounds
+import at.petrak.hexcasting.common.lib.hex.HexActions
 import at.petrak.hexcasting.common.msgs.MsgNewSpellPatternC2S
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions
 import com.mojang.blaze3d.systems.RenderSystem
@@ -71,7 +72,12 @@ class GuiSpellcasting constructor(
 
         // TODO this is the kinda hacky bit
         if (info.resolutionType == ResolvedPatternType.UNDONE) {
-            this.patterns.reversed().drop(1).firstOrNull { it.type == ResolvedPatternType.ESCAPED }?.let { it.type = ResolvedPatternType.UNDONE }
+            // find the last escaped pattern (or the opening paren if there's nothing else) and set it to UNDONE
+            this.patterns.reversed().drop(1).firstOrNull {
+                it.type == ResolvedPatternType.ESCAPED ||
+                (it.type == ResolvedPatternType.EVALUATED && it.pattern.angles == HexActions.OPEN_PAREN.prototype.angles)
+            }?.let { it.type = ResolvedPatternType.UNDONE }
+            // use the normal EVALUATED coloring for the Evanition that was just drawn
             this.patterns.getOrNull(index)?.let { it.type = ResolvedPatternType.EVALUATED }
         } else this.patterns.getOrNull(index)?.let {
                 it.type = info.resolutionType

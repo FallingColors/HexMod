@@ -51,9 +51,8 @@ interface Action {
      * The behavior of this action when inside parentheses (meaning `image.parenCount` will always be greater than 0).
      * By default, this just adds the pattern to the parenthesized list without updating the op count or performing any of its effects.
      *
-     * Note that behavior defined here can throw mishaps as usual, such as when [OpUndo][at.petrak.hexcasting.common.casting.actions.escaping.OpUndo]
-     * tries to remove a pattern but there aren't any left. Mishapping here will not affect the paren count, so the caster will still
-     * be in list-building mode after the mishap resolves.
+     * Note that behavior defined here can throw mishaps as usual. However, mishapping here will not affect the paren count,
+     * so the caster will still be in list-building mode after the mishap resolves.
      */
     @Throws(Mishap::class)
     fun operateInParens(

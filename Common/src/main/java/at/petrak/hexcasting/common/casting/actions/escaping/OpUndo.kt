@@ -10,7 +10,6 @@ import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.PatternIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNeedsParens
-import at.petrak.hexcasting.api.casting.mishaps.MishapNothingToUndo
 import at.petrak.hexcasting.common.lib.hex.HexActions
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
@@ -21,9 +20,12 @@ object OpUndo : Action {
 
     override fun operateInParens(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation, thisIota: Iota): ParenthesizedOperationResult {
         val newParens = image.parenthesized.toMutableList()
-        val last = newParens.removeLastOrNull() ?: throw MishapNothingToUndo()
+        val last = newParens.removeLastOrNull()
         var newParenCount = image.parenCount
-        if (last.iota is PatternIota && !last.escaped) {
+        if (last == null) {
+            // if there was nothing in the parenthesized list, undo the initial open paren
+            newParenCount--
+        } else if (last.iota is PatternIota && !last.escaped) {
             // adjust paren count if undoing a non-escaped open or close paren
             when (last.iota.pattern.angles) {
                 HexActions.OPEN_PAREN.prototype.angles -> newParenCount--
