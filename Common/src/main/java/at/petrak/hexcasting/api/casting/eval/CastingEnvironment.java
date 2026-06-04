@@ -48,12 +48,12 @@ public abstract class CastingEnvironment {
     /**
      * Stores all listeners that should be notified whenever a CastingEnvironment is initialised.
      */
-    private static final List<BiConsumer<CastingEnvironment, CompoundTag>> createEventListeners = new ArrayList<>();
+    private static final List<BiConsumer<CastingEnvironment, CastingImage>> createEventListeners = new ArrayList<>();
 
     /**
      * Add a listener that will be called whenever a new CastingEnvironment is created.
      */
-    public static void addCreateEventListener(BiConsumer<CastingEnvironment, CompoundTag> listener) {
+    public static void addCreateEventListener(BiConsumer<CastingEnvironment, CastingImage> listener) {
         createEventListeners.add(listener);
     }
 
@@ -71,10 +71,10 @@ public abstract class CastingEnvironment {
 
     private boolean createEventTriggered = false;
 
-    public final void triggerCreateEvent(CompoundTag userData) {
+    public final void triggerCreateEvent(CastingImage image) {
         if (!createEventTriggered) {
             for (var listener : createEventListeners)
-                listener.accept(this, userData);
+                listener.accept(this, image);
             createEventTriggered = true;
         }
     }
