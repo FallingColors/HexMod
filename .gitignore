@@ -30,6 +30,7 @@ build
 # other
 eclipse
 run
+test-modpack/
 .DS_Store
 
 # Idk what prompted gradle to create this folder

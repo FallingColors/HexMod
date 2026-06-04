@@ -1,46 +1,25 @@
-import at.petrak.pkpcpbp.MiscUtil
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url "https://maven.architectury.dev/" }
+    }
+    dependencies {
+        classpath "architectury-plugin:architectury-plugin.gradle.plugin:3.4.160"
+    }
+}
 
 plugins {
     // used for something??
-    id 'dev.architectury.loom' version '1.13-SNAPSHOT' apply false
-    // used for multi-loader stuff, NOT for the archi API
-    id 'architectury-plugin' version '3.4-SNAPSHOT'
+    id 'dev.architectury.loom' version '1.13.469' apply false
     id 'com.gradleup.shadow' version '8.3.6' apply false
 
     id "org.jetbrains.kotlin.jvm"
-
-    id("at.petra-k.pkpcpbp.PKPlugin") version "0.2.0-pre-104"
-    id("at.petra-k.pkpcpbp.PKSubprojPlugin") version "0.2.0-pre-104" apply false
-    id("at.petra-k.pkpcpbp.PKJson5Plugin") version "0.2.0-pre-104" apply false
 }
+
+apply plugin: "architectury-plugin"
 
 architectury {
     minecraft = project.minecraftVersion
-}
-
-pkpcpbp {
-    // if something goes wrong in CI, make sure we can see the logs to figure out why
-    superDebugInfo = System.getenv("CI") != null
-    // we set the maven coordinates manually in the subprojects block
-    doProjectMetadata = false
-    setupJarMetadata = true
-    setupMavenMetadata = true
-    javaVersion = 21
-    modInfo {
-        modID = project.modID
-        mcVersion = project.minecraftVersion
-        modVersion = project.modVersion
-    }
-    curseforgeInfo {
-        id = 569849
-        stability = "beta"
-        token = System.getenv("CURSEFORGE_TOKEN")
-    }
-    modrinthInfo {
-        id = "nTW3yKrm"
-        stability = "beta"
-        token = System.getenv("MODRINTH_TOKEN")
-    }
 }
 
 subprojects {
@@ -49,28 +28,14 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'kotlin'
     apply plugin: 'maven-publish'
-    apply plugin: 'at.petra-k.pkpcpbp.PKSubprojPlugin'
-    apply plugin: 'at.petra-k.pkpcpbp.PKJson5Plugin'
 
     group = "at.petra-k.$modID"
     base.archivesName = "$modID-$platform-$minecraftVersion"
     version = modVersion
 
-    def isRelease = MiscUtil.isRelease(MiscUtil.getMostRecentPush(project))
     def buildNumber = System.getenv("BUILD_NUMBER")
-    if (!isRelease && buildNumber != null) {
+    if (buildNumber != null) {
         version += "-pre-$buildNumber"
-    }
-
-    pkSubproj {
-        platform = project.platform
-        artifactId = base.archivesName.get()
-        versionDisplayName = "$platform-$minecraftVersion-$modVersion"
-    }
-
-    pkJson5 {
-        autoProcessJson5 = true
-        autoProcessJson5Flattening = true
     }
 
     loom {

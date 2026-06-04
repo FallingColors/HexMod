@@ -3,36 +3,17 @@ plugins {
     id 'com.gradleup.shadow'
 }
 
+def isNeoForgeOnlyInvocation = gradle.startParameter.taskNames
+        && gradle.startParameter.taskNames.every { it == ":Neoforge" || it.startsWith(":Neoforge:") || it == "Neoforge" || it.startsWith("Neoforge:") }
+
+if (isNeoForgeOnlyInvocation) {
+    return
+}
+
 architectury {
     platformSetupLoomIde()
     fabric()
 }
-
-// FIXME: update dependencies/versions before releasing 0.12
-pkSubproj {
-    pkPublish = true
-    curseforgeJar = remapJar.archiveFile
-    curseforgeDependencies([
-        "paucal",
-        "patchouli",
-        "fabric-language-kotlin",
-        "inline",
-        "cloth-config",
-        "cardinal-components-api",
-        "fabric-api",
-    ])
-    modrinthJar = remapJar.archiveFile
-    modrinthDependencies([
-        "paucal:dabyDTwJ", // 0.6.0-fabric
-        "patchouli:1.20.1-80-fabric",
-        "fabric-language-kotlin:1.9.4+kotlin.1.8.21",
-        "inline:1.20.1-1.0.1-fabric",
-        "cloth-config:11.1.106+fabric",
-        "cardinal-components-api:5.2.1",
-        "fabric-api:0.84.0+1.20.1",
-    ])
-}
-
 
 loom {
     mixin.defaultRefmapName = "hexcasting.mixins.refmap.json"
@@ -130,7 +111,7 @@ dependencies {
     // === MANDATORY DEPS ===
     modImplementation("libs:paucal:$paucalVersion+$minecraftVersion-fabric")
     // dear mod devs, don't put the platform in the middle of your version code
-    modImplementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-FABRIC-SNAPSHOT"
+    modImplementation "vazkii.patchouli:Patchouli:1.21.1-$patchouliVersion-FABRIC"
     modImplementation "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
     modImplementation "io.wispforest:accessories-fabric:$accessoriesVersion"
 
@@ -166,7 +147,7 @@ dependencies {
     // i am speed
     // sodium is causing frustum mixin errors so don't use it
 //    modImplementation "maven.modrinth:sodium:${sodiumVersion}"
-    modImplementation "maven.modrinth:lithium:${lithiumVersion}-fabric"
+//    modImplementation "maven.modrinth:lithium:${lithiumVersion}"
 //    modImplementation "maven.modrinth:phosphor:${phosphorVersion}"
 
 

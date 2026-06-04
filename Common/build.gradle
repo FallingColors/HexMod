@@ -39,7 +39,7 @@ dependencies {
 
     modCompileOnly "libs:paucal:$paucalVersion+$minecraftVersion-common"
     // i do not know why the xplat and mod jars are in different coordinates
-    modCompileOnly "vazkii.patchouli:Patchouli-xplat:1.21-$patchouliVersion-SNAPSHOT"
+    modCompileOnly "vazkii.patchouli:Patchouli-xplat:1.21.1-$patchouliVersion"
     modCompileOnly "com.samsthenerd.inline:inline-common:1.21.1-1.2.2-74"
 
     // === OPTIONAL DEPS ===

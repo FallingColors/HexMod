@@ -8,25 +8,6 @@ architectury {
     neoForge()
 }
 
-// FIXME: update dependencies/versions before releasing 0.12
-pkSubproj {
-    pkPublish = true
-    curseforgeJar = jar.archiveFile
-    curseforgeDependencies([
-        "paucal",
-        "patchouli",
-        "caelus",
-        "inline",
-    ])
-    modrinthJar = jar.archiveFile
-    modrinthDependencies([
-        "paucal:HyBiJPtT", // 0.6.0-forge
-        "patchouli:1.20.1-80-forge",
-        "caelus:3.1.0+1.20",
-        "inline:1.20.1-1.0.1-forge",
-    ])
-}
-
 configurations {
     common {
         canBeResolved = true
@@ -100,7 +81,7 @@ dependencies {
     runtimeOnly("top.theillusivec4.curios:curios-neoforge:$curiosVersion+$minecraftVersion")
 
     modImplementation "libs:paucal:$paucalVersion+$minecraftVersion-neoforge"
-    modImplementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-NEOFORGE-SNAPSHOT"
+    modImplementation "vazkii.patchouli:Patchouli:1.21.1-$patchouliVersion-NEOFORGE"
     modImplementation "com.illusivesoulworks.caelus:caelus-neoforge:$caelusVersion"
     modImplementation "com.samsthenerd.inline:inline-neoforge:1.21.1-1.2.2-74"
     // needed for inline to run
