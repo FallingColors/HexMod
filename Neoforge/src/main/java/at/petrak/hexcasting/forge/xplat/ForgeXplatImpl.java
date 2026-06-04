@@ -89,8 +89,9 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 import org.jetbrains.annotations.Nullable;
-import virtuoel.pehkui.api.ScaleTypes;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -545,16 +546,53 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             PEHKUI_API = new PehkuiInterop.ApiAbstraction() {
                 @Override
                 public float getScale(Entity e) {
-                    return ScaleTypes.BASE.getScaleData(e).getScale();
+                    return invokePehkuiScaleGetter(e);
                 }
 
                 @Override
                 public void setScale(Entity e, float scale) {
-                    ScaleTypes.BASE.getScaleData(e).setScale(scale);
+                    invokePehkuiScaleSetter(e, scale);
                 }
             };
         }
         return PEHKUI_API;
+    }
+
+    private static float invokePehkuiScaleGetter(Entity entity) {
+        try {
+            Object scaleData = getPehkuiScaleData(entity);
+            Method getScale = scaleData.getClass().getMethod("getScale");
+            return ((Number) getScale.invoke(scaleData)).floatValue();
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException("Failed to query Pehkui scale", e);
+        }
+    }
+
+    private static void invokePehkuiScaleSetter(Entity entity, float scale) {
+        try {
+            Object scaleData = getPehkuiScaleData(entity);
+            Method setScale = scaleData.getClass().getMethod("setScale", float.class);
+            setScale.invoke(scaleData, scale);
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException("Failed to update Pehkui scale", e);
+        }
+    }
+
+    private static Object getPehkuiScaleData(Entity entity) throws ReflectiveOperationException {
+        Class<?> scaleTypesClass = Class.forName("virtuoel.pehkui.api.ScaleTypes");
+        Field baseField = scaleTypesClass.getField("BASE");
+        Object baseScaleType = baseField.get(null);
+        Method getScaleData = findGetScaleDataMethod(baseScaleType.getClass(), entity.getClass());
+        return getScaleData.invoke(baseScaleType, entity);
+    }
+
+    private static Method findGetScaleDataMethod(Class<?> scaleTypeClass, Class<?> entityClass) throws NoSuchMethodException {
+        for (Method method : scaleTypeClass.getMethods()) {
+            if (method.getName().equals("getScaleData") && method.getParameterCount() == 1) {
+                return method;
+            }
+        }
+        throw new NoSuchMethodException("No compatible getScaleData method for " + entityClass.getName());
     }
 
     public static final String TAG_BRAINSWEPT = "hexcasting:brainswept";

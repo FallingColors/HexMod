@@ -10,8 +10,6 @@ repositories {
     mavenCentral()
     mavenLocal()
 
-    maven { url 'https://maven.blamejared.com' }
-
     maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
@@ -24,10 +22,11 @@ repositories {
     }
 
     maven { url "https://maven.shedaniel.me/" }
-    // accessories
-    maven { url 'https://maven.wispforest.io/releases' }
-    // EMI
-    maven { url = "https://maven.terraformersmc.com/releases/" }
+}
+
+def localM2 = new File(System.getProperty("user.home"), ".m2/repository")
+def localM2Jar = { String relPath ->
+    files(new File(localM2, relPath.replace('/', File.separator)))
 }
 
 dependencies {
@@ -35,16 +34,12 @@ dependencies {
     // We depend on Fabric Loader here to use the Fabric @Environment annotations,
     // which get remapped to the correct annotations on each platform.
     // Do NOT use other classes from Fabric Loader.
-    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    modImplementation localM2Jar("net/fabricmc/fabric-loader/${rootProject.fabric_loader_version}/fabric-loader-${rootProject.fabric_loader_version}.jar")
 
     modCompileOnly "libs:paucal:$paucalVersion+$minecraftVersion-common"
-    // i do not know why the xplat and mod jars are in different coordinates
-    modCompileOnly "vazkii.patchouli:Patchouli-xplat:1.21.1-$patchouliVersion"
-    modCompileOnly "com.samsthenerd.inline:inline-common:1.21.1-1.2.2-74"
-
-    // === OPTIONAL DEPS ===
-    modCompileOnly "dev.emi:emi-xplat-intermediary:${emiVersion}:api"
-    modCompileOnly "io.wispforest:accessories-common:$accessoriesVersion"
+    // Lock flaky BlameJared-hosted artifacts to local Maven copies for reproducible builds.
+    modCompileOnly localM2Jar("vazkii/patchouli/Patchouli-xplat/1.21.1-${patchouliVersion}/Patchouli-xplat-1.21.1-${patchouliVersion}.jar")
+    modCompileOnly localM2Jar("com/samsthenerd/inline/inline-common/1.21.1-1.2.2-74/inline-common-1.21.1-1.2.2-74.jar")
 
     // === OTHER STUFF ===
     compileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"

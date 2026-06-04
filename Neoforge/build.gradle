@@ -36,8 +36,6 @@ repositories {
     }
 
     maven { url = "https://maven.neoforged.net/releases/" }
-    // paucal and patchi
-    maven { url = 'https://maven.blamejared.com' }
     maven {
         name = "Curios"
         url = uri("https://maven.theillusivec4.top/")
@@ -48,8 +46,6 @@ repositories {
     }
     // pehkui
     maven { url = "https://jitpack.io" }
-    // EMI
-    maven { url = "https://maven.terraformersmc.com/releases/" }
 
     maven {
         name = 'Kotlin for Forge'
@@ -58,52 +54,43 @@ repositories {
     }
 
     maven { url "https://maven.shedaniel.me/" }
-    // accessories
-    maven { url 'https://maven.wispforest.io/releases' }
-    // sinytra connector or something?? accessories needs it
-    maven { url 'https://maven.su5ed.dev/releases' }
+}
+
+def localM2 = new File(System.getProperty("user.home"), ".m2/repository")
+def localM2Jar = { String relPath ->
+    files(new File(localM2, relPath.replace('/', File.separator)))
+}
+def testModpackJar = { String jarName ->
+    files(rootProject.file("test-modpack/Create Aeronautica Create- Aeronautica/mods/${jarName}"))
 }
 
 dependencies {
     neoForge "net.neoforged:neoforge:${neoforgeVersion}"
     implementation(project(path: ':Common', configuration: 'namedElements')) { transitive false }
     shadowBundle(project(path: ':Common', configuration: 'transformProductionNeoForge')) { transitive false }
-    modImplementation("thedarkcolour:kotlinforforge-neoforge:$kotlinForForgeVersion") {
-        exclude(group: "net.neoforged.fancymodloader", module: "loader")
-    }
+    modImplementation testModpackJar("kotlinforforge-5.11.0-all.jar")
 
     // === MANDATORY DEPS ===
 
-    compileOnly("mezz.jei:jei-$minecraftVersion-neoforge-api:$jeiVersion")
-    runtimeOnly("mezz.jei:jei-$minecraftVersion-neoforge:$jeiVersion")
+    compileOnly testModpackJar("jei-1.21.1-neoforge-19.27.0.336.jar")
+    runtimeOnly testModpackJar("jei-1.21.1-neoforge-19.27.0.336.jar")
 
-    compileOnly("top.theillusivec4.curios:curios-neoforge:$curiosVersion+$minecraftVersion:api")
-    runtimeOnly("top.theillusivec4.curios:curios-neoforge:$curiosVersion+$minecraftVersion")
+    compileOnly testModpackJar("curios-neoforge-${curiosVersion}+${minecraftVersion}.jar")
+    runtimeOnly testModpackJar("curios-neoforge-${curiosVersion}+${minecraftVersion}.jar")
 
     modImplementation "libs:paucal:$paucalVersion+$minecraftVersion-neoforge"
-    modImplementation "vazkii.patchouli:Patchouli:1.21.1-$patchouliVersion-NEOFORGE"
-    modImplementation "com.illusivesoulworks.caelus:caelus-neoforge:$caelusVersion"
-    modImplementation "com.samsthenerd.inline:inline-neoforge:1.21.1-1.2.2-74"
+    modImplementation localM2Jar("vazkii/patchouli/Patchouli/1.21.1-${patchouliVersion}-NEOFORGE/Patchouli-1.21.1-${patchouliVersion}-NEOFORGE.jar")
+    modImplementation localM2Jar("com/illusivesoulworks/caelus/caelus-neoforge/${caelusVersion}/caelus-neoforge-${caelusVersion}.jar")
+    modImplementation localM2Jar("com/samsthenerd/inline/inline-neoforge/1.21.1-1.2.2-74/inline-neoforge-1.21.1-1.2.2-74.jar")
     // needed for inline to run
-    modRuntimeOnly("me.shedaniel.cloth:cloth-config-forge:$clothConfigVersion")
-    modRuntimeOnly "com.samsthenerd.inline:inline-neoforge:$minecraftVersion-$inlineVersion"
-    modRuntimeOnly "dev.architectury:architectury-neoforge:$architecturyVersion"
+    modRuntimeOnly testModpackJar("cloth-config-15.0.140-neoforge.jar")
+    modRuntimeOnly localM2Jar("com/samsthenerd/inline/inline-neoforge/${minecraftVersion}-${inlineVersion}/inline-neoforge-${minecraftVersion}-${inlineVersion}.jar")
+    modRuntimeOnly testModpackJar("architectury-13.0.8-neoforge.jar")
 
 
     // === OPTIONAL DEPS ===
+    modRuntimeOnly localM2Jar("com/github/Virtuoel/Pehkui/${pehkuiVersion}/Pehkui-${pehkuiVersion}.jar")
 
-    modCompileOnly "dev.emi:emi-neoforge:${emiVersion}:api"
-    modRuntimeOnly "dev.emi:emi-neoforge:${emiVersion}"
-    modImplementation "io.wispforest:accessories-neoforge:$accessoriesVersion"
-
-    modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}-1.21-neoforge")
-
-    // "Required due to issues with JIJ dependency resolving in arch or something"
-    // https://github.com/wisp-forest/accessories
-    forgeRuntimeLibrary("io.wispforest:endec:0.1.8")
-    forgeRuntimeLibrary("io.wispforest.endec:gson:0.1.5")
-    forgeRuntimeLibrary("io.wispforest.endec:netty:0.1.4")
-    forgeRuntimeLibrary("io.wispforest.endec:jankson:0.1.5")
     forgeRuntimeLibrary("org.jetbrains.kotlin:kotlin-reflect:2.1.20")
     forgeRuntimeLibrary("org.jetbrains.kotlin:kotlin-stdlib:2.1.20")
     forgeRuntimeLibrary("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.20")

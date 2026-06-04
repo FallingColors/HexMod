@@ -327,7 +327,8 @@ def fetch_artifact(group: str, artifact: str, version: str, repo: str, want_jar:
     artifact = resolve(artifact, {}) or artifact
     version = resolve(version, {}) or version
     repo = repo_for(group, repo)
-    key = (group, artifact, version, want_jar)
+    classifier_key = tuple(sorted(classifiers or []))
+    key = (group, artifact, version, want_jar, classifier_key)
     if key in seen:
         return
     seen.add(key)

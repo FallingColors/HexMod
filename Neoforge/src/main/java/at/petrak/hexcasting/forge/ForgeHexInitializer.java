@@ -71,14 +71,16 @@ import net.neoforged.neoforge.event.tick.LevelTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
-import thedarkcolour.kotlinforforge.neoforge.KotlinModLoadingContext;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 @Mod(HexAPI.MOD_ID)
 public class ForgeHexInitializer {
+    private static IEventBus modEventBus;
+
     public ForgeHexInitializer(ModContainer modContainer) {
+        modEventBus = modContainer.getEventBus();
         initConfig(modContainer);
         // workaround for Inline EntTypeCradles not being available on server, related to https://github.com/SamsTheNerd/inline/issues/34
         EntTypeCradle.fromTypeId(ResourceLocation.fromNamespaceAndPath("minecraft", "pig")).get().getType();
@@ -294,6 +296,9 @@ public class ForgeHexInitializer {
 
     // aaaauughhg
     public static IEventBus getModEventBus() {
-        return KotlinModLoadingContext.Companion.get().getKEventBus();
+        if (modEventBus == null) {
+            throw new IllegalStateException("Hex mod event bus requested before mod construction");
+        }
+        return modEventBus;
     }
 }
