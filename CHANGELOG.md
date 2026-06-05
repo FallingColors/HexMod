@@ -33,6 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Fixed a crash loop when trying to generate a creative-mode ancient scroll for a Great Spell whose per-world pattern hasn't been calculated yet ([#992](https://github.com/FallingColors/HexMod/pull/992)) @Robotgiggle
+- Fixed a crash when trying to generate a loot scroll for a Great Spell whose per-world pattern hasn't been calculated yet ([#1079](https://github.com/FallingColors/HexMod/pull/1079)) @Robotgiggle
 - Fixed Create Water and Create Lava causing the "position is forbidden to you" mishap when the position is actually just out of ambit ([#1029](https://github.com/FallingColors/HexMod/pull/1029)) @pythonmcpi
 - Fixed a broken translation key on the error message from a Shepherd Directrix ([#1013](https://github.com/FallingColors/HexMod/pull/1013)) @Teal-Wolf-25-v2
 - Fixed the log spam caused by double pattern registration when joining a world ([#999](https://github.com/FallingColors/HexMod/pull/999)) @Real-Luxof
