@@ -22,24 +22,25 @@ public class BlockAkashicRecord extends Block {
      */
     public @Nullable
     BlockPos addNewDatum(BlockPos herePos, Level level, HexPattern key, Iota datum) {
-        var clobbereePos = AkashicFloodfiller.floodFillFor(herePos, level,
+        // Look for existing shelf with the same pattern to overwrite
+        var targetPos = AkashicFloodfiller.floodFillFor(herePos, level,
             (pos, bs, world) ->
                 world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
                     && tile.getPattern() != null && tile.getPattern().sigsEqual(key));
 
-        if (clobbereePos != null) {
-            return null;
+        if (targetPos == null) {
+            // Otherwise find an empty shelf
+            targetPos = AkashicFloodfiller.floodFillFor(herePos, level, 0.9f,
+                (pos, bs, world) ->
+                    world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
+                        && tile.getPattern() == null, 128);
         }
 
-        var openPos = AkashicFloodfiller.floodFillFor(herePos, level, 0.9f,
-            (pos, bs, world) ->
-                world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
-                    && tile.getPattern() == null, 128);
-        if (openPos != null) {
-            var tile = (BlockEntityAkashicBookshelf) level.getBlockEntity(openPos);
+        if (targetPos != null) {
+            var tile = (BlockEntityAkashicBookshelf) level.getBlockEntity(targetPos);
             tile.setNewMapping(key, datum);
 
-            return openPos;
+            return targetPos;
         } else {
             return null;
         }
