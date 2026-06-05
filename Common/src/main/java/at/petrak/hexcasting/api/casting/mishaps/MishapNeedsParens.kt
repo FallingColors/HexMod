@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.casting.iota.PatternIota
 import at.petrak.hexcasting.api.pigment.FrozenPigment
 import net.minecraft.world.item.DyeColor
 
-class MishapTooManyCloseParens : Mishap() {
+class MishapNeedsParens : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.ORANGE)
 
@@ -17,5 +17,5 @@ class MishapTooManyCloseParens : Mishap() {
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("too_many_close_parens")
+        error("needs_parens")
 }

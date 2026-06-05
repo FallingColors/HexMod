@@ -22,9 +22,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Changed the `media_consumption` attribute to only apply to player-based casting ([#987](https://github.com/FallingColors/HexMod/pull/987)) @Robotgiggle
 - Changed Wayfarer's Flight and Anchorite's Flight to both cost 2 dust per unit, and enforced a minimum cost for Anchorite's Flight ([#1040](https://github.com/FallingColors/HexMod/pull/1040)) @Robotgiggle
 - Changed the pattern limit to also include execution of non-pattern iotas like jumps ([#1035](https://github.com/FallingColors/HexMod/pull/1035)) @pythonmcpi
+- Changed the Hasty Retrospection mishap to Absent Introspection as it's now used for anything that only works while parenthesized ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
 - Updated the Flay Mind recipe display in EMI and JEI to cycle through all valid entities if the input is an entity tag ([#1023](https://github.com/FallingColors/HexMod/pull/1023)) @YukkuriC
 - Re-implemented the ability to extract stored media from items in trinket/curio slots ([#996](https://github.com/FallingColors/HexMod/pull/996)) @YukkuriC
 - Patterns involving entity look direction now compensate for the vanilla bug that causes projectiles and phantoms to report the wrong direction ([#1025](https://github.com/FallingColors/HexMod/pull/1025)) @Robotgiggle
+- Drawing Evanition with nothing left to do will now undo the opening Introspection ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
 - Updated Inline dependency from 1.0.1 to 1.2.2 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
 - Updated Fabric Language Kotlin dependency from 1.9.4 to 1.13.7 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
 - Updated Kotlin for Forge dependency from 4.3.0 to 4.12.0 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
@@ -44,6 +46,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Internal
 
+- The mod now uses Fabric Loom 1.9, Gradle 8.11, and Kotlin 2.0.20, by Robotgiggle in [#1043](https://github.com/FallingColors/HexMod/pull/1043).
+- Updated Inline dependency from 1.0.1 to 1.2.2, by Robotgiggle in [#1043](https://github.com/FallingColors/HexMod/pull/1043).
 - The mod now uses Fabric Loom 1.9, Gradle 8.11, and Kotlin 2.0.20 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
 - Changed the internal implementation of Thoth's Gambit to use a `TreeList` for more efficiency ([#1031](https://github.com/FallingColors/HexMod/pull/1031)) @s5bug
 - Deprecated the version of `matchPattern` that takes a boolean argument since it always raises an exception ([#1002](https://github.com/FallingColors/HexMod/pull/1002)) @beholderface
@@ -51,6 +55,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Made the `getUsableStacks` and `getPrimaryStacks` methods in `CastingEnvironment` and its subclasses public ([#907](https://github.com/FallingColors/HexMod/pull/907)) @miyucomics
 - Improved handling for duplicate pattern signatures in hexdoc ([#1007](https://github.com/FallingColors/HexMod/pull/1007)) @object-Object
 - `CircleExecutionState` now stores the shape of the spell circle using two corners rather than an entire list of positions ([#908](https://github.com/FallingColors/HexMod/pull/908)) @Stick404
+- Added methods in `Action` and `Iota` to define behavior when inside parentheses, and de-hardcoded the iota-escaping patterns ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
 
 ## `0.11.3` - 2025-11-22
 
