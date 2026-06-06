@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.castables.Action;
 import at.petrak.hexcasting.api.casting.eval.*;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.eval.vm.FrameEvaluate;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
@@ -167,10 +168,19 @@ public class PatternIota extends Iota {
                 result.getSound());
 
         } catch (Mishap mishap) {
+            // if a mishap happens mid-parens at the top level (ie when staffcasting), keep any in-progress parens
+            boolean wipeParens = false;
+            // if a mishap happens mid-parens while metacasting, wipe the parens - if we didn't do this, any open paren
+            // levels would remain open even though the metacast itself has mishapped and thus been aborted
+            if (continuation instanceof SpellContinuation.NotDone cnd && cnd.getFrame() instanceof FrameEvaluate frameEval) {
+                if (frameEval.isMetacasting()) {
+                    wipeParens = true;
+                }
+            }
             return new CastResult(
                 this,
                 continuation,
-                null,
+                wipeParens ? vm.getImage().withResetEscape() : null,
                 List.of(new OperatorSideEffect.DoMishap(mishap, new Mishap.Context(this.getPattern(), castedName.get()))),
                 mishap.resolutionType(vm.getEnv()),
                 HexEvalSounds.MISHAP);
