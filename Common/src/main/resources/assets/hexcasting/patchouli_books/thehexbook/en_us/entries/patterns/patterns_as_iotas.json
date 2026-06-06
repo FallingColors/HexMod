@@ -38,38 +38,19 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:open_n_parens",
-      "anchor": "hexcasting:open_n_parens",
-      "input": "num",
-      "text": "hexcasting.page.patterns_as_iotas.advanced_parens.1"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:close_all_parens",
-      "anchor": "hexcasting:close_all_parens",
-      "output": "num, [pattern]",
-      "text": "hexcasting.page.patterns_as_iotas.advanced_parens.2"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:read_into_parens",
-      "anchor": "hexcasting:read_into_parens",
-      "text": "hexcasting.page.patterns_as_iotas.advanced_parens.3"
-    },
-    {
-      "type": "hexcasting:pattern",
       "op_id": "hexcasting:undo",
       "anchor": "hexcasting:undo",
       "text": "hexcasting.page.patterns_as_iotas.undo"
     },
     {
       "type": "patchouli:text",
-      "anchor": "further_notes",
+      "anchor": "escaping_escapers",
       "title": "hexcasting.page.patterns_as_iotas.further_notes.title",
       "text": "hexcasting.page.patterns_as_iotas.further_notes.1"
     },
     {
       "type": "patchouli:text",
+      "anchor": "iota_embedding",
       "text": "hexcasting.page.patterns_as_iotas.further_notes.2"
     },
     {
