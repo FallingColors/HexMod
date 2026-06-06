@@ -56,7 +56,7 @@ public class EntityIota extends Iota {
     public boolean toleratesOther(Iota that) {
         return typesMatch(this, that)
                 && that instanceof EntityIota dent
-                && this.getEntityId() == dent.getEntityId();
+                && this.getEntityId().equals(dent.getEntityId());
     }
 
     @Override
