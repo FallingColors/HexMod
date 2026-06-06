@@ -552,7 +552,7 @@ public class HexActions {
     public static final ActionRegistryEntry INDEX = make("index",
         new OperationAction(HexPattern.fromAngles("deeed", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry FOR_EACH = make("for_each",
-        new ActionRegistryEntry(HexPattern.fromAngles("dadad", HexDir.NORTH_EAST), OpForEach.INSTANCE));
+        new ActionRegistryEntry(HexPattern.fromAngles("dadaqw", HexDir.NORTH_EAST), OpForEach.INSTANCE));
     //    public static final ActionRegistryEntry LIST_SIZE = make("list_size",
 //        new ActionRegistryEntry(HexPattern.fromAngles("aqaeaq", HexDir.EAST), OpListSize.INSTANCE));
     public static final ActionRegistryEntry SINGLETON = make("singleton",
