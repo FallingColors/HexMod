@@ -919,6 +919,7 @@
         brainsweep: "Flay Mind",
 
         escape: "Consideration",
+        runtime_escape: "Contemplation",
         open_paren: "Introspection",
         close_paren: "Retrospection",
         undo: "Evanition",
