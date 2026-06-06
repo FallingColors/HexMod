@@ -38,12 +38,27 @@
     },
     {
       "type": "hexcasting:pattern",
+      "op_id": "hexcasting:open_n_parens",
+      "anchor": "hexcasting:open_n_parens",
+      "input": "num",
+      "text": "hexcasting.page.patterns_as_iotas.advanced_parens.1"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:close_all_parens",
+      "anchor": "hexcasting:close_all_parens",
+      "output": "num, [pattern]",
+      "text": "hexcasting.page.patterns_as_iotas.advanced_parens.2"
+    },
+    {
+      "type": "hexcasting:pattern",
       "op_id": "hexcasting:undo",
       "anchor": "hexcasting:undo",
       "text": "hexcasting.page.patterns_as_iotas.undo"
     },
     {
       "type": "patchouli:text",
+      "anchor": "further_notes",
       "title": "hexcasting.page.patterns_as_iotas.further_notes.title",
       "text": "hexcasting.page.patterns_as_iotas.further_notes.1"
     },
