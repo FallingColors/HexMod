@@ -72,11 +72,8 @@ class GuiSpellcasting constructor(
 
         // TODO this is the kinda hacky bit
         if (info.resolutionType == ResolvedPatternType.UNDONE) {
-            // find the last escaped pattern (or the opening paren if there's nothing else) and set it to UNDONE
-            this.patterns.reversed().drop(1).firstOrNull {
-                it.type == ResolvedPatternType.ESCAPED ||
-                (it.type == ResolvedPatternType.EVALUATED && it.pattern.angles == HexActions.OPEN_PAREN.prototype.angles)
-            }?.let { it.type = ResolvedPatternType.UNDONE }
+            // find the last undo-able pattern and set its coloring to UNDONE
+            this.patterns.reversed().drop(1).firstOrNull { canBeUndone(it) }?.let { it.type = ResolvedPatternType.UNDONE }
             // use the normal EVALUATED coloring for the Evanition that was just drawn
             this.patterns.getOrNull(index)?.let { it.type = ResolvedPatternType.EVALUATED }
         } else this.patterns.getOrNull(index)?.let {
@@ -86,6 +83,21 @@ class GuiSpellcasting constructor(
         this.cachedStack = info.stackDescs
         this.cachedRavenmind = info.ravenmind
         this.calculateIotaDisplays()
+    }
+
+    fun canBeUndone(resPat: ResolvedPattern): Boolean {
+        // standard escaped patterns can always be undone
+        if (resPat.type == ResolvedPatternType.ESCAPED) return true
+        // everything else cannot be undone, with three exceptions:
+        // - unescaped Introspection and Meditation can be undone if there's nothing else left to undo
+        // - Interjection can always be undone (undoing its inserted iota) despite using the EVALUATED coloring
+        if (resPat.type == ResolvedPatternType.EVALUATED) {
+            if (resPat.pattern.angles == HexActions.OPEN_PAREN.prototype.angles ||
+                resPat.pattern.angles == HexActions.OPEN_N_PARENS.prototype.angles ||
+                resPat.pattern.angles == HexActions.READ_INTO_PARENS.prototype.angles)
+                return true
+        }
+        return false
     }
 
     fun calculateIotaDisplays() {

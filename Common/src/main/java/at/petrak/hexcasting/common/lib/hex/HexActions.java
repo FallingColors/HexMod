@@ -393,6 +393,8 @@ public class HexActions {
             new ActionRegistryEntry(HexPattern.fromAngles("eqqqe", HexDir.SOUTH_WEST), OpOpenNParens.INSTANCE));
     public static final ActionRegistryEntry CLOSE_ALL_PARENS = make("close_all_parens",
             new ActionRegistryEntry(HexPattern.fromAngles("qeeeq", HexDir.SOUTH_EAST), OpCloseAllParens.INSTANCE));
+    public static final ActionRegistryEntry READ_INTO_PARENS = make("read_into_parens",
+            new ActionRegistryEntry(HexPattern.fromAngles("aqqqqqwded", HexDir.EAST), OpReadIntoParens.INSTANCE));
     public static final ActionRegistryEntry UNDO = make("undo",
         new ActionRegistryEntry(HexPattern.fromAngles("eeedw", HexDir.EAST), OpUndo.INSTANCE));
 

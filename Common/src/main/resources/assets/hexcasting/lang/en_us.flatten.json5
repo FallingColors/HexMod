@@ -921,6 +921,7 @@
         close_paren: "Retrospection",
         open_n_parens: "Meditation",
         close_all_parens: "Recollection",
+        read_into_parens: "Interjection",
         undo: "Evanition",
         
         eval: "Hermes' Gambit",
@@ -1510,7 +1511,7 @@
         incorrect_block: "The action requires some sort of block at a target location, but the block supplied was not suitable.$(br2)Causes bright green sparks, and causes an ephemeral explosion at the given location. The explosion doesn't seem to harm me, the world, or anything else though; it's just startling.",
         
         "needs_parens.title": "Absent Introspection",
-        needs_parens: "I attempted to draw $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ or $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ without first drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$.$(br2)Causes orange sparks, and pushes the pattern I tried to draw to the stack as an iota.",
+        needs_parens: "I attempted to draw a pattern that only works while $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)introspecting/$ without first drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$.$(br2)Causes orange sparks, and pushes the pattern I tried to draw to the stack as an iota.",
 
         "too_many_patterns.title": "Lost in Thought",
         too_many_patterns: "I attempted to evaluate too many patterns in one _Hex. Often, this happens because I've accidentally created an infinite loop.$(br2)Causes dark blue sparks, and chokes all the air out of me.",
@@ -1972,8 +1973,9 @@
         advanced_parens: {
           "1": "Removes a number from the stack, then acts as though I'd drawn that many $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspections/$. Treated as a normal pattern while $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)introspecting/$, so nesting this may require $(l:patterns/patterns_as_iotas#further_notes)$(action)tricks/$ to draw extra $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospections/$.",
           "2": "Works like $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$, but closes $(italic)all/$ open $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspections/$ at once. The number of layers closed, along with the list of saved patterns, are then added to the stack.",
+          "3": "[placeholder]",
         },
-        undo: "Finally, if I make a mistake while drawing patterns inside $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ I can draw $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ to remove the last pattern that I drew from the pattern list that is being constructed.",
+        undo: "Finally, if I make a mistake while drawing patterns inside $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$, I can draw $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ to remove the last pattern that I drew from the pattern list that is being constructed.",
         further_notes: {
           title: "Further Notes",
           "1": "I can escape the special behavior of patterns like $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ by drawing a $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ before them, which will simply add them to the list without affecting which the number of $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospections/$ I need to return to casting.$(br2)If I draw two $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Considerations/$ in a row while $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)introspecting/$, it will add a single $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ to the list.",
