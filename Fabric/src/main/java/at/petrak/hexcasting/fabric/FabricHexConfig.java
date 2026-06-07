@@ -138,8 +138,6 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private boolean clickingTogglesDrawing = DEFAULT_CLICKING_TOGGLES_DRAWING;
         @ConfigEntry.Gui.Tooltip
-        private boolean alwaysShowListCommas = DEFAULT_ALWAYS_SHOW_LIST_COMMAS;
-        @ConfigEntry.Gui.Tooltip
         private boolean advancedTooltipsShowsIotaNBT = DEFAULT_ADVANCED_TOOLTIPS_SHOWS_IOTA_NBT;
         @ConfigEntry.Gui.Tooltip
         private boolean staticActiveSlates = DEFAULT_STATIC_ACTIVE_SLATES;
@@ -177,11 +175,6 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @Override
         public boolean clickingTogglesDrawing() {
              return clickingTogglesDrawing;
-        }
-
-        @Override
-        public boolean alwaysShowListCommas() {
-             return alwaysShowListCommas;
         }
 
         @Override

@@ -4,7 +4,6 @@ import at.petrak.hexcasting.api.casting.SpellList;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.TreeList;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
-import at.petrak.hexcasting.api.mod.HexConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -142,8 +141,7 @@ public class ListIota extends Iota {
                     var nextType = IotaType.getTypeFromTag(HexUtils.downcast(list.get(i+1), CompoundTag.TYPE));
                     var thisIotaNeedsComma = thisType == null || thisType.usesListCommas();
                     var nextIotaNeedsComma = nextType == null || nextType.usesListCommas();
-                    var alwaysShowCommas = HexConfig.client() != null && HexConfig.client().alwaysShowListCommas();
-                    if (thisIotaNeedsComma || nextIotaNeedsComma || alwaysShowCommas)
+                    if (thisIotaNeedsComma || nextIotaNeedsComma)
                         out.append(", ");
                 }
             }
