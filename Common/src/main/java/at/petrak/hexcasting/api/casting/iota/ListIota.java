@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.api.casting.SpellList;
-import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
@@ -111,8 +110,7 @@ public class ListIota extends Iota {
             if (i < list.size() - 1) {
                 var thisIotaNeedsComma = sub.type.get() != PatternIota.TYPE;
                 var nextIotaNeedsComma = list.getAt(i + 1).type.get() != PatternIota.TYPE;
-                var alwaysShowCommas = HexConfig.client() != null && HexConfig.client().alwaysShowListCommas();
-                if (thisIotaNeedsComma || nextIotaNeedsComma || alwaysShowCommas)
+                if (thisIotaNeedsComma || nextIotaNeedsComma)
                     out.append(", ");
             }
         }

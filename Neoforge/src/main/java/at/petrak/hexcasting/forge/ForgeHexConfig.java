@@ -83,7 +83,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ModConfigSpec.BooleanValue invertAbacusScrollDirection;
         private static ModConfigSpec.DoubleValue gridSnapThreshold;
         private static ModConfigSpec.BooleanValue clickingTogglesDrawing;
-        private static ModConfigSpec.BooleanValue alwaysShowListCommas;
 
         public Client(ModConfigSpec.Builder builder) {
             ctrlTogglesOffStrokeOrder = builder.comment(
@@ -103,9 +102,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             clickingTogglesDrawing = builder.comment(
                             "Whether you click to start and stop drawing instead of clicking and dragging")
                     .define("clickingTogglesDrawing", DEFAULT_CLICKING_TOGGLES_DRAWING);
-            alwaysShowListCommas = builder.comment(
-                            "Whether all iota types should be comma-separated in lists (by default, pattern iotas don't use commas)")
-                    .define("alwaysShowListCommas", DEFAULT_ALWAYS_SHOW_LIST_COMMAS);
         }
 
         @Override
@@ -131,11 +127,6 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public boolean clickingTogglesDrawing() {
             return clickingTogglesDrawing.get();
-        }
-
-        @Override
-        public boolean alwaysShowListCommas() {
-            return alwaysShowListCommas.get();
         }
     }
 
