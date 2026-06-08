@@ -29,6 +29,7 @@ import at.petrak.hexcasting.common.casting.actions.math.OpRandom;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpBoolIf;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpCoerceToBool;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpEquality;
+import at.petrak.hexcasting.common.casting.actions.math.logic.OpTypeEquality;
 import at.petrak.hexcasting.common.casting.actions.queryentity.*;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockAxisRaycast;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockRaycast;
@@ -190,6 +191,10 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("ad", HexDir.EAST), new OpEquality(false)));
     public static final ActionRegistryEntry NOT_EQUALS = make("not_equals",
         new ActionRegistryEntry(HexPattern.fromAngles("da", HexDir.EAST), new OpEquality(true)));
+    public static final ActionRegistryEntry TYPE_EQUALS = make("type_equals",
+        new ActionRegistryEntry(HexPattern.fromAngles("wawdw", HexDir.EAST), new OpTypeEquality(false)));
+    public static final ActionRegistryEntry TYPE_NOT_EQUALS = make("type_not_equals",
+        new ActionRegistryEntry(HexPattern.fromAngles("wdwaw", HexDir.EAST), new OpTypeEquality(true)));
     public static final ActionRegistryEntry BOOL_COERCE = make("bool_coerce",
         new ActionRegistryEntry(HexPattern.fromAngles("aw", HexDir.NORTH_EAST), OpCoerceToBool.INSTANCE));
     public static final ActionRegistryEntry IF = make("if",
