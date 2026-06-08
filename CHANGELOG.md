@@ -45,6 +45,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed a broken translation key when trying to use Place Block with no placeable items in your hotbar ([#1010](https://github.com/FallingColors/HexMod/pull/1010)) @Robotgiggle
 - Fixed a potential chunkban when leaving a looping spell circle running for long enough ([#908](https://github.com/FallingColors/HexMod/pull/908)) @Stick404
 - Fixed a potential issue on MacOS when calculating soulglimmer color ([#984](https://github.com/FallingColors/HexMod/pull/984)) @vgskye
+- Fixed Pace Purification returning nonzero velocity on nonmoving items ([#1119](https://github.com/FallingColors/HexMod/pull/1119)) @IridescentVoid
 
 ### Internal
 
