@@ -153,7 +153,18 @@ public class ItemScroll extends Item implements IotaHolderItem {
         // if op_id is set but there's no stored pattern, attempt to load the pattern on inv tick
         if (pStack.has(HexDataComponents.ACTION) && !pStack.has(HexDataComponents.PATTERN) && pEntity.getServer() != null) {
             var action = pStack.get(HexDataComponents.ACTION);
+            if (action == null) {
+                // if the provided op_id is invalid, remove it so we don't keep trying every tick
+                pStack.remove(HexDataComponents.ACTION);
+                return;
+            }
             var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(action, pEntity.getServer().overworld());
+            if (pat == null) {
+                // if pat is null, the per-world order hasn't been registered; remove the op_id and warn the player
+                pStack.set(HexDataComponents.RECALC_WARNING, action);
+                pStack.remove(HexDataComponents.ACTION);
+                return;
+            }
             pStack.set(HexDataComponents.PATTERN, pat);
         }
     }
@@ -163,6 +174,12 @@ public class ItemScroll extends Item implements IotaHolderItem {
         if (stack.has(HexDataComponents.NEEDS_PURCHASE)) {
             var needsPurchase = Component.translatable("hexcasting.tooltip.scroll.needs_purchase");
             tooltipComponents.add(needsPurchase.withStyle(ChatFormatting.GRAY));
+        } else if (stack.has(HexDataComponents.RECALC_WARNING)) {
+            var spellName = Component.translatable("hexcasting.action." + stack.get(HexDataComponents.RECALC_WARNING));
+            var line1 = Component.translatable("hexcasting.tooltip.scroll.recalc_warning.line1", spellName);
+            var line2 = Component.translatable("hexcasting.tooltip.scroll.recalc_warning.line2");
+            tooltipComponents.add(line1.withStyle(ChatFormatting.RED));
+            tooltipComponents.add(line2.withStyle(ChatFormatting.RED));
         } else if (stack.has(HexDataComponents.ACTION) && !stack.has(HexDataComponents.PATTERN)) {
             var notLoaded = Component.translatable("hexcasting.tooltip.scroll.pattern_not_loaded");
             tooltipComponents.add(notLoaded.withStyle(ChatFormatting.GRAY));

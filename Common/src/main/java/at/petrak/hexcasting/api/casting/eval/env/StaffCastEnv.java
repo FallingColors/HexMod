@@ -8,7 +8,6 @@ import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexCoord;
-import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.msgs.MsgClearSpiralPatternsS2C;
@@ -24,14 +23,11 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-public class StaffCastEnv extends PlayerBasedCastEnv {
+public class StaffCastEnv extends PlayerBasedSpiralPatternCastEnv {
     private final InteractionHand castingHand;
 
-    private final Set<HexPattern> castPatterns = new HashSet<>();
     private int soundsPlayed = 0;
-
 
     public StaffCastEnv(ServerPlayer caster, InteractionHand castingHand) {
         super(caster, castingHand);
@@ -42,10 +38,6 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
     @Override
     public void postExecution(CastResult result) {
         super.postExecution(result);
-
-        if (result.component1() instanceof PatternIota patternIota) {
-            castPatterns.add(patternIota.getPattern());
-        }
 
         // we always want to play this sound one at a time
         var sound = result.getSound().sound();
@@ -61,14 +53,12 @@ public class StaffCastEnv extends PlayerBasedCastEnv {
     public void postCast(CastingImage image) {
         super.postCast(image);
 
-        var packet = new MsgNewSpiralPatternsS2C(
-            this.caster.getUUID(), castPatterns.stream().toList(), Integer.MAX_VALUE
-        );
-        IXplatAbstractions.INSTANCE.sendPacketToPlayer(this.caster, packet);
-        IXplatAbstractions.INSTANCE.sendPacketTracking(this.caster, packet);
-
-        castPatterns.clear();
         soundsPlayed = 0;
+    }
+
+    @Override
+    public int getSpiralPatternDuration() {
+        return Integer.MAX_VALUE;
     }
 
     @Override
