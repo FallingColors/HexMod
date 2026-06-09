@@ -28,10 +28,7 @@ class MishapInvalidIota(
         val perpKey = HexIotaTypes.REGISTRY.getKey(perpetrator.getType())
         
         // this translation key is preferred because it includes the namespace
-        var perpDesc = Component.translatableWithFallback("hexcasting.iota.${perpKey}.desc", "no desc found")
-        // for addons that don't implement the .desc key, grab the non-namespaced invalid_value key instead
-        if (perpDesc.getString() == "no desc found")
-            perpDesc = Component.translatable("hexcasting.mishap.invalid_value.class.${perpKey?.getPath()}")
+        val perpDesc = Component.translatable("hexcasting.iota.${perpKey}.desc")
         
         return error(
             "invalid_value", expected, reverseIdx,
