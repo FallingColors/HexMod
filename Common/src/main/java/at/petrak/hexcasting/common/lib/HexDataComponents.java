@@ -39,6 +39,11 @@ public class HexDataComponents {
                     .persistent(ResourceKey.codec(HexRegistries.ACTION))
                     .networkSynchronized(ResourceKey.streamCodec(HexRegistries.ACTION))
                     .build());
+    public static final DataComponentType<ResourceKey<ActionRegistryEntry>> RECALC_WARNING = register("recalc_warning",
+            DataComponentType.<ResourceKey<ActionRegistryEntry>>builder()
+                    .persistent(ResourceKey.codec(HexRegistries.ACTION))
+                    .networkSynchronized(ResourceKey.streamCodec(HexRegistries.ACTION))
+                    .build());
     public static final DataComponentType<Unit> NEEDS_PURCHASE = register("needs_purchase",
             DataComponentType.<Unit>builder()
                     .networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
