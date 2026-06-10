@@ -10,7 +10,7 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:eval",
       "anchor": "hexcasting:eval",
-      "input": "[pattern] | pattern",
+      "input": "evaluatable",
       "output": "many",
       "text": "hexcasting.page.meta.eval.1"
     },
@@ -22,7 +22,7 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:eval/cc",
       "anchor": "hexcasting:eval/cc",
-      "input": "[pattern] | pattern",
+      "input": "evaluatable",
       "output": "many",
       "text": "hexcasting.page.meta.eval/cc.1"
     },
@@ -34,7 +34,7 @@
       "type": "hexcasting:pattern",
       "op_id": "hexcasting:for_each",
       "anchor": "hexcasting:for_each",
-      "input": "list, pattern | [pattern]",
+      "input": "list, evaluatable",
       "output": "list",
       "text": "hexcasting.page.meta.for_each.1"
     },
