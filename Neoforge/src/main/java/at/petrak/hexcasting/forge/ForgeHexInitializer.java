@@ -165,6 +165,9 @@ public class ForgeHexInitializer {
         });
     }
 
+    // this global is for both server and client because PatternRegistryManifest.processRegistry
+    // doesn't have separate processing for each
+    protected static boolean patternRegistryIsProcessed = false;
     private static void initListeners() {
         var modBus = getModEventBus();
         var evBus = NeoForge.EVENT_BUS;
@@ -228,8 +231,11 @@ public class ForgeHexInitializer {
             }
         });
 
-        evBus.addListener((ServerStartedEvent evt) ->
-            PatternRegistryManifest.processRegistry(evt.getServer().overworld()));
+        evBus.addListener((ServerStartedEvent evt) -> {
+            if (patternRegistryIsProcessed) return;
+            PatternRegistryManifest.processRegistry(evt.getServer().overworld());
+            patternRegistryIsProcessed = true;
+        });
 
         evBus.addListener((RegisterCommandsEvent evt) -> HexCommands.register(evt.getDispatcher()));
 

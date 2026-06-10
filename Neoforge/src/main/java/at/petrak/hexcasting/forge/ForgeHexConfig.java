@@ -83,11 +83,16 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ModConfigSpec.BooleanValue invertAbacusScrollDirection;
         private static ModConfigSpec.DoubleValue gridSnapThreshold;
         private static ModConfigSpec.BooleanValue clickingTogglesDrawing;
+        private static ModConfigSpec.BooleanValue disableInworldScrolling;
+        private static ModConfigSpec.BooleanValue staticActiveSlates;
 
         public Client(ModConfigSpec.Builder builder) {
             ctrlTogglesOffStrokeOrder = builder.comment(
                     "Whether the ctrl key will instead turn *off* the color gradient on patterns")
                 .define("ctrlTogglesOffStrokeOrder", DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER);
+            disableInworldScrolling = builder.comment(
+                    "Disable scrolling input for spellbooks and abaci in the normal world, keeping keybinds and staff screen scrolling normal")
+                .define("disableInworldScrolling", DEFAULT_DISABLE_INWORLD_SCROLLING);
             invertSpellbookScrollDirection = builder.comment(
                     "Whether scrolling up (as opposed to down) will increase the page index of the spellbook, and " +
                         "vice versa")
@@ -102,6 +107,14 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             clickingTogglesDrawing = builder.comment(
                             "Whether you click to start and stop drawing instead of clicking and dragging")
                     .define("clickingTogglesDrawing", DEFAULT_CLICKING_TOGGLES_DRAWING);
+            staticActiveSlates = builder.comment(
+                            "Whether patterns on active slates should be rendered without wobble (improves performance with lots of active slates)")
+                    .define("staticActiveSlates", DEFAULT_STATIC_ACTIVE_SLATES);
+        }
+
+        @Override
+        public boolean disableInworldScrolling() {
+            return disableInworldScrolling.get();
         }
 
         @Override
@@ -128,6 +141,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         public boolean clickingTogglesDrawing() {
             return clickingTogglesDrawing.get();
         }
+
+        @Override
+        public boolean staticActiveSlates() { return staticActiveSlates.get(); }
     }
 
     public static class Server implements HexConfig.ServerConfigAccess {

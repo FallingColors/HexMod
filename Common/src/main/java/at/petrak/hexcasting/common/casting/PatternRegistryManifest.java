@@ -57,7 +57,7 @@ public class PatternRegistryManifest {
             }
         }
 
-        HexAPI.LOGGER.info(("We're on the %s! " +
+        HexAPI.LOGGER.info(("We've loaded the pattern registry on the %s first! " +
             "Loaded %d regular actions, %d per-world actions, and %d special handlers").formatted(
             (overworld == null) ? "client" : "server", NORMAL_ACTION_LOOKUP.size(), perWorldActionCount,
             IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry().size()
@@ -84,14 +84,9 @@ public class PatternRegistryManifest {
 
     /**
      * Try to match this pattern to an action, whether via a normal pattern, a per-world pattern, or the machinations
-     * of a special handler.
-     *
-     * @param checkForAlternateStrokeOrders if this is true, will check if the pattern given is an erroneous stroke
-     *                                      order
-     *                                      for a per-world pattern.
-     */
-    public static PatternShapeMatch matchPattern(HexPattern pat, CastingEnvironment environment,
-        boolean checkForAlternateStrokeOrders) {
+     * of a special handler. Will never attempt to check alternate stroke orders, which always throws.
+    */
+    public static PatternShapeMatch matchPattern(HexPattern pat, CastingEnvironment environment) {
         // I am PURPOSELY checking normal actions before special handlers
         // This way we don't get a repeat of the phial number literal incident
         var sig = pat.getAngles();
@@ -105,10 +100,6 @@ public class PatternRegistryManifest {
         var entry = perWorldPatterns.lookup(pat.anglesSignature());
         if (entry != null) {
             return new PatternShapeMatch.PerWorld(entry.key(), true);
-        }
-
-        if (checkForAlternateStrokeOrders) {
-            throw new NotImplementedException("checking for alternate stroke orders is NYI sorry");
         }
 
         var shMatch = matchPatternToSpecialHandler(pat, environment);

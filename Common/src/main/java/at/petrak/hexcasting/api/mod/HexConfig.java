@@ -41,6 +41,8 @@ public class HexConfig {
     public interface ClientConfigAccess {
         boolean ctrlTogglesOffStrokeOrder();
 
+        boolean disableInworldScrolling();
+
         boolean invertSpellbookScrollDirection();
 
         boolean invertAbacusScrollDirection();
@@ -49,11 +51,15 @@ public class HexConfig {
 
         boolean clickingTogglesDrawing();
 
+        boolean staticActiveSlates();
+
         boolean DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER = false;
+        boolean DEFAULT_DISABLE_INWORLD_SCROLLING = false;
         boolean DEFAULT_INVERT_SPELLBOOK_SCROLL = false;
         boolean DEFAULT_INVERT_ABACUS_SCROLL = false;
         double DEFAULT_GRID_SNAP_THRESHOLD = 0.5;
         boolean DEFAULT_CLICKING_TOGGLES_DRAWING = false;
+        boolean DEFAULT_STATIC_ACTIVE_SLATES = false;
     }
 
     public interface ServerConfigAccess {
