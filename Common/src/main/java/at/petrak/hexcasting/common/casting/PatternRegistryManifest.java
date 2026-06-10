@@ -84,13 +84,9 @@ public class PatternRegistryManifest {
 
     /**
      * Try to match this pattern to an action, whether via a normal pattern, a per-world pattern, or the machinations
-     * of a special handler.
-     *
-     * @deprecated Giving this method a true will cause it to throw if it cannot find a normal or per-world pattern match. Use the bool-less overload instead.
-     */
-    @Deprecated(since = "0.11.4")
-    public static PatternShapeMatch matchPattern(HexPattern pat, CastingEnvironment environment,
-        boolean checkForAlternateStrokeOrders) {
+     * of a special handler. Will never attempt to check alternate stroke orders, which always throws.
+    */
+    public static PatternShapeMatch matchPattern(HexPattern pat, CastingEnvironment environment) {
         // I am PURPOSELY checking normal actions before special handlers
         // This way we don't get a repeat of the phial number literal incident
         var sig = pat.getAngles();
@@ -106,24 +102,12 @@ public class PatternRegistryManifest {
             return new PatternShapeMatch.PerWorld(entry.key(), true);
         }
 
-        if (checkForAlternateStrokeOrders) {
-            throw new NotImplementedException("checking for alternate stroke orders is NYI sorry");
-        }
-
         var shMatch = matchPatternToSpecialHandler(pat, environment);
         if (shMatch != null) {
             return new PatternShapeMatch.Special(shMatch.getSecond(), shMatch.getFirst());
         }
 
         return new PatternShapeMatch.Nothing();
-    }
-
-    /**
-     * Try to match this pattern to an action, whether via a normal pattern, a per-world pattern, or the machinations
-     * of a special handler. Will never attempt to check alternate stroke orders, which always throws.
-    */
-    public static PatternShapeMatch matchPattern(HexPattern pattern, CastingEnvironment environment){
-        return matchPattern(pattern, environment, false);
     }
 
     @Nullable
