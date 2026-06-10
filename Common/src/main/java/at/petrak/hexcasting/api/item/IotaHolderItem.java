@@ -3,9 +3,13 @@ package at.petrak.hexcasting.api.item;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.lib.HexDataComponents;
 import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
@@ -77,10 +81,11 @@ public interface IotaHolderItem {
             var cmp = datum.display();
             components.add(Component.translatable("hexcasting.spelldata.onitem", cmp));
 
-            //TODO port: show NBT in advanced display
-            /*if (flag.isAdvanced()) {
-                components.add(Component.literal("").append(NbtUtils.toPrettyComponent(datum)));
-            }*/
+            if (flag.isAdvanced() && (HexConfig.client() == null || HexConfig.client().advancedTooltipsShowsIotaNBT())) {
+                Tag datumTag = IotaType.TYPED_CODEC.encodeStart(NbtOps.INSTANCE, datum).getOrThrow();
+
+                components.add(Component.literal("").append(NbtUtils.toPrettyComponent(datumTag)));
+            }
         } else if (stack.has(HexDataComponents.VISUAL_OVERRIDE)) {
             components.add(Component.translatable("hexcasting.spelldata.onitem",
                 Component.translatable("hexcasting.spelldata.anything").withStyle(ChatFormatting.LIGHT_PURPLE)));

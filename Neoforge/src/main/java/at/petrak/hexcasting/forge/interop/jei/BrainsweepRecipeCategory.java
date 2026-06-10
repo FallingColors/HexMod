@@ -18,6 +18,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -74,7 +75,12 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
         background.draw(graphics);
         ClientLevel level = Minecraft.getInstance().level;
         if (level != null) {
-            var example = recipe.entityIn().exampleEntity(level);
+            var examples = recipe.entityIn().exampleEntities(level);
+            Entity example = null;
+            if (!examples.isEmpty()) {
+                long seconds = System.currentTimeMillis() / 1000;
+                example = examples.get((int) (seconds % examples.size()));
+            }
             if (example == null)
                 return;
 

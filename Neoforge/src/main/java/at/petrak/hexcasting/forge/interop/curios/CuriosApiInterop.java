@@ -16,6 +16,9 @@ import top.theillusivec4.curios.api.CuriosCapability;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
+import java.util.*;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+
 public class CuriosApiInterop {
     static class Wrapper implements ICurio {
         private final ItemStack stack;
@@ -45,6 +48,22 @@ public class CuriosApiInterop {
 
 
     public static void init() {
+        DiscoveryHandlers.addExtraEquipmentDiscoverer(player -> {
+            List<ItemStack> result = new ArrayList<>();
+            ICuriosItemHandler handler = player.getCapability(CuriosCapability.INVENTORY);
+            if(handler != null) {
+                for (var stacksHandler : handler.getCurios().values()) {
+                    var stacks = stacksHandler.getStacks();
+                    for (int i = 0; i < stacks.getSlots(); i++) {
+                        var stack = stacks.getStackInSlot(i);
+                        if (stack.isEmpty()) continue;
+                        result.add(stack);
+                    }
+                }
+            }
+            return result;
+        });
+
         DiscoveryHandlers.addDebugItemDiscoverer((player, type) -> {
             var inv = player.getCapability(CuriosCapability.INVENTORY);
 

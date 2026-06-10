@@ -3,6 +3,7 @@ package at.petrak.hexcasting.common.recipe.ingredient.brainsweep;
 import at.petrak.hexcasting.common.lib.HexBrainsweepeeIngredients;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.google.gson.JsonObject;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -53,16 +54,16 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
     }
 
     @Override
+    public List<Entity> exampleEntities(Level level) {
+        return List.of(getCachedExampleEntity(this.entityType, level));
+    }
+
+    @Override
     public String getSomeKindOfReasonableIDForEmi() {
         var resloc = BuiltInRegistries.ENTITY_TYPE.getKey(this.entityType);
         return resloc.getNamespace()
                 + "//"
                 + resloc.getPath();
-    }
-
-    @Override
-    public Entity exampleEntity(Level level) {
-        return this.entityType.create(level);
     }
 
     @Override

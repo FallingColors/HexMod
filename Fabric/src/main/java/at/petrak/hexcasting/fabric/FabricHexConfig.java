@@ -138,6 +138,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private boolean clickingTogglesDrawing = DEFAULT_CLICKING_TOGGLES_DRAWING;
         @ConfigEntry.Gui.Tooltip
+        private boolean advancedTooltipsShowsIotaNBT = DEFAULT_ADVANCED_TOOLTIPS_SHOWS_IOTA_NBT;
+        @ConfigEntry.Gui.Tooltip
         private boolean staticActiveSlates = DEFAULT_STATIC_ACTIVE_SLATES;
 
         @Override
@@ -176,7 +178,14 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         }
 
         @Override
-        public boolean staticActiveSlates() { return staticActiveSlates; }
+        public boolean advancedTooltipsShowsIotaNBT() { 
+          return advancedTooltipsShowsIotaNBT; 
+        }
+      
+        @Override
+        public boolean staticActiveSlates() { 
+          return staticActiveSlates; 
+        }
     }
 
     @Config(name = "server")

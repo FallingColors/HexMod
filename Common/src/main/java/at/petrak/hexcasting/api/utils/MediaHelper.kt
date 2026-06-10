@@ -4,6 +4,7 @@ package at.petrak.hexcasting.api.utils
 
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.addldata.ADMediaHolder
+import at.petrak.hexcasting.api.misc.DiscoveryHandlers
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.util.Mth
@@ -64,7 +65,7 @@ fun extractMedia(
 fun scanPlayerForMediaStuff(player: ServerPlayer): List<ADMediaHolder> {
     val sources = mutableListOf<ADMediaHolder>()
 
-    (player.inventory.items + player.inventory.armor + player.inventory.offhand).forEach {
+    (player.inventory.items + player.inventory.armor + player.inventory.offhand + DiscoveryHandlers.collectExtraEquipments(player)).forEach {
         val holder = HexAPI.instance().findMediaHolder(it)
         if (holder?.canProvide() == true) {
             sources.add(holder)

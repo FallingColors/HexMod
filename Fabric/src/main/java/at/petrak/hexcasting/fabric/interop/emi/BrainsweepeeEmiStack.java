@@ -4,6 +4,7 @@ import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredient;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.emi.emi.api.stack.EmiStack;
+import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -14,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import net.minecraft.world.entity.Entity;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 import static at.petrak.hexcasting.client.render.RenderLib.renderEntity;
@@ -85,7 +87,12 @@ public class BrainsweepeeEmiStack extends EmiStack {
             Minecraft mc = Minecraft.getInstance();
             ClientLevel level = mc.level;
             if (level != null) {
-                var example = this.ingredient.exampleEntity(level);
+                var examples = this.ingredient.exampleEntities(level);
+                Entity example = null;
+                if (!examples.isEmpty()) {
+                    long seconds = System.currentTimeMillis() / 1000;
+                    example = examples.get((int) (seconds % examples.size()));
+                }
 
                 RenderSystem.enableBlend();
                 RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
