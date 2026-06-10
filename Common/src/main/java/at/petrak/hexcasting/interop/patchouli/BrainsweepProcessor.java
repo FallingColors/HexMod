@@ -23,7 +23,7 @@ import java.util.List;
 public class BrainsweepProcessor implements IComponentProcessor {
 	private BrainsweepRecipe recipe;
 	@Nullable
-	private String exampleEntityString;
+	private List<IVariable> exampleEntityList;
 
 	@Override
 	public void setup(Level level, IVariableProvider vars) {
@@ -58,22 +58,28 @@ public class BrainsweepProcessor implements IComponentProcessor {
 			}
 
 			case "entity" -> {
-				if (this.exampleEntityString == null) {
-					var entity = this.recipe.entityIn().exampleEntity(Minecraft.getInstance().level);
-					if (entity == null) {
+				if (this.exampleEntityList == null) {
+					var entities = this.recipe.entityIn().exampleEntities(Minecraft.getInstance().level);
+					if (entities.isEmpty()) {
 						// oh dear
 						return null;
 					}
-					var bob = new StringBuilder();
-					bob.append(BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()));
 
-					var tag = new CompoundTag();
-					entity.save(tag);
-					bob.append(tag.toString());
-					this.exampleEntityString = bob.toString();
+					this.exampleEntityList = entities.stream().map(entity -> {
+						var bob = new StringBuilder();
+						bob.append(BuiltInRegistries.ENTITY_TYPE.getKey(entity.getType()));
+
+						var tag = new CompoundTag();
+						entity.save(tag);
+						bob.append(tag.toString());
+						return IVariable.wrap(bob.toString());
+					}).toList();
 				}
 
-				return IVariable.wrap(this.exampleEntityString);
+				//return IVariable.wrapList(this.exampleEntityList);
+				// patchouli does not currently support cycling entity displays
+				// https://github.com/VazkiiMods/Patchouli/issues/852
+				return this.exampleEntityList.get(0);
 			}
 			case "entityTooltip" -> {
 				Minecraft mc = Minecraft.getInstance();

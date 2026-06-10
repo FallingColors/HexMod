@@ -74,7 +74,7 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
     }
 
     @Override
-    public Entity exampleEntity(Level level) {
+    public List<Entity> exampleEntities(Level level) {
         var biome = Objects.requireNonNullElse(this.biome, VillagerType.PLAINS);
         var profession = Objects.requireNonNullElse(this.profession, VillagerProfession.TOOLSMITH);
         var tradeLevel = Math.min(this.minLevel, 1);
@@ -92,7 +92,7 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
         var tag = new CompoundTag();
         out.save(tag);
 
-        return out;
+        return List.of(out);
     }
 
     @Override

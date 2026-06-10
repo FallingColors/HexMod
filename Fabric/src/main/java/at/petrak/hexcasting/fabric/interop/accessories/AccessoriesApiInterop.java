@@ -8,10 +8,14 @@ import io.wispforest.accessories.api.AccessoriesAPI;
 import io.wispforest.accessories.api.AccessoriesCapability;
 import io.wispforest.accessories.api.Accessory;
 import io.wispforest.accessories.api.attributes.AccessoryAttributeBuilder;
+import io.wispforest.accessories.api.slot.SlotEntryReference;
 import io.wispforest.accessories.api.slot.SlotReference;
+import java.util.List;
+import java.util.Optional;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.util.Tuple;
 import net.minecraft.world.item.ItemStack;
 
 import static io.wispforest.accessories.api.client.AccessoriesRendererRegistry.registerRenderer;
@@ -37,6 +41,17 @@ public class AccessoriesApiInterop {
                 if (stack2 != null) return stack2.getFirst().stack();
             }
             return ItemStack.EMPTY;
+        });
+
+        DiscoveryHandlers.addExtraEquipmentDiscoverer(player -> {
+            Optional<AccessoriesCapability> optional = AccessoriesCapability.getOptionally(player);
+            if (optional.isPresent()) {
+                AccessoriesCapability component = optional.get();
+                return component.getEquipped(i -> !i.isEmpty()).stream()
+                        .map(SlotEntryReference::stack)
+                        .toList();
+            }
+            return List.of();
         });
     }
 

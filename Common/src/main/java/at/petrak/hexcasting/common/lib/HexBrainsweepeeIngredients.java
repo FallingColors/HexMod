@@ -75,8 +75,8 @@ public class HexBrainsweepeeIngredients {
         }
 
         @Override
-        public @Nullable Entity exampleEntity(Level level) {
-            return null;
+        public List<Entity> exampleEntities(Level level) {
+            return List.of();
         }
     };
 

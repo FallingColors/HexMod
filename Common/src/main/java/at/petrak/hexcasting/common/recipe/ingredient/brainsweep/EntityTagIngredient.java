@@ -86,15 +86,14 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
                 + resloc.getPath();
     }
 
-    @Override
-    public Entity exampleEntity(Level level) {
-        var someEntityTys = BuiltInRegistries.ENTITY_TYPE.getTagOrEmpty(this.entityTypeTag).iterator();
-        if (someEntityTys.hasNext()) {
-            var someTy = someEntityTys.next();
-            return someTy.value().create(level);
-        } else {
-            return null;
-        }
+    public List<Entity> exampleEntities(Level level) {
+        var someEntityTysHolder = BuiltInRegistries.ENTITY_TYPE.getTag(this.entityTypeTag);
+        if (someEntityTysHolder.isEmpty()) return List.of();
+        var someEntityTys = someEntityTysHolder.get();
+
+        return someEntityTys.stream()
+                .map(someTy -> getCachedExampleEntity(someTy.value(), level))
+                .toList();
     }
 
     @Override

@@ -51,6 +51,8 @@ public class HexConfig {
 
         boolean clickingTogglesDrawing();
 
+        boolean advancedTooltipsShowsIotaNBT();
+
         boolean staticActiveSlates();
 
         boolean DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER = false;
@@ -59,6 +61,7 @@ public class HexConfig {
         boolean DEFAULT_INVERT_ABACUS_SCROLL = false;
         double DEFAULT_GRID_SNAP_THRESHOLD = 0.5;
         boolean DEFAULT_CLICKING_TOGGLES_DRAWING = false;
+        boolean DEFAULT_ADVANCED_TOOLTIPS_SHOWS_IOTA_NBT = false;
         boolean DEFAULT_STATIC_ACTIVE_SLATES = false;
     }
 
