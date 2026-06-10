@@ -37,19 +37,6 @@ public abstract class BrainsweepeeIngredient {
      */
     public abstract List<Entity> exampleEntities(Level level);
 
-    /**
-     * @deprecated Binary compatibility API. Use exampleEntities instead.
-     */
-    @Nullable
-    @Deprecated
-    public final Entity exampleEntity(Level level) {
-        try {
-            return exampleEntities(level).iterator().next();
-        } catch (NoSuchElementException e) {
-            return null;
-        }
-    }
-
     public static Component getModNameComponent(String namespace) {
         String mod = IXplatAbstractions.INSTANCE.getModName(namespace);
         return Component.literal(mod).withStyle(ChatFormatting.BLUE, ChatFormatting.ITALIC);
