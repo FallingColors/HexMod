@@ -17,10 +17,16 @@ public class ShiftScrollListener {
             return false;
         }
 
+        if (HexConfig.client().disableInworldScrolling()) return false;
+
         return onScroll(delta, true);
     }
 
     public static boolean onScroll(double delta, boolean needsSneaking) {
+        return onScroll(delta, needsSneaking, true);
+    }
+
+    public static boolean onScroll(double delta, boolean needsSneaking, boolean allowInverting) {
         LocalPlayer player = Minecraft.getInstance().player;
         // not .isCrouching! that fails for players who are not on the ground
         // yes, this does work if you remap your sneak key
@@ -31,10 +37,10 @@ public class ShiftScrollListener {
             }
 
             if (IsScrollableItem(player.getMainHandItem().getItem())) {
-                mainHandDelta += delta;
+                mainHandDelta += delta * getScrollModifier(player.getMainHandItem().getItem(), allowInverting);
                 return true;
             } else if (IsScrollableItem(player.getOffhandItem().getItem())) {
-                offHandDelta += delta;
+                offHandDelta += delta * getScrollModifier(player.getOffhandItem().getItem(), allowInverting);
                 return true;
             }
         }
@@ -45,9 +51,8 @@ public class ShiftScrollListener {
     public static void clientTickEnd() {
         if (mainHandDelta != 0 || offHandDelta != 0) {
             IClientXplatAbstractions.INSTANCE.sendPacketToServer(
-                new MsgShiftScrollC2S(mainHandDelta, offHandDelta, Minecraft.getInstance().options.keySprint.isDown(),
-                    HexConfig.client().invertSpellbookScrollDirection(),
-                    HexConfig.client().invertAbacusScrollDirection()));
+                new MsgShiftScrollC2S(mainHandDelta, offHandDelta, Minecraft.getInstance().options.keySprint.isDown())
+            );
             mainHandDelta = 0;
             offHandDelta = 0;
         }
@@ -55,5 +60,17 @@ public class ShiftScrollListener {
 
     private static boolean IsScrollableItem(Item item) {
         return item == HexItems.SPELLBOOK || item == HexItems.ABACUS;
+    }
+
+    private static double getScrollModifier(Item item, boolean allowInverting) {
+        if (!allowInverting) return 1;
+
+        if (item == HexItems.SPELLBOOK) {
+            return HexConfig.client().invertSpellbookScrollDirection() ? -1 : 1;
+        } else if (item == HexItems.ABACUS) {
+            return HexConfig.client().invertAbacusScrollDirection() ? -1 : 1;
+        } else {
+            return 1;
+        }
     }
 }

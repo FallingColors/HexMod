@@ -12,6 +12,7 @@ import at.petrak.hexcasting.api.casting.iota.PatternIota
 import at.petrak.hexcasting.api.casting.math.HexDir
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.Mishap
+import at.petrak.hexcasting.api.casting.mishaps.MishapEvalTooMuch
 import at.petrak.hexcasting.api.casting.mishaps.MishapInternalException
 import at.petrak.hexcasting.api.casting.mishaps.MishapStackSize
 import at.petrak.hexcasting.api.casting.mishaps.MishapTooManyCloseParens
@@ -66,6 +67,13 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                     result.copy(
                         newData = null,
                         sideEffects = listOf(OperatorSideEffect.DoMishap(MishapStackSize(), Mishap.Context(null, null))),
+                        resolutionType = ResolvedPatternType.ERRORED,
+                        sound = HexEvalSounds.MISHAP,
+                    )
+                } else if (result.newData != null && result.newData.opsConsumed > env.maxOpCount()) {
+                    result.copy(
+                        newData = null,
+                        sideEffects = listOf(OperatorSideEffect.DoMishap(MishapEvalTooMuch(), Mishap.Context(null, null))),
                         resolutionType = ResolvedPatternType.ERRORED,
                         sound = HexEvalSounds.MISHAP,
                     )

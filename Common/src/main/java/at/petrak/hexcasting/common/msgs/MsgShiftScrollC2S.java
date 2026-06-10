@@ -23,16 +23,13 @@ import net.minecraft.world.item.ItemStack;
  * Sent client->server when the client shift+scrolls with a shift-scrollable item
  * or scrolls in the spellcasting UI.
  */
-public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boolean isCtrl, boolean invertSpellbook,
-                                boolean invertAbacus) implements CustomPacketPayload {
+public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boolean isCtrl) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MsgShiftScrollC2S> TYPE = new CustomPacketPayload.Type<>(HexAPI.modLoc("scroll"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, MsgShiftScrollC2S> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.DOUBLE, MsgShiftScrollC2S::mainHandDelta,
             ByteBufCodecs.DOUBLE, MsgShiftScrollC2S::offHandDelta,
             ByteBufCodecs.BOOL, MsgShiftScrollC2S::isCtrl,
-            ByteBufCodecs.BOOL, MsgShiftScrollC2S::invertSpellbook,
-            ByteBufCodecs.BOOL, MsgShiftScrollC2S::invertAbacus,
             MsgShiftScrollC2S::new
     );
 
@@ -61,10 +58,6 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
     }
 
     private void spellbook(ServerPlayer sender, InteractionHand hand, ItemStack stack, double delta) {
-        if (invertSpellbook) {
-            delta = -delta;
-        }
-
         var newIdx = ItemSpellbook.rotatePageIdx(stack, delta < 0.0, sender.level());
 
         var len = ItemSpellbook.highestPage(stack);
@@ -105,10 +98,6 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
     }
 
     private void abacus(ServerPlayer sender, InteractionHand hand, ItemStack stack, double delta) {
-        if (invertAbacus) {
-            delta = -delta;
-        }
-
         var increase = delta < 0;
         Double num = stack.get(HexDataComponents.ABACUS_VALUE);
         if(num == null)

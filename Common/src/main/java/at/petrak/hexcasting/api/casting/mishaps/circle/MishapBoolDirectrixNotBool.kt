@@ -21,5 +21,5 @@ class MishapBoolDirectrixNotBool(
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component =
-        error("circle.bool_directrix_no_bool", pos.toShortString(), perpetrator.display())
+        error("circle.bool_directrix.no_bool", pos.toShortString(), perpetrator.display())
 }

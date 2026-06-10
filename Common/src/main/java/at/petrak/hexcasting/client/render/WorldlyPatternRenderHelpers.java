@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.client.render;
 
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
@@ -68,7 +69,11 @@ public class WorldlyPatternRenderHelpers {
         boolean isOnCeiling = bs.getValue(BlockSlate.ATTACH_FACE) == AttachFace.CEILING;
         int facing = bs.getValue(BlockSlate.FACING).get2DDataValue();
 
-        boolean wombly = bs.getValue(BlockSlate.ENERGIZED);
+        boolean energized = bs.getValue(BlockSlate.ENERGIZED);
+        boolean wombly = energized;
+        if (HexConfig.client().staticActiveSlates()) {
+            wombly = false;
+        }
 
         ps.pushPose();
 

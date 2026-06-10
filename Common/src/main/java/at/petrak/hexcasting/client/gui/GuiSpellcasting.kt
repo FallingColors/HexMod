@@ -13,6 +13,7 @@ import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.client.ClientTickCounter
+import at.petrak.hexcasting.client.Keybinds
 import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.client.ktxt.accumulatedScroll
 import at.petrak.hexcasting.client.render.*
@@ -313,6 +314,22 @@ class GuiSpellcasting constructor(
         ShiftScrollListener.onScroll(scrollY, false)
 
         return true
+    }
+
+    override fun keyPressed(key: Int, scancode: Int, modifiers: Int): Boolean {
+        if (super.keyPressed(key, scancode, modifiers)) return true
+
+        // because of how mouse scrolling works (scrolling upward moves the page down), a positive
+        // delta value makes the book flip backward while a negative one makes it flip forward
+        if (Keybinds.spellbookPrev.matches(key, scancode)) {
+            ShiftScrollListener.onScroll(1.0, false, false)
+            return true
+        } else if (Keybinds.spellbookNext.matches(key, scancode)) {
+            ShiftScrollListener.onScroll(-1.0, false, false)
+            return true
+        }
+
+        return false
     }
 
     override fun onClose() {

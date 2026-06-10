@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.forge;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
+import at.petrak.hexcasting.client.Keybinds;
 import at.petrak.hexcasting.client.RegisterClientStuff;
 import at.petrak.hexcasting.client.ShiftScrollListener;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
@@ -51,8 +52,11 @@ public class ForgeHexClientInitializer {
 
         var evBus = NeoForge.EVENT_BUS;
 
-        evBus.addListener((ClientPlayerNetworkEvent.LoggingIn e) ->
-            PatternRegistryManifest.processRegistry(null));
+        evBus.addListener((ClientPlayerNetworkEvent.LoggingIn e) -> {
+            if (ForgeHexInitializer.patternRegistryIsProcessed) return;
+            PatternRegistryManifest.processRegistry(null);
+            ForgeHexInitializer.patternRegistryIsProcessed = true;
+        });
 
         // TODO port: check if gametimedelta is the right one
         evBus.addListener((RenderLevelStageEvent e) -> {
@@ -72,6 +76,7 @@ public class ForgeHexClientInitializer {
 
         evBus.addListener((ClientTickEvent.Post e) -> {
             ClientTickCounter.clientTickEnd();
+            Keybinds.clientTickEnd();
             ShiftScrollListener.clientTickEnd();
             ClientLevel level = Minecraft.getInstance().level;
             if (level != null) {
@@ -140,5 +145,10 @@ public class ForgeHexClientInitializer {
 
             skin.addLayer(new AltioraLayer<>(skin, evt.getEntityModels()));
         });
+    }
+
+    @SubscribeEvent
+    public static void registerBinds(RegisterKeyMappingsEvent event) {
+        Keybinds.ALL_BINDS.forEach(event::register);
     }
 }
