@@ -187,15 +187,19 @@ class HexContext(ValidationContextModel):
     def _add_pattern(self, pattern: PatternInfo, signatures: dict[str, PatternInfo]):
         logger.log(TRACE, f"Load pattern: {pattern.id}")
 
-        # check for duplicates, because why not
-        if duplicate := (
-            self.patterns.get(pattern.id) or signatures.get(pattern.signature)
-        ):
-            message = f"pattern {pattern.id}\n{pattern}\n{duplicate}"
+        # always raise an error for duplicate pattern ids, even with allow_duplicates
+        if duplicate := self.patterns.get(pattern.id):
+            raise ValueError(
+                f"Duplicate pattern id: {pattern.id}\n{pattern}\n{duplicate}"
+            )
+
+        if duplicate := signatures.get(pattern.signature):
+            message = f"Duplicate pattern signature: {pattern.signature}\n{pattern}\n{duplicate}"
             if self.hex_props.allow_duplicates:
-                logger.warning("Ignoring duplicate " + message)
-                return
-            raise ValueError("Duplicate" + message)
+                logger.warning(message)
+                # no early return - we still need to add the id to the lookup
+            else:
+                raise ValueError(message)
 
         self.patterns[pattern.id] = pattern
         signatures[pattern.signature] = pattern

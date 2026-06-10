@@ -161,6 +161,11 @@ public class PatternIota extends Iota {
         public int color() {
             return 0xff_ffaa00;
         }
+
+        @Override
+        public boolean usesListCommas() {
+            return false;
+        }
     };
 
     public static Component display(HexPattern pat) {
