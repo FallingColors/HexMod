@@ -290,15 +290,17 @@ fun List<Iota>.getLongOrList(idx: Int, argc: Int = 0): Either<Long, TreeList<Iot
     )
 }
 
-fun evaluatable(datum: Iota, reverseIdx: Int): Either<Iota, TreeList<Iota>> =
-    when (datum) {
+fun List<Iota>.getEvaluatable(idx: Int, argc: Int = 0): Either<Iota, TreeList<Iota>> {
+    val datum = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
+    return when (datum) {
         is ListIota -> Either.right(datum.list)
-        else -> if (datum.executable()) Either.left(datum) else throw MishapInvalidIota(
+        else -> if (datum.executable()) Either.left(datum) else throw MishapInvalidIota.of(
             datum,
-            reverseIdx,
-            "hexcasting.mishap.invalid_value.evaluatable".asTranslatedComponent
+            if (argc == 0) idx else argc - (idx + 1),
+            "evaluatable"
         )
     }
+}
 
 fun Iota?.orNull() = this ?: NullIota()
 
