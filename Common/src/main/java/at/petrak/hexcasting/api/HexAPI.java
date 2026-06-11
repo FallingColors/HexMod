@@ -59,14 +59,6 @@ public interface HexAPI {
         return "hexcasting.special.%s".formatted(action.location().toString());
     }
 
-    /**
-     * @deprecated Used to translate the names of patterns outside the standard Action system, none of which exist anymore.
-     */
-    @Deprecated(since = "0.11.4")
-    default String getRawHookI18nKey(ResourceLocation name) {
-        return "hexcasting.rawhook.%s".formatted(name);
-    }
-
     default Component getActionI18n(ResourceKey<ActionRegistryEntry> key, boolean isGreat) {
         return Component.translatable(getActionI18nKey(key))
             .withStyle(isGreat ? ChatFormatting.GOLD : ChatFormatting.LIGHT_PURPLE);
@@ -75,14 +67,6 @@ public interface HexAPI {
     default Component getSpecialHandlerI18n(ResourceKey<SpecialHandler.Factory<?>> key) {
         return Component.translatable(getSpecialHandlerI18nKey(key))
             .withStyle(ChatFormatting.LIGHT_PURPLE);
-    }
-
-    /**
-     * @deprecated Used to translate the names of patterns outside the standard Action system, none of which exist anymore.
-     */
-    @Deprecated(since = "0.11.4")
-    default Component getRawHookI18n(ResourceLocation name) {
-        return Component.translatable(getRawHookI18nKey(name)).withStyle(ChatFormatting.LIGHT_PURPLE);
     }
 
     /**
