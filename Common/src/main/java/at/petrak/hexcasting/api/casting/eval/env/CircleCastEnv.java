@@ -147,7 +147,7 @@ public class CircleCastEnv extends CastingEnvironment {
             }
         }
 
-        return this.execState.bounds.contains(vec);
+        return this.execState.bounds.aabb().contains(vec);
     }
 
     @Override

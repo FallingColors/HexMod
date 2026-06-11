@@ -19,8 +19,8 @@ class OpCircleBounds(val max: Boolean) : ConstMediaAction {
         val aabb = circle.executionState!!.bounds // the circle should have an execution state since it's executing this.
 
         return if (max)
-            Vec3(aabb.maxX - 0.5, aabb.maxY - 0.5, aabb.maxZ - 0.5).asActionResult
+            aabb.aabb().maxPosition.asActionResult
         else
-            Vec3(aabb.minX + 0.5, aabb.minY + 0.5, aabb.minZ + 0.5).asActionResult
+            aabb.aabb().minPosition.asActionResult
     }
 }

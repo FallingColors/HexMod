@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockBox;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.*;
@@ -29,42 +30,50 @@ public class CircleExecutionState {
     public static final String
         TAG_IMPETUS_POS = "impetus_pos",
         TAG_IMPETUS_DIR = "impetus_dir",
-        TAG_KNOWN_POSITIONS = "known_positions",
         TAG_REACHED_POSITIONS = "reached_positions",
         TAG_CURRENT_POS = "current_pos",
         TAG_ENTERED_FROM = "entered_from",
         TAG_IMAGE = "image",
         TAG_CASTER = "caster",
-        TAG_PIGMENT = "pigment";
+        TAG_PIGMENT = "pigment",
+        TAG_REACHED_NUMBER = "reached_slate",
+        TAG_POSITIVE_POS = "positive_pos",
+        TAG_NEGATIVE_POS = "negative_pos";
 
     public final BlockPos impetusPos;
     public final Direction impetusDir;
     // Does contain the starting impetus
-    public final Set<BlockPos> knownPositions;
-    public final List<BlockPos> reachedPositions;
+    public final HashSet<BlockPos> reachedPositions;
     public BlockPos currentPos;
     public Direction enteredFrom;
     public CastingImage currentImage;
     public @Nullable UUID caster;
     public @Nullable FrozenPigment casterPigment;
+    public long reachedSlate;
 
-    public final AABB bounds;
+    // Tracks the highest pos, and lowest pos of the AABB
+    public BlockPos greaterCorner;
+    public BlockPos lesserCorner;
+
+    public final BlockBox bounds;
 
 
-    protected CircleExecutionState(BlockPos impetusPos, Direction impetusDir, Set<BlockPos> knownPositions,
-        List<BlockPos> reachedPositions, BlockPos currentPos, Direction enteredFrom,
-        CastingImage currentImage, @Nullable UUID caster, @Nullable FrozenPigment casterPigment) {
+    protected CircleExecutionState(BlockPos impetusPos, Direction impetusDir, HashSet<BlockPos> reachedPositions,
+       BlockPos currentPos, Direction enteredFrom, CastingImage currentImage, @Nullable UUID caster,
+       @Nullable FrozenPigment casterPigment, Long reachedSlate, BlockPos greaterCorner, BlockPos lesserPos) {
         this.impetusPos = impetusPos;
         this.impetusDir = impetusDir;
-        this.knownPositions = knownPositions;
         this.reachedPositions = reachedPositions;
         this.currentPos = currentPos;
         this.enteredFrom = enteredFrom;
         this.currentImage = currentImage;
         this.caster = caster;
         this.casterPigment = casterPigment;
+        this.reachedSlate = reachedSlate;
 
-        this.bounds = BlockEntityAbstractImpetus.getBounds(new ArrayList<>(this.knownPositions));
+        this.greaterCorner = greaterCorner;
+        this.lesserCorner = lesserPos;
+        this.bounds = new BlockBox(greaterCorner, lesserPos);
     }
 
     public @Nullable ServerPlayer getCaster(ServerLevel world) {
@@ -92,7 +101,10 @@ public class CircleExecutionState {
         var todo = new Stack<Pair<Direction, BlockPos>>();
         todo.add(Pair.of(impetus.getStartDirection(), impetus.getBlockPos().relative(impetus.getStartDirection())));
         var seenGoodPosSet = new HashSet<BlockPos>();
-        var seenGoodPositions = new ArrayList<BlockPos>();
+        var impetusPos = impetus.getBlockPos();
+        var positiveBlock = impetusPos.mutable();
+        var negativeBlock = impetusPos.mutable();
+        var lastBlockPos = impetusPos.mutable();
 
         while (!todo.isEmpty()) {
             var pair = todo.pop();
@@ -108,8 +120,16 @@ public class CircleExecutionState {
             }
 
             if (seenGoodPosSet.add(herePos)) {
+                lastBlockPos.set(herePos);
+                // Updates the highest and or lowest corner of the Circle
+                positiveBlock.setX(Math.max(herePos.getX(), positiveBlock.getX()));
+                positiveBlock.setY(Math.max(herePos.getY(), positiveBlock.getY()));
+                positiveBlock.setZ(Math.max(herePos.getZ(), positiveBlock.getZ()));
+
+                negativeBlock.setX(Math.min(herePos.getX(), negativeBlock.getX()));
+                negativeBlock.setY(Math.min(herePos.getY(), negativeBlock.getY()));
+                negativeBlock.setZ(Math.min(herePos.getZ(), negativeBlock.getZ()));
                 // it's new
-                seenGoodPositions.add(herePos);
                 var outs = cmp.possibleExitDirections(herePos, hereBs, level);
                 for (var out : outs) {
                     todo.add(Pair.of(out, herePos.relative(out)));
@@ -121,19 +141,17 @@ public class CircleExecutionState {
             }
         }
 
-        if (seenGoodPositions.isEmpty()) {
+        if (lastBlockPos == impetus.getBlockPos()) {
             return new Result.Err<>(null);
         } else if (!seenGoodPosSet.contains(impetus.getBlockPos())) {
-            // we can't enter from the side the directrix exits from, so this means we couldn't loop back.
+            // we can't enter from the side the impetus exits from, so this means we couldn't loop back.
             // the last item we tried to examine will always be a terminal slate (b/c if it wasn't,
             // then the *next* slate would be last qed)
-            return new Result.Err<>(seenGoodPositions.get(seenGoodPositions.size() - 1));
+            return new Result.Err<>(lastBlockPos);
         }
 
-        var knownPositions = new HashSet<>(seenGoodPositions);
-        var reachedPositions = new ArrayList<BlockPos>();
+        var reachedPositions = new HashSet<BlockPos>();
         reachedPositions.add(impetus.getBlockPos());
-        var start = seenGoodPositions.get(0);
 
         FrozenPigment colorizer = null;
         UUID casterUUID;
@@ -144,8 +162,10 @@ public class CircleExecutionState {
             casterUUID = caster.getUUID();
         }
         return new Result.Ok<>(
-            new CircleExecutionState(impetus.getBlockPos(), impetus.getStartDirection(), knownPositions,
-                reachedPositions, start, impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer));
+            new CircleExecutionState(impetus.getBlockPos(), impetus.getStartDirection(),
+                reachedPositions, impetus.getBlockPos().offset(impetus.getStartDirection().getNormal()),
+                impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer, 0L,
+                positiveBlock.move(1,1,1), negativeBlock));
     }
 
     public CompoundTag save() {
@@ -153,12 +173,6 @@ public class CircleExecutionState {
 
         out.put(TAG_IMPETUS_POS, NbtUtils.writeBlockPos(this.impetusPos));
         out.putByte(TAG_IMPETUS_DIR, (byte) this.impetusDir.ordinal());
-
-        var knownTag = new ListTag();
-        for (var bp : this.knownPositions) {
-            knownTag.add(NbtUtils.writeBlockPos(bp));
-        }
-        out.put(TAG_KNOWN_POSITIONS, knownTag);
 
         var reachedTag = new ListTag();
         for (var bp : this.reachedPositions) {
@@ -176,6 +190,11 @@ public class CircleExecutionState {
         if (this.casterPigment != null)
             out.put(TAG_PIGMENT, FrozenPigment.CODEC.encodeStart(NbtOps.INSTANCE, casterPigment).getOrThrow());
 
+        out.putLong(TAG_REACHED_NUMBER, this.reachedSlate);
+
+        out.put(TAG_POSITIVE_POS,NbtUtils.writeBlockPos(this.greaterCorner));
+        out.put(TAG_NEGATIVE_POS,NbtUtils.writeBlockPos(this.lesserCorner));
+
         return out;
     }
 
@@ -183,13 +202,7 @@ public class CircleExecutionState {
         var startPos = NbtUtils.readBlockPos(nbt, TAG_IMPETUS_POS).orElseThrow();
         var startDir = Direction.values()[nbt.getByte(TAG_IMPETUS_DIR)];
 
-        var knownPositions = new HashSet<BlockPos>();
-        var knownTag = nbt.getList(TAG_KNOWN_POSITIONS, Tag.TAG_COMPOUND);
-        for (var tag : knownTag) {
-            var pos = readBlockPos(HexUtils.downcast(tag, IntArrayTag.TYPE).getAsIntArray());
-            pos.ifPresent(knownPositions::add);
-        }
-        var reachedPositions = new ArrayList<BlockPos>();
+        var reachedPositions = new HashSet<BlockPos>();
         var reachedTag = nbt.getList(TAG_REACHED_POSITIONS, Tag.TAG_COMPOUND);
         for (var tag : reachedTag) {
             var pos = readBlockPos(HexUtils.downcast(tag, IntArrayTag.TYPE).getAsIntArray());
@@ -200,6 +213,10 @@ public class CircleExecutionState {
         var enteredFrom = Direction.values()[nbt.getByte(TAG_ENTERED_FROM)];
         var image = CastingImage.getCODEC().parse(NbtOps.INSTANCE, nbt.getCompound(TAG_IMAGE)).getOrThrow();
 
+        var reachedSlate = nbt.getLong(TAG_REACHED_NUMBER);
+        var positivePos = NbtUtils.readBlockPos(nbt, TAG_POSITIVE_POS).orElseThrow();
+        var negativePos = NbtUtils.readBlockPos(nbt, TAG_NEGATIVE_POS).orElseThrow();
+
         UUID caster = null;
         if (nbt.hasUUID(TAG_CASTER))
             caster = nbt.getUUID(TAG_CASTER);
@@ -208,8 +225,8 @@ public class CircleExecutionState {
         if (nbt.contains(TAG_PIGMENT, Tag.TAG_COMPOUND))
             pigment = FrozenPigment.CODEC.parse(NbtOps.INSTANCE, nbt.getCompound(TAG_PIGMENT)).getOrThrow();
 
-        return new CircleExecutionState(startPos, startDir, knownPositions, reachedPositions, currentPos,
-            enteredFrom, image, caster, pigment);
+        return new CircleExecutionState(startPos, startDir, reachedPositions, currentPos,
+            enteredFrom, image, caster, pigment, reachedSlate, positivePos, negativePos);
     }
 
     private static Optional<BlockPos> readBlockPos(int[] aint) {
@@ -239,6 +256,7 @@ public class CircleExecutionState {
 
         executorBlockState = executor.startEnergized(this.currentPos, executorBlockState, world);
         this.reachedPositions.add(this.currentPos);
+        this.reachedSlate +=1;
 
         // Do the execution!
         boolean halt = false;
@@ -297,7 +315,7 @@ public class CircleExecutionState {
      * How many ticks should pass between activations, given the number of blocks encountered so far.
      */
     protected int getTickSpeed() {
-        return Math.max(2, 10 - (this.reachedPositions.size() - 1) / 3);
+        return Math.max(2, (int) (10 - (this.reachedSlate - 1) / 3));
     }
 
     public void endExecution(BlockEntityAbstractImpetus impetus) {
