@@ -16,6 +16,7 @@ import at.petrak.hexcasting.common.casting.actions.akashic.OpAkashicWrite;
 import at.petrak.hexcasting.common.casting.actions.circles.OpCircleBounds;
 import at.petrak.hexcasting.common.casting.actions.circles.OpImpetusDir;
 import at.petrak.hexcasting.common.casting.actions.circles.OpImpetusPos;
+import at.petrak.hexcasting.common.casting.actions.escaping.*;
 import at.petrak.hexcasting.common.casting.actions.eval.*;
 import at.petrak.hexcasting.common.casting.actions.lists.OpEmptyList;
 import at.petrak.hexcasting.common.casting.actions.lists.OpLastNToList;
@@ -382,8 +383,14 @@ public class HexActions {
 
     // == Meta stuff ==
 
-    // Intro/Retro/Consideration are now special-form-likes and aren't even ops.
-    // TODO should there be a registry for these too
+    public static final ActionRegistryEntry ESCAPE = make("escape",
+        new ActionRegistryEntry(HexPattern.fromAngles("qqqaw", HexDir.WEST), OpEscape.INSTANCE));
+    public static final ActionRegistryEntry OPEN_PAREN = make("open_paren",
+        new ActionRegistryEntry(HexPattern.fromAngles("qqq", HexDir.WEST), OpOpenParen.INSTANCE));
+    public static final ActionRegistryEntry CLOSE_PAREN = make("close_paren",
+        new ActionRegistryEntry(HexPattern.fromAngles("eee", HexDir.EAST), OpCloseParen.INSTANCE));
+    public static final ActionRegistryEntry UNDO = make("undo",
+        new ActionRegistryEntry(HexPattern.fromAngles("eeedw", HexDir.EAST), OpUndo.INSTANCE));
 
     // http://www.toroidalsnark.net/mkss3-pix/CalderheadJMM2014.pdf
     // eval being a space filling curve feels apt doesn't it

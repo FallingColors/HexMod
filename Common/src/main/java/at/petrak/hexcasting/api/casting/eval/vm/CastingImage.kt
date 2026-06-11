@@ -27,6 +27,10 @@ data class CastingImage(
 ) {
     constructor() : this(listOf(), 0, listOf(), false, 0, CompoundTag())
 
+    /**
+     * `escaped` is used by [OpUndo][at.petrak.hexcasting.common.casting.actions.escaping.OpUndo] to determine whether the paren count
+     * needs to be adjusted when undoing an open or close paren pattern (if the pattern was escaped, no need to change anything).
+     */
     data class ParenthesizedIota(val iota: Iota, val escaped: Boolean) {
         companion object {
             val CODEC = RecordCodecBuilder.create<ParenthesizedIota> { inst ->
@@ -64,6 +68,15 @@ data class CastingImage(
     fun withResetEscape() = this.copy(parenCount = 0, parenthesized = listOf(), escapeNext = false)
 
     /**
+     * Returns a copy of this with the provided iota added to the parenthesized list.
+     */
+    fun withNewParenthesized(iota: Iota): CastingImage {
+        val newParens = this.parenthesized.toMutableList()
+        newParens.add(ParenthesizedIota(iota, false))
+        return this.copy(parenthesized = newParens)
+    }
+
+    /**
      * Returns this image's ravenmind in an Optional wrapper.
      */
     fun ravenmind() : Optional<CompoundTag> {
@@ -73,8 +86,6 @@ data class CastingImage(
         if (!tag.isEmpty) { result = tag }
         return Optional.ofNullable(result)
     }
-
-
 
     companion object {
         @JvmStatic

@@ -4,14 +4,12 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.castables.Action;
-import at.petrak.hexcasting.api.casting.eval.CastResult;
-import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
+import at.petrak.hexcasting.api.casting.eval.*;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
-import at.petrak.hexcasting.api.casting.mishaps.MishapEvalTooMuch;
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidPattern;
 import at.petrak.hexcasting.api.casting.mishaps.MishapUnenlightened;
 import at.petrak.hexcasting.api.mod.HexTags;
@@ -63,6 +61,28 @@ public class PatternIota extends Iota {
 
     @Override
     public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
+        return lookupAndOperate(vm, continuation, false);
+    }
+
+    @Override
+    public @NotNull CastResult executeInParens(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
+        return lookupAndOperate(vm, continuation, true);
+    }
+
+    @Override
+    public boolean executable() {
+        return true;
+    }
+
+    /**
+     * Look up this iota's pattern in the action registry, and attempt to invoke the behavior of the resulting Action.
+     * If {@code inParens} is false, the {@link Action#operate} method is used, and patterns lacking a matching Action will mishap.
+     * If {@code inParens} is true, the {@link Action#operateInParens} method is used instead, and patterns lacking a matching Action
+     * will be added to the in-progress parenthesized list as usual.
+     * In either case, any mishaps thrown during the lookup or operation process will be caught, and an appropriate
+     * CastResult will be returned.
+     */
+    private @NotNull CastResult lookupAndOperate(CastingVM vm, SpellContinuation continuation, boolean inParens) {
         Supplier<@Nullable Component> castedName = () -> null;
         try {
             var lookup = PatternRegistryManifest.matchPattern(this.getPattern(), vm.getEnv());
@@ -79,7 +99,7 @@ public class PatternIota extends Iota {
                 }
 
                 var reqsEnlightenment = isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), key,
-                        HexTags.Actions.REQUIRES_ENLIGHTENMENT);
+                    HexTags.Actions.REQUIRES_ENLIGHTENMENT);
 
                 castedName = () -> HexAPI.instance().getActionI18n(key, reqsEnlightenment);
                 action = Objects.requireNonNull(IXplatAbstractions.INSTANCE.getActionRegistry().get(key)).action();
@@ -92,15 +112,41 @@ public class PatternIota extends Iota {
                 castedName = special.handler::getName;
                 action = special.handler.act();
             } else if (lookup instanceof PatternShapeMatch.Nothing) {
-                throw new MishapInvalidPattern(this.getPattern());
+                if (inParens) {
+                    // invalid patterns still get added to the list when in parens
+                    return new CastResult(
+                        this,
+                        continuation,
+                        vm.getImage().withNewParenthesized(this),
+                        List.of(),
+                        ResolvedPatternType.ESCAPED,
+                        HexEvalSounds.NORMAL_EXECUTE);
+                } else {
+                    // if you draw something invalid outside parens, it mishaps
+                    throw new MishapInvalidPattern(this.getPattern());
+                }
             } else throw new IllegalStateException();
 
-            // do the actual calculation!!
-            var result = action.operate(
+            IOperationResult result;
+            ResolvedPatternType resolutionType;
+            if (inParens) {
+                // handle parenthesized behavior
+                result = action.operateInParens(
+                    vm.getEnv(),
+                    vm.getImage(),
+                    continuation,
+                    this
+                );
+                resolutionType = ((ParenthesizedOperationResult)result).getResolutionType();
+            } else {
+                // do the actual calculation!!
+                result = action.operate(
                     vm.getEnv(),
                     vm.getImage(),
                     continuation
-            );
+                );
+                resolutionType = ResolvedPatternType.EVALUATED;
+            }
 
             var cont2 = result.getNewContinuation();
             // TODO parens also break prescience
@@ -111,7 +157,7 @@ public class PatternIota extends Iota {
                 cont2,
                 result.getNewImage(),
                 sideEffects,
-                ResolvedPatternType.EVALUATED,
+                resolutionType,
                 result.getSound());
 
         } catch (Mishap mishap) {
@@ -123,11 +169,6 @@ public class PatternIota extends Iota {
                 mishap.resolutionType(vm.getEnv()),
                 HexEvalSounds.MISHAP);
         }
-    }
-
-    @Override
-    public boolean executable() {
-        return true;
     }
 
     @Override
