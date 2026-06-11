@@ -119,7 +119,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
         append("]")
     }
 
-    data class RawHexPattern(val startDir: String, val anglesSignature: String)
+    data class RawHexPattern(val anglesSignature: String, val startDir: String)
 
     companion object {
         const val TAG_START_DIR = "start_dir"
@@ -138,7 +138,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
             } catch (exception: IllegalArgumentException) {
                 return@flatXmap DataResult.error { exception.message }
             }
-        }, { DataResult.success(RawHexPattern(it.startDir.name, it.anglesSignature())) })
+        }, { DataResult.success(RawHexPattern(it.anglesSignature(), it.startDir.name)) })
 
         @JvmField
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, HexPattern> = StreamCodec.composite(
