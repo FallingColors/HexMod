@@ -3,7 +3,6 @@ package at.petrak.hexcasting.api.casting.math
 import at.petrak.hexcasting.api.utils.coordToPx
 import at.petrak.hexcasting.api.utils.findCenter
 import com.mojang.serialization.Codec
-import com.mojang.serialization.DataResult
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
@@ -119,8 +118,6 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
         append("]")
     }
 
-    data class RawHexPattern(val startDir: String, val anglesSignature: String)
-
     companion object {
         const val TAG_START_DIR = "start_dir"
         const val TAG_ANGLES = "angles"
@@ -128,17 +125,10 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
         @JvmField
         val CODEC: Codec<HexPattern> = RecordCodecBuilder.create { instance ->
             instance.group(
-                Codec.STRING.fieldOf(TAG_ANGLES).forGetter(RawHexPattern::anglesSignature),
-                Codec.STRING.fieldOf(TAG_START_DIR).forGetter(RawHexPattern::startDir)
-            ).apply(instance, ::RawHexPattern)
-        }.flatXmap({
-            val dir = HexDir.fromString(it.startDir)
-            try {
-                return@flatXmap DataResult.success(fromAnglesUnchecked(it.anglesSignature, dir))
-            } catch (exception: IllegalArgumentException) {
-                return@flatXmap DataResult.error { exception.message }
-            }
-        }, { DataResult.success(RawHexPattern(it.startDir.name, it.anglesSignature())) })
+                Codec.STRING.fieldOf(TAG_ANGLES).forGetter(HexPattern::anglesSignature),
+                HexDir.CODEC.fieldOf(TAG_START_DIR).forGetter(HexPattern::startDir)
+            ).apply(instance, HexPattern::fromAnglesUnchecked)
+        }
 
         @JvmField
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, HexPattern> = StreamCodec.composite(
