@@ -192,45 +192,6 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         ICircleComponent.sfx(this.getBlockPos(), this.getBlockState(), this.level, this, true);
     }
 
-    /**
-     * Generate the AABB bounds of a spell circle from the list of block positions that make it up.
-     *
-     * @deprecated No longer used, since the AABB is now generated during startup and stored as a pair of corners.
-     */
-    @Deprecated(since = "0.11.4")
-    @Contract(pure = true)
-    protected static AABB getBounds(List<BlockPos> poses) {
-        int minX = Integer.MAX_VALUE;
-        int minY = Integer.MAX_VALUE;
-        int minZ = Integer.MAX_VALUE;
-        int maxX = Integer.MIN_VALUE;
-        int maxY = Integer.MIN_VALUE;
-        int maxZ = Integer.MIN_VALUE;
-
-        for (var pos : poses) {
-            if (pos.getX() < minX) {
-                minX = pos.getX();
-            }
-            if (pos.getY() < minY) {
-                minY = pos.getY();
-            }
-            if (pos.getZ() < minZ) {
-                minZ = pos.getZ();
-            }
-            if (pos.getX() > maxX) {
-                maxX = pos.getX();
-            }
-            if (pos.getY() > maxY) {
-                maxY = pos.getY();
-            }
-            if (pos.getZ() > maxZ) {
-                maxZ = pos.getZ();
-            }
-        }
-
-        return new AABB(minX, minY, minZ, maxX + 1, maxY + 1, maxZ + 1);
-    }
-
     //endregion
 
     //region media handling
