@@ -111,10 +111,11 @@ public class ListIota extends Iota {
             out.append(sub.display());
 
             // only add a comma between 2 non-patterns (commas don't look good with Inline patterns)
-            // TODO: maybe add a method on IotaType to allow it to opt out of commas?
             if (i < list.size() - 1) {
-                var thisIotaNeedsComma = sub.type.get() != PatternIota.TYPE;
-                var nextIotaNeedsComma = list.getAt(i + 1).type.get() != PatternIota.TYPE;
+                var thisType = sub.type.get();
+                var nextType = list.getAt(i+1).type.get();
+                var thisIotaNeedsComma = thisType == null || thisType.usesListCommas();
+                var nextIotaNeedsComma = nextType == null || nextType.usesListCommas();
                 if (thisIotaNeedsComma || nextIotaNeedsComma)
                     out.append(", ");
             }

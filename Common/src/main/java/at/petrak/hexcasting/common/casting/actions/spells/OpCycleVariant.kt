@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
+import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.item.ItemStack
 
@@ -22,7 +23,7 @@ object OpCycleVariant : SpellAction {
 
         return SpellAction.Result(
             Spell(variantHolder),
-            0,
+            MediaConstants.DUST_UNIT / 10,
             listOf()
         )
     }

@@ -9,6 +9,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
@@ -59,6 +60,13 @@ public abstract class IotaType<T extends Iota> {
             .dispatch(Iota::getType, IotaType::streamCodec);
 
     public boolean validate(T iota, ServerLevel level) {
+        return true;
+    }
+
+    /**
+     * If commas should be used when displaying the iota inside a list iota
+     */
+    public boolean usesListCommas() {
         return true;
     }
 
