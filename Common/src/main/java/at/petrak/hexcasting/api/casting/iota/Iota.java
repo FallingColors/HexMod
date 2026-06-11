@@ -42,8 +42,8 @@ public abstract class Iota {
     abstract protected boolean toleratesOther(Iota that);
 
     /**
-     * This method is called when this iota is executed (i.e. Hermes is run on a list containing it, unescaped).
-     * By default it will return a {@link CastResult} indicating an error has occurred.
+     * This method is called when this iota is directly executed (i.e. Hermes is run on a list containing it, unescaped).
+     * By default, it will return a {@link CastResult} with {@link MishapUnescapedValue} to indicate that an error has occurred.
      */
     public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
         return new CastResult(
@@ -58,6 +58,23 @@ public abstract class Iota {
             ),
             ResolvedPatternType.INVALID,
             HexEvalSounds.MISHAP);
+    }
+
+    /**
+     * This method is called when this iota is executed inside parentheses (e.g. Hermes is run on a list of [Introspection, this, Retrospection]).
+     * Consequently, {@code vm.image.parenCount} will always be greater than 0.
+     * By default, the iota will be added to the in-progress parenthesized list rather than causing {@link MishapUnescapedValue}.
+     * <br><br>
+     * This is specifically for parentheses-based escaping. Consideration escaping is handled in {@link CastingVM#executeInner}, and cannot be overridden.
+     */
+    public @NotNull CastResult executeInParens(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
+        return new CastResult(
+                this,
+                continuation,
+                vm.getImage().withNewParenthesized(this),
+                List.of(),
+                ResolvedPatternType.ESCAPED,
+                HexEvalSounds.NORMAL_EXECUTE);
     }
 
     /**
