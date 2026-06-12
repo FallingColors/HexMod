@@ -17,7 +17,7 @@ import net.minecraft.server.level.ServerLevel
 /**
  * A list of patterns to be evaluated in sequence.
  * @property list the *remaining* list of patterns to be evaluated
- * @property isMetacasting if this is being cast from a hermes / iris / thoth
+ * @property isMetacasting if this is being cast from a meta-evaluation pattern
  */
 data class FrameEvaluate(val list: SpellList, val isMetacasting: Boolean) : ContinuationFrame {
     // Discard this frame and keep discarding frames.

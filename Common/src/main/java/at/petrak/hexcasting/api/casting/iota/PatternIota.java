@@ -168,15 +168,12 @@ public class PatternIota extends Iota {
                 result.getSound());
 
         } catch (Mishap mishap) {
-            // if a mishap happens mid-parens at the top level (ie when staffcasting), keep any in-progress parens
-            boolean wipeParens = false;
-            // if a mishap happens mid-parens while metacasting, wipe the parens - if we didn't do this, any open paren
-            // levels would remain open even though the metacast itself has mishapped and thus been aborted
-            if (continuation instanceof SpellContinuation.NotDone cnd && cnd.getFrame() instanceof FrameEvaluate frameEval) {
-                if (frameEval.isMetacasting()) {
-                    wipeParens = true;
-                }
-            }
+            // If a mishap happens mid-parens at the top level (ie when staffcasting), keep any in-progress parens.
+            // If a mishap happens mid-parens while metacasting, wipe the parens - if we didn't do this, any open paren
+            // levels would remain open even though the metacast itself has mishapped and thus been aborted.
+            boolean wipeParens = continuation instanceof SpellContinuation.NotDone cnd
+                              && cnd.getFrame() instanceof FrameEvaluate frameEval
+                              && frameEval.isMetacasting();
             return new CastResult(
                 this,
                 continuation,

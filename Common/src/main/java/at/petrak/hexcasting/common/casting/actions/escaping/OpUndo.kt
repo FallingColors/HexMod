@@ -23,7 +23,8 @@ object OpUndo : Action {
         val last = newParens.removeLastOrNull()
         var newParenCount = image.parenCount
         if (last == null) {
-            // if there was nothing in the parenthesized list, undo the initial open paren
+            // If there was nothing in the parenthesized list, undo the initial open paren.
+            // This gets set to 0 rather than just decremented in case we started with open-n-parens.
             newParenCount = 0
         } else if (last.iota is PatternIota && !last.escaped) {
             // adjust paren count if undoing a non-escaped open or close paren

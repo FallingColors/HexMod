@@ -12,10 +12,8 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 object OpOpenNParens : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
         val newStack = image.stack.toMutableList()
-        val layers = when (val topIota = newStack.removeLastOrNull()) {
-            null -> throw MishapNotEnoughArgs(1, 0)
-            else -> listOf(topIota).getPositiveInt(0)
-        }
+        val layers = newStack.getPositiveInt(newStack.lastIndex)
+        newStack.removeLast()
         val image2 = image.copy(
             stack = newStack,
             parenCount = layers

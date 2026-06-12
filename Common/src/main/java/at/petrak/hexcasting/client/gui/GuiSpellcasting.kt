@@ -85,19 +85,20 @@ class GuiSpellcasting constructor(
         this.calculateIotaDisplays()
     }
 
-    fun canBeUndone(resPat: ResolvedPattern): Boolean {
-        // standard escaped patterns can always be undone
-        if (resPat.type == ResolvedPatternType.ESCAPED) return true
-        // everything else cannot be undone, with three exceptions:
-        // - unescaped Introspection and Meditation can be undone if there's nothing else left to undo
-        // - Interjection can always be undone (undoing its inserted iota) despite using the EVALUATED coloring
-        if (resPat.type == ResolvedPatternType.EVALUATED) {
-            if (resPat.pattern.angles == HexActions.OPEN_PAREN.prototype.angles ||
-                resPat.pattern.angles == HexActions.OPEN_N_PARENS.prototype.angles ||
-                resPat.pattern.angles == HexActions.READ_INTO_PARENS.prototype.angles)
-                return true
+    fun canBeUndone(resolvedPat: ResolvedPattern): Boolean {
+        return when (resolvedPat.type) {
+            // standard escaped patterns can always be undone
+            ResolvedPatternType.ESCAPED -> true
+            // everything else cannot be undone, with three exceptions:
+            // - unescaped Introspection and Meditation can be undone if there's nothing else left to undo
+            // - Interjection can always be undone (undoing its inserted iota) despite using the EVALUATED coloring
+            ResolvedPatternType.EVALUATED -> {
+                resolvedPat.pattern.angles == HexActions.OPEN_PAREN.prototype.angles ||
+                resolvedPat.pattern.angles == HexActions.OPEN_N_PARENS.prototype.angles ||
+                resolvedPat.pattern.angles == HexActions.READ_INTO_PARENS.prototype.angles
+            }
+            else -> false
         }
-        return false
     }
 
     fun calculateIotaDisplays() {
