@@ -83,7 +83,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
 
             // Then write all pertinent data back to the VM for the next iteration.
             if (image2.newData != null) {
-                this.image = image2.newData
+                this.image = image2.newData.copy(stack = validateIotaList(image2.newData.stack));
             }
             this.env.postExecution(image2)
 
