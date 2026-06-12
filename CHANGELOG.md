@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Updated to Minecraft 1.21.1 ([#985](https://github.com/FallingColors/HexMod/pull/985)) @SuperKnux @slava110
 
+### Changed
+
+- The media cost of Impulse now scales linearly rather than quadratically ([#1145](https://github.com/FallingColors/HexMod/pull/1145)) @Robotgiggle
+
 ### Fixed
 
 - Fixed Entity Iota comparison to use `equals` on entity IDs instead of reference equality ([#1101](https://github.com/FallingColors/HexMod/pull/1101)) @IridescentVoid
