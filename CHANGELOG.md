@@ -8,14 +8,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
-- Update to Minecraft 1.21.1, by SuperKnux and slava110 in [#985](https://github.com/FallingColors/HexMod/pull/985).
-
-### Changed
+- Updated to Minecraft 1.21.1, by SuperKnux and slava110 in [#985](https://github.com/FallingColors/HexMod/pull/985).
 
 ### Fixed
 
-- Fix entity Iota comparison, by IridescentVoid in [#1101](https://github.com/FallingColors/HexMod/pull/1101).
-- Fix Hexpattern Codec and add graceful error handling, by Master-Bw3 in [#1120](https://github.com/FallingColors/HexMod/pull/1120) and IridescentVoid in [#1131](https://github.com/FallingColors/HexMod/pull/1131) and [#1140](https://github.com/FallingColors/HexMod/pull/1140).
+- Fixed Entity Iota comparison to use `equals` on entity IDs instead of reference equality, by IridescentVoid in [#1101](https://github.com/FallingColors/HexMod/pull/1101).
+- Corrected field names of the codec for Pattern Iotas and add a graceful fallback for upgrading, by Master-Bw3 in [#1120](https://github.com/FallingColors/HexMod/pull/1120) and IridescentVoid in [#1131](https://github.com/FallingColors/HexMod/pull/1131) and [#1140](https://github.com/FallingColors/HexMod/pull/1140).
 
 ### Internal
 
