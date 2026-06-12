@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.forge.datagen.xplat;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.client.render.GaslightingTracker;
+import at.petrak.hexcasting.api.client.GaslightingTracker;
 import at.petrak.hexcasting.common.blocks.BlockQuenchedAllay;
 import at.petrak.hexcasting.common.items.ItemStaff;
 import at.petrak.hexcasting.common.items.pigment.ItemPridePigment;
@@ -14,8 +14,6 @@ import at.petrak.hexcasting.common.items.storage.ItemThoughtKnot;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.paucal.api.forge.datagen.PaucalItemModelProvider;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
@@ -101,19 +99,19 @@ public class HexItemModels extends PaucalItemModelProvider {
         buildStaff(HexItems.STAFF_MINDSPLICE, "mindsplice");
 
         // again, doesn't like paths with slashes in them, so we do it manually
-        buildFourVariantGaslight("item/staff/quenched", "item/staff/quenched", (name, path) ->
+        buildFourVariantGaslight("item/staff/quenched", "item/staff/quenched", "quenched_allay_variants", (name, path) ->
             singleTexture(path.getPath(), new ResourceLocation("item/handheld_rod"),
                 "layer0", modLoc(path.getPath())));
-        buildFourVariantGaslight(getPath(HexItems.QUENCHED_SHARD), "item/quenched_shard", (name, path) ->
+        buildFourVariantGaslight(getPath(HexItems.QUENCHED_SHARD), "item/quenched_shard", "quenched_allay_variants", (name, path) ->
             singleTexture(path.getPath(), new ResourceLocation("item/handheld"),
                 "layer0", modLoc(path.getPath())));
-        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY), "block/quenched_allay", (name, path) ->
+        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY), "block/quenched_allay", "quenched_allay_variants", (name, path) ->
             cubeAll(path.getPath(), path));
-        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_TILES), "block/deco/quenched_allay_tiles", (name, path) ->
+        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_TILES), "block/deco/quenched_allay_tiles", "quenched_allay_variants", (name, path) ->
                 cubeAll(path.getPath(), path));
-        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_BRICKS), "block/deco/quenched_allay_bricks", (name, path) ->
+        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_BRICKS), "block/deco/quenched_allay_bricks", "quenched_allay_variants", (name, path) ->
                 cubeAll(path.getPath(), path));
-        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL), "block/deco/quenched_allay_bricks_small", (name, path) ->
+        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL), "block/deco/quenched_allay_bricks_small", "quenched_allay_variants", (name, path) ->
                 cubeAll(path.getPath(), path));
 
         simpleItem(modLoc("patchouli_book"));
@@ -298,7 +296,7 @@ public class HexItemModels extends PaucalItemModelProvider {
         }
     }
 
-    private void buildFourVariantGaslight(String name, String path,
+    private void buildFourVariantGaslight(String name, String path, String gaslightingPredicate,
         BiFunction<String, ResourceLocation, ModelFile> makeModel) {
         var builder = getBuilder(name);
         for (int i = 0; i < BlockQuenchedAllay.VARIANTS; i++) {
@@ -306,7 +304,7 @@ public class HexItemModels extends PaucalItemModelProvider {
             var model = makeModel.apply(name, textureLoc);
 
             builder.override()
-                .predicate(GaslightingTracker.GASLIGHTING_PRED, i)
+                    .predicate(GaslightingTracker.GASLIGHTING_TRACKERS.get(modLoc(gaslightingPredicate)).GASLIGHTING_PRED, i)
                 .model(model)
                 .end();
         }
