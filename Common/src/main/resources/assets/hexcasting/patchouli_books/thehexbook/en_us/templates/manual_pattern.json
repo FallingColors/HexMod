@@ -23,11 +23,19 @@
     {
       "type": "patchouli:text",
       "text": "$(n)#input#/$ \u2192 $(n)#output#/$",
+      "guard": "#has_signature#",
       "y": 80
     },
     {
       "type": "patchouli:text",
       "text": "#text#",
+      "guard": "#has_signature->inv#",
+      "y": 80
+    },
+    {
+      "type": "patchouli:text",
+      "text": "#text#",
+      "guard": "#has_signature#",
       "y": 89
     }
   ]
