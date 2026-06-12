@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - ListIota now uses the asymptotically-efficient TreeList internally ([#1032](https://github.com/FallingColors/HexMod/pull/1032)) @s5bug
 - SpellList has been removed ([#1032](https://github.com/FallingColors/HexMod/pull/1032)) @s5bug
 - Casting Image and Casting Frames now store iotas in a TreeList ([#1033](https://github.com/FallingColors/HexMod/pull/1033)) @s5bug
+- Operations and actions now accept the old stack and produce the new stack through a TreeList ([#1038](https://github.com/FallingColors/HexMod/pull/1038)) @s5bug
 
 ## `0.11.3` - 2025-11-22
 
