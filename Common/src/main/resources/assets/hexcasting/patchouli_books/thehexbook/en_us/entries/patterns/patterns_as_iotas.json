@@ -44,11 +44,13 @@
     },
     {
       "type": "patchouli:text",
+      "anchor": "escaping_escapers",
       "title": "hexcasting.page.patterns_as_iotas.further_notes.title",
       "text": "hexcasting.page.patterns_as_iotas.further_notes.1"
     },
     {
       "type": "patchouli:text",
+      "anchor": "iota_embedding",
       "text": "hexcasting.page.patterns_as_iotas.further_notes.2"
     },
     {
