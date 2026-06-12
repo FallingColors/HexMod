@@ -4,13 +4,24 @@ import at.petrak.hexcasting.api.casting.circles.ICircleComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
+import java.util.Map;
+
+import static at.petrak.hexcasting.api.casting.circles.CircleExecutionState.CACHE;
 
 // Convenience impl of ICircleComponent
 public abstract class BlockCircleComponent extends Block implements ICircleComponent {
@@ -26,6 +37,27 @@ public abstract class BlockCircleComponent extends Block implements ICircleCompo
         world.setBlockAndUpdate(pos, newState);
 
         return newState;
+    }
+
+    @Override
+    public void destroy(@NotNull LevelAccessor world, @NotNull BlockPos blockPos, @NotNull BlockState blockState) {
+        // spaghet
+        for (Map.Entry<BlockPos, AABB> entry : CACHE.entrySet()) {
+            Vec3 location = blockPos.getCenter();
+            if (!entry.getValue().contains(location)) {continue;}
+            CACHE.remove(entry.getKey());
+        }
+    }
+
+    @Override
+    public void setPlacedBy(Level level, BlockPos blockPos, BlockState bs, @Nullable LivingEntity entity, ItemStack stack) {
+        for (Map.Entry<BlockPos, AABB> entry : CACHE.entrySet()) {
+            Vec3 location = blockPos.getCenter();
+            AABB aabb = entry.getValue();
+            if (!aabb.contains(location)) {continue;}
+            if (aabb.distanceToSqr(location) > 0.250009) {continue;}
+            CACHE.remove(entry.getKey());
+        }
     }
 
     @Override

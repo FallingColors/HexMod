@@ -24,6 +24,7 @@ import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * See {@link BlockEntityAbstractImpetus}, this is what's stored in it
@@ -41,6 +42,9 @@ public class CircleExecutionState {
         TAG_REACHED_NUMBER = "reached_slate",
         TAG_POSITIVE_POS = "positive_pos",
         TAG_NEGATIVE_POS = "negative_pos";
+
+    // A cache for reusing previous searches. Invalidated when ICircleComponents are broken within the AABB.
+    public static final Map<BlockPos, AABB> CACHE = new ConcurrentHashMap<>();
 
     public final BlockPos impetusPos;
     public final Direction impetusDir;
@@ -107,6 +111,31 @@ public class CircleExecutionState {
         var positiveBlock = impetusPos.mutable();
         var negativeBlock = impetusPos.mutable();
         var lastBlockPos = impetusPos.mutable();
+        var reachedPositions = new HashSet<BlockPos>();
+        reachedPositions.add(impetus.getBlockPos());
+
+        FrozenPigment colorizer = null;
+        UUID casterUUID;
+        if (caster == null) {
+            casterUUID = null;
+        } else {
+            colorizer = HexAPI.instance().getColorizer(caster);
+            casterUUID = caster.getUUID();
+        }
+
+        if (CACHE.containsKey(impetusPos)) {
+            final AABB bounds = CACHE.get(impetusPos);
+            BlockPos greater = new BlockPos((int) bounds.maxX, (int) bounds.maxY, (int) bounds.maxZ);
+            BlockPos lesser = new BlockPos((int) bounds.minX, (int) bounds.minY, (int) bounds.minZ);
+
+            return new Result.Ok<>(
+                    new CircleExecutionState(
+                            impetus.getBlockPos(), impetus.getStartDirection(), reachedPositions,
+                            impetusPos.offset(impetus.getStartDirection().getNormal()), impetus.getStartDirection(),
+                            new CastingImage(), casterUUID, colorizer, 0L, greater, lesser
+                    )
+            );
+        }
 
         while (!todo.isEmpty()) {
             var pair = todo.pop();
@@ -133,6 +162,7 @@ public class CircleExecutionState {
                 negativeBlock.setZ(Math.min(herePos.getZ(), negativeBlock.getZ()));
                 // it's new
                 var outs = cmp.possibleExitDirections(herePos, hereBs, level);
+
                 for (var out : outs) {
                     todo.add(Pair.of(out, herePos.relative(out)));
                 }
@@ -152,17 +182,10 @@ public class CircleExecutionState {
             return new Result.Err<>(lastBlockPos);
         }
 
-        var reachedPositions = new HashSet<BlockPos>();
-        reachedPositions.add(impetus.getBlockPos());
+        AABB aabb = new AABB(positiveBlock.move(1,1,1), negativeBlock);
 
-        FrozenPigment colorizer = null;
-        UUID casterUUID;
-        if (caster == null) {
-            casterUUID = null;
-        } else {
-            colorizer = HexAPI.instance().getColorizer(caster);
-            casterUUID = caster.getUUID();
-        }
+        CACHE.put(impetusPos, aabb);
+
         return new Result.Ok<>(
             new CircleExecutionState(impetus.getBlockPos(), impetus.getStartDirection(),
                 reachedPositions, impetus.getBlockPos().offset(impetus.getStartDirection().getNormal()),
