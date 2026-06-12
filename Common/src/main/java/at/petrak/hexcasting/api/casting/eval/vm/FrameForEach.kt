@@ -56,7 +56,7 @@ data class FrameForEach(
         level: ServerLevel,
         harness: CastingVM
     ): CastResult {
-        // If this isn't the very first Thoth step (i.e. no Thoth computations run yet)...
+        // If this is the very first Thoth step (i.e. no Thoth computations run yet)...
         val (stack, newAcc) = if (baseStack == null) {
             // init stack to the harness stack...
             harness.image.stack.toList() to immutableAcc
@@ -76,7 +76,7 @@ data class FrameForEach(
             Triple(data.car, harness.image.withUsedOp(), cont2)
         } else {
             // Else, dump our final list onto the stack.
-            Triple(ListIota(immutableAcc), harness.image, continuation)
+            Triple(ListIota(newAcc), harness.image, continuation)
         }
         val tStack = stack.toMutableList()
         tStack.add(stackTop)

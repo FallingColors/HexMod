@@ -24,6 +24,12 @@ public class RegisterMisc {
         HexAPI.instance().registerSpecialVelocityGetter(EntityType.SPECTRAL_ARROW, RegisterMisc::arrowVelocitizer);
         // this is an arrow apparently
         HexAPI.instance().registerSpecialVelocityGetter(EntityType.TRIDENT, RegisterMisc::arrowVelocitizer);
+        HexAPI.instance().registerSpecialVelocityGetter(EntityType.ITEM, item -> {
+            // Items only tick movement every four ticks if stationary and on ground, but gravity is added every tick
+            // and only cleared by movement logic every four ticks
+            if (item.onGround() && item.getDeltaMovement().horizontalDistanceSqr() <= 1.0E-5F) return Vec3.ZERO;
+            return item.getDeltaMovement();
+        });
 
         HexAPI.instance().registerCustomBrainsweepingBehavior(EntityType.VILLAGER, villager -> {
             ((AccessorVillager) villager).hex$releaseAllPois();
