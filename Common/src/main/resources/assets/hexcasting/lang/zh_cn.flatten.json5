@@ -142,7 +142,7 @@
     akashic_: {
       record: "阿卡夏记录",
       bookshelf: "阿卡夏书架",
-      connector: "阿卡夏桥接块",
+      ligature: "阿卡夏桥接块",
     },
 
     slate: {
@@ -364,10 +364,6 @@
           "": "单击切换绘制与否",
           "@Tooltip": "单击即可开始或结束绘制，无需按住拖动",
         },
-        alwaysShowListCommas: {
-          "": "在所有情况下都显示列表逗号",
-          "@Tooltip": "是否用逗号分隔列表中各种类型的iota（默认情况下，图案iota不会使用逗号分隔）",
-        },
         advancedTooltipsShowsIotaNBT: {
           "": "高级提示文本显示iota NBT",
           "@Tooltip": "启用高级提示文本（F3+H）时是否应当显示核心、法术书等物品所包含iota的完整NBT",
@@ -393,19 +389,11 @@
         },
         actionDenyList: {
           "": "禁用操作列表",
-          "@Tooltip": "被禁用操作的资源位置；试图执行此类操作会导致事故。例如，“hexcasting:get_caster”会禁用意识之精思。",
+          "@Tooltip": "被禁用操作的资源位置；试图执行此类操作会导致事故。例如，“hexcasting:get_caster”会禁用意识之精思",
         },
         circleActionDenyList: {
           "": "法术环禁用操作列表",
-          "@Tooltip": "法术环中被禁用操作的资源位置；试图执行此类操作会导致事故。例如，“hexcasting:get_caster”会禁用意识之精思。",
-        },
-        globalCostScaling: {
-          "": "全局消耗倍数",
-          "@Tooltip": "除去#hexcasting:cannot_modify_cost标签下的操作，其余操作的媒质消耗均会乘以该数。若希望调整该标签下操作的消耗，请使用“操作消耗倍数”配置。",
-        },
-        costRescaleListRaw: {
-          "": "操作消耗倍数",
-          "@Tooltip": "资源位置与对应操作媒质消耗倍数的映射。例如，“hexcasting:add_motion 3”会让驱动的消耗变为3倍。",
+          "@Tooltip": "法术环中被禁用操作的资源位置；试图执行此类操作会导致事故。"
         },
         greaterTeleportSplatsItems: {
           "": "卓越传送散落物品",
@@ -822,6 +810,8 @@
         less_eq: "至小之馏化，第二型",
         equals: "相等之馏化",
         not_equals: "不等之馏化",
+        type_equals: "类似之馏化",
+        type_not_equals: "相异之馏化",
         not: "取非之纯化",
         bool_coerce: "占卜师之纯化",
         if: "占卜师之提整",
@@ -1052,6 +1042,7 @@
 
       wrong_dimension: "无法在%2$s中影响到%1$s",
       entity_too_far: "%s超出影响范围",
+      entity_not_found: "无法找到%s，可能是因其已死亡或未被加载",
       immune_entity: "无法影响到%s",
       eval_too_much: "运行了过多图案",
       no_item: "需要%s，而实际无对应物品",
@@ -1524,6 +1515,9 @@
         "true_name.title": "违犯他人",
         true_name: "试图在某种永久性媒介中$(l:patterns/readwrite#hexcasting:write)$(action)存储/$代表另一位玩家的 iota。$(br2)产生黑色火花，并致盲大约一分钟。",
 
+        "entity_not_found.title": "实体失踪",
+        entity_not_found: "试图影响已不存在的实体。有两种可能性，其一是实体已死。其二也是相对来说更奇怪的，是实体距离过远以至于无法被“观测”。$(br2)产生棕色火花，并让我反胃恶心一小会，就像久坐后快速起身一样。",
+
         "disabled.title": "禁用操作",
         disabled: "试图执行被服务器管理员禁用的操作。$(br2)产生黑色火花。",
 
@@ -1731,7 +1725,7 @@
 
         empty_directrix: "第一步，基床……用“基底”这个名字会准确些。倘若没有意识引导，媒质的流向是由$(media)媒质/$波的微观涨落和环境决定的，换句话说，随机的。",
         directrix_redstone: "$(l:greatwork/directrix)$(item)石匠导向石/$会根据红石信号改变输出方向。没有信号的话，出口是$(media)媒质/$色的一端；有信号的话，出口是红石色的一端。",
-        directrix_boolean: "$(l:greatwork/directrix)$(item)牧羊人导向石/$会根据栈中的布尔值改变输出方向。为 $(thing)True/$ 时，媒质自后方流出；为 $(thing)False/$ 时，媒质自前方流出。未能获取到布尔值则会招致事故。"
+        directrix_boolean: "$(l:greatwork/directrix)$(item)牧羊人导向石/$会从栈中弹出一个布尔值并据此改变输出方向。为 $(thing)True/$ 时，媒质自后方流出；为 $(thing)False/$ 时，媒质自前方流出。未能获取到布尔值则会招致事故。"
       },
 
       akashiclib: {
@@ -1914,6 +1908,8 @@
         if: "如果第一个参数是 True，保留第二个参数并移除第三个。否则保留第三个参数并移除第二个。",
         equals: "如果第一个参数等于第二个（在较小误差内），返回 True。否则返回 False。",
         not_equals: "如果第一个参数不等于第二个（超出较小误差），返回 True。否则返回 False。",
+        type_equals: "如果第一个参数的类型与第二个匹配，返回 True。否则返回 False。",
+        type_not_equals: "如果第一个参数的类型不与第二个匹配，返回 True。否则返回 False。",
         greater: "如果第一个参数大于第二个，返回 True。否则返回 False。",
         less: "如果第一个参数小于第二个，返回 True。否则返回 False。",
         greater_eq: "如果第一个参数大于或等于第二个，返回 True。否则返回 False。",
