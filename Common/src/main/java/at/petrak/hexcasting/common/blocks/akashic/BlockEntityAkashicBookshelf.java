@@ -44,13 +44,14 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
         this.pattern = pattern;
         this.iotaTag = IotaType.serialize(iota);
 
+        var oldBs = this.getBlockState();
         if (previouslyEmpty) {
-            var oldBs = this.getBlockState();
             var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, true);
             this.level.setBlock(this.getBlockPos(), newBs, 3);
             this.level.sendBlockUpdated(this.getBlockPos(), oldBs, newBs, 3);
         } else {
             this.setChanged();
+            this.level.sendBlockUpdated(this.getBlockPos(), oldBs, oldBs, 3);
         }
     }
 
