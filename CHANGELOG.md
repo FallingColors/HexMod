@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [UNRELEASED]
+
+### Added
+
+- Update to Minecraft 1.21.1, by SuperKnux and slava110 in [#985](https://github.com/FallingColors/HexMod/pull/985).
+
+### Changed
+
+### Fixed
+
+- Fix entity Iota comparison, by IridescentVoid in [#1101](https://github.com/FallingColors/HexMod/pull/1101).
+- Fix Hexpattern Codec and add graceful error handling, by Master-Bw3 in [#1120](https://github.com/FallingColors/HexMod/pull/1120) and IridescentVoid in [#1131](https://github.com/FallingColors/HexMod/pull/1131) and [#1140](https://github.com/FallingColors/HexMod/pull/1140).
+
+### Internal
+
+- Removed APIs deprecated in `0.11.4`, by s5bug in [#1126](https://github.com/FallingColors/HexMod/pull/1126), [#1127](https://github.com/FallingColors/HexMod/pull/1127), [#1129](https://github.com/FallingColors/HexMod/pull/1129), [#1137](https://github.com/FallingColors/HexMod/pull/1137), [#1142](https://github.com/FallingColors/HexMod/pull/1142).
+
 ## `0.11.3` - 2025-11-22
 
 ### Added
