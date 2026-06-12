@@ -1147,6 +1147,7 @@
         too_close_to_out: "%s is too close to the boundary of the world",
         forbidden: "%s is forbidden to you",
         bad_dimension: "This dimension forbids that action",
+        obstructed: "%s is obstructed",
       },
       
       bad_item: {
