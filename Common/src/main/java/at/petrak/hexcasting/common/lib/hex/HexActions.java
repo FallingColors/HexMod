@@ -16,6 +16,7 @@ import at.petrak.hexcasting.common.casting.actions.akashic.OpAkashicWrite;
 import at.petrak.hexcasting.common.casting.actions.circles.OpCircleBounds;
 import at.petrak.hexcasting.common.casting.actions.circles.OpImpetusDir;
 import at.petrak.hexcasting.common.casting.actions.circles.OpImpetusPos;
+import at.petrak.hexcasting.common.casting.actions.escaping.*;
 import at.petrak.hexcasting.common.casting.actions.eval.*;
 import at.petrak.hexcasting.common.casting.actions.lists.OpEmptyList;
 import at.petrak.hexcasting.common.casting.actions.lists.OpLastNToList;
@@ -28,6 +29,7 @@ import at.petrak.hexcasting.common.casting.actions.math.OpRandom;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpBoolIf;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpCoerceToBool;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpEquality;
+import at.petrak.hexcasting.common.casting.actions.math.logic.OpTypeEquality;
 import at.petrak.hexcasting.common.casting.actions.queryentity.*;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockAxisRaycast;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockRaycast;
@@ -189,6 +191,10 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("ad", HexDir.EAST), new OpEquality(false)));
     public static final ActionRegistryEntry NOT_EQUALS = make("not_equals",
         new ActionRegistryEntry(HexPattern.fromAngles("da", HexDir.EAST), new OpEquality(true)));
+    public static final ActionRegistryEntry TYPE_EQUALS = make("type_equals",
+        new ActionRegistryEntry(HexPattern.fromAngles("wawdw", HexDir.EAST), new OpTypeEquality(false)));
+    public static final ActionRegistryEntry TYPE_NOT_EQUALS = make("type_not_equals",
+        new ActionRegistryEntry(HexPattern.fromAngles("wdwaw", HexDir.EAST), new OpTypeEquality(true)));
     public static final ActionRegistryEntry BOOL_COERCE = make("bool_coerce",
         new ActionRegistryEntry(HexPattern.fromAngles("aw", HexDir.NORTH_EAST), OpCoerceToBool.INSTANCE));
     public static final ActionRegistryEntry IF = make("if",
@@ -382,8 +388,14 @@ public class HexActions {
 
     // == Meta stuff ==
 
-    // Intro/Retro/Consideration are now special-form-likes and aren't even ops.
-    // TODO should there be a registry for these too
+    public static final ActionRegistryEntry ESCAPE = make("escape",
+        new ActionRegistryEntry(HexPattern.fromAngles("qqqaw", HexDir.WEST), OpEscape.INSTANCE));
+    public static final ActionRegistryEntry OPEN_PAREN = make("open_paren",
+        new ActionRegistryEntry(HexPattern.fromAngles("qqq", HexDir.WEST), OpOpenParen.INSTANCE));
+    public static final ActionRegistryEntry CLOSE_PAREN = make("close_paren",
+        new ActionRegistryEntry(HexPattern.fromAngles("eee", HexDir.EAST), OpCloseParen.INSTANCE));
+    public static final ActionRegistryEntry UNDO = make("undo",
+        new ActionRegistryEntry(HexPattern.fromAngles("eeedw", HexDir.EAST), OpUndo.INSTANCE));
 
     // http://www.toroidalsnark.net/mkss3-pix/CalderheadJMM2014.pdf
     // eval being a space filling curve feels apt doesn't it

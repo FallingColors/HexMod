@@ -603,7 +603,7 @@
         needs_purchase: "Purchase to show pattern",
         pattern_not_loaded: "Place in inventory to load pattern",
         "recalc_warning.line1": "The per-world pattern for %s has not been calculated yet!",
-        "recalc_warning.line2": "Please run /hexcasting recalcPatterns, then grab a new scroll.",
+        "recalc_warning.line2": "Please run /hexcasting recalcPatterns, then get a new scroll.",
       },
       
       abacus: {
@@ -814,6 +814,8 @@
         less_eq: "Minimus Distillation II",
         equals: "Equality Distillation",
         not_equals: "Inequality Distillation",
+        type_equals: "Similarity Distillation",
+        type_not_equals: "Dissimilarity Distillation",
         not: "Negation Purification",
         bool_coerce: "Augur's Purification",
         if: "Augur's Exaltation",
@@ -915,6 +917,11 @@
         create_lava: "Create Lava",
         "teleport/great": "Greater Teleport",
         brainsweep: "Flay Mind",
+
+        escape: "Consideration",
+        open_paren: "Introspection",
+        close_paren: "Retrospection",
+        undo: "Evanition",
         
         eval: "Hermes' Gambit",
         "eval/cc": "Iris' Gambit",
@@ -986,13 +993,6 @@
       number: "Numerical Reflection: %s",
       mask: "Bookkeeper's Gambit: %s",
     },
-    
-    "rawhook.hexcasting:": {
-      open_paren: "Introspection",
-      close_paren: "Retrospection",
-      escape: "Consideration",
-      undo: "Evanition",
-    },
 
     "iota.hexcasting:": {
       null: {
@@ -1042,7 +1042,7 @@
       
       not_enough_args: "expected %s or more arguments but the stack was only %s tall",
       no_args: "expected %s or more arguments but the stack was empty",
-      too_many_close_parens: "Did not first use Introspection",
+      needs_parens: "Did not first use Introspection",
       
       wrong_dimension: "cannot see %s from %s",
       entity_too_far: "%s is out of range",
@@ -1509,9 +1509,9 @@
         "incorrect_block.title": "Incorrect Block",
         incorrect_block: "The action requires some sort of block at a target location, but the block supplied was not suitable.$(br2)Causes bright green sparks, and causes an ephemeral explosion at the given location. The explosion doesn't seem to harm me, the world, or anything else though; it's just startling.",
         
-        "retrospection.title": "Hasty Retrospection",
-        retrospection: "I attempted to draw $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ without first drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$.$(br2)Causes orange sparks, and pushes the pattern for $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ to the stack as a pattern iota.",
-        
+        "needs_parens.title": "Absent Introspection",
+        needs_parens: "I attempted to draw $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ or $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ without first drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$.$(br2)Causes orange sparks, and pushes the pattern I tried to draw to the stack as an iota.",
+
         "too_many_patterns.title": "Lost in Thought",
         too_many_patterns: "I attempted to evaluate too many patterns in one _Hex. Often, this happens because I've accidentally created an infinite loop.$(br2)Causes dark blue sparks, and chokes all the air out of me.",
         
@@ -1548,7 +1548,7 @@
         "1": "I have discovered new and horrifying modes of failure. I must not succumb to them.",
         
         "bad_mindflay.title": "Inert Mindflay",
-        bad_mindflay: "Attempted to flay the mind of something that I have either already used, or of a character not suitable for the target block.$(br2)Causes dark green sparks, and kills the subject. If a villager sees that, I doubt they would look on it favorably.",
+        bad_mindflay: "Attempted to flay the mind of something that I have either already used, or of a character not suitable for the target block.$(br2)Causes dark green sparks. Subjects I have already used will be killed outright, while those that are simply unsuitable will be slightly damaged.",
         
         "no_circle.title": "Lack Spell Circle",
         no_circle: "Tried to cast an action requiring a spell circle without a spell circle.$(br2)Causes light blue sparks, and upends my inventory onto the ground.",
@@ -1725,7 +1725,7 @@
         
         empty_directrix: "Firstly, a design for the cradle ... although, perhaps \"substrate\" would be more accurate a word. Without a mind guiding it, the output direction is determined by microscopic fluctuations in the _media wave and surroundings, making it effectively random.",
         directrix_redstone: "A $(l:greatwork/directrix)$(item)Mason Directrix/$ switches output side based on a redstone signal. Without a signal, the exit is the _media-color side; with a signal, the exit is the redstone-color side.",
-        directrix_boolean: "A $(l:greatwork/directrix)$(item)Shepherd Directrix/$ switches output side based on a boolean on the stack. A $(thing)True/$ makes the wave exit from the back, a $(thing)False/$ from the front. Failing to provide a boolean at all will cause a mishap."
+        directrix_boolean: "A $(l:greatwork/directrix)$(item)Shepherd Directrix/$ switches output side based on a boolean popped from the stack. A $(thing)True/$ makes the wave exit from the back, a $(thing)False/$ from the front. Failing to provide a boolean at all will cause a mishap."
       },
       
       akashiclib: {
@@ -1908,6 +1908,8 @@
         if: "If the first argument is True, keeps the second and discards the third; otherwise discards the second and keeps the third.",
         equals: "If the first argument equals the second (within a small tolerance), return True. Otherwise, return False.",
         not_equals: "If the first argument does not equal the second (outside a small tolerance), return True. Otherwise, return False.",
+        type_equals: "If the type of the first argument matches the type of the second, return True. Otherwise, return False.",
+        type_not_equals: "If the type of the first argument does not match the type of the second, return True. Otherwise, return False.",
         greater: "If the first argument is greater than the second, return True. Otherwise, return False.",
         less: "If the first argument is less than the second, return True. Otherwise, return False.",
         greater_eq: "If the first argument is greater than or equal to the second, return True. Otherwise, return False.",

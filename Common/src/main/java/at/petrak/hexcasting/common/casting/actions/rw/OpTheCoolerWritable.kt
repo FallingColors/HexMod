@@ -21,8 +21,7 @@ object OpTheCoolerWritable : ConstMediaAction {
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(target)
             ?: return false.asActionResult
 
-        val success = datumHolder.writeIota(NullIota(), true)
-
+        val success = datumHolder.writeable()
         return success.asActionResult
     }
 }
