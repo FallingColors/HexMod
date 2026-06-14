@@ -15,19 +15,18 @@ import kotlin.jvm.optionals.getOrElse
 
 object OpPeekLocal : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stack = image.stack.toMutableList()
         val ravenmind = image.ravenmind()
+        val stack = image.stack
 
         val rm = if (ravenmind.isPresent) {
             IotaType.TYPED_CODEC.parse(NbtOps.INSTANCE, ravenmind.get()).orThrow
         } else {
             NullIota()
         }
-
-        stack.add(rm)
+        val newStack = stack.appended(rm)
 
         // does not mutate userdata
-        val image2 = image.withUsedOp().copy(stack = stack)
+        val image2 = image.withUsedOp().copy(stack = newStack)
         return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
     }
 }
