@@ -27,6 +27,7 @@ import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
@@ -155,9 +156,8 @@ public class HexplatRecipes extends RecipeProvider {
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, HexItems.ARTIFACT)
             .define('F', ingredients.goldIngot())
             .define('A', HexItems.CHARGED_AMETHYST)
-            // why in god's name does minecraft have two different places for item tags
-            // TODO port: check if good for music discs
-            .define('D', ItemTags.CREEPER_DROP_MUSIC_DISCS)
+            // 1.21 removed the vanilla music discs tag so we need to use this instead
+            .define('D', TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c","music_discs")))
             .pattern(" F ")
             .pattern("FAF")
             .pattern(" D ")
