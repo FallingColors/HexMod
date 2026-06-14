@@ -9,24 +9,22 @@ import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.getPositiveIntUnderInclusive
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
+import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 object OpLastNToList : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stack = image.stack.toMutableList()
+        val stack = image.stack
 
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0)
-        val yoinkCount = stack.takeLast(1).getPositiveIntUnderInclusive(0, stack.size - 1)
-        stack.removeLast()
-        val output = mutableListOf<Iota>()
-        output.addAll(stack.takeLast(yoinkCount))
-        for (i in 0 until yoinkCount) {
-            stack.removeLast()
-        }
-        stack.addAll(output.asActionResult)
+        val yoinkCount = stack.takeRight(1).getPositiveIntUnderInclusive(0, stack.size - 1)
+        val stackWithoutArg = stack.init()
+        val output = TreeList.from(stackWithoutArg.takeRight(yoinkCount))
+        val stackWithoutContents = stackWithoutArg.dropRight(yoinkCount)
+        val stackWithResult = stackWithoutContents.appendedAll(output.asActionResult)
 
-        val image2 = image.withUsedOp().copy(stack = stack)
+        val image2 = image.withUsedOp().copy(stack = stackWithResult)
         return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
     }
 }

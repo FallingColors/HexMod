@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
-import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
@@ -27,17 +26,16 @@ import kotlin.jvm.optionals.getOrNull
  * @property acc concatenated list of final stack states after Thoth exit
  */
 data class FrameForEach(
-    val data: SpellList,
-    val code: SpellList,
-    val baseStack: List<Iota>?,
+    val data: TreeList<Iota>,
+    val code: TreeList<Iota>,
+    val baseStack: TreeList<Iota>?,
     val acc: TreeList<Iota>
 ) : ContinuationFrame {
 
     /** When halting, we add the stack state at halt to the stack accumulator, then return the original pre-Thoth stack, plus the accumulator. */
-    override fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>> {
-        val newStack = baseStack?.toMutableList() ?: mutableListOf()
-        newStack.add(ListIota(acc.appendedAll(stack)))
-        return true to newStack
+    override fun breakDownwards(stack: TreeList<Iota>): Pair<Boolean, TreeList<Iota>> {
+        val newStack = baseStack ?: TreeList.empty()
+        return true to newStack.appended(ListIota(acc.appendedAll(stack)))
     }
 
     /** Step the Thoth computation, enqueueing one code evaluation. */
@@ -49,27 +47,26 @@ data class FrameForEach(
         // If this is the very first Thoth step (i.e. no Thoth computations run yet)...
         val (stack, newAcc) = if (baseStack == null) {
             // init stack to the harness stack...
-            harness.image.stack.toList() to acc
+            harness.image.stack to acc
         } else {
             // else save the stack to the accumulator and reuse the saved base stack.
             baseStack to acc.appendedAll(harness.image.stack)
         }
 
         // If we still have data to process...
-        val (stackTop, newImage, newCont) = if (data.nonEmpty) {
+        val (stackTop, newImage, newCont) = if (!data.isEmpty()) {
             // push the next datum to the top of the stack,
             val cont2 = continuation
                 // put the next Thoth object back on the stack for the next Thoth cycle,
-                .pushFrame(FrameForEach(data.cdr, code, stack, newAcc))
+                .pushFrame(FrameForEach(data.tail(), code, stack, newAcc))
                 // and prep the Thoth'd code block for evaluation.
                 .pushFrame(FrameEvaluate(code, true))
-            Triple(data.car, harness.image.withUsedOp(), cont2)
+            Triple(data.head(), harness.image.withUsedOp(), cont2)
         } else {
             // Else, dump our final list onto the stack.
             Triple(ListIota(newAcc), harness.image, continuation)
         }
-        val tStack = stack.toMutableList()
-        tStack.add(stackTop)
+        val tStack = stack.appended(stackTop)
         return CastResult(
             ListIota(code),
             newCont,
@@ -81,7 +78,7 @@ data class FrameForEach(
         )
     }
 
-    override fun size() = data.size() + code.size() + acc.size + (baseStack?.size ?: 0)
+    override fun size() = data.size + code.size + acc.size + (baseStack?.size ?: 0)
 
     override val type: ContinuationFrame.Type<*> = TYPE
 
@@ -90,23 +87,23 @@ data class FrameForEach(
         val TYPE: ContinuationFrame.Type<FrameForEach> = object : ContinuationFrame.Type<FrameForEach> {
             val CODEC = RecordCodecBuilder.mapCodec<FrameForEach> { inst ->
                 inst.group(
-                    SpellList.CODEC.fieldOf("data").forGetter { it.data },
-                    SpellList.CODEC.fieldOf("code").forGetter { it.code },
-                    IotaType.TYPED_CODEC.listOf().optionalFieldOf("base").forGetter { Optional.ofNullable(it.baseStack) },
-                    IotaType.TYPED_CODEC.listOf().fieldOf("accumulator").forGetter { it.acc }
+                    TreeList.codecOf(IotaType.TYPED_CODEC).fieldOf("data").forGetter { it.data },
+                    TreeList.codecOf(IotaType.TYPED_CODEC).fieldOf("code").forGetter { it.code },
+                    TreeList.codecOf(IotaType.TYPED_CODEC).optionalFieldOf("base").forGetter { Optional.ofNullable(it.baseStack) },
+                    TreeList.codecOf(IotaType.TYPED_CODEC).fieldOf("accumulator").forGetter { it.acc }
                 ).apply(inst) { a, b, c, d ->
-                    FrameForEach(a, b, c.getOrNull(), TreeList.from(d))
+                    FrameForEach(a, b, c.getOrNull(), d)
                 }
             }
             val STREAM_CODEC = StreamCodec.composite(
-                SpellList.STREAM_CODEC, FrameForEach::data,
-                SpellList.STREAM_CODEC, FrameForEach::code,
+                IotaType.TYPED_STREAM_CODEC.apply(TreeList.streamCodecOp()), FrameForEach::data,
+                IotaType.TYPED_STREAM_CODEC.apply(TreeList.streamCodecOp()), FrameForEach::code,
                 ByteBufCodecs.optional(IotaType.TYPED_STREAM_CODEC
-                    .apply(ByteBufCodecs.list())), { Optional.ofNullable(it.baseStack) },
+                    .apply(TreeList.streamCodecOp())), { Optional.ofNullable(it.baseStack) },
                 IotaType.TYPED_STREAM_CODEC
-                    .apply(ByteBufCodecs.list()), FrameForEach::acc
+                    .apply(TreeList.streamCodecOp()), FrameForEach::acc
             ) { a, b, c, d ->
-                FrameForEach(a, b, c.getOrNull(), TreeList.from(d))
+                FrameForEach(a, b, c.getOrNull(), d)
             }
 
 

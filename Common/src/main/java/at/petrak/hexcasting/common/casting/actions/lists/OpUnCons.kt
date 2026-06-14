@@ -11,8 +11,8 @@ object OpUnCons : ConstMediaAction {
     override val argc = 1
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
         val list = args.getList(0, argc)
-        if (list.nonEmpty) {
-            return listOf(ListIota(list.cdr), list.car)
+        if (!list.isEmpty()) {
+            return listOf(ListIota(list.tail()), list.head())
         }
         return listOf(args[0], NullIota())
     }

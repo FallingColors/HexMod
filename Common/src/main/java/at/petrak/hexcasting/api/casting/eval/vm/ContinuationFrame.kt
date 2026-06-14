@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.casting.eval.vm
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.common.lib.HexRegistries
+import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.common.lib.hex.HexContinuationTypes
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import com.mojang.serialization.Codec
@@ -41,7 +42,7 @@ interface ContinuationFrame {
      * In other words, we should consume Evaluate frames until we hit a FinishEval or Thoth frame.
      * @return whether the break should stop here, alongside the new stack state (e.g. for finalizing a Thoth)
      */
-    fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>>
+    fun breakDownwards(stack: TreeList<Iota>): Pair<Boolean, TreeList<Iota>>
 
     /**
      * Return the number of iotas contained inside this frame, used for determining whether it is valid to serialise.
@@ -81,7 +82,6 @@ interface ContinuationFrame {
     }
 
     companion object {
-
         /**
          * This method attempts to find the type from the `type` key.
          * See [ContinuationFrame.serializeToNBT] for the storage format.
