@@ -4,6 +4,7 @@ package at.petrak.hexcasting.api.casting
 
 import at.petrak.hexcasting.api.casting.iota.*
 import at.petrak.hexcasting.api.casting.math.HexPattern
+import at.petrak.hexcasting.api.casting.mishaps.MishapEntityNotFound
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
@@ -37,7 +38,7 @@ fun List<Iota>.getDouble(idx: Int, argc: Int = 0): Double {
 fun List<Iota>.getEntity(level: ServerLevel, idx: Int, argc: Int = 0): Entity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        return x.getEntity(level)
+        return x.getEntity(level) ?: throw MishapEntityNotFound(x.entityId, x.entityName)
     } else {
         throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity")
     }
@@ -84,7 +85,7 @@ fun List<Iota>.getBool(idx: Int, argc: Int = 0): Boolean {
 fun List<Iota>.getItemEntity(level: ServerLevel, idx: Int, argc: Int = 0): ItemEntity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = x.getEntity(level)
+        val e = x.getEntity(level) ?: throw MishapEntityNotFound(x.entityId, x.entityName)
         if (e is ItemEntity)
             return e
     }
@@ -94,7 +95,7 @@ fun List<Iota>.getItemEntity(level: ServerLevel, idx: Int, argc: Int = 0): ItemE
 fun List<Iota>.getPlayer(level: ServerLevel, idx: Int, argc: Int = 0): ServerPlayer {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = x.getEntity(level)
+        val e = x.getEntity(level) ?: throw MishapEntityNotFound(x.entityId, x.entityName)
         if (e is ServerPlayer)
             return e
     }
@@ -104,7 +105,7 @@ fun List<Iota>.getPlayer(level: ServerLevel, idx: Int, argc: Int = 0): ServerPla
 fun List<Iota>.getMob(level: ServerLevel, idx: Int, argc: Int = 0): Mob {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = x.getEntity(level)
+        val e = x.getEntity(level) ?: throw MishapEntityNotFound(x.entityId, x.entityName)
         if (e is Mob)
             return e
     }
@@ -114,7 +115,7 @@ fun List<Iota>.getMob(level: ServerLevel, idx: Int, argc: Int = 0): Mob {
 fun List<Iota>.getLivingEntityButNotArmorStand(level: ServerLevel, idx: Int, argc: Int = 0): LivingEntity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = x.getEntity(level)
+        val e = x.getEntity(level) ?: throw MishapEntityNotFound(x.entityId, x.entityName)
         if (e is LivingEntity && e !is ArmorStand)
             return e
     }

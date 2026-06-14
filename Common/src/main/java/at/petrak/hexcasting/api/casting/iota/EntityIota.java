@@ -21,7 +21,6 @@ import net.minecraft.world.item.component.ResolvableProfile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.ref.WeakReference;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -44,7 +43,7 @@ public class EntityIota extends Iota {
         return entityId;
     }
 
-    public Entity getEntity(ServerLevel level) {
+    public @Nullable Entity getEntity(ServerLevel level) {
         return level.getEntity(entityId);
     }
 
