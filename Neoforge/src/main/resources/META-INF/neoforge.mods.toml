@@ -62,6 +62,6 @@ ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.hexcasting]]
-modId = "accessories"
+modId = "curios"
 mandatory = false
-versionRange = "[1.1.0-beta.16+1.21.1,)"
+versionRange = "[9.5.1+1.21.1,)"
