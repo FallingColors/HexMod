@@ -1548,7 +1548,7 @@
         "1": "I have discovered new and horrifying modes of failure. I must not succumb to them.",
         
         "bad_mindflay.title": "Inert Mindflay",
-        bad_mindflay: "Attempted to flay the mind of something that I have either already used, or of a character not suitable for the target block.$(br2)Causes dark green sparks, and kills the subject. If a villager sees that, I doubt they would look on it favorably.",
+        bad_mindflay: "Attempted to flay the mind of something that I have either already used, or of a character not suitable for the target block.$(br2)Causes dark green sparks. Subjects I have already used will be killed outright, while those that are simply unsuitable will be slightly damaged.",
         
         "no_circle.title": "Lack Spell Circle",
         no_circle: "Tried to cast an action requiring a spell circle without a spell circle.$(br2)Causes light blue sparks, and upends my inventory onto the ground.",
