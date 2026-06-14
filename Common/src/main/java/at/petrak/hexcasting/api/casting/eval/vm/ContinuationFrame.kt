@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.casting.eval.vm
 import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.common.lib.HexRegistries
+import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.common.lib.hex.HexContinuationTypes
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import com.mojang.serialization.Codec
@@ -81,7 +82,6 @@ interface ContinuationFrame {
     }
 
     companion object {
-
         /**
          * This method attempts to find the type from the `type` key.
          * See [ContinuationFrame.serializeToNBT] for the storage format.
