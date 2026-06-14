@@ -20,7 +20,7 @@ object OpTheCoolerReadable : ConstMediaAction {
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(target)
             ?: return false.asActionResult
 
-        datumHolder.readIota()
+        datumHolder.readIota(env.world)
             ?: datumHolder.emptyIota()
             ?: return false.asActionResult
 

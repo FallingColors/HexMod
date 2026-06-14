@@ -317,6 +317,10 @@ fun <T : Iota> validateIota(iota: T, serverLevel: ServerLevel): Iota {
     }
 }
 
+fun <T: Iota> validateIotaNullable(iota: T?, serverLevel: ServerLevel): Iota? {
+    return iota?.let { validateIota(iota, serverLevel) }
+}
+
 fun <T : Iota> validateIotaList(iotaList: List<T>, serverLevel: ServerLevel): List<Iota> {
     return iotaList.map { validateIota(it, serverLevel) }
 }
