@@ -14,5 +14,5 @@ class MishapInternalException(val exception: Exception) : Mishap() {
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("unknown", exception)
+        error("unknown", exception.toString())
 }
