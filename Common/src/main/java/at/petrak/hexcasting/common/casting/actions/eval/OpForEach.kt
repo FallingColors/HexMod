@@ -1,11 +1,13 @@
 package at.petrak.hexcasting.common.casting.actions.eval
 
+import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.FrameForEach
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
+import at.petrak.hexcasting.api.casting.evaluatable
 import at.petrak.hexcasting.api.casting.getList
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.utils.TreeList
@@ -18,12 +20,14 @@ object OpForEach : Action {
         if (stack.size < 2)
             throw MishapNotEnoughArgs(2, stack.size)
 
-        val instrs = stack.getList(stack.lastIndex - 1, stack.size)
-        val datums = stack.getList(stack.lastIndex, stack.size)
+        val datums = stack.getList(stack.lastIndex - 1, stack.size)
+        val instrs = evaluatable(stack[stack.lastIndex], 0)
         stack.removeLastOrNull()
         stack.removeLastOrNull()
 
-        val frame = FrameForEach(datums, instrs, null, TreeList.empty())
+        val instrList = instrs.map({ SpellList.LList(0, listOf(it)) }, { it })
+
+        val frame = FrameForEach(datums, instrList, null, TreeList.empty())
         val image2 = image.withUsedOp().copy(stack = stack)
 
         return OperationResult(image2, listOf(), continuation.pushFrame(frame), HexEvalSounds.THOTH)

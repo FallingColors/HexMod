@@ -52,7 +52,8 @@ data class FrameForEach(
             harness.image.stack.toList() to acc
         } else {
             // else save the stack to the accumulator and reuse the saved base stack.
-            baseStack to acc.appendedAll(harness.image.stack)
+            // Only the iotas above the waterline (size of the base stack) are kept.
+            baseStack to acc.appendedAll(harness.image.stack.drop(baseStack.size))
         }
 
         // If we still have data to process...
