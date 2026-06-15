@@ -77,7 +77,11 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                         sound = HexEvalSounds.MISHAP,
                     )
                 } else {
-                    result
+                    result.copy(
+                        newData = result.newData?.copy(
+                            stack = validateIotaList(result.newData.stack, world)
+                        )
+                    )
                 }
             }
 
