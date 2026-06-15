@@ -390,6 +390,8 @@ public class HexActions {
 
     public static final ActionRegistryEntry ESCAPE = make("escape",
         new ActionRegistryEntry(HexPattern.fromAngles("qqqaw", HexDir.WEST), OpEscape.INSTANCE));
+    public static final ActionRegistryEntry RUNTIME_ESCAPE = make("runtime_escape",
+        new ActionRegistryEntry(HexPattern.fromAngles("wdeee", HexDir.SOUTH_EAST), OpRuntimeEscape.INSTANCE));
     public static final ActionRegistryEntry OPEN_PAREN = make("open_paren",
         new ActionRegistryEntry(HexPattern.fromAngles("qqq", HexDir.WEST), OpOpenParen.INSTANCE));
     public static final ActionRegistryEntry CLOSE_PAREN = make("close_paren",
