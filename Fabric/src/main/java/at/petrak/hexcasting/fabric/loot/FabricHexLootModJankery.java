@@ -25,7 +25,6 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 import static at.petrak.hexcasting.common.loot.HexLootHandler.TABLE_INJECT_AMETHYST_CLUSTER;
 
 public class FabricHexLootModJankery {
-    public static final ResourceLocation FUNC_AMETHYST_SHARD_REDUCER = modLoc("amethyst_shard_reducer");
     public static final ResourceKey<LootTable> RANDOM_SCROLL_TABLE = ResourceKey.create(Registries.LOOT_TABLE, modLoc("random_scroll"));
     public static final ResourceKey<LootTable> RANDOM_CYPHER_TABLE = ResourceKey.create(Registries.LOOT_TABLE, modLoc("random_cypher"));
 
