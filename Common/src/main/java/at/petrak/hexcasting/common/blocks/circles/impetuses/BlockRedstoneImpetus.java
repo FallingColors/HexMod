@@ -68,7 +68,7 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
             } else {
                 var datumContainer = IXplatAbstractions.INSTANCE.findDataHolder(usedStack);
                 if (datumContainer != null) {
-                    var stored = datumContainer.readIota();
+                    var stored = datumContainer.readIota(sLevel);
                     if (stored instanceof EntityIota eieio) {
                         var entity = eieio.getEntity(sLevel);
                         if (entity instanceof Player iotaPlayer) {

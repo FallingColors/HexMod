@@ -21,7 +21,7 @@ object OpTheCoolerRead : ConstMediaAction {
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(target)
             ?: throw MishapBadEntity.of(target, "iota.read")
 
-        val datum = datumHolder.readIota()
+        val datum = datumHolder.readIota(env.world)
             ?: datumHolder.emptyIota()
             ?: throw MishapBadEntity.of(target, "iota.read")
         return listOf(datum)

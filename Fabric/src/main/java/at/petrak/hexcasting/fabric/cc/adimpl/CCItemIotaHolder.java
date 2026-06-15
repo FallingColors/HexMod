@@ -4,11 +4,14 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.ladysnake.cca.api.v3.component.Component;
 
 import java.util.function.Function;
+
+import static at.petrak.hexcasting.api.utils.HexUtils.validateIotaNullable;
 
 public abstract class CCItemIotaHolder implements CCIotaHolder, Component {
     final ItemStack stack;
@@ -28,8 +31,8 @@ public abstract class CCItemIotaHolder implements CCIotaHolder, Component {
         }
 
         @Override
-        public @Nullable Iota readIota() {
-            return this.iotaHolder.readIota(this.stack);
+        public @Nullable Iota readIota(ServerLevel world) {
+            return validateIotaNullable(this.iotaHolder.readIota(this.stack), world);
         }
 
         @Override
@@ -69,7 +72,7 @@ public abstract class CCItemIotaHolder implements CCIotaHolder, Component {
         }
 
         @Override
-        public @Nullable Iota readIota() {
+        public @Nullable Iota readIota(ServerLevel world) {
             return this.provider.apply(this.stack);
         }
 

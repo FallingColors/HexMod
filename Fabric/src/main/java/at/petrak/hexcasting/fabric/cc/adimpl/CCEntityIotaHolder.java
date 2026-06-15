@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.addldata.ItemDelegatingEntityIotaHolder;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,8 +28,8 @@ public abstract class CCEntityIotaHolder implements CCIotaHolder {
 
 
         @Override
-        public @Nullable Iota readIota() {
-            return inner.readIota();
+        public @Nullable Iota readIota(ServerLevel world) {
+            return inner.readIota(world);
         }
 
         @Override

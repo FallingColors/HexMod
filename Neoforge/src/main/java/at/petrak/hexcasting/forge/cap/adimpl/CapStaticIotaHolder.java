@@ -2,6 +2,7 @@ package at.petrak.hexcasting.forge.cap.adimpl;
 
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.casting.iota.Iota;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +13,7 @@ public record CapStaticIotaHolder(Function<ItemStack, Iota> provider,
 
     @Override
     public @Nullable
-    Iota readIota() {
+    Iota readIota(ServerLevel world) {
         return provider.apply(stack);
     }
 
