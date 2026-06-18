@@ -37,7 +37,7 @@ object OpReadIntoParens : Action {
             ?: throw MishapBadOffhandItem.of(handStack, "iota.read")
 
         return ParenthesizedOperationResult(
-            image.withNewParenthesized(datum, escaped = true), // inserted parens should not adjust paren count
+            image.withUsedOp().withNewParenthesized(datum, escaped = true), // inserted parens should not adjust paren count
             listOf(), continuation,
             HexEvalSounds.NORMAL_EXECUTE,
             ResolvedPatternType.EVALUATED

@@ -14,7 +14,7 @@ object OpOpenNParens : Action {
         val newStack = image.stack.toMutableList()
         val layers = newStack.getPositiveInt(newStack.lastIndex)
         newStack.removeLast()
-        val image2 = image.copy(
+        val image2 = image.withUsedOp().copy(
             stack = newStack,
             parenCount = layers
         )

@@ -22,7 +22,7 @@ object OpCloseAllParens : Action {
         val newStack = image.stack.toMutableList()
         newStack.add(DoubleIota(image.parenCount.toDouble()))
         newStack.add(ListIota(image.parenthesized.toList().map { it.iota }))
-        val image2 = image.copy(
+        val image2 = image.withUsedOp().copy(
             stack = newStack,
             parenCount = 0,
             parenthesized = listOf()
