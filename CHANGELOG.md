@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Updated to Minecraft 1.21.1 ([#985](https://github.com/FallingColors/HexMod/pull/985)) @SuperKnux @slava110
+- Added Extirpating Gambit, Reflecting Gambit, Bubbling Gambit, Dioscuri Gambit II, Tutu's Gambit, Janus' Gambit, and Atalanta's Gambit ([#1177](https://github.com/FallingColors/HexMod/pull/1177)) @IridescentVoid
 
 ### Fixed
 
