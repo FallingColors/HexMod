@@ -44,6 +44,13 @@ interface ContinuationFrame {
     fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>>
 
     /**
+     * The OpContinue instruction wants us to "jump to" the end of the current ForEach or loop iteration.
+     * It leaves the frame intact on the stack to be executed next.
+     * @return whether the break should stop here
+     */
+    fun breakSideways(): Boolean = false
+
+    /**
      * Return the number of iotas contained inside this frame, used for determining whether it is valid to serialise.
      */
     fun size(): Int

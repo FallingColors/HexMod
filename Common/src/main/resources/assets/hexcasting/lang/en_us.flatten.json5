@@ -762,6 +762,7 @@
         replace: "Surgeon's Exaltation",
         construct: "Speaker's Distillation",
         deconstruct: "Speaker's Decomposition",
+        snap_list: "Extirpating Gambit",
         
         get_entity: "Entity Purification",
         "get_entity/": {
@@ -789,10 +790,13 @@
         swap: "Jester's Gambit",
         rotate: "Rotation Gambit",
         rotate_reverse: "Rotation Gambit II",
+        swap_one_three: "Reflecting Gambit",
+        swap_two_three: "Bubbling Gambit",
         duplicate: "Gemini Decomposition",
         over: "Prospector's Gambit",
         tuck: "Undertaker's Gambit",
         "2dup": "Dioscuri Gambit",
+        duplicate_many: "Dioscuri Gambit II",
         duplicate_n: "Gemini Gambit",
         stack_len: "Flock's Reflection",
         fisherman: "Fisherman's Gambit",
@@ -923,7 +927,10 @@
         "eval/cc": "Iris' Gambit",
         for_each: "Thoth's Gambit",
         halt: "Charon's Gambit",
+        truly_halt: "Janus' Gambit",
+        continue: "Atalanta's Gambit",
         thanatos: "Thanatos' Reflection",
+        nop: "Tutu's Gambit",
         
         "interop/": {
           "gravity/": {
@@ -1877,10 +1884,13 @@
         swap: "Swaps the top two iotas of the stack.",
         rotate: "Yanks the iota third from the top of the stack to the top. [0, 1, 2] becomes [1, 2, 0].",
         rotate_reverse: "Yanks the top iota to the third position. [0, 1, 2] becomes [2, 0, 1].",
+        swap_one_three: "Swaps the top and third-from-the-top iota. [0, 1, 2] becomes [2, 1 0].",
+        swap_two_three: "Swaps the second-from-the-top and third-from-the-top iota. [0, 1, 2] becomes [1, 0, 2].",
         duplicate: "Duplicates the top iota of the stack.",
         over: "Copy the second-to-last iota of the stack to the top. [0, 1] becomes [0, 1, 0].",
         tuck: "Copy the top iota of the stack, then put it under the second iota. [0, 1] becomes [1, 0, 1].",
         "2dup": "Copy the top two iotas of the stack. [0, 1] becomes [0, 1, 0, 1].",
+        duplicate_many: "Copy the top n iotas of the stack while preserving order.",
         stack_len: "Pushes the size of the stack as a number to the top of the stack. (For example, a stack of [0, 1] will become [0, 1, 2].)",
         duplicate_n: "Removes the number at the top of the stack, then copies the top iota of the stack that number of times. (A count of 2 results in two of the iota on the stack, not three.)",
         fisherman: "Grabs the element in the stack indexed by the number and brings it to the top. If the number is negative, instead moves the top element of the stack down that many elements.",
@@ -1958,6 +1968,7 @@
         splat: "Remove the list at the top of the stack, then push its contents to the stack.",
         construct: "Remove the top iota, then add it as the first element to the list at the top of the stack.",
         deconstruct: "Remove the first iota from the list at the top of the stack, then push that iota to the stack.",
+        snap_list: "Remove the number at the top of the stack, then split the list at the top of the stack at the given index into a list of what came before, the iota, and what comes after.",
       },
       
       patterns_as_iotas: {
@@ -2006,11 +2017,17 @@
         
         "halt.1": "This pattern forcibly halts a _Hex. This is mostly useless on its own, as I could simply just stop writing patterns, or put down my staff.",
         "halt.2": "But when combined with $(l:patterns/meta#hexcasting:eval)$(action)Hermes'/$ or $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambits/$, it becomes $(italics)far/$ more interesting. Those patterns serve to 'contain' that halting, and rather than ending the entire _Hex, those gambits end instead. This can be used to cause $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambit/$ not to operate on every iota it's given. An escape from the madness, as it were.",
-        
+
+        "truly_halt.1": "This pattern forcibly halts a _Hex, ignoring any $(l:patterns/meta#hexcasting:eval)$(action)Hermes'/$ or $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambits/$ that might otherwise contain $(l:patterns/meta#hexcasting:halt)$(action)Charon's Gambit/$.",
+
+        "continue.1": "This pattern halts the current iteration of $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambit/$, or if cast outside of one, the entire hex.",
+
         "eval/cc.1": "Cast a pattern or list of patterns from the stack exactly like $(l:patterns/meta#hexcasting:eval)$(action)Hermes' Gambit/$, except that a unique \"Jump\" iota is pushed to the stack beforehand. ",
         "eval/cc.2": "When the \"Jump\"-iota is executed, it'll skip the rest of the patterns and jump directly to the end of the pattern list.$(p)While this may seem redundant given $(l:patterns/meta#hexcasting:halt)$(action)Charon's Gambit/$ exists, this allows you to exit $(italic)nested/$ $(l:patterns/meta#hexcasting:eval)$(action)Hermes'/$ invocations in a controlled way, where Charon only allows you to exit one.$(p)The \"Jump\" iota will apparently stay on the stack even after execution is finished... better not think about the implications of that.",
         
-        "thanatos.1": "Adds the number of patterns a _Hex is still capable of evaluating to the stack. This is reduced by one for each pattern cast by the _Hex."
+        "thanatos.1": "Adds the number of patterns a _Hex is still capable of evaluating to the stack. This is reduced by one for each pattern cast by the _Hex.",
+
+        "nop.1": "Does nothing. Executing it does not consume an operation, consume media, produce particles, or have any other impact on the world.",
       },
       
       circle_patterns: {

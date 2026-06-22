@@ -135,6 +135,14 @@
       "input": "list",
       "output": "list, any",
       "text": "hexcasting.page.lists.deconstruct"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:snap_list",
+      "anchor": "hexcasting:snap_list",
+      "input": "list, number",
+      "output": "list, any, list",
+      "text": "hexcasting.page.lists.snap_list"
     }
   ]
 }

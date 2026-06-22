@@ -54,6 +54,24 @@
     },
     {
       "type": "hexcasting:pattern",
+      "op_id": "hexcasting:truly_halt",
+      "anchor": "hexcasting:truly_halt",
+      "text": "hexcasting.page.meta.truly_halt.1"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:continue",
+      "anchor": "hexcasting:continue",
+      "text": "hexcasting.page.meta.continue.1"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:nop",
+      "anchor": "hexcasting:nop",
+      "text": "hexcasting.page.meta.nop.1"
+    },
+    {
+      "type": "hexcasting:pattern",
       "op_id": "hexcasting:thanatos",
       "anchor": "hexcasting:thanatos",
       "output": "number",
