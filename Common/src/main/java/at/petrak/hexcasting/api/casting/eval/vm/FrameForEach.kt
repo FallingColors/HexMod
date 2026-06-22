@@ -14,28 +14,27 @@ import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.server.level.ServerLevel
-import java.util.*
-import kotlin.jvm.optionals.getOrNull
 
 /**
  * A frame representing all the state for a Thoth evaluation.
  * Pushed by an OpForEach.
- * @property first whether the input stack state is the first one (since we don't want to save the base-stack before any changes are made)
  * @property data list of *remaining* datums to ForEach over
  * @property code code to run per datum
- * @property baseStack the stack state at Thoth entry
- * @property acc concatenated list of final stack states after Thoth exit
+ * @property contextStack the stack state used for each iteration
+ * @property stashedStack the stack state to restore after all iterations finish
+ * @property acc concatenated list of final stack states after each iteration
  */
 data class FrameForEach(
     val data: SpellList,
     val code: SpellList,
-    val baseStack: List<Iota>?,
+    val contextStack: List<Iota>,
+    val stashedStack: List<Iota>,
     val acc: TreeList<Iota>
 ) : ContinuationFrame {
 
-    /** When halting, we add the stack state at halt to the stack accumulator, then return the original pre-Thoth stack, plus the accumulator. */
+    /** When halting, we add the stack state at halt to the stack accumulator, then return the stashed stack, plus the accumulator. */
     override fun breakDownwards(stack: List<Iota>): Pair<Boolean, List<Iota>> {
-        val newStack = baseStack?.toMutableList() ?: mutableListOf()
+        val newStack = stashedStack.toMutableList()
         newStack.add(ListIota(acc.appendedAll(stack)))
         return true to newStack
     }
@@ -46,43 +45,40 @@ data class FrameForEach(
         level: ServerLevel,
         harness: CastingVM
     ): CastResult {
-        // If this is the very first Thoth step (i.e. no Thoth computations run yet)...
-        val (stack, newAcc) = if (baseStack == null) {
-            // init stack to the harness stack...
-            harness.image.stack.toList() to acc
-        } else {
-            // else save the stack to the accumulator and reuse the saved base stack.
-            // Only the iotas above the waterline (size of the base stack) are kept.
-            baseStack to acc.appendedAll(harness.image.stack.drop(baseStack.size))
-        }
+        // Save the stack to the accumulator. On the first iteration, the stack will be empty.
+        val newAcc = acc.appendedAll(harness.image.stack)
 
         // If we still have data to process...
-        val (stackTop, newImage, newCont) = if (data.nonEmpty) {
+        val (newStack, newImage, newCont) = if (data.nonEmpty) {
+            // Restore the context stack,
+            val stack = contextStack.toMutableList()
             // push the next datum to the top of the stack,
+            stack.add(data.car)
             val cont2 = continuation
                 // put the next Thoth object back on the stack for the next Thoth cycle,
-                .pushFrame(FrameForEach(data.cdr, code, stack, newAcc))
+                .pushFrame(FrameForEach(data.cdr, code, contextStack, stashedStack, newAcc))
                 // and prep the Thoth'd code block for evaluation.
                 .pushFrame(FrameEvaluate(code, true))
-            Triple(data.car, harness.image.withUsedOp(), cont2)
+            Triple(stack, harness.image.withUsedOp(), cont2)
         } else {
-            // Else, dump our final list onto the stack.
-            Triple(ListIota(newAcc), harness.image, continuation)
+            // Else, restore the stashed stack,
+            val stack = stashedStack.toMutableList()
+            // and dump our final list onto the stack.
+            stack.add(ListIota(newAcc))
+            Triple(stack, harness.image, continuation)
         }
-        val tStack = stack.toMutableList()
-        tStack.add(stackTop)
         return CastResult(
             ListIota(code),
             newCont,
             // reset escapes so they don't carry over to other iterations or out of thoth
-            newImage.withResetEscape().copy(stack = tStack),
+            newImage.withResetEscape().copy(stack = newStack),
             listOf(),
             ResolvedPatternType.EVALUATED,
             HexEvalSounds.THOTH,
         )
     }
 
-    override fun size() = data.size() + code.size() + acc.size + (baseStack?.size ?: 0)
+    override fun size() = data.size() + code.size() + acc.size + contextStack.size + stashedStack.size
 
     override val type: ContinuationFrame.Type<*> = TYPE
 
@@ -93,21 +89,24 @@ data class FrameForEach(
                 inst.group(
                     SpellList.CODEC.fieldOf("data").forGetter { it.data },
                     SpellList.CODEC.fieldOf("code").forGetter { it.code },
-                    IotaType.TYPED_CODEC.listOf().optionalFieldOf("base").forGetter { Optional.ofNullable(it.baseStack) },
+                    IotaType.TYPED_CODEC.listOf().fieldOf("context").forGetter { it.contextStack },
+                    IotaType.TYPED_CODEC.listOf().fieldOf("stashed").forGetter { it.stashedStack },
                     IotaType.TYPED_CODEC.listOf().fieldOf("accumulator").forGetter { it.acc }
-                ).apply(inst) { a, b, c, d ->
-                    FrameForEach(a, b, c.getOrNull(), TreeList.from(d))
+                ).apply(inst) { a, b, c, d, e ->
+                    FrameForEach(a, b, c, d, TreeList.from(e))
                 }
             }
             val STREAM_CODEC = StreamCodec.composite(
                 SpellList.STREAM_CODEC, FrameForEach::data,
                 SpellList.STREAM_CODEC, FrameForEach::code,
-                ByteBufCodecs.optional(IotaType.TYPED_STREAM_CODEC
-                    .apply(ByteBufCodecs.list())), { Optional.ofNullable(it.baseStack) },
+                IotaType.TYPED_STREAM_CODEC
+                    .apply(ByteBufCodecs.list()), FrameForEach::contextStack,
+                IotaType.TYPED_STREAM_CODEC
+                    .apply(ByteBufCodecs.list()), FrameForEach::stashedStack,
                 IotaType.TYPED_STREAM_CODEC
                     .apply(ByteBufCodecs.list()), FrameForEach::acc
-            ) { a, b, c, d ->
-                FrameForEach(a, b, c.getOrNull(), TreeList.from(d))
+            ) { a, b, c, d, e ->
+                FrameForEach(a, b, c, d, TreeList.from(e))
             }
 
 

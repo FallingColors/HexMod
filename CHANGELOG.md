@@ -14,8 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Changed the argument order for Thoth's Gambit to take data first ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
 - Changed Thoth's Gambit to accept single iotas as the loop body ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
-- Changed the pattern shape for Thoth's Gambit ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
-- Changed Thoth's Gambit to use a waterline to determine which iotas are accumulated ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
+- Changed Thoth's Gambit to be a special handler with a new shape ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
+- Changed Thoth's Gambit to use a context stack for iterations, and restore stashed iotas at the end ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
 
 ### Fixed
 

@@ -988,6 +988,7 @@
     "special.hexcasting:": {
       number: "Numerical Reflection: %s",
       mask: "Bookkeeper's Gambit: %s",
+      for_each: "Thoth's Gambit: %s",
     },
 
     "iota.hexcasting:": {
@@ -2001,9 +2002,10 @@
         "eval.1": "Remove a pattern or list of patterns from the stack, then cast them as if I had drawn them myself with my $(l:items/staff)$(item)Staff/$ (until a $(l:patterns/meta#hexcasting:halt)$(action)Charon's Gambit/$ is encountered). If an iota is escaped with $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ or $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)its ilk/$, it will be pushed to the stack. Otherwise, non-patterns will fail.",
         "eval.2": "This can be very powerful in tandem with $(l:items/focus)$(item)Foci/$, and according to one esoteric scroll I found it also makes the bureaucracy of Nature a \"Turing-complete\" system.$(br2)However, it seems there's a limit to how many times a _Hex can cast itself-- Nature doesn't look kindly on runaway spells!$(br2)In addition, with the energies of the patterns occurring without me to guide them, any mishap will cause the remaining actions to immediately unravel.",
 
-        "for_each.1": "Remove a list of values and pattern/list of patterns from the stack, then cast the pattern(s) over each element of the first list.",
-        "for_each.2": "More specifically: A copy of the stack is saved at the start. For each value given:$(li)Add the element to the stack$(li)Draw the pattern(s) given$(li)If the current stack's size is larger than the saved stack's size, store the extra iotas to a hidden list.$(li)Restore the stack to match the copy and move on to the next element.$(br)Finally, pushes the list of stored iotas onto the stack.$(br2)No wonder all the practitioners of this art go mad.",
-        
+        "for_each.1": "A family of patterns that pops an evaluatable iota, a data list, and $(o)n/$ iotas of context from the stack, determined by tail length. Then cast the evaluatable over each element of the first list.",
+        "for_each.2": "In the examples, the context size is 0, 1, and 2 iotas, going clockwise from the top left.$(br2)Specifically, for each data value, it will:$(li)create a sub-stack, populated with a copy of the context iotas$(li)push the data value$(li)cast the evaluatable iota$(li)store all iotas remaining on the sub-stack to a hidden list$(br2)Finally, restores the original stack, and pushes the hidden list onto the stack.",
+        "for_each.3": "For example, if I had the number 5, a list of [1, 2, 3], and a $(l:patterns/patterns_as_iotas)$(thing)pattern iota/$ of $(l:patterns/math#hexcasting:add)$(action)Additive Distillation/$ on my stack, I can draw $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambit: 1/$ to obtain a list of [6, 7, 8], with nothing else left on my stack.$(br2)Certainly difficult to wrap my head around, but it seems worth learning. I can already think of multiple applications for this pattern.",
+
         "halt.1": "This pattern forcibly halts a _Hex. This is mostly useless on its own, as I could simply just stop writing patterns, or put down my staff.",
         "halt.2": "But when combined with $(l:patterns/meta#hexcasting:eval)$(action)Hermes'/$ or $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambits/$, it becomes $(italics)far/$ more interesting. Those patterns serve to 'contain' that halting, and rather than ending the entire _Hex, those gambits end instead. This can be used to cause $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambit/$ not to operate on every iota it's given. An escape from the madness, as it were.",
         

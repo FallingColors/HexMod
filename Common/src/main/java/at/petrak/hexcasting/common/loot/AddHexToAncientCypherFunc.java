@@ -75,12 +75,12 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
         new Pair<>("hexcasting.loot_hex.ascend", new String[] {"NORTH_EAST qaq","SOUTH_EAST aqaae","WEST qqqqqawwawawd"}),
         new Pair<>("hexcasting.loot_hex.blink", new String[] {"NORTH_EAST qaq","EAST aadaa","EAST aa","NORTH_EAST qaq","NORTH_EAST wa","EAST wqaawdd","NORTH_EAST qaq","EAST aa","NORTH_WEST wddw","NORTH_EAST wqaqw","SOUTH_EAST aqaaw","NORTH_WEST wddw","SOUTH_WEST awqqqwaq"}),
         new Pair<>("hexcasting.loot_hex.blastoff", new String[] {"NORTH_EAST qaq","NORTH_WEST qqqqqew","SOUTH_EAST aqaawaa","SOUTH_EAST waqaw","SOUTH_WEST awqqqwaqw"}),
-        new Pair<>("hexcasting.loot_hex.radar", new String[] {"NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaaeaqq","SOUTH_EAST qqqqqwdeddwd","WEST qqq","EAST aadaa","EAST aa","SOUTH_EAST aqaawa","SOUTH_WEST ewdqdwe","NORTH_EAST de","EAST eee","NORTH_EAST dadaqw"}),
+        new Pair<>("hexcasting.loot_hex.radar", new String[] {"NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaaeaqq","SOUTH_EAST qqqqqwdeddwd","WEST qqq","EAST aadaa","EAST aa","SOUTH_EAST aqaawa","SOUTH_WEST ewdqdwe","NORTH_EAST de","EAST eee","EAST waaddw"}),
         new Pair<>("hexcasting.loot_hex.beckon", new String[] {"NORTH_EAST qaq","EAST aa","NORTH_EAST qaq","NORTH_EAST wa","EAST weaqa","EAST aadaa","EAST dd","NORTH_EAST qaq","EAST aa","EAST aawdd","NORTH_WEST wddw","EAST aadaa","NORTH_EAST wqaqw","NORTH_EAST wdedw","SOUTH_EAST aqaawa","SOUTH_EAST waqaw","SOUTH_WEST awqqqwaqw"}),
         new Pair<>("hexcasting.loot_hex.detonate", new String[] {"NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaaedwd","EAST ddwddwdd"}),
         new Pair<>("hexcasting.loot_hex.shockwave", new String[] {"NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaawaa","EAST aadaadaa","SOUTH_EAST aqawqadaq","SOUTH_EAST aqaaedwd","EAST aawaawaa","NORTH_EAST qqa","EAST qaqqqqq"}),
-        new Pair<>("hexcasting.loot_hex.heat_wave", new String[] {"NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaae","SOUTH_EAST qqqqqwded","SOUTH_WEST aaqwqaa","SOUTH_EAST a","WEST qqq","SOUTH_EAST aaqawawa","EAST eee","NORTH_EAST dadaqw"}),
-        new Pair<>("hexcasting.loot_hex.wither_wave", new String[] {"NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaae","SOUTH_EAST qqqqqwdeddwd","SOUTH_WEST aaqwqaa","SOUTH_EAST a","WEST qqq","SOUTH_EAST aqaae","SOUTH_EAST aqaaw","SOUTH_WEST qqqqqaewawawe","EAST eee","NORTH_EAST dadaqw"}),
+        new Pair<>("hexcasting.loot_hex.heat_wave", new String[] {"NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaae","SOUTH_EAST qqqqqwded","SOUTH_WEST aaqwqaa","SOUTH_EAST a","WEST qqq","SOUTH_EAST aaqawawa","EAST eee","EAST waaddw"}),
+        new Pair<>("hexcasting.loot_hex.wither_wave", new String[] {"NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaae","SOUTH_EAST qqqqqwdeddwd","SOUTH_WEST aaqwqaa","SOUTH_EAST a","WEST qqq","SOUTH_EAST aqaae","SOUTH_EAST aqaaw","SOUTH_WEST qqqqqaewawawe","EAST eee","EAST waaddw"}),
         new Pair<>("hexcasting.loot_hex.flight_zone", new String[] {"NORTH_EAST qaq","SOUTH_EAST aqaaq","SOUTH_WEST awawaawq"})
     );
 }

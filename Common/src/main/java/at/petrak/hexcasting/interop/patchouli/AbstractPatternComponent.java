@@ -62,14 +62,17 @@ abstract public class AbstractPatternComponent implements ICustomComponent {
                     : PatternColors.READABLE_GRID_SCROLL_COLORS;
         }
 
+        int colsInLastRow = (patterns.size() - 1) % cols + 1;
+        double lastRowOffset = (cols - colsInLastRow) * cellW / 2;
         for(int p = 0; p < patterns.size(); p++){
 
             int r = p / cols;
             int c = p % cols;
+            double offset = r < rows - 1 ? 0 : lastRowOffset;
             HexPattern pattern = patterns.get(p);
 
             ps.pushPose();
-            ps.translate(cellW * c, cellH * r + 16, 100);
+            ps.translate(offset + cellW * c, cellH * r + 16, 100);
 
             PatternRenderer.renderPattern(pattern, graphics.pose(), patSets, patCols, 0, 4);
             ps.popPose();
