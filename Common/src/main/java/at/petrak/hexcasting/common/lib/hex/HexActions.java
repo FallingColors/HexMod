@@ -135,6 +135,8 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("ddad", HexDir.WEST), OpFisherman.INSTANCE));
     public static final ActionRegistryEntry FISHERMAN$COPY = make("fisherman/copy",
         new ActionRegistryEntry(HexPattern.fromAngles("aada", HexDir.EAST), OpFishermanButItCopies.INSTANCE));
+    public static final ActionRegistryEntry FISHERMAN$IN_PLACE = make("fisherman/in_place",
+        new ActionRegistryEntry(HexPattern.fromAngles("dadd", HexDir.NORTH_EAST), OpFishermanButItCopiesInPlace.INSTANCE));
     public static final ActionRegistryEntry SWIZZLE = make("swizzle",
         new ActionRegistryEntry(HexPattern.fromAngles("qaawdde",
             HexDir.SOUTH_EAST), OpAlwinfyHasAscendedToABeingOfPureMath.INSTANCE));

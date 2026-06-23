@@ -111,6 +111,14 @@
       "text": "hexcasting.page.stackmanip.fisherman/copy"
     },
     {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:fisherman/in_place",
+      "anchor": "hexcasting:fisherman/in_place",
+      "input": "number",
+      "output": "any",
+      "text": "hexcasting.page.stackmanip.fisherman/in_place"
+    },
+    {
       "type": "hexcasting:manual_pattern",
       "op_id": "hexcasting:mask",
       "anchor": "hexcasting:mask",
