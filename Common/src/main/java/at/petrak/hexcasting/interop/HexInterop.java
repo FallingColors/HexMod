@@ -1,11 +1,14 @@
 package at.petrak.hexcasting.interop;
 
+import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.interop.accessories.LensAccessoryRenderer;
 import at.petrak.hexcasting.interop.inline.InlineHex;
 import at.petrak.hexcasting.interop.inline.InlineHexClient;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.Platform;
+import io.wispforest.accessories.api.client.AccessoriesRendererRegistry;
 import vazkii.patchouli.api.PatchouliAPI;
 
 import java.util.List;
@@ -39,6 +42,7 @@ public class HexInterop {
     public static void clientInit() {
         IClientXplatAbstractions.INSTANCE.initPlatformSpecific();
         InlineHexClient.init();
+        AccessoriesRendererRegistry.registerRenderer(HexItems.SCRYING_LENS, LensAccessoryRenderer::new);
     }
 
     private static void initPatchouli() {
