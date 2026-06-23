@@ -1060,6 +1060,7 @@
       no_spell_circle: "requires a spell circle",
       others_name: "Tried to invade the privacy of %s's soul",
       "others_name.self": "Tried to divulge my Name too recklessly",
+      needs_loop_context: "needs to be cast within a skippable meta-evaluation pattern",
       
       divide_by_zero: {
         divide: "Attempted to divide %s by %s",
@@ -1515,6 +1516,9 @@
         
         "needs_parens.title": "Absent Introspection",
         needs_parens: "I attempted to draw $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ or $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ without first drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$.$(br2)Causes orange sparks, and pushes the pattern I tried to draw to the stack as an iota.",
+
+        "needs_loop_context.title": "Absent Metaevaluation",
+        needs_loop_context: "I attempted to draw $(l:patterns/meta#hexcasting:continue)$(action)Atalanta's Gambit/$ while not using $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambit/$.$(br2)Causes dark blue sparks.",
 
         "too_many_patterns.title": "Lost in Thought",
         too_many_patterns: "I attempted to evaluate too many patterns in one _Hex. Often, this happens because I've accidentally created an infinite loop.$(br2)Causes dark blue sparks, and chokes all the air out of me.",
@@ -2020,7 +2024,7 @@
 
         "truly_halt.1": "This pattern forcibly halts a _Hex, ignoring any $(l:patterns/meta#hexcasting:eval)$(action)Hermes'/$ or $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambits/$ that might otherwise contain $(l:patterns/meta#hexcasting:halt)$(action)Charon's Gambit/$.",
 
-        "continue.1": "This pattern halts the current iteration of $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambit/$, or if cast outside of one, the entire hex.",
+        "continue.1": "This pattern halts the current iteration of $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambit/$, immediately causing the next iteration, if any, to start. Mishaps if cast outside of a special context like $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambit/$.",
 
         "eval/cc.1": "Cast a pattern or list of patterns from the stack exactly like $(l:patterns/meta#hexcasting:eval)$(action)Hermes' Gambit/$, except that a unique \"Jump\" iota is pushed to the stack beforehand. ",
         "eval/cc.2": "When the \"Jump\"-iota is executed, it'll skip the rest of the patterns and jump directly to the end of the pattern list.$(p)While this may seem redundant given $(l:patterns/meta#hexcasting:halt)$(action)Charon's Gambit/$ exists, this allows you to exit $(italic)nested/$ $(l:patterns/meta#hexcasting:eval)$(action)Hermes'/$ invocations in a controlled way, where Charon only allows you to exit one.$(p)The \"Jump\" iota will apparently stay on the stack even after execution is finished... better not think about the implications of that.",
