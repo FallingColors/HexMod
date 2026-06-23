@@ -18,10 +18,7 @@ import at.petrak.hexcasting.common.casting.actions.circles.OpImpetusDir;
 import at.petrak.hexcasting.common.casting.actions.circles.OpImpetusPos;
 import at.petrak.hexcasting.common.casting.actions.escaping.*;
 import at.petrak.hexcasting.common.casting.actions.eval.*;
-import at.petrak.hexcasting.common.casting.actions.lists.OpEmptyList;
-import at.petrak.hexcasting.common.casting.actions.lists.OpLastNToList;
-import at.petrak.hexcasting.common.casting.actions.lists.OpSingleton;
-import at.petrak.hexcasting.common.casting.actions.lists.OpSplat;
+import at.petrak.hexcasting.common.casting.actions.lists.*;
 import at.petrak.hexcasting.common.casting.actions.local.OpPeekLocal;
 import at.petrak.hexcasting.common.casting.actions.local.OpPushLocal;
 import at.petrak.hexcasting.common.casting.actions.math.OpCoerceToAxial;
@@ -115,8 +112,11 @@ public class HexActions {
     public static final ActionRegistryEntry ROTATE = make("rotate",
         new ActionRegistryEntry(HexPattern.fromAngles("aaeaa", HexDir.EAST), new OpTwiddling(3, new int[]{1, 2, 0})));
     public static final ActionRegistryEntry ROTATE_REVERSE = make("rotate_reverse",
-        new ActionRegistryEntry(HexPattern.fromAngles("ddqdd",
-            HexDir.NORTH_EAST), new OpTwiddling(3, new int[]{2, 0, 1})));
+        new ActionRegistryEntry(HexPattern.fromAngles("ddqdd", HexDir.NORTH_EAST), new OpTwiddling(3, new int[]{2, 0, 1})));
+    public static final ActionRegistryEntry SWAP_ONE_THREE = make("swap_one_three",
+        new ActionRegistryEntry(HexPattern.fromAngles("ddwqaq", HexDir.NORTH_EAST), new OpTwiddling(3, new int[]{2, 1, 0})));
+    public static final ActionRegistryEntry SWAP_TWO_THREE = make("swap_two_three",
+        new ActionRegistryEntry(HexPattern.fromAngles("aawede", HexDir.EAST), new OpTwiddling(3, new int[]{1, 0, 2})));
     public static final ActionRegistryEntry DUPLICATE = make("duplicate",
         new ActionRegistryEntry(HexPattern.fromAngles("aadaa", HexDir.EAST), new OpTwiddling(1, new int[]{0, 0})));
     public static final ActionRegistryEntry OVER = make("over",
@@ -126,6 +126,8 @@ public class HexActions {
     public static final ActionRegistryEntry TWO_DUP = make("2dup",
         new ActionRegistryEntry(HexPattern.fromAngles("aadadaaw",
             HexDir.EAST), new OpTwiddling(2, new int[]{0, 1, 0, 1})));
+    public static final ActionRegistryEntry DUPLICATE_MANY = make("duplicate_many",
+        new ActionRegistryEntry(HexPattern.fromAngles("waadadaa", HexDir.EAST), OpDuplicateMany.INSTANCE));
 
     public static final ActionRegistryEntry STACK_LEN = make("stack_len",
         new ActionRegistryEntry(HexPattern.fromAngles("qwaeawqaeaqa", HexDir.NORTH_WEST), OpStackSize.INSTANCE));
@@ -405,6 +407,12 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("qwaqde", HexDir.NORTH_WEST), OpEvalBreakable.INSTANCE));
     public static final ActionRegistryEntry HALT = make("halt",
         new ActionRegistryEntry(HexPattern.fromAngles("aqdee", HexDir.SOUTH_WEST), OpHalt.INSTANCE));
+    public static final ActionRegistryEntry TRULY_HALT = make("truly_halt",
+        new ActionRegistryEntry(HexPattern.fromAngles("aadee", HexDir.SOUTH_WEST), OpTrulyHalt.INSTANCE));
+    public static final ActionRegistryEntry CONTINUE = make("continue",
+        new ActionRegistryEntry(HexPattern.fromAngles("aqdea", HexDir.SOUTH_WEST), OpContinue.INSTANCE));
+    public static final ActionRegistryEntry NOP = make("nop",
+        new ActionRegistryEntry(HexPattern.fromAngles("eedqa", HexDir.WEST), OpNop.INSTANCE));
 
     public static final ActionRegistryEntry READ = make("read",
         new ActionRegistryEntry(HexPattern.fromAngles("aqqqqq", HexDir.EAST), OpRead.INSTANCE));
@@ -577,6 +585,8 @@ public class HexActions {
         new OperationAction(HexPattern.fromAngles("ddewedd", HexDir.SOUTH_EAST)));
     public static final ActionRegistryEntry DECONSTRUCT = make("deconstruct",
         new OperationAction(HexPattern.fromAngles("aaqwqaa", HexDir.SOUTH_WEST)));
+    public static final ActionRegistryEntry SNAP_LIST = make("snap_list",
+        new ActionRegistryEntry(HexPattern.fromAngles("eawdq", HexDir.EAST), OpSnapList.INSTANCE));
 
     // Xplat interops
     static {

@@ -48,6 +48,22 @@
     },
     {
       "type": "hexcasting:pattern",
+      "op_id": "hexcasting:swap_one_three",
+      "anchor": "hexcasting:swap_one_three",
+      "input": "any, any, any",
+      "output": "any, any, any",
+      "text": "hexcasting.page.stackmanip.swap_one_three"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:swap_two_three",
+      "anchor": "hexcasting:swap_two_three",
+      "input": "any, any, any",
+      "output": "any, any, any",
+      "text": "hexcasting.page.stackmanip.swap_two_three"
+    },
+    {
+      "type": "hexcasting:pattern",
       "op_id": "hexcasting:duplicate",
       "anchor": "hexcasting:duplicate",
       "input": "any",
@@ -88,11 +104,11 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:stack_len",
-      "anchor": "hexcasting:stack_len",
-      "input": "",
-      "output": "number",
-      "text": "hexcasting.page.stackmanip.stack_len"
+      "op_id": "hexcasting:duplicate_many",
+      "anchor": "hexcasting:duplicate_many",
+      "input": "many, number",
+      "output": "many",
+      "text": "hexcasting.page.stackmanip.duplicate_many"
     },
     {
       "type": "hexcasting:pattern",
@@ -153,6 +169,14 @@
       "text": "hexcasting.page.stackmanip.swizzle.2",
       "link_text": "hexcasting.page.stackmanip.swizzle.link",
       "url": "https://github.com/gamma-delta/HexMod/wiki/Table-of-Lehmer-Codes-for-Swindler's-Gambit"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:stack_len",
+      "anchor": "hexcasting:stack_len",
+      "input": "",
+      "output": "number",
+      "text": "hexcasting.page.stackmanip.stack_len"
     }
   ]
 }

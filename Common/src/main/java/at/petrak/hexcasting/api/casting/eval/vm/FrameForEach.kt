@@ -40,6 +40,9 @@ data class FrameForEach(
         return true to newStack
     }
 
+    /** When casting OpContinue, we should stop popping frames here. */
+    override fun breakSideways(): Boolean = true
+
     /** Step the Thoth computation, enqueueing one code evaluation. */
     override fun evaluate(
         continuation: SpellContinuation,
