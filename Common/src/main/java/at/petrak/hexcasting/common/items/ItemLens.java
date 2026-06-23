@@ -9,11 +9,13 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.block.DispenserBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,13 +31,22 @@ public class ItemLens extends Item implements HexBaubleItem { // Wearable,
             HexAPI.modLoc("scrying_lens_sight"), 1.0, AttributeModifier.Operation.ADD_VALUE);
 
     public ItemLens(Properties pProperties) {
-        super(pProperties);
+        super(pProperties.attributes(lensAttributeModifiers()));
         DispenserBlock.registerBehavior(this, new OptionalDispenseItemBehavior() {
             protected @NotNull ItemStack execute(@NotNull BlockSource world, @NotNull ItemStack stack) {
                 this.setSuccess(ArmorItem.dispenseArmor(world, stack));
                 return stack;
             }
         });
+    }
+
+    private static ItemAttributeModifiers lensAttributeModifiers() {
+        ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
+        builder.add(HexAttributes.GRID_ZOOM, GRID_ZOOM, EquipmentSlotGroup.HAND);
+        builder.add(HexAttributes.GRID_ZOOM, GRID_ZOOM, EquipmentSlotGroup.HEAD);
+        builder.add(HexAttributes.SCRY_SIGHT, SCRY_SIGHT, EquipmentSlotGroup.HAND);
+        builder.add(HexAttributes.SCRY_SIGHT, SCRY_SIGHT, EquipmentSlotGroup.HEAD);
+        return builder.build();
     }
 
     @Override
