@@ -23,8 +23,6 @@ import at.petrak.hexcasting.common.lib.HexStateIngredients;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.ForgeCapabilityHandler;
 import at.petrak.hexcasting.forge.datagen.ForgeHexDataGenerators;
-import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
-import at.petrak.hexcasting.forge.interop.curios.CuriosRenderers;
 import at.petrak.hexcasting.forge.lib.ForgeHexArgumentTypeRegistry;
 import at.petrak.hexcasting.forge.lib.ForgeHexAttachments;
 import at.petrak.hexcasting.forge.lib.ForgeHexIngredientTypes;
@@ -290,12 +288,6 @@ public class ForgeHexInitializer {
             e.add(EntityType.PLAYER, HexAttributes.AMBIT_RADIUS);
             e.add(EntityType.PLAYER, HexAttributes.SENTINEL_RADIUS);
         });
-
-        if (ModList.get().isLoaded(HexInterop.Forge.CURIOS_API_ID)) {
-            modBus.addListener(CuriosApiInterop::onClientSetup);
-            if(FMLEnvironment.dist == Dist.CLIENT)
-                modBus.addListener(CuriosRenderers::onLayerRegister);
-        }
     }
 
     // aaaauughhg

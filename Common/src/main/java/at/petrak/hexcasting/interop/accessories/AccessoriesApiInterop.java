@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.fabric.interop.accessories;
+package at.petrak.hexcasting.interop.accessories;
 
 import at.petrak.hexcasting.api.misc.DiscoveryHandlers;
 import at.petrak.hexcasting.common.items.HexBaubleItem;
@@ -15,7 +15,6 @@ import java.util.Optional;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.item.ItemStack;
 
 import static io.wispforest.accessories.api.client.AccessoriesRendererRegistry.registerRenderer;

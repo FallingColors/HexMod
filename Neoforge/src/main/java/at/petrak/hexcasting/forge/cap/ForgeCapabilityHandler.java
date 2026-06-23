@@ -12,7 +12,6 @@ import at.petrak.hexcasting.common.items.HexBaubleItem;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.forge.cap.adimpl.*;
-import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -37,8 +36,6 @@ public class ForgeCapabilityHandler {
                 evt.registerItem(HexCapabilities.Item.VARIANT_ITEM, (stack, ctx) -> new CapItemVariantItem(holder, stack), item);
             if(item instanceof PigmentItem holder)
                 evt.registerItem(HexCapabilities.Item.COLOR, (stack, ctx) -> new CapItemPigment(holder, stack), item);
-            if(item instanceof HexBaubleItem && IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Forge.CURIOS_API_ID))
-                CuriosApiInterop.registerCap(evt, item);
         }
 
         evt.registerItem(

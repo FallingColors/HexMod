@@ -27,7 +27,6 @@ import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngr
 import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredientType;
 import at.petrak.hexcasting.forge.cap.CapSyncers;
 import at.petrak.hexcasting.forge.cap.HexCapabilities;
-import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
@@ -121,9 +120,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
     public void initPlatformSpecific() {
-        if (this.isModPresent(HexInterop.Forge.CURIOS_API_ID)) {
-            CuriosApiInterop.init();
-        }
+        // platform-specific initialization not currently necessary
     }
 
 //    @Override

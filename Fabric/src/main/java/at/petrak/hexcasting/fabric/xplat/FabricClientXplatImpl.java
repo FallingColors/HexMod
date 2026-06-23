@@ -3,7 +3,6 @@ package at.petrak.hexcasting.fabric.xplat;
 import at.petrak.hexcasting.api.client.ClientCastingStack;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.fabric.client.ExtendedTexture;
-import at.petrak.hexcasting.fabric.interop.accessories.AccessoriesApiInterop;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -44,9 +43,7 @@ public class FabricClientXplatImpl implements IClientXplatAbstractions {
 
     @Override
     public void initPlatformSpecific() {
-        if (IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Fabric.ACCESSORIES_API_ID)) {
-            AccessoriesApiInterop.clientInit();
-        }
+        // platform-specific initialization not currently necessary
     }
 
     @Override
