@@ -570,6 +570,7 @@
       "heat_wave": "Heat Wave",
       "wither_wave": "Wither Wave",
       "flight_zone": "Flight Zone",
+      "magnet": "Magnet",
     },
 
     // TODO: post-eigengrau make these less anticlimactic

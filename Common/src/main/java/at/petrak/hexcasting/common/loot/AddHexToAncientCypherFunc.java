@@ -81,6 +81,7 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
         new Pair<>("hexcasting.loot_hex.shockwave", new String[] {"NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaawaa","EAST aadaadaa","SOUTH_EAST aqawqadaq","SOUTH_EAST aqaaedwd","EAST aawaawaa","NORTH_EAST qqa","EAST qaqqqqq"}),
         new Pair<>("hexcasting.loot_hex.heat_wave", new String[] {"NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaae","SOUTH_EAST qqqqqwded","SOUTH_WEST aaqwqaa","SOUTH_EAST a","WEST qqq","SOUTH_EAST aaqawawa","EAST eee","EAST waaddw"}),
         new Pair<>("hexcasting.loot_hex.wither_wave", new String[] {"NORTH_EAST qaq","EAST aa","SOUTH_EAST aqaae","SOUTH_EAST qqqqqwdeddwd","SOUTH_WEST aaqwqaa","SOUTH_EAST a","WEST qqq","SOUTH_EAST aqaae","SOUTH_EAST aqaaw","SOUTH_WEST qqqqqaewawawe","EAST eee","EAST waaddw"}),
-        new Pair<>("hexcasting.loot_hex.flight_zone", new String[] {"NORTH_EAST qaq","SOUTH_EAST aqaaq","SOUTH_WEST awawaawq"})
+        new Pair<>("hexcasting.loot_hex.flight_zone", new String[] {"NORTH_EAST qaq","SOUTH_EAST aqaaq","SOUTH_WEST awawaawq"}),
+        new Pair<>("hexcasting.loot_hex.magnet", new String[] {"NORTH_EAST qaq","EAST aa","EAST aadaa","SOUTH_EAST aqaaeq","SOUTH_EAST qqqqqwdeddww","WEST qqq","EAST ddqaa","EAST aa","NORTH_WEST wddw","EAST aadaa","NORTH_EAST wqaqw","NORTH_EAST wdedw","SOUTH_WEST awqqqwaqw","EAST eee","EAST waaddwda"})
     );
 }
