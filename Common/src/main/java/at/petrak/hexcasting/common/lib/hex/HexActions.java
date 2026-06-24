@@ -278,6 +278,8 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("aaqawawa", HexDir.SOUTH_EAST), OpIgnite.INSTANCE));
     public static final ActionRegistryEntry EXTINGUISH = make("extinguish",
         new ActionRegistryEntry(HexPattern.fromAngles("ddedwdwd", HexDir.SOUTH_WEST), OpExtinguish.INSTANCE));
+    public static final ActionRegistryEntry SMELT = make("smelt",
+        new ActionRegistryEntry(HexPattern.fromAngles("wqqqwqqadad", HexDir.EAST), OpSmelt.INSTANCE));
     public static final ActionRegistryEntry FREEZE = make("freeze",
         new ActionRegistryEntry(HexPattern.fromAngles("weeeweedada", HexDir.WEST), OpFreeze.INSTANCE));
 
