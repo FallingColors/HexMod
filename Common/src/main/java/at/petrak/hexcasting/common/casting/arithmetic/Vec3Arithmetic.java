@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.common.casting.arithmetic.operator.OperatorFactorial;
 import at.petrak.hexcasting.common.casting.arithmetic.operator.vec.OperatorPack;
 import at.petrak.hexcasting.common.casting.arithmetic.operator.vec.OperatorUnpack;
 import at.petrak.hexcasting.common.casting.arithmetic.operator.vec.OperatorVec3Delegating;
@@ -36,7 +37,8 @@ public enum Vec3Arithmetic implements Arithmetic {
 			POW,
 			FLOOR,
 			CEIL,
-			MOD
+			MOD,
+			FACT
 	);
 
 	public static final IotaMultiPredicate ACCEPTS = IotaMultiPredicate.any(IotaPredicate.ofType(VEC3), IotaPredicate.ofType(DOUBLE));
@@ -75,6 +77,8 @@ public enum Vec3Arithmetic implements Arithmetic {
 			return make1(v -> new Vec3(Math.ceil(v.x), Math.ceil(v.y), Math.ceil(v.z)));
 		} else if (pattern.equals(MOD)) {
 			return make2Fallback(pattern);
+		} else if (pattern.equals(FACT)) {
+			return OperatorFactorial.INSTANCE;
 		}
 		throw new InvalidOperatorException(pattern + " is not a valid operator in Arithmetic " + this + ".");
 	}

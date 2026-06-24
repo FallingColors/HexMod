@@ -223,6 +223,8 @@ public class HexActions {
         new OperationAction(HexPattern.fromAngles("eqaqe", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry MODULO = make("modulo",
         new OperationAction(HexPattern.fromAngles("addwaad", HexDir.NORTH_EAST)));
+    public static final ActionRegistryEntry FACTORIAL = make("factorial",
+        new OperationAction(HexPattern.fromAngles("wawdedwaw", HexDir.SOUTH_EAST)));
 
     // == Sets ==
 
