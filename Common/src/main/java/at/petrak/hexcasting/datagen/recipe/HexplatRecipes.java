@@ -19,6 +19,7 @@ import at.petrak.hexcasting.datagen.IXplatIngredients;
 import at.petrak.hexcasting.datagen.recipe.builders.BrainsweepRecipeBuilder;
 import at.petrak.hexcasting.datagen.recipe.builders.CreateCrushingRecipeBuilder;
 import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightCuttingRecipeBuilder;
+import at.petrak.hexcasting.datagen.recipe.builders.FreezeRecipeBuilder;
 import at.petrak.paucal.api.PaucalAPI;
 import at.petrak.paucal.api.datagen.PaucalAdvancementSubProvider;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -468,6 +469,16 @@ public class HexplatRecipes extends RecipeProvider {
                 .requires(HexBlocks.SLATE_PILLAR)
                 .requires(HexBlocks.AMETHYST_PILLAR)
                 .unlockedBy("has_item", has(HexBlocks.SLATE)).save(recipes);
+
+        new FreezeRecipeBuilder(HexStateIngredients.of(Blocks.ICE), Blocks.PACKED_ICE.defaultBlockState())
+                .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
+                .save(recipes, modLoc("freeze/packed_ice"));
+        new FreezeRecipeBuilder(HexStateIngredients.of(Blocks.PACKED_ICE), Blocks.BLUE_ICE.defaultBlockState())
+                .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
+                .save(recipes, modLoc("freeze/blue_ice"));
+        new FreezeRecipeBuilder(HexStateIngredients.of(Blocks.WATER_CAULDRON), Blocks.POWDER_SNOW_CAULDRON.defaultBlockState())
+                .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
+                .save(recipes, modLoc("freeze/powder_snow_cauldron"));
 
         new BrainsweepRecipeBuilder(HexStateIngredients.of(Blocks.AMETHYST_BLOCK),
             new VillagerIngredient(null, null, 3),

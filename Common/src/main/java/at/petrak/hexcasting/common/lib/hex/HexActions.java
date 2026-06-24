@@ -258,10 +258,6 @@ public class HexActions {
             Fluids.WATER)));
     public static final ActionRegistryEntry DESTROY_WATER = make("destroy_water",
         new ActionRegistryEntry(HexPattern.fromAngles("dedwedade", HexDir.SOUTH_WEST), OpDestroyFluid.INSTANCE));
-    public static final ActionRegistryEntry IGNITE = make("ignite",
-        new ActionRegistryEntry(HexPattern.fromAngles("aaqawawa", HexDir.SOUTH_EAST), OpIgnite.INSTANCE));
-    public static final ActionRegistryEntry EXTINGUISH = make("extinguish",
-        new ActionRegistryEntry(HexPattern.fromAngles("ddedwdwd", HexDir.SOUTH_WEST), OpExtinguish.INSTANCE));
     public static final ActionRegistryEntry CONJURE_BLOCK = make("conjure_block",
         new ActionRegistryEntry(HexPattern.fromAngles("qqa", HexDir.NORTH_EAST), new OpConjureBlock(false)));
     public static final ActionRegistryEntry CONJURE_LIGHT = make("conjure_light",
@@ -277,6 +273,13 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("wqaqwd", HexDir.NORTH_EAST), OpEdifySapling.INSTANCE));
     public static final ActionRegistryEntry FALLING_BLOCK = make("falling_block",
         new ActionRegistryEntry(HexPattern.fromAngles("wqwawqwqwqwqwqw", HexDir.EAST), OpFallingBlock.INSTANCE));
+
+    public static final ActionRegistryEntry IGNITE = make("ignite",
+        new ActionRegistryEntry(HexPattern.fromAngles("aaqawawa", HexDir.SOUTH_EAST), OpIgnite.INSTANCE));
+    public static final ActionRegistryEntry EXTINGUISH = make("extinguish",
+        new ActionRegistryEntry(HexPattern.fromAngles("ddedwdwd", HexDir.SOUTH_WEST), OpExtinguish.INSTANCE));
+    public static final ActionRegistryEntry FREEZE = make("freeze",
+        new ActionRegistryEntry(HexPattern.fromAngles("weeeweedada", HexDir.WEST), OpFreeze.INSTANCE));
 
     public static final ActionRegistryEntry BEEP = make("beep",
         new ActionRegistryEntry(HexPattern.fromAngles("adaa", HexDir.WEST), OpBeep.INSTANCE));

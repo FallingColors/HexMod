@@ -1,0 +1,10 @@
+{
+  "type": "hexcasting:freeze",
+  "blockIn": {
+    "type": "hexcasting:block",
+    "block": "minecraft:ice"
+  },
+  "result": {
+    "Name": "minecraft:packed_ice"
+  }
+}

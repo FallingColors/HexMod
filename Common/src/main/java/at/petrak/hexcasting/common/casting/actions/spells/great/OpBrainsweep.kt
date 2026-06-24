@@ -14,6 +14,7 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe
+import at.petrak.hexcasting.common.recipe.CopyProperties
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
 import at.petrak.hexcasting.ktxt.tellWitnessesThatIWasMurdered
 import at.petrak.hexcasting.mixin.accessor.AccessorLivingEntity
@@ -75,7 +76,7 @@ object OpBrainsweep : SpellAction {
         val recipe: BrainsweepRecipe
     ) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            env.world.setBlockAndUpdate(pos, BrainsweepRecipe.copyProperties(state, recipe.result))
+            env.world.setBlockAndUpdate(pos, CopyProperties.copyProperties(state, recipe.result))
 
             HexAPI.instance().brainsweep(sacrifice)
 
