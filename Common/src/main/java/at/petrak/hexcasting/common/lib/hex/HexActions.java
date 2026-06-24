@@ -285,6 +285,8 @@ public class HexActions {
 
     public static final ActionRegistryEntry BEEP = make("beep",
         new ActionRegistryEntry(HexPattern.fromAngles("adaa", HexDir.WEST), OpBeep.INSTANCE));
+    public static final ActionRegistryEntry PARTICLES = make("particles",
+        new ActionRegistryEntry(HexPattern.fromAngles("eqqqqa", HexDir.NORTH_EAST), OpParticles.INSTANCE));
 
     public static final ActionRegistryEntry CRAFT$CYPHER = make("craft/cypher", new ActionRegistryEntry(
         HexPattern.fromAngles("waqqqqq", HexDir.EAST), 

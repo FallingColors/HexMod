@@ -49,6 +49,10 @@ public class ForgePacketHandler {
                     makeClientBoundHandler(MsgNewSpiralPatternsS2C::handle));
             registar.playToClient(MsgClearSpiralPatternsS2C.TYPE, MsgClearSpiralPatternsS2C.STREAM_CODEC,
                     makeClientBoundHandler(MsgClearSpiralPatternsS2C::handle));
+            registar.playToClient(MsgSingleParticleS2C.TYPE, MsgSingleParticleS2C.STREAM_CODEC,
+                    makeClientBoundHandler(MsgSingleParticleS2C::handle));
+            registar.playToClient(MsgParticleLinesS2C.TYPE, MsgParticleLinesS2C.STREAM_CODEC,
+                    makeClientBoundHandler(MsgParticleLinesS2C::handle));
         });
     }
 
