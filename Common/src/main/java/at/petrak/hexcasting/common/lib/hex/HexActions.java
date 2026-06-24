@@ -275,6 +275,8 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("qdqawwaww", HexDir.EAST), OpErase.INSTANCE));
     public static final ActionRegistryEntry EDIFY = make("edify",
         new ActionRegistryEntry(HexPattern.fromAngles("wqaqwd", HexDir.NORTH_EAST), OpEdifySapling.INSTANCE));
+    public static final ActionRegistryEntry FALLING_BLOCK = make("falling_block",
+        new ActionRegistryEntry(HexPattern.fromAngles("wqwawqwqwqwqwqw", HexDir.EAST), OpFallingBlock.INSTANCE));
 
     public static final ActionRegistryEntry BEEP = make("beep",
         new ActionRegistryEntry(HexPattern.fromAngles("adaa", HexDir.WEST), OpBeep.INSTANCE));
