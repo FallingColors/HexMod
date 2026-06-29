@@ -12,9 +12,9 @@ import at.petrak.hexcasting.api.casting.iota.DoubleIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.MishapDivideByZero
-import at.petrak.hexcasting.common.casting.arithmetic.operator.OperatorFactorial
 import at.petrak.hexcasting.common.casting.arithmetic.operator.OperatorLog
 import at.petrak.hexcasting.common.casting.arithmetic.operator.asDoubleBetween
+import at.petrak.hexcasting.common.casting.arithmetic.operator.generalFactorial
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
 import java.util.function.DoubleBinaryOperator
 import java.util.function.DoubleUnaryOperator
@@ -72,7 +72,7 @@ object DoubleArithmetic : Arithmetic {
             ARCTAN2 -> make2 { a, b -> atan2(a, b) }
             LOG     -> OperatorLog
             MOD     -> make2 { a, b -> if (b == 0.0) throw MishapDivideByZero.of(a, b) else a % b }
-            FACT    -> OperatorFactorial
+            FACT    -> make1 { a -> generalFactorial(a) }
             else    -> throw InvalidOperatorException("$pattern is not a valid operator in Arithmetic $this.")
         }
     }
