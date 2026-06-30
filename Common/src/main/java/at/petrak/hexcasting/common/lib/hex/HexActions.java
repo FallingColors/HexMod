@@ -283,7 +283,7 @@ public class HexActions {
     public static final ActionRegistryEntry SMELT = make("smelt",
         new ActionRegistryEntry(HexPattern.fromAngles("wqqqwqqadad", HexDir.EAST), OpSmelt.INSTANCE));
     public static final ActionRegistryEntry FREEZE = make("freeze",
-        new ActionRegistryEntry(HexPattern.fromAngles("weeeweedada", HexDir.WEST), OpFreeze.INSTANCE));
+        new ActionRegistryEntry(HexPattern.fromAngles("weeeweedada", HexDir.EAST), OpFreeze.INSTANCE));
 
     public static final ActionRegistryEntry BEEP = make("beep",
         new ActionRegistryEntry(HexPattern.fromAngles("adaa", HexDir.WEST), OpBeep.INSTANCE));

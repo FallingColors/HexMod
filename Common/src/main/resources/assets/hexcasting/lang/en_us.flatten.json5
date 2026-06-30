@@ -837,6 +837,7 @@
         random: "Entropy Reflection",
         logarithm: "Logarithmic Distillation",
         coerce_axial: "Axial Purification",
+        factorial: "Factorial Purification",
         
         read: "Scribe's Reflection",
         "read/entity": "Chronicler's Purification",
@@ -855,6 +856,7 @@
         
         print: "Reveal",
         beep: "Make Note",
+        particles: "Particles",
         explode: "Explosion",
         "explode/fire": "Fireball",
         add_motion: "Impulse",
@@ -873,10 +875,13 @@
         destroy_water: "Destroy Liquid",
         ignite: "Ignite",
         extinguish: "Extinguish Area",
+        smelt: "Smelt",
+        freeze: "Freeze",
         conjure_block: "Conjure Block",
         conjure_light: "Conjure Light",
         bonemeal: "Overgrow",
         edify: "Edify Sapling",
+        falling_block: "Gravitate Block",
         colorize: "Internalize Pigment",
         cycle_variant: "Caster's Glamour",
         
@@ -1106,7 +1111,7 @@
             living: "a living entity",
           },
           
-          entity_or_vector: "an entity or a vector",
+          entity_or_vector: "an entity or vector",
           
           unknown: "(unknown, uh-oh, this is a bug)",
         },
@@ -1114,6 +1119,7 @@
         numvec: "a number or vector",
         numlist: "an integer or list",
         "list.pattern": "a list of patterns",
+        vec_or_veclist: "a vector or list of vectors",
         
         double: {
           positive: {
