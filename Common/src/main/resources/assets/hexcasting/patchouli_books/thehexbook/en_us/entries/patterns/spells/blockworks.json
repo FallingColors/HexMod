@@ -72,19 +72,11 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:ignite",
-      "anchor": "hexcasting:ignite",
-      "input": "entity | vector",
-      "output": "",
-      "text": "hexcasting.page.blockworks.ignite"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:extinguish",
-      "anchor": "hexcasting:extinguish",
+      "op_id": "hexcasting:falling_block",
+      "anchor": "hexcasting:falling_block",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks.extinguish"
+      "text": "hexcasting.page.blockworks.falling_block"
     }
   ]
 }

@@ -1324,6 +1324,7 @@
       itempicking: "Working with Items",
       basic_spell: "Basic Spells",
       blockworks: "Block Manipulation",
+      heatworks: "Heat Manipulation",
       nadirs: "Nadirs",
       hexcasting_spell: "Crafting Casting Items",
       sentinels: "Sentinels",
@@ -1825,6 +1826,7 @@
         construct_vec: "Combine three numbers at the top of the stack into a vector's X, Y, and Z components (bottom to top).",
         deconstruct_vec: "Split a vector into its X, Y, and Z components (bottom to top).",
         modulo: "Takes the modulus of two numbers. This is the amount $(italics)remaining/$ after division - for example, 5 %% 2 is 1, and 5 %% 3 is 2. When applied on vectors, performs the above operation elementwise.",
+        factorial: "Takes the factorial of a number. This is the product of all integers from 1 to the number. For non-integers, uses the $(l:https://en.wikipedia.org/wiki/Gamma_function)gamma function/$. For vectors, performs the above operation elementwise.",
         coerce_axial: "For a vector, coerce it to its nearest axial direction, a unit vector. For a number, return the sign of the number; 1 if positive, -1 if negative. In both cases, zero is unaffected.",
         random: "Creates a random number between 0 and 1.",
       },
@@ -2053,6 +2055,8 @@
         
         "beep.1": "Remove a vector and two numbers from the stack. Plays an $(thing)instrument/$ defined by the first number at the given location, with a $(thing)note/$ defined by the second number. Costs a negligible amount of _media.",
         "beep.2": "There appear to be 16 different $(thing)instruments/$ and 25 different $(thing)notes/$. Both are indexed by zero.$(br2)These seem to be the same instruments I can produce with a $(item)Note Block/$, though the reason for each instrument's number being what it is eludes me.$(br2)Either way, I can find the numbers I need to use by inspecting a $(item)Note Block/$ through a $(l:items/lens)$(item)Scrying Lens/$.",
+
+        particles: "Accepts a location or a list of locations, and either creates a particle at the location, or creates lines of particles between the locations in the list. Costs two thousandths of an $(l:items/amethyst)$(item)Amethyst Dust/$ per location.",
       },
       
       blockworks: {
@@ -2064,8 +2068,14 @@
         conjure_light: "Conjure a magical light that softly glows with my pigment at the given position. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         bonemeal: "Encourage a plant or sapling at the target position to grow, as if $(item)Bonemeal/$ was applied. Costs a bit more than one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         edify: "Forcibly infuse _media into the sapling at the target position, causing it to grow into an $(l:items/edified)$(thing)Edified Tree/$. Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$.",
+        falling_block: "Force the block at the target position to fall as if it were sand or gravel. Certain blocks seem mysteriously immune to this effect. Costs one and a half $(l:items/amethyst)$(item)Amethyst Dust/$.",
+      },
+
+      heatworks: {
         ignite: "Start a fire on top of the given location, as if a $(item)Fire Charge/$ was applied, or set fire to an entity. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         extinguish: "Extinguish blocks in a large area. Costs about six $(l:items/amethyst)$(item)Amethyst Dust/$.",
+        smelt: "Smelts either the block at the given location or all the items in the given item entity. Costs three quarters of an $(l:items/amethyst)$(item)Amethyst Dust/$ per block/item smelted.",
+        freeze: "Freezes the block at the given location. For example, turns water into ice, and ice into packed ice. Costs one $(l:items/amethyst)$(item)Amethyst Dust/$.",
       },
       
       nadirs: {
