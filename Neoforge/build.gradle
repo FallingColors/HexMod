@@ -104,7 +104,7 @@ dependencies {
     modImplementation "com.illusivesoulworks.caelus:caelus-neoforge:$caelusVersion"
     modImplementation "com.samsthenerd.inline:inline-neoforge:1.21.1-1.2.2-74"
     // needed for inline to run
-    modRuntimeOnly("me.shedaniel.cloth:cloth-config-forge:$clothConfigVersion")
+    modRuntimeOnly("me.shedaniel.cloth:cloth-config-neoforge:$clothConfigVersion")
     modRuntimeOnly "com.samsthenerd.inline:inline-neoforge:$minecraftVersion-$inlineVersion"
     modRuntimeOnly "dev.architectury:architectury-neoforge:$architecturyVersion"
 
