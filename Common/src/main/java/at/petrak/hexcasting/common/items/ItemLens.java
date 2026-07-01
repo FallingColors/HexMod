@@ -9,11 +9,13 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.OptionalDispenseItemBehavior;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.block.DispenserBlock;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +29,13 @@ public class ItemLens extends Item implements HexBaubleItem { // Wearable,
 
     public static final AttributeModifier SCRY_SIGHT = new AttributeModifier(
             HexAPI.modLoc("scrying_lens_sight"), 1.0, AttributeModifier.Operation.ADD_VALUE);
+
+    public static final ItemAttributeModifiers MODIFIERS = ItemAttributeModifiers.builder()
+            .add(HexAttributes.GRID_ZOOM, GRID_ZOOM, EquipmentSlotGroup.HAND)
+            .add(HexAttributes.GRID_ZOOM, GRID_ZOOM, EquipmentSlotGroup.HEAD)
+            .add(HexAttributes.SCRY_SIGHT, SCRY_SIGHT, EquipmentSlotGroup.HAND)
+            .add(HexAttributes.SCRY_SIGHT, SCRY_SIGHT, EquipmentSlotGroup.HEAD)
+            .build();
 
     public ItemLens(Properties pProperties) {
         super(pProperties);
