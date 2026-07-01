@@ -61,6 +61,6 @@ public class TrinketsInterop {
 
     @Environment(EnvType.CLIENT)
     public static void clientInit() {
-        registerRenderer(HexItems.SCRYING_LENS, new LensAccessoryRenderer());
+        registerRenderer(HexItems.SCRYING_LENS, new LensTrinketRenderer());
     }
 }
