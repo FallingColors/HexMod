@@ -60,3 +60,10 @@ mandatory = true
 versionRange = "[1.21.1-1.2.2,)"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies.hexcasting]]
+modId = "curios"
+type = "optional"
+versionRange = "[9.5.1,)"
+ordering = "NONE"
+side = "BOTH"
