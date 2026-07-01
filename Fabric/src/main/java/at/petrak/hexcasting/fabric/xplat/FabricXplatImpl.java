@@ -25,7 +25,7 @@ import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredientType;
 import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredientType;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
-import at.petrak.hexcasting.fabric.interop.accessories.AccessoriesApiInterop;
+import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsInterop;
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
@@ -109,8 +109,8 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public void initPlatformSpecific() {
-        if (this.isModPresent(HexInterop.Fabric.ACCESSORIES_API_ID)) {
-            AccessoriesApiInterop.init();
+        if (this.isModPresent(HexInterop.Fabric.TRINKETS_API_ID)) {
+            TrinketsInterop.init();
         }
     }
 
