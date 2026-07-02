@@ -344,23 +344,6 @@ public class FabricXplatImpl implements IXplatAbstractions {
     );
 
     @Override
-    public boolean isCorrectTierForDrops(Tier tier, BlockState bs) {
-        if (!bs.requiresCorrectToolForDrops()) {
-            return true;
-        }
-
-        int level = HexConfig.server()
-            .opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort();
-        for (var tool : HARVEST_TOOLS_BY_LEVEL.get(level)) {
-            if (tool.isCorrectToolForDrops(bs)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    @Override
     public Item.Properties addEquipSlotFabric(EquipmentSlot slot) {
         return new Item.Properties().equipmentSlot((e, s) -> slot);
     }

@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.casting.math.HexCoord
 import at.petrak.hexcasting.api.casting.validateSubIotas
+import at.petrak.hexcasting.api.mod.HexTags
 import net.minecraft.ChatFormatting
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
@@ -21,6 +22,8 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.TagKey
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.Tier
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import java.lang.ref.WeakReference
@@ -106,6 +109,12 @@ fun pxToCoord(px: Vec2, size: Float, offset: Vec2): HexCoord {
         HexCoord(q + (qf + 0.5f * rf).roundToInt(), r)
     else
         HexCoord(q, r + (rf + 0.5 * qf).roundToInt())
+}
+
+fun isCorrectTierForDrops(tier: Tier, bs: BlockState): Boolean {
+    val tierTooLow = bs.`is`(tier.incorrectBlocksForDrops)
+    val blacklisted = bs.`is`(HexTags.Blocks.HEX_UNBREAKABLE)
+    return !(tierTooLow || blacklisted)
 }
 
 @JvmOverloads
