@@ -80,36 +80,24 @@ object OpFallingBlock : SpellAction {
             }
         }
 
-        fun canSilkTouch(level: ServerLevel, pos: BlockPos, state: BlockState, harvestTier: Tier, owner: Entity?): Boolean {
-            val harvestToolStack: ItemStack = getHarvestToolStack(harvestTier, state)
-            if (harvestToolStack.isEmpty) {
-                return false
-            }
-            harvestToolStack.enchant(level.holderLookup(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH), 1)
-            val drops: List<ItemStack> = Block.getDrops(state, level, pos, null, owner, harvestToolStack)
-            val blockItem: Item = state.block.asItem()
-            return drops.any { s -> s.item === blockItem }
-        }
-
         companion object {
-            fun getHarvestToolStack(harvestTier: Tier, state: BlockState): ItemStack {
-                return getTool(harvestTier, state).copy()
+            fun canSilkTouch(level: ServerLevel, pos: BlockPos, state: BlockState, harvestTier: Tier, owner: Entity?): Boolean {
+                // need to use .copy() here or the stack in HARVEST_TOOLS_BY_TIER will get enchanted
+                val harvestToolStack: ItemStack = getTool(harvestTier, state).copy()
+                if (harvestToolStack.isEmpty) return false
+                harvestToolStack.enchant(level.holderLookup(Registries.ENCHANTMENT).getOrThrow(Enchantments.SILK_TOUCH), 1)
+                val drops: List<ItemStack> = Block.getDrops(state, level, pos, null, owner, harvestToolStack)
+                val blockItem: Item = state.block.asItem()
+                return drops.any { s -> s.item === blockItem }
             }
 
             private fun getTool(harvestTier: Tier, state: BlockState): ItemStack {
-                if (harvestTier !in HARVEST_TOOLS_BY_LEVEL.keys) return ItemStack.EMPTY
-                if (!state.requiresCorrectToolForDrops()) {
-                    return HARVEST_TOOLS_BY_LEVEL[harvestTier]!![0]
-                }
-                for (tool in HARVEST_TOOLS_BY_LEVEL[harvestTier]!!) {
-                    if (tool.isCorrectToolForDrops(state)) {
-                        return tool
-                    }
-                }
-                return ItemStack.EMPTY
+                val toolsForTier = HARVEST_TOOLS_BY_TIER.getOrElse(harvestTier) { return ItemStack.EMPTY }
+                if (!state.requiresCorrectToolForDrops()) return toolsForTier[0]
+                return toolsForTier.firstOrNull { it.isCorrectToolForDrops(state) } ?: ItemStack.EMPTY
             }
 
-            private val HARVEST_TOOLS_BY_LEVEL: Map<Tier, List<ItemStack>> = mapOf(
+            private val HARVEST_TOOLS_BY_TIER: Map<Tier, List<ItemStack>> = mapOf(
                 Tiers.WOOD to stacks(Items.WOODEN_PICKAXE, Items.WOODEN_AXE, Items.WOODEN_HOE, Items.WOODEN_SHOVEL),
                 Tiers.STONE to stacks(Items.STONE_PICKAXE, Items.STONE_AXE, Items.STONE_HOE, Items.STONE_SHOVEL),
                 Tiers.IRON to stacks(Items.IRON_PICKAXE, Items.IRON_AXE, Items.IRON_HOE, Items.IRON_SHOVEL),
