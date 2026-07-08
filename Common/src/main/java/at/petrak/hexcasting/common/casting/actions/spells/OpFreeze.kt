@@ -33,23 +33,9 @@ object OpFreeze : SpellAction {
     private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
             val blockState = env.world.getBlockState(pos)
-            val fluidState = env.world.getFluidState(pos)
 
             if (!IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, pos, blockState, env.castingEntity as? ServerPlayer))
                 return
-
-            if (fluidState.type == Fluids.WATER && blockState.block is LiquidBlock) {
-                env.world.setBlockAndUpdate(pos, Blocks.ICE.defaultBlockState())
-                return
-            }
-            if (fluidState.type == Fluids.LAVA && blockState.block is LiquidBlock) {
-                env.world.setBlockAndUpdate(pos, Blocks.OBSIDIAN.defaultBlockState())
-                return
-            }
-            if (fluidState.type == Fluids.FLOWING_LAVA && blockState.block is LiquidBlock) {
-                env.world.setBlockAndUpdate(pos, Blocks.COBBLESTONE.defaultBlockState())
-                return
-            }
 
             val recman = env.world.recipeManager
             val recipes = recman.getAllRecipesFor(HexRecipeStuffRegistry.FREEZE_TYPE).map{ holder -> holder.value }

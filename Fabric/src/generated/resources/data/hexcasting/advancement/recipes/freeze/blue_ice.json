@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "hexcasting:freeze/packed_ice"
+        "recipe": "hexcasting:blue_ice"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -26,7 +26,7 @@
   ],
   "rewards": {
     "recipes": [
-      "hexcasting:freeze/packed_ice"
+      "hexcasting:blue_ice"
     ]
   }
 }

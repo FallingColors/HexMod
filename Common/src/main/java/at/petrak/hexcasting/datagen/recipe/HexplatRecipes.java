@@ -47,6 +47,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluids;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -470,15 +471,28 @@ public class HexplatRecipes extends RecipeProvider {
                 .requires(HexBlocks.AMETHYST_PILLAR)
                 .unlockedBy("has_item", has(HexBlocks.SLATE)).save(recipes);
 
+        new FreezeRecipeBuilder(HexStateIngredients.of(Fluids.WATER), Blocks.ICE.defaultBlockState())
+                .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
+                .save(recipes, modLoc("ice"));
+        new FreezeRecipeBuilder(HexStateIngredients.of(Fluids.FLOWING_WATER), Blocks.SNOW_BLOCK.defaultBlockState())
+                .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
+                .save(recipes, modLoc("snow_block"));
+        new FreezeRecipeBuilder(HexStateIngredients.of(Fluids.LAVA), Blocks.OBSIDIAN.defaultBlockState())
+                .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
+                .save(recipes, modLoc("obsidian"));
+        new FreezeRecipeBuilder(HexStateIngredients.of(Fluids.FLOWING_LAVA), Blocks.COBBLESTONE.defaultBlockState())
+                .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
+                .save(recipes, modLoc("cobblestone"));
+
         new FreezeRecipeBuilder(HexStateIngredients.of(Blocks.ICE), Blocks.PACKED_ICE.defaultBlockState())
                 .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
-                .save(recipes, modLoc("freeze/packed_ice"));
+                .save(recipes, modLoc("packed_ice"));
         new FreezeRecipeBuilder(HexStateIngredients.of(Blocks.PACKED_ICE), Blocks.BLUE_ICE.defaultBlockState())
                 .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
-                .save(recipes, modLoc("freeze/blue_ice"));
+                .save(recipes, modLoc("blue_ice"));
         new FreezeRecipeBuilder(HexStateIngredients.of(Blocks.WATER_CAULDRON), Blocks.POWDER_SNOW_CAULDRON.defaultBlockState())
                 .unlockedBy("has_item", hasItem(HexTags.Items.STAVES))
-                .save(recipes, modLoc("freeze/powder_snow_cauldron"));
+                .save(recipes, modLoc("powder_snow_cauldron"));
 
         new BrainsweepRecipeBuilder(HexStateIngredients.of(Blocks.AMETHYST_BLOCK),
             new VillagerIngredient(null, null, 3),

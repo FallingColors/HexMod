@@ -1,0 +1,10 @@
+{
+  "type": "hexcasting:freeze",
+  "blockIn": {
+    "type": "hexcasting:fluid",
+    "fluid": "minecraft:water"
+  },
+  "result": {
+    "Name": "minecraft:ice"
+  }
+}

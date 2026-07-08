@@ -13,6 +13,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
 
 import java.util.List;
 import java.util.Random;
@@ -30,6 +31,7 @@ public class HexStateIngredients {
     public static final StateIngredientType<StateIngredientBlock> BLOCK_TYPE = new StateIngredientBlock.Type();
     public static final StateIngredientType<StateIngredientBlockState> BLOCK_STATE = new StateIngredientBlockState.Type();
     public static final StateIngredientType<StateIngredientBlocks> BLOCKS = new StateIngredientBlocks.Type();
+    public static final StateIngredientType<StateIngredientFluid> FLUID_TYPE = new StateIngredientFluid.Type();
     public static final StateIngredientType<StateIngredientTag> TAG = new StateIngredientTag.Type();
     public static final StateIngredientType<StateIngredientTagExcluding> TAG_EXCLUDING = new StateIngredientTagExcluding.Type();
 
@@ -77,6 +79,7 @@ public class HexStateIngredients {
         r.accept(BLOCK_TYPE, HexAPI.modLoc("block"));
         r.accept(BLOCK_STATE, HexAPI.modLoc("state"));
         r.accept(BLOCKS, HexAPI.modLoc("blocks"));
+        r.accept(FLUID_TYPE, HexAPI.modLoc("fluid"));
         r.accept(TAG, HexAPI.modLoc("tag"));
         r.accept(TAG_EXCLUDING, HexAPI.modLoc("tag_excluding"));
     }
@@ -92,4 +95,6 @@ public class HexStateIngredients {
     public static StateIngredient of(TagKey<Block> tag) {
         return new StateIngredientTag(tag);
     }
+
+    public static StateIngredient of(Fluid fluid) { return new StateIngredientFluid(fluid); }
 }
