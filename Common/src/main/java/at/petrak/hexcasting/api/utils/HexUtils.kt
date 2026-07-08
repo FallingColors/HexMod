@@ -8,7 +8,6 @@ import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.casting.math.HexCoord
 import at.petrak.hexcasting.api.casting.validateSubIotas
-import at.petrak.hexcasting.api.pigment.FrozenPigment
 import net.minecraft.ChatFormatting
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
@@ -20,7 +19,6 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.TagKey
-import net.minecraft.util.RandomSource
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec2
@@ -65,17 +63,6 @@ fun vec2FromNBT(tag: LongArray): Vec2 = if (tag.size != 2) Vec2.ZERO else
         Double.fromBits(tag[0]).toFloat(),
         Double.fromBits(tag[1]).toFloat(),
     )
-
-fun FrozenPigment.nextColor(random: RandomSource): Int {
-    return colorProvider.getColor(
-        random.nextFloat() * 16384,
-        Vec3(
-            random.nextFloat().toDouble(),
-            random.nextFloat().toDouble(),
-            random.nextFloat().toDouble()
-        ).scale((random.nextFloat() * 3).toDouble())
-    )
-}
 
 fun otherHand(hand: InteractionHand) =
     if (hand == InteractionHand.MAIN_HAND) InteractionHand.OFF_HAND else InteractionHand.MAIN_HAND

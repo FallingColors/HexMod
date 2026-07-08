@@ -2,7 +2,6 @@ package at.petrak.hexcasting.common.msgs;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
-import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import at.petrak.paucal.api.PaucalCodecs;
 import net.minecraft.client.Minecraft;
@@ -38,6 +37,7 @@ public record MsgParticleLinesS2C(List<Vec3> locs, FrozenPigment colorizer) impl
             Minecraft.getInstance().execute(() -> {
                 var level = Minecraft.getInstance().level;
                 if (level == null) return;
+                var colProvider = msg.colorizer().getColorProvider();
 
                 for (int i = 0; i < msg.locs.size()-1; ++i) {
                     Vec3 start = msg.locs.get(i);
@@ -45,7 +45,7 @@ public record MsgParticleLinesS2C(List<Vec3> locs, FrozenPigment colorizer) impl
                     int steps = (int) (end.subtract(start).length() * 10);
                     for (int j = 0; j <= steps; ++j) {
                         Vec3 pos = start.add(end.subtract(start).scale((double) j / steps));
-                        var color = HexUtils.nextColor(msg.colorizer, level.random);
+                        var color = colProvider.getRandomColor(level.random);
                         level.addParticle(new ConjureParticleOptions(color),
                                 pos.x, pos.y, pos.z, 0.0, 0.0, 0.0);
                     }
