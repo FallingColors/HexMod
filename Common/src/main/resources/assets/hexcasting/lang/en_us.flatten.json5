@@ -797,6 +797,7 @@
         stack_len: "Flock's Reflection",
         fisherman: "Fisherman's Gambit",
         "fisherman/copy": "Fisherman's Gambit II",
+        "fisherman/in_place": "Fisherman's Gambit III",
         swizzle: "Swindler's Gambit",
         
         unique: "Uniqueness Purification",
@@ -1885,7 +1886,8 @@
         duplicate_n: "Removes the number at the top of the stack, then copies the top iota of the stack that number of times. (A count of 2 results in two of the iota on the stack, not three.)",
         fisherman: "Grabs the element in the stack indexed by the number and brings it to the top. If the number is negative, instead moves the top element of the stack down that many elements.",
         "fisherman/copy": "Like $(l:patterns/stackmanip#hexcasting:fisherman)$(action)Fisherman's Gambit/$, but instead of moving the iota, copies it.",
-        
+        "fisherman/in_place": "Like $(l:patterns/stackmanip#hexcasting:fisherman)$(action)Fisherman's Gambit II/$, but duplicates the iota in-place. (For example, a stack of [0, 1, 1] will become [0, 0, 1].)",
+
         mask: {
           "1": "An infinite family of actions that keep or remove elements at the top of the stack based on the sequence of dips and lines.",
           "2": "Assuming that I draw a Bookkeeper's Gambit pattern left-to-right, the number of iotas the action will require is determined by the horizontal distance covered by the pattern. From deepest in the stack to shallowest, a flat line will keep the iota, whereas a triangle dipping down will remove it.$(br2)If my stack contains $(italic)0, 1, 2/$ from deepest to shallowest, drawing the first pattern opposite will give me $(italic)1/$, the second will give me $(italic)0/$, and the third will give me $(italic)0, 2/$ (the 0 at the bottom is left untouched).",

@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Updated to Minecraft 1.21.1 ([#985](https://github.com/FallingColors/HexMod/pull/985)) @SuperKnux @slava110
+- Added Fisherman's Gambit III ([#1178](https://github.com/FallingColors/HexMod/pull/1178)) @IridescentVoid
 
 ### Fixed
 
