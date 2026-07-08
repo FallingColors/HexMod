@@ -2,6 +2,7 @@ package at.petrak.hexcasting.forge.recipe;
 
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.casting.iota.NullIota;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.forge.lib.ForgeHexIngredientTypes;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -56,8 +57,8 @@ public class ForgeUnsealedIngredient implements ICustomIngredient {
         }
         if (this.stack.getItem() == input.getItem() && this.stack.getDamageValue() == input.getDamageValue()) {
             ADIotaHolder holder = IXplatAbstractions.INSTANCE.findDataHolder(this.stack);
-            if (holder != null) {
-                return holder.readIota() != null && holder.writeIota(new NullIota(), true);
+            if (holder != null && this.stack.getItem() instanceof IotaHolderItem holderItem) {
+                return holderItem.readIota(this.stack) != null && holder.writeIota(new NullIota(), true);
             }
         }
 

@@ -3,15 +3,18 @@ package at.petrak.hexcasting.forge.cap.adimpl;
 import at.petrak.hexcasting.api.addldata.ADIotaHolder;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+
+import static at.petrak.hexcasting.api.utils.HexUtils.validateIotaNullable;
 
 public record CapItemIotaHolder(IotaHolderItem holder, ItemStack stack) implements ADIotaHolder {
 
     @Override
     public @Nullable
-    Iota readIota() {
-        return holder.readIota(stack);
+    Iota readIota(ServerLevel world) {
+        return validateIotaNullable(holder.readIota(stack), world);
     }
 
     @Override

@@ -18,7 +18,7 @@ object OpReadable : ConstMediaAction {
             ?: return false.asActionResult
 
         // If the datum contains no iota, return whether it has a default empty iota.
-        datumHolder.readIota()
+        datumHolder.readIota(env.world)
             ?: return (datumHolder.emptyIota() != null).asActionResult
 
         return true.asActionResult

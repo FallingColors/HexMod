@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.addldata;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -39,9 +40,9 @@ public abstract class ItemDelegatingEntityIotaHolder implements ADIotaHolder {
     }
 
     @Override
-    public @Nullable Iota readIota() {
+    public @Nullable Iota readIota(ServerLevel world) {
         var delegate = IXplatAbstractions.INSTANCE.findDataHolder(this.stackSupplier.get());
-        return delegate == null ? null : delegate.readIota();
+        return delegate == null ? null : delegate.readIota(world);
     }
 
     @Override

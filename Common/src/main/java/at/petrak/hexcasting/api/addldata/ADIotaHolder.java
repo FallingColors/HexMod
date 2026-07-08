@@ -1,12 +1,13 @@
 package at.petrak.hexcasting.api.addldata;
 
 import at.petrak.hexcasting.api.casting.iota.Iota;
+import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.Nullable;
 
 public interface ADIotaHolder {
 
     @Nullable
-    Iota readIota();
+    Iota readIota(ServerLevel world);
 
     @Nullable
     default Iota emptyIota() {
