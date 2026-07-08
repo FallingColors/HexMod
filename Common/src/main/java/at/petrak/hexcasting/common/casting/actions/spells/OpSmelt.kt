@@ -79,7 +79,6 @@ object OpSmelt : SpellAction {
 
     private data class BlockSpell(val pos: BlockPos) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            if (!env.canEditBlockAt(pos)) return
             val blockState = env.world.getBlockState(pos)
             if (!IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, pos, blockState, env.castingEntity as? ServerPlayer)) return
 
@@ -93,7 +92,7 @@ object OpSmelt : SpellAction {
                     env.world.addFreshEntity(ItemEntity(env.world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), itemStack.copy()))
                 }
             } else {
-                env.world.destroyBlock(pos, false, env.caster)
+                env.world.destroyBlock(pos, false, env.castingEntity as? ServerPlayer)
                 env.world.addFreshEntity(ItemEntity(env.world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), itemStack.copy()))
                 // Send a block update, also copied from Ars Nouveau (this is all copied from Ars Nouveau)
                 if (!env.world.isOutsideBuildHeight(pos))

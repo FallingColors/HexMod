@@ -33,23 +33,20 @@ object OpFallingBlock : SpellAction {
     override val argc = 1
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
-        val pos = args.getVec3(0, argc)
-        env.assertVecInRange(pos)
+        val pos = args.getBlockPos(0, argc)
+        env.assertPosInRangeForEditing(pos)
 
-        val centered = Vec3.atCenterOf(BlockPos.containing(pos))
         return SpellAction.Result(
             Spell(pos),
             (1.5 * MediaConstants.DUST_UNIT).roundToLong(),
-            listOf(ParticleSpray.burst(centered, 1.0))
+            listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0))
         )
     }
 
-    private data class Spell(val v: Vec3) : RenderedSpell {
+    private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            val pos = BlockPos.containing(v)
-
             val blockstate = env.world.getBlockState(pos)
-            if (!env.canEditBlockAt(pos) || !IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, pos, blockstate, env.caster))
+            if (!IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, pos, blockstate, env.castingEntity as? ServerPlayer))
                 return
 
             val tier = HexConfig.server().opBreakHarvestLevel()

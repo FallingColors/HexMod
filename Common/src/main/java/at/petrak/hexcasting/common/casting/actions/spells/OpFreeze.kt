@@ -19,24 +19,23 @@ object OpFreeze : SpellAction {
     override val argc = 1
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
-        val toFreeze = Vec3.atCenterOf(BlockPos.containing(args.getVec3(0, argc)))
+        val toFreeze = args.getBlockPos(0, argc)
 
-        env.assertVecInRange(toFreeze)
+        env.assertPosInRangeForEditing(toFreeze)
 
         return SpellAction.Result(
             Spell(toFreeze),
             MediaConstants.DUST_UNIT,
-            listOf(ParticleSpray.burst(toFreeze, 1.0))
+            listOf(ParticleSpray.burst(Vec3.atCenterOf(toFreeze), 1.0))
         )
     }
 
-    private data class Spell(val vec: Vec3) : RenderedSpell {
+    private data class Spell(val pos: BlockPos) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            val pos = BlockPos.containing(vec)
             val blockState = env.world.getBlockState(pos)
             val fluidState = env.world.getFluidState(pos)
 
-            if (!env.canEditBlockAt(pos) || !IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, pos, blockState, env.castingEntity as? ServerPlayer))
+            if (!IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, pos, blockState, env.castingEntity as? ServerPlayer))
                 return
 
             if (fluidState.type == Fluids.WATER && blockState.block is LiquidBlock) {
