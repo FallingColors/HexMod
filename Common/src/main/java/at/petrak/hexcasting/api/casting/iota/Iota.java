@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 public abstract class Iota {
     @NotNull
@@ -100,6 +101,24 @@ public abstract class Iota {
      */
     public @Nullable Iterable<Iota> subIotas() {
         return null;
+    }
+
+    /**
+     * Applies the given operator to all iotas in this iota's tree (recursive subIotas), including this iota.
+     * @param visitor Applied to this iota then every element of the resulting iota's tree.
+     * @return The iota after all subiotas have been visited (and potentially replaced).
+     */
+    public Iota visit(UnaryOperator<Iota> visitor) {
+        return visitor.apply(this).visitChildren(visitor);
+    }
+
+    /**
+     * Applies the given operator to all iotas in this iota's tree, **excluding** this iota. This must be called on an
+     * iota just before it is returned from {@link Iota#visit}. You should try to preserve your iota's identity if
+     * the operator doesn't modify anything.
+     */
+    protected Iota visitChildren(UnaryOperator<Iota> visitor) {
+        return this;
     }
 
     /**

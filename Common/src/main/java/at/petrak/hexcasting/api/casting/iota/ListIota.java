@@ -15,7 +15,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import static java.lang.Math.max;
 
@@ -95,6 +97,18 @@ public class ListIota extends Iota {
     @Override
     public @Nullable Iterable<Iota> subIotas() {
         return this.getList();
+    }
+
+    @Override
+    protected Iota visitChildren(UnaryOperator<Iota> visitor) {
+        var out = new ArrayList<Iota>();
+        boolean conserve = true;
+        for (Iota orig : getList()) {
+            var replacement = orig.visit(visitor);
+            conserve &= replacement == orig;
+            out.add(replacement);
+        }
+        return conserve ? this : new ListIota(out);
     }
 
     @Override
