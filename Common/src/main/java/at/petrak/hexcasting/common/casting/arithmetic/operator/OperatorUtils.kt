@@ -77,11 +77,11 @@ fun generalFactorial(arg: Double): Double {
     val argInt = arg.roundToInt()
     if (arg >= 0 && DoubleIota.tolerates(arg, argInt.toDouble())) {
         // normal integer factorial
-        var result: Long = 1
+        var result = 1.0
         for (factor in 2..argInt) {
             result *= factor
         }
-        return result.toDouble()
+        return result
     }
     // gamma function of arg+1 for non-integer factorial
     // https://introcs.cs.princeton.edu/java/91float/Gamma.java.html
