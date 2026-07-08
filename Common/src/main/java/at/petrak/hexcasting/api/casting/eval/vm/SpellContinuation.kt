@@ -1,13 +1,6 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
-import com.mojang.datafixers.util.Either
-import com.mojang.serialization.Codec
-import com.mojang.serialization.codecs.RecordCodecBuilder
-import io.netty.buffer.ByteBuf
-import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
-import net.minecraft.network.codec.StreamCodec
-import java.util.function.Function
 
 /**
  * A continuation during the execution of a spell.
