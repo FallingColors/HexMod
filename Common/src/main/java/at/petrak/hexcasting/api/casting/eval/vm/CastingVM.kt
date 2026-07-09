@@ -167,8 +167,9 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             if (this.image.simulateNext) {
                 // push a bool based on whether the cast would have succeeded; do not perform any side effects from the cast
                 val success = result.sideEffects.none { it is OperatorSideEffect.DoMishap }
+                val tooBig = result.newData != null && IotaType.isTooLargeToSerialize(result.newData.stack)
                 val newStack = this.image.stack.toMutableList()
-                newStack.add(BooleanIota(success))
+                newStack.add(BooleanIota(success && !tooBig))
                 val newImage = this.image.copy(
                     stack = newStack,
                     simulateNext = false
