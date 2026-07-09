@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.casting.math.HexCoord
 import at.petrak.hexcasting.api.casting.validateSubIotas
 import at.petrak.hexcasting.api.mod.HexTags
+import com.mojang.datafixers.util.Function6
 import net.minecraft.ChatFormatting
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
@@ -16,6 +17,7 @@ import net.minecraft.nbt.*
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
+import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerLevel
@@ -28,6 +30,7 @@ import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import java.lang.ref.WeakReference
 import java.util.*
+import java.util.function.Function
 import kotlin.math.absoluteValue
 import kotlin.math.max
 import kotlin.math.min
@@ -330,3 +333,38 @@ fun <T : Iota> validateIotaList(iotaList: List<T>, serverLevel: ServerLevel): Li
     return iotaList.map { validateIota(it, serverLevel) }
 }
 
+
+// vanilla's StreamCodec.composite() only supports up to six fields in 1.21
+fun <B, C, T1, T2, T3, T4, T5, T6, T7> compositeCodecSeven(
+    streamCodec1: StreamCodec<in B, T1>, function1: Function<C, T1>,
+    streamCodec2: StreamCodec<in B, T2>, function2: Function<C, T2>,
+    streamCodec3: StreamCodec<in B, T3>, function3: Function<C, T3>,
+    streamCodec4: StreamCodec<in B, T4>, function4: Function<C, T4>,
+    streamCodec5: StreamCodec<in B, T5>, function5: Function<C, T5>,
+    streamCodec6: StreamCodec<in B, T6>, function6: Function<C, T6>,
+    streamCodec7: StreamCodec<in B, T7>, function7: Function<C, T7>,
+    createFunction: Function7<T1, T2, T3, T4, T5, T6, T7, C>
+): StreamCodec<B, C> {
+    return object : StreamCodec<B, C> {
+        override fun decode(stream: B): C {
+            val field1 = streamCodec1.decode(stream)
+            val field2 = streamCodec2.decode(stream)
+            val field3 = streamCodec3.decode(stream)
+            val field4 = streamCodec4.decode(stream)
+            val field5 = streamCodec5.decode(stream)
+            val field6 = streamCodec6.decode(stream)
+            val field7 = streamCodec7.decode(stream)
+            return createFunction.invoke(field1, field2, field3, field4, field5, field6, field7)
+        }
+
+        override fun encode(stream: B, obj: C) {
+            streamCodec1.encode(stream, function1.apply(obj))
+            streamCodec2.encode(stream, function2.apply(obj))
+            streamCodec3.encode(stream, function3.apply(obj))
+            streamCodec4.encode(stream, function4.apply(obj))
+            streamCodec5.encode(stream, function5.apply(obj))
+            streamCodec6.encode(stream, function6.apply(obj))
+            streamCodec7.encode(stream, function7.apply(obj))
+        }
+    }
+}
