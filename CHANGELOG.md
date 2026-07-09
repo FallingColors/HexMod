@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Updated to Minecraft 1.21.1 ([#985](https://github.com/FallingColors/HexMod/pull/985)) @SuperKnux @slava110
+- Added Smelt, Freeze, Gravitate Block, Particles, and Factorial Purification, all of which were previously in Hexal ([#1183](https://github.com/FallingColors/HexMod/pull/1183)) @Robotgiggle
+  - Freeze now supports data-driven recipes for freezing liquids as well as blocks
+  - Factorial Purification now works on vectors as well as numbers, applying element-wise
 
 ### Fixed
 
