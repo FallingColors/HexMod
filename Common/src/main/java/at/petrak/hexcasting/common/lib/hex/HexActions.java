@@ -417,14 +417,6 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("deeeee", HexDir.EAST), OpWrite.INSTANCE));
     public static final ActionRegistryEntry WRITE$ENTITY = make("write/entity",
         new ActionRegistryEntry(HexPattern.fromAngles("wdwewewewewew", HexDir.EAST), OpTheCoolerWrite.INSTANCE));
-    public static final ActionRegistryEntry READABLE = make("readable",
-        new ActionRegistryEntry(HexPattern.fromAngles("aqqqqqe", HexDir.EAST), OpReadable.INSTANCE));
-    public static final ActionRegistryEntry READABLE$ENTITY = make("readable/entity",
-        new ActionRegistryEntry(HexPattern.fromAngles("wawqwqwqwqwqwew", HexDir.EAST), OpTheCoolerReadable.INSTANCE));
-    public static final ActionRegistryEntry WRITABLE = make("writable",
-        new ActionRegistryEntry(HexPattern.fromAngles("deeeeeq", HexDir.EAST), OpWritable.INSTANCE));
-    public static final ActionRegistryEntry WRITABLE$ENTITY = make("writable/entity",
-        new ActionRegistryEntry(HexPattern.fromAngles("wdwewewewewewqw", HexDir.EAST), OpTheCoolerWritable.INSTANCE));
 
     public static final ActionRegistryEntry READ$LOCAL = make("read/local",
         new ActionRegistryEntry(HexPattern.fromAngles("qeewdweddw", HexDir.NORTH_EAST), OpPeekLocal.INSTANCE));

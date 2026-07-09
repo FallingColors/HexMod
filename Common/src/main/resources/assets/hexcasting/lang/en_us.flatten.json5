@@ -845,11 +845,7 @@
         write: "Scribe's Gambit",
         "write/entity": "Chronicler's Gambit",
         "write/local": "Huginn's Gambit",
-        
-        readable: "Auditor's Reflection",
-        "readable/entity": "Auditor's Purification",
-        writable: "Assessor's Reflection",
-        "writable/entity": "Assessor's Purification",
+
         "akashic/read": "Akasha's Distillation",
         "akashic/write": "Akasha's Gambit",
         
