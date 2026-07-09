@@ -918,6 +918,8 @@
         open_paren: "Introspection",
         close_paren: "Retrospection",
         undo: "Evanition",
+
+        simulate: "Simulate",
         
         eval: "Hermes' Gambit",
         "eval/cc": "Iris' Gambit",
@@ -1311,6 +1313,7 @@
       patterns_as_iotas: "Escaping Patterns",
       readwrite: "Reading and Writing",
       meta: "Meta-Evaluation",
+      mishap_avoidance: "Mishap Avoidance",
       circle_patterns: "Spell Circle Patterns",
       akashic_patterns: "Akashic Patterns",
       
@@ -2012,10 +2015,15 @@
         
         "thanatos.1": "Adds the number of patterns a _Hex is still capable of evaluating to the stack. This is reduced by one for each pattern cast by the _Hex."
       },
+
+      mishap_avoidance: {
+        "1": "$(l:casting/mishaps)$(thing)Mishaps/$ can be very annoying. Thankfully, I have found a way to mitigate them. The following pattern can be used to simulate any other pattern, allowing me to find out if it would have succeeded without actually executing it.$(br2)Note that simulating a pattern like $(l:patterns/meta)$(action)Hermes' Gambit/$ will not simulate the resulting meta-evaluation, only the pattern itself.",
+        simulate: "Causes the next pattern drawn to be simulated rather than actually executed. A simulated pattern does not change the stack, and has no effects apart from pushing a boolean value representing whether it $(o)would/$ have successfully resolved.",
+      },
       
       circle_patterns: {
         disclaimer: "These patterns must be cast from a $(l:greatwork/spellcircles)$(item)Spell Circle/$; trying to cast them through a $(l:items/staff)$(item)Staff/$ will fail rather spectacularly.",
-        
+
         "circle/impetus_pos": "Returns the position of the $(l:greatwork/impetus)$(item)Impetus/$ of this spell circle.",
         "circle/impetus_dir": "Returns the direction the $(l:greatwork/impetus)$(item)Impetus/$ of this spell circle is facing as a unit vector.",
         "circle/bounds/min": "Returns the position of the lower-north-west corner of the bounds of this spell circle.",

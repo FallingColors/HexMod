@@ -397,6 +397,9 @@ public class HexActions {
     public static final ActionRegistryEntry UNDO = make("undo",
         new ActionRegistryEntry(HexPattern.fromAngles("eeedw", HexDir.EAST), OpUndo.INSTANCE));
 
+    public static final ActionRegistryEntry SIMULATE = make("simulate",
+        new ActionRegistryEntry(HexPattern.fromAngles("deaq", HexDir.EAST), OpSimulate.INSTANCE));
+
     // http://www.toroidalsnark.net/mkss3-pix/CalderheadJMM2014.pdf
     // eval being a space filling curve feels apt doesn't it
     public static final ActionRegistryEntry EVAL = make("eval",
