@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.eval.*
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
+import at.petrak.hexcasting.api.casting.iota.BooleanIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.ListIota
@@ -150,12 +151,28 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.ESCAPED, HexEvalSounds.NORMAL_EXECUTE)
             }
 
+            var result: CastResult
             if (this.image.parenCount > 0) {
                 // Handle parens escaping
-                return iota.executeInParens(this, world, continuation)
+                result = iota.executeInParens(this, world, continuation)
             } else {
                 // Handle normal execution behavior
-                return iota.execute(this, world, continuation)
+                result = iota.execute(this, world, continuation)
+            }
+
+            if (this.image.simulateNext) {
+                // push a bool based on whether the cast would have succeeded; do not perform any side effects from the cast
+                val success = result.sideEffects.none { it is OperatorSideEffect.DoMishap }
+                val newStack = this.image.stack.toMutableList()
+                newStack.add(BooleanIota(success))
+                val newImage = this.image.copy(
+                    stack = newStack,
+                    simulateNext = false
+                )
+                return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.EVALUATED, HexEvalSounds.NORMAL_EXECUTE)
+            } else {
+                // return a standard CastResult that does include the side effects from the cast
+                return result
             }
         } catch (exception: Exception) {
             // This means something very bad has happened
