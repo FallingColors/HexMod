@@ -112,7 +112,11 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             ravenmind = IotaType.TYPED_CODEC.encodeStart<Tag?>(NbtOps.INSTANCE, newIota).getOrThrow() as CompoundTag?
         }
 
-        val isStackClear = image.stack.isEmpty() && image.parenCount == 0 && !image.escapeNext && ravenmind == null
+        val isStackClear = image.stack.isEmpty()
+                        && image.parenCount == 0
+                        && !image.escapeNext
+                        && !image.simulateNext
+                        && ravenmind == null
 
         this.env.postCast(image)
         return ExecutionClientView(isStackClear, lastResolutionType, image.stack, ravenmind)
@@ -169,7 +173,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                     stack = newStack,
                     simulateNext = false
                 )
-                return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.EVALUATED, HexEvalSounds.NORMAL_EXECUTE)
+                return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.SIMULATED, HexEvalSounds.NORMAL_EXECUTE)
             } else {
                 // return a standard CastResult that does include the side effects from the cast
                 return result
