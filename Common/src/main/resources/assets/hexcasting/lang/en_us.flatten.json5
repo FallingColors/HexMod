@@ -815,6 +815,7 @@
         not: "Negation Purification",
         bool_coerce: "Augur's Purification",
         if: "Augur's Exaltation",
+        null_coalesce: "Coalescing Distillation",
         
         add: "Additive Distillation",
         sub: "Subtractive Distillation",
@@ -1906,6 +1907,7 @@
         and: "Returns True if both arguments are true; otherwise returns False.",
         xor: "Returns True if exactly one of the arguments is true; otherwise returns False.",
         if: "If the first argument is True, keeps the second and discards the third; otherwise discards the second and keeps the third.",
+        null_coalesce: "If the first argument is not $(l:casting/influences)$(thing)Null/$, returns it. Otherwise, returns the second argument.",
         equals: "If the first argument equals the second (within a small tolerance), return True. Otherwise, return False.",
         not_equals: "If the first argument does not equal the second (outside a small tolerance), return True. Otherwise, return False.",
         type_equals: "If the type of the first argument matches the type of the second, return True. Otherwise, return False.",
