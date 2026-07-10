@@ -395,9 +395,9 @@ public class HexActions {
     public static final ActionRegistryEntry CLOSE_PAREN = make("close_paren",
         new ActionRegistryEntry(HexPattern.fromAngles("eee", HexDir.EAST), OpCloseParen.INSTANCE));
     public static final ActionRegistryEntry OPEN_N_PARENS = make("open_n_parens",
-            new ActionRegistryEntry(HexPattern.fromAngles("eqqqe", HexDir.SOUTH_WEST), OpOpenNParens.INSTANCE));
+            new ActionRegistryEntry(HexPattern.fromAngles("qdaqadq", HexDir.WEST), OpOpenNParens.INSTANCE));
     public static final ActionRegistryEntry CLOSE_ALL_PARENS = make("close_all_parens",
-            new ActionRegistryEntry(HexPattern.fromAngles("qeeeq", HexDir.SOUTH_EAST), OpCloseAllParens.INSTANCE));
+            new ActionRegistryEntry(HexPattern.fromAngles("eadedae", HexDir.EAST), OpCloseAllParens.INSTANCE));
     public static final ActionRegistryEntry READ_INTO_PARENS = make("read_into_parens",
             new ActionRegistryEntry(HexPattern.fromAngles("aqqqqqwded", HexDir.EAST), OpReadIntoParens.INSTANCE));
     public static final ActionRegistryEntry UNDO = make("undo",
