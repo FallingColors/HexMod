@@ -97,7 +97,7 @@ data class CastingImage(
                 Codec.INT.fieldOf("open_parens").forGetter { it.parenCount },
                 ParenthesizedIota.CODEC.listOf().fieldOf("parenthesized").forGetter { it.parenthesized },
                 Codec.BOOL.fieldOf("escape_next").forGetter { it.escapeNext },
-                Codec.BOOL.fieldOf("catch_mishap").forGetter { it.simulateNext },
+                Codec.BOOL.fieldOf("simulate_next").forGetter { it.simulateNext },
                 Codec.LONG.fieldOf("ops_consumed").forGetter { it.opsConsumed },
                 CompoundTag.CODEC.fieldOf("userData").forGetter { it.userData }
             ).apply(inst) { a, b, c, d, e, f, g ->

@@ -155,30 +155,28 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.ESCAPED, HexEvalSounds.NORMAL_EXECUTE)
             }
 
-            var result: CastResult
-            if (this.image.parenCount > 0) {
+            val result = if (this.image.parenCount > 0) {
                 // Handle parens escaping
-                result = iota.executeInParens(this, world, continuation)
+                iota.executeInParens(this, world, continuation)
             } else {
                 // Handle normal execution behavior
-                result = iota.execute(this, world, continuation)
+                iota.execute(this, world, continuation)
             }
 
+            // if simulating, push a bool for whether the cast would have succeeded; do not perform any side effects
             if (this.image.simulateNext) {
-                // push a bool based on whether the cast would have succeeded; do not perform any side effects from the cast
-                val success = result.sideEffects.none { it is OperatorSideEffect.DoMishap }
                 val tooBig = result.newData != null && IotaType.isTooLargeToSerialize(result.newData.stack)
                 val newStack = this.image.stack.toMutableList()
-                newStack.add(BooleanIota(success && !tooBig))
+                newStack.add(BooleanIota(result.resolutionType.success && !tooBig))
                 val newImage = this.image.copy(
                     stack = newStack,
                     simulateNext = false
                 )
                 return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.SIMULATED, HexEvalSounds.NORMAL_EXECUTE)
-            } else {
-                // return a standard CastResult that does include the side effects from the cast
-                return result
             }
+
+            // otherwise, return the original CastResult to perform all the side effects, stack manip, etc
+            return result
         } catch (exception: Exception) {
             // This means something very bad has happened
             exception.printStackTrace()
