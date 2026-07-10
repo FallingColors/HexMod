@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Updated to Minecraft 1.21.1 ([#985](https://github.com/FallingColors/HexMod/pull/985)) @SuperKnux @slava110
 - Added the `hex_unbreakable` tag for blocks that should be immune to Break Block regardless of the configured mining tier ([#1186](https://github.com/FallingColors/HexMod/pull/1186)) @Robotgiggle @slava110
+- Added Coalescing Distillation, which performs the null-coalescing operation ([#1196](https://github.com/FallingColors/HexMod/pull/1196)) @Robotgiggle
 
 ### Fixed
 
