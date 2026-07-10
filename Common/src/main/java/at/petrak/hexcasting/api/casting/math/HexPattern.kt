@@ -144,7 +144,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, HexPattern> = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8, HexPattern::anglesSignature,
             HexDir.STREAM_CODEC, HexPattern::startDir,
-            HexPattern::fromAngles
+            HexPattern::fromAnglesUnchecked
         )
 
         /**

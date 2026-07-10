@@ -77,10 +77,6 @@ repositories {
     }
 
     maven { url "https://maven.shedaniel.me/" }
-    // accessories
-    maven { url 'https://maven.wispforest.io/releases' }
-    // sinytra connector or something?? accessories needs it
-    maven { url 'https://maven.su5ed.dev/releases' }
 }
 
 dependencies {
@@ -104,7 +100,7 @@ dependencies {
     modImplementation "com.illusivesoulworks.caelus:caelus-neoforge:$caelusVersion"
     modImplementation "com.samsthenerd.inline:inline-neoforge:1.21.1-1.2.2-74"
     // needed for inline to run
-    modRuntimeOnly("me.shedaniel.cloth:cloth-config-forge:$clothConfigVersion")
+    modRuntimeOnly("me.shedaniel.cloth:cloth-config-neoforge:$clothConfigVersion")
     modRuntimeOnly "com.samsthenerd.inline:inline-neoforge:$minecraftVersion-$inlineVersion"
     modRuntimeOnly "dev.architectury:architectury-neoforge:$architecturyVersion"
 
@@ -113,16 +109,10 @@ dependencies {
 
     modCompileOnly "dev.emi:emi-neoforge:${emiVersion}:api"
     modRuntimeOnly "dev.emi:emi-neoforge:${emiVersion}"
-    modImplementation "io.wispforest:accessories-neoforge:$accessoriesVersion"
 
     modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}-1.21-neoforge")
-
+    
     // "Required due to issues with JIJ dependency resolving in arch or something"
-    // https://github.com/wisp-forest/accessories
-    forgeRuntimeLibrary("io.wispforest:endec:0.1.8")
-    forgeRuntimeLibrary("io.wispforest.endec:gson:0.1.5")
-    forgeRuntimeLibrary("io.wispforest.endec:netty:0.1.4")
-    forgeRuntimeLibrary("io.wispforest.endec:jankson:0.1.5")
     forgeRuntimeLibrary("org.jetbrains.kotlin:kotlin-reflect:2.1.20")
     forgeRuntimeLibrary("org.jetbrains.kotlin:kotlin-stdlib:2.1.20")
     forgeRuntimeLibrary("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.20")
@@ -131,8 +121,6 @@ dependencies {
     forgeRuntimeLibrary("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.10.2")
     forgeRuntimeLibrary("org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.8.1")
     forgeRuntimeLibrary("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.8.1")
-    forgeRuntimeLibrary("blue.endless:jankson:1.2.2")
-    forgeRuntimeLibrary("blue.endless:jankson:0.1.5")
 }
 
 def generatedResources = project(":Common").file("src/generated/resources")

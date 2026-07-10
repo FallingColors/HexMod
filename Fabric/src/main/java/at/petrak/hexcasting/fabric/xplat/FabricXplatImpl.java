@@ -25,7 +25,7 @@ import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredientType;
 import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredientType;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
-import at.petrak.hexcasting.fabric.interop.accessories.AccessoriesApiInterop;
+import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsInterop;
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
@@ -109,8 +109,8 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public void initPlatformSpecific() {
-        if (this.isModPresent(HexInterop.Fabric.ACCESSORIES_API_ID)) {
-            AccessoriesApiInterop.init();
+        if (this.isModPresent(HexInterop.Fabric.TRINKETS_API_ID)) {
+            TrinketsInterop.init();
         }
     }
 
@@ -328,36 +328,6 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public Ingredient getUnsealedIngredient(ItemStack stack) {
         return FabricUnsealedIngredient.of(stack);
-    }
-
-    // do a stupid hack from botania
-    private static List<ItemStack> stacks(Item... items) {
-        return Stream.of(items).map(ItemStack::new).toList();
-    }
-
-    private static final List<List<ItemStack>> HARVEST_TOOLS_BY_LEVEL = List.of(
-        stacks(Items.WOODEN_PICKAXE, Items.WOODEN_AXE, Items.WOODEN_HOE, Items.WOODEN_SHOVEL),
-        stacks(Items.STONE_PICKAXE, Items.STONE_AXE, Items.STONE_HOE, Items.STONE_SHOVEL),
-        stacks(Items.IRON_PICKAXE, Items.IRON_AXE, Items.IRON_HOE, Items.IRON_SHOVEL),
-        stacks(Items.DIAMOND_PICKAXE, Items.DIAMOND_AXE, Items.DIAMOND_HOE, Items.DIAMOND_SHOVEL),
-        stacks(Items.NETHERITE_PICKAXE, Items.NETHERITE_AXE, Items.NETHERITE_HOE, Items.NETHERITE_SHOVEL)
-    );
-
-    @Override
-    public boolean isCorrectTierForDrops(Tier tier, BlockState bs) {
-        if (!bs.requiresCorrectToolForDrops()) {
-            return true;
-        }
-
-        int level = HexConfig.server()
-            .opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort();
-        for (var tool : HARVEST_TOOLS_BY_LEVEL.get(level)) {
-            if (tool.isCorrectToolForDrops(bs)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     @Override
