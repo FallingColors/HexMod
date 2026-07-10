@@ -6,6 +6,8 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.EntityIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadItem
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.xplat.IXplatAbstractions
@@ -20,6 +22,7 @@ import net.minecraft.world.item.crafting.RecipeHolder
 import net.minecraft.world.item.crafting.RecipeType
 import net.minecraft.world.item.crafting.SingleRecipeInput
 import net.minecraft.world.item.crafting.SmeltingRecipe
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.phys.Vec3
 import java.util.*
 import kotlin.math.roundToLong
@@ -32,17 +35,26 @@ object OpSmelt : SpellAction {
             is EntityIota -> {
                 val itemEntity = args.getItemEntity(env.world, 0, argc)
                 env.assertEntityInRange(itemEntity)
+
+                val oldStack = itemEntity.item
+                val newStack = smeltResult(oldStack.item, env) ?: throw MishapBadItem.of(itemEntity, "smeltable")
+                newStack.count *= oldStack.count
+
                 return SpellAction.Result(
-                    ItemSpell(itemEntity),
-                    (itemEntity.item.count * 0.75 * MediaConstants.DUST_UNIT).roundToLong(),
+                    ItemSpell(itemEntity, newStack),
+                    (oldStack.count * 0.75 * MediaConstants.DUST_UNIT).roundToLong(),
                     listOf(ParticleSpray.burst(itemEntity.position(), 1.0))
                 )
             }
             is Vec3Iota -> {
                 val pos = args.getBlockPos(0, argc)
                 env.assertPosInRangeForEditing(pos)
+
+                val blockState = env.world.getBlockState(pos)
+                val resultStack = smeltResult(blockState.block.asItem(), env) ?: throw MishapBadBlock.of(pos, "smeltable")
+
                 return SpellAction.Result(
-                    BlockSpell(pos),
+                    BlockSpell(pos, blockState, resultStack),
                     (0.75 * MediaConstants.DUST_UNIT).roundToLong(),
                     listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0))
                 )
@@ -66,34 +78,27 @@ object OpSmelt : SpellAction {
         return result
     }
 
-    private data class ItemSpell(val itemEntity: ItemEntity) : RenderedSpell {
+    private data class ItemSpell(val itemEntity: ItemEntity, val resultStack: ItemStack) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            val result = smeltResult(itemEntity.item.item, env) ?: return // cursed .item.item to map from ItemEntity to ItemLike to ItemStack
-
-            result.count *= itemEntity.item.count
-
-            env.world.addFreshEntity(ItemEntity(env.world, itemEntity.x, itemEntity.y, itemEntity.z, result.copy()))
+            env.world.addFreshEntity(ItemEntity(env.world, itemEntity.x, itemEntity.y, itemEntity.z, resultStack.copy()))
             itemEntity.remove(Entity.RemovalReason.DISCARDED)
         }
     }
 
-    private data class BlockSpell(val pos: BlockPos) : RenderedSpell {
+    private data class BlockSpell(val pos: BlockPos, val blockState: BlockState, val resultStack: ItemStack) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            val blockState = env.world.getBlockState(pos)
             if (!IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, pos, blockState, env.castingEntity as? ServerPlayer)) return
 
-            val itemStack = smeltResult(blockState.block.asItem(), env) ?: return
+            if (resultStack.item is BlockItem) {
+                env.world.setBlockAndUpdate(pos, (resultStack.item as BlockItem).block.defaultBlockState())
 
-            if (itemStack.item is BlockItem) {
-                env.world.setBlockAndUpdate(pos, (itemStack.item as BlockItem).block.defaultBlockState())
-
-                if (itemStack.count > 1) {
-                    itemStack.count -= 1
-                    env.world.addFreshEntity(ItemEntity(env.world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), itemStack.copy()))
+                if (resultStack.count > 1) {
+                    resultStack.count -= 1
+                    env.world.addFreshEntity(ItemEntity(env.world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), resultStack.copy()))
                 }
             } else {
                 env.world.destroyBlock(pos, false, env.castingEntity as? ServerPlayer)
-                env.world.addFreshEntity(ItemEntity(env.world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), itemStack.copy()))
+                env.world.addFreshEntity(ItemEntity(env.world, pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble(), resultStack.copy()))
                 // Send a block update, also copied from Ars Nouveau (this is all copied from Ars Nouveau)
                 if (!env.world.isOutsideBuildHeight(pos))
                     env.world.sendBlockUpdated(pos, env.world.getBlockState(pos), env.world.getBlockState(pos), 3) // don't know how this works

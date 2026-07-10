@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.*
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.mishaps.MishapBadBlock
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.common.recipe.CopyProperties
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
@@ -12,6 +13,7 @@ import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.block.LiquidBlock
+import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.Vec3
 
@@ -19,31 +21,27 @@ object OpFreeze : SpellAction {
     override val argc = 1
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {
-        val toFreeze = args.getBlockPos(0, argc)
+        val pos = args.getBlockPos(0, argc)
 
-        env.assertPosInRangeForEditing(toFreeze)
+        env.assertPosInRangeForEditing(pos)
+
+        val blockState = env.world.getBlockState(pos)
+        val recipes = env.world.recipeManager.getAllRecipesFor(HexRecipeStuffRegistry.FREEZE_TYPE).map{ holder -> holder.value }
+        val recipe = recipes.find{ it.matches(blockState) } ?: throw MishapBadBlock.of(pos, "freezable")
 
         return SpellAction.Result(
-            Spell(toFreeze),
+            Spell(pos, blockState, recipe.result),
             MediaConstants.DUST_UNIT,
-            listOf(ParticleSpray.burst(Vec3.atCenterOf(toFreeze), 1.0))
+            listOf(ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0))
         )
     }
 
-    private data class Spell(val pos: BlockPos) : RenderedSpell {
+    private data class Spell(val pos: BlockPos, val oldState: BlockState, val newState: BlockState) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            val blockState = env.world.getBlockState(pos)
-
-            if (!IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, pos, blockState, env.castingEntity as? ServerPlayer))
+            if (!IXplatAbstractions.INSTANCE.isBreakingAllowed(env.world, pos, oldState, env.castingEntity as? ServerPlayer))
                 return
-
-            val recman = env.world.recipeManager
-            val recipes = recman.getAllRecipesFor(HexRecipeStuffRegistry.FREEZE_TYPE).map{ holder -> holder.value }
-
-            val recipe = recipes.find{ it.matches(blockState) }
-
-            if (recipe != null)
-                env.world.setBlockAndUpdate(pos, CopyProperties.copyProperties(blockState, recipe.result))
+            
+            env.world.setBlockAndUpdate(pos, CopyProperties.copyProperties(oldState, newState))
         }
     }
 }

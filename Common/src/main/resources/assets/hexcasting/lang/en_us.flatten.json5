@@ -1173,11 +1173,14 @@
         colorizer: "a pigment",
         variant: "an item with variants",
         placeable: "a placeable item",
+        smeltable: "a smeltable item",
       },
       
       bad_block: {
         "": "Expected %s at %s, but got %s",
         sapling: "a sapling",
+        smeltable: "a smeltable block",
+        freezable: "a freezable block",
         replaceable: "somewhere to place a block",
       },
       
