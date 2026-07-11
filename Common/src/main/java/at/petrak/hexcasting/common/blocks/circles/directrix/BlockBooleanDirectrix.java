@@ -62,7 +62,7 @@ public class BlockBooleanDirectrix extends BlockCircleComponent {
             ? bs.getValue(FACING).getOpposite()
             : bs.getValue(FACING);
         var imageOut = imageIn.copy(stack, imageIn.getParenCount(), imageIn.getParenthesized(),
-            imageIn.getEscapeNext(), imageIn.getOpsConsumed(), imageIn.getUserData());
+            imageIn.getEscapeNext(), imageIn.getSimulateNext(), imageIn.getOpsConsumed(), imageIn.getUserData());
 
         return new ControlFlow.Continue(imageOut, List.of(this.exitPositionFromDirection(pos, outputDir)));
     }
