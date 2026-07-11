@@ -9,6 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Updated to Minecraft 1.21.1 ([#985](https://github.com/FallingColors/HexMod/pull/985)) @SuperKnux @slava110
+- Added Smelt, Freeze, Gravitate Block, Particles, and Factorial Purification, all of which were previously in Hexal ([#1183](https://github.com/FallingColors/HexMod/pull/1183)) @Robotgiggle
+  - Freeze now supports data-driven recipes for freezing liquids as well as blocks
+  - Smelt and Freeze now mishap if the target does not have a valid smelting/freezing recipe
+  - Factorial Purification now works on vectors as well as numbers, applying element-wise
 - Added Simulate, which causes the next pattern drawn to be simulated (to check for mishaps) rather than executed ([#1194](https://github.com/FallingColors/HexMod/pull/1194)) @Robotgiggle
 - Added the `hex_unbreakable` tag for blocks that should be immune to Break Block regardless of the configured mining tier ([#1186](https://github.com/FallingColors/HexMod/pull/1186)) @Robotgiggle @slava110
 

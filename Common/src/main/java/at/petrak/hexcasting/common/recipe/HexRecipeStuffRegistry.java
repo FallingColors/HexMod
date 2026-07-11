@@ -30,12 +30,15 @@ public class HexRecipeStuffRegistry {
 
     public static final RecipeSerializer<?> BRAINSWEEP = registerSerializer("brainsweep",
         new BrainsweepRecipe.Serializer());
+    public static final RecipeSerializer<?> FREEZE = registerSerializer("freeze",
+        new FreezeRecipe.Serializer());
     public static final RecipeSerializer<SealThingsRecipe> SEAL_FOCUS = registerSerializer(
         "seal_focus", SealThingsRecipe.FOCUS_SERIALIZER);
     public static final RecipeSerializer<SealThingsRecipe> SEAL_SPELLBOOK = registerSerializer(
         "seal_spellbook", SealThingsRecipe.SPELLBOOK_SERIALIZER);
 
     public static RecipeType<BrainsweepRecipe> BRAINSWEEP_TYPE = registerType("brainsweep");
+    public static RecipeType<FreezeRecipe> FREEZE_TYPE = registerType("freeze");
 
     private static <T extends Recipe<?>> RecipeSerializer<T> registerSerializer(String name, RecipeSerializer<T> rs) {
         var old = SERIALIZERS.put(modLoc(name), rs);

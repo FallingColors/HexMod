@@ -223,6 +223,8 @@ public class HexActions {
         new OperationAction(HexPattern.fromAngles("eqaqe", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry MODULO = make("modulo",
         new OperationAction(HexPattern.fromAngles("addwaad", HexDir.NORTH_EAST)));
+    public static final ActionRegistryEntry FACTORIAL = make("factorial",
+        new OperationAction(HexPattern.fromAngles("wawdedwaw", HexDir.SOUTH_EAST)));
 
     // == Sets ==
 
@@ -258,10 +260,6 @@ public class HexActions {
             Fluids.WATER)));
     public static final ActionRegistryEntry DESTROY_WATER = make("destroy_water",
         new ActionRegistryEntry(HexPattern.fromAngles("dedwedade", HexDir.SOUTH_WEST), OpDestroyFluid.INSTANCE));
-    public static final ActionRegistryEntry IGNITE = make("ignite",
-        new ActionRegistryEntry(HexPattern.fromAngles("aaqawawa", HexDir.SOUTH_EAST), OpIgnite.INSTANCE));
-    public static final ActionRegistryEntry EXTINGUISH = make("extinguish",
-        new ActionRegistryEntry(HexPattern.fromAngles("ddedwdwd", HexDir.SOUTH_WEST), OpExtinguish.INSTANCE));
     public static final ActionRegistryEntry CONJURE_BLOCK = make("conjure_block",
         new ActionRegistryEntry(HexPattern.fromAngles("qqa", HexDir.NORTH_EAST), new OpConjureBlock(false)));
     public static final ActionRegistryEntry CONJURE_LIGHT = make("conjure_light",
@@ -275,9 +273,22 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("qdqawwaww", HexDir.EAST), OpErase.INSTANCE));
     public static final ActionRegistryEntry EDIFY = make("edify",
         new ActionRegistryEntry(HexPattern.fromAngles("wqaqwd", HexDir.NORTH_EAST), OpEdifySapling.INSTANCE));
+    public static final ActionRegistryEntry FALLING_BLOCK = make("falling_block",
+        new ActionRegistryEntry(HexPattern.fromAngles("qaqqwwddwwq", HexDir.EAST), OpFallingBlock.INSTANCE));
+
+    public static final ActionRegistryEntry IGNITE = make("ignite",
+        new ActionRegistryEntry(HexPattern.fromAngles("aaqawawa", HexDir.SOUTH_EAST), OpIgnite.INSTANCE));
+    public static final ActionRegistryEntry EXTINGUISH = make("extinguish",
+        new ActionRegistryEntry(HexPattern.fromAngles("ddedwdwd", HexDir.SOUTH_WEST), OpExtinguish.INSTANCE));
+    public static final ActionRegistryEntry SMELT = make("smelt",
+        new ActionRegistryEntry(HexPattern.fromAngles("wqqqwqqadad", HexDir.EAST), OpSmelt.INSTANCE));
+    public static final ActionRegistryEntry FREEZE = make("freeze",
+        new ActionRegistryEntry(HexPattern.fromAngles("weeeweedada", HexDir.EAST), OpFreeze.INSTANCE));
 
     public static final ActionRegistryEntry BEEP = make("beep",
         new ActionRegistryEntry(HexPattern.fromAngles("adaa", HexDir.WEST), OpBeep.INSTANCE));
+    public static final ActionRegistryEntry PARTICLES = make("particles",
+        new ActionRegistryEntry(HexPattern.fromAngles("eqqqqa", HexDir.NORTH_EAST), OpParticles.INSTANCE));
 
     public static final ActionRegistryEntry CRAFT$CYPHER = make("craft/cypher", new ActionRegistryEntry(
         HexPattern.fromAngles("waqqqqq", HexDir.EAST), 

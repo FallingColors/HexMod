@@ -271,6 +271,25 @@ fun List<Iota>.getNumOrVec(idx: Int, argc: Int = 0): Either<Double, Vec3> {
     }
 }
 
+fun List<Iota>.getVecOrVecList(idx: Int, argc: Int = 0): Either<Vec3, List<Vec3>> {
+    val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
+    return when (x) {
+        is Vec3Iota -> Either.left(x.vec3)
+        is ListIota -> {
+            val out = mutableListOf<Vec3>()
+            for (v in x.list) {
+                if (v is Vec3Iota) {
+                    out.add(v.vec3)
+                } else {
+                    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "vec_or_veclist")
+                }
+            }
+            Either.right(out)
+        }
+        else -> throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "vec_or_veclist")
+    }
+}
+
 fun List<Iota>.getLongOrList(idx: Int, argc: Int = 0): Either<Long, SpellList> {
     val datum = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (datum is DoubleIota) {
