@@ -1117,7 +1117,6 @@
         
         numvec: "a number or vector",
         numlist: "an integer or list",
-        "list.pattern": "a list of patterns",
         
         double: {
           positive: {
@@ -1627,7 +1626,7 @@
         "2": "To do this, I can craft one of three types of magic items: $(l:items/hexcasting)$(item)Cyphers/$, $(l:items/hexcasting)$(item)Trinkets/$, or $(l:items/hexcasting)$(item)Artifacts/$. All of them hold the patterns of a given _Hex inside, along with a small battery containing _media.$(br2)Simply holding one and pressing $(thing)$(k:use)/$ will cast the patterns inside, as if the holder had cast them out of a staff, using its internal battery.",
         "3": "Each item has its own quirks:$(br2)$(l:items/hexcasting)$(item)Cyphers/$ are fragile, destroyed after their internal _media reserves are gone, and $(italic)cannot/$ be recharged;$(br2)$(l:items/hexcasting)$(item)Trinkets/$ can be cast as much as the holder likes, as long as there's enough _media left, but become useless afterwards until recharged;",
         "4": "$(l:items/hexcasting)$(item)Artifacts/$ are the most powerful of all-- after their _media is depleted, they can use $(l:items/amethyst)$(item)Amethyst/$ from the holder's inventory to pay for the _Hex, just as I do when casting with a $(l:items/staff)$(item)Staff/$. Of course, this also means the spell might consume their mind if there's not enough $(l:items/amethyst)$(item)Amethyst/$.$(br2)Once I've made an empty magic item in a mundane crafting bench, I infuse the _Hex into it using (what else but) a spell appropriate to the item. $(l:patterns/spells/hexcasting)I've catalogued the patterns here./$",
-        "5": "Each infusion spell requires an entity and a list of patterns on the stack. The entity must be a _media-holding item entity (i.e. $(l:items/amethyst)$(item)amethyst/$ crystals, dropped on the ground); the entity is consumed and forms the battery.$(br2)Usefully, it seems that the _media in the battery is not consumed in chunks as it is when casting with a $(l:items/staff)$(item)Staff/$-- rather, the _media \"melts down\" into one continuous pool. Thus, if I store a _Hex that only costs one $(l:items/amethyst)$(item)Amethyst Dust/$'s worth of media, a $(l:items/amethyst)$(item)Charged Crystal/$ used as the battery will allow me to cast it 10 times.",
+        "5": "Each infusion spell requires an entity and a list of iotas to cast on the stack. The entity must be a _media-holding item entity (i.e. $(l:items/amethyst)$(item)amethyst/$ dropped on the ground); the entity is consumed and forms the battery.$(br2)Usefully, it seems that the _media in the battery is not consumed in chunks as it is when casting with a $(l:items/staff)$(item)Staff/$-- rather, the _media \"melts down\" into one continuous pool. Thus, if I store a _Hex that only costs one $(l:items/amethyst)$(item)Amethyst Dust/$'s worth of media, a $(l:items/amethyst)$(item)Charged Crystal/$ used as the battery will allow me to cast it 10 times.",
         "crafting.desc": "$(italic)We have a saying in our field: \"Magic isn't\". It doesn't \"just work,\" it doesn't respond to your thoughts, you can't throw fireballs or create a roast dinner from thin air or turn a bunch of muggers into frogs and snails./$",
       },
 
@@ -1999,16 +1998,16 @@
       },
       
       meta: {
-        "eval.1": "Remove a pattern or list of patterns from the stack, then cast them as if I had drawn them myself with my $(l:items/staff)$(item)Staff/$ (until a $(l:patterns/meta#hexcasting:halt)$(action)Charon's Gambit/$ is encountered). If an iota is $(l:patterns/patterns_as_iotas)$(action)escaped/$, it will be pushed to the stack. Otherwise, non-pattern iota will cause a mishap.",
+        "eval.1": "Remove something evaluatable (usually a pattern or list of patterns) from the stack, then cast it as if I had drawn the relevant patterns with my $(l:items/staff)$(item)Staff/$. If an iota in such a list is $(l:patterns/patterns_as_iotas)$(action)escaped/$, it will be pushed to the stack. Otherwise, non-pattern iotas will mishap.",//391
         "eval.2": "This can be very powerful in tandem with $(l:items/focus)$(item)Foci/$, and according to one esoteric scroll I found it also makes the bureaucracy of Nature a \"Turing-complete\" system.$(br2)However, it seems there's a limit to how many patterns a _Hex can cast-- Nature doesn't look kindly on runaway spells!$(br2)In addition, with the energies of the patterns occurring without me to guide them, any mishap will cause the remaining actions to immediately unravel.",
         
-        "for_each.1": "Remove a list of patterns and a list from the stack, then cast the given pattern-list over each element of the second list.",
-        "for_each.2": "More specifically, for each element in the second list, it will:$(li)Create a new stack, with everything on the current stack plus that element$(li)Draw all the patterns in the first list$(li)Save all the iotas remaining on the stack to a list$(br)Then, after all is said and done, pushes the list of saved iotas onto the main stack.$(br2)No wonder all the practitioners of this art go mad.",
+        "for_each.1": "Remove something evaluatable from the stack, then cast it over each element of the provided list.",
+        "for_each.2": "More specifically, for each element in the provided list, it will:$(li)Create a new stack, with everything on the current stack plus that element$(li)Cast the evaluatable iota$(li)Save all the iotas remaining on the stack to a list$(br)Then, after all is said and done, pushes the list of saved iotas onto the main stack.$(br2)No wonder all the practitioners of this art go mad.",
         
         "halt.1": "This pattern forcibly halts a _Hex. This is mostly useless on its own, as I could simply just stop writing patterns, or put down my staff.",
         "halt.2": "But when combined with $(l:patterns/meta#hexcasting:eval)$(action)Hermes'/$ or $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambits/$, it becomes $(italics)far/$ more interesting. Those patterns serve to 'contain' that halting, and rather than ending the entire _Hex, those gambits end instead. This can be used to cause $(l:patterns/meta#hexcasting:for_each)$(action)Thoth's Gambit/$ not to operate on every iota it's given. An escape from the madness, as it were.",
         
-        "eval/cc.1": "Cast a pattern or list of patterns from the stack exactly like $(l:patterns/meta#hexcasting:eval)$(action)Hermes' Gambit/$, except that a unique \"Jump\" iota is pushed to the stack beforehand. ",
+        "eval/cc.1": "Cast something evaluatable from the stack exactly like $(l:patterns/meta#hexcasting:eval)$(action)Hermes' Gambit/$, except that a unique \"Jump\" iota is pushed to the stack beforehand. ",
         "eval/cc.2": "When the \"Jump\"-iota is executed, it'll skip the rest of the patterns and jump directly to the end of the pattern list.$(p)While this may seem redundant given $(l:patterns/meta#hexcasting:halt)$(action)Charon's Gambit/$ exists, this allows you to exit $(italic)nested/$ $(l:patterns/meta#hexcasting:eval)$(action)Hermes'/$ invocations in a controlled way, where Charon only allows you to exit one.$(p)The \"Jump\" iota will apparently stay on the stack even after execution is finished... better not think about the implications of that.",
         
         "thanatos.1": "Adds the number of patterns a _Hex is still capable of evaluating to the stack. This is reduced by one for each pattern cast by the _Hex."
@@ -2075,7 +2074,7 @@
       },
       
       hexcasting_spell: {
-        basics: "These three spells each create an $(l:items/hexcasting)$(thing)item that casts a _Hex./$$(br)They all require me to hold the empty item in my off-hand, and require two things: the list of patterns to be cast, and an entity representing a dropped stack of $(l:items/amethyst)$(item)Amethyst/$ to form the item's battery.$(br2)See $(l:items/hexcasting)this entry/$ for more information.",
+        basics: "These three spells each create an $(l:items/hexcasting)$(thing)item that casts a _Hex./$$(br)They all require me to hold the empty item in my off-hand, and require two things: the list of iotas (usually patterns) to be cast, and an entity representing a dropped stack of $(l:items/amethyst)$(item)Amethyst/$ to form the item's battery.$(br2)See $(l:items/hexcasting)this entry/$ for more information.",
         "craft/cypher": "Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$.",
         "craft/trinket": "Costs about five $(l:items/amethyst)$(item)Charged Amethysts/$.",
         "craft/artifact": "Costs about ten $(l:items/amethyst)$(item)Charged Amethysts/$.",
