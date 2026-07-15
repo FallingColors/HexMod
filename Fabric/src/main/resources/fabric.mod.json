@@ -62,7 +62,8 @@
   },
   "suggests": {
     "pehkui": ">=3.7.6",
-    "modmenu": ">=7.0.1"
+    "modmenu": ">=7.0.1",
+    "trinkets": ">=3.10.0"
   },
   "custom": {
     "cardinal-components": [

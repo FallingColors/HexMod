@@ -41,38 +41,6 @@
       "text": "hexcasting.page.readwrite.write/entity"
     },
     {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:readable",
-      "anchor": "hexcasting:readable",
-      "input": "",
-      "output": "bool",
-      "text": "hexcasting.page.readwrite.readable"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:readable/entity",
-      "anchor": "hexcasting:readable/entity",
-      "input": "entity",
-      "output": "bool",
-      "text": "hexcasting.page.readwrite.readable/entity"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:writable",
-      "anchor": "hexcasting:writable",
-      "input": "",
-      "output": "bool",
-      "text": "hexcasting.page.readwrite.writable"
-    },
-    {
-      "type": "hexcasting:pattern",
-      "op_id": "hexcasting:writable/entity",
-      "anchor": "hexcasting:writable/entity",
-      "input": "entity",
-      "output": "bool",
-      "text": "hexcasting.page.readwrite.writable/entity"
-    },
-    {
       "type": "patchouli:text",
       "anchor": "hexcasting:local",
       "title": "hexcasting.page.readwrite.local.title",

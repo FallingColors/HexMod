@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.PatternShapeMatch.*
 import at.petrak.hexcasting.api.casting.eval.*
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
+import at.petrak.hexcasting.api.casting.iota.BooleanIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.ListIota
@@ -112,7 +113,11 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             ravenmind = IotaType.TYPED_CODEC.encodeStart<Tag?>(NbtOps.INSTANCE, newIota).getOrThrow() as CompoundTag?
         }
 
-        val isStackClear = image.stack.isEmpty() && image.parenCount == 0 && !image.escapeNext && ravenmind == null
+        val isStackClear = image.stack.isEmpty()
+                        && image.parenCount == 0
+                        && !image.escapeNext
+                        && !image.simulateNext
+                        && ravenmind == null
 
         this.env.postCast(image)
         return ExecutionClientView(isStackClear, lastResolutionType, image.stack, ravenmind)
@@ -151,13 +156,28 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.ESCAPED, HexEvalSounds.NORMAL_EXECUTE)
             }
 
-            if (this.image.parenCount > 0) {
+            val result = if (this.image.parenCount > 0) {
                 // Handle parens escaping
-                return iota.executeInParens(this, world, continuation)
+                iota.executeInParens(this, world, continuation)
             } else {
                 // Handle normal execution behavior
-                return iota.execute(this, world, continuation)
+                iota.execute(this, world, continuation)
             }
+
+            // if simulating, push a bool for whether the cast would have succeeded; do not perform any side effects
+            if (this.image.simulateNext) {
+                val tooBig = result.newData != null && IotaType.isTooLargeToSerialize(result.newData.stack)
+                val newStack = this.image.stack.toMutableList()
+                newStack.add(BooleanIota(result.resolutionType.success && !tooBig))
+                val newImage = this.image.copy(
+                    stack = newStack,
+                    simulateNext = false
+                )
+                return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.SIMULATED, HexEvalSounds.NORMAL_EXECUTE)
+            }
+
+            // otherwise, return the original CastResult to perform all the side effects, stack manip, etc
+            return result
         } catch (exception: Exception) {
             // This means something very bad has happened
             exception.printStackTrace()
