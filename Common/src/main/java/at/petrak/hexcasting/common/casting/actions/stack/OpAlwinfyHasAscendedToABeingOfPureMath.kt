@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.getPositiveLong
+import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
@@ -14,13 +15,13 @@ import it.unimi.dsi.fastutil.longs.LongArrayList
 // "lehmer code"
 object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stack = image.stack.toMutableList()
+        var stack = image.stack
 
         if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0)
 
         val code = stack.getPositiveLong(stack.lastIndex)
-        stack.removeLast()
+        stack = stack.init()
 
         val strides = LongArrayList()
         for (f in FactorialIter()) {
@@ -32,20 +33,16 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
 
         if (strides.size > stack.size)
             throw MishapNotEnoughArgs(strides.size + 1, stack.size + 1)
-        var editTarget = stack.subList(stack.size - strides.size, stack.size)
-        val swap = editTarget.toMutableList()
+        var newOrder = TreeList.empty<Iota>()
+        val oldOrder = stack.slice(stack.size - strides.size, stack.size).toMutableList()
         var radix = code
         for (divisor in strides.asReversed()) {
             val index = radix / divisor
             radix %= divisor
-            editTarget[0] = swap.removeAt(index.toInt())
-            // i hope this isn't O(n)
-            editTarget = editTarget.subList(1, editTarget.size)
+            newOrder = newOrder.appended(oldOrder.removeAt(index.toInt()))
         }
 
-        // FIXME this is expensive if the stack is incredibly large
-        // someone should rewrite this op to cut and replace a `slice` of the `TreeList` stack
-        val image2 = image.withUsedOp().copy(stack = TreeList.from(stack))
+        val image2 = image.withUsedOp().copy(stack = stack.dropRight(strides.size).appendedAll(newOrder))
         return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
     }
 
