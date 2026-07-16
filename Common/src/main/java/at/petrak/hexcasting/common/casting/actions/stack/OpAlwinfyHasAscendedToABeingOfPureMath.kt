@@ -33,16 +33,16 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
 
         if (strides.size > stack.size)
             throw MishapNotEnoughArgs(strides.size + 1, stack.size + 1)
-        var newOrder = TreeList.empty<Iota>()
+        val newOrder = TreeList.TreeListBuilder<Iota>()
         val oldOrder = stack.slice(stack.size - strides.size, stack.size).toMutableList()
         var radix = code
         for (divisor in strides.asReversed()) {
             val index = radix / divisor
             radix %= divisor
-            newOrder = newOrder.appended(oldOrder.removeAt(index.toInt()))
+            newOrder.addOne(oldOrder.removeAt(index.toInt()))
         }
 
-        val image2 = image.withUsedOp().copy(stack = stack.dropRight(strides.size).appendedAll(newOrder))
+        val image2 = image.withUsedOp().copy(stack = stack.dropRight(strides.size).appendedAll(newOrder.result()))
         return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
     }
 
