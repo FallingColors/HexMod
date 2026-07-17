@@ -66,7 +66,8 @@ repositories {
     // Entity reach
     maven { url "https://maven.jamieswhiteshirt.com/libs-release/" }
     maven { url "https://mvn.devos.one/snapshots/" }
-    maven { url = "https://maven.terraformersmc.com/releases/" }
+    // temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors
+    maven { url = "https://maven.gnomecraft.net/releases" }
     exclusiveContent {
         forRepository {
             maven { url = "https://api.modrinth.com/maven" }
