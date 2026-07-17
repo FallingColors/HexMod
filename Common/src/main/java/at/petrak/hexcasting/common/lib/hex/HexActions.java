@@ -26,10 +26,7 @@ import at.petrak.hexcasting.common.casting.actions.local.OpPeekLocal;
 import at.petrak.hexcasting.common.casting.actions.local.OpPushLocal;
 import at.petrak.hexcasting.common.casting.actions.math.OpCoerceToAxial;
 import at.petrak.hexcasting.common.casting.actions.math.OpRandom;
-import at.petrak.hexcasting.common.casting.actions.math.logic.OpBoolIf;
-import at.petrak.hexcasting.common.casting.actions.math.logic.OpCoerceToBool;
-import at.petrak.hexcasting.common.casting.actions.math.logic.OpEquality;
-import at.petrak.hexcasting.common.casting.actions.math.logic.OpTypeEquality;
+import at.petrak.hexcasting.common.casting.actions.math.logic.*;
 import at.petrak.hexcasting.common.casting.actions.queryentity.*;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockAxisRaycast;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockRaycast;
@@ -199,6 +196,8 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("aw", HexDir.NORTH_EAST), OpCoerceToBool.INSTANCE));
     public static final ActionRegistryEntry IF = make("if",
         new ActionRegistryEntry(HexPattern.fromAngles("awdd", HexDir.SOUTH_EAST), OpBoolIf.INSTANCE));
+    public static final ActionRegistryEntry NULL_COALESCE = make("null_coalesce",
+        new ActionRegistryEntry(HexPattern.fromAngles("wawaa", HexDir.SOUTH_EAST), OpNullCoalesce.INSTANCE));
 
     public static final ActionRegistryEntry RANDOM = make("random",
         new ActionRegistryEntry(HexPattern.fromAngles("eqqq", HexDir.NORTH_WEST), OpRandom.INSTANCE));
