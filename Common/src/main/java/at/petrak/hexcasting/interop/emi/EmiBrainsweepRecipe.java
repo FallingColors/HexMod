@@ -16,7 +16,7 @@ public record EmiBrainsweepRecipe(EmiIngredient blockInput,
                                   EmiIngredient villagerInput,
                                   EmiStack output,
                                   ResourceLocation id) implements EmiRecipe {
-    private static final ResourceLocation OVERLAY = modLoc("textures/gui/brainsweep_jei.png");
+    private static final ResourceLocation OVERLAY = modLoc("textures/gui/brainsweep_recipe.png");
 
     @Override
     public EmiRecipeCategory getCategory() {

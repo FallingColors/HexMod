@@ -21,9 +21,9 @@ public class HexEMIPlugin implements EmiPlugin {
 	public static final ResourceLocation PHIAL_ID = modLoc("craft/battery");
 	public static final ResourceLocation EDIFY_ID = modLoc("edify");
 
-	private static final ResourceLocation SIMPLIFIED_ICON_BRAINSWEEP = modLoc("textures/gui/brainsweep_emi.png");
-	private static final ResourceLocation SIMPLIFIED_ICON_PHIAL = modLoc("textures/gui/phial_emi.png");
-	private static final ResourceLocation SIMPLIFIED_ICON_EDIFY = modLoc("textures/gui/edify_emi.png");
+	private static final ResourceLocation SIMPLIFIED_ICON_BRAINSWEEP = modLoc("textures/gui/brainsweep_recipe_icon.png");
+	private static final ResourceLocation SIMPLIFIED_ICON_PHIAL = modLoc("textures/gui/phial_recipe_icon.png");
+	private static final ResourceLocation SIMPLIFIED_ICON_EDIFY = modLoc("textures/gui/edify_recipe_icon.png");
 
 	public static final EmiRecipeCategory BRAINSWEEP = new EmiRecipeCategory(BRAINSWEEP_ID,
 		new PatternRendererEMI(BRAINSWEEP_ID, 16, 16),
