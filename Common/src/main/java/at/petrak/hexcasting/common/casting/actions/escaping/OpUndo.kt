@@ -32,7 +32,7 @@ object OpUndo : Action {
                 HexActions.CLOSE_PAREN.prototype.angles -> newParenCount++
             }
         }
-        val image2 = image.copy(
+        val image2 = image.withUsedOp().copy(
             parenthesized = newParens,
             parenCount = newParenCount
         )

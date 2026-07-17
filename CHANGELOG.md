@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Edified Panels are now crafted with 9 planks rather than 8 to avoid conflicting with the vanilla chest recipe ([#1080](https://github.com/FallingColors/HexMod/pull/1080)) @Robotgiggle
 - Drawing Evanition with nothing left to do will now undo the opening Introspection ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
 - Book pages for patterns without input/output iotas will no longer display the type signature line at all ([#1118](https://github.com/FallingColors/HexMod/pull/1118)) @IridescentVoid
+- Consideration, Introspection, Retrospection, and Evanition now count towards the per-hex pattern limit ([#1172](https://github.com/FallingColors/HexMod/pull/1172)) @Robotgiggle
 - Updated Inline dependency from 1.0.1 to 1.2.2 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
 - Updated Fabric Language Kotlin dependency from 1.9.4 to 1.13.7 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
 - Updated Kotlin for Forge dependency from 4.3.0 to 4.12.0 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
