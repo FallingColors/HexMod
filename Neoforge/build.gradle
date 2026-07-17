@@ -68,7 +68,8 @@ repositories {
     // pehkui
     maven { url = "https://jitpack.io" }
     // EMI
-    maven { url = "https://maven.terraformersmc.com/releases/" }
+    // temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors
+    maven { url = "https://maven.gnomecraft.net/releases" }
 
     maven {
         name = 'Kotlin for Forge'
