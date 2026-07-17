@@ -49,22 +49,10 @@ repositories {
         dir 'libs'
     }
 
-    maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
-        name = "ModMaven"
-        url = "https://modmaven.dev"
-    }
-    maven {
-        // maven for EMI
-        // temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors
-        name = "Gnomecraft maven"
-        url = "https://maven.gnomecraft.net/releases"
-    }
+    // paucal, patchi, inline
+    maven { url = 'https://maven.blamejared.com' }
+    // EMI (temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors)
+    maven {url = "https://maven.gnomecraft.net/releases"}
     // caelus elytra
     maven { url = "https://maven.theillusivec4.top" }
     // pehkui
@@ -105,9 +93,6 @@ dependencies {
 
     // Optional interop
 
-    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-common-api:$jeiVersion")
-    compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge-api:$jeiVersion")
-    runtimeOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge:$jeiVersion")
     compileOnly fg.deobf("dev.emi:emi-forge:$emiVersion+$minecraftVersion")
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion:api")

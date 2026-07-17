@@ -58,7 +58,7 @@ loom {
 repositories {
     mavenCentral()
 
-    // paucal and patchi
+    // paucal, patchi, inline
     maven { url = 'https://maven.blamejared.com' }
     // modmenu and clothconfig
     maven { url "https://maven.shedaniel.me/" }
@@ -66,7 +66,7 @@ repositories {
     // Entity reach
     maven { url "https://maven.jamieswhiteshirt.com/libs-release/" }
     maven { url "https://mvn.devos.one/snapshots/" }
-    // temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors
+    // EMI (temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors)
     maven { url = "https://maven.gnomecraft.net/releases" }
     exclusiveContent {
         forRepository {
