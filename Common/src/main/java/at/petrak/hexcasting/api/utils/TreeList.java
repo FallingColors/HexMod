@@ -497,11 +497,6 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
     }
 
     /**
-     * {@snippet :
-     *     TreeList<String> x = TreeList.from(List.of("a", "b", "c"));
-     *     assert TreeList.from(List.of("b", "c")).equals(x.tail());
-     * }
-     *
      * @return a new TreeList containing all the elements from this TreeList except for the first one
      */
     public TreeList<A> tail() {
@@ -509,11 +504,6 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
     }
 
     /**
-     * {@snippet :
-     *     TreeList<String> x = TreeList.from(List.of("a", "b", "c"));
-     *     assert TreeList.from(List.of("a", "b")).equals(x.init());
-     * }
-     *
      * @return a new TreeList containing all the elements from this TreeList except for the last one
      */
     public TreeList<A> init() {
@@ -531,11 +521,6 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
     abstract int treeListSlicePrefixLength(int idx);
 
     /**
-     * {@snippet :
-     *     TreeList<String> x = TreeList.from(List.of("a", "b", "c"));
-     *     assert "a".equals(x.head());
-     * }
-     *
      * @return the first element of this TreeList
      */
     public final A head() {
@@ -544,11 +529,6 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
     }
 
     /**
-     * {@snippet :
-     *     TreeList<String> x = TreeList.from(List.of("a", "b", "c"));
-     *     assert "c".equals(x.last());
-     * }
-     *
      * @return the last element of this TreeList
      */
     public A last() {
