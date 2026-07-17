@@ -23,6 +23,12 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    maven {
+        // maven for EMI
+        // temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors
+        name = "Gnomecraft maven"
+        url = "https://maven.gnomecraft.net/releases"
+    }
 
     maven { url "https://maven.shedaniel.me/" }
 
@@ -33,6 +39,7 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
     compileOnly "at.petra-k.paucal:paucal-common-$minecraftVersion:$paucalVersion"
+    compileOnly "dev.emi:emi-xplat-mojmap:$emiVersion+$minecraftVersion"
     compileOnly "vazkii.patchouli:Patchouli-xplat:$minecraftVersion-$patchouliVersion-SNAPSHOT"
 
     compileOnly "com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion"

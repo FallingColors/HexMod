@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.fabric.interop.emi;
+package at.petrak.hexcasting.interop.emi;
 
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;

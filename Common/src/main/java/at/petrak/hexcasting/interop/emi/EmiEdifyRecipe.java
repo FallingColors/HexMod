@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.fabric.interop.emi;
+package at.petrak.hexcasting.interop.emi;
 
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import dev.emi.emi.api.recipe.EmiRecipe;

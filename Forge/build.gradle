@@ -59,6 +59,12 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    maven {
+        // maven for EMI
+        // temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors
+        name = "Gnomecraft maven"
+        url = "https://maven.gnomecraft.net/releases"
+    }
     // caelus elytra
     maven { url = "https://maven.theillusivec4.top" }
     // pehkui
@@ -102,6 +108,7 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-common-api:$jeiVersion")
     compileOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge-api:$jeiVersion")
     runtimeOnly fg.deobf("mezz.jei:jei-$minecraftVersion-forge:$jeiVersion")
+    compileOnly fg.deobf("dev.emi:emi-forge:$emiVersion+$minecraftVersion")
 
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion:api")
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:$curiosVersion+$minecraftVersion")
