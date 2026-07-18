@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.fabric.interop.emi;
+package at.petrak.hexcasting.interop.emi;
 
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import dev.emi.emi.api.recipe.EmiRecipe;
@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class EmiEdifyRecipe implements EmiRecipe {
-    private static final ResourceLocation OVERLAY = modLoc("textures/gui/edify_jei.png");
+    private static final ResourceLocation OVERLAY = modLoc("textures/gui/edify_recipe.png");
 
     private final EmiIngredient saplings;
     private final EmiIngredient leaves;

@@ -34,7 +34,7 @@
       "at.petrak.hexcasting.fabric.cc.HexCardinalComponents"
     ],
     "emi": [
-      "at.petrak.hexcasting.fabric.interop.emi.HexEMIPlugin"
+      "at.petrak.hexcasting.interop.emi.HexEMIPlugin"
     ],
     "modmenu": [
       "at.petrak.hexcasting.fabric.interop.ModMenuInterop"

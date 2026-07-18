@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.fabric.interop.emi;
+package at.petrak.hexcasting.interop.emi;
 
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class EmiPhialRecipe implements EmiRecipe {
-    private static final ResourceLocation OVERLAY = modLoc("textures/gui/phial_jei.png");
+    private static final ResourceLocation OVERLAY = modLoc("textures/gui/phial_recipe.png");
 
     private final EmiIngredient inputs;
     private final EmiIngredient bottle;
