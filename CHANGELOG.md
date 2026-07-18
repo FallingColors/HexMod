@@ -25,7 +25,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Changed Wayfarer's Flight and Anchorite's Flight to both cost 2 dust per unit, and enforced a minimum cost for Anchorite's Flight ([#1040](https://github.com/FallingColors/HexMod/pull/1040)) @Robotgiggle
 - Changed the pattern limit to also include execution of non-pattern iotas like jumps ([#1035](https://github.com/FallingColors/HexMod/pull/1035)) @pythonmcpi
 - Changed the Hasty Retrospection mishap to Absent Introspection as it's now used for anything that only works while parenthesized ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
-- Updated the Flay Mind recipe display in EMI and JEI to cycle through all valid entities if the input is an entity tag ([#1023](https://github.com/FallingColors/HexMod/pull/1023)) @YukkuriC
+- All custom recipe displays are now handled via EMI on both sides rather than EMI on Fabric and JEI on Forge ([#1206](https://github.com/FallingColors/HexMod/pull/1206)) @Robotgiggle
+- Updated the Flay Mind recipe display to cycle through all valid entities if the input is an entity tag ([#1023](https://github.com/FallingColors/HexMod/pull/1023)) @YukkuriC
 - Re-implemented the ability to extract stored media from items in trinket/curio slots ([#996](https://github.com/FallingColors/HexMod/pull/996)) @YukkuriC
 - Patterns involving entity look direction now compensate for the vanilla bug that causes projectiles and phantoms to report the wrong direction ([#1025](https://github.com/FallingColors/HexMod/pull/1025)) @Robotgiggle
 - Edified Panels are now crafted with 9 planks rather than 8 to avoid conflicting with the vanilla chest recipe ([#1080](https://github.com/FallingColors/HexMod/pull/1080)) @Robotgiggle
