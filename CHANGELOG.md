@@ -9,13 +9,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Updated to Minecraft 1.21.1 ([#985](https://github.com/FallingColors/HexMod/pull/985)) @SuperKnux @slava110
+- Added a new Ancient Cypher hex that impulses nearby items towards the caster ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
 
 ### Changed
 
-- Changed the argument order for Thoth's Gambit to take data first ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
-- Changed Thoth's Gambit to accept single iotas as the loop body ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
-- Changed Thoth's Gambit to be a special handler with a new shape ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
-- Changed Thoth's Gambit to use a context stack for iterations, and restore stashed iotas at the end ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
+- Reworked Thoth's Gambit in a variety of ways ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
+  - The argument order now takes the data list first and then the loop body
+  - The loop body can now be either a list or a single executable iota
+  - The pattern itself is now a special handler with a variable tail length
+  - The tail length determines how many extra iotas from the original stack are included in each iteration's stack
+  - Iotas included via the above process are now popped from the original stack
 
 ### Fixed
 
