@@ -8,7 +8,7 @@ import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.FrameForEach
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
-import at.petrak.hexcasting.api.casting.evaluatable
+import at.petrak.hexcasting.api.casting.getEvaluatable
 import at.petrak.hexcasting.api.casting.getList
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
@@ -39,7 +39,7 @@ class SpecialHandlerForEach(val n: Int) : SpecialHandler {
                 throw MishapNotEnoughArgs(2 + n, stack.size)
 
             val datums = stack.getList(stack.lastIndex - 1, stack.size)
-            val instrs = evaluatable(stack[stack.lastIndex], 0)
+            val instrs = stack.getEvaluatable(stack.lastIndex, stack.size)
             stack = stack.dropRight(2)
 
             val instrList = instrs.map({ TreeList.from(listOf(it)) }, { it })
