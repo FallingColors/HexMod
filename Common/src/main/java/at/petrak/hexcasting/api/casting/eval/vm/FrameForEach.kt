@@ -15,7 +15,7 @@ import net.minecraft.server.level.ServerLevel
 
 /**
  * A frame representing all the state for a Thoth evaluation.
- * Pushed by an OpForEach.
+ * Pushed by SpecialHandlerForEach.
  * @property data list of *remaining* datums to ForEach over
  * @property code code to run per datum
  * @property contextStack the stack state used for each iteration
