@@ -397,12 +397,6 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public boolean isCorrectTierForDrops(Tier tier, BlockState bs) {
-        // TODO port: check tag
-        return !bs.is(HexTags.Blocks.HEX_UNBREAKABLE);
-    }
-
-    @Override
     public Item.Properties addEquipSlotFabric(EquipmentSlot slot) {
         return new Item.Properties();
     }

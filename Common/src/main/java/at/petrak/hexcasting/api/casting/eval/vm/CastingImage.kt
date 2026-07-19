@@ -3,8 +3,10 @@ package at.petrak.hexcasting.api.casting.eval.vm
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
+import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.api.utils.getOrCreateCompound
 import at.petrak.hexcasting.api.utils.putCompound
+import at.petrak.hexcasting.api.utils.compositeCodecSeven
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.nbt.CompoundTag
@@ -17,15 +19,15 @@ import java.util.Optional
  * The state of a casting VM, containing the stack and all
  */
 data class CastingImage(
-    val stack: List<Iota>,
-
+    val stack: TreeList<Iota>,
     val parenCount: Int,
-    val parenthesized: List<ParenthesizedIota>,
+    val parenthesized: TreeList<ParenthesizedIota>,
     val escapeNext: Boolean,
+    val simulateNext: Boolean,
     val opsConsumed: Long,
     val userData: CompoundTag
 ) {
-    constructor() : this(listOf(), 0, listOf(), false, 0, CompoundTag())
+    constructor() : this(TreeList.empty(), 0, TreeList.empty(), false, false, 0, CompoundTag())
 
     /**
      * `escaped` is used by [OpUndo][at.petrak.hexcasting.common.casting.actions.escaping.OpUndo] to determine whether the paren count
@@ -65,14 +67,13 @@ data class CastingImage(
     /**
      * Returns a copy of this with escape/paren-related fields cleared.
      */
-    fun withResetEscape() = this.copy(parenCount = 0, parenthesized = listOf(), escapeNext = false)
+    fun withResetEscape() = this.copy(parenCount = 0, parenthesized = TreeList.empty(), escapeNext = false)
 
     /**
      * Returns a copy of this with the provided iota added to the parenthesized list.
      */
     fun withNewParenthesized(iota: Iota): CastingImage {
-        val newParens = this.parenthesized.toMutableList()
-        newParens.add(ParenthesizedIota(iota, false))
+        val newParens = this.parenthesized.appended(ParenthesizedIota(iota, false))
         return this.copy(parenthesized = newParens)
     }
 
@@ -91,26 +92,28 @@ data class CastingImage(
         @JvmStatic
         val CODEC = RecordCodecBuilder.create<CastingImage> { inst ->
             inst.group(
-                IotaType.TYPED_CODEC.listOf().fieldOf("stack").forGetter { it.stack },
+                TreeList.codecOf(IotaType.TYPED_CODEC).fieldOf("stack").forGetter { it.stack },
                 Codec.INT.fieldOf("open_parens").forGetter { it.parenCount },
-                ParenthesizedIota.CODEC.listOf().fieldOf("parenthesized").forGetter { it.parenthesized },
+                TreeList.codecOf(ParenthesizedIota.CODEC).fieldOf("parenthesized").forGetter { it.parenthesized },
                 Codec.BOOL.fieldOf("escape_next").forGetter { it.escapeNext },
+                Codec.BOOL.fieldOf("simulate_next").forGetter { it.simulateNext },
                 Codec.LONG.fieldOf("ops_consumed").forGetter { it.opsConsumed },
                 CompoundTag.CODEC.fieldOf("userData").forGetter { it.userData }
-            ).apply(inst) { a, b, c, d, e, f ->
-                CastingImage(a, b, c, d, e, f)
+            ).apply(inst) { a, b, c, d, e, f, g ->
+                CastingImage(a, b, c, d, e, f, g)
             }
         }.orElseGet(::CastingImage)
         @JvmStatic
-        val STREAM_CODEC = StreamCodec.composite(
-            IotaType.TYPED_STREAM_CODEC.apply(ByteBufCodecs.list()), CastingImage::stack,
+        val STREAM_CODEC = compositeCodecSeven(
+            IotaType.TYPED_STREAM_CODEC.apply(TreeList.streamCodecOp()), CastingImage::stack,
             ByteBufCodecs.VAR_INT, CastingImage::parenCount,
-            ParenthesizedIota.STREAM_CODEC.apply(ByteBufCodecs.list()), CastingImage::parenthesized,
+            ParenthesizedIota.STREAM_CODEC.apply(TreeList.streamCodecOp()), CastingImage::parenthesized,
             ByteBufCodecs.BOOL, CastingImage::escapeNext,
+            ByteBufCodecs.BOOL, CastingImage::simulateNext,
             ByteBufCodecs.VAR_LONG, CastingImage::opsConsumed,
             ByteBufCodecs.COMPOUND_TAG, { it.userData },
-            { a, b, c, d, e, f ->
-                        CastingImage(a, b, c, d, e, f)
+            { a, b, c, d, e, f, g ->
+                        CastingImage(a, b, c, d, e, f, g)
                     }
         )
 

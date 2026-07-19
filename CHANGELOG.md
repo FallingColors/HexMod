@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Updated to Minecraft 1.21.1 ([#985](https://github.com/FallingColors/HexMod/pull/985)) @SuperKnux @slava110
+- Added Simulate, which causes the next pattern drawn to be simulated (to check for mishaps) rather than executed ([#1194](https://github.com/FallingColors/HexMod/pull/1194)) @Robotgiggle
+- Added the `hex_unbreakable` tag for blocks that should be immune to Break Block regardless of the configured mining tier ([#1186](https://github.com/FallingColors/HexMod/pull/1186)) @Robotgiggle @slava110
 - Added a new Ancient Cypher hex that impulses nearby items towards the caster ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
 
 ### Changed
@@ -28,6 +30,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Internal
 
 - Removed APIs deprecated in `0.11.4` ([#1126](https://github.com/FallingColors/HexMod/pull/1126), [#1127](https://github.com/FallingColors/HexMod/pull/1127) [#1129](https://github.com/FallingColors/HexMod/pull/1129), [#1137](https://github.com/FallingColors/HexMod/pull/1137), [#1142](https://github.com/FallingColors/HexMod/pull/1142)) @s5bug
+- ListIota now uses the asymptotically-efficient TreeList internally ([#1032](https://github.com/FallingColors/HexMod/pull/1032)) @s5bug
+- SpellList has been removed ([#1032](https://github.com/FallingColors/HexMod/pull/1032)) @s5bug
+- Casting Image and Casting Frames now store iotas in a TreeList ([#1033](https://github.com/FallingColors/HexMod/pull/1033)) @s5bug
 
 ## `0.11.3` - 2025-11-22
 

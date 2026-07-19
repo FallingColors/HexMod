@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.common.casting.actions.eval
 
 import at.petrak.hexcasting.api.HexAPI
-import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
@@ -34,23 +33,22 @@ class SpecialHandlerForEach(val n: Int) : SpecialHandler {
 
     class InnerAction(val n: Int) : Action {
         override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-            val stack = image.stack.toMutableList()
+            var stack = image.stack
 
             if (stack.size < 2 + n)
                 throw MishapNotEnoughArgs(2 + n, stack.size)
 
             val datums = stack.getList(stack.lastIndex - 1, stack.size)
             val instrs = evaluatable(stack[stack.lastIndex], 0)
-            stack.removeLastOrNull()
-            stack.removeLastOrNull()
+            stack = stack.dropRight(2)
 
-            val instrList = instrs.map({ SpellList.LList(0, listOf(it)) }, { it })
+            val instrList = instrs.map({ TreeList.from(listOf(it)) }, { it })
 
-            val contextStack = stack.takeLast(n)
-            val stashedStack = stack.dropLast(n)
+            val contextStack = stack.takeRight(n)
+            val stashedStack = stack.dropRight(n)
 
             val frame = FrameForEach(datums, instrList, contextStack, stashedStack, TreeList.empty())
-            val image2 = image.withUsedOp().copy(stack = listOf())
+            val image2 = image.withUsedOp().copy(stack = TreeList.empty())
 
             return OperationResult(image2, listOf(), continuation.pushFrame(frame), HexEvalSounds.THOTH)
         }
