@@ -18,7 +18,7 @@ object OpEval : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
         val stack = image.stack
 
-        if (stack.size < 1)
+        if (stack.isEmpty())
             throw MishapNotEnoughArgs(1, 0)
 
         val instrs = stack.getEvaluatable(stack.lastIndex, stack.size)
