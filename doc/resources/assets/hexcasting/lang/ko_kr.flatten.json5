@@ -1,0 +1,48 @@
+{
+  hexdoc: {
+    hexcasting: {
+      title: "헥스 책",
+      description: "헥스 책의 모든 내용을 한곳에.",
+    },
+
+    renderer: {
+      renders: "렌더링",
+      palettes: "팔레트",
+
+      animated: "애니메이션",
+      monocolor: "단색",
+      gradient: "그라데이션",
+      segment: "분할",
+
+      default: "기본",
+      turbo: "turbo",
+      dark2: "dark2",
+      tab10: "tab10",
+    },
+
+    pattern: {
+      show: "클릭하여 주문 표시",
+      hide: "클릭하여 주문 숨기기",
+
+      multiplier: "${speedScale()}x",
+      paused: "일시 정지됨",
+
+      not_supported: "사용 중인 브라우저는 패턴 시각화를 지원하지 않습니다. 패턴 코드: {}",
+    },
+
+    villager_requirements: {
+      any: "{level} 이상의 주민이 필요합니다",
+      professional: "{level} 이상의 {profession} 주민이 필요합니다",
+    },
+  },
+
+  "block.hexcasting": {
+    slate: "빈 석판",
+  },
+
+  "tag.item.c": {
+    brown_dye: "갈색 염료",
+    glowstone_dusts: "발광석 가루",
+    wood_sticks: "나무 막대기",
+  },
+}
