@@ -116,17 +116,5 @@ data class CastingImage(
                         CastingImage(a, b, c, d, e, f, g)
                     }
         )
-
-        @JvmStatic
-        fun checkAndMarkGivenMotion(userData: CompoundTag, entity: Entity): Boolean {
-            val marked = userData.getOrCreateCompound(HexAPI.MARKED_MOVED_USERDATA)
-            return if (marked.contains(entity.stringUUID)) {
-                true
-            } else {
-                marked.putBoolean(entity.stringUUID, true)
-                userData.putCompound(HexAPI.MARKED_MOVED_USERDATA, marked)
-                false
-            }
-        }
     }
 }

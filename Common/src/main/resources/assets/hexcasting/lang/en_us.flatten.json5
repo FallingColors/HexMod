@@ -2049,7 +2049,7 @@
         "explode.fire.1": "Remove a number and vector from the stack, then create a fiery explosion at the given location with the given power.",
         "explode.fire.2": "Costs one $(l:items/amethyst)$(item)Amethyst Dust/$, plus about 3 extra $(l:items/amethyst)$(item)Amethyst Dust/$s per point of explosion power. Otherwise, the same as $(l:patterns/spells/basic#hexcasting:explode)$(action)Explosion/$, except with fire.",
         
-        add_motion: "Remove an entity and direction from the stack, then give a shove to the given entity in the given direction. The strength of the impulse is determined by the length of the vector.$(br)Costs units of $(l:items/amethyst)$(item)Amethyst Dust/$ equal to the square of the length of the vector, plus one for every Impulse except the first targeting an entity.",
+        add_motion: "Remove an entity and direction from the stack, then give a shove to the given entity in the given direction. The strength of the impulse is determined by the length of the vector.$(br)Costs $(l:items/amethyst)$(item)Amethyst Dust/$ equal to twice the length of the vector.",
         blink: "Remove an entity and length from the stack, then teleport the given entity along its look vector by the given length.$(br)Costs about one $(l:items/amethyst)$(item)Amethyst Shard/$ per two blocks travelled.",
         
         "beep.1": "Remove a vector and two numbers from the stack. Plays an $(thing)instrument/$ defined by the first number at the given location, with a $(thing)note/$ defined by the second number. Costs a negligible amount of _media.",
