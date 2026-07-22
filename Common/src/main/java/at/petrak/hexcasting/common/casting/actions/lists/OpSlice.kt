@@ -12,7 +12,7 @@ import kotlin.math.min
 object OpSlice : ConstMediaAction {
     override val argc = 3
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
-        val list = args.getList(0, argc).toList()
+        val list = args.getList(0, argc)
         val index1 = args.getPositiveIntUnderInclusive(1, list.size, argc)
         val index2 = args.getPositiveIntUnderInclusive(2, list.size, argc)
 
