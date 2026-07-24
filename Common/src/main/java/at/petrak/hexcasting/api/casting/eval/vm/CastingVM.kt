@@ -1,14 +1,14 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
-import at.petrak.hexcasting.api.HexAPI
-import at.petrak.hexcasting.api.casting.PatternShapeMatch.*
-import at.petrak.hexcasting.api.casting.eval.*
+import at.petrak.hexcasting.api.casting.eval.CastResult
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.eval.ExecutionClientView
+import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
 import at.petrak.hexcasting.api.casting.iota.BooleanIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
-import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.iota.PatternIota
 import at.petrak.hexcasting.api.casting.math.HexDir
 import at.petrak.hexcasting.api.casting.math.HexPattern
@@ -20,11 +20,7 @@ import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.api.utils.validateIota
 import at.petrak.hexcasting.api.utils.validateIotaList
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.NbtOps
-import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
-import kotlin.jvm.optionals.getOrElse
 import kotlin.jvm.optionals.getOrNull
 
 /**
@@ -105,12 +101,10 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 if (lastResolutionType.success) ResolvedPatternType.EVALUATED else ResolvedPatternType.ERRORED
         }
 
-        var ravenmind: CompoundTag? = image.ravenmind().getOrNull()
+        var ravenmind: Iota? = image.ravenmind().getOrNull()
 
         if (ravenmind != null) {
-            val test = IotaType.TYPED_CODEC.parse<Tag?>(NbtOps.INSTANCE, ravenmind).getOrThrow()
-            val newIota = validateIota(test, world)
-            ravenmind = IotaType.TYPED_CODEC.encodeStart<Tag?>(NbtOps.INSTANCE, newIota).getOrThrow() as CompoundTag?
+            ravenmind = validateIota(ravenmind, world)
         }
 
         val isStackClear = image.stack.isEmpty()
