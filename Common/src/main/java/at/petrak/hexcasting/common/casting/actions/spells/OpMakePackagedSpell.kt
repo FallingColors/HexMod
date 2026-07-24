@@ -59,9 +59,9 @@ class OpMakePackagedSpell(val isValid: Predicate<ItemStack>, val expectedTypeDes
             )
         }
 
-        val trueName = MishapOthersName.getTrueNameFromArgs(env.world, patterns, env.castingEntity as? ServerPlayer)
-        if (trueName != null)
-            throw MishapOthersName(trueName)
+        val trueNameMishap = MishapOthersName.getTrueNameMishapFromArgs(env.world, patterns, env.castingEntity as? ServerPlayer)
+        if (trueNameMishap != null)
+            throw trueNameMishap
 
         return SpellAction.Result(
             Spell(entity, patterns, handStack),
