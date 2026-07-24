@@ -10,32 +10,34 @@ import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.DyeColor
 
 /**
- * Also throwable for your *own* name, for cases like Chronicler's Gambit
+ * Also throwable for your *own* name, for cases like Chronicler's Gambit.
+ * confidant == null means the player is offline.
  */
-class MishapOthersName(val confidant: Player) : Mishap() {
+class MishapOthersName(val confidant: Player?) : Mishap() {
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BLACK)
 
     override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: TreeList<Iota>): TreeList<Iota> {
-        val seconds = if (this.confidant == ctx.castingEntity) 5 else 60
+        val seconds = if (this.confidant != null && this.confidant == ctx.castingEntity) 5 else 60
         ctx.mishapEnvironment.blind(seconds * 20)
         return stack
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        if (this.confidant == ctx.castingEntity)
-            error("others_name.self")
-        else
-            error("others_name", confidant.name)
+        when (this.confidant) {
+            null -> error("others_name.offline")
+            ctx.castingEntity -> error("others_name.self")
+            else -> error("others_name", confidant.name)
+        }
 
     companion object {
         /**
-         * Return any true names found in this iota.
+         * Returns a mishap if any true names are found in this iota.
          *
          * If `caster` is non-null, it will ignore that when checking.
          */
         @JvmStatic
-        fun getTrueNameFromDatum(level: ServerLevel, datum: Iota, caster: Player?): Player? {
+        fun getTrueNameMishapFromDatum(level: ServerLevel, datum: Iota, caster: Player?): MishapOthersName? {
             val poolToSearch = ArrayDeque<Iota>()
             poolToSearch.addLast(datum)
 
@@ -44,8 +46,10 @@ class MishapOthersName(val confidant: Player) : Mishap() {
 
                 if(datumToCheck is EntityIota) {
                     val ent = datumToCheck.getEntity(level)
+                    if (ent == null && datumToCheck.isPlayer)
+                        return MishapOthersName(null)
                     if(ent is Player && ent != caster)
-                        return ent
+                        return MishapOthersName(ent)
                 }
 
                 val datumSubIotas = datumToCheck.subIotas()
@@ -57,8 +61,8 @@ class MishapOthersName(val confidant: Player) : Mishap() {
         }
 
         @JvmStatic
-        fun getTrueNameFromArgs(level: ServerLevel, datums: List<Iota>, caster: Player?): Player? {
-            return datums.firstNotNullOfOrNull { getTrueNameFromDatum(level, it, caster) }
+        fun getTrueNameMishapFromArgs(level: ServerLevel, datums: List<Iota>, caster: Player?): MishapOthersName? {
+            return datums.firstNotNullOfOrNull { getTrueNameMishapFromDatum(level, it, caster) }
         }
     }
 }

@@ -1053,6 +1053,7 @@
       no_spell_circle: "requires a spell circle",
       others_name: "Tried to invade the privacy of %s's soul",
       "others_name.self": "Tried to divulge my Name too recklessly",
+      "others_name.offline": "Tried to invade the privacy of an absent player's soul",
       
       divide_by_zero: {
         divide: "Attempted to divide %s by %s",
