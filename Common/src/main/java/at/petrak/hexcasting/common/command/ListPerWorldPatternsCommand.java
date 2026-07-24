@@ -136,7 +136,7 @@ public class ListPerWorldPatternsCommand {
                 Component.translatable(
                     "command.hexcasting.pats.specific.success",
                     stack.getDisplayName(),
-                        actionKey.location(),
+                        actionKey.location().toString(),
                     targets.size() == 1 ? targets.iterator().next().getDisplayName() : targets.size()),
                 true);
 
