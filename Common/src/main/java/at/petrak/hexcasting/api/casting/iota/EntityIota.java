@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.samsthenerd.inline.api.InlineAPI;
@@ -21,7 +22,6 @@ import net.minecraft.world.item.component.ResolvableProfile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.ref.WeakReference;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,15 +29,17 @@ public class EntityIota extends Iota {
     private final UUID entityId;
     @Nullable
     private final Component entityName;
+    private boolean isPlayer;
 
     public EntityIota(@NotNull Entity e) {
-        this(e.getUUID(), getEntityNameWithInline(e));
+        this(e.getUUID(), getEntityNameWithInline(e), e instanceof Player);
     }
 
-    public EntityIota(UUID entityId, @Nullable Component entityName) {
+    public EntityIota(UUID entityId, @Nullable Component entityName, boolean isPlayer) {
         super(() -> HexIotaTypes.ENTITY);
         this.entityId = entityId;
         this.entityName = entityName;
+        this.isPlayer = isPlayer;
     }
 
     public UUID getEntityId() {
@@ -50,6 +52,10 @@ public class EntityIota extends Iota {
 
     public @Nullable Component getEntityName() {
         return entityName;
+    }
+
+    public boolean isPlayer() {
+        return isPlayer;
     }
 
     @Override
@@ -93,18 +99,22 @@ public class EntityIota extends Iota {
         public static final MapCodec<EntityIota> CODEC = RecordCodecBuilder.mapCodec(inst ->
                 inst.group(
                         UUIDUtil.CODEC.fieldOf("entityId").forGetter(EntityIota::getEntityId),
-                        ComponentSerialization.CODEC.optionalFieldOf("entityName").forGetter(iota -> Optional.ofNullable(iota.getEntityName()))
-                ).apply(inst, (a, b) -> new EntityIota(a, b.orElse(null))));
+                        ComponentSerialization.CODEC.optionalFieldOf("entityName").forGetter(iota -> Optional.ofNullable(iota.getEntityName())),
+                        Codec.BOOL.fieldOf("isPlayer").orElse(true).forGetter(EntityIota::isPlayer)
+                ).apply(inst, (a, b, c) -> new EntityIota(a, b.orElse(null), c)));
         public static final StreamCodec<RegistryFriendlyByteBuf, EntityIota> STREAM_CODEC =
                 StreamCodec.composite(
                         UUIDUtil.STREAM_CODEC, EntityIota::getEntityId,
                         ByteBufCodecs.optional(ComponentSerialization.STREAM_CODEC), iota -> Optional.ofNullable(iota.getEntityName()),
-                        (a, b) -> new EntityIota(a, b.orElse(null))
+                        ByteBufCodecs.BOOL, EntityIota::isPlayer,
+                        (a, b, c) -> new EntityIota(a, b.orElse(null), c)
                 );
 
         @Override
         public boolean validate(EntityIota iota, ServerLevel level) {
             var entity = iota.getEntity(level);
+            // update isPlayer so older non-player entity iotas are not protected
+            iota.isPlayer = (entity instanceof Player);
             return entity != null;
         }
 
