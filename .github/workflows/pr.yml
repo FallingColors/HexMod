@@ -116,7 +116,7 @@ jobs:
 
       - name: Prepare mod jar
         run: |
-          rm -f dist/*-javadoc.jar dist/*-sources.jar
+          rm -f dist/*-javadoc.jar dist/*-sources.jar dist/*-shadow.jar
           cp dist/hexcasting-${{ matrix.modloader }}-*.jar run/mods
 
       - name: Shorten java version
