@@ -68,6 +68,7 @@ jobs:
               'https://cdn.modrinth.com/data/nU0bVIaL/versions/XIjNwQkI/Patchouli-1.21.1-93-FABRIC.jar'
               'https://cdn.modrinth.com/data/mOgUt4GM/versions/v6Xx3fbU/modmenu-11.0.4.jar'
               'https://cdn.modrinth.com/data/5aaWibi9/versions/JagCscwi/trinkets-3.10.0.jar'
+              'https://cdn.modrinth.com/data/lhGA9TYQ/versions/Pzc2FP5K/architectury-13.0.11-fabric.jar'
           - modloader: neoforge
             mc-runtime-test: neoforge
             fabric-api: none
