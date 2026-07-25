@@ -121,7 +121,7 @@ jobs:
       - name: Run MC test client
         if: matrix.env == 'client'
         timeout-minutes: 10
-        uses: headlesshq/mc-runtime-test@4.4.0
+        uses: headlesshq/mc-runtime-test@4.5.1
         with:
           java: ${{ env.JAVA_VERSION }}
           mc: 1.21.1
