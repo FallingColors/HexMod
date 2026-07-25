@@ -12,7 +12,7 @@ on:
     branches: indev/1.21.1
 
 env:
-  JAVA_VERSION: '21.0.5'
+  JAVA_VERSION: '21'
 
 jobs:
   build:
@@ -89,17 +89,18 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Create cache key
+        id: cache-key
         run: |
           cat <<END_OF_FILE > dependencies.txt
           ${{ matrix.dependencies }}
           END_OF_FILE
-
+          echo "key=$(sha256sum dependencies.txt)" >> $GITHUB_OUTPUT
       - name: Restore cached dependencies
         id: cache
         uses: actions/cache/restore@v4
         with:
           path: run/mods
-          key: ${{ hashFiles('dependencies.txt') }}
+          key: ${{ steps.cache-key.outputs.key }}
 
       - name: Download dependencies
         if: steps.cache.outputs.cache-hit != 'true'
@@ -108,12 +109,13 @@ jobs:
             wget --directory-prefix=run/mods/ "$url"
           done
 
+      # Cache has to be saved here already to avoid also caching the build artifact at the end of the run
       - name: Cache dependencies
         uses: actions/cache/save@v4
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           path: run/mods
-          key: ${{ hashFiles('dependencies.txt') }}
+          key: ${{ steps.cache-key.outputs.key }}
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
@@ -126,18 +128,12 @@ jobs:
           rm -f dist/*-javadoc.jar dist/*-sources.jar dist/*-shadow.jar
           cp dist/hexcasting-${{ matrix.modloader }}-*.jar run/mods
 
-      - name: Shorten java version
-        shell: bash
-        id: shorten-java
-        run:
-          echo "shortened=${JAVA_VERSION%%.*}" >> $GITHUB_OUTPUT
-
       - name: Run MC test client
         if: matrix.env == 'client'
         timeout-minutes: 10
         uses: headlesshq/mc-runtime-test@4.5.1
         with:
-          java: ${{ steps.shorten-java.outputs.shortened }}
+          java: ${{ env.JAVA_VERSION }}
           mc: 1.21.1
           modloader: ${{ matrix.modloader }}
           regex: '.*${{ matrix.modloader }}.*'
@@ -149,7 +145,7 @@ jobs:
         timeout-minutes: 10
         uses: headlesshq/mc-server-test@1.1.1
         with:
-          java: ${{ steps.shorten-java.outputs.shortened }}
+          java: ${{ env.JAVA_VERSION }}
           mc: 1.21.1
           modloader: ${{ matrix.modloader }}
           fabric-api: ${{ matrix.fabric-api }}
