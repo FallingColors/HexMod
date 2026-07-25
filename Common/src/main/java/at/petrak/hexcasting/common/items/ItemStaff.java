@@ -1,12 +1,12 @@
 package at.petrak.hexcasting.common.items;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.common.lib.HexAttributes;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.common.msgs.MsgClearSpiralPatternsS2C;
 import at.petrak.hexcasting.common.msgs.MsgOpenSpellGuiS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -47,7 +47,7 @@ public class ItemStaff extends Item {
             var vm = IXplatAbstractions.INSTANCE.getStaffcastVM(serverPlayer, hand);
             var patterns = IXplatAbstractions.INSTANCE.getPatternsSavedInUi(serverPlayer);
 
-            @Nullable CompoundTag ravenmind = vm.getImage().ravenmind().orElse(null);
+            @Nullable Iota ravenmind = vm.getImage().ravenmind().orElse(null);
 
 
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(serverPlayer,
