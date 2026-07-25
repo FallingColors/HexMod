@@ -63,7 +63,7 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
             if (usedStack.isEmpty() && player.isDiscrete()) {
                 tile.clearPlayer();
                 tile.sync();
-                level.playSound(null, pos, HexSounds.IMPETUS_REDSTONE_CLEAR, SoundSource.BLOCKS, 1f, 1f);
+                level.playSound(null, pos, HexSounds.IMPETUS_REDSTONE_CLEAR.value(), SoundSource.BLOCKS, 1f, 1f);
                 return ItemInteractionResult.sidedSuccess(level.isClientSide);
             } else {
                 var datumContainer = IXplatAbstractions.INSTANCE.findDataHolder(usedStack);
@@ -76,7 +76,7 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
                             tile.setPlayer(iotaPlayer.getGameProfile(), entity.getUUID());
                             tile.sync();
 
-                            level.playSound(null, pos, HexSounds.IMPETUS_REDSTONE_DING,
+                            level.playSound(null, pos, HexSounds.IMPETUS_REDSTONE_DING.value(),
                                     SoundSource.BLOCKS, 1f, 1f);
                             return ItemInteractionResult.sidedSuccess(level.isClientSide);
                         }

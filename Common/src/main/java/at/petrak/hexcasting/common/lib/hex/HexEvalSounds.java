@@ -17,19 +17,19 @@ public class HexEvalSounds {
     public static final EvalSound NOTHING = make("nothing",
         new EvalSound(null, Integer.MIN_VALUE));
     public static final EvalSound NORMAL_EXECUTE = make("operator",
-        new EvalSound(HexSounds.CAST_NORMAL, 0));
+        new EvalSound(HexSounds.CAST_NORMAL.value(), 0));
     public static final EvalSound SPELL = make("spell",
-        new EvalSound(HexSounds.CAST_SPELL, 1000));
+        new EvalSound(HexSounds.CAST_SPELL.value(), 1000));
     public static final EvalSound HERMES = make("hermes",
-        new EvalSound(HexSounds.CAST_HERMES, 2000));
+        new EvalSound(HexSounds.CAST_HERMES.value(), 2000));
     public static final EvalSound THOTH = make("thoth",
-        new EvalSound(HexSounds.CAST_THOTH, 2500));
+        new EvalSound(HexSounds.CAST_THOTH.value(), 2500));
 
     public static final EvalSound MUTE = make("mute",
         new EvalSound(null, 3000));
 
     public static final EvalSound MISHAP = make("mishap",
-        new EvalSound(HexSounds.CAST_FAILURE, 4000));
+        new EvalSound(HexSounds.CAST_FAILURE.value(), 4000));
 
     private static EvalSound make(String name, EvalSound sound) {
         var old = SOUNDS.put(modLoc(name), sound);

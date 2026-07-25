@@ -77,7 +77,7 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
                     var t = (float) newLook / MAX_LOOK_AMOUNT;
                     var pitch = Mth.lerp(t, 0.5f, 1.2f);
                     var volume = Mth.lerp(t, 0.2f, 1.2f);
-                    level.playSound(null, pos, HexSounds.IMPETUS_LOOK_TICK, SoundSource.BLOCKS, volume, pitch);
+                    level.playSound(null, pos, HexSounds.IMPETUS_LOOK_TICK.value(), SoundSource.BLOCKS, volume, pitch);
                 }
                 self.lookAmount = newLook;
                 self.setChanged();

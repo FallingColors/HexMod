@@ -50,7 +50,7 @@ public class ItemAbacus extends Item implements IotaHolderItem {
             Double oldNum = stack.get(HexDataComponents.ABACUS_VALUE);
             stack.remove(HexDataComponents.ABACUS_VALUE);
 
-            player.playSound(HexSounds.ABACUS_SHAKE, 1f, 1f);
+            player.playSound(HexSounds.ABACUS_SHAKE.value(), 1f, 1f);
 
             var key = "hexcasting.tooltip.abacus.reset";
             if (oldNum != null && oldNum == 69) {

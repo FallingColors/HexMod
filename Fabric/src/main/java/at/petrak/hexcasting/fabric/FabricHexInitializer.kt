@@ -199,7 +199,7 @@ object FabricHexInitializer : ModInitializer {
 
         HexCreativeTabs.registerCreativeTabs(bind(BuiltInRegistries.CREATIVE_MODE_TAB))
 
-        HexSounds.registerSounds(bind(BuiltInRegistries.SOUND_EVENT))
+        HexSounds.register()
         HexBlocks.registerBlocks(bind(BuiltInRegistries.BLOCK))
         HexBlocks.registerBlockItems(boundForItem)
         HexBlockEntities.registerTiles(bind(BuiltInRegistries.BLOCK_ENTITY_TYPE))

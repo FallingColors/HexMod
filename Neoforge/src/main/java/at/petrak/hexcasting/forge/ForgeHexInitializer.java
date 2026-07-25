@@ -113,7 +113,7 @@ public class ForgeHexInitializer {
     }
 
     private static void initRegistry() {
-        bind(Registries.SOUND_EVENT, HexSounds::registerSounds);
+        HexSounds.register();
 
         HexBlockSetTypes.registerBlocks(BlockSetType::register);
 

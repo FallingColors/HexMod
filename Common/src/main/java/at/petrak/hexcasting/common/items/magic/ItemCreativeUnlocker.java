@@ -194,7 +194,7 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
         BlockEntity be = context.getLevel().getBlockEntity(context.getClickedPos());
         if (be instanceof BlockEntityAbstractImpetus impetus) {
             impetus.setInfiniteMedia();
-            context.getLevel().playSound(null, context.getClickedPos(), HexSounds.SPELL_CIRCLE_FIND_BLOCK,
+            context.getLevel().playSound(null, context.getClickedPos(), HexSounds.SPELL_CIRCLE_FIND_BLOCK.value(),
                 SoundSource.PLAYERS, 1f, 1f);
             return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
         }

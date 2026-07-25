@@ -38,7 +38,7 @@ public record MsgNewSpellPatternS2C(ExecutionClientView info, int index) impleme
                 var mc = Minecraft.getInstance();
                 if (self.info().isStackClear()) {
                     // don't pay attention to the screen, so it also stops when we die
-                    mc.getSoundManager().stop(HexSounds.CASTING_AMBIANCE.getLocation(), null);
+                    mc.getSoundManager().stop(HexSounds.CASTING_AMBIANCE.value().getLocation(), null);
                 }
                 var screen = Minecraft.getInstance().screen;
                 if (screen instanceof GuiSpellcasting spellGui) {

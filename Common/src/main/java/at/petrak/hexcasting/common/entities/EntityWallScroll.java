@@ -115,7 +115,7 @@ public class EntityWallScroll extends HangingEntity {
             }
             this.setShowsStrokeOrder(true);
 
-            pPlayer.level().playSound(pPlayer, this, HexSounds.SCROLL_DUST, SoundSource.PLAYERS, 1f, 1f);
+            pPlayer.level().playSound(pPlayer, this, HexSounds.SCROLL_DUST.value(), SoundSource.PLAYERS, 1f, 1f);
 
             if (pPlayer.level() instanceof ServerLevel slevel) {
                 IXplatAbstractions.INSTANCE.sendPacketNear(this.position(), 32.0, slevel,
