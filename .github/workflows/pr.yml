@@ -146,7 +146,6 @@ jobs:
           mc: 1.21.1
           modloader: ${{ matrix.modloader }}
           fabric-api: ${{ matrix.fabric-api }}
-          hmc-version: 2.10.0
 
   datagen:
     runs-on: ubuntu-latest
