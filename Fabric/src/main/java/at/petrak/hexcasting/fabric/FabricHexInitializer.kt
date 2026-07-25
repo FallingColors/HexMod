@@ -216,7 +216,7 @@ object FabricHexInitializer : ModInitializer {
                 .add(HexAttributes.MEDIA_CONSUMPTION_MODIFIER)
                 .add(HexAttributes.SENTINEL_RADIUS))
         HexMobEffects.register()
-        HexPotions.registerPotions(bind(BuiltInRegistries.POTION))
+        HexPotions.register()
         HexDataComponents.registerDataComponents(bind(BuiltInRegistries.DATA_COMPONENT_TYPE))
 
         HexRecipeStuffRegistry.registerSerializers(bind(BuiltInRegistries.RECIPE_SERIALIZER))

@@ -1,5 +1,8 @@
 package at.petrak.hexcasting.common.lib;
 
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.xplat.IXplatRegister;
+import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -16,48 +19,36 @@ import java.util.function.BiConsumer;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexPotions {
-    private static final Map<ResourceLocation, Potion> POTIONS = new LinkedHashMap<>();
+    private static final IXplatRegister<Potion> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.POTION);
 
-    public static final Potion ENLARGE_GRID = make("enlarge_grid",
+    public static void register() {
+        REGISTER.registerAll();
+    }
+
+    public static final Holder<Potion> ENLARGE_GRID = REGISTER.registerHolder("enlarge_grid", () ->
         new Potion("enlarge_grid", new MobEffectInstance(HexMobEffects.ENLARGE_GRID, 3600)));
-    public static final Potion ENLARGE_GRID_LONG = make("enlarge_grid_long",
+    public static final Holder<Potion> ENLARGE_GRID_LONG = REGISTER.registerHolder("enlarge_grid_long", () ->
         new Potion("enlarge_grid_long", new MobEffectInstance(HexMobEffects.ENLARGE_GRID, 9600)));
-    public static final Potion ENLARGE_GRID_STRONG = make("enlarge_grid_strong",
+    public static final Holder<Potion> ENLARGE_GRID_STRONG = REGISTER.registerHolder("enlarge_grid_strong", () ->
         new Potion("enlarge_grid_strong", new MobEffectInstance(HexMobEffects.ENLARGE_GRID, 1800, 1)));
 
-    public static final Potion SHRINK_GRID = make("shrink_grid",
+    public static final Holder<Potion> SHRINK_GRID = REGISTER.registerHolder("shrink_grid", () ->
         new Potion("shrink_grid", new MobEffectInstance(HexMobEffects.SHRINK_GRID, 3600)));
-    public static final Potion SHRINK_GRID_LONG = make("shrink_grid_long",
+    public static final Holder<Potion> SHRINK_GRID_LONG = REGISTER.registerHolder("shrink_grid_long", () ->
         new Potion("shrink_grid_long", new MobEffectInstance(HexMobEffects.SHRINK_GRID, 9600)));
-    public static final Potion SHRINK_GRID_STRONG = make("shrink_grid_strong",
+    public static final Holder<Potion> SHRINK_GRID_STRONG = REGISTER.registerHolder("shrink_grid_strong", () ->
         new Potion("shrink_grid_strong", new MobEffectInstance(HexMobEffects.SHRINK_GRID, 1800, 1)));
 
-    public static void registerPotions(BiConsumer<Potion, ResourceLocation> r) {
-        for (var e : POTIONS.entrySet()) {
-            r.accept(e.getValue(), e.getKey());
-        }
-    }
+    public static void addRecipes(PotionBrewing.Builder builder) {
+        builder.addMix(Potions.AWKWARD, HexItems.AMETHYST_DUST, ENLARGE_GRID);
+        builder.addMix(ENLARGE_GRID, Items.REDSTONE, ENLARGE_GRID_LONG);
+        builder.addMix(ENLARGE_GRID, Items.GLOWSTONE_DUST, ENLARGE_GRID_STRONG);
 
-    public static void addRecipes(PotionBrewing.Builder builder, RegistryAccess registryAccess) {
-        var potionRegistry = registryAccess.registryOrThrow(Registries.POTION);
+        builder.addMix(ENLARGE_GRID, Items.FERMENTED_SPIDER_EYE, SHRINK_GRID);
+        builder.addMix(ENLARGE_GRID_LONG, Items.FERMENTED_SPIDER_EYE, SHRINK_GRID_LONG);
+        builder.addMix(ENLARGE_GRID_STRONG, Items.FERMENTED_SPIDER_EYE, SHRINK_GRID_STRONG);
 
-        builder.addMix(Potions.AWKWARD, HexItems.AMETHYST_DUST, potionRegistry.wrapAsHolder(ENLARGE_GRID));
-        builder.addMix(potionRegistry.wrapAsHolder(ENLARGE_GRID), Items.REDSTONE, potionRegistry.wrapAsHolder(ENLARGE_GRID_LONG));
-        builder.addMix(potionRegistry.wrapAsHolder(ENLARGE_GRID), Items.GLOWSTONE_DUST, potionRegistry.wrapAsHolder(ENLARGE_GRID_STRONG));
-
-        builder.addMix(potionRegistry.wrapAsHolder(ENLARGE_GRID), Items.FERMENTED_SPIDER_EYE, potionRegistry.wrapAsHolder(SHRINK_GRID));
-        builder.addMix(potionRegistry.wrapAsHolder(ENLARGE_GRID_LONG), Items.FERMENTED_SPIDER_EYE, potionRegistry.wrapAsHolder(SHRINK_GRID_LONG));
-        builder.addMix(potionRegistry.wrapAsHolder(ENLARGE_GRID_STRONG), Items.FERMENTED_SPIDER_EYE, potionRegistry.wrapAsHolder(SHRINK_GRID_STRONG));
-
-        builder.addMix(potionRegistry.wrapAsHolder(SHRINK_GRID), Items.REDSTONE, potionRegistry.wrapAsHolder(SHRINK_GRID_LONG));
-        builder.addMix(potionRegistry.wrapAsHolder(SHRINK_GRID), Items.GLOWSTONE_DUST, potionRegistry.wrapAsHolder(SHRINK_GRID_STRONG));
-    }
-
-    private static <T extends Potion> T make(String id, T potion) {
-        var old = POTIONS.put(modLoc(id), potion);
-        if (old != null) {
-            throw new IllegalArgumentException("Typo? Duplicate id " + id);
-        }
-        return potion;
+        builder.addMix(SHRINK_GRID, Items.REDSTONE, SHRINK_GRID_LONG);
+        builder.addMix(SHRINK_GRID, Items.GLOWSTONE_DUST, SHRINK_GRID_STRONG);
     }
 }
