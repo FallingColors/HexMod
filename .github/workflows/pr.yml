@@ -118,12 +118,18 @@ jobs:
           rm -f dist/*-javadoc.jar dist/*-sources.jar
           cp dist/hexcasting-${{ matrix.modloader }}-*.jar run/mods
 
+      - name: Shorten java version
+        shell: bash
+        id: shorten-java
+        run:
+          echo "shortened=${JAVA_VERSION%%.*}" >> $GITHUB_OUTPUT
+
       - name: Run MC test client
         if: matrix.env == 'client'
         timeout-minutes: 10
         uses: headlesshq/mc-runtime-test@4.5.1
         with:
-          java: ${{ env.JAVA_VERSION }}
+          java: ${{ steps.shorten-java.outputs.shortened }}
           mc: 1.21.1
           modloader: ${{ matrix.modloader }}
           regex: '.*${{ matrix.modloader }}.*'
@@ -135,7 +141,7 @@ jobs:
         timeout-minutes: 10
         uses: headlesshq/mc-server-test@1.1.1
         with:
-          java: 21
+          java: ${{ steps.shorten-java.outputs.shortened }}
           mc: 1.21.1
           modloader: ${{ matrix.modloader }}
           fabric-api: ${{ matrix.fabric-api }}
