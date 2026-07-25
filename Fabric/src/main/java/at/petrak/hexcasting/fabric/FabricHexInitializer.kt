@@ -58,6 +58,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer
+import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistryBuilder
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
@@ -147,6 +148,8 @@ object FabricHexInitializer : ModInitializer {
         LootTableEvents.MODIFY.register { key, builder, _, _ ->
             FabricHexLootModJankery.lootLoad(key, builder::withPool)
         }
+
+        FabricBrewingRecipeRegistryBuilder.BUILD.register { builder -> HexPotions.addRecipes(builder) }
 
         EntityElytraEvents.CUSTOM.register { target, _ ->
             if (target is Player) {
