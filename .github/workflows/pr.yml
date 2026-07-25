@@ -94,9 +94,9 @@ jobs:
           ${{ matrix.dependencies }}
           END_OF_FILE
 
-      - name: Cache dependencies
+      - name: Restore cached dependencies
         id: cache
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: run/mods
           key: ${{ hashFiles('dependencies.txt') }}
@@ -107,6 +107,13 @@ jobs:
           for url in ${{ matrix.dependencies }}; do
             wget --directory-prefix=run/mods/ "$url"
           done
+
+      - name: Cache dependencies
+        uses: actions/cache/save@v4
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          path: run/mods
+          key: ${{ hashFiles('dependencies.txt') }}
 
       - name: Download build artifacts
         uses: actions/download-artifact@v4
