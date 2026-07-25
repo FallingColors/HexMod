@@ -94,7 +94,7 @@ jobs:
           cat <<END_OF_FILE > dependencies.txt
           ${{ matrix.dependencies }}
           END_OF_FILE
-          echo "key=$(sha256sum dependencies.txt)" >> $GITHUB_OUTPUT
+          echo "key=$(sha256sum dependencies.txt | awk '{print $1}')" >> $GITHUB_OUTPUT
       - name: Restore cached dependencies
         id: cache
         uses: actions/cache/restore@v4
