@@ -127,11 +127,10 @@ public class ForgeHexInitializer {
         HexRecipeStuffRegistry.register();
 
         HexEntities.register();
-        // Testing out new registration system
         HexAttributes.register();
         HexMobEffects.register();
         HexPotions.register();
-        bind(Registries.PARTICLE_TYPE, HexParticles::registerParticles);
+        HexParticles.register();
 
         bind(Registries.TRIGGER_TYPE, HexAdvancementTriggers::registerTriggers);
 

@@ -13,7 +13,7 @@ import net.minecraft.network.codec.StreamCodec;
 public record ConjureParticleOptions(int color) implements ParticleOptions {
     @Override
     public ParticleType<?> getType() {
-        return HexParticles.CONJURE_PARTICLE;
+        return HexParticles.CONJURE_PARTICLE.get();
     }
 
     public static class Type extends ParticleType<ConjureParticleOptions> {
