@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.lib;
 
-import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.recipe.ingredient.state.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatRegister;
@@ -9,7 +8,6 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -17,7 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 import java.util.Random;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 public class HexStateIngredients {

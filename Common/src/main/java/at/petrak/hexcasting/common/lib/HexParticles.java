@@ -9,15 +9,9 @@ import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexParticles {
     private static final IXplatRegister<ParticleType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.PARTICLE_TYPE);

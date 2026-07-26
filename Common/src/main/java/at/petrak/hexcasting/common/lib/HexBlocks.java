@@ -19,11 +19,8 @@ import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRightClickImpet
 import at.petrak.hexcasting.common.blocks.decoration.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatRegister;
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ColorRGBA;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
@@ -40,11 +37,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexBlocks {
     private static final IXplatRegister<Block> REGISTER_BLOCKS = IXplatAbstractions.INSTANCE.createRegistar(Registries.BLOCK);

@@ -6,16 +6,10 @@ import at.petrak.hexcasting.common.loot.AmethystReducerFunc;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatRegister;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexLootFunctions {
     private static final IXplatRegister<LootItemFunctionType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.LOOT_FUNCTION_TYPE);

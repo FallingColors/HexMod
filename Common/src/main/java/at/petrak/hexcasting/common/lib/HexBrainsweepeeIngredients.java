@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.lib;
 
-import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatRegister;
@@ -10,7 +9,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
@@ -21,7 +19,6 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 public class HexBrainsweepeeIngredients {

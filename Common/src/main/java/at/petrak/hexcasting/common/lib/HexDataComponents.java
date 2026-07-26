@@ -15,14 +15,10 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexDataComponents {
     private static final IXplatRegister<DataComponentType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.DATA_COMPONENT_TYPE);
