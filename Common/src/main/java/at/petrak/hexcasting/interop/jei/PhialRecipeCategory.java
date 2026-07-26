@@ -26,7 +26,7 @@ public class PhialRecipeCategory implements IRecipeCategory<OpMakeBattery> {
     private final Component localizedName;
 
     public PhialRecipeCategory(IGuiHelper guiHelper) {
-        ResourceLocation location = modLoc("textures/gui/phial_jei.png");
+        ResourceLocation location = modLoc("textures/gui/phial_recipe.png");
         background = guiHelper.drawableBuilder(location, 0, 0, 113, 40).setTextureSize(128, 128).build();
         var craftPhial = modLoc("craft/battery");
         localizedName = Component.translatable("hexcasting.action." + craftPhial);

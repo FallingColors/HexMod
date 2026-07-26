@@ -35,7 +35,7 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
     private final Component localizedName;
 
     public BrainsweepRecipeCategory(IGuiHelper guiHelper) {
-        ResourceLocation location = modLoc("textures/gui/brainsweep_jei.png");
+        ResourceLocation location = modLoc("textures/gui/brainsweep_recipe.png");
         background = guiHelper.drawableBuilder(location, 0, 0, 118, 86).setTextureSize(128, 128).build();
         var brainsweep = modLoc("brainsweep");
         localizedName = Component.translatable("hexcasting.action." + brainsweep);
