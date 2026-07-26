@@ -329,7 +329,7 @@ fun <T : Iota> validateIota(iota: T, serverLevel: ServerLevel): Iota {
     }
 }
 
-fun <T : Iota> validateIotaList(iotaList: List<T>, serverLevel: ServerLevel): List<Iota> {
+fun <T : Iota> validateIotaList(iotaList: TreeList<T>, serverLevel: ServerLevel): TreeList<Iota> {
     return iotaList.map { validateIota(it, serverLevel) }
 }
 

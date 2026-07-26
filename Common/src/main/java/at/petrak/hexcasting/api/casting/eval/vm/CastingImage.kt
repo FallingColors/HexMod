@@ -3,31 +3,32 @@ package at.petrak.hexcasting.api.casting.eval.vm
 import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
+import at.petrak.hexcasting.api.utils.TreeList
+import at.petrak.hexcasting.api.utils.compositeCodecSeven
 import at.petrak.hexcasting.api.utils.getOrCreateCompound
 import at.petrak.hexcasting.api.utils.putCompound
-import at.petrak.hexcasting.api.utils.compositeCodecSeven
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtOps
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.world.entity.Entity
-import java.util.Optional
+import java.util.*
 
 /**
  * The state of a casting VM, containing the stack and all
  */
 data class CastingImage(
-    val stack: List<Iota>,
-
+    val stack: TreeList<Iota>,
     val parenCount: Int,
-    val parenthesized: List<ParenthesizedIota>,
+    val parenthesized: TreeList<ParenthesizedIota>,
     val escapeNext: Boolean,
     val simulateNext: Boolean,
     val opsConsumed: Long,
     val userData: CompoundTag
 ) {
-    constructor() : this(listOf(), 0, listOf(), false, false, 0, CompoundTag())
+    constructor() : this(TreeList.empty(), 0, TreeList.empty(), false, false, 0, CompoundTag())
 
     /**
      * `escaped` is used by [OpUndo][at.petrak.hexcasting.common.casting.actions.escaping.OpUndo] to determine whether the paren count
@@ -67,25 +68,24 @@ data class CastingImage(
     /**
      * Returns a copy of this with escape/paren-related fields cleared.
      */
-    fun withResetEscape() = this.copy(parenCount = 0, parenthesized = listOf(), escapeNext = false)
+    fun withResetEscape() = this.copy(parenCount = 0, parenthesized = TreeList.empty(), escapeNext = false)
 
     /**
      * Returns a copy of this with the provided iota added to the parenthesized list.
      */
     fun withNewParenthesized(iota: Iota): CastingImage {
-        val newParens = this.parenthesized.toMutableList()
-        newParens.add(ParenthesizedIota(iota, false))
+        val newParens = this.parenthesized.appended(ParenthesizedIota(iota, false))
         return this.copy(parenthesized = newParens)
     }
 
     /**
      * Returns this image's ravenmind in an Optional wrapper.
      */
-    fun ravenmind() : Optional<CompoundTag> {
+    fun ravenmind() : Optional<Iota> {
         val tag = userData.getCompound(HexAPI.RAVENMIND_USERDATA)
 
-        var result: CompoundTag? = null
-        if (!tag.isEmpty) { result = tag }
+        var result: Iota? = null
+        if (!tag.isEmpty) { result = IotaType.TYPED_CODEC.parse(NbtOps.INSTANCE, tag).getOrThrow() }
         return Optional.ofNullable(result)
     }
 
@@ -93,9 +93,9 @@ data class CastingImage(
         @JvmStatic
         val CODEC = RecordCodecBuilder.create<CastingImage> { inst ->
             inst.group(
-                IotaType.TYPED_CODEC.listOf().fieldOf("stack").forGetter { it.stack },
+                TreeList.codecOf(IotaType.TYPED_CODEC).fieldOf("stack").forGetter { it.stack },
                 Codec.INT.fieldOf("open_parens").forGetter { it.parenCount },
-                ParenthesizedIota.CODEC.listOf().fieldOf("parenthesized").forGetter { it.parenthesized },
+                TreeList.codecOf(ParenthesizedIota.CODEC).fieldOf("parenthesized").forGetter { it.parenthesized },
                 Codec.BOOL.fieldOf("escape_next").forGetter { it.escapeNext },
                 Codec.BOOL.fieldOf("simulate_next").forGetter { it.simulateNext },
                 Codec.LONG.fieldOf("ops_consumed").forGetter { it.opsConsumed },
@@ -106,9 +106,9 @@ data class CastingImage(
         }.orElseGet(::CastingImage)
         @JvmStatic
         val STREAM_CODEC = compositeCodecSeven(
-            IotaType.TYPED_STREAM_CODEC.apply(ByteBufCodecs.list()), CastingImage::stack,
+            IotaType.TYPED_STREAM_CODEC.apply(TreeList.streamCodecOp()), CastingImage::stack,
             ByteBufCodecs.VAR_INT, CastingImage::parenCount,
-            ParenthesizedIota.STREAM_CODEC.apply(ByteBufCodecs.list()), CastingImage::parenthesized,
+            ParenthesizedIota.STREAM_CODEC.apply(TreeList.streamCodecOp()), CastingImage::parenthesized,
             ByteBufCodecs.BOOL, CastingImage::escapeNext,
             ByteBufCodecs.BOOL, CastingImage::simulateNext,
             ByteBufCodecs.VAR_LONG, CastingImage::opsConsumed,

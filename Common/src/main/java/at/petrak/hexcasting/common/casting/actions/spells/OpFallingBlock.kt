@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.utils.isCorrectTierForDrops
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.core.particles.BlockParticleOption
@@ -61,7 +62,7 @@ object OpFallingBlock : SpellAction {
                 && !blockstate.isAir
                 && blockstate.getDestroySpeed(env.world, pos) >= 0f // fix being able to break bedrock &c
                 && env.world.getBlockEntity(pos) == null
-                && IXplatAbstractions.INSTANCE.isCorrectTierForDrops(tier, blockstate)
+                && isCorrectTierForDrops(tier, blockstate)
                 && canSilkTouch(env.world, pos, blockstate, tier, env.castingEntity as? ServerPlayer)
             ) {
                 val falling: FallingBlockEntity = FallingBlockEntity.fall(env.world, pos, blockstate)

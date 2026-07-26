@@ -1,10 +1,10 @@
 package at.petrak.hexcasting.common.casting.arithmetic.operator
 
-import at.petrak.hexcasting.api.casting.SpellList
 import at.petrak.hexcasting.api.casting.iota.DoubleIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
+import at.petrak.hexcasting.api.utils.TreeList
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.exp
@@ -12,7 +12,7 @@ import kotlin.math.ln
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
-fun Iterator<IndexedValue<Iota>>.nextList(argc: Int = 0): SpellList {
+fun Iterator<IndexedValue<Iota>>.nextList(argc: Int = 0): TreeList<Iota> {
     val (idx, x) = this.next()
     if (x is ListIota) {
         return x.list
