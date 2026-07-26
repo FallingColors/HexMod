@@ -22,7 +22,7 @@ object OpPushLocal : Action {
             throw MishapNotEnoughArgs(1, 0)
 
         val newLocal = stack.last()
-        if (newLocal.type == HexIotaTypes.NULL)
+        if (newLocal.type == HexIotaTypes.NULL.get())
             image.userData.remove(HexAPI.RAVENMIND_USERDATA)
          else
             image.userData.put(HexAPI.RAVENMIND_USERDATA, IotaType.TYPED_CODEC.encodeStart(NbtOps.INSTANCE, newLocal).orThrow)

@@ -12,7 +12,7 @@ import net.minecraft.network.codec.StreamCodec;
 public class BooleanIota extends Iota {
     private boolean value;
     public BooleanIota(boolean d) {
-        super(() -> HexIotaTypes.BOOLEAN);
+        super(() -> HexIotaTypes.BOOLEAN.get());
         this.value = d;
     }
 

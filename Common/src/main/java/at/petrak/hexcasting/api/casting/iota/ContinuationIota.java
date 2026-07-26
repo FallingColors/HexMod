@@ -24,7 +24,7 @@ public class ContinuationIota extends Iota {
     private SpellContinuation value;
 
     public ContinuationIota(SpellContinuation cont) {
-        super(() -> HexIotaTypes.CONTINUATION);
+        super(() -> HexIotaTypes.CONTINUATION.get());
         this.value = cont;
     }
 

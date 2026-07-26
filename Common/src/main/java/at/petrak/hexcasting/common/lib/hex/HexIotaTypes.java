@@ -1,7 +1,9 @@
 package at.petrak.hexcasting.common.lib.hex;
 
 import at.petrak.hexcasting.api.casting.iota.*;
+import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.xplat.IXplatRegister;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 
@@ -9,6 +11,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -17,34 +20,25 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  */
 @ParametersAreNonnullByDefault
 public class HexIotaTypes {
+    private static final IXplatRegister<IotaType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(HexRegistries.IOTA_TYPE);
+
     public static final Registry<IotaType<?>> REGISTRY = IXplatAbstractions.INSTANCE.getIotaTypeRegistry();
     public static final int MAX_SERIALIZATION_DEPTH = 256;
     public static final int MAX_SERIALIZATION_TOTAL = 1024;
 
+    public static void register() {
+        REGISTER.registerAll();
+    }
+
     private static final Map<ResourceLocation, IotaType<?>> TYPES = new LinkedHashMap<>();
 
-    public static final IotaType<NullIota> NULL = type("null", NullIota.TYPE);
-    public static final IotaType<DoubleIota> DOUBLE = type("double", DoubleIota.TYPE);
-    public static final IotaType<BooleanIota> BOOLEAN = type("boolean", BooleanIota.TYPE);
-    public static final IotaType<EntityIota> ENTITY = type("entity", EntityIota.TYPE);
-    public static final IotaType<ListIota> LIST = type("list", ListIota.TYPE);
-    public static final IotaType<PatternIota> PATTERN = type("pattern", PatternIota.TYPE);
-    public static final IotaType<GarbageIota> GARBAGE = type("garbage", GarbageIota.TYPE);
-    public static final IotaType<Vec3Iota> VEC3 = type("vec3", Vec3Iota.TYPE);
-    public static final IotaType<ContinuationIota> CONTINUATION = type("continuation", ContinuationIota.TYPE);
-
-    public static void registerTypes(BiConsumer<IotaType<?>, ResourceLocation> r) {
-        for (var e : TYPES.entrySet()) {
-            r.accept(e.getValue(), e.getKey());
-        }
-    }
-
-
-    private static <U extends Iota, T extends IotaType<U>> T type(String name, T type) {
-        var old = TYPES.put(modLoc(name), type);
-        if (old != null) {
-            throw new IllegalArgumentException("Typo? Duplicate id " + name);
-        }
-        return type;
-    }
+    public static final Supplier<IotaType<NullIota>> NULL = REGISTER.register("null", () -> NullIota.TYPE);
+    public static final Supplier<IotaType<DoubleIota>> DOUBLE = REGISTER.register("double", () -> DoubleIota.TYPE);
+    public static final Supplier<IotaType<BooleanIota>> BOOLEAN = REGISTER.register("boolean", () -> BooleanIota.TYPE);
+    public static final Supplier<IotaType<EntityIota>> ENTITY = REGISTER.register("entity", () -> EntityIota.TYPE);
+    public static final Supplier<IotaType<ListIota>> LIST = REGISTER.register("list", () -> ListIota.TYPE);
+    public static final Supplier<IotaType<PatternIota>> PATTERN = REGISTER.register("pattern", () -> PatternIota.TYPE);
+    public static final Supplier<IotaType<GarbageIota>> GARBAGE = REGISTER.register("garbage", () -> GarbageIota.TYPE);
+    public static final Supplier<IotaType<Vec3Iota>> VEC3 = REGISTER.register("vec3", () -> Vec3Iota.TYPE);
+    public static final Supplier<IotaType<ContinuationIota>> CONTINUATION = REGISTER.register("continuation", () -> ContinuationIota.TYPE);
 }

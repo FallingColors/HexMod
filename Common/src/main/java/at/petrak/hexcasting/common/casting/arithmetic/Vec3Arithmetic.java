@@ -39,7 +39,7 @@ public enum Vec3Arithmetic implements Arithmetic {
 			MOD
 	);
 
-	public static final IotaMultiPredicate ACCEPTS = IotaMultiPredicate.any(IotaPredicate.ofType(VEC3), IotaPredicate.ofType(DOUBLE));
+	public static final IotaMultiPredicate ACCEPTS = IotaMultiPredicate.any(IotaPredicate.ofType(VEC3.get()), IotaPredicate.ofType(DOUBLE.get()));
 
 	@Override
 	public String arithName() {
@@ -79,10 +79,10 @@ public enum Vec3Arithmetic implements Arithmetic {
 		throw new InvalidOperatorException(pattern + " is not a valid operator in Arithmetic " + this + ".");
 	}
 	public static OperatorUnary make1(Function<Vec3, Vec3> op) {
-		return new OperatorUnary(ACCEPTS, i -> new Vec3Iota(op.apply(downcast(i, VEC3).getVec3())));
+		return new OperatorUnary(ACCEPTS, i -> new Vec3Iota(op.apply(downcast(i, VEC3.get()).getVec3())));
 	}
 	public static OperatorUnary make1Double(Function<Vec3, Double> op) {
-		return new OperatorUnary(ACCEPTS, i -> new DoubleIota(op.apply(downcast(i, VEC3).getVec3())));
+		return new OperatorUnary(ACCEPTS, i -> new DoubleIota(op.apply(downcast(i, VEC3.get()).getVec3())));
 	}
 	public static OperatorVec3Delegating make2Fallback(HexPattern pattern) {
 		return new OperatorVec3Delegating(null, pattern);

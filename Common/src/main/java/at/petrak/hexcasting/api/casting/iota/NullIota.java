@@ -16,7 +16,7 @@ public class NullIota extends Iota {
         Component.translatable("hexcasting.tooltip.null_iota").withStyle(ChatFormatting.GRAY);
 
     public NullIota() {
-        super(() -> HexIotaTypes.NULL);
+        super(() -> HexIotaTypes.NULL.get());
     }
 
     @Override

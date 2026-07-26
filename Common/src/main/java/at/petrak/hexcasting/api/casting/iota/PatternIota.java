@@ -39,7 +39,7 @@ public class PatternIota extends Iota {
     private HexPattern value;
 
     public PatternIota(@NotNull HexPattern pattern) {
-        super(() -> HexIotaTypes.PATTERN);
+        super(() -> HexIotaTypes.PATTERN.get());
         this.value = pattern;
     }
 

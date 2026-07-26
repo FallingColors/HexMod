@@ -218,7 +218,7 @@ object FabricHexInitializer : ModInitializer {
 
         HexLootFunctions.registerSerializers(bind(BuiltInRegistries.LOOT_FUNCTION_TYPE))
 
-        HexIotaTypes.registerTypes(bind(IXplatAbstractions.INSTANCE.iotaTypeRegistry))
+        HexIotaTypes.register()
         HexActions.register(bind(IXplatAbstractions.INSTANCE.actionRegistry))
         HexSpecialHandlers.register(bind(IXplatAbstractions.INSTANCE.specialHandlerRegistry))
         HexArithmetics.register(bind(IXplatAbstractions.INSTANCE.arithmeticRegistry))

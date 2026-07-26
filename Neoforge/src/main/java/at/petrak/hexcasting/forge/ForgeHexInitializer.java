@@ -134,7 +134,7 @@ public class ForgeHexInitializer {
 
         HexAdvancementTriggers.register();
 
-        bind(HexRegistries.IOTA_TYPE, HexIotaTypes::registerTypes);
+        HexIotaTypes.register();
         bind(HexRegistries.ACTION, HexActions::register);
         bind(HexRegistries.SPECIAL_HANDLER, HexSpecialHandlers::register);
         bind(HexRegistries.ARITHMETIC, HexArithmetics::register);
