@@ -212,8 +212,7 @@ object FabricHexInitializer : ModInitializer {
         HexPotions.register()
         HexDataComponents.register()
 
-        HexRecipeStuffRegistry.registerSerializers(bind(BuiltInRegistries.RECIPE_SERIALIZER))
-        HexRecipeStuffRegistry.registerTypes(bind(BuiltInRegistries.RECIPE_TYPE))
+        HexRecipeStuffRegistry.register()
 
         HexParticles.registerParticles(bind(BuiltInRegistries.PARTICLE_TYPE))
 

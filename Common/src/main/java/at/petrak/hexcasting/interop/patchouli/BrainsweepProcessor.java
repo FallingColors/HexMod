@@ -30,7 +30,7 @@ public class BrainsweepProcessor implements IComponentProcessor {
 		var id = ResourceLocation.parse(vars.get("recipe", level.registryAccess()).asString());
 
 		var recman = level.getRecipeManager();
-		var brainsweepings = recman.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE);
+		var brainsweepings = recman.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE.get());
 		for (var poisonApples : brainsweepings) {
 			if (poisonApples.id().equals(id)) {
 				this.recipe = poisonApples.value();

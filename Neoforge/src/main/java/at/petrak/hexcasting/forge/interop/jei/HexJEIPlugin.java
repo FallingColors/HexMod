@@ -58,7 +58,7 @@ public class HexJEIPlugin implements IModPlugin {
         Level level = Minecraft.getInstance().level;
         if (level != null) {
             registration.addRecipes(BRAINSWEEPING,
-                level.getRecipeManager().getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE).stream().map(RecipeHolder::value).toList());
+                level.getRecipeManager().getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE.get()).stream().map(RecipeHolder::value).toList());
         }
 
         if (PhialRecipeStackBuilder.shouldAddRecipe()) {

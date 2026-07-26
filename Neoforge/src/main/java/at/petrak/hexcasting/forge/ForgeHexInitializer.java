@@ -124,8 +124,7 @@ public class ForgeHexInitializer {
         HexItems.register();
         HexDataComponents.register();
 
-        bind(Registries.RECIPE_SERIALIZER, HexRecipeStuffRegistry::registerSerializers);
-        bind(Registries.RECIPE_TYPE, HexRecipeStuffRegistry::registerTypes);
+        HexRecipeStuffRegistry.register();
 
         bind(Registries.ENTITY_TYPE, HexEntities::registerEntities);
         // Testing out new registration system
