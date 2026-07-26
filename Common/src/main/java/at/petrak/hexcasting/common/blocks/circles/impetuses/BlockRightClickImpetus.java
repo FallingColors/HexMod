@@ -22,7 +22,7 @@ public class BlockRightClickImpetus extends BlockAbstractImpetus {
 
     @Override
     public BlockEntityType<? extends BlockEntityAbstractImpetus> getBlockEntityType() {
-        return HexBlockEntities.IMPETUS_RIGHTCLICK_TILE;
+        return HexBlockEntities.IMPETUS_RIGHTCLICK_TILE.get();
     }
 
     @Override

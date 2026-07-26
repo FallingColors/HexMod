@@ -35,7 +35,7 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
 
     @Override
     public BlockEntityType<? extends BlockEntityAbstractImpetus> getBlockEntityType() {
-        return HexBlockEntities.IMPETUS_REDSTONE_TILE;
+        return HexBlockEntities.IMPETUS_REDSTONE_TILE.get();
     }
 
     @Override

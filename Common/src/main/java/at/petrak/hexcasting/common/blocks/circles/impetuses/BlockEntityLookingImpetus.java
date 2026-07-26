@@ -25,7 +25,7 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
     private int lookAmount = 0;
 
     public BlockEntityLookingImpetus(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(HexBlockEntities.IMPETUS_LOOK_TILE, pWorldPosition, pBlockState);
+        super(HexBlockEntities.IMPETUS_LOOK_TILE.get(), pWorldPosition, pBlockState);
     }
 
     // https://github.com/VazkiiMods/Botania/blob/2607bcd31c4eaeb617f7d1b3ec1c1db08f59add4/Common/src/main/java/vazkii/botania/common/block/tile/TileEnderEye.java#L27

@@ -20,7 +20,7 @@ public class BlockEntitySlate extends HexBlockEntity {
     public HexPattern pattern;
 
     public BlockEntitySlate(BlockPos pos, BlockState state) {
-        super(HexBlockEntities.SLATE_TILE, pos, state);
+        super(HexBlockEntities.SLATE_TILE.get(), pos, state);
     }
 
     @Override

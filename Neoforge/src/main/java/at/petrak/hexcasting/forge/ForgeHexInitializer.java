@@ -121,7 +121,7 @@ public class ForgeHexInitializer {
 
         HexBlocks.registerBlocks();
         HexBlocks.registerBlockItems();
-        bind(Registries.BLOCK_ENTITY_TYPE, HexBlockEntities::registerTiles);
+        HexBlockEntities.register();
         HexItems.register();
         bind(Registries.DATA_COMPONENT_TYPE, HexDataComponents::registerDataComponents);
 

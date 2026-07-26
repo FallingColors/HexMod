@@ -193,7 +193,7 @@ object FabricHexInitializer : ModInitializer {
         HexSounds.register()
         HexBlocks.registerBlocks()
         HexBlocks.registerBlockItems()
-        HexBlockEntities.registerTiles(bind(BuiltInRegistries.BLOCK_ENTITY_TYPE))
+        HexBlockEntities.register()
         HexItems.register()
         // Registry.register(IngredientDeserializer.REGISTRY, FabricModConditionalIngredient.ID, FabricModConditionalIngredient.Deserializer.INSTANCE)
         CustomIngredientSerializer.register(FabricUnsealedIngredient.Serializer.INSTANCE);

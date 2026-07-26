@@ -237,16 +237,16 @@ public class RegisterClientStuff {
     }
 
     public static void registerBlockEntityRenderers(@NotNull BlockEntityRendererRegisterererer registerer) {
-        registerer.registerBlockEntityRenderer(HexBlockEntities.SLATE_TILE, BlockEntitySlateRenderer::new);
-        registerer.registerBlockEntityRenderer(HexBlockEntities.AKASHIC_BOOKSHELF_TILE,
+        registerer.registerBlockEntityRenderer(HexBlockEntities.SLATE_TILE.get(), BlockEntitySlateRenderer::new);
+        registerer.registerBlockEntityRenderer(HexBlockEntities.AKASHIC_BOOKSHELF_TILE.get(),
             BlockEntityAkashicBookshelfRenderer::new);
-        registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_TILE,
+        registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_TILE.get(),
             BlockEntityQuenchedAllayRenderer::new);
-        registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_TILES_TILE,
+        registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_TILES_TILE.get(),
                 BlockEntityQuenchedAllayRenderer::new);
-        registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_BRICKS_TILE,
+        registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_BRICKS_TILE.get(),
                 BlockEntityQuenchedAllayRenderer::new);
-        registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_BRICKS_SMALL_TILE,
+        registerer.registerBlockEntityRenderer(HexBlockEntities.QUENCHED_ALLAY_BRICKS_SMALL_TILE.get(),
                 BlockEntityQuenchedAllayRenderer::new);
     }
 
