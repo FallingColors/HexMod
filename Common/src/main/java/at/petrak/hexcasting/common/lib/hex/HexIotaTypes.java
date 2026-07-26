@@ -30,8 +30,6 @@ public class HexIotaTypes {
         REGISTER.registerAll();
     }
 
-    private static final Map<ResourceLocation, IotaType<?>> TYPES = new LinkedHashMap<>();
-
     public static final Supplier<IotaType<NullIota>> NULL = REGISTER.register("null", () -> NullIota.TYPE);
     public static final Supplier<IotaType<DoubleIota>> DOUBLE = REGISTER.register("double", () -> DoubleIota.TYPE);
     public static final Supplier<IotaType<BooleanIota>> BOOLEAN = REGISTER.register("boolean", () -> BooleanIota.TYPE);
