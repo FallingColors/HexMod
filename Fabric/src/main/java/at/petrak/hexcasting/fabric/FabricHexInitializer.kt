@@ -97,7 +97,7 @@ object FabricHexInitializer : ModInitializer {
             PatternResKeyArgument::class.java,
             SingletonArgumentInfo.contextFree { PatternResKeyArgument.id() }
         )
-        HexAdvancementTriggers.registerTriggers(bind(BuiltInRegistries.TRIGGER_TYPES))
+        HexAdvancementTriggers.register()
         HexComposting.setup()
         HexStrippables.init()
         FabricImpetusStorage.registerStorage()

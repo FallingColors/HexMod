@@ -132,7 +132,7 @@ public class ForgeHexInitializer {
         HexPotions.register();
         HexParticles.register();
 
-        bind(Registries.TRIGGER_TYPE, HexAdvancementTriggers::registerTriggers);
+        HexAdvancementTriggers.register();
 
         bind(HexRegistries.IOTA_TYPE, HexIotaTypes::registerTypes);
         bind(HexRegistries.ACTION, HexActions::register);

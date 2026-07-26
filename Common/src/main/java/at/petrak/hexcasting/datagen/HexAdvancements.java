@@ -67,7 +67,7 @@ public class HexAdvancements extends PaucalAdvancementSubProvider {
             .display(simpleDisplay(Items.GLISTERING_MELON_SLICE, "wasteful_cast", AdvancementType.TASK))
             .parent(root)
             .addCriterion("waste_amt", new Criterion<>(
-                    HexAdvancementTriggers.SPEND_MEDIA_TRIGGER,
+                    HexAdvancementTriggers.SPEND_MEDIA_TRIGGER.get(),
                     new SpendMediaTrigger.Instance(Optional.empty(),
                             MinMaxLongs.ANY,
                             MinMaxLongs.atLeast(89 * MediaConstants.DUST_UNIT / 10))
@@ -77,7 +77,7 @@ public class HexAdvancements extends PaucalAdvancementSubProvider {
             .display(simpleDisplay(HexItems.CHARGED_AMETHYST.get(), "big_cast", AdvancementType.TASK))
             .parent(root)
             .addCriterion("cast_amt", new Criterion<>(
-                    HexAdvancementTriggers.SPEND_MEDIA_TRIGGER,
+                    HexAdvancementTriggers.SPEND_MEDIA_TRIGGER.get(),
                     new SpendMediaTrigger.Instance(Optional.empty(),
                             MinMaxLongs.atLeast(64 * MediaConstants.CRYSTAL_UNIT),
                             MinMaxLongs.ANY)
@@ -88,7 +88,7 @@ public class HexAdvancements extends PaucalAdvancementSubProvider {
             .display(simpleDisplay(Items.BLAZE_POWDER, "y_u_no_cast_angy", AdvancementType.TASK))
             .parent(root)
             .addCriterion("did_the_thing",
-                new Criterion<>(HexAdvancementTriggers.FAIL_GREAT_SPELL_TRIGGER,
+                new Criterion<>(HexAdvancementTriggers.FAIL_GREAT_SPELL_TRIGGER.get(),
                         new FailToCastGreatSpellTrigger.Instance(Optional.empty())))
             .save(consumer, prefix("y_u_no_cast_angy"));
 
@@ -97,7 +97,7 @@ public class HexAdvancements extends PaucalAdvancementSubProvider {
             .parent(impotence)
             .addCriterion("health_used",
                 new Criterion<>(
-                        HexAdvancementTriggers.OVERCAST_TRIGGER,
+                        HexAdvancementTriggers.OVERCAST_TRIGGER.get(),
                         new OvercastTrigger.Instance(Optional.empty(),
                                 MinMaxBounds.Ints.ANY,
                                 MinMaxBounds.Doubles.ANY,
@@ -113,7 +113,7 @@ public class HexAdvancements extends PaucalAdvancementSubProvider {
                 Optional.empty(),
                 AdvancementType.CHALLENGE, true, true, true))
             .parent(opened_eyes)
-            .addCriterion("health_used", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, ENLIGHTEN))
+            .addCriterion("health_used", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER.get(), ENLIGHTEN))
             .save(consumer, prefix("enlightenment"));
 
         var loreRoot = Advancement.Builder.advancement()

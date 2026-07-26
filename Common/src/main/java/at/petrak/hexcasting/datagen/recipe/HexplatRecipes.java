@@ -406,7 +406,7 @@ public class HexplatRecipes extends RecipeProvider {
             .pattern("PSS")
             .pattern("BAB")
             .pattern("SSP")
-            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment)).save(recipes);
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER.get(), enlightenment)).save(recipes);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, HexBlocks.EMPTY_DIRECTRIX.get())
             .define('C', Items.COMPARATOR)
@@ -416,7 +416,7 @@ public class HexplatRecipes extends RecipeProvider {
             .pattern("CSS")
             .pattern("OAO")
             .pattern("SSC")
-            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment)).save(recipes);
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER.get(), enlightenment)).save(recipes);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, HexBlocks.AKASHIC_BOOKSHELF.get())
             .define('L', HexTags.Items.EDIFIED_LOGS)
@@ -425,7 +425,7 @@ public class HexplatRecipes extends RecipeProvider {
             /*this is the*/.pattern("LPL") // and what i have for you today is
             .pattern("CCC")
             .pattern("LPL")
-            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment)).save(recipes);
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER.get(), enlightenment)).save(recipes);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, HexBlocks.AKASHIC_LIGATURE.get(), 4)
             .define('L', HexTags.Items.EDIFIED_LOGS)
@@ -436,7 +436,7 @@ public class HexplatRecipes extends RecipeProvider {
             .pattern("LPL")
             .pattern("123")
             .pattern("LPL")
-            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment)).save(recipes);
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER.get(), enlightenment)).save(recipes);
 
         // Stone sets
         stoneSet(recipes, HexBlocks.SLATE_BLOCK.get().asItem(), HexBlocks.SLATE_BRICKS.get().asItem(), HexBlocks.SLATE_BRICKS_SMALL.get().asItem(), HexBlocks.SLATE_TILES.get().asItem(), HexBlocks.SLATE_PILLAR.get().asItem());
@@ -472,50 +472,50 @@ public class HexplatRecipes extends RecipeProvider {
         new BrainsweepRecipeBuilder(HexStateIngredients.of(Blocks.AMETHYST_BLOCK),
             new VillagerIngredient(null, null, 3),
             Blocks.BUDDING_AMETHYST.defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
-            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER.get(), enlightenment))
             .save(recipes, modLoc("budding_amethyst"));
 
         new BrainsweepRecipeBuilder(HexStateIngredients.of(HexBlocks.IMPETUS_EMPTY.get()),
             new VillagerIngredient(VillagerProfession.TOOLSMITH, null, 2),
             HexBlocks.IMPETUS_RIGHTCLICK.get().defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
-            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER.get(), enlightenment))
             .save(recipes, modLoc("impetus_rightclick"));
 
         new BrainsweepRecipeBuilder(HexStateIngredients.of(HexBlocks.IMPETUS_EMPTY.get()),
             new VillagerIngredient(VillagerProfession.FLETCHER, null, 2),
             HexBlocks.IMPETUS_LOOK.get().defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
-            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER.get(), enlightenment))
             .save(recipes, modLoc("impetus_look"));
 
         new BrainsweepRecipeBuilder(HexStateIngredients.of(HexBlocks.IMPETUS_EMPTY.get()),
             new VillagerIngredient(VillagerProfession.CLERIC, null, 2),
             HexBlocks.IMPETUS_REDSTONE.get().defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
-            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER.get(), enlightenment))
             .save(recipes, modLoc("impetus_storedplayer"));
 
         new BrainsweepRecipeBuilder(HexStateIngredients.of(HexBlocks.EMPTY_DIRECTRIX.get()),
             new VillagerIngredient(VillagerProfession.MASON, null, 1),
             HexBlocks.DIRECTRIX_REDSTONE.get().defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
-            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER.get(), enlightenment))
             .save(recipes, modLoc("directrix_redstone"));
 
         new BrainsweepRecipeBuilder(HexStateIngredients.of(HexBlocks.EMPTY_DIRECTRIX.get()),
                 new VillagerIngredient(VillagerProfession.SHEPHERD, null, 1),
                 HexBlocks.DIRECTRIX_BOOLEAN.get().defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
-                .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
+                .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER.get(), enlightenment))
                 .save(recipes, modLoc("directrix_boolean"));
 
         new BrainsweepRecipeBuilder(HexStateIngredients.of(HexBlocks.AKASHIC_LIGATURE.get()),
             new VillagerIngredient(VillagerProfession.LIBRARIAN, null, 5),
             HexBlocks.AKASHIC_RECORD.get().defaultBlockState(), MediaConstants.CRYSTAL_UNIT * 10)
-            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER.get(), enlightenment))
             .save(recipes, modLoc("akashic_record"));
 
         // Temporary tests
         new BrainsweepRecipeBuilder(HexStateIngredients.of(Blocks.AMETHYST_BLOCK),
             new EntityTypeIngredient(EntityType.ALLAY),
             HexBlocks.QUENCHED_ALLAY.get().defaultBlockState(), MediaConstants.CRYSTAL_UNIT)
-            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER, enlightenment))
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER.get(), enlightenment))
             .save(recipes, modLoc("quench_allay"));
 
         // Create compat; will need to be Neo only as Create 1.21 will not exist on Fabric
