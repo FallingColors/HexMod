@@ -1,9 +1,10 @@
 package at.petrak.hexcasting.api.casting.iota;
 
-import at.petrak.hexcasting.api.casting.SpellList;
+import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.utils.TreeList;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import com.mojang.serialization.MapCodec;
+import java.util.ListIterator;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -16,14 +17,14 @@ import java.util.List;
 import static java.lang.Math.max;
 
 /**
- * This is a <i>wrapper</i> for {@link SpellList}.
+ * This is a <i>wrapper</i> for {@link TreeList} of {@link Iota}.
  */
 public class ListIota extends Iota {
-    private SpellList list;
+    private final TreeList<Iota> list;
     private final int depth;
     private final int size;
 
-    public ListIota(@NotNull SpellList list) {
+    public ListIota(@NotNull TreeList<Iota> list) {
         super(() -> HexIotaTypes.LIST);
         this.list = list;
         int maxChildDepth = 0;
@@ -36,21 +37,17 @@ public class ListIota extends Iota {
         size = totalSize;
     }
 
-    public ListIota(@NotNull TreeList<Iota> list) {
-        this(new SpellList.LList(list));
-    }
-
     public ListIota(@NotNull List<Iota> list) {
-        this(new SpellList.LList(list));
+        this(TreeList.from(list));
     }
 
-    public SpellList getList() {
-        return list;
+    public TreeList<Iota> getList() {
+        return this.list;
     }
 
     @Override
     public boolean isTruthy() {
-        return this.getList().getNonEmpty();
+        return !this.getList().isEmpty();
     }
 
     @Override
@@ -64,7 +61,7 @@ public class ListIota extends Iota {
         }
         var b = list.getList();
 
-        SpellList.SpellListIterator aIter = a.iterator(), bIter = b.iterator();
+        ListIterator<Iota> aIter = a.iterator(), bIter = b.iterator();
         for (; ; ) {
             if (!aIter.hasNext() && !bIter.hasNext()) {
                 // we ran out together!
@@ -106,14 +103,14 @@ public class ListIota extends Iota {
         var out = Component.empty();
 
         for (int i = 0; i < list.size(); i++) {
-            var sub = list.getAt(i);
+            var sub = list.get(i);
 
             out.append(sub.display());
 
             // only add a comma between 2 non-patterns (commas don't look good with Inline patterns)
             if (i < list.size() - 1) {
                 var thisType = sub.type.get();
-                var nextType = list.getAt(i+1).type.get();
+                var nextType = list.get(i + 1).type.get();
                 var thisIotaNeedsComma = thisType == null || thisType.usesListCommas();
                 var nextIotaNeedsComma = nextType == null || nextType.usesListCommas();
                 if (thisIotaNeedsComma || nextIotaNeedsComma)
@@ -125,11 +122,11 @@ public class ListIota extends Iota {
 
     public static IotaType<ListIota> TYPE = new IotaType<>() {
 
-        public static final MapCodec<ListIota> CODEC = SpellList.getCODEC()
+        public static final MapCodec<ListIota> CODEC = TreeList.codecOf(IotaType.TYPED_CODEC)
                 .xmap(ListIota::new, ListIota::getList)
                 .fieldOf("list");
         public static final StreamCodec<RegistryFriendlyByteBuf, ListIota> STREAM_CODEC =
-                SpellList.getSTREAM_CODEC().map(ListIota::new, ListIota::getList);
+                IotaType.TYPED_STREAM_CODEC.apply(TreeList.streamCodecOp()).map(ListIota::new, ListIota::getList);
 
         @Override
         public MapCodec<ListIota> codec() {

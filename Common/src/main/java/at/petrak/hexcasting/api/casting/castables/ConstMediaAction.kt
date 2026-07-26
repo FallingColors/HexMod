@@ -29,21 +29,21 @@ interface ConstMediaAction : Action {
     }
 
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stack = image.stack.toMutableList()
+        val stack = image.stack
 
         if (this.argc > stack.size)
             throw MishapNotEnoughArgs(this.argc, stack.size)
-        val args = stack.takeLast(this.argc)
-        repeat(this.argc) { stack.removeLast() }
+        val args = stack.takeRight(this.argc)
+        val stackWithoutArgs = stack.dropRight(this.argc)
         val result = this.executeWithOpCount(args, env)
-        stack.addAll(result.resultStack)
+        val stackWithResult = stackWithoutArgs.appendedAll(result.resultStack)
 
         if (env.extractMedia(this.mediaCost, true) > 0)
             throw MishapNotEnoughMedia(this.mediaCost)
 
         val sideEffects = mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMedia(this.mediaCost))
 
-        val image2 = image.copy(stack = stack, opsConsumed = image.opsConsumed + result.opCount)
+        val image2 = image.copy(stack = stackWithResult, opsConsumed = image.opsConsumed + result.opCount)
         return OperationResult(image2, sideEffects, continuation, HexEvalSounds.NORMAL_EXECUTE)
     }
 
