@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.forge.interop.jei;
+package at.petrak.hexcasting.interop.jei;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.casting.actions.spells.OpEdifySapling;
