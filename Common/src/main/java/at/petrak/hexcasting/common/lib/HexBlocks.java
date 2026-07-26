@@ -51,11 +51,8 @@ public class HexBlocks {
     private static final IXplatRegister<Item> REGISTER_BLOCK_ITEMS = IXplatAbstractions.INSTANCE.createRegistar(Registries.ITEM);
     private static final Map<ResourceKey<CreativeModeTab>, List<Supplier<Block>>> BLOCK_TABS = new LinkedHashMap<>();
 
-    public static void registerBlocks() {
+    public static void register() {
         REGISTER_BLOCKS.registerAll();
-    }
-
-    public static void registerBlockItems() {
         REGISTER_BLOCK_ITEMS.registerAll();
     }
 

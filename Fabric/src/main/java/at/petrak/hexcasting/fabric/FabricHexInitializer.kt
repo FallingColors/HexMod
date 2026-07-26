@@ -191,8 +191,7 @@ object FabricHexInitializer : ModInitializer {
         HexCreativeTabs.register()
 
         HexSounds.register()
-        HexBlocks.registerBlocks()
-        HexBlocks.registerBlockItems()
+        HexBlocks.register()
         HexBlockEntities.register()
         HexItems.register()
         // Registry.register(IngredientDeserializer.REGISTRY, FabricModConditionalIngredient.ID, FabricModConditionalIngredient.Deserializer.INSTANCE)

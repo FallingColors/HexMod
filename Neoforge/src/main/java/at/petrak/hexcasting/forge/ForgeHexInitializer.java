@@ -119,8 +119,7 @@ public class ForgeHexInitializer {
 
         HexCreativeTabs.register();
 
-        HexBlocks.registerBlocks();
-        HexBlocks.registerBlockItems();
+        HexBlocks.register();
         HexBlockEntities.register();
         HexItems.register();
         HexDataComponents.register();
