@@ -199,8 +199,7 @@ public class ForgeHexInitializer {
         modBus.addListener((RegisterEvent evt) -> {
             if (evt.getRegistryKey().equals(Registries.ITEM)) {
                 HexStatistics.register();
-                HexLootFunctions.registerSerializers((lift, id) ->
-                    Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, id, lift));
+                HexLootFunctions.register();
             }
         });
 

@@ -73,6 +73,6 @@ public class AddPerWorldPatternToScrollFunc extends LootItemConditionalFunction 
 
     @Override
     public LootItemFunctionType<? extends LootItemConditionalFunction> getType() {
-        return HexLootFunctions.PATTERN_SCROLL;
+        return HexLootFunctions.PATTERN_SCROLL.get();
     }
 }

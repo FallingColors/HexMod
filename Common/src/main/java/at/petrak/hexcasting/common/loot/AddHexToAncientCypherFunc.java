@@ -61,7 +61,7 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
 
     @Override
     public LootItemFunctionType<? extends LootItemConditionalFunction> getType() {
-        return HexLootFunctions.HEX_CYPHER;
+        return HexLootFunctions.HEX_CYPHER.get();
     }
 
     // TODO: make this datapackable

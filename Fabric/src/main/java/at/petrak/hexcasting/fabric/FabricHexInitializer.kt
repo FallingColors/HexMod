@@ -216,7 +216,7 @@ object FabricHexInitializer : ModInitializer {
 
         HexParticles.register()
 
-        HexLootFunctions.registerSerializers(bind(BuiltInRegistries.LOOT_FUNCTION_TYPE))
+        HexLootFunctions.register()
 
         HexIotaTypes.register()
         HexActions.register()

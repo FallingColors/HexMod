@@ -47,6 +47,6 @@ public class AmethystReducerFunc extends LootItemConditionalFunction {
 
     @Override
     public LootItemFunctionType<? extends LootItemConditionalFunction> getType() {
-        return HexLootFunctions.AMETHYST_SHARD_REDUCER;
+        return HexLootFunctions.AMETHYST_SHARD_REDUCER.get();
     }
 }
