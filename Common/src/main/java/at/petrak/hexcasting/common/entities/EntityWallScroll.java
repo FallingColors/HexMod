@@ -61,8 +61,8 @@ public class EntityWallScroll extends HangingEntity {
     }
 
     public void recalculateDisplay() {
-        this.pattern = scroll.get(HexDataComponents.PATTERN);
-        this.isAncient = scroll.has(HexDataComponents.ACTION);
+        this.pattern = scroll.get(HexDataComponents.PATTERN.get());
+        this.isAncient = scroll.has(HexDataComponents.ACTION.get());
     }
 
     @Override

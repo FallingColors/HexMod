@@ -30,7 +30,7 @@ public class MixinWanderingTrader {
         if (rand.nextFloat() < HexConfig.server().traderScrollChance() && self.getServer() != null) {
             ItemStack scroll = new ItemStack(HexItems.SCROLL_LARGE.get());
             AddPerWorldPatternToScrollFunc.doStatic(scroll, rand, self.getServer().overworld());
-            scroll.set(HexDataComponents.NEEDS_PURCHASE, Unit.INSTANCE);
+            scroll.set(HexDataComponents.NEEDS_PURCHASE.get(), Unit.INSTANCE);
             offerList.set(5, new MerchantOffer(new ItemCost(Items.EMERALD, 12), scroll, 1, 1, 1));
         }
     }

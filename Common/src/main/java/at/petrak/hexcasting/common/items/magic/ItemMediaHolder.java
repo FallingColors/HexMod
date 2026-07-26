@@ -36,8 +36,8 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
     public static ItemStack withMedia(ItemStack stack, long media, long maxMedia) {
         Item item = stack.getItem();
         if (item instanceof ItemMediaHolder) {
-            stack.set(HexDataComponents.MEDIA, media);
-            stack.set(HexDataComponents.MEDIA_MAX, media);
+            stack.set(HexDataComponents.MEDIA.get(), media);
+            stack.set(HexDataComponents.MEDIA_MAX.get(), media);
         }
 
         return stack;
@@ -45,19 +45,19 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
 
     @Override
     public long getMedia(ItemStack stack) {
-        var media = stack.get(HexDataComponents.MEDIA);
+        var media = stack.get(HexDataComponents.MEDIA.get());
         return media != null ? media : 0L;
     }
 
     @Override
     public long getMaxMedia(ItemStack stack) {
-        var maxMedia = stack.get(HexDataComponents.MEDIA_MAX);
+        var maxMedia = stack.get(HexDataComponents.MEDIA_MAX.get());
         return maxMedia != null ? maxMedia : 0L;
     }
 
     @Override
     public void setMedia(ItemStack stack, long media) {
-        stack.set(HexDataComponents.MEDIA, MathUtils.clamp(media, 0, getMaxMedia(stack)));
+        stack.set(HexDataComponents.MEDIA.get(), MathUtils.clamp(media, 0, getMaxMedia(stack)));
     }
 
     @Override

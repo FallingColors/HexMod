@@ -20,7 +20,7 @@ public class SealSpellbookRecipe extends ShapelessRecipe {
     private static ItemStack getSealedStack() {
         ItemStack output = new ItemStack(HexItems.SPELLBOOK.get());
         ItemSpellbook.setSealed(output, true);
-        output.set(HexDataComponents.VISUAL_OVERRIDE, Optional.empty());
+        output.set(HexDataComponents.VISUAL_OVERRIDE.get(), Optional.empty());
         return output;
     }
 

@@ -56,7 +56,7 @@ public class RegisterClientStuff {
 
     public static void init() {
         registerSealableDataHolderOverrides(HexItems.FOCUS.get(),
-            stack -> stack.has(HexDataComponents.IOTA_HOLDER_IOTA),
+            stack -> stack.has(HexDataComponents.IOTA_HOLDER_IOTA.get()),
             ItemFocus::isSealed);
         registerSealableDataHolderOverrides(HexItems.SPELLBOOK.get(),
             stack -> HexItems.SPELLBOOK.get().readIota(stack) != null,
@@ -69,7 +69,7 @@ public class RegisterClientStuff {
         registerVariantOverrides(HexItems.ARTIFACT.get(), HexItems.ARTIFACT.get()::getVariant);
         IClientXplatAbstractions.INSTANCE.registerItemProperty(HexItems.THOUGHT_KNOT.get(), ItemThoughtKnot.WRITTEN_PRED,
             (stack, level, holder, holderID) -> {
-                if (stack.has(HexDataComponents.IOTA_HOLDER_IOTA)) {
+                if (stack.has(HexDataComponents.IOTA_HOLDER_IOTA.get())) {
                     return 1;
                 } else {
                     return 0;
@@ -192,7 +192,7 @@ public class RegisterClientStuff {
         Predicate<ItemStack> isSealed) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty((Item) item, ItemFocus.OVERLAY_PRED,
             (stack, level, holder, holderID) -> {
-                if (!hasIota.test(stack) && !stack.has(HexDataComponents.VISUAL_OVERRIDE)) {
+                if (!hasIota.test(stack) && !stack.has(HexDataComponents.VISUAL_OVERRIDE.get())) {
                     return 0;
                 }
                 if (!isSealed.test(stack)) {
@@ -209,7 +209,7 @@ public class RegisterClientStuff {
 
     private static void registerScrollOverrides(ItemScroll scroll) {
         IClientXplatAbstractions.INSTANCE.registerItemProperty(scroll, ItemScroll.ANCIENT_PREDICATE,
-            (stack, level, holder, holderID) -> stack.has(HexDataComponents.ACTION) ? 1f : 0f);
+            (stack, level, holder, holderID) -> stack.has(HexDataComponents.ACTION.get()) ? 1f : 0f);
     }
 
     private static void registerPackagedSpellOverrides(ItemPackagedHex item) {

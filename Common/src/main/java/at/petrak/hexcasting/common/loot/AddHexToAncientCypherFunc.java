@@ -42,11 +42,11 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
     public static ItemStack doStatic(ItemStack stack, RandomSource rand) {
         var hex = LOOT_HEXES.get(rand.nextInt(LOOT_HEXES.size()));
 
-        stack.set(HexDataComponents.HEX_NAME, hex.getFirst());
-        stack.set(HexDataComponents.MEDIA, 32 * MediaConstants.SHARD_UNIT);
-        stack.set(HexDataComponents.MEDIA_MAX, 32 * MediaConstants.SHARD_UNIT);
-        stack.set(HexDataComponents.ITEM_VARIANT, rand.nextInt(8));
-        stack.set(HexDataComponents.HEX_HOLDER_PATTERNS, Arrays.stream(hex.getSecond()).map(el -> {
+        stack.set(HexDataComponents.HEX_NAME.get(), hex.getFirst());
+        stack.set(HexDataComponents.MEDIA.get(), 32 * MediaConstants.SHARD_UNIT);
+        stack.set(HexDataComponents.MEDIA_MAX.get(), 32 * MediaConstants.SHARD_UNIT);
+        stack.set(HexDataComponents.ITEM_VARIANT.get(), rand.nextInt(8));
+        stack.set(HexDataComponents.HEX_HOLDER_PATTERNS.get(), Arrays.stream(hex.getSecond()).map(el -> {
             var pieces = el.split(" ");
             return new PatternIota(HexPattern.fromAngles(pieces[1],HexDir.fromString(pieces[0])));
         }).collect(Collectors.toList()));

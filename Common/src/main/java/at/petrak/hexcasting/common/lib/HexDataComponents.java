@@ -5,8 +5,11 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.xplat.IXplatRegister;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -17,34 +20,33 @@ import net.minecraft.util.Unit;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexDataComponents {
-    public static void registerDataComponents(BiConsumer<DataComponentType<?>, ResourceLocation> r) {
-        for (var e : DATA_COMPONENTS.entrySet()) {
-            r.accept(e.getValue(), e.getKey());
-        }
+    private static final IXplatRegister<DataComponentType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.DATA_COMPONENT_TYPE);
+
+    public static void register() {
+        REGISTER.registerAll();
     }
 
-    private static final Map<ResourceLocation, DataComponentType<?>> DATA_COMPONENTS = new LinkedHashMap<>();
-
-    public static final DataComponentType<HexPattern> PATTERN = register("pattern",
+    public static final Supplier<DataComponentType<HexPattern>> PATTERN = REGISTER.register("pattern", () ->
             DataComponentType.<HexPattern>builder()
                     .persistent(HexPattern.CODEC)
                     .networkSynchronized(HexPattern.STREAM_CODEC)
                     .build());
-    public static final DataComponentType<ResourceKey<ActionRegistryEntry>> ACTION = register("op_id",
+    public static final Supplier<DataComponentType<ResourceKey<ActionRegistryEntry>>> ACTION = REGISTER.register("op_id", () ->
             DataComponentType.<ResourceKey<ActionRegistryEntry>>builder()
                     .persistent(ResourceKey.codec(HexRegistries.ACTION))
                     .networkSynchronized(ResourceKey.streamCodec(HexRegistries.ACTION))
                     .build());
-    public static final DataComponentType<ResourceKey<ActionRegistryEntry>> RECALC_WARNING = register("recalc_warning",
+    public static final Supplier<DataComponentType<ResourceKey<ActionRegistryEntry>>> RECALC_WARNING = REGISTER.register("recalc_warning", () ->
             DataComponentType.<ResourceKey<ActionRegistryEntry>>builder()
                     .persistent(ResourceKey.codec(HexRegistries.ACTION))
                     .networkSynchronized(ResourceKey.streamCodec(HexRegistries.ACTION))
                     .build());
-    public static final DataComponentType<Unit> NEEDS_PURCHASE = register("needs_purchase",
+    public static final Supplier<DataComponentType<Unit>> NEEDS_PURCHASE = REGISTER.register("needs_purchase", () ->
             DataComponentType.<Unit>builder()
                     .networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
                     .build());
@@ -54,67 +56,67 @@ public class HexDataComponents {
      * <p>
      * This is not useful to the player at all.
      */
-    public static final DataComponentType<Optional<IotaType<?>>> VISUAL_OVERRIDE = register("visual_override",
+    public static final Supplier<DataComponentType<Optional<IotaType<?>>>> VISUAL_OVERRIDE = REGISTER.register("visual_override", () ->
             DataComponentType.<Optional<IotaType<?>>>builder()
                     .networkSynchronized(ByteBufCodecs.optional(ByteBufCodecs.registry(HexRegistries.IOTA_TYPE)))
                     .build());
-    public static final DataComponentType<Integer> ITEM_VARIANT = register("variant",
+    public static final Supplier<DataComponentType<Integer>> ITEM_VARIANT = REGISTER.register("variant", () ->
             DataComponentType.<Integer>builder()
                     .persistent(Codec.intRange(0, Integer.MAX_VALUE))
                     .networkSynchronized(ByteBufCodecs.VAR_INT)
                     .build());
-    public static final DataComponentType<Unit> SEALED_IOTA_HOLDER = register("sealed",
+    public static final Supplier<DataComponentType<Unit>> SEALED_IOTA_HOLDER = REGISTER.register("sealed", () ->
             DataComponentType.<Unit>builder()
                     .persistent(Codec.unit(Unit.INSTANCE))
                     .networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
                     .build());
     // TODO port: Data components must implement equals and hashCode. Keep in mind they must also be immutable
-    public static final DataComponentType<Iota> IOTA_HOLDER_IOTA = register("iota",
+    public static final Supplier<DataComponentType<Iota>> IOTA_HOLDER_IOTA = REGISTER.register("iota", () ->
             DataComponentType.<Iota>builder()
                     .persistent(IotaType.TYPED_CODEC)
                     .networkSynchronized(IotaType.TYPED_STREAM_CODEC)
                     .build());
 
-    public static final DataComponentType<List<Iota>> HEX_HOLDER_PATTERNS = register("patterns",
+    public static final Supplier<DataComponentType<List<Iota>>> HEX_HOLDER_PATTERNS = REGISTER.register("patterns", () ->
             DataComponentType.<List<Iota>>builder()
                     .persistent(IotaType.TYPED_CODEC.listOf())
                     .networkSynchronized(IotaType.TYPED_STREAM_CODEC.apply(ByteBufCodecs.list()))
                     .build());
-    public static final DataComponentType<Long> MEDIA = register("media",
+    public static final Supplier<DataComponentType<Long>> MEDIA = REGISTER.register("media", () ->
             DataComponentType.<Long>builder()
                     .persistent(Codec.LONG)
                     .networkSynchronized(ByteBufCodecs.VAR_LONG)
                     .build());
-    public static final DataComponentType<Long> MEDIA_MAX = register("start_media",
+    public static final Supplier<DataComponentType<Long>> MEDIA_MAX = REGISTER.register("start_media", () ->
             DataComponentType.<Long>builder()
                     .persistent(Codec.LONG)
                     .networkSynchronized(ByteBufCodecs.VAR_LONG)
                     .build());
-    public static final DataComponentType<String> HEX_NAME = register("hex_name",
+    public static final Supplier<DataComponentType<String>> HEX_NAME = REGISTER.register("hex_name", () ->
             DataComponentType.<String>builder()
                     .persistent(Codec.STRING)
                     .networkSynchronized(ByteBufCodecs.STRING_UTF8)
                     .build());
 
-    public static final DataComponentType<FrozenPigment> PIGMENT = register("pigment",
+    public static final Supplier<DataComponentType<FrozenPigment>> PIGMENT = REGISTER.register("pigment", () ->
             DataComponentType.<FrozenPigment>builder()
                     .persistent(FrozenPigment.CODEC)
                     .networkSynchronized(FrozenPigment.STREAM_CODEC)
                     .build());
 
-    public static final DataComponentType<Double> ABACUS_VALUE = register("abacus_value",
+    public static final Supplier<DataComponentType<Double>> ABACUS_VALUE = REGISTER.register("abacus_value", () ->
             DataComponentType.<Double>builder()
                     .persistent(Codec.DOUBLE)
                     .networkSynchronized(ByteBufCodecs.DOUBLE)
                     .build());
 
-    public static final DataComponentType<Integer> SELECTED_SPELLBOOK_PAGE = register("page_idx",
+    public static final Supplier<DataComponentType<Integer>> SELECTED_SPELLBOOK_PAGE = REGISTER.register("page_idx", () ->
             DataComponentType.<Integer>builder()
                     .persistent(Codec.INT)
                     .networkSynchronized(ByteBufCodecs.INT)
                     .build());
 
-    public static final DataComponentType<Map<String, Iota>> SPELLBOOK_PAGES = register("pages",
+    public static final Supplier<DataComponentType<Map<String, Iota>>> SPELLBOOK_PAGES = REGISTER.register("pages", () ->
             DataComponentType.<Map<String, Iota>>builder()
                     .persistent(Codec.unboundedMap(Codec.STRING, IotaType.TYPED_CODEC))
                     .networkSynchronized(ByteBufCodecs.map(
@@ -124,7 +126,7 @@ public class HexDataComponents {
                     ))
                     .build());
 
-    public static final DataComponentType<Map<String, Component>> SPELLBOOK_PAGE_NAMES = register("page_names",
+    public static final Supplier<DataComponentType<Map<String, Component>>> SPELLBOOK_PAGE_NAMES = REGISTER.register("page_names", () ->
             DataComponentType.<Map<String, Component>>builder()
                     .persistent(Codec.unboundedMap(Codec.STRING, ComponentSerialization.CODEC))
                     .networkSynchronized(ByteBufCodecs.map(
@@ -134,7 +136,7 @@ public class HexDataComponents {
                     ))
                     .build());
 
-    public static final DataComponentType<Map<String, Boolean>> SPELLBOOK_PAGE_SEALS = register("sealed_pages",
+    public static final Supplier<DataComponentType<Map<String, Boolean>>> SPELLBOOK_PAGE_SEALS = REGISTER.register("sealed_pages", () ->
             DataComponentType.<Map<String, Boolean>>builder()
                     .persistent(Codec.unboundedMap(Codec.STRING, Codec.BOOL))
                     .networkSynchronized(ByteBufCodecs.map(
@@ -144,27 +146,15 @@ public class HexDataComponents {
                     ))
                     .build());
 
-    public static final DataComponentType<List<Long>> MEDIA_EXTRACTIONS = register("media_extractions",
+    public static final Supplier<DataComponentType<List<Long>>> MEDIA_EXTRACTIONS = REGISTER.register("media_extractions", () ->
             DataComponentType.<List<Long>>builder()
                     .persistent(Codec.LONG.listOf())
                     .networkSynchronized(ByteBufCodecs.VAR_LONG.apply(ByteBufCodecs.list()))
                     .build());
 
-    public static final DataComponentType<List<Long>> MEDIA_INSERTIONS = register("media_insertions",
+    public static final Supplier<DataComponentType<List<Long>>> MEDIA_INSERTIONS = REGISTER.register("media_insertions", () ->
             DataComponentType.<List<Long>>builder()
                     .persistent(Codec.LONG.listOf())
                     .networkSynchronized(ByteBufCodecs.VAR_LONG.apply(ByteBufCodecs.list()))
                     .build());
-
-
-    private static <T> DataComponentType<T> register(
-            String id,
-            DataComponentType<T> lift
-    ) {
-        var old = DATA_COMPONENTS.put(modLoc(id), lift);
-        if (old != null) {
-            throw new IllegalArgumentException("Typo? Duplicate id " + id);
-        }
-        return lift;
-    }
 }

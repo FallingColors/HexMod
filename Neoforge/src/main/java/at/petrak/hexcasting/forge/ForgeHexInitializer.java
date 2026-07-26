@@ -123,7 +123,7 @@ public class ForgeHexInitializer {
         HexBlocks.registerBlockItems();
         HexBlockEntities.register();
         HexItems.register();
-        bind(Registries.DATA_COMPONENT_TYPE, HexDataComponents::registerDataComponents);
+        HexDataComponents.register();
 
         bind(Registries.RECIPE_SERIALIZER, HexRecipeStuffRegistry::registerSerializers);
         bind(Registries.RECIPE_TYPE, HexRecipeStuffRegistry::registerTypes);

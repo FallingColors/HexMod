@@ -57,12 +57,12 @@ public class AddPerWorldPatternToScrollFunc extends LootItemConditionalFunction 
         if (pat == null) {
             HexAPI.LOGGER.error("No per-world pattern found for action " + patternID + " while generating loot scroll! " +
                     "Try running '/hexcasting recalcPatterns' to generate the patterns for this world.");
-            stack.set(HexDataComponents.RECALC_WARNING, patternKey);
+            stack.set(HexDataComponents.RECALC_WARNING.get(), patternKey);
             return stack;
         }
 
-        stack.set(HexDataComponents.ACTION, patternKey);
-        stack.set(HexDataComponents.PATTERN, pat);
+        stack.set(HexDataComponents.ACTION.get(), patternKey);
+        stack.set(HexDataComponents.PATTERN.get(), pat);
         return stack;
     }
 
