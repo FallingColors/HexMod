@@ -22,6 +22,6 @@ object OpPeekLocal : Action {
 
         // does not mutate userdata
         val image2 = image.withUsedOp().copy(stack = newStack)
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
+        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get())
     }
 }

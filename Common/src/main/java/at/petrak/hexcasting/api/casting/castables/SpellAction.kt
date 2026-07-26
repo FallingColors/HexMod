@@ -67,7 +67,7 @@ interface SpellAction : Action {
 
         val image2 = image.copy(stack = stackWithoutArgs, opsConsumed = image.opsConsumed + result.opCount, userData = userDataMut)
 
-        val sound = if (this.hasCastingSound(env)) HexEvalSounds.SPELL else HexEvalSounds.MUTE
+        val sound = if (this.hasCastingSound(env)) HexEvalSounds.SPELL.get() else HexEvalSounds.MUTE.get()
         return OperationResult(image2, sideEffects, continuation, sound)
     }
 

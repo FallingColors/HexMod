@@ -57,7 +57,7 @@ public abstract class Iota {
                 )
             ),
             ResolvedPatternType.INVALID,
-            HexEvalSounds.MISHAP);
+            HexEvalSounds.MISHAP.get());
     }
 
     /**
@@ -74,7 +74,7 @@ public abstract class Iota {
                 vm.getImage().withNewParenthesized(this),
                 List.of(),
                 ResolvedPatternType.ESCAPED,
-                HexEvalSounds.NORMAL_EXECUTE);
+                HexEvalSounds.NORMAL_EXECUTE.get());
     }
 
     /**

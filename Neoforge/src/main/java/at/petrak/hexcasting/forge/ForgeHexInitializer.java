@@ -139,7 +139,7 @@ public class ForgeHexInitializer {
         HexSpecialHandlers.register();
         HexArithmetics.register();
         HexContinuationTypes.register();
-        bind(HexRegistries.EVAL_SOUND, HexEvalSounds::register);
+        HexEvalSounds.register();
         bind(HexRegistries.STATE_INGREDIENT, HexStateIngredients::register);
         bind(HexRegistries.BRAINSWEEPEE_INGREDIENT, HexBrainsweepeeIngredients::register);
 

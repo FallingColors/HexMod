@@ -38,14 +38,14 @@ data class FrameEvaluate(val list: TreeList<Iota>, val isMetacasting: Boolean) :
             } else continuation
             // ...before evaluating the first one in the list.
             val update = harness.executeInner(list.head(), level, newCont)
-            if (this.isMetacasting && update.sound != HexEvalSounds.MISHAP) {
-                update.copy(sound = HexEvalSounds.HERMES)
+            if (this.isMetacasting && update.sound != HexEvalSounds.MISHAP.get()) {
+                update.copy(sound = HexEvalSounds.HERMES.get())
             } else {
                 update
             }
         } else {
             // If there are no patterns (e.g. empty Hermes), just return OK.
-            CastResult(ListIota(list), continuation, null, listOf(), ResolvedPatternType.EVALUATED, HexEvalSounds.HERMES)
+            CastResult(ListIota(list), continuation, null, listOf(), ResolvedPatternType.EVALUATED, HexEvalSounds.HERMES.get())
         }
     }
 

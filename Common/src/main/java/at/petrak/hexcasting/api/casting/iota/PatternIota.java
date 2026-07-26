@@ -120,7 +120,7 @@ public class PatternIota extends Iota {
                         vm.getImage().withNewParenthesized(this),
                         List.of(),
                         ResolvedPatternType.ESCAPED,
-                        HexEvalSounds.NORMAL_EXECUTE);
+                        HexEvalSounds.NORMAL_EXECUTE.get());
                 } else {
                     // if you draw something invalid outside parens, it mishaps
                     throw new MishapInvalidPattern(this.getPattern());
@@ -167,7 +167,7 @@ public class PatternIota extends Iota {
                 null,
                 List.of(new OperatorSideEffect.DoMishap(mishap, new Mishap.Context(this.getPattern(), castedName.get()))),
                 mishap.resolutionType(vm.getEnv()),
-                HexEvalSounds.MISHAP);
+                HexEvalSounds.MISHAP.get());
         }
     }
 

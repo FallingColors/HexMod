@@ -65,14 +65,14 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                         newData = null,
                         sideEffects = listOf(OperatorSideEffect.DoMishap(MishapStackSize(), Mishap.Context(null, null))),
                         resolutionType = ResolvedPatternType.ERRORED,
-                        sound = HexEvalSounds.MISHAP,
+                        sound = HexEvalSounds.MISHAP.get(),
                     )
                 } else if (result.newData != null && result.newData.opsConsumed > env.maxOpCount()) {
                     result.copy(
                         newData = null,
                         sideEffects = listOf(OperatorSideEffect.DoMishap(MishapEvalTooMuch(), Mishap.Context(null, null))),
                         resolutionType = ResolvedPatternType.ERRORED,
-                        sound = HexEvalSounds.MISHAP,
+                        sound = HexEvalSounds.MISHAP.get(),
                     )
                 } else {
                     result
@@ -145,7 +145,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                         escapeNext = false,
                     )
                 }
-                return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.ESCAPED, HexEvalSounds.NORMAL_EXECUTE)
+                return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.ESCAPED, HexEvalSounds.NORMAL_EXECUTE.get())
             }
 
             val result = if (this.image.parenCount > 0) {
@@ -164,7 +164,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                     stack = newStack,
                     simulateNext = false
                 )
-                return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.SIMULATED, HexEvalSounds.NORMAL_EXECUTE)
+                return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.SIMULATED, HexEvalSounds.NORMAL_EXECUTE.get())
             }
 
             // otherwise, return the original CastResult to perform all the side effects, stack manip, etc
@@ -186,7 +186,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                     )
                 ),
                 ResolvedPatternType.ERRORED,
-                HexEvalSounds.MISHAP
+                HexEvalSounds.MISHAP.get()
             )
         }
     }

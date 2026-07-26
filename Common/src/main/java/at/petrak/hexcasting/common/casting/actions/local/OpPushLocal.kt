@@ -28,6 +28,6 @@ object OpPushLocal : Action {
             image.userData.put(HexAPI.RAVENMIND_USERDATA, IotaType.TYPED_CODEC.encodeStart(NbtOps.INSTANCE, newLocal).orThrow)
 
         val image2 = image.withUsedOp().copy(stack = stack.init())
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
+        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get())
     }
 }

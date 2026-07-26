@@ -223,7 +223,7 @@ object FabricHexInitializer : ModInitializer {
         HexSpecialHandlers.register()
         HexArithmetics.register()
         HexContinuationTypes.register()
-        HexEvalSounds.register(bind(IXplatAbstractions.INSTANCE.evalSoundRegistry))
+        HexEvalSounds.register()
         HexStateIngredients.register(bind(IXplatAbstractions.INSTANCE.stateIngredientRegistry))
         HexBrainsweepeeIngredients.register(bind(IXplatAbstractions.INSTANCE.brainsweepeeIngredientRegistry))
 

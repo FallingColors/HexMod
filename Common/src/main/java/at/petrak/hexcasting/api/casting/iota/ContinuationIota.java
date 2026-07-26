@@ -44,7 +44,7 @@ public class ContinuationIota extends Iota {
 
     @Override
     public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
-        return new CastResult(this, this.getContinuation(), vm.getImage(), List.of(), ResolvedPatternType.EVALUATED, HexEvalSounds.HERMES);
+        return new CastResult(this, this.getContinuation(), vm.getImage(), List.of(), ResolvedPatternType.EVALUATED, HexEvalSounds.HERMES.get());
     }
 
     @Override

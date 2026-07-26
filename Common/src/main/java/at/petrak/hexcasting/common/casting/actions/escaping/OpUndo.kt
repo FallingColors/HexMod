@@ -39,6 +39,6 @@ object OpUndo : Action {
             parenthesized = newParens,
             parenCount = newParenCount
         )
-        return ParenthesizedOperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE, ResolvedPatternType.UNDONE)
+        return ParenthesizedOperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get(), ResolvedPatternType.UNDONE)
     }
 }
