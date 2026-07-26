@@ -219,7 +219,7 @@ object FabricHexInitializer : ModInitializer {
         HexLootFunctions.registerSerializers(bind(BuiltInRegistries.LOOT_FUNCTION_TYPE))
 
         HexIotaTypes.register()
-        HexActions.register(bind(IXplatAbstractions.INSTANCE.actionRegistry))
+        HexActions.register()
         HexSpecialHandlers.register(bind(IXplatAbstractions.INSTANCE.specialHandlerRegistry))
         HexArithmetics.register(bind(IXplatAbstractions.INSTANCE.arithmeticRegistry))
         HexContinuationTypes.registerContinuations(bind(IXplatAbstractions.INSTANCE.continuationTypeRegistry))

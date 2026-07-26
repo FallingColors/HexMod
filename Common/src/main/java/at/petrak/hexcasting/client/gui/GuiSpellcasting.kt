@@ -74,7 +74,7 @@ class GuiSpellcasting constructor(
             // find the last escaped pattern (or the opening paren if there's nothing else) and set it to UNDONE
             this.patterns.reversed().drop(1).firstOrNull {
                 it.type == ResolvedPatternType.ESCAPED ||
-                (it.type == ResolvedPatternType.EVALUATED && it.pattern.angles == HexActions.OPEN_PAREN.prototype.angles)
+                (it.type == ResolvedPatternType.EVALUATED && it.pattern.angles == HexActions.OPEN_PAREN.value().prototype.angles)
             }?.let { it.type = ResolvedPatternType.UNDONE }
             // use the normal EVALUATED coloring for the Evanition that was just drawn
             this.patterns.getOrNull(index)?.let { it.type = ResolvedPatternType.EVALUATED }
