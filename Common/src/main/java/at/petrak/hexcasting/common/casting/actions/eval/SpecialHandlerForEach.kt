@@ -26,7 +26,7 @@ class SpecialHandlerForEach(val n: Int) : SpecialHandler {
     }
 
     override fun getName(): Component {
-        val key = IXplatAbstractions.INSTANCE.specialHandlerRegistry.getResourceKey(HexSpecialHandlers.FOR_EACH).get()
+        val key = IXplatAbstractions.INSTANCE.specialHandlerRegistry.getResourceKey(HexSpecialHandlers.FOR_EACH.get()).get()
         return HexAPI.instance().getSpecialHandlerI18nKey(key)
             .asTranslatedComponent(n.toString()).lightPurple
     }

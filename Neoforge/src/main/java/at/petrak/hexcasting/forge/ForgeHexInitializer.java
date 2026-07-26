@@ -136,7 +136,7 @@ public class ForgeHexInitializer {
 
         HexIotaTypes.register();
         HexActions.register();
-        bind(HexRegistries.SPECIAL_HANDLER, HexSpecialHandlers::register);
+        HexSpecialHandlers.register();
         bind(HexRegistries.ARITHMETIC, HexArithmetics::register);
         bind(HexRegistries.CONTINUATION_TYPE, HexContinuationTypes::registerContinuations);
         bind(HexRegistries.EVAL_SOUND, HexEvalSounds::register);

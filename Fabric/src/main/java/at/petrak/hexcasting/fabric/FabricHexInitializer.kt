@@ -220,7 +220,7 @@ object FabricHexInitializer : ModInitializer {
 
         HexIotaTypes.register()
         HexActions.register()
-        HexSpecialHandlers.register(bind(IXplatAbstractions.INSTANCE.specialHandlerRegistry))
+        HexSpecialHandlers.register()
         HexArithmetics.register(bind(IXplatAbstractions.INSTANCE.arithmeticRegistry))
         HexContinuationTypes.registerContinuations(bind(IXplatAbstractions.INSTANCE.continuationTypeRegistry))
         HexEvalSounds.register(bind(IXplatAbstractions.INSTANCE.evalSoundRegistry))
