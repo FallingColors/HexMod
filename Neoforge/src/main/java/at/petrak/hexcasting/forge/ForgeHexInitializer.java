@@ -141,7 +141,7 @@ public class ForgeHexInitializer {
         HexContinuationTypes.register();
         HexEvalSounds.register();
         HexStateIngredients.register();
-        bind(HexRegistries.BRAINSWEEPEE_INGREDIENT, HexBrainsweepeeIngredients::register);
+        HexBrainsweepeeIngredients.register();
 
         ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
         ForgeHexLootMods.REGISTRY.register(getModEventBus());

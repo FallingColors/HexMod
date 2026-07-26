@@ -225,7 +225,7 @@ object FabricHexInitializer : ModInitializer {
         HexContinuationTypes.register()
         HexEvalSounds.register()
         HexStateIngredients.register()
-        HexBrainsweepeeIngredients.register(bind(IXplatAbstractions.INSTANCE.brainsweepeeIngredientRegistry))
+        HexBrainsweepeeIngredients.register()
 
 
         // Because of Java's lazy-loading of classes, can't use Kotlin static initialization for
