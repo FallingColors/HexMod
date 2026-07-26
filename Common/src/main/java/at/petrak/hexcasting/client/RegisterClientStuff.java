@@ -49,25 +49,25 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 public class RegisterClientStuff {
     public static Map<ResourceLocation, List<BakedModel>> QUENCHED_ALLAY_VARIANTS = new HashMap<>();
     private static final Map<BlockQuenchedAllay, Boolean> QUENCHED_ALLAY_TYPES = Map.of(
-            HexBlocks.QUENCHED_ALLAY, false,
-            HexBlocks.QUENCHED_ALLAY_TILES, true,
-            HexBlocks.QUENCHED_ALLAY_BRICKS, true,
-            HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL, true);
+            HexBlocks.QUENCHED_ALLAY.get(), false,
+            HexBlocks.QUENCHED_ALLAY_TILES.get(), true,
+            HexBlocks.QUENCHED_ALLAY_BRICKS.get(), true,
+            HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL.get(), true);
 
     public static void init() {
-        registerSealableDataHolderOverrides(HexItems.FOCUS,
+        registerSealableDataHolderOverrides(HexItems.FOCUS.get(),
             stack -> stack.has(HexDataComponents.IOTA_HOLDER_IOTA),
             ItemFocus::isSealed);
-        registerSealableDataHolderOverrides(HexItems.SPELLBOOK,
-            stack -> HexItems.SPELLBOOK.readIota(stack) != null,
+        registerSealableDataHolderOverrides(HexItems.SPELLBOOK.get(),
+            stack -> HexItems.SPELLBOOK.get().readIota(stack) != null,
             ItemSpellbook::isSealed);
-        registerVariantOverrides(HexItems.FOCUS, HexItems.FOCUS::getVariant);
-        registerVariantOverrides(HexItems.SPELLBOOK, HexItems.SPELLBOOK::getVariant);
-        registerVariantOverrides(HexItems.ANCIENT_CYPHER, HexItems.ANCIENT_CYPHER::getVariant);
-        registerVariantOverrides(HexItems.CYPHER, HexItems.CYPHER::getVariant);
-        registerVariantOverrides(HexItems.TRINKET, HexItems.TRINKET::getVariant);
-        registerVariantOverrides(HexItems.ARTIFACT, HexItems.ARTIFACT::getVariant);
-        IClientXplatAbstractions.INSTANCE.registerItemProperty(HexItems.THOUGHT_KNOT, ItemThoughtKnot.WRITTEN_PRED,
+        registerVariantOverrides(HexItems.FOCUS.get(), HexItems.FOCUS.get()::getVariant);
+        registerVariantOverrides(HexItems.SPELLBOOK.get(), HexItems.SPELLBOOK.get()::getVariant);
+        registerVariantOverrides(HexItems.ANCIENT_CYPHER.get(), HexItems.ANCIENT_CYPHER.get()::getVariant);
+        registerVariantOverrides(HexItems.CYPHER.get(), HexItems.CYPHER.get()::getVariant);
+        registerVariantOverrides(HexItems.TRINKET.get(), HexItems.TRINKET.get()::getVariant);
+        registerVariantOverrides(HexItems.ARTIFACT.get(), HexItems.ARTIFACT.get()::getVariant);
+        IClientXplatAbstractions.INSTANCE.registerItemProperty(HexItems.THOUGHT_KNOT.get(), ItemThoughtKnot.WRITTEN_PRED,
             (stack, level, holder, holderID) -> {
                 if (stack.has(HexDataComponents.IOTA_HOLDER_IOTA)) {
                     return 1;
@@ -76,61 +76,61 @@ public class RegisterClientStuff {
                 }
             });
 
-        registerPackagedSpellOverrides(HexItems.ANCIENT_CYPHER);
-        registerPackagedSpellOverrides(HexItems.CYPHER);
-        registerPackagedSpellOverrides(HexItems.TRINKET);
-        registerPackagedSpellOverrides(HexItems.ARTIFACT);
+        registerPackagedSpellOverrides(HexItems.ANCIENT_CYPHER.get());
+        registerPackagedSpellOverrides(HexItems.CYPHER.get());
+        registerPackagedSpellOverrides(HexItems.TRINKET.get());
+        registerPackagedSpellOverrides(HexItems.ARTIFACT.get());
 
         var x = IClientXplatAbstractions.INSTANCE;
-        x.registerItemProperty(HexItems.BATTERY, ItemMediaBattery.MEDIA_PREDICATE,
+        x.registerItemProperty(HexItems.BATTERY.get(), ItemMediaBattery.MEDIA_PREDICATE,
             (stack, level, holder, holderID) -> {
                 var item = (MediaHolderItem) stack.getItem();
                 return item.getMediaFullness(stack);
             });
-        x.registerItemProperty(HexItems.BATTERY, ItemMediaBattery.MAX_MEDIA_PREDICATE,
+        x.registerItemProperty(HexItems.BATTERY.get(), ItemMediaBattery.MAX_MEDIA_PREDICATE,
             (stack, level, holder, holderID) -> {
                 var item = (ItemMediaBattery) stack.getItem();
                 var max = item.getMaxMedia(stack);
                 return 1.049658f * (float) Math.log((float) max / MediaConstants.CRYSTAL_UNIT + 9.06152f) - 2.1436f;
             });
 
-        registerScrollOverrides(HexItems.SCROLL_SMOL);
-        registerScrollOverrides(HexItems.SCROLL_MEDIUM);
-        registerScrollOverrides(HexItems.SCROLL_LARGE);
+        registerScrollOverrides(HexItems.SCROLL_SMOL.get());
+        registerScrollOverrides(HexItems.SCROLL_MEDIUM.get());
+        registerScrollOverrides(HexItems.SCROLL_LARGE.get());
 
-        x.registerItemProperty(HexItems.SLATE, ItemSlate.WRITTEN_PRED,
+        x.registerItemProperty(HexItems.SLATE.get(), ItemSlate.WRITTEN_PRED,
             (stack, level, holder, holderID) -> ItemSlate.hasPattern(stack) ? 1f : 0f);
 
-        registerWandOverrides(HexItems.STAFF_OAK);
-        registerWandOverrides(HexItems.STAFF_BIRCH);
-        registerWandOverrides(HexItems.STAFF_SPRUCE);
-        registerWandOverrides(HexItems.STAFF_JUNGLE);
-        registerWandOverrides(HexItems.STAFF_DARK_OAK);
-        registerWandOverrides(HexItems.STAFF_ACACIA);
-        registerWandOverrides(HexItems.STAFF_EDIFIED);
+        registerWandOverrides(HexItems.STAFF_OAK.get());
+        registerWandOverrides(HexItems.STAFF_BIRCH.get());
+        registerWandOverrides(HexItems.STAFF_SPRUCE.get());
+        registerWandOverrides(HexItems.STAFF_JUNGLE.get());
+        registerWandOverrides(HexItems.STAFF_DARK_OAK.get());
+        registerWandOverrides(HexItems.STAFF_ACACIA.get());
+        registerWandOverrides(HexItems.STAFF_EDIFIED.get());
         // purposely skip quenched
-        registerWandOverrides(HexItems.STAFF_MINDSPLICE);
+        registerWandOverrides(HexItems.STAFF_MINDSPLICE.get());
 
-        registerGaslight4(HexItems.STAFF_QUENCHED);
-        registerGaslight4(HexBlocks.QUENCHED_ALLAY.asItem());
-        registerGaslight4(HexBlocks.QUENCHED_ALLAY_TILES.asItem());
-        registerGaslight4(HexBlocks.QUENCHED_ALLAY_BRICKS.asItem());
-        registerGaslight4(HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL.asItem());
-        registerGaslight4(HexItems.QUENCHED_SHARD);
+        registerGaslight4(HexItems.STAFF_QUENCHED.get());
+        registerGaslight4(HexBlocks.QUENCHED_ALLAY.get().asItem());
+        registerGaslight4(HexBlocks.QUENCHED_ALLAY_TILES.get().asItem());
+        registerGaslight4(HexBlocks.QUENCHED_ALLAY_BRICKS.get().asItem());
+        registerGaslight4(HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL.get().asItem());
+        registerGaslight4(HexItems.QUENCHED_SHARD.get());
 
-        x.setRenderLayer(HexBlocks.CONJURED_LIGHT, RenderType.cutout());
-        x.setRenderLayer(HexBlocks.CONJURED_BLOCK, RenderType.cutout());
-        x.setRenderLayer(HexBlocks.EDIFIED_DOOR, RenderType.cutout());
-        x.setRenderLayer(HexBlocks.EDIFIED_TRAPDOOR, RenderType.cutout());
-        x.setRenderLayer(HexBlocks.AKASHIC_BOOKSHELF, RenderType.cutout());
-        x.setRenderLayer(HexBlocks.SCONCE, RenderType.cutout());
+        x.setRenderLayer(HexBlocks.CONJURED_LIGHT.get(), RenderType.cutout());
+        x.setRenderLayer(HexBlocks.CONJURED_BLOCK.get(), RenderType.cutout());
+        x.setRenderLayer(HexBlocks.EDIFIED_DOOR.get(), RenderType.cutout());
+        x.setRenderLayer(HexBlocks.EDIFIED_TRAPDOOR.get(), RenderType.cutout());
+        x.setRenderLayer(HexBlocks.AKASHIC_BOOKSHELF.get(), RenderType.cutout());
+        x.setRenderLayer(HexBlocks.SCONCE.get(), RenderType.cutout());
 
-        x.setRenderLayer(HexBlocks.AMETHYST_EDIFIED_LEAVES, RenderType.cutoutMipped());
-        x.setRenderLayer(HexBlocks.AVENTURINE_EDIFIED_LEAVES, RenderType.cutoutMipped());
-        x.setRenderLayer(HexBlocks.CITRINE_EDIFIED_LEAVES, RenderType.cutoutMipped());
+        x.setRenderLayer(HexBlocks.AMETHYST_EDIFIED_LEAVES.get(), RenderType.cutoutMipped());
+        x.setRenderLayer(HexBlocks.AVENTURINE_EDIFIED_LEAVES.get(), RenderType.cutoutMipped());
+        x.setRenderLayer(HexBlocks.CITRINE_EDIFIED_LEAVES.get(), RenderType.cutoutMipped());
 
-        x.setRenderLayer(HexBlocks.AKASHIC_RECORD, RenderType.translucent());
-        x.setRenderLayer(HexBlocks.QUENCHED_ALLAY, RenderType.translucent());
+        x.setRenderLayer(HexBlocks.AKASHIC_RECORD.get(), RenderType.translucent());
+        x.setRenderLayer(HexBlocks.QUENCHED_ALLAY.get(), RenderType.translucent());
 
         x.registerEntityRenderer(HexEntities.WALL_SCROLL, WallScrollRenderer::new);
 
@@ -153,9 +153,9 @@ public class RegisterClientStuff {
 
     public static void registerColorProviders(BiConsumer<ItemColor, Item> itemColorRegistry,
         BiConsumer<BlockColor, Block> blockColorRegistry) {
-        itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.FOCUS::getColor), HexItems.FOCUS);
-        itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.SPELLBOOK::getColor), HexItems.SPELLBOOK);
-        itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.THOUGHT_KNOT::getColor), HexItems.THOUGHT_KNOT);
+        itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.FOCUS.get()::getColor), HexItems.FOCUS.get());
+        itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.SPELLBOOK.get()::getColor), HexItems.SPELLBOOK.get());
+        itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.THOUGHT_KNOT.get()::getColor), HexItems.THOUGHT_KNOT.get());
 
         blockColorRegistry.accept((bs, level, pos, idx) -> {
             if (!bs.getValue(BlockAkashicBookshelf.HAS_BOOKS) || level == null || pos == null) {
@@ -171,7 +171,7 @@ public class RegisterClientStuff {
                 return 0xff_ffffff;
             }
             return iota.getType().color();
-        }, HexBlocks.AKASHIC_BOOKSHELF);
+        }, HexBlocks.AKASHIC_BOOKSHELF.get());
     }
 
     /**

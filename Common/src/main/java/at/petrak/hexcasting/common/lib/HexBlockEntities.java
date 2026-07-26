@@ -33,46 +33,46 @@ public class HexBlockEntities {
 
     public static final BlockEntityType<BlockEntityConjured> CONJURED_TILE = register(
         "conjured",
-        BlockEntityConjured::new, HexBlocks.CONJURED_LIGHT, HexBlocks.CONJURED_BLOCK);
+        BlockEntityConjured::new, HexBlocks.CONJURED_LIGHT.get(), HexBlocks.CONJURED_BLOCK.get());
 
     public static final BlockEntityType<BlockEntityAkashicBookshelf> AKASHIC_BOOKSHELF_TILE = register(
         "akashic_bookshelf",
-        BlockEntityAkashicBookshelf::new, HexBlocks.AKASHIC_BOOKSHELF);
+        BlockEntityAkashicBookshelf::new, HexBlocks.AKASHIC_BOOKSHELF.get());
 
     public static final BlockEntityType<BlockEntityRedstoneImpetus> IMPETUS_REDSTONE_TILE = register(
         "impetus/redstone",
-        BlockEntityRedstoneImpetus::new, HexBlocks.IMPETUS_REDSTONE);
+        BlockEntityRedstoneImpetus::new, HexBlocks.IMPETUS_REDSTONE.get());
     public static final BlockEntityType<BlockEntityLookingImpetus> IMPETUS_LOOK_TILE = register(
         "impetus/look",
-        BlockEntityLookingImpetus::new, HexBlocks.IMPETUS_LOOK);
+        BlockEntityLookingImpetus::new, HexBlocks.IMPETUS_LOOK.get());
     public static final BlockEntityType<BlockEntityRightClickImpetus> IMPETUS_RIGHTCLICK_TILE = register(
         "impetus/rightclick",
-        BlockEntityRightClickImpetus::new, HexBlocks.IMPETUS_RIGHTCLICK);
+        BlockEntityRightClickImpetus::new, HexBlocks.IMPETUS_RIGHTCLICK.get());
 
     public static final BlockEntityType<BlockEntitySlate> SLATE_TILE = register(
         "slate",
-        BlockEntitySlate::new, HexBlocks.SLATE);
+        BlockEntitySlate::new, HexBlocks.SLATE.get());
 
     public static final BlockEntityType<BlockEntityQuenchedAllay> QUENCHED_ALLAY_TILE = register(
-        "quenched_allay", BlockEntityQuenchedAllay.fromKnownBlock(HexBlocks.QUENCHED_ALLAY), HexBlocks.QUENCHED_ALLAY);
+        "quenched_allay", BlockEntityQuenchedAllay.fromKnownBlock(HexBlocks.QUENCHED_ALLAY.get()), HexBlocks.QUENCHED_ALLAY.get());
 
     public static final BlockEntityType<BlockEntityQuenchedAllay> QUENCHED_ALLAY_TILES_TILE = register(
-            "quenched_allay_tiles", BlockEntityQuenchedAllay.fromKnownBlock(HexBlocks.QUENCHED_ALLAY_TILES), HexBlocks.QUENCHED_ALLAY_TILES);
+            "quenched_allay_tiles", BlockEntityQuenchedAllay.fromKnownBlock(HexBlocks.QUENCHED_ALLAY_TILES.get()), HexBlocks.QUENCHED_ALLAY_TILES.get());
 
     public static final BlockEntityType<BlockEntityQuenchedAllay> QUENCHED_ALLAY_BRICKS_TILE = register(
-            "quenched_allay_bricks", BlockEntityQuenchedAllay.fromKnownBlock(HexBlocks.QUENCHED_ALLAY_BRICKS), HexBlocks.QUENCHED_ALLAY_BRICKS);
+            "quenched_allay_bricks", BlockEntityQuenchedAllay.fromKnownBlock(HexBlocks.QUENCHED_ALLAY_BRICKS.get()), HexBlocks.QUENCHED_ALLAY_BRICKS.get());
 
     public static final BlockEntityType<BlockEntityQuenchedAllay> QUENCHED_ALLAY_BRICKS_SMALL_TILE = register(
-            "quenched_allay_bricks_small", BlockEntityQuenchedAllay.fromKnownBlock(HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL), HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL);
+            "quenched_allay_bricks_small", BlockEntityQuenchedAllay.fromKnownBlock(HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL.get()), HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL.get());
 
     public static BlockEntityType<BlockEntityQuenchedAllay> typeForQuenchedAllay(BlockQuenchedAllay block) {
-        if (block == HexBlocks.QUENCHED_ALLAY)
+        if (block == HexBlocks.QUENCHED_ALLAY.get())
             return QUENCHED_ALLAY_TILE;
-        if (block == HexBlocks.QUENCHED_ALLAY_TILES)
+        if (block == HexBlocks.QUENCHED_ALLAY_TILES.get())
             return QUENCHED_ALLAY_TILES_TILE;
-        if (block == HexBlocks.QUENCHED_ALLAY_BRICKS)
+        if (block == HexBlocks.QUENCHED_ALLAY_BRICKS.get())
             return QUENCHED_ALLAY_BRICKS_TILE;
-        if (block == HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL)
+        if (block == HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL.get())
             return QUENCHED_ALLAY_BRICKS_SMALL_TILE;
         return null;
     }

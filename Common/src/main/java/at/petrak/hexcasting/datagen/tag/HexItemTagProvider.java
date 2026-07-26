@@ -26,23 +26,23 @@ public class HexItemTagProvider extends ItemTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider provider) {
         add(tag(xtags.gems()),
-            HexItems.CHARGED_AMETHYST);
+            HexItems.CHARGED_AMETHYST.get());
         add(tag(xtags.amethystDust()),
-            HexItems.AMETHYST_DUST);
+            HexItems.AMETHYST_DUST.get());
 
         add(tag(HexTags.Items.STAVES),
-            HexItems.STAFF_EDIFIED,
-            HexItems.STAFF_OAK, HexItems.STAFF_SPRUCE, HexItems.STAFF_BIRCH,
-            HexItems.STAFF_JUNGLE, HexItems.STAFF_ACACIA, HexItems.STAFF_DARK_OAK,
-            HexItems.STAFF_CRIMSON, HexItems.STAFF_WARPED, HexItems.STAFF_MANGROVE,
-            HexItems.STAFF_CHERRY,HexItems.STAFF_BAMBOO,
-            HexItems.STAFF_QUENCHED, HexItems.STAFF_MINDSPLICE);
+            HexItems.STAFF_EDIFIED.get(),
+            HexItems.STAFF_OAK.get(), HexItems.STAFF_SPRUCE.get(), HexItems.STAFF_BIRCH.get(),
+            HexItems.STAFF_JUNGLE.get(), HexItems.STAFF_ACACIA.get(), HexItems.STAFF_DARK_OAK.get(),
+            HexItems.STAFF_CRIMSON.get(), HexItems.STAFF_WARPED.get(), HexItems.STAFF_MANGROVE.get(),
+            HexItems.STAFF_CHERRY.get(),HexItems.STAFF_BAMBOO.get(),
+            HexItems.STAFF_QUENCHED.get(), HexItems.STAFF_MINDSPLICE.get());
 
         add(tag(HexTags.Items.PHIAL_BASE),
             Items.GLASS_BOTTLE);
         add(tag(HexTags.Items.GRANTS_ROOT_ADVANCEMENT),
-            HexItems.AMETHYST_DUST, Items.AMETHYST_SHARD,
-            HexItems.CHARGED_AMETHYST, HexItems.CREATIVE_UNLOCKER);
+            HexItems.AMETHYST_DUST.get(), Items.AMETHYST_SHARD,
+            HexItems.CHARGED_AMETHYST.get(), HexItems.CREATIVE_UNLOCKER.get());
         add(tag(HexTags.Items.SEAL_MATERIALS),
             Items.HONEYCOMB);
 

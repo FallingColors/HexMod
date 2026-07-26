@@ -40,7 +40,7 @@ public class HexPotions {
         new Potion("shrink_grid_strong", new MobEffectInstance(HexMobEffects.SHRINK_GRID, 1800, 1)));
 
     public static void addRecipes(PotionBrewing.Builder builder) {
-        builder.addMix(Potions.AWKWARD, HexItems.AMETHYST_DUST, ENLARGE_GRID);
+        builder.addMix(Potions.AWKWARD, HexItems.AMETHYST_DUST.get(), ENLARGE_GRID);
         builder.addMix(ENLARGE_GRID, Items.REDSTONE, ENLARGE_GRID_LONG);
         builder.addMix(ENLARGE_GRID, Items.GLOWSTONE_DUST, ENLARGE_GRID_STRONG);
 

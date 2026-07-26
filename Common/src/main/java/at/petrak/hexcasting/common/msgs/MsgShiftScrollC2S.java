@@ -49,9 +49,9 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         if (delta != 0) {
             var stack = sender.getItemInHand(hand);
 
-            if (stack.getItem() == HexItems.SPELLBOOK) {
+            if (stack.getItem() == HexItems.SPELLBOOK.get()) {
                 spellbook(sender, hand, stack, delta);
-            } else if (stack.getItem() == HexItems.ABACUS) {
+            } else if (stack.getItem() == HexItems.ABACUS.get()) {
                 abacus(sender, hand, stack, delta);
             }
         }
@@ -123,7 +123,7 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         sender.level().playSound(null, sender.getX(), sender.getY(), sender.getZ(),
             HexSounds.ABACUS, SoundSource.PLAYERS, 0.5f, pitch);
 
-        var datum = HexItems.ABACUS.readIota(stack);
+        var datum = HexItems.ABACUS.get().readIota(stack);
         if (datum != null) {
             var popup = datum.display();
             sender.displayClientMessage(

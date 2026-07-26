@@ -45,45 +45,45 @@ public class HexLootTables extends PaucalLootTableSubProvider {
     @Override
     protected void makeLootTables(Map<Block, LootTable.Builder> blockTables,
         Map<ResourceKey<LootTable>, LootTable.Builder> lootTables) {
-        dropSelf(blockTables, HexBlocks.IMPETUS_EMPTY,
-            HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_REDSTONE,
-            HexBlocks.EMPTY_DIRECTRIX, HexBlocks.DIRECTRIX_REDSTONE, HexBlocks.DIRECTRIX_BOOLEAN,
-            HexBlocks.AKASHIC_RECORD, HexBlocks.AKASHIC_BOOKSHELF, HexBlocks.AKASHIC_LIGATURE,
-            HexBlocks.SLATE_BLOCK, HexBlocks.SLATE_TILES, HexBlocks.SLATE_BRICKS, HexBlocks.SLATE_BRICKS_SMALL,
-            HexBlocks.SLATE_PILLAR, HexBlocks.AMETHYST_DUST_BLOCK, HexBlocks.AMETHYST_TILES, HexBlocks.AMETHYST_BRICKS,
-            HexBlocks.AMETHYST_BRICKS_SMALL, HexBlocks.AMETHYST_PILLAR, HexBlocks.SLATE_AMETHYST_TILES,
-            HexBlocks.SLATE_AMETHYST_BRICKS, HexBlocks.SLATE_AMETHYST_BRICKS_SMALL, HexBlocks.SLATE_AMETHYST_PILLAR,
-            HexBlocks.QUENCHED_ALLAY_TILES, HexBlocks.QUENCHED_ALLAY_BRICKS, HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL,
-            HexBlocks.SCROLL_PAPER, HexBlocks.ANCIENT_SCROLL_PAPER, HexBlocks.SCROLL_PAPER_LANTERN,
-            HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN, HexBlocks.SCONCE,
-            HexBlocks.EDIFIED_LOG, HexBlocks.EDIFIED_LOG_AMETHYST, HexBlocks.EDIFIED_LOG_AVENTURINE,
-            HexBlocks.EDIFIED_LOG_CITRINE, HexBlocks.EDIFIED_LOG_PURPLE, HexBlocks.STRIPPED_EDIFIED_LOG,
-            HexBlocks.EDIFIED_WOOD, HexBlocks.STRIPPED_EDIFIED_WOOD,
-            HexBlocks.EDIFIED_PLANKS, HexBlocks.EDIFIED_TILE, HexBlocks.EDIFIED_PANEL,
-            HexBlocks.EDIFIED_TRAPDOOR, HexBlocks.EDIFIED_STAIRS, HexBlocks.EDIFIED_FENCE, HexBlocks.EDIFIED_FENCE_GATE, HexBlocks.EDIFIED_PRESSURE_PLATE,
-            HexBlocks.EDIFIED_BUTTON);
+        dropSelf(blockTables, HexBlocks.IMPETUS_EMPTY.get(),
+            HexBlocks.IMPETUS_RIGHTCLICK.get(), HexBlocks.IMPETUS_LOOK.get(), HexBlocks.IMPETUS_REDSTONE.get(),
+            HexBlocks.EMPTY_DIRECTRIX.get(), HexBlocks.DIRECTRIX_REDSTONE.get(), HexBlocks.DIRECTRIX_BOOLEAN.get(),
+            HexBlocks.AKASHIC_RECORD.get(), HexBlocks.AKASHIC_BOOKSHELF.get(), HexBlocks.AKASHIC_LIGATURE.get(),
+            HexBlocks.SLATE_BLOCK.get(), HexBlocks.SLATE_TILES.get(), HexBlocks.SLATE_BRICKS.get(), HexBlocks.SLATE_BRICKS_SMALL.get(),
+            HexBlocks.SLATE_PILLAR.get(), HexBlocks.AMETHYST_DUST_BLOCK.get(), HexBlocks.AMETHYST_TILES.get(), HexBlocks.AMETHYST_BRICKS.get(),
+            HexBlocks.AMETHYST_BRICKS_SMALL.get(), HexBlocks.AMETHYST_PILLAR.get(), HexBlocks.SLATE_AMETHYST_TILES.get(),
+            HexBlocks.SLATE_AMETHYST_BRICKS.get(), HexBlocks.SLATE_AMETHYST_BRICKS_SMALL.get(), HexBlocks.SLATE_AMETHYST_PILLAR.get(),
+            HexBlocks.QUENCHED_ALLAY_TILES.get(), HexBlocks.QUENCHED_ALLAY_BRICKS.get(), HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL.get(),
+            HexBlocks.SCROLL_PAPER.get(), HexBlocks.ANCIENT_SCROLL_PAPER.get(), HexBlocks.SCROLL_PAPER_LANTERN.get(),
+            HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN.get(), HexBlocks.SCONCE.get(),
+            HexBlocks.EDIFIED_LOG.get(), HexBlocks.EDIFIED_LOG_AMETHYST.get(), HexBlocks.EDIFIED_LOG_AVENTURINE.get(),
+            HexBlocks.EDIFIED_LOG_CITRINE.get(), HexBlocks.EDIFIED_LOG_PURPLE.get(), HexBlocks.STRIPPED_EDIFIED_LOG.get(),
+            HexBlocks.EDIFIED_WOOD.get(), HexBlocks.STRIPPED_EDIFIED_WOOD.get(),
+            HexBlocks.EDIFIED_PLANKS.get(), HexBlocks.EDIFIED_TILE.get(), HexBlocks.EDIFIED_PANEL.get(),
+            HexBlocks.EDIFIED_TRAPDOOR.get(), HexBlocks.EDIFIED_STAIRS.get(), HexBlocks.EDIFIED_FENCE.get(), HexBlocks.EDIFIED_FENCE_GATE.get(), HexBlocks.EDIFIED_PRESSURE_PLATE.get(),
+            HexBlocks.EDIFIED_BUTTON.get());
 
         HolderLookup.RegistryLookup<Enchantment> enchRegistryLookup = this.registries.lookupOrThrow(Registries.ENCHANTMENT);
 
-        makeSlabTable(blockTables, HexBlocks.EDIFIED_SLAB);
+        makeSlabTable(blockTables, HexBlocks.EDIFIED_SLAB.get());
 
-        makeLeafTable(blockTables, HexBlocks.AMETHYST_EDIFIED_LEAVES, enchRegistryLookup);
-        makeLeafTable(blockTables, HexBlocks.AVENTURINE_EDIFIED_LEAVES, enchRegistryLookup);
-        makeLeafTable(blockTables, HexBlocks.CITRINE_EDIFIED_LEAVES, enchRegistryLookup);
+        makeLeafTable(blockTables, HexBlocks.AMETHYST_EDIFIED_LEAVES.get(), enchRegistryLookup);
+        makeLeafTable(blockTables, HexBlocks.AVENTURINE_EDIFIED_LEAVES.get(), enchRegistryLookup);
+        makeLeafTable(blockTables, HexBlocks.CITRINE_EDIFIED_LEAVES.get(), enchRegistryLookup);
 
         var slatePool = LootPool.lootPool()
             .setRolls(ConstantValue.exactly(1))
-            .add(LootItem.lootTableItem(HexBlocks.SLATE)
+            .add(LootItem.lootTableItem(HexBlocks.SLATE.get())
                 .apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
                         .include(HexDataComponents.PATTERN)
                 ));
-        blockTables.put(HexBlocks.SLATE, LootTable.lootTable().withPool(slatePool));
+        blockTables.put(HexBlocks.SLATE.get(), LootTable.lootTable().withPool(slatePool));
 
-        var doorPool = dropThisPool(HexBlocks.EDIFIED_DOOR, 1)
-            .when(new LootItemBlockStatePropertyCondition.Builder(HexBlocks.EDIFIED_DOOR).setProperties(
+        var doorPool = dropThisPool(HexBlocks.EDIFIED_DOOR.get(), 1)
+            .when(new LootItemBlockStatePropertyCondition.Builder(HexBlocks.EDIFIED_DOOR.get()).setProperties(
                 StatePropertiesPredicate.Builder.properties().hasProperty(DoorBlock.HALF, DoubleBlockHalf.LOWER)
             ));
-        blockTables.put(HexBlocks.EDIFIED_DOOR, LootTable.lootTable().withPool(doorPool));
+        blockTables.put(HexBlocks.EDIFIED_DOOR.get(), LootTable.lootTable().withPool(doorPool));
 
         var silkTouchCond = MatchTool.toolMatches(
             ItemPredicate.Builder.item().withSubPredicate(
@@ -98,25 +98,25 @@ public class HexLootTables extends PaucalLootTableSubProvider {
         );
 
         var dustPoolWhenGood = LootPool.lootPool()
-            .add(LootItem.lootTableItem(HexItems.AMETHYST_DUST))
+            .add(LootItem.lootTableItem(HexItems.AMETHYST_DUST.get()))
             .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 4)))
             .apply(ApplyBonusCount.addOreBonusCount(enchRegistryLookup.getOrThrow(Enchantments.FORTUNE)))
             .when(noSilkTouchCond).when(goodAtAmethystingCond);
 
         var dustPoolWhenBad = LootPool.lootPool()
-            .add(LootItem.lootTableItem(HexItems.AMETHYST_DUST))
+            .add(LootItem.lootTableItem(HexItems.AMETHYST_DUST.get()))
             .apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 2)))
             .when(noSilkTouchCond).when(goodAtAmethystingCond.invert());
 
         var isThatAnMFingBrandonSandersonReference = LootPool.lootPool()
-            .add(LootItem.lootTableItem(HexItems.CHARGED_AMETHYST))
+            .add(LootItem.lootTableItem(HexItems.CHARGED_AMETHYST.get()))
             .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
             .when(noSilkTouchCond).when(goodAtAmethystingCond)
             .when(BonusLevelTableCondition.bonusLevelFlatChance(enchRegistryLookup.getOrThrow(Enchantments.FORTUNE),
                 0.25f, 0.35f, 0.5f, 0.75f, 1.0f));
 
         var isThatAnMFingBadBrandonSandersonReference = LootPool.lootPool()
-            .add(LootItem.lootTableItem(HexItems.CHARGED_AMETHYST))
+            .add(LootItem.lootTableItem(HexItems.CHARGED_AMETHYST.get()))
             .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
             .when(noSilkTouchCond).when(goodAtAmethystingCond.invert())
             .when(LootItemRandomChanceCondition.randomChance(0.125f));
@@ -134,14 +134,14 @@ public class HexLootTables extends PaucalLootTableSubProvider {
         // it looks like loot groups are bugged?
         // so instead we add some and then *increment* the amount, gated behind the cond
         var quenchedPool = LootPool.lootPool().add(AlternativesEntry.alternatives(
-            LootItem.lootTableItem(HexBlocks.QUENCHED_ALLAY).when(silkTouchCond),
-            LootItem.lootTableItem(HexItems.QUENCHED_SHARD)
+            LootItem.lootTableItem(HexBlocks.QUENCHED_ALLAY.get()).when(silkTouchCond),
+            LootItem.lootTableItem(HexItems.QUENCHED_SHARD.get())
                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(2f, 4f)))
                 .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1), true)
                     .when(BonusLevelTableCondition.bonusLevelFlatChance(enchRegistryLookup.getOrThrow(Enchantments.FORTUNE),
                         0.25f, 0.5f, 0.75f, 1.0f)))
         ));
-        blockTables.put(HexBlocks.QUENCHED_ALLAY, LootTable.lootTable().withPool(quenchedPool));
+        blockTables.put(HexBlocks.QUENCHED_ALLAY.get(), LootTable.lootTable().withPool(quenchedPool));
     }
 
     private void makeLeafTable(Map<Block, LootTable.Builder> lootTables, Block block, HolderLookup.RegistryLookup<Enchantment> enchRegistryLookup) {

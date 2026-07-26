@@ -71,18 +71,18 @@ public class HexJEIPlugin implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         for (ItemStaff staff : new ItemStaff[]{
-            HexItems.STAFF_OAK,
-            HexItems.STAFF_SPRUCE,
-            HexItems.STAFF_BIRCH,
-            HexItems.STAFF_JUNGLE,
-            HexItems.STAFF_ACACIA,
-            HexItems.STAFF_DARK_OAK,
-            HexItems.STAFF_CRIMSON,
-            HexItems.STAFF_WARPED,
-            HexItems.STAFF_MANGROVE,
-            HexItems.STAFF_CHERRY,
-            HexItems.STAFF_BAMBOO,
-            HexItems.STAFF_EDIFIED,
+            HexItems.STAFF_OAK.get(),
+            HexItems.STAFF_SPRUCE.get(),
+            HexItems.STAFF_BIRCH.get(),
+            HexItems.STAFF_JUNGLE.get(),
+            HexItems.STAFF_ACACIA.get(),
+            HexItems.STAFF_DARK_OAK.get(),
+            HexItems.STAFF_CRIMSON.get(),
+            HexItems.STAFF_WARPED.get(),
+            HexItems.STAFF_MANGROVE.get(),
+            HexItems.STAFF_CHERRY.get(),
+            HexItems.STAFF_BAMBOO.get(),
+            HexItems.STAFF_EDIFIED.get(),
         }) {
             registration.addRecipeCatalyst(new ItemStack(staff), BRAINSWEEPING, PHIAL, EDIFY);
         }

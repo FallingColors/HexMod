@@ -281,15 +281,15 @@ public class HexActions {
 
     public static final ActionRegistryEntry CRAFT$CYPHER = make("craft/cypher", new ActionRegistryEntry(
         HexPattern.fromAngles("waqqqqq", HexDir.EAST), 
-        new OpMakePackagedSpell(s -> (s.is(HexItems.CYPHER)||s.is(HexItems.ANCIENT_CYPHER)), HexItems.CYPHER::getDescription, MediaConstants.CRYSTAL_UNIT)
+        new OpMakePackagedSpell(s -> (s.is(HexItems.CYPHER.get())||s.is(HexItems.ANCIENT_CYPHER.get())), HexItems.CYPHER.get()::getDescription, MediaConstants.CRYSTAL_UNIT)
     ));
     public static final ActionRegistryEntry CRAFT$TRINKET = make("craft/trinket", new ActionRegistryEntry(
         HexPattern.fromAngles("wwaqqqqqeaqeaeqqqeaeq", HexDir.EAST), 
-        new OpMakePackagedSpell(HexItems.TRINKET, 5 * MediaConstants.CRYSTAL_UNIT)
+        new OpMakePackagedSpell(HexItems.TRINKET.get(), 5 * MediaConstants.CRYSTAL_UNIT)
     ));
     public static final ActionRegistryEntry CRAFT$ARTIFACT = make("craft/artifact", new ActionRegistryEntry(
         HexPattern.fromAngles("wwaqqqqqeawqwqwqwqwqwwqqeadaeqqeqqeadaeqq", HexDir.EAST),
-        new OpMakePackagedSpell(HexItems.ARTIFACT, 10 * MediaConstants.CRYSTAL_UNIT)
+        new OpMakePackagedSpell(HexItems.ARTIFACT.get(), 10 * MediaConstants.CRYSTAL_UNIT)
     ));
     public static final ActionRegistryEntry CRAFT$BATTERY = make("craft/battery", new ActionRegistryEntry(
         HexPattern.fromAngles("aqqqaqwwaqqqqqeqaqqqawwqwqwqwqwqw", HexDir.SOUTH_WEST), OpMakeBattery.INSTANCE));

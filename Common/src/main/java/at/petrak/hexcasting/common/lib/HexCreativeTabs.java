@@ -23,12 +23,12 @@ public class HexCreativeTabs {
     private static final Map<ResourceLocation, CreativeModeTab> TABS = new LinkedHashMap<>();
 
     public static final CreativeModeTab HEX = register("hexcasting", CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
-            .icon(() -> new ItemStack(HexItems.SPELLBOOK)));
+            .icon(() -> new ItemStack(HexItems.SPELLBOOK.get())));
 
     public static final ResourceKey<CreativeModeTab> HEX_KEY = ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), modLoc("hexcasting"));
 
     public static final CreativeModeTab SCROLLS = register("scrolls", CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
-            .icon(() -> new ItemStack(HexItems.SCROLL_LARGE)));
+            .icon(() -> new ItemStack(HexItems.SCROLL_LARGE.get())));
 
     public static final ResourceKey<CreativeModeTab> SCROLLS_KEY = ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), modLoc("scrolls"));
 

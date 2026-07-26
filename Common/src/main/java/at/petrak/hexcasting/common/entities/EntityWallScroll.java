@@ -109,7 +109,7 @@ public class EntityWallScroll extends HangingEntity {
     @Override
     public InteractionResult interactAt(Player pPlayer, Vec3 pVec, InteractionHand pHand) {
         var handStack = pPlayer.getItemInHand(pHand);
-        if (handStack.is(HexItems.AMETHYST_DUST) && !this.getShowsStrokeOrder()) {
+        if (handStack.is(HexItems.AMETHYST_DUST.get()) && !this.getShowsStrokeOrder()) {
             if (!pPlayer.getAbilities().instabuild) {
                 handStack.shrink(1);
             }

@@ -52,14 +52,14 @@ public class HexAdvancements extends PaucalAdvancementSubProvider {
 
         //Creative Debug Unlocker
         Advancement.Builder.advancement()
-            .display(new DisplayInfo(new ItemStack(HexItems.CREATIVE_UNLOCKER),
+            .display(new DisplayInfo(new ItemStack(HexItems.CREATIVE_UNLOCKER.get()),
                 Component.translatable("advancement.hexcasting:creative_unlocker"),
                 Component.translatable("advancement.hexcasting:creative_unlocker.desc"),
                 Optional.of(ResourceLocation.withDefaultNamespace("textures/block/calcite.png")),
                     AdvancementType.TASK, true, false, true))
             .parent(root)
             .addCriterion("has_creative_unlocker", InventoryChangeTrigger.TriggerInstance.hasItems(
-                ItemPredicate.Builder.item().of(HexItems.CREATIVE_UNLOCKER).build()))
+                ItemPredicate.Builder.item().of(HexItems.CREATIVE_UNLOCKER.get()).build()))
             .save(consumer, prefix("creative_unlocker"));
 
         // weird names so we have alphabetical parity
@@ -74,7 +74,7 @@ public class HexAdvancements extends PaucalAdvancementSubProvider {
             ))
             .save(consumer, prefix("aaa_wasteful_cast"));
         Advancement.Builder.advancement()
-            .display(simpleDisplay(HexItems.CHARGED_AMETHYST, "big_cast", AdvancementType.TASK))
+            .display(simpleDisplay(HexItems.CHARGED_AMETHYST.get(), "big_cast", AdvancementType.TASK))
             .parent(root)
             .addCriterion("cast_amt", new Criterion<>(
                     HexAdvancementTriggers.SPEND_MEDIA_TRIGGER,
@@ -117,15 +117,15 @@ public class HexAdvancements extends PaucalAdvancementSubProvider {
             .save(consumer, prefix("enlightenment"));
 
         var loreRoot = Advancement.Builder.advancement()
-            .display(simpleDisplayWithBackground(HexBlocks.AKASHIC_LIGATURE, "lore", AdvancementType.GOAL,
+            .display(simpleDisplayWithBackground(HexBlocks.AKASHIC_LIGATURE.get(), "lore", AdvancementType.GOAL,
                 modLoc("textures/block/slate_block.png")))
             .addCriterion("used_item", new Criterion<>(CriteriaTriggers.CONSUME_ITEM, new ConsumeItemTrigger.TriggerInstance(Optional.empty(),
-                    Optional.of(ItemPredicate.Builder.item().of(HexItems.LORE_FRAGMENT).build()))))
+                    Optional.of(ItemPredicate.Builder.item().of(HexItems.LORE_FRAGMENT.get()).build()))))
             .save(consumer, prefix("lore"));
 
         for (var advId : ItemLoreFragment.NAMES) {
             Advancement.Builder.advancement()
-                .display(new DisplayInfo(new ItemStack(HexItems.LORE_FRAGMENT),
+                .display(new DisplayInfo(new ItemStack(HexItems.LORE_FRAGMENT.get()),
                     Component.translatable("advancement." + advId), Component.empty(),
                         Optional.empty(), AdvancementType.TASK, true, true, true))
                 .parent(loreRoot)

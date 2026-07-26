@@ -97,7 +97,7 @@ public class ListPerWorldPatternsCommand {
                     var startDir = found.getSecond().canonicalStartDir();
                     var pat = HexPattern.fromAnglesUnchecked(signature, startDir);
 
-                    var stack = new ItemStack(HexItems.SCROLL_LARGE);
+                    var stack = new ItemStack(HexItems.SCROLL_LARGE.get());
                     stack.set(HexDataComponents.ACTION, key);
                     stack.set(HexDataComponents.PATTERN, pat);
 
@@ -128,7 +128,7 @@ public class ListPerWorldPatternsCommand {
     private static int giveOne(CommandSourceStack source, Collection<ServerPlayer> targets,
                                ResourceKey<ActionRegistryEntry> actionKey, HexPattern pat) {
         if (!targets.isEmpty()) {
-            var stack = new ItemStack(HexItems.SCROLL_LARGE);
+            var stack = new ItemStack(HexItems.SCROLL_LARGE.get());
             stack.set(HexDataComponents.ACTION, actionKey);
             stack.set(HexDataComponents.PATTERN, pat);
 

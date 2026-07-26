@@ -119,10 +119,10 @@ public class ForgeHexInitializer {
 
         bind(Registries.CREATIVE_MODE_TAB, HexCreativeTabs::registerCreativeTabs);
 
-        bind(Registries.BLOCK, HexBlocks::registerBlocks);
-        bind(Registries.ITEM, HexBlocks::registerBlockItems);
+        HexBlocks.registerBlocks();
+        HexBlocks.registerBlockItems();
         bind(Registries.BLOCK_ENTITY_TYPE, HexBlockEntities::registerTiles);
-        bind(Registries.ITEM, HexItems::registerItems);
+        HexItems.register();
         bind(Registries.DATA_COMPONENT_TYPE, HexDataComponents::registerDataComponents);
 
         bind(Registries.RECIPE_SERIALIZER, HexRecipeStuffRegistry::registerSerializers);
@@ -193,8 +193,8 @@ public class ForgeHexInitializer {
             }));
 
         modBus.addListener((BuildCreativeModeTabContentsEvent evt) -> {
-            HexBlocks.registerBlockCreativeTab(evt::accept, evt.getTab());
-            HexItems.registerItemCreativeTab(evt, evt.getTab());
+            HexBlocks.registerBlocksForCreativeTab(evt.getTabKey(), evt);
+            HexItems.registerItemsForCreativeTab(evt.getTabKey(), evt);
         });
 
 

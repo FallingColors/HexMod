@@ -57,7 +57,7 @@ public class ScryingLensOverlays {
                         .withStyle(color(noteColor))));
             });
 
-        ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_BOOKSHELF,
+        ScryingLensOverlayRegistry.addDisplayer(HexBlocks.AKASHIC_BOOKSHELF.get(),
             (lines, state, pos, observer, world, direction) -> {
                 if (world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile) {
                     var iota = tile.getIota();
