@@ -198,7 +198,7 @@ object FabricHexInitializer : ModInitializer {
         CustomIngredientSerializer.register(FabricUnsealedIngredient.Serializer.INSTANCE);
         CustomIngredientSerializer.register(FabricModConditionalIngredient.Serializer.INSTANCE);
 
-        HexEntities.registerEntities(bind(BuiltInRegistries.ENTITY_TYPE))
+        HexEntities.register()
         HexAttributes.register()
         FabricDefaultAttributeRegistry.register(EntityType.PLAYER,
             Player.createAttributes()

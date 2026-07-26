@@ -132,7 +132,7 @@ public class RegisterClientStuff {
         x.setRenderLayer(HexBlocks.AKASHIC_RECORD.get(), RenderType.translucent());
         x.setRenderLayer(HexBlocks.QUENCHED_ALLAY.get(), RenderType.translucent());
 
-        x.registerEntityRenderer(HexEntities.WALL_SCROLL, WallScrollRenderer::new);
+        x.registerEntityRenderer(HexEntities.WALL_SCROLL.get(), WallScrollRenderer::new);
 
 //        for (var tex : ResourceLocation.fromNamespaceAndPath[]{
 //                PatternTooltipComponent.PRISTINE_BG,

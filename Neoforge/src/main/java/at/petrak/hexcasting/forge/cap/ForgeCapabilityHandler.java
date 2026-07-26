@@ -86,7 +86,7 @@ public class ForgeCapabilityHandler {
         );
         evt.registerEntity(
                 HexCapabilities.Entity.IOTA,
-                HexEntities.WALL_SCROLL,
+                HexEntities.WALL_SCROLL.get(),
                 (ent, ctx) -> new ItemDelegatingEntityIotaHolder.ToWallScroll(ent)
         );
 

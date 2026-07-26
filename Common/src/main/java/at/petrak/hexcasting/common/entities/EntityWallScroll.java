@@ -50,7 +50,7 @@ public class EntityWallScroll extends HangingEntity {
 
     public EntityWallScroll(Level world, BlockPos pos, Direction dir, ItemStack scroll, boolean showStrokeOrder,
         int blockSize) {
-        super(HexEntities.WALL_SCROLL, world, pos);
+        super(HexEntities.WALL_SCROLL.get(), world, pos);
         this.setDirection(dir);
         this.blockSize = blockSize;
 
