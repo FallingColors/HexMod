@@ -30,7 +30,7 @@ public class StateIngredientBlocks implements StateIngredient {
 
     @Override
     public StateIngredientType<?> getType() {
-        return HexStateIngredients.BLOCKS;
+        return HexStateIngredients.BLOCKS.get();
     }
 
     @Override
