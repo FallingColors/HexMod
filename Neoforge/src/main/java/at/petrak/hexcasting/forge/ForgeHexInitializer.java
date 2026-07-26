@@ -117,7 +117,7 @@ public class ForgeHexInitializer {
 
         HexBlockSetTypes.registerBlocks(BlockSetType::register);
 
-        bind(Registries.CREATIVE_MODE_TAB, HexCreativeTabs::registerCreativeTabs);
+        HexCreativeTabs.register();
 
         HexBlocks.registerBlocks();
         HexBlocks.registerBlockItems();

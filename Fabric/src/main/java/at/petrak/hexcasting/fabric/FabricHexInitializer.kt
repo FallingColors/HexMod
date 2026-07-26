@@ -188,7 +188,7 @@ object FabricHexInitializer : ModInitializer {
     private fun initRegistries() {
         HexBlockSetTypes.registerBlocks(BlockSetType::register)
 
-        HexCreativeTabs.registerCreativeTabs(bind(BuiltInRegistries.CREATIVE_MODE_TAB))
+        HexCreativeTabs.register()
 
         HexSounds.register()
         HexBlocks.registerBlocks()
