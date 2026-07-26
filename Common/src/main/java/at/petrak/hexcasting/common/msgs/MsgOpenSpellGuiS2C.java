@@ -6,7 +6,6 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.client.gui.GuiSpellcasting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -23,7 +22,7 @@ import java.util.Optional;
 public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> patterns,
                                  List<Iota> stack,
                                  @Nullable
-                                 CompoundTag ravenmind,
+                                 Iota ravenmind,
                                  int parenCount
 )
     implements CustomPacketPayload {
@@ -36,7 +35,7 @@ public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> pat
             ), MsgOpenSpellGuiS2C::hand,
             ResolvedPattern.STREAM_CODEC.apply(ByteBufCodecs.list()), MsgOpenSpellGuiS2C::patterns,
             IotaType.TYPED_STREAM_CODEC.apply(ByteBufCodecs.list()), MsgOpenSpellGuiS2C::stack,
-            ByteBufCodecs.optional(ByteBufCodecs.COMPOUND_TAG).map(
+            ByteBufCodecs.optional(IotaType.TYPED_STREAM_CODEC).map(
                     opt -> opt.orElse(null),
                     Optional::ofNullable
             ), MsgOpenSpellGuiS2C::ravenmind,

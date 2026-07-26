@@ -24,10 +24,9 @@ repositories {
     }
 
     maven { url "https://maven.shedaniel.me/" }
-    // accessories
-    maven { url 'https://maven.wispforest.io/releases' }
     // EMI
-    maven { url = "https://maven.terraformersmc.com/releases/" }
+    // temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors
+    maven { url = "https://maven.gnomecraft.net/releases" }
 }
 
 dependencies {
@@ -44,7 +43,6 @@ dependencies {
 
     // === OPTIONAL DEPS ===
     modCompileOnly "dev.emi:emi-xplat-intermediary:${emiVersion}:api"
-    modCompileOnly "io.wispforest:accessories-common:$accessoriesVersion"
 
     // === OTHER STUFF ===
     compileOnly "org.jetbrains:annotations:$jetbrainsAnnotationsVersion"

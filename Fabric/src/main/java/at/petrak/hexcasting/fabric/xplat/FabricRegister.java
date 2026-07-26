@@ -14,18 +14,10 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class FabricRegister<B> implements IXplatRegister<B> {
     private final Registry<B> register;
-    private final Map<String, B> map;
 
     @SuppressWarnings("unchecked")
     public FabricRegister(ResourceKey<Registry<B>> registryKey) {
         this.register = (Registry<B>) BuiltInRegistries.REGISTRY.get(registryKey.location());
-        this.map = new HashMap<>();
-    }
-
-    @SuppressWarnings("unchecked")
-    public FabricRegister(ResourceKey<Registry<B>> registryKey, Map<String, B> map) {
-        this.register = (Registry<B>) BuiltInRegistries.REGISTRY.get(registryKey.location());
-        this.map = map;
     }
 
 
@@ -39,14 +31,12 @@ public class FabricRegister<B> implements IXplatRegister<B> {
     @Override
     public <T extends B> Holder<B> registerHolder(String id, Supplier<T> provider) {
         T value = provider.get();
-        map.put(id, value);
+        Registry.register(register, modLoc(id), value);
         return register.wrapAsHolder(value);
     }
 
     @Override
     public void registerAll() {
-        map.forEach((string, value) ->
-                Registry.register(register, modLoc(string), value)
-        );
+        // This is fabric. we register eagerly.
     }
 }

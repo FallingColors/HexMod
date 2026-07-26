@@ -75,7 +75,7 @@ public class HexItems {
 
     public static final ItemLens SCRYING_LENS = make("lens", new ItemLens(
             IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
-                    .stacksTo(1)));
+                    .stacksTo(1).attributes(ItemLens.MODIFIERS)));
 
     public static final ItemAbacus ABACUS = make("abacus", new ItemAbacus(unstackable()));
     public static final ItemThoughtKnot THOUGHT_KNOT = make("thought_knot", new ItemThoughtKnot(unstackable()));
