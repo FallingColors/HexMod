@@ -37,9 +37,9 @@ object OpWrite : SpellAction {
         if (!datumHolder.writeIota(datum, true))
             throw MishapBadOffhandItem.of(handStack, "iota.readonly", datum.display())
 
-        val trueName = MishapOthersName.getTrueNameFromDatum(env.world, datum, env.castingEntity as? ServerPlayer)
-        if (trueName != null)
-            throw MishapOthersName(trueName)
+        val trueNameMishap = MishapOthersName.getTrueNameMishapFromDatum(env.world, datum, env.castingEntity as? ServerPlayer)
+        if (trueNameMishap != null)
+            throw trueNameMishap
 
         return SpellAction.Result(
             Spell(datum, datumHolder),
