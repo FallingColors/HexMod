@@ -4,7 +4,6 @@ import at.petrak.hexcasting.api.casting.eval.ExecutionClientView
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.math.HexAngle
 import at.petrak.hexcasting.api.casting.math.HexCoord
 import at.petrak.hexcasting.api.casting.math.HexDir
@@ -31,8 +30,6 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.resources.sounds.SoundInstance
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.NbtOps
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.FormattedCharSequence
 import net.minecraft.util.Mth
@@ -45,7 +42,7 @@ class GuiSpellcasting constructor(
     private val handOpenedWith: InteractionHand,
     private var patterns: MutableList<ResolvedPattern>,
     private var cachedStack: List<Iota>,
-    private var cachedRavenmind: CompoundTag?,
+    private var cachedRavenmind: Iota?,
     private var parenCount: Int,
 ) : Screen("gui.hexcasting.spellcasting".asTranslatedComponent) {
     private var stackDescs: List<FormattedCharSequence> = listOf()
@@ -104,13 +101,10 @@ class GuiSpellcasting constructor(
 //            emptyList()
         this.parenDescs = emptyList()
         this.ravenmind =
-            this.cachedRavenmind?.let {
-                val iota = IotaType.TYPED_CODEC.parse(NbtOps.INSTANCE, it).getOrThrow()
-                iota.displayWithMaxWidth(
-                    (this.width * RHS_IOTAS_ALLOCATION).toInt(),
-                    mc.font
-                )
-            }
+            this.cachedRavenmind?.displayWithMaxWidth(
+                (this.width * RHS_IOTAS_ALLOCATION).toInt(),
+                mc.font
+            )
     }
 
     override fun init() {
@@ -209,7 +203,7 @@ class GuiSpellcasting constructor(
                 val angle = atan2(delta.y, delta.x)
                 // 0 is right, increases clockwise(?)
                 val snappedAngle = angle.div(Mth.TWO_PI).mod(6.0f)
-                val newdir = HexDir.values()[(snappedAngle.times(6).roundToInt() + 1).mod(6)]
+                val newdir = HexDir.entries[(snappedAngle.times(6).roundToInt() + 1).mod(6)]
                 // The player might have a lousy aim, so set the new anchor point to the "ideal"
                 // location as if they had hit it exactly on the nose.
                 val idealNextLoc = anchorCoord + newdir

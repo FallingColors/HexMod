@@ -19,8 +19,11 @@ object OpUndo : Action {
     }
 
     override fun operateInParens(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation, thisIota: Iota): ParenthesizedOperationResult {
-        val newParens = image.parenthesized.toMutableList()
-        val last = newParens.removeLastOrNull()
+        val (newParens, last) = if(image.parenthesized.isEmpty()) {
+            (image.parenthesized to null)
+        } else {
+            (image.parenthesized.init() to image.parenthesized.last())
+        }
         var newParenCount = image.parenCount
         if (last == null) {
             // if there was nothing in the parenthesized list, undo the initial open paren

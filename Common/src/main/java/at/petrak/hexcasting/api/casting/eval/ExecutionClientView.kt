@@ -2,7 +2,6 @@ package at.petrak.hexcasting.api.casting.eval
 
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
@@ -17,7 +16,7 @@ data class ExecutionClientView(
     val resolutionType: ResolvedPatternType,
 
     val stackDescs: List<Iota>,
-    val ravenmind: CompoundTag?
+    val ravenmind: Iota?
 ) {
 
     companion object {
@@ -30,9 +29,9 @@ data class ExecutionClientView(
                     ResolvedPatternType::ordinal
                 ), ExecutionClientView::resolutionType,
                 IotaType.TYPED_STREAM_CODEC.apply(ByteBufCodecs.list()), ExecutionClientView::stackDescs,
-                ByteBufCodecs.optional(ByteBufCodecs.COMPOUND_TAG).map(
+                ByteBufCodecs.optional(IotaType.TYPED_STREAM_CODEC).map(
                     { it.getOrNull() },
-                    Optional<CompoundTag>::ofNullable
+                    Optional<Iota>::ofNullable
                 ), ExecutionClientView::ravenmind,
                 ::ExecutionClientView
             )
