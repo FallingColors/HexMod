@@ -273,7 +273,7 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("qdqawwaww", HexDir.EAST), OpErase.INSTANCE));
     public static final ActionRegistryEntry EDIFY = make("edify",
         new ActionRegistryEntry(HexPattern.fromAngles("wqaqwd", HexDir.NORTH_EAST), OpEdifySapling.INSTANCE));
-    public static final ActionRegistryEntry FALLING_BLOCK = make("falling_block",
+    public static final ActionRegistryEntry DISLODGE_BLOCK = make("dislodge_block",
         new ActionRegistryEntry(HexPattern.fromAngles("qaqqwwddwwq", HexDir.EAST), OpFallingBlock.INSTANCE));
 
     public static final ActionRegistryEntry IGNITE = make("ignite",

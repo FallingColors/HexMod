@@ -72,11 +72,11 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:falling_block",
-      "anchor": "hexcasting:falling_block",
+      "op_id": "hexcasting:dislodge_block",
+      "anchor": "hexcasting:dislodge_block",
       "input": "vector",
       "output": "",
-      "text": "hexcasting.page.blockworks.falling_block"
+      "text": "hexcasting.page.blockworks.dislodge_block"
     }
   ]
 }

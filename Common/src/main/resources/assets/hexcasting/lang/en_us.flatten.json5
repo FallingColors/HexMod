@@ -878,7 +878,7 @@
         conjure_light: "Conjure Light",
         bonemeal: "Overgrow",
         edify: "Edify Sapling",
-        falling_block: "Gravitate Block",
+        dislodge_block: "Dislodge Block",
         colorize: "Internalize Pigment",
         cycle_variant: "Caster's Glamour",
         
@@ -2078,7 +2078,7 @@
         conjure_light: "Conjure a magical light that softly glows with my pigment at the given position. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         bonemeal: "Encourage a plant or sapling at the target position to grow, as if $(item)Bonemeal/$ was applied. Costs a bit more than one $(l:items/amethyst)$(item)Amethyst Dust/$.",
         edify: "Forcibly infuse _media into the sapling at the target position, causing it to grow into an $(l:items/edified)$(thing)Edified Tree/$. Costs about one $(l:items/amethyst)$(item)Charged Amethyst/$.",
-        falling_block: "Force the block at the target position to fall as if it were sand or gravel. Certain blocks seem mysteriously immune to this effect. Costs one and a half $(l:items/amethyst)$(item)Amethyst Dust/$.",
+        dislodge_block: "Force the block at the target position to fall as if it were sand or gravel. Certain blocks seem mysteriously immune to this effect. Costs one and a half $(l:items/amethyst)$(item)Amethyst Dust/$.",
       },
 
       heatworks: {
