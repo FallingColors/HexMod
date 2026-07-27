@@ -35,13 +35,13 @@ object BitwiseSetArithmetic : Arithmetic {
         else -> throw InvalidOperatorException("$pattern is not a valid operator in Arithmetic $this.")
     }
 
-    private fun make1(op: LongUnaryOperator): OperatorUnary = OperatorUnary(DoubleArithmetic.ACCEPTS)
-        { i: Iota -> DoubleIota(op.applyAsLong(downcast(i, DOUBLE).double.roundToLong()).toDouble()) }
+    private fun make1(op: LongUnaryOperator): OperatorUnary = OperatorUnary(DoubleArithmetic.ACCEPTS())
+        { i: Iota -> DoubleIota(op.applyAsLong(downcast(i, DOUBLE.get()).double.roundToLong()).toDouble()) }
 
-    private fun make2(op: LongBinaryOperator): OperatorBinary = OperatorBinary(DoubleArithmetic.ACCEPTS)
+    private fun make2(op: LongBinaryOperator): OperatorBinary = OperatorBinary(DoubleArithmetic.ACCEPTS())
         { i: Iota, j: Iota -> DoubleIota(
                 op.applyAsLong(
-                    downcast(i, DOUBLE).double.roundToLong(),
-                    downcast(j, DOUBLE).double.roundToLong()
+                    downcast(i, DOUBLE.get()).double.roundToLong(),
+                    downcast(j, DOUBLE.get()).double.roundToLong()
                 ).toDouble()) }
 }

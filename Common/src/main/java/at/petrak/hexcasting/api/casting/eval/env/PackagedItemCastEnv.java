@@ -11,7 +11,7 @@ import net.minecraft.world.InteractionHand;
 
 public class PackagedItemCastEnv extends PlayerBasedSpiralPatternCastEnv {
 
-    protected EvalSound sound = HexEvalSounds.NOTHING;
+    protected EvalSound sound = HexEvalSounds.NOTHING.get();
 
     public PackagedItemCastEnv(ServerPlayer caster, InteractionHand castingHand) {
         super(caster, castingHand);

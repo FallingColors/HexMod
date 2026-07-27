@@ -12,6 +12,6 @@ object OpStackSize : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
         val stack = image.stack.appended(DoubleIota(image.stack.size.toDouble()))
         val image2 = image.withUsedOp().copy(stack = stack)
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
+        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get())
     }
 }

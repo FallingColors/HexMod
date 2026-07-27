@@ -9,7 +9,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.common.casting.arithmetic.operator.nextList
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.LIST
 
-object OperatorAppend : OperatorBasic(2, IotaMultiPredicate.pair(IotaPredicate.ofType(LIST), IotaPredicate.TRUE)) {
+object OperatorAppend : OperatorBasic(2, IotaMultiPredicate.pair(IotaPredicate.ofType(LIST.get()), IotaPredicate.TRUE)) {
     override fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator().withIndex()
         val list = it.nextList(arity).toMutableList()

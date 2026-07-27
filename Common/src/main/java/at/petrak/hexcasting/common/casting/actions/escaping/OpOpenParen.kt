@@ -15,7 +15,7 @@ object OpOpenParen : Action {
         val image2 = image.copy(
             parenCount = image.parenCount + 1
         )
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
+        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get())
     }
 
     override fun operateInParens(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation, thisIota: Iota): ParenthesizedOperationResult {
@@ -25,6 +25,6 @@ object OpOpenParen : Action {
             parenthesized = newParens,
             parenCount = image.parenCount + 1
         )
-        return ParenthesizedOperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE, ResolvedPatternType.ESCAPED)
+        return ParenthesizedOperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get(), ResolvedPatternType.ESCAPED)
     }
 }

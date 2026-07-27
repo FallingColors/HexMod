@@ -26,16 +26,16 @@ public class EmiEdifyRecipe implements EmiRecipe {
     public EmiEdifyRecipe() {
         this.saplings = EmiIngredient.of(ItemTags.SAPLINGS);
         this.leaves = EmiIngredient.of(List.of(
-            EmiStack.of(HexBlocks.AMETHYST_EDIFIED_LEAVES),
-            EmiStack.of(HexBlocks.AVENTURINE_EDIFIED_LEAVES),
-            EmiStack.of(HexBlocks.CITRINE_EDIFIED_LEAVES)
+            EmiStack.of(HexBlocks.AMETHYST_EDIFIED_LEAVES.get()),
+            EmiStack.of(HexBlocks.AVENTURINE_EDIFIED_LEAVES.get()),
+            EmiStack.of(HexBlocks.CITRINE_EDIFIED_LEAVES.get())
         ));
         this.log = EmiIngredient.of(List.of(
-                EmiStack.of(HexBlocks.EDIFIED_LOG),
-                EmiStack.of(HexBlocks.EDIFIED_LOG_AMETHYST),
-                EmiStack.of(HexBlocks.EDIFIED_LOG_AVENTURINE),
-                EmiStack.of(HexBlocks.EDIFIED_LOG_CITRINE)
-//                EmiStack.of(HexBlocks.EDIFIED_LOG_PURPLE)
+                EmiStack.of(HexBlocks.EDIFIED_LOG.get()),
+                EmiStack.of(HexBlocks.EDIFIED_LOG_AMETHYST.get()),
+                EmiStack.of(HexBlocks.EDIFIED_LOG_AVENTURINE.get()),
+                EmiStack.of(HexBlocks.EDIFIED_LOG_CITRINE.get())
+//                EmiStack.of(HexBlocks.EDIFIED_LOG_PURPLE.get())
         ));
     }
 

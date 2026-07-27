@@ -43,7 +43,7 @@ object OpAlwinfyHasAscendedToABeingOfPureMath : Action {
         }
 
         val image2 = image.withUsedOp().copy(stack = stack.dropRight(strides.size).appendedAll(newOrder.result()))
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
+        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get())
     }
 
     private class FactorialIter : Iterator<Long> {

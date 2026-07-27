@@ -28,7 +28,7 @@ object OpPrint : Action {
                 OperatorSideEffect.AttemptSpell(Spell(datum), hasCastingSound = false, awardStat = false)
             ),
             continuation,
-            HexEvalSounds.SPELL,
+            HexEvalSounds.SPELL.get(),
         )
     }
 

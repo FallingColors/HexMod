@@ -36,7 +36,7 @@ public class EntityIota extends Iota {
     }
 
     public EntityIota(UUID entityId, @Nullable Component entityName, boolean isPlayer) {
-        super(() -> HexIotaTypes.ENTITY);
+        super(() -> HexIotaTypes.ENTITY.get());
         this.entityId = entityId;
         this.entityName = entityName;
         this.isPlayer = isPlayer;

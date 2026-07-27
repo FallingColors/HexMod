@@ -14,6 +14,6 @@ object OpThanos : Action {
         val stack = image.stack.appended(DoubleIota(opsLeft.toDouble()))
 
         val image2 = image.withUsedOp().copy(stack = stack)
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
+        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get())
     }
 }

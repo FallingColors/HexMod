@@ -33,8 +33,8 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag isAdvanced) {
         boolean sealed = isSealed(stack);
         boolean empty = false;
-        if (stack.has(HexDataComponents.SELECTED_SPELLBOOK_PAGE)) {
-            var pageIdx = stack.get(HexDataComponents.SELECTED_SPELLBOOK_PAGE);
+        if (stack.has(HexDataComponents.SELECTED_SPELLBOOK_PAGE.get())) {
+            var pageIdx = stack.get(HexDataComponents.SELECTED_SPELLBOOK_PAGE.get());
             int highest = highestPage(stack);
             if (highest != 0) {
                 if (sealed) {
@@ -57,7 +57,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         }
 
         if (empty) {
-            boolean overridden = stack.has(HexDataComponents.VISUAL_OVERRIDE);
+            boolean overridden = stack.has(HexDataComponents.VISUAL_OVERRIDE.get());
             if (sealed) {
                 if (overridden) {
                     tooltip.add(Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(
@@ -81,39 +81,39 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity pEntity, int pSlotId, boolean pIsSelected) {
         int index = getPage(stack, 0);
-        stack.set(HexDataComponents.SELECTED_SPELLBOOK_PAGE, index);
+        stack.set(HexDataComponents.SELECTED_SPELLBOOK_PAGE.get(), index);
 
         int shiftedIdx = Math.max(1, index);
         String nameKey = String.valueOf(shiftedIdx);
 
         var customName = stack.get(DataComponents.CUSTOM_NAME);
-        var savedNames = stack.get(HexDataComponents.SPELLBOOK_PAGE_NAMES);
+        var savedNames = stack.get(HexDataComponents.SPELLBOOK_PAGE_NAMES.get());
 
         if(customName != null) {
             if(savedNames != null) {
                 if(!savedNames.containsKey(nameKey) || !savedNames.get(nameKey).equals(customName)) {
                     var mutNames = new HashMap<>(savedNames);
                     mutNames.put(nameKey, customName);
-                    stack.set(HexDataComponents.SPELLBOOK_PAGE_NAMES, mutNames);
+                    stack.set(HexDataComponents.SPELLBOOK_PAGE_NAMES.get(), mutNames);
                 }
             } else {
                 var mutNames = new HashMap<String, Component>();
                 mutNames.put(nameKey, customName);
-                stack.set(HexDataComponents.SPELLBOOK_PAGE_NAMES, mutNames);
+                stack.set(HexDataComponents.SPELLBOOK_PAGE_NAMES.get(), mutNames);
             }
         } else if(savedNames != null) {
             var mutNames = new HashMap<>(savedNames);
             mutNames.remove(nameKey);
             if(mutNames.isEmpty()) {
-                stack.remove(HexDataComponents.SPELLBOOK_PAGE_NAMES);
+                stack.remove(HexDataComponents.SPELLBOOK_PAGE_NAMES.get());
             } else {
-                stack.set(HexDataComponents.SPELLBOOK_PAGE_NAMES, mutNames);
+                stack.set(HexDataComponents.SPELLBOOK_PAGE_NAMES.get(), mutNames);
             }
         }
     }
 
     public static boolean arePagesEmpty(ItemStack stack) {
-        var pages = stack.get(HexDataComponents.SPELLBOOK_PAGES);
+        var pages = stack.get(HexDataComponents.SPELLBOOK_PAGES.get());
         return pages == null || pages.isEmpty();
     }
 
@@ -121,7 +121,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     public @Nullable Iota readIota(ItemStack stack) {
         int idx = getPage(stack, 1);
         var key = String.valueOf(idx);
-        var pages = stack.get(HexDataComponents.SPELLBOOK_PAGES);
+        var pages = stack.get(HexDataComponents.SPELLBOOK_PAGES.get());
         if (pages != null && pages.containsKey(key)) {
             return pages.get(key);
         } else {
@@ -148,23 +148,23 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         int idx = getPage(stack, 1);
         var key = String.valueOf(idx);
 
-        var pages = stack.get(HexDataComponents.SPELLBOOK_PAGES);
+        var pages = stack.get(HexDataComponents.SPELLBOOK_PAGES.get());
 
         if (pages != null) {
             var pagesMut = new HashMap<>(pages);
 
             if (datum == null) {
                 pagesMut.remove(key);
-                var seals = stack.get(HexDataComponents.SPELLBOOK_PAGE_SEALS);
+                var seals = stack.get(HexDataComponents.SPELLBOOK_PAGE_SEALS.get());
                 if(seals != null) {
                     var sealsMut = new HashMap<>(seals);
 
                     sealsMut.remove(key);
 
                     if(sealsMut.isEmpty()) {
-                        stack.remove(HexDataComponents.SPELLBOOK_PAGE_SEALS);
+                        stack.remove(HexDataComponents.SPELLBOOK_PAGE_SEALS.get());
                     } else {
-                        stack.set(HexDataComponents.SPELLBOOK_PAGE_SEALS, sealsMut);
+                        stack.set(HexDataComponents.SPELLBOOK_PAGE_SEALS.get(), sealsMut);
                     }
                 }
             } else {
@@ -172,24 +172,24 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
             }
 
             if (pagesMut.isEmpty()) {
-                stack.remove(HexDataComponents.SPELLBOOK_PAGES);
+                stack.remove(HexDataComponents.SPELLBOOK_PAGES.get());
             } else {
-                stack.set(HexDataComponents.SPELLBOOK_PAGES, pagesMut);
+                stack.set(HexDataComponents.SPELLBOOK_PAGES.get(), pagesMut);
             }
         } else if (datum != null) {
             var map = new HashMap<String, Iota>();
             map.put(key, datum);
-            stack.set(HexDataComponents.SPELLBOOK_PAGES, map);
+            stack.set(HexDataComponents.SPELLBOOK_PAGES.get(), map);
         } else {
-            var seals = stack.get(HexDataComponents.SPELLBOOK_PAGE_SEALS);
+            var seals = stack.get(HexDataComponents.SPELLBOOK_PAGE_SEALS.get());
             if(seals != null) {
                 var sealsMut = new HashMap<>(seals);
                 sealsMut.remove(key);
 
                 if(sealsMut.isEmpty()) {
-                    stack.remove(HexDataComponents.SPELLBOOK_PAGE_SEALS);
+                    stack.remove(HexDataComponents.SPELLBOOK_PAGE_SEALS.get());
                 } else {
-                    stack.set(HexDataComponents.SPELLBOOK_PAGE_SEALS, sealsMut);
+                    stack.set(HexDataComponents.SPELLBOOK_PAGE_SEALS.get(), sealsMut);
                 }
             }
         }
@@ -198,8 +198,8 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     public static int getPage(ItemStack stack, int ifEmpty) {
         if (arePagesEmpty(stack)) {
             return ifEmpty;
-        } else if (stack.has(HexDataComponents.SELECTED_SPELLBOOK_PAGE)) {
-            var index = stack.get(HexDataComponents.SELECTED_SPELLBOOK_PAGE);
+        } else if (stack.has(HexDataComponents.SELECTED_SPELLBOOK_PAGE.get())) {
+            var index = stack.get(HexDataComponents.SELECTED_SPELLBOOK_PAGE.get());
             if(index == null)
                 return 1;
             if (index == 0) {
@@ -216,7 +216,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
 
         String nameKey = String.valueOf(index);
 
-        var seals = stack.get(HexDataComponents.SPELLBOOK_PAGE_SEALS);
+        var seals = stack.get(HexDataComponents.SPELLBOOK_PAGE_SEALS.get());
 
         var sealsMut = seals != null ? new HashMap<>(seals) : new HashMap<String, Boolean>();
 
@@ -227,9 +227,9 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         }
 
         if (sealsMut.isEmpty()) {
-            stack.remove(HexDataComponents.SPELLBOOK_PAGE_SEALS);
+            stack.remove(HexDataComponents.SPELLBOOK_PAGE_SEALS.get());
         } else {
-            stack.set(HexDataComponents.SPELLBOOK_PAGE_SEALS, sealsMut);
+            stack.set(HexDataComponents.SPELLBOOK_PAGE_SEALS.get(), sealsMut);
         }
     }
 
@@ -237,7 +237,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         int index = getPage(stack, 1);
 
         String nameKey = String.valueOf(index);
-        var seals = stack.get(HexDataComponents.SPELLBOOK_PAGE_SEALS);
+        var seals = stack.get(HexDataComponents.SPELLBOOK_PAGE_SEALS.get());
         if(seals == null)
             return false;
         var v = seals.get(nameKey);
@@ -245,7 +245,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     }
 
     public static int highestPage(ItemStack stack) {
-        var pages = stack.get(HexDataComponents.SPELLBOOK_PAGES);
+        var pages = stack.get(HexDataComponents.SPELLBOOK_PAGES.get());
         if (pages == null) {
             return 0;
         }
@@ -265,9 +265,9 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
             idx = Math.max(1, idx);
         }
         idx = Mth.clamp(idx, 0, MAX_PAGES);
-        stack.set(HexDataComponents.SELECTED_SPELLBOOK_PAGE, idx);
+        stack.set(HexDataComponents.SELECTED_SPELLBOOK_PAGE.get(), idx);
 
-        var names = stack.getOrDefault(HexDataComponents.SPELLBOOK_PAGE_NAMES, Collections.<String, Component>emptyMap());
+        var names = stack.getOrDefault(HexDataComponents.SPELLBOOK_PAGE_NAMES.get(), Collections.<String, Component>emptyMap());
         int shiftedIdx = Math.max(1, idx);
         String nameKey = String.valueOf(shiftedIdx);
         Component name = names.get(nameKey);
@@ -288,6 +288,6 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
     @Override
     public void setVariant(ItemStack stack, int variant) {
         if (!isSealed(stack))
-            stack.set(HexDataComponents.ITEM_VARIANT, clampVariant(variant));
+            stack.set(HexDataComponents.ITEM_VARIANT.get(), clampVariant(variant));
     }
 }

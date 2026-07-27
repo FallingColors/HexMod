@@ -172,7 +172,7 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
 
                 var actuallyTaken = Mth.ceil(mediaAbleToCastFromHP - (this.caster.getHealth() * mediaToHealth));
 
-                HexAdvancementTriggers.OVERCAST_TRIGGER.trigger(this.caster, actuallyTaken);
+                HexAdvancementTriggers.OVERCAST_TRIGGER.get().trigger(this.caster, actuallyTaken);
                 this.caster.awardStat(HexStatistics.MEDIA_OVERCAST, actuallyTaken);
 
                 costLeft -= actuallyTaken;
@@ -181,7 +181,7 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
 
         if (!simulate) {
             this.caster.awardStat(HexStatistics.MEDIA_USED, (int) (startCost - costLeft));
-            HexAdvancementTriggers.SPEND_MEDIA_TRIGGER.trigger(
+            HexAdvancementTriggers.SPEND_MEDIA_TRIGGER.get().trigger(
                     this.caster,
                     startCost - costLeft,
                     costLeft < 0 ? -costLeft : 0

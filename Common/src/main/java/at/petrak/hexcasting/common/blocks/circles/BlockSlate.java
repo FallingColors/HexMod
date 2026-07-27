@@ -118,9 +118,9 @@ public class BlockSlate extends BlockCircleComponent implements EntityBlock, Sim
         Player player) {
         BlockEntity be = level.getBlockEntity(pos);
         if (be instanceof BlockEntitySlate slate) {
-            ItemStack stack = new ItemStack(HexItems.SLATE);
+            ItemStack stack = new ItemStack(HexItems.SLATE.get());
             if (slate.pattern != null) {
-                HexItems.SLATE.writeDatum(stack, new PatternIota(slate.pattern));
+                HexItems.SLATE.get().writeDatum(stack, new PatternIota(slate.pattern));
             }
             return stack;
         }

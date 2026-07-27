@@ -62,7 +62,7 @@ public class FabricHexLootModJankery {
     private static LootPool.Builder makeScrollAddPool(int range) {
         return LootPool.lootPool()
             .setRolls(range < 0 ? ConstantValue.exactly(1) : UniformGenerator.between(-range, range))
-            .add(LootItem.lootTableItem(HexItems.SCROLL_LARGE))
+            .add(LootItem.lootTableItem(HexItems.SCROLL_LARGE.get()))
             .apply(() -> new AddPerWorldPatternToScrollFunc(List.of(new LootItemCondition[0])));
     }
 
@@ -70,14 +70,14 @@ public class FabricHexLootModJankery {
         return LootPool.lootPool()
             .when(LootItemRandomChanceCondition.randomChance((float) chance))
             .setRolls(ConstantValue.exactly(1))
-            .add(LootItem.lootTableItem(HexItems.LORE_FRAGMENT));
+            .add(LootItem.lootTableItem(HexItems.LORE_FRAGMENT.get()));
     }
 
     private static LootPool.Builder makeCypherAddPool(double chance) {
         return LootPool.lootPool()
             .when(LootItemRandomChanceCondition.randomChance((float) chance))
             .setRolls(ConstantValue.exactly(1))
-            .add(LootItem.lootTableItem(HexItems.ANCIENT_CYPHER))
+            .add(LootItem.lootTableItem(HexItems.ANCIENT_CYPHER.get()))
             .apply(() -> new AddHexToAncientCypherFunc(List.of(new LootItemCondition[0])));
     }
 }

@@ -21,8 +21,8 @@ public interface HexPatternOverlayRenderer extends ItemOverlayRenderer {
     HexPattern getPattern(ItemStack stack);
 
     HexPatternOverlayRenderer SCROLL_RENDERER = (stack) -> {
-        var pattern = stack.get(HexDataComponents.PATTERN);
-        if (pattern != null && !stack.has(HexDataComponents.NEEDS_PURCHASE)) {
+        var pattern = stack.get(HexDataComponents.PATTERN.get());
+        if (pattern != null && !stack.has(HexDataComponents.NEEDS_PURCHASE.get())) {
             return pattern;
         }
         return null;

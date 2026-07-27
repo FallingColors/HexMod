@@ -48,18 +48,18 @@ public class HexItemModels extends PaucalItemModelProvider {
 
     @Override
     protected void registerModels() {
-        simpleItem(HexItems.AMETHYST_DUST);
-        simpleItem(HexItems.CHARGED_AMETHYST);
-        simpleItem(HexItems.SUBMARINE_SANDWICH);
-        simpleItem(HexItems.ABACUS);
-        brandishedItem(HexItems.JEWELER_HAMMER);
-        simpleItem(HexItems.CREATIVE_UNLOCKER);
-        simpleItem(HexItems.LORE_FRAGMENT);
+        simpleItem(HexItems.AMETHYST_DUST.get());
+        simpleItem(HexItems.CHARGED_AMETHYST.get());
+        simpleItem(HexItems.SUBMARINE_SANDWICH.get());
+        simpleItem(HexItems.ABACUS.get());
+        brandishedItem(HexItems.JEWELER_HAMMER.get());
+        simpleItem(HexItems.CREATIVE_UNLOCKER.get());
+        simpleItem(HexItems.LORE_FRAGMENT.get());
 
-        singleTexture(getPath(HexBlocks.CONJURED_BLOCK),
+        singleTexture(getPath(HexBlocks.CONJURED_BLOCK.get()),
             ResourceLocation.withDefaultNamespace("item/generated"),
             "layer0", ResourceLocation.withDefaultNamespace("item/amethyst_shard"));
-        singleTexture(getPath(HexBlocks.CONJURED_LIGHT),
+        singleTexture(getPath(HexBlocks.CONJURED_LIGHT.get()),
             ResourceLocation.withDefaultNamespace("item/generated"),
             "layer0", ResourceLocation.withDefaultNamespace("item/amethyst_shard"));
 
@@ -68,12 +68,12 @@ public class HexItemModels extends PaucalItemModelProvider {
                 simpleItem(modLoc("scroll_" + age + "_" + size));
             }
         }
-        buildScroll(HexItems.SCROLL_SMOL, "small");
-        buildScroll(HexItems.SCROLL_MEDIUM, "medium");
-        buildScroll(HexItems.SCROLL_LARGE, "large");
+        buildScroll(HexItems.SCROLL_SMOL.get(), "small");
+        buildScroll(HexItems.SCROLL_MEDIUM.get(), "medium");
+        buildScroll(HexItems.SCROLL_LARGE.get(), "large");
 
-        simpleItem(HexItems.SCRYING_LENS);
-        getBuilder(getPath(HexItems.SCRYING_LENS))
+        simpleItem(HexItems.SCRYING_LENS.get());
+        getBuilder(getPath(HexItems.SCRYING_LENS.get()))
             .transforms()
             .transform(ItemDisplayContext.HEAD)
             .rotation(0f, 0f, 0f)
@@ -85,46 +85,46 @@ public class HexItemModels extends PaucalItemModelProvider {
         singleTexture("cherry_staff", ResourceLocation.withDefaultNamespace("item/handheld_rod"),
             "layer0", modLoc("item/staff/cherry"));
 
-        buildStaff(HexItems.STAFF_OAK, "oak");
-        buildStaff(HexItems.STAFF_BIRCH, "birch");
-        buildStaff(HexItems.STAFF_SPRUCE, "spruce");
-        buildStaff(HexItems.STAFF_JUNGLE, "jungle");
-        buildStaff(HexItems.STAFF_DARK_OAK, "dark_oak");
-        buildStaff(HexItems.STAFF_ACACIA, "acacia");
-        buildStaff(HexItems.STAFF_CRIMSON, "crimson");
-        buildStaff(HexItems.STAFF_WARPED, "warped");
-        buildStaff(HexItems.STAFF_MANGROVE, "mangrove");
-        buildStaff(HexItems.STAFF_CHERRY, "cherry");
-        buildStaff(HexItems.STAFF_BAMBOO, "bamboo");
-        buildStaff(HexItems.STAFF_EDIFIED, "edified");
-        buildStaff(HexItems.STAFF_MINDSPLICE, "mindsplice");
+        buildStaff(HexItems.STAFF_OAK.get(), "oak");
+        buildStaff(HexItems.STAFF_BIRCH.get(), "birch");
+        buildStaff(HexItems.STAFF_SPRUCE.get(), "spruce");
+        buildStaff(HexItems.STAFF_JUNGLE.get(), "jungle");
+        buildStaff(HexItems.STAFF_DARK_OAK.get(), "dark_oak");
+        buildStaff(HexItems.STAFF_ACACIA.get(), "acacia");
+        buildStaff(HexItems.STAFF_CRIMSON.get(), "crimson");
+        buildStaff(HexItems.STAFF_WARPED.get(), "warped");
+        buildStaff(HexItems.STAFF_MANGROVE.get(), "mangrove");
+        buildStaff(HexItems.STAFF_CHERRY.get(), "cherry");
+        buildStaff(HexItems.STAFF_BAMBOO.get(), "bamboo");
+        buildStaff(HexItems.STAFF_EDIFIED.get(), "edified");
+        buildStaff(HexItems.STAFF_MINDSPLICE.get(), "mindsplice");
 
         // again, doesn't like paths with slashes in them, so we do it manually
         buildFourVariantGaslight("item/staff/quenched", "item/staff/quenched", (name, path) ->
             singleTexture(path.getPath(), ResourceLocation.withDefaultNamespace("item/handheld_rod"),
                 "layer0", modLoc(path.getPath())));
-        buildFourVariantGaslight(getPath(HexItems.QUENCHED_SHARD), "item/quenched_shard", (name, path) ->
+        buildFourVariantGaslight(getPath(HexItems.QUENCHED_SHARD.get()), "item/quenched_shard", (name, path) ->
             singleTexture(path.getPath(), ResourceLocation.withDefaultNamespace("item/handheld"),
                 "layer0", modLoc(path.getPath())));
-        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY), "block/quenched_allay", (name, path) ->
+        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY.get()), "block/quenched_allay", (name, path) ->
             cubeAll(path.getPath(), path));
-        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_TILES), "block/deco/quenched_allay_tiles", (name, path) ->
+        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_TILES.get()), "block/deco/quenched_allay_tiles", (name, path) ->
                 cubeAll(path.getPath(), path));
-        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_BRICKS), "block/deco/quenched_allay_bricks", (name, path) ->
+        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_BRICKS.get()), "block/deco/quenched_allay_bricks", (name, path) ->
                 cubeAll(path.getPath(), path));
-        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL), "block/deco/quenched_allay_bricks_small", (name, path) ->
+        buildFourVariantGaslight(getPath(HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL.get()), "block/deco/quenched_allay_bricks_small", (name, path) ->
                 cubeAll(path.getPath(), path));
 
         simpleItem(modLoc("patchouli_book"));
 
         buildThoughtKnot();
-        buildSealableIotaHolder(HexItems.FOCUS, "focus", HexItems.FOCUS.numVariants());
-        buildSealableIotaHolder(HexItems.SPELLBOOK, "spellbook", HexItems.SPELLBOOK.numVariants());
+        buildSealableIotaHolder(HexItems.FOCUS.get(), "focus", HexItems.FOCUS.get().numVariants());
+        buildSealableIotaHolder(HexItems.SPELLBOOK.get(), "spellbook", HexItems.SPELLBOOK.get().numVariants());
 
-        buildPackagedSpell(HexItems.ANCIENT_CYPHER, "ancient_cypher", HexItems.ANCIENT_CYPHER.numVariants());
-        buildPackagedSpell(HexItems.CYPHER, "cypher", HexItems.CYPHER.numVariants());
-        buildPackagedSpell(HexItems.TRINKET, "trinket", HexItems.TRINKET.numVariants());
-        buildPackagedSpell(HexItems.ARTIFACT, "artifact", HexItems.ARTIFACT.numVariants());
+        buildPackagedSpell(HexItems.ANCIENT_CYPHER.get(), "ancient_cypher", HexItems.ANCIENT_CYPHER.get().numVariants());
+        buildPackagedSpell(HexItems.CYPHER.get(), "cypher", HexItems.CYPHER.get().numVariants());
+        buildPackagedSpell(HexItems.TRINKET.get(), "trinket", HexItems.TRINKET.get().numVariants());
+        buildPackagedSpell(HexItems.ARTIFACT.get(), "artifact", HexItems.ARTIFACT.get().numVariants());
 
         int maxFill = 4;
         for (int size = 0; size < PHIAL_SIZES.length; size++) {
@@ -136,7 +136,7 @@ public class HexItemModels extends PaucalItemModelProvider {
                     "layer0", modLoc("item/phial/" + name));
 
                 float fillProp = (float) fill / maxFill;
-                getBuilder(getPath(HexItems.BATTERY)).override()
+                getBuilder(getPath(HexItems.BATTERY.get())).override()
                     .predicate(ItemMediaBattery.MEDIA_PREDICATE, fillProp)
                     .predicate(ItemMediaBattery.MAX_MEDIA_PREDICATE, size)
                     .model(new ModelFile.UncheckedModelFile(modLoc("item/" + name)))
@@ -145,25 +145,25 @@ public class HexItemModels extends PaucalItemModelProvider {
         }
 
         for (var dye : DyeColor.values()) {
-            singleTexture(getPath(HexItems.DYE_PIGMENTS.get(dye)),
+            singleTexture(getPath(HexItems.DYE_PIGMENTS.get(dye).get()),
                 ResourceLocation.withDefaultNamespace("item/generated"),
                 "layer0", modLoc("item/colorizer/dye_" + dye.getName()));
         }
         for (var type : ItemPridePigment.Type.values()) {
-            singleTexture(getPath(HexItems.PRIDE_PIGMENTS.get(type)),
+            singleTexture(getPath(HexItems.PRIDE_PIGMENTS.get(type).get()),
                 ResourceLocation.withDefaultNamespace("item/generated"),
                 "layer0", modLoc("item/colorizer/pride_" + type.getName()));
         }
-        singleTexture(getPath(HexItems.UUID_PIGMENT), ResourceLocation.withDefaultNamespace("item/generated"),
+        singleTexture(getPath(HexItems.UUID_PIGMENT.get()), ResourceLocation.withDefaultNamespace("item/generated"),
             "layer0", modLoc("item/colorizer/uuid"));
-        singleTexture(getPath(HexItems.DEFAULT_PIGMENT), ResourceLocation.withDefaultNamespace("item/generated"),
+        singleTexture(getPath(HexItems.DEFAULT_PIGMENT.get()), ResourceLocation.withDefaultNamespace("item/generated"),
             "layer0", modLoc("item/colorizer/default"));
-        singleTexture(getPath(HexItems.ANCIENT_PIGMENT), ResourceLocation.withDefaultNamespace("item/generated"),
+        singleTexture(getPath(HexItems.ANCIENT_PIGMENT.get()), ResourceLocation.withDefaultNamespace("item/generated"),
             "layer0", modLoc("item/colorizer/ancient"));
 
         simpleItem(modLoc("slate_blank"));
         simpleItem(modLoc("slate_written"));
-        getBuilder(getPath(HexItems.SLATE)).override()
+        getBuilder(getPath(HexItems.SLATE.get())).override()
             .predicate(ItemSlate.WRITTEN_PRED, 0)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/slate_blank")))
             .end()
@@ -172,46 +172,46 @@ public class HexItemModels extends PaucalItemModelProvider {
             .model(new ModelFile.UncheckedModelFile(modLoc("item/slate_written")))
             .end();
 
-        getBuilder(getPath(HexBlocks.SLATE_PILLAR)).parent(
+        getBuilder(getPath(HexBlocks.SLATE_PILLAR.get())).parent(
                 new ModelFile.UncheckedModelFile(modLoc("block/slate_pillar")));
-        getBuilder(getPath(HexBlocks.AMETHYST_PILLAR)).parent(
+        getBuilder(getPath(HexBlocks.AMETHYST_PILLAR.get())).parent(
                 new ModelFile.UncheckedModelFile(modLoc("block/deco/amethyst_pillar")));
-        getBuilder(getPath(HexBlocks.SLATE_AMETHYST_PILLAR)).parent(
+        getBuilder(getPath(HexBlocks.SLATE_AMETHYST_PILLAR.get())).parent(
                 new ModelFile.UncheckedModelFile(modLoc("block/slate_amethyst_pillar")));
 
-        getBuilder(getPath(HexBlocks.AKASHIC_RECORD)).parent(
+        getBuilder(getPath(HexBlocks.AKASHIC_RECORD.get())).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/akashic_record")));
         simpleItem(modLoc("edified_door"));
-        getBuilder(getPath(HexBlocks.EDIFIED_TRAPDOOR)).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_TRAPDOOR.get())).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_trapdoor_bottom")));
-        getBuilder(getPath(HexBlocks.EDIFIED_LOG)).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_LOG.get())).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_log")));
-        getBuilder(getPath(HexBlocks.EDIFIED_LOG_AMETHYST)).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_LOG_AMETHYST.get())).parent(
                 new ModelFile.UncheckedModelFile(modLoc("block/edified_log_amethyst")));
-        getBuilder(getPath(HexBlocks.EDIFIED_LOG_AVENTURINE)).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_LOG_AVENTURINE.get())).parent(
                 new ModelFile.UncheckedModelFile(modLoc("block/edified_log_aventurine")));
-        getBuilder(getPath(HexBlocks.EDIFIED_LOG_CITRINE)).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_LOG_CITRINE.get())).parent(
                 new ModelFile.UncheckedModelFile(modLoc("block/edified_log_citrine")));
-        getBuilder(getPath(HexBlocks.EDIFIED_LOG_PURPLE)).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_LOG_PURPLE.get())).parent(
                 new ModelFile.UncheckedModelFile(modLoc("block/edified_log_purple")));
-        getBuilder(getPath(HexBlocks.STRIPPED_EDIFIED_LOG)).parent(
+        getBuilder(getPath(HexBlocks.STRIPPED_EDIFIED_LOG.get())).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/stripped_edified_log")));
-        getBuilder(getPath(HexBlocks.EDIFIED_WOOD)).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_WOOD.get())).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_wood")));
-        getBuilder(getPath(HexBlocks.STRIPPED_EDIFIED_WOOD)).parent(
+        getBuilder(getPath(HexBlocks.STRIPPED_EDIFIED_WOOD.get())).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/stripped_edified_wood")));
-        getBuilder(getPath(HexBlocks.EDIFIED_STAIRS)).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_STAIRS.get())).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_stairs")));
-        getBuilder(getPath(HexBlocks.EDIFIED_FENCE)).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_FENCE.get())).parent(
                 new ModelFile.UncheckedModelFile(modLoc("block/edified_fence_inventory")));
-        getBuilder(getPath(HexBlocks.EDIFIED_FENCE_GATE)).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_FENCE_GATE.get())).parent(
                 new ModelFile.UncheckedModelFile(modLoc("block/edified_fence_gate")));
-        getBuilder(getPath(HexBlocks.EDIFIED_SLAB)).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_SLAB.get())).parent(
             new ModelFile.UncheckedModelFile(modLoc("block/edified_slab")));
-        getBuilder(getPath(HexBlocks.EDIFIED_BUTTON)).parent(
+        getBuilder(getPath(HexBlocks.EDIFIED_BUTTON.get())).parent(
                 new ModelFile.UncheckedModelFile(ResourceLocation.withDefaultNamespace("block/button_inventory")))
             .texture("texture", modLoc("block/edified_planks"));
-        getBuilder(getPath(HexBlocks.EDIFIED_PRESSURE_PLATE))
+        getBuilder(getPath(HexBlocks.EDIFIED_PRESSURE_PLATE.get()))
             .parent(new ModelFile.UncheckedModelFile(modLoc("block/edified_pressure_plate")));
     }
 

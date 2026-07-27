@@ -373,101 +373,84 @@ public class FabricXplatImpl implements IXplatAbstractions {
         return namespace;
     }
 
-    private static final Supplier<Registry<ActionRegistryEntry>> ACTION_REGISTRY = Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new MappedRegistry<>(
+    private static final Registry<ActionRegistryEntry> ACTION_REGISTRY = FabricRegistryBuilder.from(new MappedRegistry<>(
                 HexRegistries.ACTION,
                 Lifecycle.stable()))
-            .buildAndRegister()
-    );
-    private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
-        Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new MappedRegistry<>(
+            .buildAndRegister();
+    private static final Registry<SpecialHandler.Factory<?>> SPECIAL_HANDLER_REGISTRY = FabricRegistryBuilder.from(new MappedRegistry<>(
                     HexRegistries.SPECIAL_HANDLER,
                     Lifecycle.stable()))
-                .buildAndRegister()
-        );
-    private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new MappedRegistry<>(
+                .buildAndRegister();
+    private static final Registry<IotaType<?>> IOTA_TYPE_REGISTRY = FabricRegistryBuilder.from(new MappedRegistry<>(
                 HexRegistries.IOTA_TYPE,
                 Lifecycle.stable(), false))
-            .buildAndRegister()
-    );
+            .buildAndRegister();
 
-    private static final Supplier<Registry<Arithmetic>> ARITHMETIC_REGISTRY = Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new MappedRegistry<>(
+    private static final Registry<Arithmetic> ARITHMETIC_REGISTRY = FabricRegistryBuilder.from(new MappedRegistry<>(
                     HexRegistries.ARITHMETIC,
                     Lifecycle.stable()))
-                .buildAndRegister()
-    );
+                .buildAndRegister();
 
-    private static final Supplier<Registry<ContinuationFrame.Type<?>>> CONTINUATION_TYPE_REGISTRY = Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+    private static final Registry<ContinuationFrame.Type<?>> CONTINUATION_TYPE_REGISTRY = FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
                             HexAPI.MOD_ID + ":end", HexRegistries.CONTINUATION_TYPE,
                             Lifecycle.stable(), false))
-                    .buildAndRegister()
-    );
+                    .buildAndRegister();
 
-    private static final Supplier<Registry<EvalSound>> EVAL_SOUNDS_REGISTRY = Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+    private static final Registry<EvalSound> EVAL_SOUNDS_REGISTRY = FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
                 HexAPI.MOD_ID + ":nothing", HexRegistries.EVAL_SOUND,
                 Lifecycle.stable(), false))
-            .buildAndRegister()
-    );
+            .buildAndRegister();
 
-    private static final Supplier<Registry<StateIngredientType<?>>> STATE_INGREDIENT_REGISTRY = Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+    private static final Registry<StateIngredientType<?>> STATE_INGREDIENT_REGISTRY = FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
                             HexAPI.MOD_ID + ":none",
                     HexRegistries.STATE_INGREDIENT,
                     Lifecycle.stable(), false))
-                    .buildAndRegister()
-    );
+                    .buildAndRegister();
 
-    private static final Supplier<Registry<BrainsweepeeIngredientType<?>>> BRAINSWEEPEE_INGREDIENT_REGISTRY = Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+    private static final Registry<BrainsweepeeIngredientType<?>> BRAINSWEEPEE_INGREDIENT_REGISTRY = FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
                             HexAPI.MOD_ID + ":none",
                     HexRegistries.BRAINSWEEPEE_INGREDIENT,
                     Lifecycle.stable(), false))
-                    .buildAndRegister()
-    );
+                    .buildAndRegister();
 
     @Override
     public Registry<ActionRegistryEntry> getActionRegistry() {
-        return ACTION_REGISTRY.get();
+        return ACTION_REGISTRY;
     }
 
     @Override
     public Registry<SpecialHandler.Factory<?>> getSpecialHandlerRegistry() {
-        return SPECIAL_HANDLER_REGISTRY.get();
+        return SPECIAL_HANDLER_REGISTRY;
     }
 
     @Override
     public Registry<IotaType<?>> getIotaTypeRegistry() {
-        return IOTA_TYPE_REGISTRY.get();
+        return IOTA_TYPE_REGISTRY;
     }
 
     @Override
     public Registry<Arithmetic> getArithmeticRegistry() {
-        return ARITHMETIC_REGISTRY.get();
+        return ARITHMETIC_REGISTRY;
     }
 
     @Override
     public Registry<ContinuationFrame.Type<?>> getContinuationTypeRegistry() {
-        return CONTINUATION_TYPE_REGISTRY.get();
+        return CONTINUATION_TYPE_REGISTRY;
     }
 
     @Override
     public Registry<EvalSound> getEvalSoundRegistry() {
-        return EVAL_SOUNDS_REGISTRY.get();
+        return EVAL_SOUNDS_REGISTRY;
     }
 
     @Override
     public Registry<StateIngredientType<?>> getStateIngredientRegistry() {
-        return STATE_INGREDIENT_REGISTRY.get();
+        return STATE_INGREDIENT_REGISTRY;
     }
 
     @Override
     public Registry<BrainsweepeeIngredientType<?>> getBrainsweepeeIngredientRegistry() {
-        return BRAINSWEEPEE_INGREDIENT_REGISTRY.get();
+        return BRAINSWEEPEE_INGREDIENT_REGISTRY;
     }
 
     @Override
