@@ -337,8 +337,11 @@ public class HexplatRecipes extends RecipeProvider {
                     .unlockedBy("has_item", hasItem(log)).save(recipes);
         }
 
-        ring(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_PANEL.get(), 8,
-            HexTags.Items.EDIFIED_PLANKS, null)
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_PANEL.get(), 9)
+            .define('W', HexTags.Items.EDIFIED_PLANKS)
+            .pattern("WWW")
+            .pattern("WWW")
+            .pattern("WWW")
             .unlockedBy("has_item", hasItem(HexTags.Items.EDIFIED_PLANKS)).save(recipes);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, HexBlocks.EDIFIED_TILE.get(), 6)
