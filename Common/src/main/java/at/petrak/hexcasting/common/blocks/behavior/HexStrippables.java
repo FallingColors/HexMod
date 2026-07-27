@@ -10,11 +10,11 @@ public class HexStrippables {
     public static final Map<Block, Block> STRIPPABLES = new HashMap<>();
 
     public static void init() {
-        STRIPPABLES.put(HexBlocks.EDIFIED_LOG, HexBlocks.STRIPPED_EDIFIED_LOG);
-        STRIPPABLES.put(HexBlocks.EDIFIED_LOG_AMETHYST, HexBlocks.STRIPPED_EDIFIED_LOG);
-        STRIPPABLES.put(HexBlocks.EDIFIED_LOG_AVENTURINE, HexBlocks.STRIPPED_EDIFIED_LOG);
-        STRIPPABLES.put(HexBlocks.EDIFIED_LOG_CITRINE, HexBlocks.STRIPPED_EDIFIED_LOG);
-        STRIPPABLES.put(HexBlocks.EDIFIED_LOG_PURPLE, HexBlocks.STRIPPED_EDIFIED_LOG);
-        STRIPPABLES.put(HexBlocks.EDIFIED_WOOD, HexBlocks.STRIPPED_EDIFIED_WOOD);
+        STRIPPABLES.put(HexBlocks.EDIFIED_LOG.get(), HexBlocks.STRIPPED_EDIFIED_LOG.get());
+        STRIPPABLES.put(HexBlocks.EDIFIED_LOG_AMETHYST.get(), HexBlocks.STRIPPED_EDIFIED_LOG.get());
+        STRIPPABLES.put(HexBlocks.EDIFIED_LOG_AVENTURINE.get(), HexBlocks.STRIPPED_EDIFIED_LOG.get());
+        STRIPPABLES.put(HexBlocks.EDIFIED_LOG_CITRINE.get(), HexBlocks.STRIPPED_EDIFIED_LOG.get());
+        STRIPPABLES.put(HexBlocks.EDIFIED_LOG_PURPLE.get(), HexBlocks.STRIPPED_EDIFIED_LOG.get());
+        STRIPPABLES.put(HexBlocks.EDIFIED_WOOD.get(), HexBlocks.STRIPPED_EDIFIED_WOOD.get());
     }
 }

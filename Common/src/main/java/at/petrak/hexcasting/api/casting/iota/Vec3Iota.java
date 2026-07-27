@@ -16,7 +16,7 @@ import java.util.List;
 public class Vec3Iota extends Iota {
     private Vec3 value;
     public Vec3Iota(@NotNull Vec3 datum) {
-        super(() -> HexIotaTypes.VEC3);
+        super(() -> HexIotaTypes.VEC3.get());
         this.value = datum;
     }
 

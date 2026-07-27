@@ -26,7 +26,7 @@ class SpecialHandlerForEach(val n: Int) : SpecialHandler {
     }
 
     override fun getName(): Component {
-        val key = IXplatAbstractions.INSTANCE.specialHandlerRegistry.getResourceKey(HexSpecialHandlers.FOR_EACH).get()
+        val key = IXplatAbstractions.INSTANCE.specialHandlerRegistry.getResourceKey(HexSpecialHandlers.FOR_EACH.get()).get()
         return HexAPI.instance().getSpecialHandlerI18nKey(key)
             .asTranslatedComponent(n.toString()).lightPurple
     }
@@ -50,7 +50,7 @@ class SpecialHandlerForEach(val n: Int) : SpecialHandler {
             val frame = FrameForEach(datums, instrList, contextStack, stashedStack, TreeList.empty())
             val image2 = image.withUsedOp().copy(stack = TreeList.empty())
 
-            return OperationResult(image2, listOf(), continuation.pushFrame(frame), HexEvalSounds.THOTH)
+            return OperationResult(image2, listOf(), continuation.pushFrame(frame), HexEvalSounds.THOTH.get())
         }
     }
 

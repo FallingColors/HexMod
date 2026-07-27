@@ -49,9 +49,9 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         if (delta != 0) {
             var stack = sender.getItemInHand(hand);
 
-            if (stack.getItem() == HexItems.SPELLBOOK) {
+            if (stack.getItem() == HexItems.SPELLBOOK.get()) {
                 spellbook(sender, hand, stack, delta);
-            } else if (stack.getItem() == HexItems.ABACUS) {
+            } else if (stack.getItem() == HexItems.ABACUS.get()) {
                 abacus(sender, hand, stack, delta);
             }
         }
@@ -99,7 +99,7 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
 
     private void abacus(ServerPlayer sender, InteractionHand hand, ItemStack stack, double delta) {
         var increase = delta < 0;
-        Double num = stack.get(HexDataComponents.ABACUS_VALUE);
+        Double num = stack.get(HexDataComponents.ABACUS_VALUE.get());
         if(num == null)
             num = 0.0;
 
@@ -116,14 +116,14 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         int scale = Math.max((int) Math.floor(Math.abs(delta)), 1);
 
         num += scale * shiftDelta * (increase ? 1 : -1);
-        stack.set(HexDataComponents.ABACUS_VALUE, num);
+        stack.set(HexDataComponents.ABACUS_VALUE.get(), num);
 
         pitch *= (increase ? 1.05f : 0.95f);
         pitch += (Math.random() - 0.5) * 0.1;
         sender.level().playSound(null, sender.getX(), sender.getY(), sender.getZ(),
             HexSounds.ABACUS, SoundSource.PLAYERS, 0.5f, pitch);
 
-        var datum = HexItems.ABACUS.readIota(stack);
+        var datum = HexItems.ABACUS.get().readIota(stack);
         if (datum != null) {
             var popup = datum.display();
             sender.displayClientMessage(

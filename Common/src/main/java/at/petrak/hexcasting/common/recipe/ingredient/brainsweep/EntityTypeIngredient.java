@@ -27,7 +27,7 @@ public class EntityTypeIngredient extends BrainsweepeeIngredient {
 
     @Override
     public BrainsweepeeIngredientType<?> getType() {
-        return HexBrainsweepeeIngredients.ENTITY_TYPE;
+        return HexBrainsweepeeIngredients.ENTITY_TYPE.get();
     }
 
     public EntityType<?> getEntityType() {

@@ -29,7 +29,7 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
     public HexPatternPoints points;
 
     public BlockEntityAkashicBookshelf(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(HexBlockEntities.AKASHIC_BOOKSHELF_TILE, pWorldPosition, pBlockState);
+        super(HexBlockEntities.AKASHIC_BOOKSHELF_TILE.get(), pWorldPosition, pBlockState);
     }
 
     @Nullable

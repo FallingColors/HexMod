@@ -18,15 +18,15 @@ public class SealSpellbookRecipe extends ShapelessRecipe {
         new SimpleCraftingRecipeSerializer<>(SealSpellbookRecipe::new);
 
     private static ItemStack getSealedStack() {
-        ItemStack output = new ItemStack(HexItems.SPELLBOOK);
+        ItemStack output = new ItemStack(HexItems.SPELLBOOK.get());
         ItemSpellbook.setSealed(output, true);
-        output.set(HexDataComponents.VISUAL_OVERRIDE, Optional.empty());
+        output.set(HexDataComponents.VISUAL_OVERRIDE.get(), Optional.empty());
         return output;
     }
 
     private static NonNullList<Ingredient> createIngredients() {
         NonNullList<Ingredient> ingredients = NonNullList.createWithCapacity(2);
-        ingredients.add(IXplatAbstractions.INSTANCE.getUnsealedIngredient(new ItemStack(HexItems.SPELLBOOK)));
+        ingredients.add(IXplatAbstractions.INSTANCE.getUnsealedIngredient(new ItemStack(HexItems.SPELLBOOK.get())));
         ingredients.add(Ingredient.of(Items.HONEYCOMB));
         return ingredients;
     }
@@ -41,7 +41,7 @@ public class SealSpellbookRecipe extends ShapelessRecipe {
 
         for (int i = 0; i < inv.size(); i++) {
             var stack = inv.getItem(i);
-            if (stack.is(HexItems.SPELLBOOK)) {
+            if (stack.is(HexItems.SPELLBOOK.get())) {
                 out = stack.copy();
                 break;
             }

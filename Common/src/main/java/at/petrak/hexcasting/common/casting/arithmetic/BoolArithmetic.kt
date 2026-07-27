@@ -44,19 +44,19 @@ object BoolArithmetic : Arithmetic {
         GREATER_EQ -> makeComp { x, y -> DoubleIota.tolerates(x, y) || x >= y }
         LESS_EQ -> makeComp { x, y -> DoubleIota.tolerates(x, y) || x <= y }
         NOT -> make1 { a -> !a }
-        ABS -> OperatorUnary(ALL_BOOLS) { i: Iota -> DoubleIota( if (Operator.downcast(i, BOOLEAN).bool) 1.0 else 0.0 ) }
+        ABS -> OperatorUnary(ALL_BOOLS()) { i: Iota -> DoubleIota( if (Operator.downcast(i, BOOLEAN.get()).bool) 1.0 else 0.0 ) }
         else -> throw InvalidOperatorException("$pattern is not a valid operator in Arithmetic $this.")
     }
-    val ALL_BOOLS: IotaMultiPredicate = IotaMultiPredicate.all(IotaPredicate.ofType(BOOLEAN))
+    val ALL_BOOLS: ()->IotaMultiPredicate = { IotaMultiPredicate.all(IotaPredicate.ofType(BOOLEAN.get())) }
 
     private fun make1(op: BooleanUnaryOperator): OperatorUnary {
-        return OperatorUnary(ALL_BOOLS) { i: Iota -> BooleanIota(op.apply(Operator.downcast(i, BOOLEAN).bool)) }
+        return OperatorUnary(ALL_BOOLS()) { i: Iota -> BooleanIota(op.apply(Operator.downcast(i, BOOLEAN.get()).bool)) }
     }
     private fun make2(op: BooleanBinaryOperator): OperatorBinary {
-        return OperatorBinary(ALL_BOOLS) { i: Iota, j: Iota -> BooleanIota(op.apply(Operator.downcast(i, BOOLEAN).bool, Operator.downcast(j, BOOLEAN).bool)) }
+        return OperatorBinary(ALL_BOOLS()) { i: Iota, j: Iota -> BooleanIota(op.apply(Operator.downcast(i, BOOLEAN.get()).bool, Operator.downcast(j, BOOLEAN.get()).bool)) }
     }
     private fun makeComp(op: BiFunction<Double, Double, Boolean>): OperatorBinary {
-        return OperatorBinary(DoubleArithmetic.ACCEPTS)
-            { i: Iota, j: Iota -> BooleanIota(op.apply(Operator.downcast(i, DOUBLE).double, Operator.downcast(j, DOUBLE).double)) }
+        return OperatorBinary(DoubleArithmetic.ACCEPTS())
+            { i: Iota, j: Iota -> BooleanIota(op.apply(Operator.downcast(i, DOUBLE.get()).double, Operator.downcast(j, DOUBLE.get()).double)) }
     }
 }

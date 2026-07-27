@@ -23,7 +23,7 @@ public class BlockEntityConjured extends HexBlockEntity {
     public static final String TAG_COLORIZER = "tag_colorizer";
 
     public BlockEntityConjured(BlockPos pos, BlockState state) {
-        super(HexBlockEntities.CONJURED_TILE, pos, state);
+        super(HexBlockEntities.CONJURED_TILE.get(), pos, state);
     }
 
     public void walkParticle(Entity pEntity) {

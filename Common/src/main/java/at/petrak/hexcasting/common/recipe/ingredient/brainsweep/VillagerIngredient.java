@@ -47,7 +47,7 @@ public class VillagerIngredient extends BrainsweepeeIngredient {
 
     @Override
     public BrainsweepeeIngredientType<?> getType() {
-        return HexBrainsweepeeIngredients.VILLAGER;
+        return HexBrainsweepeeIngredients.VILLAGER.get();
     }
 
     public @Nullable VillagerProfession getProfession() {

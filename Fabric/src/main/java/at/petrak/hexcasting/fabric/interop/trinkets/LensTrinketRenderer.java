@@ -22,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
 public class LensTrinketRenderer implements TrinketRenderer {
     @Override
     public void render(ItemStack stack, SlotReference slotReference, EntityModel<? extends LivingEntity> model, PoseStack matrices, MultiBufferSource multiBufferSource, int light, LivingEntity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
-        if (stack.is(HexItems.SCRYING_LENS) &&
+        if (stack.is(HexItems.SCRYING_LENS.get()) &&
                 model instanceof PlayerModel playerModel && entity instanceof AbstractClientPlayer player) {
 
             // from https://github.com/Creators-of-Create/Create/blob/ee33823ed0b5084af10ed131a1626ce71db4c07e/src/main/java/com/simibubi/create/compat/curios/GogglesCurioRenderer.java

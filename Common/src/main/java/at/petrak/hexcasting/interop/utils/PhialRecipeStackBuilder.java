@@ -14,7 +14,7 @@ import java.util.List;
 
 public class PhialRecipeStackBuilder {
     private static ItemStack makeBattery(long unit, int size) {
-        return ItemMediaBattery.withMedia(new ItemStack(HexItems.BATTERY), unit * size, unit * size);
+        return ItemMediaBattery.withMedia(new ItemStack(HexItems.BATTERY.get()), unit * size, unit * size);
     }
 
     public static Pair<List<ItemStack>, List<ItemStack>> createStacks() {
@@ -29,9 +29,9 @@ public class PhialRecipeStackBuilder {
 
 
         if (dust > 0) {
-            inputItems.add(new ItemStack(HexItems.AMETHYST_DUST, 1));
+            inputItems.add(new ItemStack(HexItems.AMETHYST_DUST.get(), 1));
             outputItems.add(makeBattery(dust, 1));
-            inputItems.add(new ItemStack(HexItems.AMETHYST_DUST, 64));
+            inputItems.add(new ItemStack(HexItems.AMETHYST_DUST.get(), 64));
             outputItems.add(makeBattery(dust, 64));
         }
 
@@ -43,20 +43,20 @@ public class PhialRecipeStackBuilder {
         }
 
         if (charged > 0) {
-            inputItems.add(new ItemStack(HexItems.CHARGED_AMETHYST, 1));
+            inputItems.add(new ItemStack(HexItems.CHARGED_AMETHYST.get(), 1));
             outputItems.add(makeBattery(charged, 1));
-            inputItems.add(new ItemStack(HexItems.CHARGED_AMETHYST, 64));
+            inputItems.add(new ItemStack(HexItems.CHARGED_AMETHYST.get(), 64));
             outputItems.add(makeBattery(charged, 64));
         }
 
-        inputItems.add(new ItemStack(HexItems.QUENCHED_SHARD, 1));
+        inputItems.add(new ItemStack(HexItems.QUENCHED_SHARD.get(), 1));
         outputItems.add(makeBattery(quenchedShard, 1));
-        inputItems.add(new ItemStack(HexItems.QUENCHED_SHARD, 64));
+        inputItems.add(new ItemStack(HexItems.QUENCHED_SHARD.get(), 64));
         outputItems.add(makeBattery(quenchedShard, 64));
 
-        inputItems.add(new ItemStack(HexBlocks.QUENCHED_ALLAY, 1));
+        inputItems.add(new ItemStack(HexBlocks.QUENCHED_ALLAY.get(), 1));
         outputItems.add(makeBattery(quenchedBlock, 1));
-        inputItems.add(new ItemStack(HexBlocks.QUENCHED_ALLAY, 64));
+        inputItems.add(new ItemStack(HexBlocks.QUENCHED_ALLAY.get(), 64));
         outputItems.add(makeBattery(quenchedBlock, 64));
 
         return new Pair<>(inputItems, outputItems);

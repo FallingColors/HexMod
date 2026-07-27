@@ -28,7 +28,7 @@ object OpCloseParen : Action {
                 parenCount = newParenCount,
                 parenthesized = TreeList.empty()
             )
-            return ParenthesizedOperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE, ResolvedPatternType.EVALUATED)
+            return ParenthesizedOperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get(), ResolvedPatternType.EVALUATED)
         } else {
             // we have this situation: "(()"
             // we need to add the close paren
@@ -37,7 +37,7 @@ object OpCloseParen : Action {
                 parenCount = newParenCount,
                 parenthesized = newParens
             )
-            return ParenthesizedOperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE, ResolvedPatternType.ESCAPED)
+            return ParenthesizedOperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get(), ResolvedPatternType.ESCAPED)
         }
     }
 }

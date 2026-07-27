@@ -12,6 +12,6 @@ object OpSimulate : Action {
         val image2 = image.copy(
             simulateNext = true
         )
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
+        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get())
     }
 }

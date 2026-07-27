@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.ActionRegistryEntry
 import at.petrak.hexcasting.api.casting.iota.DoubleIota
 import at.petrak.hexcasting.api.item.HexHolderItem
 import at.petrak.hexcasting.api.item.IotaHolderItem
+import at.petrak.hexcasting.api.item.MediaHolderItem
 import at.petrak.hexcasting.api.item.PigmentItem
 import at.petrak.hexcasting.api.item.VariantItem
 import at.petrak.hexcasting.api.misc.MediaConstants
@@ -57,6 +58,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer
+import net.fabricmc.fabric.api.registry.FabricBrewingRecipeRegistryBuilder
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
 import net.minecraft.commands.synchronization.SingletonArgumentInfo
 import net.minecraft.core.Registry
@@ -95,7 +97,7 @@ object FabricHexInitializer : ModInitializer {
             PatternResKeyArgument::class.java,
             SingletonArgumentInfo.contextFree { PatternResKeyArgument.id() }
         )
-        HexAdvancementTriggers.registerTriggers(bind(BuiltInRegistries.TRIGGER_TYPES))
+        HexAdvancementTriggers.register()
         HexComposting.setup()
         HexStrippables.init()
         FabricImpetusStorage.registerStorage()
@@ -147,6 +149,8 @@ object FabricHexInitializer : ModInitializer {
             FabricHexLootModJankery.lootLoad(key, builder::withPool)
         }
 
+        FabricBrewingRecipeRegistryBuilder.BUILD.register { builder -> HexPotions.addRecipes(builder) }
+
         EntityElytraEvents.CUSTOM.register { target, _ ->
             if (target is Player) {
                 val altiora = IXplatAbstractions.INSTANCE.getAltiora(target)
@@ -169,42 +173,32 @@ object FabricHexInitializer : ModInitializer {
             for (key in keyList) {
                 r.accept(
                     ItemScroll.withPerWorldPattern(
-                        ItemStack(HexItems.SCROLL_LARGE),
+                        ItemStack(HexItems.SCROLL_LARGE.get()),
                         key
                     )
                 )
             }
         }
         ItemGroupEvents.modifyEntriesEvent(HexCreativeTabs.HEX_KEY).register { r ->
-            for (item in this.itemsToAddToCreativeTab) {
-                if (item is ItemMediaBattery) {
-                    r.accept(HexItems.BATTERY_DUST_STACK.get())
-                    r.accept(HexItems.BATTERY_SHARD_STACK.get())
-                    r.accept(HexItems.BATTERY_CRYSTAL_STACK.get())
-                    r.accept(HexItems.BATTERY_QUENCHED_SHARD_STACK.get())
-                    r.accept(HexItems.BATTERY_QUENCHED_BLOCK_STACK.get())
-                } else {
-                    r.accept(item)
-                }
-            }
+            HexItems.registerItemsForCreativeTab(HexCreativeTabs.HEX_KEY, r)
+            HexBlocks.registerBlocksForCreativeTab(HexCreativeTabs.HEX_KEY, r)
         }
     }
 
     private fun initRegistries() {
         HexBlockSetTypes.registerBlocks(BlockSetType::register)
 
-        HexCreativeTabs.registerCreativeTabs(bind(BuiltInRegistries.CREATIVE_MODE_TAB))
+        HexCreativeTabs.register()
 
-        HexSounds.registerSounds(bind(BuiltInRegistries.SOUND_EVENT))
-        HexBlocks.registerBlocks(bind(BuiltInRegistries.BLOCK))
-        HexBlocks.registerBlockItems(boundForItem)
-        HexBlockEntities.registerTiles(bind(BuiltInRegistries.BLOCK_ENTITY_TYPE))
-        HexItems.registerItems(boundForItem)
+        HexSounds.register()
+        HexBlocks.register()
+        HexBlockEntities.register()
+        HexItems.register()
         // Registry.register(IngredientDeserializer.REGISTRY, FabricModConditionalIngredient.ID, FabricModConditionalIngredient.Deserializer.INSTANCE)
         CustomIngredientSerializer.register(FabricUnsealedIngredient.Serializer.INSTANCE);
         CustomIngredientSerializer.register(FabricModConditionalIngredient.Serializer.INSTANCE);
 
-        HexEntities.registerEntities(bind(BuiltInRegistries.ENTITY_TYPE))
+        HexEntities.register()
         HexAttributes.register()
         FabricDefaultAttributeRegistry.register(EntityType.PLAYER,
             Player.createAttributes()
@@ -215,24 +209,23 @@ object FabricHexInitializer : ModInitializer {
                 .add(HexAttributes.MEDIA_CONSUMPTION_MODIFIER)
                 .add(HexAttributes.SENTINEL_RADIUS))
         HexMobEffects.register()
-        HexPotions.registerPotions(bind(BuiltInRegistries.POTION))
-        HexDataComponents.registerDataComponents(bind(BuiltInRegistries.DATA_COMPONENT_TYPE))
+        HexPotions.register()
+        HexDataComponents.register()
 
-        HexRecipeStuffRegistry.registerSerializers(bind(BuiltInRegistries.RECIPE_SERIALIZER))
-        HexRecipeStuffRegistry.registerTypes(bind(BuiltInRegistries.RECIPE_TYPE))
+        HexRecipeStuffRegistry.register()
 
-        HexParticles.registerParticles(bind(BuiltInRegistries.PARTICLE_TYPE))
+        HexParticles.register()
 
-        HexLootFunctions.registerSerializers(bind(BuiltInRegistries.LOOT_FUNCTION_TYPE))
+        HexLootFunctions.register()
 
-        HexIotaTypes.registerTypes(bind(IXplatAbstractions.INSTANCE.iotaTypeRegistry))
-        HexActions.register(bind(IXplatAbstractions.INSTANCE.actionRegistry))
-        HexSpecialHandlers.register(bind(IXplatAbstractions.INSTANCE.specialHandlerRegistry))
-        HexArithmetics.register(bind(IXplatAbstractions.INSTANCE.arithmeticRegistry))
-        HexContinuationTypes.registerContinuations(bind(IXplatAbstractions.INSTANCE.continuationTypeRegistry))
-        HexEvalSounds.register(bind(IXplatAbstractions.INSTANCE.evalSoundRegistry))
-        HexStateIngredients.register(bind(IXplatAbstractions.INSTANCE.stateIngredientRegistry))
-        HexBrainsweepeeIngredients.register(bind(IXplatAbstractions.INSTANCE.brainsweepeeIngredientRegistry))
+        HexIotaTypes.register()
+        HexActions.register()
+        HexSpecialHandlers.register()
+        HexArithmetics.register()
+        HexContinuationTypes.register()
+        HexEvalSounds.register()
+        HexStateIngredients.register()
+        HexBrainsweepeeIngredients.register()
 
 
         // Because of Java's lazy-loading of classes, can't use Kotlin static initialization for
@@ -256,6 +249,11 @@ object FabricHexInitializer : ModInitializer {
                     item, _ -> CCPigment.ItemBased(item);
                 }, item)
             }
+            if (item is MediaHolderItem) {
+                HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
+                        item, _ -> CCMediaHolder.ItemBased(item);
+                }, item)
+            }
             if (item is IotaHolderItem) {
                 HexCardinalComponents.IOTA_HOLDER_LOOKUP.registerForItems({
                     item, _ -> CCItemIotaHolder.ItemBased(item);
@@ -275,7 +273,7 @@ object FabricHexInitializer : ModInitializer {
 
         HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
          stack, _ -> CCMediaHolder.Static({ HexConfig.common().dustMediaAmount() }, ADMediaHolder.AMETHYST_DUST_PRIORITY, stack)
-        }, HexItems.AMETHYST_DUST)
+        }, HexItems.AMETHYST_DUST.get())
 
         HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
             stack, _ -> CCMediaHolder.Static({ HexConfig.common().shardMediaAmount() }, ADMediaHolder.AMETHYST_SHARD_PRIORITY, stack)
@@ -283,15 +281,15 @@ object FabricHexInitializer : ModInitializer {
 
         HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
                 stack, _ -> CCMediaHolder.Static({ HexConfig.common().chargedCrystalMediaAmount() }, ADMediaHolder.CHARGED_AMETHYST_PRIORITY, stack)
-        }, HexItems.CHARGED_AMETHYST)
+        }, HexItems.CHARGED_AMETHYST.get())
 
         HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
                 stack, _ -> CCMediaHolder.Static({ MediaConstants.QUENCHED_SHARD_UNIT }, ADMediaHolder.QUENCHED_SHARD_PRIORITY, stack)
-        }, HexItems.QUENCHED_SHARD)
+        }, HexItems.QUENCHED_SHARD.get())
 
         HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
                 stack, _ -> CCMediaHolder.Static({ MediaConstants.QUENCHED_BLOCK_UNIT }, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, stack)
-        }, HexBlocks.QUENCHED_ALLAY.asItem())
+        }, HexBlocks.QUENCHED_ALLAY.get().asItem())
 
         HexCardinalComponents.IOTA_HOLDER_LOOKUP.registerForItems({
             stack, _ -> CCItemIotaHolder.Static(stack) {
@@ -311,46 +309,46 @@ object FabricHexInitializer : ModInitializer {
     private fun butYouCouldBeFire() {
         val flameOn = FlammableBlockRegistry.getDefaultInstance()
         for (log in listOf(
-            HexBlocks.EDIFIED_LOG,
-            HexBlocks.EDIFIED_LOG_AMETHYST,
-            HexBlocks.EDIFIED_LOG_AVENTURINE,
-            HexBlocks.EDIFIED_LOG_CITRINE,
-            HexBlocks.EDIFIED_LOG_PURPLE,
-            HexBlocks.STRIPPED_EDIFIED_LOG,
-            HexBlocks.EDIFIED_WOOD,
-            HexBlocks.STRIPPED_EDIFIED_LOG,
+            HexBlocks.EDIFIED_LOG.get(),
+            HexBlocks.EDIFIED_LOG_AMETHYST.get(),
+            HexBlocks.EDIFIED_LOG_AVENTURINE.get(),
+            HexBlocks.EDIFIED_LOG_CITRINE.get(),
+            HexBlocks.EDIFIED_LOG_PURPLE.get(),
+            HexBlocks.STRIPPED_EDIFIED_LOG.get(),
+            HexBlocks.EDIFIED_WOOD.get(),
+            HexBlocks.STRIPPED_EDIFIED_LOG.get(),
         )) {
             flameOn.add(log, 5, 5)
         }
         for (wood in listOf(
-            HexBlocks.EDIFIED_PLANKS,
-            HexBlocks.EDIFIED_PANEL,
-            HexBlocks.EDIFIED_TILE,
-            HexBlocks.EDIFIED_DOOR,
-            HexBlocks.EDIFIED_TRAPDOOR,
-            HexBlocks.EDIFIED_STAIRS,
-            HexBlocks.EDIFIED_SLAB,
-            HexBlocks.EDIFIED_FENCE,
-            HexBlocks.EDIFIED_FENCE_GATE,
-            HexBlocks.EDIFIED_SLAB,
-            HexBlocks.EDIFIED_BUTTON,
-            HexBlocks.EDIFIED_PRESSURE_PLATE,
+            HexBlocks.EDIFIED_PLANKS.get(),
+            HexBlocks.EDIFIED_PANEL.get(),
+            HexBlocks.EDIFIED_TILE.get(),
+            HexBlocks.EDIFIED_DOOR.get(),
+            HexBlocks.EDIFIED_TRAPDOOR.get(),
+            HexBlocks.EDIFIED_STAIRS.get(),
+            HexBlocks.EDIFIED_SLAB.get(),
+            HexBlocks.EDIFIED_FENCE.get(),
+            HexBlocks.EDIFIED_FENCE_GATE.get(),
+            HexBlocks.EDIFIED_SLAB.get(),
+            HexBlocks.EDIFIED_BUTTON.get(),
+            HexBlocks.EDIFIED_PRESSURE_PLATE.get(),
         )) {
             flameOn.add(wood, 20, 5)
         }
         for (papery in listOf(
-            HexBlocks.SCROLL_PAPER,
-            HexBlocks.SCROLL_PAPER_LANTERN,
-            HexBlocks.ANCIENT_SCROLL_PAPER,
-            HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN,
+            HexBlocks.SCROLL_PAPER.get(),
+            HexBlocks.SCROLL_PAPER_LANTERN.get(),
+            HexBlocks.ANCIENT_SCROLL_PAPER.get(),
+            HexBlocks.ANCIENT_SCROLL_PAPER_LANTERN.get(),
 
             )) {
             flameOn.add(papery, 100, 60)
         }
         for (leaves in listOf(
-            HexBlocks.AMETHYST_EDIFIED_LEAVES,
-            HexBlocks.AVENTURINE_EDIFIED_LEAVES,
-            HexBlocks.CITRINE_EDIFIED_LEAVES,
+            HexBlocks.AMETHYST_EDIFIED_LEAVES.get(),
+            HexBlocks.AVENTURINE_EDIFIED_LEAVES.get(),
+            HexBlocks.CITRINE_EDIFIED_LEAVES.get(),
         )) {
             flameOn.add(leaves, 60, 30)
         }
