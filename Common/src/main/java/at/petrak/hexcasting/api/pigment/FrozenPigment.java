@@ -21,9 +21,9 @@ import java.util.function.Supplier;
  */
 public record FrozenPigment(ItemStack item, UUID owner) {
     public static final Supplier<FrozenPigment> DEFAULT =
-            () -> new FrozenPigment(new ItemStack(HexItems.DEFAULT_PIGMENT), Util.NIL_UUID);
+            () -> new FrozenPigment(new ItemStack(HexItems.DEFAULT_PIGMENT.get()), Util.NIL_UUID);
     public static final Supplier<FrozenPigment> ANCIENT =
-            () -> new FrozenPigment(new ItemStack(HexItems.ANCIENT_PIGMENT), Util.NIL_UUID);
+            () -> new FrozenPigment(new ItemStack(HexItems.ANCIENT_PIGMENT.get()), Util.NIL_UUID);
 
     public static Codec<FrozenPigment> CODEC = RecordCodecBuilder.<FrozenPigment>create(inst ->
             inst.group(

@@ -17,7 +17,7 @@ public class DoubleIota extends Iota {
     private double value;
 
     public DoubleIota(double d) {
-        super(() -> HexIotaTypes.DOUBLE);
+        super(() -> HexIotaTypes.DOUBLE.get());
         this.value = d;
     }
 

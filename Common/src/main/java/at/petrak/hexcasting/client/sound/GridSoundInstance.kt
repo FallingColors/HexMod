@@ -12,7 +12,7 @@ import net.minecraft.world.phys.Vec3
 
 class GridSoundInstance(val player: Player) :
     AbstractTickableSoundInstance(
-        HexSounds.CASTING_AMBIANCE,
+        HexSounds.CASTING_AMBIANCE.value(),
         SoundSource.PLAYERS,
         SoundInstance.createUnseededRandom()
     ) {

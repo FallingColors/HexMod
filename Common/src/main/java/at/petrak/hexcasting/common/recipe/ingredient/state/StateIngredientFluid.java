@@ -25,7 +25,7 @@ public class StateIngredientFluid implements StateIngredient {
 
     @Override
     public StateIngredientType<?> getType() {
-        return HexStateIngredients.FLUID_TYPE;
+        return HexStateIngredients.FLUID_TYPE.get();
     }
 
     @Override

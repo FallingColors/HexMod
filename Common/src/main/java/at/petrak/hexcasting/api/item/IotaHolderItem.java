@@ -33,7 +33,7 @@ public interface IotaHolderItem {
             throw new IllegalArgumentException("stack's item must be an IotaHolderItem but was " + stack.getItem());
         }
 
-        return stack.get(HexDataComponents.IOTA_HOLDER_IOTA);
+        return stack.get(HexDataComponents.IOTA_HOLDER_IOTA.get());
     }
 
     /**
@@ -45,7 +45,7 @@ public interface IotaHolderItem {
     }
 
     default int getColor(ItemStack stack) {
-        var override = stack.get(HexDataComponents.VISUAL_OVERRIDE);
+        var override = stack.get(HexDataComponents.VISUAL_OVERRIDE.get());
         //noinspection OptionalAssignedToNull
         if (override != null) {
             return override.map(IotaType::color).orElseGet(() -> 0xFF000000 | Mth.hsvToRgb(ClientTickCounter.getTotal() * 2 % 360 / 360F, 0.75F, 1F));
@@ -86,7 +86,7 @@ public interface IotaHolderItem {
 
                 components.add(Component.literal("").append(NbtUtils.toPrettyComponent(datumTag)));
             }
-        } else if (stack.has(HexDataComponents.VISUAL_OVERRIDE)) {
+        } else if (stack.has(HexDataComponents.VISUAL_OVERRIDE.get())) {
             components.add(Component.translatable("hexcasting.spelldata.onitem",
                 Component.translatable("hexcasting.spelldata.anything").withStyle(ChatFormatting.LIGHT_PURPLE)));
         }

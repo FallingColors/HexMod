@@ -10,9 +10,9 @@ public class InlineHexClient {
         InlineClientAPI.INSTANCE.addMatcher(HexPatternMatcher.INSTANCE);
         InlineClientAPI.INSTANCE.addRenderer(InlinePatternRenderer.INSTANCE);
 
-        ItemOverlayRenderer.addRenderer(HexItems.SCROLL_LARGE, HexPatternOverlayRenderer.SCROLL_RENDERER);
-        ItemOverlayRenderer.addRenderer(HexItems.SCROLL_MEDIUM, HexPatternOverlayRenderer.SCROLL_RENDERER);
-        ItemOverlayRenderer.addRenderer(HexItems.SCROLL_SMOL, HexPatternOverlayRenderer.SCROLL_RENDERER);
-        ItemOverlayRenderer.addRenderer(HexItems.SLATE, HexPatternOverlayRenderer.SLATE_RENDERER);
+        ItemOverlayRenderer.addRenderer(HexItems.SCROLL_LARGE.get(), HexPatternOverlayRenderer.SCROLL_RENDERER);
+        ItemOverlayRenderer.addRenderer(HexItems.SCROLL_MEDIUM.get(), HexPatternOverlayRenderer.SCROLL_RENDERER);
+        ItemOverlayRenderer.addRenderer(HexItems.SCROLL_SMOL.get(), HexPatternOverlayRenderer.SCROLL_RENDERER);
+        ItemOverlayRenderer.addRenderer(HexItems.SLATE.get(), HexPatternOverlayRenderer.SLATE_RENDERER);
     }
 }

@@ -30,7 +30,7 @@ import net.minecraft.world.phys.Vec3
 import kotlin.math.roundToLong
 
 // https://github.com/VazkiiMods/Botania/blob/1.21.1-porting/Xplat/src/main/java/vazkii/botania/common/item/lens/WeightLens.java
-object OpFallingBlock : SpellAction {
+object OpDislodgeBlock : SpellAction {
     override val argc = 1
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): SpellAction.Result {

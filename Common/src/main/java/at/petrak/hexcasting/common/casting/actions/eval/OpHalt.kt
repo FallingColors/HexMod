@@ -28,6 +28,6 @@ object OpHalt : Action {
         }
 
         val image2 = image.withUsedOp().copy(stack = newStack)
-        return OperationResult(image2, listOf(), newCont, HexEvalSounds.SPELL)
+        return OperationResult(image2, listOf(), newCont, HexEvalSounds.SPELL.get())
     }
 }

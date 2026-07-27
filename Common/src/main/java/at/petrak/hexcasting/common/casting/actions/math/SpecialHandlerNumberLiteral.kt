@@ -20,7 +20,7 @@ class SpecialHandlerNumberLiteral(val x: Double) : SpecialHandler {
     }
 
     override fun getName(): Component {
-        val key = IXplatAbstractions.INSTANCE.specialHandlerRegistry.getResourceKey(HexSpecialHandlers.NUMBER).get()
+        val key = IXplatAbstractions.INSTANCE.specialHandlerRegistry.getResourceKey(HexSpecialHandlers.NUMBER.get()).get()
         return HexAPI.instance().getSpecialHandlerI18nKey(key)
             .asTranslatedComponent(Action.DOUBLE_FORMATTER.format(x)).lightPurple
     }

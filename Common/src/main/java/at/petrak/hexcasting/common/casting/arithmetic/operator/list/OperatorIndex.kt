@@ -10,11 +10,11 @@ import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.DOUBLE
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.LIST
 import kotlin.math.roundToInt
 
-object OperatorIndex : OperatorBasic(2, IotaMultiPredicate.pair(IotaPredicate.ofType(LIST), IotaPredicate.ofType(DOUBLE))) {
+object OperatorIndex : OperatorBasic(2, IotaMultiPredicate.pair(IotaPredicate.ofType(LIST.get()), IotaPredicate.ofType(DOUBLE.get()))) {
     override fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator()
-        val list = downcast(it.next(), LIST).list.toMutableList()
-        val index = downcast(it.next(), DOUBLE).double
+        val list = downcast(it.next(), LIST.get()).list.toMutableList()
+        val index = downcast(it.next(), DOUBLE.get()).double
         val x = list.getOrElse(index.roundToInt()) { NullIota() }
         return listOf(x)
     }

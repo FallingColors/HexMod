@@ -28,12 +28,12 @@ public record FreezeRecipe(
 
     @Override
     public RecipeType<?> getType() {
-        return HexRecipeStuffRegistry.FREEZE_TYPE;
+        return HexRecipeStuffRegistry.FREEZE_TYPE.get();
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return HexRecipeStuffRegistry.FREEZE;
+        return HexRecipeStuffRegistry.FREEZE.get();
     }
 
     // in order to get this to be a "Recipe" we need to do a lot of bending-over-backwards

@@ -26,7 +26,7 @@ object OpFreeze : SpellAction {
         env.assertPosInRangeForEditing(pos)
 
         val blockState = env.world.getBlockState(pos)
-        val recipes = env.world.recipeManager.getAllRecipesFor(HexRecipeStuffRegistry.FREEZE_TYPE).map{ holder -> holder.value }
+        val recipes = env.world.recipeManager.getAllRecipesFor(HexRecipeStuffRegistry.FREEZE_TYPE.get()).map{ holder -> holder.value }
         val recipe = recipes.find{ it.matches(blockState) } ?: throw MishapBadBlock.of(pos, "freezable")
 
         return SpellAction.Result(

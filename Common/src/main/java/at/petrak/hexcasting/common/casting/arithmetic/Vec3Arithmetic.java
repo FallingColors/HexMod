@@ -18,6 +18,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static at.petrak.hexcasting.api.casting.arithmetic.operator.Operator.downcast;
 import static at.petrak.hexcasting.common.lib.hex.HexIotaTypes.DOUBLE;
@@ -41,7 +42,7 @@ public enum Vec3Arithmetic implements Arithmetic {
 			FACT
 	);
 
-	public static final IotaMultiPredicate ACCEPTS = IotaMultiPredicate.any(IotaPredicate.ofType(VEC3), IotaPredicate.ofType(DOUBLE));
+	public static final Supplier<IotaMultiPredicate> ACCEPTS = () -> IotaMultiPredicate.any(IotaPredicate.ofType(VEC3.get()), IotaPredicate.ofType(DOUBLE.get()));
 
 	@Override
 	public String arithName() {
@@ -85,10 +86,10 @@ public enum Vec3Arithmetic implements Arithmetic {
 		throw new InvalidOperatorException(pattern + " is not a valid operator in Arithmetic " + this + ".");
 	}
 	public static OperatorUnary make1(Function<Vec3, Vec3> op) {
-		return new OperatorUnary(ACCEPTS, i -> new Vec3Iota(op.apply(downcast(i, VEC3).getVec3())));
+		return new OperatorUnary(ACCEPTS.get(), i -> new Vec3Iota(op.apply(downcast(i, VEC3.get()).getVec3())));
 	}
 	public static OperatorUnary make1Double(Function<Vec3, Double> op) {
-		return new OperatorUnary(ACCEPTS, i -> new DoubleIota(op.apply(downcast(i, VEC3).getVec3())));
+		return new OperatorUnary(ACCEPTS.get(), i -> new DoubleIota(op.apply(downcast(i, VEC3.get()).getVec3())));
 	}
 	public static OperatorVec3Delegating make2Fallback(HexPattern pattern) {
 		return new OperatorVec3Delegating(null, pattern);

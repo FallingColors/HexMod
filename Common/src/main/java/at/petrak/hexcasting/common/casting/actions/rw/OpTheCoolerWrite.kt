@@ -32,9 +32,9 @@ object OpTheCoolerWrite : SpellAction {
 
         // We pass null here so that even the own caster won't be allowed into a focus.
         // Otherwise, you could sentinel scout to people and remotely write their names into things using a cleric circle.
-        val trueName = MishapOthersName.getTrueNameFromDatum(env.world, datum, null)
-        if (trueName != null)
-            throw MishapOthersName(trueName)
+        val trueNameMishap = MishapOthersName.getTrueNameMishapFromDatum(env.world, datum, null)
+        if (trueNameMishap != null)
+            throw trueNameMishap
 
         val burstPos = if (target is ItemEntity) {
             // Special case these because the render is way above the entity

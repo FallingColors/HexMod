@@ -27,7 +27,7 @@ public class OperatorVec3Delegating extends OperatorBasic {
 	private final BiFunction<Vec3, Vec3, Iota> op;
 	private final OperatorBasic fb;
 	public OperatorVec3Delegating(BiFunction<Vec3, Vec3, Iota> core, HexPattern fallback) {
-		super(2, IotaMultiPredicate.any(IotaPredicate.ofType(VEC3), IotaPredicate.ofType(DOUBLE)));
+		super(2, IotaMultiPredicate.any(IotaPredicate.ofType(VEC3.get()), IotaPredicate.ofType(DOUBLE.get())));
 		op = core;
 		fb = (OperatorBasic) Objects.requireNonNull(DoubleArithmetic.INSTANCE.getOperator(fallback));
 	}
@@ -41,13 +41,13 @@ public class OperatorVec3Delegating extends OperatorBasic {
 			if (op != null && left instanceof Vec3Iota lh && right instanceof Vec3Iota rh) {
 				return List.of(op.apply(lh.getVec3(), rh.getVec3()));
 			}
-			var lh = left instanceof Vec3Iota l ? l.getVec3() : triplicate(downcast(left, DOUBLE).getDouble());
-			var rh = right instanceof Vec3Iota r ? r.getVec3() : triplicate(downcast(right, DOUBLE).getDouble());
+			var lh = left instanceof Vec3Iota l ? l.getVec3() : triplicate(downcast(left, DOUBLE.get()).getDouble());
+			var rh = right instanceof Vec3Iota r ? r.getVec3() : triplicate(downcast(right, DOUBLE.get()).getDouble());
 			return new TripleIterable<>(
 					fb.apply(new IterPair<>(new DoubleIota(lh.x()), new DoubleIota(rh.x())), env),
 					fb.apply(new IterPair<>(new DoubleIota(lh.y()), new DoubleIota(rh.y())), env),
 					fb.apply(new IterPair<>(new DoubleIota(lh.z()), new DoubleIota(rh.z())), env),
-					(x, y, z) -> new Vec3Iota(new Vec3(downcast(x, DOUBLE).getDouble(), downcast(y, DOUBLE).getDouble(), downcast(z, DOUBLE).getDouble()))
+					(x, y, z) -> new Vec3Iota(new Vec3(downcast(x, DOUBLE.get()).getDouble(), downcast(y, DOUBLE.get()).getDouble(), downcast(z, DOUBLE.get()).getDouble()))
 			);
 		} catch (MishapDivideByZero e) {
 			throw MishapDivideByZero.of(left, right, e.getSuffix());

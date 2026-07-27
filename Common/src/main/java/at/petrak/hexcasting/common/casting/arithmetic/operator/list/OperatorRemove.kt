@@ -11,7 +11,7 @@ import at.petrak.hexcasting.common.casting.arithmetic.operator.nextList
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.DOUBLE
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.LIST
 
-object OperatorRemove : OperatorBasic(2, IotaMultiPredicate.pair(IotaPredicate.ofType(LIST), IotaPredicate.ofType(DOUBLE))) {
+object OperatorRemove : OperatorBasic(2, IotaMultiPredicate.pair(IotaPredicate.ofType(LIST.get()), IotaPredicate.ofType(DOUBLE.get()))) {
     override fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator().withIndex()
         val list = it.nextList(arity).toMutableList()

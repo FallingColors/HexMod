@@ -24,7 +24,7 @@ public class ContinuationIota extends Iota {
     private SpellContinuation value;
 
     public ContinuationIota(SpellContinuation cont) {
-        super(() -> HexIotaTypes.CONTINUATION);
+        super(() -> HexIotaTypes.CONTINUATION.get());
         this.value = cont;
     }
 
@@ -44,7 +44,7 @@ public class ContinuationIota extends Iota {
 
     @Override
     public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
-        return new CastResult(this, this.getContinuation(), vm.getImage(), List.of(), ResolvedPatternType.EVALUATED, HexEvalSounds.HERMES);
+        return new CastResult(this, this.getContinuation(), vm.getImage(), List.of(), ResolvedPatternType.EVALUATED, HexEvalSounds.HERMES.get());
     }
 
     @Override

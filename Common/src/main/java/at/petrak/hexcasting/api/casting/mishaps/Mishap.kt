@@ -57,7 +57,7 @@ abstract class Mishap : RuntimeException() {
 
     protected fun dyeColor(color: DyeColor): FrozenPigment =
         FrozenPigment(
-            ItemStack(HexItems.DYE_PIGMENTS[color]!!),
+            ItemStack(HexItems.DYE_PIGMENTS[color]!!.get()),
             Util.NIL_UUID
         )
 

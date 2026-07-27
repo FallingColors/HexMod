@@ -41,7 +41,7 @@ public class ItemLoreFragment extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
-        player.playSound(HexSounds.READ_LORE_FRAGMENT, 1f, 1f);
+        player.playSound(HexSounds.READ_LORE_FRAGMENT.value(), 1f, 1f);
 
         var handStack = player.getItemInHand(usedHand);
         if (!(player instanceof ServerPlayer splayer)) {

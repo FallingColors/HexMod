@@ -13,7 +13,7 @@ import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 public class CuriosRenderers {
     public static void register() {
-        CuriosRendererRegistry.register(HexItems.SCRYING_LENS, () -> new LensCurioRenderer(Minecraft.getInstance().getEntityModels().bakeLayer(LensCurioRenderer.LAYER)));
+        CuriosRendererRegistry.register(HexItems.SCRYING_LENS.get(), () -> new LensCurioRenderer(Minecraft.getInstance().getEntityModels().bakeLayer(LensCurioRenderer.LAYER)));
     }
 
     public static void onLayerRegister(final EntityRenderersEvent.RegisterLayerDefinitions event) {

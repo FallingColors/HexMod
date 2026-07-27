@@ -46,7 +46,7 @@ object DoubleArithmetic : Arithmetic {
     /**
      * An example of an IotaMultiPredicate, which returns true only if all arguments to the Operator are DoubleIotas.
      */
-    val ACCEPTS: IotaMultiPredicate = IotaMultiPredicate.all(IotaPredicate.ofType(HexIotaTypes.DOUBLE))
+    val ACCEPTS: ()->IotaMultiPredicate = { IotaMultiPredicate.all(IotaPredicate.ofType(HexIotaTypes.DOUBLE.get())) }
 
     override fun arithName() = "double_math"
 
@@ -77,9 +77,9 @@ object DoubleArithmetic : Arithmetic {
         }
     }
 
-    fun make1(op: DoubleUnaryOperator) = OperatorUnary(ACCEPTS)
-        { i: Iota -> DoubleIota(op.applyAsDouble(Operator.downcast(i, HexIotaTypes.DOUBLE).double)) }
+    fun make1(op: DoubleUnaryOperator) = OperatorUnary(ACCEPTS())
+        { i: Iota -> DoubleIota(op.applyAsDouble(Operator.downcast(i, HexIotaTypes.DOUBLE.get()).double)) }
 
-    fun make2(op: DoubleBinaryOperator) = OperatorBinary(ACCEPTS)
-        { i: Iota, j: Iota -> DoubleIota(op.applyAsDouble(Operator.downcast(i, HexIotaTypes.DOUBLE).double, Operator.downcast(j, HexIotaTypes.DOUBLE).double)) }
+    fun make2(op: DoubleBinaryOperator) = OperatorBinary(ACCEPTS())
+        { i: Iota, j: Iota -> DoubleIota(op.applyAsDouble(Operator.downcast(i, HexIotaTypes.DOUBLE.get()).double, Operator.downcast(j, HexIotaTypes.DOUBLE.get()).double)) }
 }
