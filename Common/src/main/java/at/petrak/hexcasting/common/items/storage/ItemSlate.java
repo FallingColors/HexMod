@@ -42,7 +42,7 @@ public class ItemSlate extends BlockItem implements IotaHolderItem {
     }
 
     public static Optional<HexPattern> getPattern(ItemStack stack){
-        return Optional.ofNullable(stack.get(HexDataComponents.PATTERN));
+        return Optional.ofNullable(stack.get(HexDataComponents.PATTERN.get()));
     }
 
     public static boolean hasPattern(ItemStack stack) {
@@ -52,7 +52,7 @@ public class ItemSlate extends BlockItem implements IotaHolderItem {
     @SoftImplement("IForgeItem")
     public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
         if (!hasPattern(stack)) {
-            stack.remove(HexDataComponents.PATTERN);
+            stack.remove(HexDataComponents.PATTERN.get());
         }
         return false;
     }
@@ -60,7 +60,7 @@ public class ItemSlate extends BlockItem implements IotaHolderItem {
     @Override
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
         if (!hasPattern(pStack)) {
-            pStack.remove(HexDataComponents.PATTERN);
+            pStack.remove(HexDataComponents.PATTERN.get());
         }
     }
 
@@ -83,9 +83,9 @@ public class ItemSlate extends BlockItem implements IotaHolderItem {
     public void writeDatum(ItemStack stack, Iota datum) {
         if(this.canWrite(stack, datum)) {
             if (datum == null) {
-                stack.remove(HexDataComponents.PATTERN);
+                stack.remove(HexDataComponents.PATTERN.get());
             } else if (datum instanceof PatternIota pat) {
-                stack.set(HexDataComponents.PATTERN, pat.getPattern());
+                stack.set(HexDataComponents.PATTERN.get(), pat.getPattern());
             }
         }
     }

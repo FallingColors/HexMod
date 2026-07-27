@@ -10,7 +10,7 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapDivideByZero
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.DOUBLE
 import kotlin.math.log
 
-object OperatorLog : OperatorBasic(2, IotaMultiPredicate.all(IotaPredicate.ofType(DOUBLE))) {
+object OperatorLog : OperatorBasic(2, IotaMultiPredicate.all(IotaPredicate.ofType(DOUBLE.get()))) {
     override fun apply(iotas: Iterable<Iota>, env : CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator().withIndex()
         val value = it.nextDouble(arity)

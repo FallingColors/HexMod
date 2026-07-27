@@ -1,35 +1,26 @@
 package at.petrak.hexcasting.api.advancements;
 
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.xplat.IXplatRegister;
 import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexAdvancementTriggers {
-    private static final Map<ResourceLocation, CriterionTrigger<?>> TRIGGERS = new LinkedHashMap<>();
+    private static final IXplatRegister<CriterionTrigger<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.TRIGGER_TYPE);
 
-    public static final OvercastTrigger OVERCAST_TRIGGER = register("overcast", new OvercastTrigger());
-    public static final SpendMediaTrigger SPEND_MEDIA_TRIGGER = register("spend_media", new SpendMediaTrigger());
-    public static final FailToCastGreatSpellTrigger FAIL_GREAT_SPELL_TRIGGER = register("fail_to_cast_great_spell", new FailToCastGreatSpellTrigger());
-
-    public static void registerTriggers(BiConsumer<CriterionTrigger<?>, ResourceLocation> r) {
-        for (var e : TRIGGERS.entrySet()) {
-            r.accept(e.getValue(), e.getKey());
-        }
+    public static void register() {
+        REGISTER.registerAll();
     }
 
-    private static <T extends CriterionTrigger<?>> T register(
-            String id,
-            T lift
-    ) {
-        var old = TRIGGERS.put(modLoc(id), lift);
-        if (old != null) {
-            throw new IllegalArgumentException("Typo? Duplicate id " + id);
-        }
-        return lift;
-    }
+    public static final Supplier<OvercastTrigger> OVERCAST_TRIGGER = REGISTER.register("overcast", OvercastTrigger::new);
+    public static final Supplier<SpendMediaTrigger> SPEND_MEDIA_TRIGGER = REGISTER.register("spend_media", SpendMediaTrigger::new);
+    public static final Supplier<FailToCastGreatSpellTrigger> FAIL_GREAT_SPELL_TRIGGER = REGISTER.register("fail_to_cast_great_spell", FailToCastGreatSpellTrigger::new);
 }

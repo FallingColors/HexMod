@@ -25,15 +25,15 @@ public class HexFeatureConfigs {
         HexAPI.LOGGER.info(TreeConfiguration.CODEC.encodeStart(JsonOps.INSTANCE, CITRINE_EDIFIED_TREE_CONFIG));
     }
 
-    public static final TreeConfiguration AMETHYST_EDIFIED_TREE_CONFIG = akashicTree(HexBlocks.AMETHYST_EDIFIED_LEAVES, HexBlocks.EDIFIED_LOG_AMETHYST);
-    public static final TreeConfiguration AVENTURINE_EDIFIED_TREE_CONFIG = akashicTree(HexBlocks.AVENTURINE_EDIFIED_LEAVES, HexBlocks.EDIFIED_LOG_AVENTURINE);
-    public static final TreeConfiguration CITRINE_EDIFIED_TREE_CONFIG = akashicTree(HexBlocks.CITRINE_EDIFIED_LEAVES, HexBlocks.EDIFIED_LOG_CITRINE);
+    public static final TreeConfiguration AMETHYST_EDIFIED_TREE_CONFIG = akashicTree(HexBlocks.AMETHYST_EDIFIED_LEAVES.get(), HexBlocks.EDIFIED_LOG_AMETHYST.get());
+    public static final TreeConfiguration AVENTURINE_EDIFIED_TREE_CONFIG = akashicTree(HexBlocks.AVENTURINE_EDIFIED_LEAVES.get(), HexBlocks.EDIFIED_LOG_AVENTURINE.get());
+    public static final TreeConfiguration CITRINE_EDIFIED_TREE_CONFIG = akashicTree(HexBlocks.CITRINE_EDIFIED_LEAVES.get(), HexBlocks.EDIFIED_LOG_CITRINE.get());
 
     private static TreeConfiguration akashicTree(Block leaves, Block altLog) {
         return new TreeConfiguration.TreeConfigurationBuilder(
                 new WeightedStateProvider(
                         SimpleWeightedRandomList.<BlockState>builder()
-                                .add(HexBlocks.EDIFIED_LOG.defaultBlockState(), 8)
+                                .add(HexBlocks.EDIFIED_LOG.get().defaultBlockState(), 8)
                                 .add(altLog.defaultBlockState(), 1)
                                 .build()),
                 // baseHeight, heightRandA, heightRandB

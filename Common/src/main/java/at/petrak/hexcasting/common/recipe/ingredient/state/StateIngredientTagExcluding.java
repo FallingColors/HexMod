@@ -29,7 +29,7 @@ public class StateIngredientTagExcluding extends StateIngredientTag {
 
     @Override
     public StateIngredientType<?> getType() {
-        return HexStateIngredients.TAG_EXCLUDING;
+        return HexStateIngredients.TAG_EXCLUDING.get();
     }
 
     @Override

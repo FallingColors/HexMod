@@ -4,6 +4,7 @@ import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.loot.AddHexToAncientCypherFunc;
 import at.petrak.hexcasting.common.loot.AddPerWorldPatternToScrollFunc;
 import at.petrak.hexcasting.fabric.FabricHexInitializer;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
@@ -24,9 +25,8 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 import static at.petrak.hexcasting.common.loot.HexLootHandler.TABLE_INJECT_AMETHYST_CLUSTER;
 
 public class FabricHexLootModJankery {
-    public static final ResourceLocation FUNC_AMETHYST_SHARD_REDUCER = modLoc("amethyst_shard_reducer");
-    public static final ResourceLocation RANDOM_SCROLL_TABLE = modLoc("random_scroll");
-    public static final ResourceLocation RANDOM_CYPHER_TABLE = modLoc("random_cypher");
+    public static final ResourceKey<LootTable> RANDOM_SCROLL_TABLE = ResourceKey.create(Registries.LOOT_TABLE, modLoc("random_scroll"));
+    public static final ResourceKey<LootTable> RANDOM_CYPHER_TABLE = ResourceKey.create(Registries.LOOT_TABLE, modLoc("random_cypher"));
 
     public static void lootLoad(ResourceKey<LootTable> id, Consumer<LootPool.Builder> addPool) {
         if (id.equals(Blocks.AMETHYST_CLUSTER.getLootTable())) {
@@ -62,7 +62,7 @@ public class FabricHexLootModJankery {
     private static LootPool.Builder makeScrollAddPool(int range) {
         return LootPool.lootPool()
             .setRolls(range < 0 ? ConstantValue.exactly(1) : UniformGenerator.between(-range, range))
-            .add(LootItem.lootTableItem(HexItems.SCROLL_LARGE))
+            .add(LootItem.lootTableItem(HexItems.SCROLL_LARGE.get()))
             .apply(() -> new AddPerWorldPatternToScrollFunc(List.of(new LootItemCondition[0])));
     }
 
@@ -70,14 +70,14 @@ public class FabricHexLootModJankery {
         return LootPool.lootPool()
             .when(LootItemRandomChanceCondition.randomChance((float) chance))
             .setRolls(ConstantValue.exactly(1))
-            .add(LootItem.lootTableItem(HexItems.LORE_FRAGMENT));
+            .add(LootItem.lootTableItem(HexItems.LORE_FRAGMENT.get()));
     }
 
     private static LootPool.Builder makeCypherAddPool(double chance) {
         return LootPool.lootPool()
             .when(LootItemRandomChanceCondition.randomChance((float) chance))
             .setRolls(ConstantValue.exactly(1))
-            .add(LootItem.lootTableItem(HexItems.ANCIENT_CYPHER))
+            .add(LootItem.lootTableItem(HexItems.ANCIENT_CYPHER.get()))
             .apply(() -> new AddHexToAncientCypherFunc(List.of(new LootItemCondition[0])));
     }
 }

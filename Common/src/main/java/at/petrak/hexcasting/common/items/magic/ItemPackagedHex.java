@@ -58,34 +58,34 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
 
     @Override
     public boolean hasHex(ItemStack stack) {
-        return stack.has(HexDataComponents.HEX_HOLDER_PATTERNS);
+        return stack.has(HexDataComponents.HEX_HOLDER_PATTERNS.get());
     }
 
     @Override
     public @Nullable List<Iota> getHex(ItemStack stack, ServerLevel level) {
-        return stack.get(HexDataComponents.HEX_HOLDER_PATTERNS);
+        return stack.get(HexDataComponents.HEX_HOLDER_PATTERNS.get());
     }
 
     @Override
     public void writeHex(ItemStack stack, List<Iota> program, @Nullable FrozenPigment pigment, long media) {
-        stack.set(HexDataComponents.HEX_HOLDER_PATTERNS, program);
+        stack.set(HexDataComponents.HEX_HOLDER_PATTERNS.get(), program);
         if (pigment != null)
-            stack.set(HexDataComponents.PIGMENT, pigment);
+            stack.set(HexDataComponents.PIGMENT.get(), pigment);
 
         withMedia(stack, media, media);
     }
 
     @Override
     public void clearHex(ItemStack stack) {
-        stack.remove(HexDataComponents.HEX_HOLDER_PATTERNS);
-        stack.remove(HexDataComponents.PIGMENT);
-        stack.remove(HexDataComponents.MEDIA);
-        stack.remove(HexDataComponents.MEDIA_MAX);
+        stack.remove(HexDataComponents.HEX_HOLDER_PATTERNS.get());
+        stack.remove(HexDataComponents.PIGMENT.get());
+        stack.remove(HexDataComponents.MEDIA.get());
+        stack.remove(HexDataComponents.MEDIA_MAX.get());
     }
 
     @Override
     public @Nullable FrozenPigment getPigment(ItemStack stack) {
-        return stack.get(HexDataComponents.PIGMENT);
+        return stack.get(HexDataComponents.PIGMENT.get());
     }
 
     @Override

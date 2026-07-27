@@ -12,7 +12,7 @@ public class FabricItemEntityMixin {
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
     private void tick(CallbackInfo ci) {
         ItemEntity entity = (ItemEntity) (Object) this;
-        if (entity.getItem().is(HexItems.SLATE) && HexItems.SLATE.onEntityItemUpdate(entity.getItem(), entity))
+        if (entity.getItem().is(HexItems.SLATE.get()) && HexItems.SLATE.get().onEntityItemUpdate(entity.getItem(), entity))
             ci.cancel();
     }
 }

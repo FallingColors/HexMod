@@ -73,7 +73,7 @@ object OpMakeBattery : SpellAction {
             val entityStack = itemEntity.item.copy()
             val mediamount = extractMedia(entityStack, drainForBatteries = true)
             if (mediamount > 0) {
-                if (!env.replaceItem({ it == handStack }, ItemMediaHolder.withMedia(ItemStack(HexItems.BATTERY), mediamount, mediamount), hand))
+                if (!env.replaceItem({ it == handStack }, ItemMediaHolder.withMedia(ItemStack(HexItems.BATTERY.get()), mediamount, mediamount), hand))
                     return
             }
 

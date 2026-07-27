@@ -30,7 +30,7 @@ public class EntityTagIngredient extends BrainsweepeeIngredient {
 
     @Override
     public BrainsweepeeIngredientType<?> getType() {
-        return HexBrainsweepeeIngredients.TAG;
+        return HexBrainsweepeeIngredients.TAG.get();
     }
 
     public TagKey<EntityType<?>> getTag() {

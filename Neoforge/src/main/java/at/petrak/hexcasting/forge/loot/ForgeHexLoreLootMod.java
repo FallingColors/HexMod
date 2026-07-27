@@ -34,7 +34,7 @@ public class ForgeHexLoreLootMod extends LootModifier {
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot,
         LootContext context) {
         if (context.getRandom().nextDouble() < this.chance) {
-            generatedLoot.add(new ItemStack(HexItems.LORE_FRAGMENT));
+            generatedLoot.add(new ItemStack(HexItems.LORE_FRAGMENT.get()));
         }
         return generatedLoot;
     }

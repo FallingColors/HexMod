@@ -4,7 +4,6 @@ import at.petrak.hexcasting.api.casting.eval.ExecutionClientView
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.math.HexAngle
 import at.petrak.hexcasting.api.casting.math.HexCoord
 import at.petrak.hexcasting.api.casting.math.HexDir
@@ -31,8 +30,6 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.resources.sounds.SoundInstance
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.NbtOps
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.FormattedCharSequence
 import net.minecraft.util.Mth
@@ -45,7 +42,7 @@ class GuiSpellcasting constructor(
     private val handOpenedWith: InteractionHand,
     private var patterns: MutableList<ResolvedPattern>,
     private var cachedStack: List<Iota>,
-    private var cachedRavenmind: CompoundTag?,
+    private var cachedRavenmind: Iota?,
     private var parenCount: Int,
 ) : Screen("gui.hexcasting.spellcasting".asTranslatedComponent) {
     private var stackDescs: List<FormattedCharSequence> = listOf()
@@ -77,7 +74,7 @@ class GuiSpellcasting constructor(
             // find the last escaped pattern (or the opening paren if there's nothing else) and set it to UNDONE
             this.patterns.reversed().drop(1).firstOrNull {
                 it.type == ResolvedPatternType.ESCAPED ||
-                (it.type == ResolvedPatternType.EVALUATED && it.pattern.angles == HexActions.OPEN_PAREN.prototype.angles)
+                (it.type == ResolvedPatternType.EVALUATED && it.pattern.angles == HexActions.OPEN_PAREN.value().prototype.angles)
             }?.let { it.type = ResolvedPatternType.UNDONE }
             // use the normal EVALUATED coloring for the Evanition that was just drawn
             this.patterns.getOrNull(index)?.let { it.type = ResolvedPatternType.EVALUATED }
@@ -104,19 +101,16 @@ class GuiSpellcasting constructor(
 //            emptyList()
         this.parenDescs = emptyList()
         this.ravenmind =
-            this.cachedRavenmind?.let {
-                val iota = IotaType.TYPED_CODEC.parse(NbtOps.INSTANCE, it).getOrThrow()
-                iota.displayWithMaxWidth(
-                    (this.width * RHS_IOTAS_ALLOCATION).toInt(),
-                    mc.font
-                )
-            }
+            this.cachedRavenmind?.displayWithMaxWidth(
+                (this.width * RHS_IOTAS_ALLOCATION).toInt(),
+                mc.font
+            )
     }
 
     override fun init() {
         val minecraft = Minecraft.getInstance()
         val soundManager = minecraft.soundManager
-        soundManager.stop(HexSounds.CASTING_AMBIANCE.location, null)
+        soundManager.stop(HexSounds.CASTING_AMBIANCE.value().location, null)
         val player = minecraft.player
         if (player != null) {
             this.ambianceSoundInstance = GridSoundInstance(player)
@@ -158,7 +152,7 @@ class GuiSpellcasting constructor(
                 this.drawState = PatternDrawState.JustStarted(coord)
                 Minecraft.getInstance().soundManager.play(
                     SimpleSoundInstance(
-                        HexSounds.START_PATTERN,
+                        HexSounds.START_PATTERN.value(),
                         SoundSource.PLAYERS,
                         0.25f,
                         1f,
@@ -209,7 +203,7 @@ class GuiSpellcasting constructor(
                 val angle = atan2(delta.y, delta.x)
                 // 0 is right, increases clockwise(?)
                 val snappedAngle = angle.div(Mth.TWO_PI).mod(6.0f)
-                val newdir = HexDir.values()[(snappedAngle.times(6).roundToInt() + 1).mod(6)]
+                val newdir = HexDir.entries[(snappedAngle.times(6).roundToInt() + 1).mod(6)]
                 // The player might have a lousy aim, so set the new anchor point to the "ideal"
                 // location as if they had hit it exactly on the nose.
                 val idealNextLoc = anchorCoord + newdir
@@ -246,7 +240,7 @@ class GuiSpellcasting constructor(
                 if (playSound) {
                     Minecraft.getInstance().soundManager.play(
                         SimpleSoundInstance(
-                            HexSounds.ADD_TO_PATTERN,
+                            HexSounds.ADD_TO_PATTERN.value(),
                             SoundSource.PLAYERS,
                             0.25f,
                             1f + (Math.random().toFloat() - 0.5f) * 0.1f,
@@ -346,7 +340,7 @@ class GuiSpellcasting constructor(
     }
 
     fun closeForReal() {
-        Minecraft.getInstance().soundManager.stop(HexSounds.CASTING_AMBIANCE.location, null)
+        Minecraft.getInstance().soundManager.stop(HexSounds.CASTING_AMBIANCE.value().location, null)
 
         super.onClose()
     }

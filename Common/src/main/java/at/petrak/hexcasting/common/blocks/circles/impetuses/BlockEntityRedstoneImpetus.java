@@ -38,7 +38,7 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
     private ItemStack cachedDisplayStack = null;
 
     public BlockEntityRedstoneImpetus(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(HexBlockEntities.IMPETUS_REDSTONE_TILE, pWorldPosition, pBlockState);
+        super(HexBlockEntities.IMPETUS_REDSTONE_TILE.get(), pWorldPosition, pBlockState);
     }
 
     protected @Nullable GameProfile getPlayerName() {

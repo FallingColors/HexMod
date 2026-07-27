@@ -19,8 +19,11 @@ object OpUndo : Action {
     }
 
     override fun operateInParens(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation, thisIota: Iota): ParenthesizedOperationResult {
-        val newParens = image.parenthesized.toMutableList()
-        val last = newParens.removeLastOrNull()
+        val (newParens, last) = if(image.parenthesized.isEmpty()) {
+            (image.parenthesized to null)
+        } else {
+            (image.parenthesized.init() to image.parenthesized.last())
+        }
         var newParenCount = image.parenCount
         if (last == null) {
             // if there was nothing in the parenthesized list, undo the initial open paren
@@ -28,14 +31,14 @@ object OpUndo : Action {
         } else if (last.iota is PatternIota && !last.escaped) {
             // adjust paren count if undoing a non-escaped open or close paren
             when (last.iota.pattern.angles) {
-                HexActions.OPEN_PAREN.prototype.angles -> newParenCount--
-                HexActions.CLOSE_PAREN.prototype.angles -> newParenCount++
+                HexActions.OPEN_PAREN.value().prototype.angles -> newParenCount--
+                HexActions.CLOSE_PAREN.value().prototype.angles -> newParenCount++
             }
         }
         val image2 = image.copy(
             parenthesized = newParens,
             parenCount = newParenCount
         )
-        return ParenthesizedOperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE, ResolvedPatternType.UNDONE)
+        return ParenthesizedOperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get(), ResolvedPatternType.UNDONE)
     }
 }

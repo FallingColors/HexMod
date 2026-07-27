@@ -34,9 +34,9 @@ object OpAkashicWrite : SpellAction {
             throw MishapNoAkashicRecord(pos)
         }
 
-        val trueName = MishapOthersName.getTrueNameFromDatum(env.world, datum, env.castingEntity as? ServerPlayer)
-        if (trueName != null)
-            throw MishapOthersName(trueName)
+        val trueNameMishap = MishapOthersName.getTrueNameMishapFromDatum(env.world, datum, env.castingEntity as? ServerPlayer)
+        if (trueNameMishap != null)
+            throw trueNameMishap
 
         return SpellAction.Result(
             Spell(record, pos, key, datum),
@@ -56,7 +56,7 @@ object OpAkashicWrite : SpellAction {
             record.addNewDatum(recordPos, env.world, key, datum)
 
             env.world.playSound(
-                null, recordPos, HexSounds.SCROLL_SCRIBBLE, SoundSource.BLOCKS,
+                null, recordPos, HexSounds.SCROLL_SCRIBBLE.value(), SoundSource.BLOCKS,
                 1f, 0.8f
             )
 

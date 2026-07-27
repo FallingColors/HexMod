@@ -25,7 +25,7 @@ import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredientType;
 import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredientType;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
-import at.petrak.hexcasting.fabric.interop.accessories.AccessoriesApiInterop;
+import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsInterop;
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
@@ -109,8 +109,8 @@ public class FabricXplatImpl implements IXplatAbstractions {
 
     @Override
     public void initPlatformSpecific() {
-        if (this.isModPresent(HexInterop.Fabric.ACCESSORIES_API_ID)) {
-            AccessoriesApiInterop.init();
+        if (this.isModPresent(HexInterop.Fabric.TRINKETS_API_ID)) {
+            TrinketsInterop.init();
         }
     }
 
@@ -330,36 +330,6 @@ public class FabricXplatImpl implements IXplatAbstractions {
         return FabricUnsealedIngredient.of(stack);
     }
 
-    // do a stupid hack from botania
-    private static List<ItemStack> stacks(Item... items) {
-        return Stream.of(items).map(ItemStack::new).toList();
-    }
-
-    private static final List<List<ItemStack>> HARVEST_TOOLS_BY_LEVEL = List.of(
-        stacks(Items.WOODEN_PICKAXE, Items.WOODEN_AXE, Items.WOODEN_HOE, Items.WOODEN_SHOVEL),
-        stacks(Items.STONE_PICKAXE, Items.STONE_AXE, Items.STONE_HOE, Items.STONE_SHOVEL),
-        stacks(Items.IRON_PICKAXE, Items.IRON_AXE, Items.IRON_HOE, Items.IRON_SHOVEL),
-        stacks(Items.DIAMOND_PICKAXE, Items.DIAMOND_AXE, Items.DIAMOND_HOE, Items.DIAMOND_SHOVEL),
-        stacks(Items.NETHERITE_PICKAXE, Items.NETHERITE_AXE, Items.NETHERITE_HOE, Items.NETHERITE_SHOVEL)
-    );
-
-    @Override
-    public boolean isCorrectTierForDrops(Tier tier, BlockState bs) {
-        if (!bs.requiresCorrectToolForDrops()) {
-            return true;
-        }
-
-        int level = HexConfig.server()
-            .opBreakHarvestLevelBecauseForgeThoughtItWasAGoodIdeaToImplementHarvestTiersUsingAnHonestToGodTopoSort();
-        for (var tool : HARVEST_TOOLS_BY_LEVEL.get(level)) {
-            if (tool.isCorrectToolForDrops(bs)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     @Override
     public Item.Properties addEquipSlotFabric(EquipmentSlot slot) {
         return new Item.Properties().equipmentSlot((e, s) -> slot);
@@ -403,101 +373,84 @@ public class FabricXplatImpl implements IXplatAbstractions {
         return namespace;
     }
 
-    private static final Supplier<Registry<ActionRegistryEntry>> ACTION_REGISTRY = Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new MappedRegistry<>(
+    private static final Registry<ActionRegistryEntry> ACTION_REGISTRY = FabricRegistryBuilder.from(new MappedRegistry<>(
                 HexRegistries.ACTION,
                 Lifecycle.stable()))
-            .buildAndRegister()
-    );
-    private static final Supplier<Registry<SpecialHandler.Factory<?>>> SPECIAL_HANDLER_REGISTRY =
-        Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new MappedRegistry<>(
+            .buildAndRegister();
+    private static final Registry<SpecialHandler.Factory<?>> SPECIAL_HANDLER_REGISTRY = FabricRegistryBuilder.from(new MappedRegistry<>(
                     HexRegistries.SPECIAL_HANDLER,
                     Lifecycle.stable()))
-                .buildAndRegister()
-        );
-    private static final Supplier<Registry<IotaType<?>>> IOTA_TYPE_REGISTRY = Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new MappedRegistry<>(
+                .buildAndRegister();
+    private static final Registry<IotaType<?>> IOTA_TYPE_REGISTRY = FabricRegistryBuilder.from(new MappedRegistry<>(
                 HexRegistries.IOTA_TYPE,
                 Lifecycle.stable(), false))
-            .buildAndRegister()
-    );
+            .buildAndRegister();
 
-    private static final Supplier<Registry<Arithmetic>> ARITHMETIC_REGISTRY = Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new MappedRegistry<>(
+    private static final Registry<Arithmetic> ARITHMETIC_REGISTRY = FabricRegistryBuilder.from(new MappedRegistry<>(
                     HexRegistries.ARITHMETIC,
                     Lifecycle.stable()))
-                .buildAndRegister()
-    );
+                .buildAndRegister();
 
-    private static final Supplier<Registry<ContinuationFrame.Type<?>>> CONTINUATION_TYPE_REGISTRY = Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+    private static final Registry<ContinuationFrame.Type<?>> CONTINUATION_TYPE_REGISTRY = FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
                             HexAPI.MOD_ID + ":end", HexRegistries.CONTINUATION_TYPE,
                             Lifecycle.stable(), false))
-                    .buildAndRegister()
-    );
+                    .buildAndRegister();
 
-    private static final Supplier<Registry<EvalSound>> EVAL_SOUNDS_REGISTRY = Suppliers.memoize(() ->
-        FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+    private static final Registry<EvalSound> EVAL_SOUNDS_REGISTRY = FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
                 HexAPI.MOD_ID + ":nothing", HexRegistries.EVAL_SOUND,
                 Lifecycle.stable(), false))
-            .buildAndRegister()
-    );
+            .buildAndRegister();
 
-    private static final Supplier<Registry<StateIngredientType<?>>> STATE_INGREDIENT_REGISTRY = Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+    private static final Registry<StateIngredientType<?>> STATE_INGREDIENT_REGISTRY = FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
                             HexAPI.MOD_ID + ":none",
                     HexRegistries.STATE_INGREDIENT,
                     Lifecycle.stable(), false))
-                    .buildAndRegister()
-    );
+                    .buildAndRegister();
 
-    private static final Supplier<Registry<BrainsweepeeIngredientType<?>>> BRAINSWEEPEE_INGREDIENT_REGISTRY = Suppliers.memoize(() ->
-            FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
+    private static final Registry<BrainsweepeeIngredientType<?>> BRAINSWEEPEE_INGREDIENT_REGISTRY = FabricRegistryBuilder.from(new DefaultedMappedRegistry<>(
                             HexAPI.MOD_ID + ":none",
                     HexRegistries.BRAINSWEEPEE_INGREDIENT,
                     Lifecycle.stable(), false))
-                    .buildAndRegister()
-    );
+                    .buildAndRegister();
 
     @Override
     public Registry<ActionRegistryEntry> getActionRegistry() {
-        return ACTION_REGISTRY.get();
+        return ACTION_REGISTRY;
     }
 
     @Override
     public Registry<SpecialHandler.Factory<?>> getSpecialHandlerRegistry() {
-        return SPECIAL_HANDLER_REGISTRY.get();
+        return SPECIAL_HANDLER_REGISTRY;
     }
 
     @Override
     public Registry<IotaType<?>> getIotaTypeRegistry() {
-        return IOTA_TYPE_REGISTRY.get();
+        return IOTA_TYPE_REGISTRY;
     }
 
     @Override
     public Registry<Arithmetic> getArithmeticRegistry() {
-        return ARITHMETIC_REGISTRY.get();
+        return ARITHMETIC_REGISTRY;
     }
 
     @Override
     public Registry<ContinuationFrame.Type<?>> getContinuationTypeRegistry() {
-        return CONTINUATION_TYPE_REGISTRY.get();
+        return CONTINUATION_TYPE_REGISTRY;
     }
 
     @Override
     public Registry<EvalSound> getEvalSoundRegistry() {
-        return EVAL_SOUNDS_REGISTRY.get();
+        return EVAL_SOUNDS_REGISTRY;
     }
 
     @Override
     public Registry<StateIngredientType<?>> getStateIngredientRegistry() {
-        return STATE_INGREDIENT_REGISTRY.get();
+        return STATE_INGREDIENT_REGISTRY;
     }
 
     @Override
     public Registry<BrainsweepeeIngredientType<?>> getBrainsweepeeIngredientRegistry() {
-        return BRAINSWEEPEE_INGREDIENT_REGISTRY.get();
+        return BRAINSWEEPEE_INGREDIENT_REGISTRY;
     }
 
     @Override

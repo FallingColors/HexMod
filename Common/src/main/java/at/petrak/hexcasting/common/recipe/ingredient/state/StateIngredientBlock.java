@@ -26,7 +26,7 @@ public class StateIngredientBlock implements StateIngredient {
 
     @Override
     public StateIngredientType<?> getType() {
-        return HexStateIngredients.BLOCK_TYPE;
+        return HexStateIngredients.BLOCK_TYPE.get();
     }
 
     @Override

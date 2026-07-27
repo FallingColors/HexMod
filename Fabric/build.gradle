@@ -101,7 +101,8 @@ repositories {
     maven { url = "https://maven.ladysnake.org/releases" }
     maven { url "https://mvn.devos.one/snapshots/" }
     // EMI
-    maven { url = "https://maven.terraformersmc.com/releases/" }
+    // temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors
+    maven { url = "https://maven.gnomecraft.net/releases" }
     exclusiveContent {
         forRepository {
             maven { url = "https://api.modrinth.com/maven" }
@@ -110,8 +111,6 @@ repositories {
     }
     // pehkui
     maven { url = "https://jitpack.io" }
-    // accessories
-    maven { url 'https://maven.wispforest.io/releases' }
 
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
     flatDir {
@@ -132,7 +131,7 @@ dependencies {
     // dear mod devs, don't put the platform in the middle of your version code
     modImplementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-FABRIC-SNAPSHOT"
     modImplementation "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
-    modImplementation "io.wispforest:accessories-fabric:$accessoriesVersion"
+    modImplementation "dev.emi:trinkets:${trinketsVersion}"
 
     modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-base:$cardinalComponentsVersion"
 //    modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-util:$cardinalComponentsVersion"

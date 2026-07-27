@@ -3,7 +3,7 @@ package at.petrak.hexcasting.fabric.xplat;
 import at.petrak.hexcasting.api.client.ClientCastingStack;
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
 import at.petrak.hexcasting.fabric.client.ExtendedTexture;
-import at.petrak.hexcasting.fabric.interop.accessories.AccessoriesApiInterop;
+import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsInterop;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -44,8 +44,8 @@ public class FabricClientXplatImpl implements IClientXplatAbstractions {
 
     @Override
     public void initPlatformSpecific() {
-        if (IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Fabric.ACCESSORIES_API_ID)) {
-            AccessoriesApiInterop.clientInit();
+        if (IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Fabric.TRINKETS_API_ID)) {
+            TrinketsInterop.clientInit();
         }
     }
 
@@ -102,6 +102,7 @@ public class FabricClientXplatImpl implements IClientXplatAbstractions {
 
     @Override
     public String getModelLocVariant() {
-        return ModelResourceLocation.INVENTORY_VARIANT;
+        // used to be ModelResourceLocation.INVENTORY_VARIANT, but for some reason fabric doesn't have those anymore since the 1.21 port.
+        return "fabric_resource";
     }
 }

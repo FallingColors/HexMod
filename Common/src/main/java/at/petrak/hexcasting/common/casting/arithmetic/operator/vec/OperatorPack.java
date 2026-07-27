@@ -15,7 +15,7 @@ import java.util.List;
 
 public class OperatorPack extends OperatorBasic {
 	private OperatorPack() {
-		super(3, IotaMultiPredicate.all(IotaPredicate.ofType(HexIotaTypes.DOUBLE)));
+		super(3, IotaMultiPredicate.all(IotaPredicate.ofType(HexIotaTypes.DOUBLE.get())));
 	}
 
 	public static OperatorPack INSTANCE = new OperatorPack();
@@ -24,9 +24,9 @@ public class OperatorPack extends OperatorBasic {
 	public @NotNull Iterable<Iota> apply(Iterable<? extends Iota> iotas, @NotNull CastingEnvironment env) {
 		var it = iotas.iterator();
 		return List.of(new Vec3Iota(new Vec3(
-			downcast(it.next(), HexIotaTypes.DOUBLE).getDouble(),
-			downcast(it.next(), HexIotaTypes.DOUBLE).getDouble(),
-			downcast(it.next(), HexIotaTypes.DOUBLE).getDouble()
+			downcast(it.next(), HexIotaTypes.DOUBLE.get()).getDouble(),
+			downcast(it.next(), HexIotaTypes.DOUBLE.get()).getDouble(),
+			downcast(it.next(), HexIotaTypes.DOUBLE.get()).getDouble()
 		)));
 	}
 }

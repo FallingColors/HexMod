@@ -50,7 +50,7 @@ public class EntityWallScroll extends HangingEntity {
 
     public EntityWallScroll(Level world, BlockPos pos, Direction dir, ItemStack scroll, boolean showStrokeOrder,
         int blockSize) {
-        super(HexEntities.WALL_SCROLL, world, pos);
+        super(HexEntities.WALL_SCROLL.get(), world, pos);
         this.setDirection(dir);
         this.blockSize = blockSize;
 
@@ -61,8 +61,8 @@ public class EntityWallScroll extends HangingEntity {
     }
 
     public void recalculateDisplay() {
-        this.pattern = scroll.get(HexDataComponents.PATTERN);
-        this.isAncient = scroll.has(HexDataComponents.ACTION);
+        this.pattern = scroll.get(HexDataComponents.PATTERN.get());
+        this.isAncient = scroll.has(HexDataComponents.ACTION.get());
     }
 
     @Override
@@ -109,13 +109,13 @@ public class EntityWallScroll extends HangingEntity {
     @Override
     public InteractionResult interactAt(Player pPlayer, Vec3 pVec, InteractionHand pHand) {
         var handStack = pPlayer.getItemInHand(pHand);
-        if (handStack.is(HexItems.AMETHYST_DUST) && !this.getShowsStrokeOrder()) {
+        if (handStack.is(HexItems.AMETHYST_DUST.get()) && !this.getShowsStrokeOrder()) {
             if (!pPlayer.getAbilities().instabuild) {
                 handStack.shrink(1);
             }
             this.setShowsStrokeOrder(true);
 
-            pPlayer.level().playSound(pPlayer, this, HexSounds.SCROLL_DUST, SoundSource.PLAYERS, 1f, 1f);
+            pPlayer.level().playSound(pPlayer, this, HexSounds.SCROLL_DUST.value(), SoundSource.PLAYERS, 1f, 1f);
 
             if (pPlayer.level() instanceof ServerLevel slevel) {
                 IXplatAbstractions.INSTANCE.sendPacketNear(this.position(), 32.0, slevel,

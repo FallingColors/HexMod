@@ -155,8 +155,6 @@ public interface IXplatAbstractions {
 
     // misc
 
-    boolean isCorrectTierForDrops(Tier tier, BlockState bs);
-
     Ingredient getUnsealedIngredient(ItemStack stack);
 
     IXplatTags tags();

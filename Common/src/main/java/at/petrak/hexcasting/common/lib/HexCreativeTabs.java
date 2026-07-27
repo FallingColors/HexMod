@@ -1,43 +1,37 @@
 package at.petrak.hexcasting.common.lib;
 
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.xplat.IXplatRegister;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexCreativeTabs {
-    public static void registerCreativeTabs(BiConsumer<CreativeModeTab, ResourceLocation> r) {
-        for (var e : TABS.entrySet()) {
-            r.accept(e.getValue(), e.getKey());
-        }
+    private static final IXplatRegister<CreativeModeTab> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.CREATIVE_MODE_TAB);
+
+    public static void register() {
+        REGISTER.registerAll();
     }
 
-    private static final Map<ResourceLocation, CreativeModeTab> TABS = new LinkedHashMap<>();
-
-    public static final CreativeModeTab HEX = register("hexcasting", CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
-            .icon(() -> new ItemStack(HexItems.SPELLBOOK)));
+    public static final Holder<CreativeModeTab> HEX = REGISTER.registerHolder("hexcasting", () ->
+            CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
+                    .icon(() -> new ItemStack(HexItems.SPELLBOOK.get()))
+                    .title(Component.translatable("itemGroup.hexcasting.hexcasting"))
+                    .build());
 
     public static final ResourceKey<CreativeModeTab> HEX_KEY = ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), modLoc("hexcasting"));
 
-    public static final CreativeModeTab SCROLLS = register("scrolls", CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
-            .icon(() -> new ItemStack(HexItems.SCROLL_LARGE)));
+    public static final Holder<CreativeModeTab> SCROLLS = REGISTER.registerHolder("scrolls", () ->
+            CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
+                    .icon(() -> new ItemStack(HexItems.SCROLL_LARGE.get()))
+                    .title(Component.translatable("itemGroup.hexcasting.scrolls"))
+                    .build());
 
     public static final ResourceKey<CreativeModeTab> SCROLLS_KEY = ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), modLoc("scrolls"));
-
-    private static CreativeModeTab register(String name, CreativeModeTab.Builder tabBuilder) {
-        var tab = tabBuilder.title(Component.translatable("itemGroup.hexcasting." + name)).build();
-        var old = TABS.put(modLoc(name), tab);
-        if (old != null) {
-            throw new IllegalArgumentException("Typo? Duplicate id " + name);
-        }
-        return tab;
-    }
 }

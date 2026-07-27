@@ -11,23 +11,23 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 object OpFishermanButItCopies : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val stack = image.stack.toMutableList()
+        var stack = image.stack
 
         if (stack.size < 2)
             throw MishapNotEnoughArgs(2, stack.size)
 
         val depth = stack.getIntBetween(stack.lastIndex, -(stack.size - 2), stack.size - 2)
-        stack.removeLast()
+        stack = stack.init()
 
         if (depth >= 0) {
             val fish = stack[stack.size - 1 - depth]
-            stack.add(fish)
+            stack = stack.appended(fish)
         } else {
             val lure = stack.last()
-            stack.add(stack.size - 1 + depth, lure)
+            stack = stack.dropRight(1 - depth).appended(lure).appendedAll(stack.takeRight(1 - depth))
         }
 
         val image2 = image.withUsedOp().copy(stack = stack)
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
+        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get())
     }
 }

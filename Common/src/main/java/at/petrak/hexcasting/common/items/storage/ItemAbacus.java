@@ -25,7 +25,7 @@ public class ItemAbacus extends Item implements IotaHolderItem {
 
     @Override
     public @Nullable Iota readIota(ItemStack stack) {
-        return new DoubleIota(stack.getOrDefault(HexDataComponents.ABACUS_VALUE, 0.0));
+        return new DoubleIota(stack.getOrDefault(HexDataComponents.ABACUS_VALUE.get(), 0.0));
     }
 
     @Override
@@ -47,10 +47,10 @@ public class ItemAbacus extends Item implements IotaHolderItem {
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         var stack = player.getItemInHand(hand);
         if (player.isShiftKeyDown()) {
-            Double oldNum = stack.get(HexDataComponents.ABACUS_VALUE);
-            stack.remove(HexDataComponents.ABACUS_VALUE);
+            Double oldNum = stack.get(HexDataComponents.ABACUS_VALUE.get());
+            stack.remove(HexDataComponents.ABACUS_VALUE.get());
 
-            player.playSound(HexSounds.ABACUS_SHAKE, 1f, 1f);
+            player.playSound(HexSounds.ABACUS_SHAKE.value(), 1f, 1f);
 
             var key = "hexcasting.tooltip.abacus.reset";
             if (oldNum != null && oldNum == 69) {

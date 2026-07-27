@@ -1,13 +1,14 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
-import at.petrak.hexcasting.api.HexAPI
-import at.petrak.hexcasting.api.casting.SpellList
-import at.petrak.hexcasting.api.casting.eval.*
+import at.petrak.hexcasting.api.casting.eval.CastResult
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
+import at.petrak.hexcasting.api.casting.eval.ExecutionClientView
+import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
+import at.petrak.hexcasting.api.casting.iota.BooleanIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
-import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.iota.PatternIota
 import at.petrak.hexcasting.api.casting.math.HexDir
 import at.petrak.hexcasting.api.casting.math.HexPattern
@@ -15,14 +16,11 @@ import at.petrak.hexcasting.api.casting.mishaps.Mishap
 import at.petrak.hexcasting.api.casting.mishaps.MishapEvalTooMuch
 import at.petrak.hexcasting.api.casting.mishaps.MishapInternalException
 import at.petrak.hexcasting.api.casting.mishaps.MishapStackSize
+import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.api.utils.validateIota
 import at.petrak.hexcasting.api.utils.validateIotaList
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.NbtOps
-import net.minecraft.nbt.Tag
 import net.minecraft.server.level.ServerLevel
-import kotlin.jvm.optionals.getOrElse
 import kotlin.jvm.optionals.getOrNull
 
 /**
@@ -50,7 +48,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
             stack = validateIotaList(this.image.stack, world)
         )
         // Initialize the continuation stack to a single top-level eval for all iotas.
-        var continuation = SpellContinuation.Done.pushFrame(FrameEvaluate(SpellList.LList(0, iotas), false))
+        var continuation = SpellContinuation.Done.pushFrame(FrameEvaluate(TreeList.from(iotas), false))
         // Begin aggregating info
         val info = TempControllerInfo(earlyExit = false)
         var lastResolutionType = ResolvedPatternType.UNRESOLVED
@@ -67,14 +65,14 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                         newData = null,
                         sideEffects = listOf(OperatorSideEffect.DoMishap(MishapStackSize(), Mishap.Context(null, null))),
                         resolutionType = ResolvedPatternType.ERRORED,
-                        sound = HexEvalSounds.MISHAP,
+                        sound = HexEvalSounds.MISHAP.get(),
                     )
                 } else if (result.newData != null && result.newData.opsConsumed > env.maxOpCount()) {
                     result.copy(
                         newData = null,
                         sideEffects = listOf(OperatorSideEffect.DoMishap(MishapEvalTooMuch(), Mishap.Context(null, null))),
                         resolutionType = ResolvedPatternType.ERRORED,
-                        sound = HexEvalSounds.MISHAP,
+                        sound = HexEvalSounds.MISHAP.get(),
                     )
                 } else {
                     result
@@ -103,15 +101,17 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 if (lastResolutionType.success) ResolvedPatternType.EVALUATED else ResolvedPatternType.ERRORED
         }
 
-        var ravenmind: CompoundTag? = image.ravenmind().getOrNull()
+        var ravenmind: Iota? = image.ravenmind().getOrNull()
 
         if (ravenmind != null) {
-            val test = IotaType.TYPED_CODEC.parse<Tag?>(NbtOps.INSTANCE, ravenmind).getOrThrow()
-            val newIota = validateIota(test, world)
-            ravenmind = IotaType.TYPED_CODEC.encodeStart<Tag?>(NbtOps.INSTANCE, newIota).getOrThrow() as CompoundTag?
+            ravenmind = validateIota(ravenmind, world)
         }
 
-        val isStackClear = image.stack.isEmpty() && image.parenCount == 0 && !image.escapeNext && ravenmind == null
+        val isStackClear = image.stack.isEmpty()
+                        && image.parenCount == 0
+                        && !image.escapeNext
+                        && !image.simulateNext
+                        && ravenmind == null
 
         this.env.postCast(image)
         return ExecutionClientView(isStackClear, lastResolutionType, image.stack, ravenmind)
@@ -132,31 +132,43 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 val newImage: CastingImage
                 if (this.image.parenCount > 0) {
                     // if we're inside parentheses, add the iota to the list with escaped set to true
-                    val newParens = this.image.parenthesized.toMutableList()
-                    newParens.add(ParenthesizedIota(iota, true))
+                    val newParens = this.image.parenthesized.appended(ParenthesizedIota(iota, true))
                     newImage = this.image.copy(
                         escapeNext = false,
                         parenthesized = newParens
                     )
                 } else {
                     // if we're not in parentheses, just push the iota to the stack
-                    val newStack = this.image.stack.toMutableList()
-                    newStack.add(iota)
+                    val newStack = this.image.stack.appended(iota)
                     newImage = this.image.copy(
                         stack = newStack,
                         escapeNext = false,
                     )
                 }
-                return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.ESCAPED, HexEvalSounds.NORMAL_EXECUTE)
+                return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.ESCAPED, HexEvalSounds.NORMAL_EXECUTE.get())
             }
 
-            if (this.image.parenCount > 0) {
+            val result = if (this.image.parenCount > 0) {
                 // Handle parens escaping
-                return iota.executeInParens(this, world, continuation)
+                iota.executeInParens(this, world, continuation)
             } else {
                 // Handle normal execution behavior
-                return iota.execute(this, world, continuation)
+                iota.execute(this, world, continuation)
             }
+
+            // if simulating, push a bool for whether the cast would have succeeded; do not perform any side effects
+            if (this.image.simulateNext) {
+                val tooBig = result.newData != null && IotaType.isTooLargeToSerialize(result.newData.stack)
+                val newStack = this.image.stack.appended(BooleanIota(result.resolutionType.success && !tooBig))
+                val newImage = this.image.copy(
+                    stack = newStack,
+                    simulateNext = false
+                )
+                return CastResult(iota, continuation, newImage, listOf(), ResolvedPatternType.SIMULATED, HexEvalSounds.NORMAL_EXECUTE.get())
+            }
+
+            // otherwise, return the original CastResult to perform all the side effects, stack manip, etc
+            return result
         } catch (exception: Exception) {
             // This means something very bad has happened
             exception.printStackTrace()
@@ -174,7 +186,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                     )
                 ),
                 ResolvedPatternType.ERRORED,
-                HexEvalSounds.MISHAP
+                HexEvalSounds.MISHAP.get()
             )
         }
     }
