@@ -397,6 +397,8 @@ public class HexActions {
 
     public static final Holder<ActionRegistryEntry> ESCAPE = REGISTER.registerHolder("escape", () ->
         new ActionRegistryEntry(HexPattern.fromAngles("qqqaw", HexDir.WEST), OpEscape.INSTANCE));
+    public static final Holder<ActionRegistryEntry> RUNTIME_ESCAPE = REGISTER.registerHolder("runtime_escape", () ->
+            new ActionRegistryEntry(HexPattern.fromAngles("wdeee", HexDir.SOUTH_EAST), OpRuntimeEscape.INSTANCE));
     public static final Holder<ActionRegistryEntry> OPEN_PAREN = REGISTER.registerHolder("open_paren", () ->
         new ActionRegistryEntry(HexPattern.fromAngles("qqq", HexDir.WEST), OpOpenParen.INSTANCE));
     public static final Holder<ActionRegistryEntry> CLOSE_PAREN = REGISTER.registerHolder("close_paren", () ->

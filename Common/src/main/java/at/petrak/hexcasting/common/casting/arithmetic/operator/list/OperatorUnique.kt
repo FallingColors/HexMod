@@ -6,14 +6,13 @@ import at.petrak.hexcasting.api.casting.arithmetic.predicates.IotaPredicate
 import at.petrak.hexcasting.api.casting.asActionResult
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.common.casting.actions.math.bit.OpToSet
 import at.petrak.hexcasting.common.casting.arithmetic.operator.nextList
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.LIST
 
 object OperatorUnique : OperatorBasic(1, IotaMultiPredicate.all(IotaPredicate.ofType(LIST.get()))) {
     override fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator().withIndex()
-        val list = it.nextList(OpToSet.argc)
+        val list = it.nextList()
         val out = mutableListOf<Iota>()
 
         for (subiota in list) {
