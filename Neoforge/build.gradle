@@ -8,23 +8,34 @@ architectury {
     neoForge()
 }
 
-// FIXME: update dependencies/versions before releasing 0.12
-pkSubproj {
-    pkPublish = true
-    curseforgeJar = jar.archiveFile
-    curseforgeDependencies([
-        "paucal",
-        "patchouli",
-        "caelus",
-        "inline",
-    ])
-    modrinthJar = jar.archiveFile
-    modrinthDependencies([
-        "paucal:HyBiJPtT", // 0.6.0-forge
-        "patchouli:1.20.1-80-forge",
-        "caelus:3.1.0+1.20",
-        "inline:1.20.1-1.0.1-forge",
-    ])
+publishMods {
+    file = jar.archiveFile
+    modLoaders.add("neoForge")
+    curseforge{
+        requires("paucal",
+                "patchouli",
+                "caelus",
+                "inline")
+    }
+    modrinth{
+        requires {
+            slug = "paucal"
+            version = "zgpdzVKd"
+            platform = "neoforge"
+        }
+        requires {
+            slug = "patchouli"
+            version = "1.21-88-neoforge"
+        }
+        requires {
+            slug = "caelus"
+            version = "KsfI4QsR" // 7.0.1+1.21.1 neoforge ver
+        }
+        requires {
+            slug = "inline"
+            version = "1.21.1-1.2.2-neoforge"
+        }
+    }
 }
 
 configurations {
@@ -55,7 +66,7 @@ repositories {
     }
 
     maven { url = "https://maven.neoforged.net/releases/" }
-    // paucal and patchi
+    // paucal and patchouli
     maven { url = 'https://maven.blamejared.com' }
     maven {
         name = "Curios"
