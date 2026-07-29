@@ -1,9 +1,12 @@
 package at.petrak.hexcasting.common.loot;
 
+import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.common.components.HexHolderComponent;
 import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexLootFunctions;
 import com.mojang.datafixers.util.Pair;
@@ -40,16 +43,17 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
      * This doesn't actually have any params so extract behaviour out for the benefit of forge
      */
     public static ItemStack doStatic(ItemStack stack, RandomSource rand) {
-        var hex = LOOT_HEXES.get(rand.nextInt(LOOT_HEXES.size()));
+        var hexAndName = LOOT_HEXES.get(rand.nextInt(LOOT_HEXES.size()));
+        var hex = Arrays.stream(hexAndName.getSecond()).map(stringifiedPat -> {
+            var pieces = stringifiedPat.split(" ");
+            return (Iota) new PatternIota(HexPattern.fromAngles(pieces[1],HexDir.fromString(pieces[0])));
+        }).toList();
 
-        stack.set(HexDataComponents.HEX_NAME.get(), hex.getFirst());
+        stack.set(HexDataComponents.HEX_NAME.get(), hexAndName.getFirst());
         stack.set(HexDataComponents.MEDIA.get(), 32 * MediaConstants.SHARD_UNIT);
         stack.set(HexDataComponents.MEDIA_MAX.get(), 32 * MediaConstants.SHARD_UNIT);
         stack.set(HexDataComponents.ITEM_VARIANT.get(), rand.nextInt(8));
-        stack.set(HexDataComponents.HEX_HOLDER_PATTERNS.get(), Arrays.stream(hex.getSecond()).map(el -> {
-            var pieces = el.split(" ");
-            return new PatternIota(HexPattern.fromAngles(pieces[1],HexDir.fromString(pieces[0])));
-        }).collect(Collectors.toList()));
+        stack.set(HexDataComponents.HEX_HOLDER.get(), new HexHolderComponent(hex, FrozenPigment.ANCIENT.get()));
 
         return stack;
     }

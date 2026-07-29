@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.common.components.HexHolderComponent;
 import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.msgs.MsgNewSpiralPatternsS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -58,34 +59,32 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
 
     @Override
     public boolean hasHex(ItemStack stack) {
-        return stack.has(HexDataComponents.HEX_HOLDER_PATTERNS.get());
+        return stack.has(HexDataComponents.HEX_HOLDER.get());
     }
 
     @Override
     public @Nullable List<Iota> getHex(ItemStack stack, ServerLevel level) {
-        return stack.get(HexDataComponents.HEX_HOLDER_PATTERNS.get());
+        var hexHolder = stack.get(HexDataComponents.HEX_HOLDER.get());
+        return (hexHolder != null) ? hexHolder.hex() : null;
     }
 
     @Override
     public void writeHex(ItemStack stack, List<Iota> program, @Nullable FrozenPigment pigment, long media) {
-        stack.set(HexDataComponents.HEX_HOLDER_PATTERNS.get(), program);
-        if (pigment != null)
-            stack.set(HexDataComponents.PIGMENT.get(), pigment);
-
+        stack.set(HexDataComponents.HEX_HOLDER.get(), new HexHolderComponent(program, pigment));
         withMedia(stack, media, media);
     }
 
     @Override
     public void clearHex(ItemStack stack) {
-        stack.remove(HexDataComponents.HEX_HOLDER_PATTERNS.get());
-        stack.remove(HexDataComponents.PIGMENT.get());
+        stack.remove(HexDataComponents.HEX_HOLDER.get());
         stack.remove(HexDataComponents.MEDIA.get());
         stack.remove(HexDataComponents.MEDIA_MAX.get());
     }
 
     @Override
     public @Nullable FrozenPigment getPigment(ItemStack stack) {
-        return stack.get(HexDataComponents.PIGMENT.get());
+        var hexHolder = stack.get(HexDataComponents.HEX_HOLDER.get());
+        return (hexHolder != null) ? hexHolder.pigment() : null;
     }
 
     @Override

@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.common.components.HexHolderComponent;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatRegister;
 import com.mojang.serialization.Codec;
@@ -73,11 +74,12 @@ public class HexDataComponents {
                     .networkSynchronized(IotaType.TYPED_STREAM_CODEC)
                     .build());
 
-    public static final Supplier<DataComponentType<List<Iota>>> HEX_HOLDER_PATTERNS = REGISTER.register("patterns", () ->
-            DataComponentType.<List<Iota>>builder()
-                    .persistent(IotaType.TYPED_CODEC.listOf())
-                    .networkSynchronized(IotaType.TYPED_STREAM_CODEC.apply(ByteBufCodecs.list()))
+    public static final Supplier<DataComponentType<HexHolderComponent>> HEX_HOLDER = REGISTER.register("hex_holder", () ->
+            DataComponentType.<HexHolderComponent>builder()
+                    .persistent(HexHolderComponent.CODEC)
+                    .networkSynchronized(HexHolderComponent.STREAM_CODEC)
                     .build());
+    
     public static final Supplier<DataComponentType<Long>> MEDIA = REGISTER.register("media", () ->
             DataComponentType.<Long>builder()
                     .persistent(Codec.LONG)
@@ -92,12 +94,6 @@ public class HexDataComponents {
             DataComponentType.<String>builder()
                     .persistent(Codec.STRING)
                     .networkSynchronized(ByteBufCodecs.STRING_UTF8)
-                    .build());
-
-    public static final Supplier<DataComponentType<FrozenPigment>> PIGMENT = REGISTER.register("pigment", () ->
-            DataComponentType.<FrozenPigment>builder()
-                    .persistent(FrozenPigment.CODEC)
-                    .networkSynchronized(FrozenPigment.STREAM_CODEC)
                     .build());
 
     public static final Supplier<DataComponentType<Double>> ABACUS_VALUE = REGISTER.register("abacus_value", () ->

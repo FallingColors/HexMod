@@ -37,13 +37,12 @@ public class ItemAncientCypher extends ItemCypher {
         // display media fullness as usual
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
 
-        var patterns = stack.get(HexDataComponents.HEX_HOLDER_PATTERNS.get());
-
         // also show contained spell
-        if(patterns != null) {
+        var hexHolder = stack.get(HexDataComponents.HEX_HOLDER.get());
+        if(hexHolder != null) {
             var storedHex = Component.translatable("hexcasting.tooltip.stored_hex");
 
-            for(var iota : patterns) {
+            for(var iota : hexHolder.hex()) {
                 storedHex.append(iota.display().plainCopy().withStyle(ChatFormatting.DARK_PURPLE));
             }
 
