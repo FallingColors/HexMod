@@ -59,15 +59,15 @@ public class ShiftScrollListener {
     }
 
     private static boolean IsScrollableItem(Item item) {
-        return item == HexItems.SPELLBOOK || item == HexItems.ABACUS;
+        return item == HexItems.SPELLBOOK.get() || item == HexItems.ABACUS.get();
     }
 
     private static double getScrollModifier(Item item, boolean allowInverting) {
         if (!allowInverting) return 1;
 
-        if (item == HexItems.SPELLBOOK) {
+        if (item == HexItems.SPELLBOOK.get()) {
             return HexConfig.client().invertSpellbookScrollDirection() ? -1 : 1;
-        } else if (item == HexItems.ABACUS) {
+        } else if (item == HexItems.ABACUS.get()) {
             return HexConfig.client().invertAbacusScrollDirection() ? -1 : 1;
         } else {
             return 1;

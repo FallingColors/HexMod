@@ -113,38 +113,35 @@ public class ForgeHexInitializer {
     }
 
     private static void initRegistry() {
-        bind(Registries.SOUND_EVENT, HexSounds::registerSounds);
+        HexSounds.register();
 
         HexBlockSetTypes.registerBlocks(BlockSetType::register);
 
-        bind(Registries.CREATIVE_MODE_TAB, HexCreativeTabs::registerCreativeTabs);
+        HexCreativeTabs.register();
 
-        bind(Registries.BLOCK, HexBlocks::registerBlocks);
-        bind(Registries.ITEM, HexBlocks::registerBlockItems);
-        bind(Registries.BLOCK_ENTITY_TYPE, HexBlockEntities::registerTiles);
-        bind(Registries.ITEM, HexItems::registerItems);
-        bind(Registries.DATA_COMPONENT_TYPE, HexDataComponents::registerDataComponents);
+        HexBlocks.register();
+        HexBlockEntities.register();
+        HexItems.register();
+        HexDataComponents.register();
 
-        bind(Registries.RECIPE_SERIALIZER, HexRecipeStuffRegistry::registerSerializers);
-        bind(Registries.RECIPE_TYPE, HexRecipeStuffRegistry::registerTypes);
+        HexRecipeStuffRegistry.register();
 
-        bind(Registries.ENTITY_TYPE, HexEntities::registerEntities);
-        // Testing out new registration system
+        HexEntities.register();
         HexAttributes.register();
         HexMobEffects.register();
-        bind(Registries.POTION, HexPotions::registerPotions);
-        bind(Registries.PARTICLE_TYPE, HexParticles::registerParticles);
+        HexPotions.register();
+        HexParticles.register();
 
-        bind(Registries.TRIGGER_TYPE, HexAdvancementTriggers::registerTriggers);
+        HexAdvancementTriggers.register();
 
-        bind(HexRegistries.IOTA_TYPE, HexIotaTypes::registerTypes);
-        bind(HexRegistries.ACTION, HexActions::register);
-        bind(HexRegistries.SPECIAL_HANDLER, HexSpecialHandlers::register);
-        bind(HexRegistries.ARITHMETIC, HexArithmetics::register);
-        bind(HexRegistries.CONTINUATION_TYPE, HexContinuationTypes::registerContinuations);
-        bind(HexRegistries.EVAL_SOUND, HexEvalSounds::register);
-        bind(HexRegistries.STATE_INGREDIENT, HexStateIngredients::register);
-        bind(HexRegistries.BRAINSWEEPEE_INGREDIENT, HexBrainsweepeeIngredients::register);
+        HexIotaTypes.register();
+        HexActions.register();
+        HexSpecialHandlers.register();
+        HexArithmetics.register();
+        HexContinuationTypes.register();
+        HexEvalSounds.register();
+        HexStateIngredients.register();
+        HexBrainsweepeeIngredients.register();
 
         ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
         ForgeHexLootMods.REGISTRY.register(getModEventBus());
@@ -193,8 +190,8 @@ public class ForgeHexInitializer {
             }));
 
         modBus.addListener((BuildCreativeModeTabContentsEvent evt) -> {
-            HexBlocks.registerBlockCreativeTab(evt::accept, evt.getTab());
-            HexItems.registerItemCreativeTab(evt, evt.getTab());
+            HexBlocks.registerBlocksForCreativeTab(evt.getTabKey(), evt);
+            HexItems.registerItemsForCreativeTab(evt.getTabKey(), evt);
         });
 
 
@@ -202,8 +199,7 @@ public class ForgeHexInitializer {
         modBus.addListener((RegisterEvent evt) -> {
             if (evt.getRegistryKey().equals(Registries.ITEM)) {
                 HexStatistics.register();
-                HexLootFunctions.registerSerializers((lift, id) ->
-                    Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, id, lift));
+                HexLootFunctions.register();
             }
         });
 
@@ -273,7 +269,7 @@ public class ForgeHexInitializer {
         });
 
         evBus.addListener(RegisterBrewingRecipesEvent.class, ev -> {
-            HexPotions.addRecipes(ev.getBuilder(), ev.getRegistryAccess());
+            HexPotions.addRecipes(ev.getBuilder());
         });
 
         // Caps are cardinal components on farbc

@@ -44,7 +44,7 @@ public class ForgeCapabilityHandler {
         evt.registerItem(
                 HexCapabilities.Item.MEDIA,
                 (stack, ctx) -> new CapStaticMediaHolder(HexConfig.common()::dustMediaAmount, ADMediaHolder.AMETHYST_DUST_PRIORITY, stack),
-                HexItems.AMETHYST_DUST
+                HexItems.AMETHYST_DUST.get()
         );
         evt.registerItem(
                 HexCapabilities.Item.MEDIA,
@@ -54,17 +54,17 @@ public class ForgeCapabilityHandler {
         evt.registerItem(
                 HexCapabilities.Item.MEDIA,
                 (stack, ctx) -> new CapStaticMediaHolder(HexConfig.common()::chargedCrystalMediaAmount, ADMediaHolder.CHARGED_AMETHYST_PRIORITY, stack),
-                HexItems.CHARGED_AMETHYST
+                HexItems.CHARGED_AMETHYST.get()
         );
         evt.registerItem(
                 HexCapabilities.Item.MEDIA,
                 (stack, ctx) -> new CapStaticMediaHolder(() -> MediaConstants.QUENCHED_SHARD_UNIT, ADMediaHolder.QUENCHED_SHARD_PRIORITY, stack),
-                HexItems.QUENCHED_SHARD
+                HexItems.QUENCHED_SHARD.get()
         );
         evt.registerItem(
                 HexCapabilities.Item.MEDIA,
                 (stack, ctx) -> new CapStaticMediaHolder(() -> MediaConstants.QUENCHED_BLOCK_UNIT, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, stack),
-                HexBlocks.QUENCHED_ALLAY.asItem()
+                HexBlocks.QUENCHED_ALLAY.get().asItem()
         );
 
         // haha yes
@@ -86,7 +86,7 @@ public class ForgeCapabilityHandler {
         );
         evt.registerEntity(
                 HexCapabilities.Entity.IOTA,
-                HexEntities.WALL_SCROLL,
+                HexEntities.WALL_SCROLL.get(),
                 (ent, ctx) -> new ItemDelegatingEntityIotaHolder.ToWallScroll(ent)
         );
 

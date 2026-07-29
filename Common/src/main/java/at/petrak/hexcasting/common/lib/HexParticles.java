@@ -2,38 +2,26 @@ package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.client.particles.ConjureParticle;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.xplat.IXplatRegister;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.registries.Registries;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
+import java.util.function.Supplier;
 
 public class HexParticles {
-    public static void registerParticles(BiConsumer<ParticleType<?>, ResourceLocation> r) {
-        for (var e : PARTICLES.entrySet()) {
-            r.accept(e.getValue(), e.getKey());
-        }
+    private static final IXplatRegister<ParticleType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.PARTICLE_TYPE);
+
+    public static void register() {
+        REGISTER.registerAll();
     }
 
-    private static final Map<ResourceLocation, ParticleType<?>> PARTICLES = new LinkedHashMap<>();
-
-    public static final ConjureParticleOptions.Type CONJURE_PARTICLE = register(
-        "conjure_particle", new ConjureParticleOptions.Type(false));
-
-    private static <O extends ParticleOptions, T extends ParticleType<O>> T register(String id, T particle) {
-        var old = PARTICLES.put(modLoc(id), particle);
-        if (old != null) {
-            throw new IllegalArgumentException("Typo? Duplicate id " + id);
-        }
-        return particle;
-    }
+    public static final Supplier<ConjureParticleOptions.Type> CONJURE_PARTICLE = REGISTER.register(
+        "conjure_particle", () -> new ConjureParticleOptions.Type(false));
 
     public static class FactoryHandler {
         public interface Consumer {
@@ -42,7 +30,7 @@ public class HexParticles {
         }
 
         public static void registerFactories(Consumer consumer) {
-            consumer.register(CONJURE_PARTICLE, ConjureParticle.Provider::new);
+            consumer.register(CONJURE_PARTICLE.get(), ConjureParticle.Provider::new);
         }
     }
 }

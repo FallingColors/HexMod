@@ -61,7 +61,7 @@ sealed class OperatorSideEffect {
             spray.sprayParticles(
                 harness.env.world,
                 FrozenPigment(
-                    ItemStack(HexItems.DYE_PIGMENTS[DyeColor.RED]!!),
+                    ItemStack(HexItems.DYE_PIGMENTS[DyeColor.RED]!!.get()),
                     Util.NIL_UUID
                 )
             )

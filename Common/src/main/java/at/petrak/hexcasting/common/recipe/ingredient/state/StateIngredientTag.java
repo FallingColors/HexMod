@@ -33,7 +33,7 @@ public class StateIngredientTag extends StateIngredientBlocks {
 
 	@Override
 	public StateIngredientType<?> getType() {
-		return HexStateIngredients.TAG;
+		return HexStateIngredients.TAG.get();
 	}
 
 	public Stream<Block> resolve() {

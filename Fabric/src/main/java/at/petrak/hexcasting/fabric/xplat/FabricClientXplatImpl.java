@@ -102,6 +102,7 @@ public class FabricClientXplatImpl implements IClientXplatAbstractions {
 
     @Override
     public String getModelLocVariant() {
-        return ModelResourceLocation.INVENTORY_VARIANT;
+        // used to be ModelResourceLocation.INVENTORY_VARIANT, but for some reason fabric doesn't have those anymore since the 1.21 port.
+        return "fabric_resource";
     }
 }

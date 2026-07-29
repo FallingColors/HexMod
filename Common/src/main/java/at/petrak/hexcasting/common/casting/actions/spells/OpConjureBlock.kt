@@ -50,7 +50,7 @@ class OpConjureBlock(val light: Boolean) : SpellAction {
 
             val worldState = env.world.getBlockState(pos)
             if (worldState.canBeReplaced(placeContext)) {
-                val block = if (this.light) HexBlocks.CONJURED_LIGHT else HexBlocks.CONJURED_BLOCK
+                val block = if (this.light) HexBlocks.CONJURED_LIGHT.get() else HexBlocks.CONJURED_BLOCK.get()
 
                 if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(env.world, pos, ItemStack(block), env.castingEntity as? ServerPlayer))
                     return

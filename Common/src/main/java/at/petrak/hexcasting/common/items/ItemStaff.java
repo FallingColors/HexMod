@@ -34,7 +34,7 @@ public class ItemStaff extends Item {
         }
         if (player.isShiftKeyDown()) {
             if (world.isClientSide()) {
-                player.playSound(HexSounds.STAFF_RESET, 1f, 1f);
+                player.playSound(HexSounds.STAFF_RESET.value(), 1f, 1f);
             } else if (player instanceof ServerPlayer serverPlayer) {
                 IXplatAbstractions.INSTANCE.clearCastingData(serverPlayer);
                 var packet = new MsgClearSpiralPatternsS2C(player.getUUID());

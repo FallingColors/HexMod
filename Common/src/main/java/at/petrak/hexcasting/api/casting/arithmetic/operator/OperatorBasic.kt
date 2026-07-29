@@ -22,7 +22,7 @@ abstract class OperatorBasic(arity: Int, accepts: IotaMultiPredicate) : Operator
         val stackWithResult = stackWithoutArgs.appendedAll(ret)
 
         val image2 = image.copy(stack = stackWithResult, opsConsumed = image.opsConsumed + 1)
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
+        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get())
     }
 
     /**

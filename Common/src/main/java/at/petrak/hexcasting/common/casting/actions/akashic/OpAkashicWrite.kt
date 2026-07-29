@@ -56,7 +56,7 @@ object OpAkashicWrite : SpellAction {
             record.addNewDatum(recordPos, env.world, key, datum)
 
             env.world.playSound(
-                null, recordPos, HexSounds.SCROLL_SCRIBBLE, SoundSource.BLOCKS,
+                null, recordPos, HexSounds.SCROLL_SCRIBBLE.value(), SoundSource.BLOCKS,
                 1f, 0.8f
             )
 

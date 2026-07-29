@@ -19,7 +19,7 @@ public class GarbageIota extends Iota {
     public GarbageIota() {
         // We have to pass *something* here, but there's nothing that actually needs to go there,
         // so we just do this i guess
-        super(() -> HexIotaTypes.GARBAGE);
+        super(() -> HexIotaTypes.GARBAGE.get());
     }
 
     @Override

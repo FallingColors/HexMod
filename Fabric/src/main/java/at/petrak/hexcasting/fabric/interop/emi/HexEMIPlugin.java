@@ -46,7 +46,7 @@ public class HexEMIPlugin implements EmiPlugin {
 		registry.addWorkstation(EDIFY, EmiIngredient.of(HexTags.Items.STAVES));
 
 		for (RecipeHolder<BrainsweepRecipe> recipe : registry.getRecipeManager()
-			.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE)) {
+			.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE.get())) {
 			var inputBlocks = EmiIngredient.of(recipe.value().blockIn().getDisplayedStacks().stream()
 				.map(EmiStack::of).toList());
 			var inputEntity = new BrainsweepeeEmiStack(recipe.value().entityIn());

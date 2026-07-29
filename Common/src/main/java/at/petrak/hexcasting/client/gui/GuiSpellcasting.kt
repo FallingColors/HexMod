@@ -74,7 +74,7 @@ class GuiSpellcasting constructor(
             // find the last escaped pattern (or the opening paren if there's nothing else) and set it to UNDONE
             this.patterns.reversed().drop(1).firstOrNull {
                 it.type == ResolvedPatternType.ESCAPED ||
-                (it.type == ResolvedPatternType.EVALUATED && it.pattern.angles == HexActions.OPEN_PAREN.prototype.angles)
+                (it.type == ResolvedPatternType.EVALUATED && it.pattern.angles == HexActions.OPEN_PAREN.value().prototype.angles)
             }?.let { it.type = ResolvedPatternType.UNDONE }
             // use the normal EVALUATED coloring for the Evanition that was just drawn
             this.patterns.getOrNull(index)?.let { it.type = ResolvedPatternType.EVALUATED }
@@ -110,7 +110,7 @@ class GuiSpellcasting constructor(
     override fun init() {
         val minecraft = Minecraft.getInstance()
         val soundManager = minecraft.soundManager
-        soundManager.stop(HexSounds.CASTING_AMBIANCE.location, null)
+        soundManager.stop(HexSounds.CASTING_AMBIANCE.value().location, null)
         val player = minecraft.player
         if (player != null) {
             this.ambianceSoundInstance = GridSoundInstance(player)
@@ -152,7 +152,7 @@ class GuiSpellcasting constructor(
                 this.drawState = PatternDrawState.JustStarted(coord)
                 Minecraft.getInstance().soundManager.play(
                     SimpleSoundInstance(
-                        HexSounds.START_PATTERN,
+                        HexSounds.START_PATTERN.value(),
                         SoundSource.PLAYERS,
                         0.25f,
                         1f,
@@ -240,7 +240,7 @@ class GuiSpellcasting constructor(
                 if (playSound) {
                     Minecraft.getInstance().soundManager.play(
                         SimpleSoundInstance(
-                            HexSounds.ADD_TO_PATTERN,
+                            HexSounds.ADD_TO_PATTERN.value(),
                             SoundSource.PLAYERS,
                             0.25f,
                             1f + (Math.random().toFloat() - 0.5f) * 0.1f,
@@ -340,7 +340,7 @@ class GuiSpellcasting constructor(
     }
 
     fun closeForReal() {
-        Minecraft.getInstance().soundManager.stop(HexSounds.CASTING_AMBIANCE.location, null)
+        Minecraft.getInstance().soundManager.stop(HexSounds.CASTING_AMBIANCE.value().location, null)
 
         super.onClose()
     }

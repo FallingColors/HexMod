@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.common.lib;
 
-import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.blocks.BlockQuenchedAllay;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
@@ -10,81 +9,76 @@ import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityRightClic
 import at.petrak.hexcasting.common.blocks.entity.BlockEntityConjured;
 import at.petrak.hexcasting.common.blocks.entity.BlockEntityQuenchedAllay;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import at.petrak.hexcasting.xplat.IXplatRegister;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 public class HexBlockEntities {
-    public static void registerTiles(BiConsumer<BlockEntityType<?>, ResourceLocation> r) {
-        for (var e : BLOCK_ENTITIES.entrySet()) {
-            r.accept(e.getValue(), e.getKey());
-        }
+    private static final IXplatRegister<BlockEntityType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.BLOCK_ENTITY_TYPE);
+
+    public static void register() {
+        REGISTER.registerAll();
     }
 
-    private static final Map<ResourceLocation, BlockEntityType<?>> BLOCK_ENTITIES = new LinkedHashMap<>();
+    public static final Supplier<BlockEntityType<BlockEntityConjured>> CONJURED_TILE = REGISTER.register("conjured", () ->
+            IXplatAbstractions.INSTANCE.createBlockEntityType(BlockEntityConjured::new,
+                    HexBlocks.CONJURED_LIGHT.get(), HexBlocks.CONJURED_BLOCK.get()));
 
-    public static final BlockEntityType<BlockEntityConjured> CONJURED_TILE = register(
-        "conjured",
-        BlockEntityConjured::new, HexBlocks.CONJURED_LIGHT, HexBlocks.CONJURED_BLOCK);
-
-    public static final BlockEntityType<BlockEntityAkashicBookshelf> AKASHIC_BOOKSHELF_TILE = register(
+    public static final Supplier<BlockEntityType<BlockEntityAkashicBookshelf>> AKASHIC_BOOKSHELF_TILE = REGISTER.register(
         "akashic_bookshelf",
-        BlockEntityAkashicBookshelf::new, HexBlocks.AKASHIC_BOOKSHELF);
+            () -> IXplatAbstractions.INSTANCE.createBlockEntityType(BlockEntityAkashicBookshelf::new,
+                    HexBlocks.AKASHIC_BOOKSHELF.get()));
 
-    public static final BlockEntityType<BlockEntityRedstoneImpetus> IMPETUS_REDSTONE_TILE = register(
+    public static final Supplier<BlockEntityType<BlockEntityRedstoneImpetus>> IMPETUS_REDSTONE_TILE = REGISTER.register(
         "impetus/redstone",
-        BlockEntityRedstoneImpetus::new, HexBlocks.IMPETUS_REDSTONE);
-    public static final BlockEntityType<BlockEntityLookingImpetus> IMPETUS_LOOK_TILE = register(
+            () -> IXplatAbstractions.INSTANCE.createBlockEntityType(BlockEntityRedstoneImpetus::new,
+                    HexBlocks.IMPETUS_REDSTONE.get()));
+    public static final Supplier<BlockEntityType<BlockEntityLookingImpetus>> IMPETUS_LOOK_TILE = REGISTER.register(
         "impetus/look",
-        BlockEntityLookingImpetus::new, HexBlocks.IMPETUS_LOOK);
-    public static final BlockEntityType<BlockEntityRightClickImpetus> IMPETUS_RIGHTCLICK_TILE = register(
+            () -> IXplatAbstractions.INSTANCE.createBlockEntityType(BlockEntityLookingImpetus::new,
+                    HexBlocks.IMPETUS_LOOK.get()));
+    public static final Supplier<BlockEntityType<BlockEntityRightClickImpetus>> IMPETUS_RIGHTCLICK_TILE = REGISTER.register(
         "impetus/rightclick",
-        BlockEntityRightClickImpetus::new, HexBlocks.IMPETUS_RIGHTCLICK);
+            () -> IXplatAbstractions.INSTANCE.createBlockEntityType(BlockEntityRightClickImpetus::new,
+                    HexBlocks.IMPETUS_RIGHTCLICK.get()));
 
-    public static final BlockEntityType<BlockEntitySlate> SLATE_TILE = register(
+    public static final Supplier<BlockEntityType<BlockEntitySlate>> SLATE_TILE = REGISTER.register(
         "slate",
-        BlockEntitySlate::new, HexBlocks.SLATE);
+            () -> IXplatAbstractions.INSTANCE.createBlockEntityType(BlockEntitySlate::new,
+                    HexBlocks.SLATE.get()));
 
-    public static final BlockEntityType<BlockEntityQuenchedAllay> QUENCHED_ALLAY_TILE = register(
-        "quenched_allay", BlockEntityQuenchedAllay.fromKnownBlock(HexBlocks.QUENCHED_ALLAY), HexBlocks.QUENCHED_ALLAY);
+    public static final Supplier<BlockEntityType<BlockEntityQuenchedAllay>> QUENCHED_ALLAY_TILE = REGISTER.register(
+        "quenched_allay", () -> IXplatAbstractions.INSTANCE.createBlockEntityType(
+                BlockEntityQuenchedAllay.fromKnownBlock(HexBlocks.QUENCHED_ALLAY.get()),
+                    HexBlocks.QUENCHED_ALLAY.get()));
 
-    public static final BlockEntityType<BlockEntityQuenchedAllay> QUENCHED_ALLAY_TILES_TILE = register(
-            "quenched_allay_tiles", BlockEntityQuenchedAllay.fromKnownBlock(HexBlocks.QUENCHED_ALLAY_TILES), HexBlocks.QUENCHED_ALLAY_TILES);
+    public static final Supplier<BlockEntityType<BlockEntityQuenchedAllay>> QUENCHED_ALLAY_TILES_TILE = REGISTER.register(
+            "quenched_allay_tiles", () -> IXplatAbstractions.INSTANCE.createBlockEntityType(
+                    BlockEntityQuenchedAllay.fromKnownBlock(HexBlocks.QUENCHED_ALLAY_TILES.get()),
+                    HexBlocks.QUENCHED_ALLAY_TILES.get()));
 
-    public static final BlockEntityType<BlockEntityQuenchedAllay> QUENCHED_ALLAY_BRICKS_TILE = register(
-            "quenched_allay_bricks", BlockEntityQuenchedAllay.fromKnownBlock(HexBlocks.QUENCHED_ALLAY_BRICKS), HexBlocks.QUENCHED_ALLAY_BRICKS);
+    public static final Supplier<BlockEntityType<BlockEntityQuenchedAllay>> QUENCHED_ALLAY_BRICKS_TILE = REGISTER.register(
+            "quenched_allay_bricks", () -> IXplatAbstractions.INSTANCE.createBlockEntityType(
+                    BlockEntityQuenchedAllay.fromKnownBlock(HexBlocks.QUENCHED_ALLAY_BRICKS.get()),
+                    HexBlocks.QUENCHED_ALLAY_BRICKS.get()));
 
-    public static final BlockEntityType<BlockEntityQuenchedAllay> QUENCHED_ALLAY_BRICKS_SMALL_TILE = register(
-            "quenched_allay_bricks_small", BlockEntityQuenchedAllay.fromKnownBlock(HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL), HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL);
+    public static final Supplier<BlockEntityType<BlockEntityQuenchedAllay>> QUENCHED_ALLAY_BRICKS_SMALL_TILE = REGISTER.register(
+            "quenched_allay_bricks_small", () -> IXplatAbstractions.INSTANCE.createBlockEntityType(
+                    BlockEntityQuenchedAllay.fromKnownBlock(HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL.get()),
+                    HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL.get()));
 
     public static BlockEntityType<BlockEntityQuenchedAllay> typeForQuenchedAllay(BlockQuenchedAllay block) {
-        if (block == HexBlocks.QUENCHED_ALLAY)
-            return QUENCHED_ALLAY_TILE;
-        if (block == HexBlocks.QUENCHED_ALLAY_TILES)
-            return QUENCHED_ALLAY_TILES_TILE;
-        if (block == HexBlocks.QUENCHED_ALLAY_BRICKS)
-            return QUENCHED_ALLAY_BRICKS_TILE;
-        if (block == HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL)
-            return QUENCHED_ALLAY_BRICKS_SMALL_TILE;
+        if (block == HexBlocks.QUENCHED_ALLAY.get())
+            return QUENCHED_ALLAY_TILE.get();
+        if (block == HexBlocks.QUENCHED_ALLAY_TILES.get())
+            return QUENCHED_ALLAY_TILES_TILE.get();
+        if (block == HexBlocks.QUENCHED_ALLAY_BRICKS.get())
+            return QUENCHED_ALLAY_BRICKS_TILE.get();
+        if (block == HexBlocks.QUENCHED_ALLAY_BRICKS_SMALL.get())
+            return QUENCHED_ALLAY_BRICKS_SMALL_TILE.get();
         return null;
-    }
-
-    private static <T extends BlockEntity> BlockEntityType<T> register(String id,
-        BiFunction<BlockPos, BlockState, T> func, Block... blocks) {
-        var ret = IXplatAbstractions.INSTANCE.createBlockEntityType(func, blocks);
-        var old = BLOCK_ENTITIES.put(ResourceLocation.fromNamespaceAndPath(HexAPI.MOD_ID, id), ret);
-        if (old != null) {
-            throw new IllegalArgumentException("Duplicate id " + id);
-        }
-        return ret;
     }
 
 }

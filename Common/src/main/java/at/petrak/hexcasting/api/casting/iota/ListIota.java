@@ -25,7 +25,7 @@ public class ListIota extends Iota {
     private final int size;
 
     public ListIota(@NotNull TreeList<Iota> list) {
-        super(() -> HexIotaTypes.LIST);
+        super(() -> HexIotaTypes.LIST.get());
         this.list = list;
         int maxChildDepth = 0;
         int totalSize = 1;
