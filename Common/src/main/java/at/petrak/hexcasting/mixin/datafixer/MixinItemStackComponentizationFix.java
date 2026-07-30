@@ -3,11 +3,9 @@ package at.petrak.hexcasting.mixin.datafixer;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import com.mojang.serialization.Dynamic;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+import com.mojang.serialization.OptionalDynamic;
 import net.minecraft.util.datafix.fixes.ItemStackComponentizationFix;
 import net.minecraft.util.datafix.fixes.ItemStackComponentizationFix.ItemStackData;
 import org.spongepowered.asm.mixin.Mixin;
@@ -65,6 +63,12 @@ public class MixinItemStackComponentizationFix {
     private static void hexCasting$fixIotaHolder(ItemStackData itemStackData, Dynamic<?> dynamic, String iotaType, Dynamic<?> hexData, boolean sealed) {
         Map<Dynamic<?>, Dynamic<?>> component = new HashMap<>();
         component.put(dynamic.createString("type"), dynamic.createString(iotaType));
+        switch (iotaType) {
+            case "hexcasting:double":
+                component.put(dynamic.createString("value"), hexData);
+                break;
+                // TODO: correctly fix each iota type. Can we somehow even do this for non-basemod iotas?
+        }
         component.put(dynamic.createString("value"), hexData);
         itemStackData.setComponent("hexcasting:iota", dynamic.createMap(component));
         if (sealed) itemStackData.setComponent("hexcasting:sealed", dynamic.createMap(Map.of()));
