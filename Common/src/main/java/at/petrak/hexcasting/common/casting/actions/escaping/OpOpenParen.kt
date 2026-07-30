@@ -22,7 +22,7 @@ object OpOpenParen : Action {
         // we have escaped the parens onto the stack; we just also record our count.
         val newParens = image.parenthesized.toMutableList()
         newParens.add(CastingImage.ParenthesizedIota(thisIota, false))
-        val image2 = image.withUsedOp().copy(
+        val image2 = image.copy(
             parenthesized = newParens,
             parenCount = image.parenCount + 1
         )

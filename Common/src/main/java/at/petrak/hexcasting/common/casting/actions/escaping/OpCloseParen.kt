@@ -34,7 +34,7 @@ object OpCloseParen : Action {
             // we need to add the close paren
             val newParens = image.parenthesized.toMutableList()
             newParens.add(ParenthesizedIota(thisIota, false))
-            val image2 = image.withUsedOp().copy(
+            val image2 = image.copy(
                 parenCount = newParenCount,
                 parenthesized = newParens
             )
