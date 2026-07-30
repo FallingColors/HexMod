@@ -4,8 +4,8 @@ import at.petrak.hexcasting.api.casting.math.HexPattern;
 import com.mojang.serialization.Dynamic;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
-import com.mojang.serialization.OptionalDynamic;
 import net.minecraft.util.datafix.fixes.ItemStackComponentizationFix;
 import net.minecraft.util.datafix.fixes.ItemStackComponentizationFix.ItemStackData;
 import org.spongepowered.asm.mixin.Mixin;
@@ -66,6 +66,12 @@ public class MixinItemStackComponentizationFix {
         switch (iotaType) {
             case "hexcasting:double":
                 component.put(dynamic.createString("value"), hexData);
+                break;
+            case "hexcasting:entity":
+                IntStream uuid = hexData.get("uuid").asIntStream();
+                // Unfortunately, it seems like we cannot easily fix InlineAPI components, so we will have to live with "an unknown entity"
+                component.put(dynamic.createString("entityId"), dynamic.createIntList(uuid));
+                component.put(dynamic.createString("isPlayer"), dynamic.createBoolean(true));
                 break;
                 // TODO: correctly fix each iota type. Can we somehow even do this for non-basemod iotas?
         }
