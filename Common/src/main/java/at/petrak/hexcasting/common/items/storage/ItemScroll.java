@@ -58,7 +58,7 @@ public class ItemScroll extends Item implements IotaHolderItem {
     public static ItemStack withPerWorldPattern(ItemStack stack, ResourceKey<ActionRegistryEntry> action) {
         Item item = stack.getItem();
         if (item instanceof ItemScroll) {
-            stack.set(HexDataComponents.ACTION, action);
+            stack.set(HexDataComponents.ACTION.get(), action);
         }
 
         return stack;
@@ -78,9 +78,9 @@ public class ItemScroll extends Item implements IotaHolderItem {
     public void writeDatum(ItemStack stack, Iota datum) {
         if (this.canWrite(stack, datum)) {
             if (datum instanceof PatternIota pat) {
-                stack.set(HexDataComponents.PATTERN, pat.getPattern());
+                stack.set(HexDataComponents.PATTERN.get(), pat.getPattern());
             } else if (datum == null) {
-                stack.remove(HexDataComponents.PATTERN);
+                stack.remove(HexDataComponents.PATTERN.get());
             }
         }
     }
@@ -128,12 +128,12 @@ public class ItemScroll extends Item implements IotaHolderItem {
     @Override
     public Component getName(ItemStack pStack) {
         var descID = this.getDescriptionId(pStack);
-        var ancientAction = pStack.get(HexDataComponents.ACTION);
+        var ancientAction = pStack.get(HexDataComponents.ACTION.get());
         if (ancientAction != null) {
             return Component.translatable(descID + ".of",
                 Component.translatable("hexcasting.action." + ancientAction.location()));
-        } else if (pStack.has(HexDataComponents.PATTERN)) {
-            var pattern = pStack.get(HexDataComponents.PATTERN);
+        } else if (pStack.has(HexDataComponents.PATTERN.get())) {
+            var pattern = pStack.get(HexDataComponents.PATTERN.get());
             var patternLabel = Component.literal("");
             if (pattern != null) {
                 patternLabel = Component.literal(": ").append(new InlinePatternData(pattern).asText(false));
@@ -148,39 +148,39 @@ public class ItemScroll extends Item implements IotaHolderItem {
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
         // the needs_purchase tag is used so you can't see the pattern on scrolls sold by a wandering trader
         // once you put the scroll into your inventory, this removes the tag to reveal the pattern
-        if(pStack.has(HexDataComponents.NEEDS_PURCHASE))
-            pStack.remove(HexDataComponents.NEEDS_PURCHASE);
+        if(pStack.has(HexDataComponents.NEEDS_PURCHASE.get()))
+            pStack.remove(HexDataComponents.NEEDS_PURCHASE.get());
         // if op_id is set but there's no stored pattern, attempt to load the pattern on inv tick
-        if (pStack.has(HexDataComponents.ACTION) && !pStack.has(HexDataComponents.PATTERN) && pEntity.getServer() != null) {
-            var action = pStack.get(HexDataComponents.ACTION);
+        if (pStack.has(HexDataComponents.ACTION.get()) && !pStack.has(HexDataComponents.PATTERN.get()) && pEntity.getServer() != null) {
+            var action = pStack.get(HexDataComponents.ACTION.get());
             if (action == null) {
                 // if the provided op_id is invalid, remove it so we don't keep trying every tick
-                pStack.remove(HexDataComponents.ACTION);
+                pStack.remove(HexDataComponents.ACTION.get());
                 return;
             }
             var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(action, pEntity.getServer().overworld());
             if (pat == null) {
                 // if pat is null, the per-world order hasn't been registered; remove the op_id and warn the player
-                pStack.set(HexDataComponents.RECALC_WARNING, action);
-                pStack.remove(HexDataComponents.ACTION);
+                pStack.set(HexDataComponents.RECALC_WARNING.get(), action);
+                pStack.remove(HexDataComponents.ACTION.get());
                 return;
             }
-            pStack.set(HexDataComponents.PATTERN, pat);
+            pStack.set(HexDataComponents.PATTERN.get(), pat);
         }
     }
 
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        if (stack.has(HexDataComponents.NEEDS_PURCHASE)) {
+        if (stack.has(HexDataComponents.NEEDS_PURCHASE.get())) {
             var needsPurchase = Component.translatable("hexcasting.tooltip.scroll.needs_purchase");
             tooltipComponents.add(needsPurchase.withStyle(ChatFormatting.GRAY));
-        } else if (stack.has(HexDataComponents.RECALC_WARNING)) {
-            var spellName = Component.translatable("hexcasting.action." + stack.get(HexDataComponents.RECALC_WARNING));
+        } else if (stack.has(HexDataComponents.RECALC_WARNING.get())) {
+            var spellName = Component.translatable("hexcasting.action." + stack.get(HexDataComponents.RECALC_WARNING.get()));
             var line1 = Component.translatable("hexcasting.tooltip.scroll.recalc_warning.line1", spellName);
             var line2 = Component.translatable("hexcasting.tooltip.scroll.recalc_warning.line2");
             tooltipComponents.add(line1.withStyle(ChatFormatting.RED));
             tooltipComponents.add(line2.withStyle(ChatFormatting.RED));
-        } else if (stack.has(HexDataComponents.ACTION) && !stack.has(HexDataComponents.PATTERN)) {
+        } else if (stack.has(HexDataComponents.ACTION.get()) && !stack.has(HexDataComponents.PATTERN.get())) {
             var notLoaded = Component.translatable("hexcasting.tooltip.scroll.pattern_not_loaded");
             tooltipComponents.add(notLoaded.withStyle(ChatFormatting.GRAY));
         }
@@ -188,11 +188,11 @@ public class ItemScroll extends Item implements IotaHolderItem {
 
     @Override
     public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
-        var pattern = stack.get(HexDataComponents.PATTERN);
-        if (pattern != null && !stack.has(HexDataComponents.NEEDS_PURCHASE)) {
+        var pattern = stack.get(HexDataComponents.PATTERN.get());
+        if (pattern != null && !stack.has(HexDataComponents.NEEDS_PURCHASE.get())) {
             return Optional.of(new PatternTooltip(
                 pattern,
-                    stack.has(HexDataComponents.ACTION)
+                    stack.has(HexDataComponents.ACTION.get())
                     ? PatternTooltipComponent.ANCIENT_BG
                     : PatternTooltipComponent.PRISTINE_BG));
         }
@@ -202,7 +202,7 @@ public class ItemScroll extends Item implements IotaHolderItem {
 
     @Override
     public @Nullable Iota readIota(ItemStack stack) {
-        var pattern = stack.get(HexDataComponents.PATTERN);
+        var pattern = stack.get(HexDataComponents.PATTERN.get());
         return pattern != null ? new PatternIota(pattern) : null;
     }
 }

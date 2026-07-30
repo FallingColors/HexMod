@@ -31,7 +31,7 @@ object FrameFinishEval : ContinuationFrame {
             null,
             listOf(),
             ResolvedPatternType.EVALUATED,
-            HexEvalSounds.NOTHING,
+            HexEvalSounds.NOTHING.get(),
         )
     }
 

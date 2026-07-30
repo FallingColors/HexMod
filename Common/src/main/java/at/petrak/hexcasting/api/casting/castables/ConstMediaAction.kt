@@ -44,7 +44,7 @@ interface ConstMediaAction : Action {
         val sideEffects = mutableListOf<OperatorSideEffect>(OperatorSideEffect.ConsumeMedia(this.mediaCost))
 
         val image2 = image.copy(stack = stackWithResult, opsConsumed = image.opsConsumed + result.opCount)
-        return OperationResult(image2, sideEffects, continuation, HexEvalSounds.NORMAL_EXECUTE)
+        return OperationResult(image2, sideEffects, continuation, HexEvalSounds.NORMAL_EXECUTE.get())
     }
 
     data class CostMediaActionResult(val resultStack: List<Iota>, val opCount: Long = 1)

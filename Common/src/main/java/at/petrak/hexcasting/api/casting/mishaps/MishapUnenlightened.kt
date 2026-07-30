@@ -28,7 +28,7 @@ class MishapUnenlightened : Mishap() {
 
         val castingPlayer = env.castingEntity as? ServerPlayer
         if (castingPlayer != null) {
-            HexAdvancementTriggers.FAIL_GREAT_SPELL_TRIGGER.trigger(castingPlayer)
+            HexAdvancementTriggers.FAIL_GREAT_SPELL_TRIGGER.get().trigger(castingPlayer)
         }
         return stack
     }

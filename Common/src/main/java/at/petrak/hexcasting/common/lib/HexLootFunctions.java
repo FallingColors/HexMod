@@ -3,40 +3,25 @@ package at.petrak.hexcasting.common.lib;
 import at.petrak.hexcasting.common.loot.AddHexToAncientCypherFunc;
 import at.petrak.hexcasting.common.loot.AddPerWorldPatternToScrollFunc;
 import at.petrak.hexcasting.common.loot.AmethystReducerFunc;
-import net.minecraft.resources.ResourceLocation;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.xplat.IXplatRegister;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
+import java.util.function.Supplier;
 
 public class HexLootFunctions {
-    public static void registerSerializers(BiConsumer<LootItemFunctionType<?>, ResourceLocation> r) {
-        for (var e : LOOT_FUNCS.entrySet()) {
-            r.accept(e.getValue(), e.getKey());
-        }
+    private static final IXplatRegister<LootItemFunctionType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.LOOT_FUNCTION_TYPE);
+
+    public static void register() {
+        REGISTER.registerAll();
     }
 
-    private static final Map<ResourceLocation, LootItemFunctionType<?>> LOOT_FUNCS = new LinkedHashMap<>();
-
-    public static final LootItemFunctionType<? extends LootItemConditionalFunction> PATTERN_SCROLL = register("pattern_scroll",
-        new LootItemFunctionType<>(AddPerWorldPatternToScrollFunc.CODEC));
-    public static final LootItemFunctionType<? extends LootItemConditionalFunction> HEX_CYPHER = register("hex_cypher",
-        new LootItemFunctionType<>(AddHexToAncientCypherFunc.CODEC));
-    public static final LootItemFunctionType<? extends LootItemConditionalFunction> AMETHYST_SHARD_REDUCER = register("amethyst_shard_reducer",
-        new LootItemFunctionType<>(AmethystReducerFunc.CODEC));
-
-    private static LootItemFunctionType<? extends LootItemConditionalFunction> register(
-            String id,
-            LootItemFunctionType<? extends LootItemConditionalFunction> lift
-    ) {
-        var old = LOOT_FUNCS.put(modLoc(id), lift);
-        if (old != null) {
-            throw new IllegalArgumentException("Typo? Duplicate id " + id);
-        }
-        return lift;
-    }
+    public static final Supplier<LootItemFunctionType<? extends LootItemConditionalFunction>> PATTERN_SCROLL = REGISTER.register("pattern_scroll",
+            () -> new LootItemFunctionType<>(AddPerWorldPatternToScrollFunc.CODEC));
+    public static final Supplier<LootItemFunctionType<? extends LootItemConditionalFunction>> HEX_CYPHER = REGISTER.register("hex_cypher",
+            () -> new LootItemFunctionType<>(AddHexToAncientCypherFunc.CODEC));
+    public static final Supplier<LootItemFunctionType<? extends LootItemConditionalFunction>> AMETHYST_SHARD_REDUCER = REGISTER.register("amethyst_shard_reducer",
+            () -> new LootItemFunctionType<>(AmethystReducerFunc.CODEC));
 }

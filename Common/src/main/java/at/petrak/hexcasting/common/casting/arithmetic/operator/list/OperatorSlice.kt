@@ -13,7 +13,7 @@ import at.petrak.hexcasting.common.lib.hex.HexIotaTypes.LIST
 import kotlin.math.max
 import kotlin.math.min
 
-object OperatorSlice : OperatorBasic(3, IotaMultiPredicate.triple(IotaPredicate.ofType(LIST), IotaPredicate.ofType(DOUBLE), IotaPredicate.ofType(DOUBLE))) {
+object OperatorSlice : OperatorBasic(3, IotaMultiPredicate.triple(IotaPredicate.ofType(LIST.get()), IotaPredicate.ofType(DOUBLE.get()), IotaPredicate.ofType(DOUBLE.get()))) {
     override fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator().withIndex()
         val list = it.nextList(arity).toList()

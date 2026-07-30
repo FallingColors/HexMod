@@ -30,7 +30,7 @@ public class BrainsweepProcessor implements IComponentProcessor {
 		var id = ResourceLocation.parse(vars.get("recipe", level.registryAccess()).asString());
 
 		var recman = level.getRecipeManager();
-		var brainsweepings = recman.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE);
+		var brainsweepings = recman.getAllRecipesFor(HexRecipeStuffRegistry.BRAINSWEEP_TYPE.get());
 		for (var poisonApples : brainsweepings) {
 			if (poisonApples.id().equals(id)) {
 				this.recipe = poisonApples.value();
@@ -96,9 +96,9 @@ public class BrainsweepProcessor implements IComponentProcessor {
                     }
 				}
 				ItemCost[] costs  = {
-						new ItemCost(HexItems.AMETHYST_DUST, (int)MediaConstants.DUST_UNIT),
+						new ItemCost(HexItems.AMETHYST_DUST.get(), (int)MediaConstants.DUST_UNIT),
 						new ItemCost(Items.AMETHYST_SHARD, (int)MediaConstants.SHARD_UNIT),
-						new ItemCost(HexItems.CHARGED_AMETHYST, (int)MediaConstants.CRYSTAL_UNIT),
+						new ItemCost(HexItems.CHARGED_AMETHYST.get(), (int)MediaConstants.CRYSTAL_UNIT),
 				};
 
 				// get evenly divisible ItemStacks
@@ -112,7 +112,7 @@ public class BrainsweepProcessor implements IComponentProcessor {
 					return IVariable.wrapList(validItemStacks, level.registryAccess());
 				}
 				// fallback: display in terms of dust
-				return IVariable.from(new ItemStack(HexItems.AMETHYST_DUST, (int) (this.recipe.mediaCost() / MediaConstants.DUST_UNIT)), level.registryAccess());
+				return IVariable.from(new ItemStack(HexItems.AMETHYST_DUST.get(), (int) (this.recipe.mediaCost() / MediaConstants.DUST_UNIT)), level.registryAccess());
 			}
 			default -> {
 				return null;

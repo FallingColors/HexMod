@@ -25,7 +25,7 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
     private int lookAmount = 0;
 
     public BlockEntityLookingImpetus(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(HexBlockEntities.IMPETUS_LOOK_TILE, pWorldPosition, pBlockState);
+        super(HexBlockEntities.IMPETUS_LOOK_TILE.get(), pWorldPosition, pBlockState);
     }
 
     // https://github.com/VazkiiMods/Botania/blob/2607bcd31c4eaeb617f7d1b3ec1c1db08f59add4/Common/src/main/java/vazkii/botania/common/block/tile/TileEnderEye.java#L27
@@ -77,7 +77,7 @@ public class BlockEntityLookingImpetus extends BlockEntityAbstractImpetus {
                     var t = (float) newLook / MAX_LOOK_AMOUNT;
                     var pitch = Mth.lerp(t, 0.5f, 1.2f);
                     var volume = Mth.lerp(t, 0.2f, 1.2f);
-                    level.playSound(null, pos, HexSounds.IMPETUS_LOOK_TICK, SoundSource.BLOCKS, volume, pitch);
+                    level.playSound(null, pos, HexSounds.IMPETUS_LOOK_TICK.value(), SoundSource.BLOCKS, volume, pitch);
                 }
                 self.lookAmount = newLook;
                 self.setChanged();

@@ -25,6 +25,6 @@ object OpLastNToList : Action {
         val stackWithResult = stackWithoutContents.appendedAll(output.asActionResult)
 
         val image2 = image.withUsedOp().copy(stack = stackWithResult)
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
+        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get())
     }
 }

@@ -16,7 +16,7 @@ import static at.petrak.hexcasting.common.lib.hex.HexIotaTypes.VEC3;
 
 public class OperatorUnpack extends OperatorBasic {
 	private OperatorUnpack() {
-		super(1, IotaMultiPredicate.all(IotaPredicate.ofType(HexIotaTypes.VEC3)));
+		super(1, IotaMultiPredicate.all(IotaPredicate.ofType(HexIotaTypes.VEC3.get())));
 	}
 
 	public static OperatorUnpack INSTANCE = new OperatorUnpack();
@@ -24,7 +24,7 @@ public class OperatorUnpack extends OperatorBasic {
 	@Override
 	public @NotNull Iterable<Iota> apply(Iterable<? extends Iota> iotas, @NotNull CastingEnvironment env) {
 		var it = iotas.iterator();
-		var vec = downcast(it.next(), VEC3).getVec3();
+		var vec = downcast(it.next(), VEC3.get()).getVec3();
 		return List.of(new DoubleIota(vec.x), new DoubleIota(vec.y), new DoubleIota(vec.z));
 	}
 }

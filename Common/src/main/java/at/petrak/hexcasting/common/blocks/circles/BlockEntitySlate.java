@@ -20,21 +20,21 @@ public class BlockEntitySlate extends HexBlockEntity {
     public HexPattern pattern;
 
     public BlockEntitySlate(BlockPos pos, BlockState state) {
-        super(HexBlockEntities.SLATE_TILE, pos, state);
+        super(HexBlockEntities.SLATE_TILE.get(), pos, state);
     }
 
     @Override
     protected void collectImplicitComponents(DataComponentMap.Builder components) {
         super.collectImplicitComponents(components);
         if (this.pattern != null) {
-            components.set(HexDataComponents.PATTERN, this.pattern);
+            components.set(HexDataComponents.PATTERN.get(), this.pattern);
         }
     }
 
     @Override
     protected void applyImplicitComponents(DataComponentInput componentInput) {
         super.applyImplicitComponents(componentInput);
-        var pat = componentInput.get(HexDataComponents.PATTERN);
+        var pat = componentInput.get(HexDataComponents.PATTERN.get());
         if (pat != null) {
             this.pattern = pat;
         }

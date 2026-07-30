@@ -30,7 +30,7 @@ public class ForgeUnsealedIngredient implements ICustomIngredient {
 
     private static ItemStack createStack(ItemStack base) {
         ItemStack newStack = base.copy();
-        base.set(HexDataComponents.VISUAL_OVERRIDE, Optional.empty());
+        base.set(HexDataComponents.VISUAL_OVERRIDE.get(), Optional.empty());
         return newStack;
     }
 

@@ -23,7 +23,7 @@ public class BlockLookingImpetus extends BlockAbstractImpetus {
 
     @Override
     public BlockEntityType<? extends BlockEntityAbstractImpetus> getBlockEntityType() {
-        return HexBlockEntities.IMPETUS_LOOK_TILE;
+        return HexBlockEntities.IMPETUS_LOOK_TILE.get();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class BlockLookingImpetus extends BlockAbstractImpetus {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState,
         BlockEntityType<T> type) {
         if (!pLevel.isClientSide) {
-            return createTickerHelper(type, HexBlockEntities.IMPETUS_LOOK_TILE,
+            return createTickerHelper(type, HexBlockEntities.IMPETUS_LOOK_TILE.get(),
                 BlockEntityLookingImpetus::serverTick);
         } else {
             return null;

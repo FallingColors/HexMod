@@ -15,13 +15,13 @@ object OpEscape : Action {
         val image2 = image.copy(
             escapeNext = true
         )
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)
+        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get())
     }
 
     override fun operateInParens(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation, thisIota: Iota): ParenthesizedOperationResult {
         val image2 = image.copy(
             escapeNext = true
         )
-        return ParenthesizedOperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE, ResolvedPatternType.EVALUATED)
+        return ParenthesizedOperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get(), ResolvedPatternType.EVALUATED)
     }
 }

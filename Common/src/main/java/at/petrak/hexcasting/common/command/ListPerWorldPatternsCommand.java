@@ -97,9 +97,9 @@ public class ListPerWorldPatternsCommand {
                     var startDir = found.getSecond().canonicalStartDir();
                     var pat = HexPattern.fromAnglesUnchecked(signature, startDir);
 
-                    var stack = new ItemStack(HexItems.SCROLL_LARGE);
-                    stack.set(HexDataComponents.ACTION, key);
-                    stack.set(HexDataComponents.PATTERN, pat);
+                    var stack = new ItemStack(HexItems.SCROLL_LARGE.get());
+                    stack.set(HexDataComponents.ACTION.get(), key);
+                    stack.set(HexDataComponents.PATTERN.get(), pat);
 
                     for (var player : targets) {
                         var stackEntity = player.drop(stack, false);
@@ -128,9 +128,9 @@ public class ListPerWorldPatternsCommand {
     private static int giveOne(CommandSourceStack source, Collection<ServerPlayer> targets,
                                ResourceKey<ActionRegistryEntry> actionKey, HexPattern pat) {
         if (!targets.isEmpty()) {
-            var stack = new ItemStack(HexItems.SCROLL_LARGE);
-            stack.set(HexDataComponents.ACTION, actionKey);
-            stack.set(HexDataComponents.PATTERN, pat);
+            var stack = new ItemStack(HexItems.SCROLL_LARGE.get());
+            stack.set(HexDataComponents.ACTION.get(), actionKey);
+            stack.set(HexDataComponents.PATTERN.get(), pat);
 
             source.sendSuccess(() ->
                 Component.translatable(

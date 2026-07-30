@@ -213,7 +213,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
     }
 
     public void insertMedia(ItemStack stack) {
-        if (getMedia() >= 0 && !stack.isEmpty() && stack.getItem() == HexItems.CREATIVE_UNLOCKER) {
+        if (getMedia() >= 0 && !stack.isEmpty() && stack.getItem() == HexItems.CREATIVE_UNLOCKER.get()) {
             setInfiniteMedia();
             stack.shrink(1);
         } else {
@@ -299,12 +299,12 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
         BlockState state, BlockPos pos, Player observer, Level world, Direction hitFace) {
         if (world.getBlockEntity(pos) instanceof BlockEntityAbstractImpetus beai) {
             if (beai.getMedia() < 0) {
-                lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), ItemCreativeUnlocker.infiniteMedia(world)));
+                lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST.get()), ItemCreativeUnlocker.infiniteMedia(world)));
             } else {
                 var dustCount = (float) beai.getMedia() / (float) MediaConstants.DUST_UNIT;
                 var dustCmp = Component.translatable("hexcasting.tooltip.media",
                     DUST_AMOUNT.format(dustCount));
-                lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST), dustCmp));
+                lines.add(new Pair<>(new ItemStack(HexItems.AMETHYST_DUST.get()), dustCmp));
             }
 
             if (this.displayMsg != null && this.displayItem != null) {
@@ -414,7 +414,7 @@ public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implemen
             return false;
         }
 
-        if (stack.is(HexItems.CREATIVE_UNLOCKER)) {
+        if (stack.is(HexItems.CREATIVE_UNLOCKER.get())) {
             return true;
         }
 

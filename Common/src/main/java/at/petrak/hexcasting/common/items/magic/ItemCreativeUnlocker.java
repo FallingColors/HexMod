@@ -73,7 +73,7 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     }
 
     public static boolean isDebug(ItemStack stack, String flag) {
-        if (!stack.is(HexItems.CREATIVE_UNLOCKER) || !stack.has(DataComponents.CUSTOM_NAME)) {
+        if (!stack.is(HexItems.CREATIVE_UNLOCKER.get()) || !stack.has(DataComponents.CUSTOM_NAME)) {
             return false;
         }
         var keywords = Arrays.asList(stack.getHoverName().getString().toLowerCase(Locale.ROOT).split(" "));
@@ -138,7 +138,7 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     public long withdrawMedia(ItemStack stack, long cost, boolean simulate) {
         // In case it's withdrawn through other means
         if (!simulate && isDebug(stack, DISPLAY_MEDIA)) {
-            addToLongArray(stack, HexDataComponents.MEDIA_EXTRACTIONS, cost);
+            addToLongArray(stack, HexDataComponents.MEDIA_EXTRACTIONS.get(), cost);
         }
 
         return cost < 0 ? getMedia(stack) : cost;
@@ -148,7 +148,7 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     public long insertMedia(ItemStack stack, long amount, boolean simulate) {
         // In case it's inserted through other means
         if (!simulate && isDebug(stack, DISPLAY_MEDIA)) {
-            addToLongArray(stack, HexDataComponents.MEDIA_INSERTIONS, amount);
+            addToLongArray(stack, HexDataComponents.MEDIA_INSERTIONS.get(), amount);
         }
 
         return amount < 0 ? getMaxMedia(stack) : amount;
@@ -162,8 +162,8 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
         if (isDebug(stack, DISPLAY_MEDIA) && !level.isClientSide) {
-            debugDisplay(stack, HexDataComponents.MEDIA_EXTRACTIONS, "withdrawn", "all_media", entity);
-            debugDisplay(stack, HexDataComponents.MEDIA_INSERTIONS, "inserted", "infinite_media", entity);
+            debugDisplay(stack, HexDataComponents.MEDIA_EXTRACTIONS.get(), "withdrawn", "all_media", entity);
+            debugDisplay(stack, HexDataComponents.MEDIA_INSERTIONS.get(), "inserted", "infinite_media", entity);
         }
     }
 
@@ -194,7 +194,7 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
         BlockEntity be = context.getLevel().getBlockEntity(context.getClickedPos());
         if (be instanceof BlockEntityAbstractImpetus impetus) {
             impetus.setInfiniteMedia();
-            context.getLevel().playSound(null, context.getClickedPos(), HexSounds.SPELL_CIRCLE_FIND_BLOCK,
+            context.getLevel().playSound(null, context.getClickedPos(), HexSounds.SPELL_CIRCLE_FIND_BLOCK.value(),
                 SoundSource.PLAYERS, 1f, 1f);
             return InteractionResult.sidedSuccess(context.getLevel().isClientSide());
         }

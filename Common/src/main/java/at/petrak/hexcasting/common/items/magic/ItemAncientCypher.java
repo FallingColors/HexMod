@@ -18,13 +18,13 @@ public class ItemAncientCypher extends ItemCypher {
     @Override
     public void clearHex(ItemStack stack) {
         super.clearHex(stack);
-        stack.remove(HexDataComponents.HEX_NAME);
+        stack.remove(HexDataComponents.HEX_NAME.get());
     }
 
     @Override
     public Component getName(ItemStack stack) {
         var descID = this.getDescriptionId(stack);
-        var hexName = stack.get(HexDataComponents.HEX_NAME);
+        var hexName = stack.get(HexDataComponents.HEX_NAME.get());
         if (hexName != null) {
             return Component.translatable(descID + ".preset", Component.translatable(hexName));
         } else {
@@ -37,7 +37,7 @@ public class ItemAncientCypher extends ItemCypher {
         // display media fullness as usual
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
 
-        var patterns = stack.get(HexDataComponents.HEX_HOLDER_PATTERNS);
+        var patterns = stack.get(HexDataComponents.HEX_HOLDER_PATTERNS.get());
 
         // also show contained spell
         if(patterns != null) {

@@ -65,7 +65,7 @@ interface Action {
             image.withNewParenthesized(thisIota),
             listOf(),
             continuation,
-            HexEvalSounds.NORMAL_EXECUTE,
+            HexEvalSounds.NORMAL_EXECUTE.get(),
             ResolvedPatternType.ESCAPED
         )
     }

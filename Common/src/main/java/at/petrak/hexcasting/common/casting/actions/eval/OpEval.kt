@@ -39,6 +39,6 @@ object OpEval : Action {
         val frame = FrameEvaluate(instrsList, true)
 
         val image2 = image.withUsedOp().copy(stack = newStack)
-        return OperationResult(image2, listOf(), newCont.pushFrame(frame), HexEvalSounds.HERMES)
+        return OperationResult(image2, listOf(), newCont.pushFrame(frame), HexEvalSounds.HERMES.get())
     }
 }

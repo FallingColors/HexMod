@@ -66,7 +66,7 @@ data class FrameForEach(
             newImage.withResetEscape().copy(stack = newStack),
             listOf(),
             ResolvedPatternType.EVALUATED,
-            HexEvalSounds.THOTH,
+            HexEvalSounds.THOTH.get(),
         )
     }
 
