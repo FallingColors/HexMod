@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.casting.math.HexDir;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
-import at.petrak.hexcasting.common.components.HexHolderComponent;
+import at.petrak.hexcasting.common.items.magic.ItemPackagedHex.HexHolder;
 import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexLootFunctions;
 import com.mojang.datafixers.util.Pair;
@@ -53,7 +53,7 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
         stack.set(HexDataComponents.MEDIA.get(), 32 * MediaConstants.SHARD_UNIT);
         stack.set(HexDataComponents.MEDIA_MAX.get(), 32 * MediaConstants.SHARD_UNIT);
         stack.set(HexDataComponents.ITEM_VARIANT.get(), rand.nextInt(8));
-        stack.set(HexDataComponents.HEX_HOLDER.get(), new HexHolderComponent(hex, FrozenPigment.ANCIENT.get()));
+        stack.set(HexDataComponents.HEX_HOLDER.get(), new HexHolder(hex, FrozenPigment.ANCIENT.get()));
 
         return stack;
     }

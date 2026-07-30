@@ -4,8 +4,7 @@ import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
-import at.petrak.hexcasting.api.pigment.FrozenPigment;
-import at.petrak.hexcasting.common.components.HexHolderComponent;
+import at.petrak.hexcasting.common.items.magic.ItemPackagedHex.HexHolder;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatRegister;
 import com.mojang.serialization.Codec;
@@ -74,10 +73,10 @@ public class HexDataComponents {
                     .networkSynchronized(IotaType.TYPED_STREAM_CODEC)
                     .build());
 
-    public static final Supplier<DataComponentType<HexHolderComponent>> HEX_HOLDER = REGISTER.register("hex_holder", () ->
-            DataComponentType.<HexHolderComponent>builder()
-                    .persistent(HexHolderComponent.CODEC)
-                    .networkSynchronized(HexHolderComponent.STREAM_CODEC)
+    public static final Supplier<DataComponentType<HexHolder>> HEX_HOLDER = REGISTER.register("hex_holder", () ->
+            DataComponentType.<HexHolder>builder()
+                    .persistent(HexHolder.CODEC)
+                    .networkSynchronized(HexHolder.STREAM_CODEC)
                     .build());
     
     public static final Supplier<DataComponentType<Long>> MEDIA = REGISTER.register("media", () ->

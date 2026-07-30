@@ -4,13 +4,15 @@ import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.eval.env.PackagedItemCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.iota.Iota;
-import at.petrak.hexcasting.api.casting.iota.PatternIota;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.item.HexHolderItem;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
-import at.petrak.hexcasting.common.components.HexHolderComponent;
 import at.petrak.hexcasting.common.lib.HexDataComponents;
-import at.petrak.hexcasting.common.msgs.MsgNewSpiralPatternsS2C;
-import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -70,7 +72,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
 
     @Override
     public void writeHex(ItemStack stack, List<Iota> program, @Nullable FrozenPigment pigment, long media) {
-        stack.set(HexDataComponents.HEX_HOLDER.get(), new HexHolderComponent(program, pigment));
+        stack.set(HexDataComponents.HEX_HOLDER.get(), new HexHolder(program, pigment));
         withMedia(stack, media, media);
     }
 
@@ -145,5 +147,19 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
     @Override
     public UseAnim getUseAnimation(ItemStack pStack) {
         return UseAnim.BLOCK;
+    }
+
+    public record HexHolder(List<Iota> hex, FrozenPigment pigment) {
+        public static final Codec<HexHolder> CODEC = RecordCodecBuilder.create(inst ->
+                inst.group(
+                        IotaType.TYPED_CODEC.listOf().fieldOf("hex").forGetter(HexHolder::hex),
+                        FrozenPigment.CODEC.fieldOf("pigment").forGetter(HexHolder::pigment)
+                ).apply(inst, HexHolder::new)
+        );
+        public static final StreamCodec<RegistryFriendlyByteBuf, HexHolder> STREAM_CODEC = StreamCodec.composite(
+                IotaType.TYPED_STREAM_CODEC.apply(ByteBufCodecs.list()), HexHolder::hex,
+                FrozenPigment.STREAM_CODEC, HexHolder::pigment,
+                HexHolder::new
+        );
     }
 }
