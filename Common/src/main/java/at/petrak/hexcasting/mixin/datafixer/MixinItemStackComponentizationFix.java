@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemStackComponentizationFix.class)
 public class MixinItemStackComponentizationFix {
     private static final String HEX_IOTA_COMPONENT = "hexcasting:iota";
+    private static final String HEX_SEALED_COMPONENT = "hexcasting:sealed";
     private static final String HEX_IOTA_TYPE = "hexcasting:type";
     private static final String HEX_STORAGE_SEALED = "hexcasting:sealed";
     private static final String HEX_DATA = "hexcasting:data";
@@ -43,7 +44,7 @@ public class MixinItemStackComponentizationFix {
         Map<Dynamic<?>, Dynamic<?>> component = new HashMap<>();
         component.put(dynamic.createString("type"), dynamic.createString(iotaType));
         component.put(dynamic.createString("value"), hexData);
-        if (sealed) component.put(dynamic.createString("sealed"), dynamic.createBoolean(true));
         itemStackData.setComponent(HEX_IOTA_COMPONENT, dynamic.createMap(component));
+        if (sealed) itemStackData.setComponent(HEX_SEALED_COMPONENT, dynamic.createMap(Map.of()));
     }
 }
