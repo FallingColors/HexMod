@@ -64,6 +64,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Improved handling for duplicate pattern signatures in hexdoc ([#1007](https://github.com/FallingColors/HexMod/pull/1007)) @object-Object
 - `CircleExecutionState` now stores the shape of the spell circle using two corners rather than an entire list of positions ([#908](https://github.com/FallingColors/HexMod/pull/908)) @Stick404
 - Added methods in `Action` and `Iota` to define behavior when inside parentheses, and de-hardcoded the iota-escaping patterns ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
+- Changed the client-side ravenmind to store `Iota` instead of `CompoundTag` ([#1210](https://github.com/FallingColors/HexMod/pull/1210)) @Olfi01
+- Changed resource registration to use the IXplatRegister system ([#1212](https://github.com/FallingColors/HexMod/pull/1212)) @Olfi01
+- Added visitor methods to `Iota` to enable walking iotas in an extensible way ([#1191](https://github.com/FallingColors/HexMod/pull/1191)) @poolcritter
 
 ## `0.11.3` - 2025-11-22
 
