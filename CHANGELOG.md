@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Added the `cannot_modify_cost` tag for patterns that should ignore the `media_consumption` attribute when calculating cost ([#987](https://github.com/FallingColors/HexMod/pull/987)) @Robotgiggle
+- Added config options to scale pattern costs per action and globally ([#1041](https://github.com/FallingColors/HexMod/pull/1041)) @Robotgiggle
 - Added a config toggle for the pattern wobble animation on active slates to improve performance ([#1017](https://github.com/FallingColors/HexMod/pull/1017)) @aloaloolaola
 - Added keybinds to flip forward and backwards in a spellbook ([#1028](https://github.com/FallingColors/HexMod/pull/1028)) @pythonmcpi
 - Added a config toggle to disable scrolling through spellbooks outside of the staff grid ([#1028](https://github.com/FallingColors/HexMod/pull/1028)) @pythonmcpi
