@@ -10,6 +10,7 @@ import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import at.petrak.hexcasting.interop.inline.InlinePatternData;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -153,8 +154,8 @@ public class ItemScroll extends Item implements IotaHolderItem {
         // if op_id is set but there's no stored pattern, attempt to load the pattern on inv tick
         if (pStack.has(HexDataComponents.ACTION.get()) && !pStack.has(HexDataComponents.PATTERN.get()) && pEntity.getServer() != null) {
             var action = pStack.get(HexDataComponents.ACTION.get());
-            if (action == null) {
-                // if the provided op_id is invalid, remove it so we don't keep trying every tick
+            if (!IXplatAbstractions.INSTANCE.getActionRegistry().containsKey(action)) {
+                // if the specified Action doesn't actually exist, remove the component so we don't keep trying every tick
                 pStack.remove(HexDataComponents.ACTION.get());
                 return;
             }
@@ -175,7 +176,7 @@ public class ItemScroll extends Item implements IotaHolderItem {
             var needsPurchase = Component.translatable("hexcasting.tooltip.scroll.needs_purchase");
             tooltipComponents.add(needsPurchase.withStyle(ChatFormatting.GRAY));
         } else if (stack.has(HexDataComponents.RECALC_WARNING.get())) {
-            var spellName = Component.translatable("hexcasting.action." + stack.get(HexDataComponents.RECALC_WARNING.get()));
+            var spellName = Component.translatable("hexcasting.action." + stack.get(HexDataComponents.RECALC_WARNING.get()).location());
             var line1 = Component.translatable("hexcasting.tooltip.scroll.recalc_warning.line1", spellName);
             var line2 = Component.translatable("hexcasting.tooltip.scroll.recalc_warning.line2");
             tooltipComponents.add(line1.withStyle(ChatFormatting.RED));
