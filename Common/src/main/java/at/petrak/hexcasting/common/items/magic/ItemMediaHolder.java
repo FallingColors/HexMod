@@ -34,7 +34,7 @@ public abstract class ItemMediaHolder extends Item implements MediaHolderItem {
         Item item = stack.getItem();
         if (item instanceof ItemMediaHolder) {
             stack.set(HexDataComponents.MEDIA.get(), media);
-            stack.set(HexDataComponents.MEDIA_MAX.get(), media);
+            stack.set(HexDataComponents.MEDIA_MAX.get(), maxMedia);
         }
 
         return stack;
