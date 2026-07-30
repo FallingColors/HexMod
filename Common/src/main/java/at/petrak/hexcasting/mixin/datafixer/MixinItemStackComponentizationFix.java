@@ -4,7 +4,6 @@ import at.petrak.hexcasting.api.casting.math.HexPattern;
 import com.mojang.serialization.Dynamic;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -20,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemStackComponentizationFix.class)
 public class MixinItemStackComponentizationFix {
     @Unique
-    private static final String HEX_IOTA_TYPE = "hexcasting:type";
+    private static final String HEX_TYPE = "hexcasting:type";
     @Unique
     private static final String HEX_STORAGE_SEALED = "hexcasting:sealed";
     @Unique
@@ -62,7 +61,7 @@ public class MixinItemStackComponentizationFix {
 
     @Unique
     private static Dynamic<?> hexCasting$mapIotaData(Dynamic<?> iota) {
-        String iotaType = iota.get(HEX_IOTA_TYPE).asString("");
+        String iotaType = iota.get(HEX_TYPE).asString("");
         Dynamic<?> iotaData = iota.get(HEX_DATA).orElseEmptyMap();
         Map<Dynamic<?>, Dynamic<?>> component = new HashMap<>();
         component.put(iota.createString("type"), iota.createString(iotaType));
@@ -78,8 +77,8 @@ public class MixinItemStackComponentizationFix {
                 component.put(iota.createString("value"), iotaData);
                 break;
             case "hexcasting:list":
-                List<Dynamic<?>> listData = iotaData.asList(MixinItemStackComponentizationFix::hexCasting$mapIotaData);
-                component.put(iota.createString("list"), iota.createList(listData.stream()));
+                component.put(iota.createString("list"),
+                        iota.createList(iotaData.asStream().map(MixinItemStackComponentizationFix::hexCasting$mapIotaData)));
                 break;
             case "hexcasting:pattern":
                 component.put(iota.createString("value"), hexCasting$mapPattern(iotaData));
@@ -88,8 +87,8 @@ public class MixinItemStackComponentizationFix {
                 component.put(iota.createString("value"), hexCasting$mapVec3(iotaData));
                 break;
             case "hexcasting:continuation":
-                List<Dynamic<?>> frames = iotaData.asList(MixinItemStackComponentizationFix::hexCasting$mapContinuationFrame);
-                component.put(iota.createString("value"), iota.createList(frames.stream()));
+                component.put(iota.createString("value"),
+                        iota.createList(iotaData.asStream().map(MixinItemStackComponentizationFix::hexCasting$mapContinuationFrame)));
                 break;
             case "hexcasting:null":
             case "hexcasting:garbage":
@@ -107,9 +106,11 @@ public class MixinItemStackComponentizationFix {
     private static Dynamic<?> hexCasting$mapPattern(Dynamic<?> pattern) {
         Map<Dynamic<?>, Dynamic<?>> patternComponent = new HashMap<>();
         byte startDir = pattern.get("start_dir").asByte((byte) 0);
-        List<Byte> angles = pattern.get("angles").asList(dynamic0 -> dynamic0.asByte((byte) 0));
+        List<String> angles = pattern.get("angles").asStream()
+                .map(a -> hexCasting$hexAngle[a.asByte((byte) 0)])
+                .toList();
         patternComponent.put(pattern.createString(HexPattern.TAG_START_DIR), pattern.createString(hexCasting$hexDir[startDir]));
-        patternComponent.put(pattern.createString(HexPattern.TAG_ANGLES), pattern.createString(String.join("", angles.stream().map(a -> hexCasting$hexAngle[a]).toList())));
+        patternComponent.put(pattern.createString(HexPattern.TAG_ANGLES), pattern.createString(String.join("", angles)));
         return pattern.createMap(patternComponent);
     }
 
@@ -122,8 +123,36 @@ public class MixinItemStackComponentizationFix {
     }
 
     @Unique
-    private static Dynamic<?> hexCasting$mapContinuationFrame(Dynamic<?> dynamic) {
-        throw new NotImplementedException();
+    private static Dynamic<?> hexCasting$mapContinuationFrame(Dynamic<?> frame) {
+        String type = frame.get(HEX_TYPE).asString("");
+        Dynamic<?> frameData = frame.get(HEX_DATA).orElseEmptyMap();
+        Map<Dynamic<?>, Dynamic<?>> component = new HashMap<>();
+        component.put(frame.createString("type"), frame.createString(type));
+        switch (type) {
+            case "hexcasting:evaluate":
+                component.put(frame.createString("patterns"),
+                        frame.createList(frameData.get("patterns").asStream().map(MixinItemStackComponentizationFix::hexCasting$mapIotaData)));
+                component.put(frame.createString("isMetacasting"),
+                        frame.createBoolean(frameData.get("isMetacasting").asBoolean(false)));
+                break;
+            case "hexcasting:foreach":
+                component.put(frame.createString("data"),
+                        frame.createList(frameData.get("data").asStream().map(MixinItemStackComponentizationFix::hexCasting$mapIotaData)));
+                component.put(frame.createString("code"),
+                        frame.createList(frameData.get("code").asStream().map(MixinItemStackComponentizationFix::hexCasting$mapIotaData)));
+                component.put(frame.createString("context"),
+                        frame.createList(frameData.get("base").asStream().map(MixinItemStackComponentizationFix::hexCasting$mapIotaData)));
+                // TODO: figure out whether stashed should be base (replicating otherwise unavailable 1.20 thoth behavior) or an empty list (equivalent to 1.21 thoth with whatever size the stack had before casting)
+                component.put(frame.createString("stashed"),
+                        frame.createList(frameData.get("base").asStream().map(MixinItemStackComponentizationFix::hexCasting$mapIotaData)));
+                component.put(frame.createString("accumulator"),
+                        frame.createList(frameData.get("accumulator").asStream().map(MixinItemStackComponentizationFix::hexCasting$mapIotaData)));
+                break;
+            case "hexcasting:end":
+            default:
+                break;
+        }
+        return frame.createMap(component);
     }
 
     @Unique
