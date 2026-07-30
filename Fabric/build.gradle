@@ -1,30 +1,55 @@
 plugins {
     id 'fabric-loom' version "1.9+"
-    id "at.petra-k.pkpcpbp.PKSubprojPlugin"
 }
 
-pkSubproj {
-    pkPublish = true
-    curseforgeJar = remapJar.archiveFile
-    curseforgeDependencies([
-        "paucal",
-        "patchouli",
-        "fabric-language-kotlin",
-        "inline",
-        "cloth-config",
-        "cardinal-components-api",
-        "fabric-api",
-    ])
-    modrinthJar = remapJar.archiveFile
-    modrinthDependencies([
-        "paucal:dabyDTwJ", // 0.6.0-fabric
-        "patchouli:1.20.1-80-fabric",
-        "fabric-language-kotlin:1.13.7+kotlin.2.2.21",
-        "inline:1.20.1-1.2.2-fabric",
-        "cloth-config:11.1.106+fabric",
-        "cardinal-components-api:5.2.1",
-        "fabric-api:0.84.0+1.20.1",
-    ])
+publishMods {
+    // for Fabric 1.21.11 and below
+    file = remapJar.archiveFile
+    modLoaders.add("fabric")
+    curseforge{
+        requires(
+                "paucal",
+                "patchouli",
+                "fabric-language-kotlin",
+                "inline",
+                "cloth-config",
+                "cardinal-components-api",
+                "fabric-api",
+        )
+    }
+    modrinth{
+        requires {
+            slug = "paucal"
+            version = "dabyDTwJ" // 0.6.0 fabric ver
+        }
+        requires {
+            slug = "patchouli"
+            version = "1.20.1-80-fabric"
+        }
+
+        requires {
+            slug = "fabric-language-kotlin"
+            version = fabricLanguageKotlinVersion
+        }
+
+        requires {
+            slug = "inline"
+            version = "1.20.1-1.2.2-fabric"
+        }
+
+        requires {
+            slug = "cloth-config"
+            version = clothConfigVersion + "+fabric"
+        }
+        requires {
+            slug = "cardinal-components-api"
+            version = cardinalComponentsVersion
+        }
+        requires {
+            slug = "fabric-api"
+            version = fabricVersion
+        }
+    }
 }
 
 loom {
@@ -143,7 +168,7 @@ dependencies {
 //    modImplementation "maven.modrinth:phosphor:${phosphorVersion}"
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     source(project(":Common").sourceSets.main.allSource)
 }
 compileKotlin {
