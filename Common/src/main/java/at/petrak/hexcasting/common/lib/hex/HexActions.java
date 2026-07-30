@@ -30,6 +30,7 @@ import at.petrak.hexcasting.common.casting.actions.math.logic.OpBoolIf;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpCoerceToBool;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpEquality;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpTypeEquality;
+import at.petrak.hexcasting.common.casting.actions.queryblock.OpBlockEquality;
 import at.petrak.hexcasting.common.casting.actions.queryentity.*;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockAxisRaycast;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockRaycast;
@@ -542,6 +543,20 @@ public class HexActions {
             HexPattern.fromAngles("eeeeewaqaawd", HexDir.NORTH_EAST), new OpGetEntitiesBy(OpGetEntitiesBy::isLiving,
             true)
         ));
+
+    // == Blocks ==
+    public static final ActionRegistryEntry COMPARE_BLOCK = make("compare_block", new ActionRegistryEntry(
+        HexPattern.fromAngles("qqqqqeqeeeee", HexDir.NORTH_WEST), new OpBlockEquality(false, false)
+    ));
+    public static final ActionRegistryEntry COMPARE_BLOCK_INVERTED = make("compare_block/inverted", new ActionRegistryEntry(
+        HexPattern.fromAngles("eeeeeqeqqqqq", HexDir.NORTH_EAST), new OpBlockEquality(false, true)
+    ));
+    public static final ActionRegistryEntry COMPARE_BLOCK_STRICT = make("compare_block/strict", new ActionRegistryEntry(
+        HexPattern.fromAngles("qwawqwadadwewdwe", HexDir.NORTH_WEST), new OpBlockEquality(true, false)
+    ));
+    public static final ActionRegistryEntry COMPARE_BLOCK_STRICT_INVERTED = make("compare_block/strict/inverted", new ActionRegistryEntry(
+        HexPattern.fromAngles("ewdwewdadawqwawq", HexDir.NORTH_EAST), new OpBlockEquality(true, true)
+    ));
 
     // == Lists ==
 
