@@ -12,10 +12,12 @@ publishMods {
     file = jar.archiveFile
     modLoaders.add("neoForge")
     curseforge{
-        requires("paucal",
-                "patchouli",
-                "caelus",
-                "inline")
+        requires(
+            "paucal",
+            "patchouli",
+            "caelus",
+            "inline"
+        )
     }
     modrinth{
         requires {

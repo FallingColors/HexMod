@@ -13,13 +13,15 @@ publishMods {
     file = remapJar.archiveFile
     modLoaders.add("fabric")
     curseforge{
-        requires("paucal",
-                "patchouli",
-                "fabric-language-kotlin",
-                "inline",
-                "cloth-config",
-                "cardinal-components-api",
-                "fabric-api",)
+        requires(
+            "paucal",
+            "patchouli",
+            "fabric-language-kotlin",
+            "inline",
+            "cloth-config",
+            "cardinal-components-api",
+            "fabric-api",
+        )
     }
     modrinth{
         requires {
@@ -53,7 +55,6 @@ publishMods {
             slug = "fabric-api"
             version = fabricVersion
         }
-
     }
 }
 
