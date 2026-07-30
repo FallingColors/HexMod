@@ -6,7 +6,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static at.petrak.hexcasting.api.mod.HexConfig.noneMatch;
 
@@ -174,6 +177,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> costRescaleList;
+        private static Map<ResourceLocation, Double> costRescaleMap = new HashMap<>();
         private static ForgeConfigSpec.DoubleValue globalCostScaling;
 
         private static ForgeConfigSpec.BooleanValue greaterTeleportSplatsItems;
@@ -205,7 +209,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             costRescaleList = builder.comment(
                     "Maps resource locations to the scaling factor for that specific action's media cost. " +
                         "For example, hexcasting:add_motion 3 will make Impulse cost 3x as much.")
-                .defineList("costRescaleList",  List.of(), Server::isValidReslocDoublePair);
+                .defineList("costRescaleList", List.of(), Server::validateAndStoreMapping);
 
             globalCostScaling = builder.comment(
                     "All media costs, except for actions in the #hexcasting:cannot_modify_cost tag, will be multiplied by this value." +
@@ -269,13 +273,10 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
         @Override
         public double getActionCostScaling(ResourceLocation actionID) {
-            for (var entry : costRescaleList.get()) {
-                String[] split = entry.split(" ");
-                if (actionID.toString().equals(split[0])) {
-                    return Double.parseDouble(split[1]);
-                }
+            if (costRescaleMap.size() != costRescaleList.get().size()) {
+                removeStaleCostScaleMappings();
             }
-            return 1.0;
+            return costRescaleMap.getOrDefault(actionID, 1.0);
         }
 
         @Override
@@ -308,17 +309,35 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             return o instanceof String s && ResourceLocation.isValidResourceLocation(s);
         }
 
-        private static boolean isValidReslocDoublePair(Object o) {
+        private static boolean validateAndStoreMapping(Object o) {
             if (o instanceof String s) {
-                String[] split = s.split(" ");
                 try {
-                    Double.parseDouble(split[1]);
-                } catch (NumberFormatException e) {
+                    String[] split = s.split(" ");
+                    ResourceLocation loc = new ResourceLocation(split[0]);
+                    double scale = Double.parseDouble(split[1]);
+                    costRescaleMap.put(loc, scale);
+                    return true;
+                } catch (Exception e) {
+                    costRescaleMap.clear();
                     return false;
                 }
-                return ResourceLocation.isValidResourceLocation(split[0]);
             }
+            costRescaleMap.clear();
             return false;
+        }
+
+        /**
+         * When an element is removed from the config-backed {@code costRescaleList}, there's no way for the {@code costRescaleMap}
+         * to know that it's gone since Forge's list validation is only done on a per-element basis. To handle this, we
+         * check if {@code costRescaleList} and {@code costRescaleMap} are the same size, and if not we call this method
+         * to remove the erroneous key/value pairs from the map.
+         */
+        private static void removeStaleCostScaleMappings() {
+            var actualKeys = costRescaleList.get().stream().map(entry -> {
+                String[] split = entry.split(" ");
+                return new ResourceLocation(split[0]);
+            }).collect(Collectors.toSet());
+            costRescaleMap.keySet().retainAll(actualKeys);
         }
     }
 }
