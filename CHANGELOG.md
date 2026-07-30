@@ -50,6 +50,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed the book page for the Inert Mindflay mishap incorrectly claiming it would kill unsuitable flay subjects ([#1081](https://github.com/FallingColors/HexMod/pull/1081)) @Robotgiggle
 - Fixed Pace Purification returning nonzero velocity on nonmoving items ([#1119](https://github.com/FallingColors/HexMod/pull/1119)) @IridescentVoid
 - Fixed Accessor's Purification returning false for scrolls in item frames ([#1115](https://github.com/FallingColors/HexMod/pull/1115)) @IridescentVoid
+- Fixed Break Block being unable to break cobwebs on Fabric ([#1218](https://github.com/FallingColors/HexMod/pull/1218)) @Robotgiggle
 
 ### Internal
 
