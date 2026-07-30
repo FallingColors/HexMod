@@ -37,11 +37,11 @@ import java.util.Optional;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 /**
- * TAG_OP_ID and TAG_PATTERN: "Ancient Scroll of %s" (per-world pattern preloaded)
+ * ACTION and PATTERN components: "Ancient Scroll of %s" (per-world pattern preloaded)
  * <br>
- * TAG_OP_ID: "Ancient Scroll of %s" (per-world pattern loaded on inv tick)
+ * Only ACTION component: "Ancient Scroll of %s" (per-world pattern loaded on inv tick)
  * <br>
- * TAG_PATTERN: "Scroll" (custom)
+ * Only PATTERN component: "Scroll" (custom)
  * <br>
  * (none): "Empty Scroll"
  */
@@ -147,11 +147,11 @@ public class ItemScroll extends Item implements IotaHolderItem {
 
     @Override
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        // the needs_purchase tag is used so you can't see the pattern on scrolls sold by a wandering trader
-        // once you put the scroll into your inventory, this removes the tag to reveal the pattern
+        // the NEEDS_PURCHASE component is used so you can't see the pattern on scrolls sold by a wandering trader
+        // once you put the scroll into your inventory, this removes the component to reveal the pattern
         if(pStack.has(HexDataComponents.NEEDS_PURCHASE.get()))
             pStack.remove(HexDataComponents.NEEDS_PURCHASE.get());
-        // if op_id is set but there's no stored pattern, attempt to load the pattern on inv tick
+        // if ACTION is present but PATTERN is not present, attempt to load the pattern on inv tick
         if (pStack.has(HexDataComponents.ACTION.get()) && !pStack.has(HexDataComponents.PATTERN.get()) && pEntity.getServer() != null) {
             var action = pStack.get(HexDataComponents.ACTION.get());
             if (!IXplatAbstractions.INSTANCE.getActionRegistry().containsKey(action)) {
@@ -161,7 +161,7 @@ public class ItemScroll extends Item implements IotaHolderItem {
             }
             var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(action, pEntity.getServer().overworld());
             if (pat == null) {
-                // if pat is null, the per-world order hasn't been registered; remove the op_id and warn the player
+                // if pat is null, the per-world order hasn't been registered; remove the ACTION component and warn the player
                 pStack.set(HexDataComponents.RECALC_WARNING.get(), action);
                 pStack.remove(HexDataComponents.ACTION.get());
                 return;
