@@ -1,9 +1,18 @@
 #!/usr/bin/env groovy
 
+RELEASE_BRANCHES = ["main", "1.21"]
+
 pipeline {
     agent any
     tools {
         jdk "jdk-21"
+    }
+    parameters {
+        booleanParam(
+            name: "PUBLISH_CURSEFORGE_AND_MODRINTH",
+            description: "Publish to CurseForge and modrinth",
+            defaultValue: false,
+        )
     }
     environment {
         discordWebhook = credentials('discordWebhook')
@@ -43,7 +52,7 @@ pipeline {
         stage('Publish') {
             when {
                 allOf {
-                    branch 'main'
+                    expression { env.BRANCH_NAME in RELEASE_BRANCHES }
                     not { changeRequest() }
                 }
             }
@@ -51,10 +60,13 @@ pipeline {
                 stage('Deploy Previews') {
                     steps {
                         echo 'Deploying previews to various places'
-                        sh './gradlew publish publishToDiscord'
+                        sh './gradlew publish announceDiscord'
                     }
                 }
                 stage('Deploy releases') {
+                    when {
+                        expression { params.CURSEFORGE_AND_MODRINTH}
+                    }
                     steps {
                         echo 'Maybe deploy releases'
                         sh './gradlew publishCurseforge publishModrinth'
