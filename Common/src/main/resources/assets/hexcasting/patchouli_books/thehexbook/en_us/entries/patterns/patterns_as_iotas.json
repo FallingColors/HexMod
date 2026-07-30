@@ -55,6 +55,7 @@
     },
     {
       "type": "patchouli:text",
+      "anchor": "embedding",
       "text": "hexcasting.page.patterns_as_iotas.further_notes.2"
     },
     {
