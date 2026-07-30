@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added a pattern display overlay for pattern-holding items (ie scrolls or slates) while holding shift in the inventory ([#879](https://github.com/FallingColors/HexMod/pull/879)) @SamsTheNerd
 - Added connected textures for Akashic Ligatures when using Continuity or Optifine ([#885](https://github.com/FallingColors/HexMod/pull/885)) @kineticneticat
 - Added Similarity Distillation and Dissimilarity Distillation for comparing iota types ([#1114](https://github.com/FallingColors/HexMod/pull/1114)) @IridescentVoid
+- Added Contemplation for escaping without the exponential growth of Consideration ([#1102](https://github.com/FallingColors/HexMod/pull/1102)) @IridescentVoid
 
 ### Changed
 
@@ -50,6 +51,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed the book page for the Inert Mindflay mishap incorrectly claiming it would kill unsuitable flay subjects ([#1081](https://github.com/FallingColors/HexMod/pull/1081)) @Robotgiggle
 - Fixed Pace Purification returning nonzero velocity on nonmoving items ([#1119](https://github.com/FallingColors/HexMod/pull/1119)) @IridescentVoid
 - Fixed Accessor's Purification returning false for scrolls in item frames ([#1115](https://github.com/FallingColors/HexMod/pull/1115)) @IridescentVoid
+- Fixed Break Block being unable to break cobwebs on Fabric ([#1218](https://github.com/FallingColors/HexMod/pull/1218)) @Robotgiggle
 
 ### Internal
 
@@ -63,6 +65,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Improved handling for duplicate pattern signatures in hexdoc ([#1007](https://github.com/FallingColors/HexMod/pull/1007)) @object-Object
 - `CircleExecutionState` now stores the shape of the spell circle using two corners rather than an entire list of positions ([#908](https://github.com/FallingColors/HexMod/pull/908)) @Stick404
 - Added methods in `Action` and `Iota` to define behavior when inside parentheses, and de-hardcoded the iota-escaping patterns ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
+- Added visitor methods to `Iota` to enable walking iotas in an extensible way ([#1191](https://github.com/FallingColors/HexMod/pull/1191)) @poolcritter
 
 ## `0.11.3` - 2025-11-22
 

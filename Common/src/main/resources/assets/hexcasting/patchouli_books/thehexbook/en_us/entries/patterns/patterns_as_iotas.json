@@ -16,16 +16,6 @@
     },
     {
       "type": "hexcasting:pattern",
-      "op_id": "hexcasting:escape",
-      "anchor": "hexcasting:escape",
-      "text": "hexcasting.page.patterns_as_iotas.escape.1"
-    },
-    {
-      "type": "patchouli:text",
-      "text": "hexcasting.page.patterns_as_iotas.escape.2"
-    },
-    {
-      "type": "hexcasting:pattern",
       "op_id": "hexcasting:open_paren",
       "anchor": "hexcasting:open_paren",
       "text": "hexcasting.page.patterns_as_iotas.parens.1"
@@ -35,6 +25,22 @@
       "op_id": "hexcasting:close_paren",
       "anchor": "hexcasting:close_paren",
       "text": "hexcasting.page.patterns_as_iotas.parens.2"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:runtime_escape",
+      "anchor": "hexcasting:runtime_escape",
+      "text": "hexcasting.page.patterns_as_iotas.escape.1"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:escape",
+      "anchor": "hexcasting:escape",
+      "text": "hexcasting.page.patterns_as_iotas.escape.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.patterns_as_iotas.escape.3"
     },
     {
       "type": "hexcasting:pattern",

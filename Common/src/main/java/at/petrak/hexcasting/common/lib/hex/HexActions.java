@@ -390,6 +390,8 @@ public class HexActions {
 
     public static final ActionRegistryEntry ESCAPE = make("escape",
         new ActionRegistryEntry(HexPattern.fromAngles("qqqaw", HexDir.WEST), OpEscape.INSTANCE));
+    public static final ActionRegistryEntry RUNTIME_ESCAPE = make("runtime_escape",
+        new ActionRegistryEntry(HexPattern.fromAngles("wdeee", HexDir.SOUTH_EAST), OpRuntimeEscape.INSTANCE));
     public static final ActionRegistryEntry OPEN_PAREN = make("open_paren",
         new ActionRegistryEntry(HexPattern.fromAngles("qqq", HexDir.WEST), OpOpenParen.INSTANCE));
     public static final ActionRegistryEntry CLOSE_PAREN = make("close_paren",
@@ -547,14 +549,10 @@ public class HexActions {
         new OperationAction(HexPattern.fromAngles("edqde", HexDir.SOUTH_WEST)));
     public static final ActionRegistryEntry UNAPPEND = make("unappend",
         new OperationAction(HexPattern.fromAngles("qaeaq", HexDir.NORTH_WEST)));
-    //    public static final ActionRegistryEntry CONCAT = make("concat",
-//        new ActionRegistryEntry(HexPattern.fromAngles("qaeaq", HexDir.NORTH_WEST), OpConcat.INSTANCE));
     public static final ActionRegistryEntry INDEX = make("index",
         new OperationAction(HexPattern.fromAngles("deeed", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry FOR_EACH = make("for_each",
         new ActionRegistryEntry(HexPattern.fromAngles("dadad", HexDir.NORTH_EAST), OpForEach.INSTANCE));
-    //    public static final ActionRegistryEntry LIST_SIZE = make("list_size",
-//        new ActionRegistryEntry(HexPattern.fromAngles("aqaeaq", HexDir.EAST), OpListSize.INSTANCE));
     public static final ActionRegistryEntry SINGLETON = make("singleton",
         new ActionRegistryEntry(HexPattern.fromAngles("adeeed", HexDir.EAST), OpSingleton.INSTANCE));
     public static final ActionRegistryEntry EMPTY_LIST = make("empty_list",
