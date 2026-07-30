@@ -45,7 +45,7 @@ public class MixinItemStackComponentizationFix {
             hexCasting$fixScroll(itemStackData, dynamic);
         }
         if (itemStackData.is("hexcasting:ancient_cypher")) {
-            // TODO: hex name component
+            itemStackData.moveTagToComponent("hex_name", "hexcasting:hex_name");
         }
         if (itemStackData.is("hexcasting:abacus")) {
             // TODO: abacus value component
