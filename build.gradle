@@ -34,7 +34,8 @@ subprojects { subproject ->
     base.archivesName = "$modID-$platform-$minecraftVersion"
     version = modVersion
 
-    def isRelease = true
+    def isRelease = System.getenv("FORMAL_RELEASE") ?
+            System.getenv("FORMAL_RELEASE").toBoolean() : false
     def buildNumber = System.getenv("BUILD_NUMBER")
     if (!isRelease && buildNumber != null) {
         version += "-pre-$buildNumber"

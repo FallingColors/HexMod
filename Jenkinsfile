@@ -13,11 +13,17 @@ pipeline {
             description: "Publish to CurseForge and modrinth",
             defaultValue: false,
         )
+        booleanParam(
+            name: "FORMAL_RELEASE",
+            description: "decides if is a formal release (without -pre)",
+            defaultValue: false,
+        )
     }
     environment {
         discordWebhook = credentials('discordWebhook')
         CURSEFORGE_TOKEN = credentials('curseforgeApiKey')
         MODRINTH_TOKEN = credentials('modrinthApiKey')
+        FORMAL_RELEASE = "${params.FORMAL_RELEASE ? 'true' : 'false'}"
     }
     stages {
         stage('Clean') {
@@ -71,7 +77,7 @@ pipeline {
                         echo 'Maybe deploy releases'
                         sh './gradlew publishCurseforge publishModrinth'
                     }
-                }
+                }}
             }
         }
     }
