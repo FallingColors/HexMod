@@ -70,8 +70,8 @@
     },
     {
       "type": "patchouli:text",
-      "title": "hexcasting.page.mishaps.retrospection.title",
-      "text": "hexcasting.page.mishaps.retrospection"
+      "title": "hexcasting.page.mishaps.needs_parens.title",
+      "text": "hexcasting.page.mishaps.needs_parens"
     },
     {
       "type": "patchouli:text",

@@ -1,15 +1,17 @@
-package at.petrak.hexcasting.common.casting.actions.lists
+package at.petrak.hexcasting.common.casting.actions.math.logic
 
 import at.petrak.hexcasting.api.casting.asActionResult
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
-import at.petrak.hexcasting.api.casting.getList
 import at.petrak.hexcasting.api.casting.iota.Iota
 
-// it's still called beancounter's distillation in my heart
-object OpListSize : ConstMediaAction {
-    override val argc = 1
+class OpTypeEquality(val invert: Boolean) : ConstMediaAction {
+    override val argc = 2
+
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
-        return args.getList(0, argc).toList().size.asActionResult // mmm one-liner
+        val lhs = args[0]
+        val rhs = args[1]
+
+        return ((lhs.type == rhs.type) != invert).asActionResult
     }
 }

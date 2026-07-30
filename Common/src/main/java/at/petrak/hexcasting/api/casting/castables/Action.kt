@@ -1,11 +1,17 @@
 package at.petrak.hexcasting.api.casting.castables
 
+import at.petrak.hexcasting.api.casting.eval.CastResult
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.OperationResult
+import at.petrak.hexcasting.api.casting.eval.ParenthesizedOperationResult
+import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.Mishap
+import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import net.minecraft.world.phys.Vec3
 import java.text.DecimalFormat
 
@@ -40,6 +46,29 @@ interface Action {
         image: CastingImage,
         continuation: SpellContinuation
     ): OperationResult
+
+    /**
+     * The behavior of this action when inside parentheses (meaning `image.parenCount` will always be greater than 0).
+     * By default, this just adds the pattern to the parenthesized list without updating the op count or performing any of its effects.
+     *
+     * Note that behavior defined here can throw mishaps as usual. However, mishapping here will not affect the paren count,
+     * so the caster will still be in list-building mode after the mishap resolves.
+     */
+    @Throws(Mishap::class)
+    fun operateInParens(
+        env: CastingEnvironment,
+        image: CastingImage,
+        continuation: SpellContinuation,
+        thisIota: Iota,
+    ): ParenthesizedOperationResult {
+        return ParenthesizedOperationResult(
+            image.withNewParenthesized(thisIota),
+            listOf(),
+            continuation,
+            HexEvalSounds.NORMAL_EXECUTE,
+            ResolvedPatternType.ESCAPED
+        )
+    }
 
     companion object {
         // I see why vazkii did this: you can't raycast out to infinity!

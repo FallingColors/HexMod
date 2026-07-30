@@ -81,6 +81,22 @@
     },
     {
       "type": "hexcasting:pattern",
+      "op_id": "hexcasting:type_equals",
+      "anchor": "hexcasting:type_equals",
+      "input": "any, any",
+      "output": "bool",
+      "text": "hexcasting.page.logic.type_equals"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:type_not_equals",
+      "anchor": "hexcasting:type_not_equals",
+      "input": "any, any",
+      "output": "bool",
+      "text": "hexcasting.page.logic.type_not_equals"
+    },
+    {
+      "type": "hexcasting:pattern",
       "op_id": "hexcasting:greater",
       "anchor": "hexcasting:greater",
       "input": "number, number",

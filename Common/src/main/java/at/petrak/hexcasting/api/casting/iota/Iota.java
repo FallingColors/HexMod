@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 public abstract class Iota {
     @NotNull
@@ -49,8 +50,8 @@ public abstract class Iota {
     abstract public @NotNull Tag serialize();
 
     /**
-     * This method is called when this iota is executed (i.e. Hermes is run on a list containing it, unescaped).
-     * By default it will return a {@link CastResult} indicating an error has occurred.
+     * This method is called when this iota is directly executed (i.e. Hermes is run on a list containing it, unescaped).
+     * By default, it will return a {@link CastResult} with {@link MishapUnescapedValue} to indicate that an error has occurred.
      */
     public @NotNull CastResult execute(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
         return new CastResult(
@@ -65,6 +66,23 @@ public abstract class Iota {
             ),
             ResolvedPatternType.INVALID,
             HexEvalSounds.MISHAP);
+    }
+
+    /**
+     * This method is called when this iota is executed inside parentheses (e.g. Hermes is run on a list of [Introspection, this, Retrospection]).
+     * Consequently, {@code vm.image.parenCount} will always be greater than 0.
+     * By default, the iota will be added to the in-progress parenthesized list rather than causing {@link MishapUnescapedValue}.
+     * <br><br>
+     * This is specifically for parentheses-based escaping. Consideration escaping is handled in {@link CastingVM#executeInner}, and cannot be overridden.
+     */
+    public @NotNull CastResult executeInParens(CastingVM vm, ServerLevel world, SpellContinuation continuation) {
+        return new CastResult(
+                this,
+                continuation,
+                vm.getImage().withNewParenthesized(this),
+                List.of(),
+                ResolvedPatternType.ESCAPED,
+                HexEvalSounds.NORMAL_EXECUTE);
     }
 
     /**
@@ -83,6 +101,24 @@ public abstract class Iota {
      */
     public @Nullable Iterable<Iota> subIotas() {
         return null;
+    }
+
+    /**
+     * Applies the given operator to all iotas in this iota's tree (recursive subIotas), including this iota.
+     * @param visitor Applied to this iota then every element of the resulting iota's tree.
+     * @return The iota after all subiotas have been visited (and potentially replaced).
+     */
+    public Iota visit(UnaryOperator<Iota> visitor) {
+        return visitor.apply(this).visitChildren(visitor);
+    }
+
+    /**
+     * Applies the given operator to all iotas in this iota's tree, **excluding** this iota. This must be called on an
+     * iota just before it is returned from {@link Iota#visit}. You should try to preserve your iota's identity if
+     * the operator doesn't modify anything.
+     */
+    protected Iota visitChildren(UnaryOperator<Iota> visitor) {
+        return this;
     }
 
     /**
