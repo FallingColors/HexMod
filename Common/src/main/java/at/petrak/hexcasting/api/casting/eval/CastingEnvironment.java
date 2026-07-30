@@ -183,9 +183,10 @@ public abstract class CastingEnvironment {
     }
 
     /**
-     * If something about this ARE itself is invalid, mishap.
-     * <p>
-     * This is used for stuff like requiring enlightenment and pattern denylists
+     * If something about this Action itself is invalid, mishap.
+     * This is used for stuff like requiring enlightenment and pattern denylists.<br>
+     * If the Action <i>is</i> valid, this sets the CastingEnvironment's {@code costModifier} based on the
+     * appropriate modifier for that action as returned by {@code getCostModifier()}.
      */
     public void precheckAction(PatternShapeMatch match) throws Mishap {
         // TODO: this doesn't let you select special handlers.

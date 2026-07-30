@@ -397,7 +397,7 @@
         },
         circleActionDenyList: {
           "": "Circle Action Deny List",
-          "@Tooltip": "Resource locations of disallowed actions within circles. Trying to cast one of these from a circle will result in a mishap. For example, hexcasting:get_caster will prevent Mind's Reflection.",
+          "@Tooltip": "Resource locations of disallowed actions within circles. Trying to cast one of these from a circle will result in a mishap. For example, hexcasting:get_caster\" will prevent Mind's Reflection.",
         },
         globalCostScaling: {
           "": "Global Cost Scaling Factor",

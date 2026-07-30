@@ -212,7 +212,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private List<String> circleActionDenyList = List.of();
         @ConfigEntry.Gui.Tooltip
         private List<String> costRescaleListRaw = List.of();
-        private transient Object2DoubleMap<ResourceLocation> costRescaleList;
+        private transient Object2DoubleMap<ResourceLocation> costRescaleMap;
         @ConfigEntry.Gui.Tooltip
         private double globalCostScaling = DEFAULT_GLOBAL_COST_SCALING;
         @ConfigEntry.Gui.Tooltip
@@ -260,17 +260,19 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
 
         @Override
         public void validatePostLoad() throws ValidationException {
+            this.opBreakHarvestLevel = Mth.clamp(this.opBreakHarvestLevel, 0, 4);
             this.maxOpCount = Math.max(this.maxOpCount, 0);
             this.maxSpellCircleLength = Math.max(this.maxSpellCircleLength, 4);
+            this.globalCostScaling = Math.max(this.globalCostScaling, 0);
             this.traderScrollChance = Mth.clamp(this.traderScrollChance, 0.0, 1.0);
 
-            this.costRescaleList = new Object2DoubleOpenHashMap<>();
+            this.costRescaleMap = new Object2DoubleOpenHashMap<>();
             try {
                 for (var auugh : this.costRescaleListRaw) {
                     String[] split = auugh.split(" ");
                     ResourceLocation loc = new ResourceLocation(split[0]);
                     double scale = Double.parseDouble(split[1]);
-                    this.costRescaleList.put(loc, scale);
+                    this.costRescaleMap.put(loc, scale);
                 }
             } catch (Exception e) {
                 throw new ValidationException("Bad parsing of action cost rescaling", e);
@@ -340,7 +342,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
 
         @Override
         public double getActionCostScaling(ResourceLocation actionID) {
-            return this.costRescaleList.getOrDefault(actionID, 1.0);
+            return this.costRescaleMap.getOrDefault(actionID, 1.0);
         }
 
         @Override

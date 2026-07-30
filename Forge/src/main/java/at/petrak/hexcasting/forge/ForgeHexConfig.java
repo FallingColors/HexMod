@@ -199,12 +199,12 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
             actionDenyList = builder.comment(
                     "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap. " +
-                        "For example, \"hexcasting:get_caster\" will prevent Mind's Reflection.")
+                        "For example, hexcasting:get_caster will prevent Mind's Reflection.")
                 .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
 
             costRescaleList = builder.comment(
                     "Maps resource locations to the scaling factor for that specific action's media cost. " +
-                        "For example, \"hexcasting:add_motion 3\" will make Impulse cost 3x as much.")
+                        "For example, hexcasting:add_motion 3 will make Impulse cost 3x as much.")
                 .defineList("costRescaleList",  List.of(), Server::isValidReslocDoublePair);
 
             globalCostScaling = builder.comment(
@@ -219,7 +219,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
             circleActionDenyList = builder.comment(
                     "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle" +
-                        " will result in a mishap. For example, \"hexcasting:get_caster\" will prevent Mind's Reflection.")
+                        " will result in a mishap. For example, hexcasting:get_caster will prevent Mind's Reflection.")
                 .defineList("circleActionDenyList", List.of(), Server::isValidReslocArg);
             builder.pop();
 
