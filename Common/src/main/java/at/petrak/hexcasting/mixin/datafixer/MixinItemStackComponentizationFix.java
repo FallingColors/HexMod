@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 
 import net.minecraft.util.datafix.fixes.ItemStackComponentizationFix;
 import net.minecraft.util.datafix.fixes.ItemStackComponentizationFix.ItemStackData;
-import org.apache.commons.lang3.NotImplementedException;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,6 +21,15 @@ public class MixinItemStackComponentizationFix {
     private static final String HEX_TYPE = "hexcasting:type";
     @Unique
     private static final String HEX_DATA = "hexcasting:data";
+
+    @Inject(method = "fixItemStack", at = @At("HEAD"))
+    private static void preFixHexItemStack(ItemStackData itemStackData, Dynamic<?> dynamic, CallbackInfo ci) {
+        if (itemStackData.is("hexcasting:slate")) {
+            itemStackData.fixSubTag("BlockEntityTag", false, dynamic0 ->
+                    hexCasting$mapPattern(dynamic0.get("pattern").orElseEmptyMap()));
+            itemStackData.moveTagToComponent("BlockEntityTag", "pattern");
+        }
+    }
 
     @Inject(method = "fixItemStack", at = @At("TAIL"))
     private static void fixHexItemStack(ItemStackData itemStackData, Dynamic<?> dynamic, CallbackInfo ci) {
