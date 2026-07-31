@@ -163,9 +163,8 @@ public class MixinItemStackComponentizationFix {
                         frame.createList(frameData.get("code").asStream().map(MixinItemStackComponentizationFix::hexCasting$mapIotaData)));
                 component.put(frame.createString("context"),
                         frame.createList(frameData.get("base").asStream().map(MixinItemStackComponentizationFix::hexCasting$mapIotaData)));
-                // TODO: figure out whether stashed should be base (replicating otherwise unavailable 1.20 thoth behavior) or an empty list (equivalent to 1.21 thoth with whatever size the stack had before casting)
                 component.put(frame.createString("stashed"),
-                        frame.createList(frameData.get("base").asStream().map(MixinItemStackComponentizationFix::hexCasting$mapIotaData)));
+                        frame.createList(Stream.of()));
                 component.put(frame.createString("accumulator"),
                         frame.createList(frameData.get("accumulator").asStream().map(MixinItemStackComponentizationFix::hexCasting$mapIotaData)));
                 break;
