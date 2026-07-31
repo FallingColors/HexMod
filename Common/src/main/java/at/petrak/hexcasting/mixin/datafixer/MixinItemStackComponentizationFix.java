@@ -3,6 +3,8 @@ package at.petrak.hexcasting.mixin.datafixer;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
 import at.petrak.hexcasting.api.item.VariantItem;
+import at.petrak.hexcasting.common.items.magic.ItemMediaHolder;
+import at.petrak.hexcasting.common.items.magic.ItemPackagedHex;
 import com.mojang.serialization.Dynamic;
 
 import java.util.*;
@@ -62,9 +64,13 @@ public class MixinItemStackComponentizationFix {
         if (item instanceof VariantItem) {
             itemStackData.moveTagToComponent("variant", "hexcasting:variant");
         }
-        // TODO: wait for #1220, then hex holder component
-        // TODO: media component
-        // TODO: media_max component
+        if (item instanceof ItemPackagedHex) {
+            // TODO: wait for #1220, then hex holder component
+        }
+        if (item instanceof ItemMediaHolder) {
+            itemStackData.moveTagToComponent("hexcasting:media", "hexcasting:media");
+            itemStackData.moveTagToComponent("hexcasting:start_media", "hexcasting:start_media");
+        }
     }
 
     @Unique
