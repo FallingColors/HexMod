@@ -35,7 +35,7 @@ public class MixinItemStackComponentizationFix {
         if (itemStackData.is("hexcasting:slate")) {
             itemStackData.fixSubTag("BlockEntityTag", false, dynamic0 ->
                     hexCasting$mapPattern(dynamic0.get("pattern").orElseEmptyMap()));
-            itemStackData.moveTagToComponent("BlockEntityTag", "pattern");
+            itemStackData.moveTagToComponent("BlockEntityTag", "hexcasting:pattern");
         }
     }
 
@@ -200,7 +200,7 @@ public class MixinItemStackComponentizationFix {
         itemStackData.moveTagToComponent("page_names", "hexcasting:page_names");
 
         itemStackData.fixSubTag("pages", true, d0 ->
-            d0.createMap(d0.asMap(Function.identity(), MixinItemStackComponentizationFix::hexCasting$mapPattern)));
+            d0.createMap(d0.asMap(Function.identity(), MixinItemStackComponentizationFix::hexCasting$mapIotaData)));
         itemStackData.moveTagToComponent("pages", "hexcasting:pages");
 
         itemStackData.moveTagToComponent("sealed_pages", "hexcasting:sealed_pages");
