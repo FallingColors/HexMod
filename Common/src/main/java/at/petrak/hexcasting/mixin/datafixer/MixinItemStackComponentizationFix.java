@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.math.HexPattern;
 import com.mojang.serialization.Dynamic;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -160,6 +161,11 @@ public class MixinItemStackComponentizationFix {
     }
 
     @Unique
+    private static Dynamic<?> hexCasting$stringToPlainComponent(Dynamic<?> string) {
+        return string.createMap(Map.of(string.createString("text"), string));
+    }
+
+    @Unique
     private static void hexCasting$fixScroll(ItemStackData itemStackData) {
         itemStackData.fixSubTag("pattern", true, MixinItemStackComponentizationFix::hexCasting$mapPattern);
 
@@ -171,6 +177,16 @@ public class MixinItemStackComponentizationFix {
 
     @Unique
     private static void hexCasting$fixSpellbook(ItemStackData itemStackData, Dynamic<?> dynamic) {
-        // TODO: all spellbook components
+        itemStackData.moveTagToComponent("page_idx", "hexcasting:page_idx");
+
+        itemStackData.fixSubTag("page_names", true, d0 ->
+            d0.createMap(d0.asMap(Function.identity(), MixinItemStackComponentizationFix::hexCasting$stringToPlainComponent)));
+        itemStackData.moveTagToComponent("page_names", "hexcasting:page_names");
+
+        itemStackData.fixSubTag("pages", true, d0 ->
+            d0.createMap(d0.asMap(Function.identity(), MixinItemStackComponentizationFix::hexCasting$mapPattern)));
+        itemStackData.moveTagToComponent("pages", "hexcasting:pages");
+
+        itemStackData.moveTagToComponent("sealed_pages", "hexcasting:sealed_pages");
     }
 }
