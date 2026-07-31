@@ -1,0 +1,42 @@
+{
+  "name": "hexcasting.entry.types",
+  "category": "hexcasting:patterns",
+  "icon": "hexcasting:lens",
+  "sortnum": 6,
+  "advancement": "hexcasting:root",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:type_equals",
+      "anchor": "hexcasting:type_equals",
+      "input": "any, any",
+      "output": "bool",
+      "text": "hexcasting.page.types.type_equals"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:type_not_equals",
+      "anchor": "hexcasting:type_not_equals",
+      "input": "any, any",
+      "output": "bool",
+      "text": "hexcasting.page.types.type_not_equals"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:compare_block/lenient",
+      "anchor": "hexcasting:compare_block/lenient",
+      "input": "vec, vec",
+      "output": "bool",
+      "text": "hexcasting.page.types.compare_block/lenient"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:compare_block/strict",
+      "anchor": "hexcasting:compare_block/strict",
+      "input": "vec, vec",
+      "output": "bool",
+      "text": "hexcasting.page.types.compare_block/strict"
+    }
+  ]
+}

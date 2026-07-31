@@ -1316,7 +1316,7 @@
       stackmanip: "Stack Manipulation",
       logic: "Logical Operators",
       entities: "Entities",
-      blocks: "Blocks",
+      types: "Types",
       lists: "List Manipulation",
       patterns_as_iotas: "Escaping Patterns",
       readwrite: "Reading and Writing",
@@ -1915,8 +1915,6 @@
         if: "If the first argument is True, keeps the second and discards the third; otherwise discards the second and keeps the third.",
         equals: "If the first argument equals the second (within a small tolerance), return True. Otherwise, return False.",
         not_equals: "If the first argument does not equal the second (outside a small tolerance), return True. Otherwise, return False.",
-        type_equals: "If the type of the first argument matches the type of the second, return True. Otherwise, return False.",
-        type_not_equals: "If the type of the first argument does not match the type of the second, return True. Otherwise, return False.",
         greater: "If the first argument is greater than the second, return True. Otherwise, return False.",
         less: "If the first argument is less than the second, return True. Otherwise, return False.",
         greater_eq: "If the first argument is greater than or equal to the second, return True. Otherwise, return False.",
@@ -1948,7 +1946,9 @@
         },
       },
 
-      blocks: {
+      types: {
+        type_equals: "If the type of the first argument matches the type of the second, return True. Otherwise, return False.",
+        type_not_equals: "If the type of the first argument does not match the type of the second, return True. Otherwise, return False.",
         "compare_block/": {
           lenient: "Removes two vectors from the top of the stack, and push whether they are of the same type in Nature's eye.",
           strict: "Removes two vectors from the top of the stack, and push whether they are exactly the same.",
