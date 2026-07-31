@@ -2,6 +2,7 @@ package at.petrak.hexcasting.mixin.datafixer;
 
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.item.IotaHolderItem;
+import at.petrak.hexcasting.api.item.VariantItem;
 import com.mojang.serialization.Dynamic;
 
 import java.util.*;
@@ -58,7 +59,9 @@ public class MixinItemStackComponentizationFix {
         if (item instanceof IotaHolderItem) {
             itemStackData.moveTagToComponent("VisualOverride", "hexcasting:visual_override");
         }
-        // TODO: item variant component
+        if (item instanceof VariantItem) {
+            itemStackData.moveTagToComponent("variant", "hexcasting:variant");
+        }
         // TODO: wait for #1220, then hex holder component
         // TODO: media component
         // TODO: media_max component
