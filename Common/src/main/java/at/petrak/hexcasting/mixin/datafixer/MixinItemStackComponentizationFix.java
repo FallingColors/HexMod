@@ -35,7 +35,7 @@ public class MixinItemStackComponentizationFix {
             itemStackData.moveTagToComponent("hex_name", "hexcasting:hex_name");
         }
         if (itemStackData.is("hexcasting:abacus")) {
-            // TODO: abacus value component
+            itemStackData.moveTagToComponent("value", "hexcasting:abacus_value");
         }
         if (itemStackData.is("hexcasting:spellbook")) {
             hexCasting$fixSpellbook(itemStackData, dynamic);
