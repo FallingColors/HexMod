@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.mixin.datafixer;
 
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.item.IotaHolderItem;
 import com.mojang.serialization.Dynamic;
 
 import java.util.*;
@@ -8,8 +9,11 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.datafix.fixes.ItemStackComponentizationFix;
 import net.minecraft.util.datafix.fixes.ItemStackComponentizationFix.ItemStackData;
+import net.minecraft.world.item.Item;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,6 +38,8 @@ public class MixinItemStackComponentizationFix {
 
     @Inject(method = "fixItemStack", at = @At("TAIL"))
     private static void fixHexItemStack(ItemStackData itemStackData, Dynamic<?> dynamic, CallbackInfo ci) {
+        Item item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(itemStackData.item));
+
         if (itemStackData.is(Set.of("hexcasting:focus", "hexcasting:thought_knot"))) {
             hexCasting$fixIotaHolder(itemStackData, dynamic);
         }
@@ -49,8 +55,9 @@ public class MixinItemStackComponentizationFix {
         if (itemStackData.is("hexcasting:spellbook")) {
             hexCasting$fixSpellbook(itemStackData, dynamic);
         }
-
-        // TODO: visual override component
+        if (item instanceof IotaHolderItem) {
+            itemStackData.moveTagToComponent("VisualOverride", "hexcasting:visual_override");
+        }
         // TODO: item variant component
         // TODO: wait for #1220, then hex holder component
         // TODO: media component

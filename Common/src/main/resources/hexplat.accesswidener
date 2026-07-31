@@ -9,3 +9,4 @@ accessible method net/minecraft/world/item/context/UseOnContext <init> (Lnet/min
 accessible method net/minecraft/world/damagesource/DamageSources source (Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/world/damagesource/DamageSource;
 accessible method net/minecraft/world/damagesource/DamageSources source (Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/entity/Entity;)Lnet/minecraft/world/damagesource/DamageSource;
 accessible class net/minecraft/util/datafix/fixes/ItemStackComponentizationFix$ItemStackData
+accessible field net/minecraft/util/datafix/fixes/ItemStackComponentizationFix$ItemStackData item Ljava/lang/String;
