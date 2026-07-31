@@ -27,6 +27,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -69,7 +70,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
     }
 
     @Override
-    public void writeHex(ItemStack stack, List<Iota> program, @Nullable FrozenPigment pigment, long media) {
+    public void writeHex(ItemStack stack, List<Iota> program, FrozenPigment pigment, long media) {
         stack.set(HexDataComponents.HEX_HOLDER.get(), new HexHolder(program, pigment));
         withMedia(stack, media, media);
     }
@@ -147,7 +148,7 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
         return UseAnim.BLOCK;
     }
 
-    public record HexHolder(List<Iota> hex, FrozenPigment pigment) {
+    public record HexHolder(@NotNull List<Iota> hex, @NotNull FrozenPigment pigment) {
         public static final Codec<HexHolder> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         IotaType.TYPED_CODEC.listOf().fieldOf("hex").forGetter(HexHolder::hex),

@@ -154,7 +154,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public @Nullable FrozenPigment setPigment(Player target, @Nullable FrozenPigment pigment) {
+    public FrozenPigment setPigment(Player target, FrozenPigment pigment) {
         var cc = HexCardinalComponents.FAVORED_PIGMENT.get(target);
         var old = cc.getPigment();
         cc.setPigment(pigment);
