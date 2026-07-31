@@ -2,7 +2,7 @@
   "name": "hexcasting.entry.patterns_as_iotas",
   "category": "hexcasting:patterns",
   "icon": "minecraft:emerald",
-  "sortnum": 8,
+  "sortnum": 9,
   "advancement": "hexcasting:root",
   "read_by_default": true,
   "pages": [

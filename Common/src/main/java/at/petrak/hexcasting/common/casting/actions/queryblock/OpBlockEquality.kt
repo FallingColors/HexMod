@@ -6,7 +6,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getBlockPos
 import at.petrak.hexcasting.api.casting.iota.Iota
 
-class OpBlockEquality(val exact: Boolean, val invert: Boolean) : ConstMediaAction {
+class OpBlockEquality(val exact: Boolean) : ConstMediaAction {
     override val argc = 2
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
@@ -19,6 +19,6 @@ class OpBlockEquality(val exact: Boolean, val invert: Boolean) : ConstMediaActio
         // a unique BlockState only has one instance
         val matches = if (exact) blockA === blockB else blockA.`is`(blockB.block)
 
-        return (matches != invert).asActionResult
+        return matches.asActionResult
     }
 }

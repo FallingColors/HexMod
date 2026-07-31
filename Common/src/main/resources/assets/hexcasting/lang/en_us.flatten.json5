@@ -789,6 +789,11 @@
           not_player: "Zone Distillation: Non-Player",
           not_living: "Zone Distillation: Non-Living",
         },
+
+        "compare_block/": {
+          "lenient": "Surveyor's Distillation",
+          "strict": "Inspector's Distillation",
+        },
         
         swap: "Jester's Gambit",
         rotate: "Rotation Gambit",
@@ -1311,6 +1316,7 @@
       stackmanip: "Stack Manipulation",
       logic: "Logical Operators",
       entities: "Entities",
+      blocks: "Blocks",
       lists: "List Manipulation",
       patterns_as_iotas: "Escaping Patterns",
       readwrite: "Reading and Writing",
@@ -1939,6 +1945,13 @@
           not_player: "Take a position and maximum distance on the stack, and combine them into a list of non-player characters near the position.",
           living: "Take a position and maximum distance on the stack, and combine them into a list of living creatures near the position.",
           not_living: "Take a position and maximum distance on the stack, and combine them into a list of non-living entities near the position.",
+        },
+      },
+
+      blocks: {
+        "compare_block/": {
+          lenient: "Removes two vectors from the top of the stack, and push whether they are of the same type in Nature's eye.",
+          strict: "Removes two vectors from the top of the stack, and push whether they are exactly the same.",
         },
       },
       
