@@ -21,8 +21,6 @@ public class MixinItemStackComponentizationFix {
     @Unique
     private static final String HEX_TYPE = "hexcasting:type";
     @Unique
-    private static final String HEX_STORAGE_SEALED = "hexcasting:sealed";
-    @Unique
     private static final String HEX_DATA = "hexcasting:data";
 
     @Inject(method = "fixItemStack", at = @At("TAIL"))
@@ -55,7 +53,7 @@ public class MixinItemStackComponentizationFix {
         itemStackData.fixSubTag("data", true, MixinItemStackComponentizationFix::hexCasting$mapIotaData);
         itemStackData.moveTagToComponent("data", "hexcasting:iota");
 
-        if (itemStackData.removeTag(HEX_STORAGE_SEALED).asBoolean(false))
+        if (itemStackData.removeTag("sealed").asBoolean(false))
             itemStackData.setComponent("hexcasting:sealed", dynamic.createMap(Map.of()));
     }
 
@@ -72,8 +70,7 @@ public class MixinItemStackComponentizationFix {
                 component.put(iota.createString("entityId"), iota.createIntList(uuid));
                 component.put(iota.createString("isPlayer"), iota.createBoolean(true));
                 break;
-            case "hexcasting:boolean":
-            case "hexcasting:double":
+            case "hexcasting:boolean", "hexcasting:double":
                 component.put(iota.createString("value"), iotaData);
                 break;
             case "hexcasting:list":
@@ -90,8 +87,7 @@ public class MixinItemStackComponentizationFix {
                 component.put(iota.createString("value"),
                         iota.createList(iotaData.asStream().map(MixinItemStackComponentizationFix::hexCasting$mapContinuationFrame)));
                 break;
-            case "hexcasting:null":
-            case "hexcasting:garbage":
+            case "hexcasting:null", "hexcasting:garbage":
             default:
                 break;
         }
