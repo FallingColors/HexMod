@@ -790,9 +790,16 @@
           not_living: "Zone Distillation: Non-Living",
         },
 
+        type_equals: "Similarity Distillation",
+        type_not_equals: "Dissimilarity Distillation",
         "compare_block/": {
           "lenient": "Surveyor's Distillation",
           "strict": "Inspector's Distillation",
+        },
+        compare_entity: "Taxonomer's Distillation",
+        "compare_item/": {
+          "lenient": "Sorter's Distillation",
+          "strict": "Stacking Distillation",
         },
         
         swap: "Jester's Gambit",
@@ -819,8 +826,6 @@
         less_eq: "Minimus Distillation II",
         equals: "Equality Distillation",
         not_equals: "Inequality Distillation",
-        type_equals: "Similarity Distillation",
-        type_not_equals: "Dissimilarity Distillation",
         not: "Negation Purification",
         bool_coerce: "Augur's Purification",
         if: "Augur's Exaltation",
@@ -1111,6 +1116,7 @@
             "": "an entity",
             mob: "a mob",
             item: "an item entity",
+            item_holder: "an item-holding entity",
             player: "a player",
             living: "a living entity",
           },
@@ -1947,11 +1953,16 @@
       },
 
       types: {
-        type_equals: "If the type of the first argument matches the type of the second, return True. Otherwise, return False.",
-        type_not_equals: "If the type of the first argument does not match the type of the second, return True. Otherwise, return False.",
+        type_equals: "Compare the given iotas and push whether they are of the same type.",
+        type_not_equals: "Compare the given iotas and push whether they are of different types.",
         "compare_block/": {
-          lenient: "Removes two vectors from the top of the stack, and push whether they are of the same type in Nature's eye.",
-          strict: "Removes two vectors from the top of the stack, and push whether they are exactly the same.",
+          lenient: "Compare the blocks specified by the given vectors and push whether they are of the same type, in Nature's eye.",
+          strict: "Compare the blocks specified by the given vectors and push whether they appear to be identical.",
+        },
+        compare_entity: "Compare the given entities and push whether they are of the same type.",
+        "compare_item/": {
+          lenient: "Compare the items within or held by the given entities and push whether they are the same type of item. Two $(l:items/focus)$(item)Foci/$ will always compare as equal.",
+          strict: "Like $(l:patterns/types#hexcasting:compare_item/lenient)$(action)Sorter's Distillation/$, but push whether they are identical items. Two $(l:items/focus)$(item)Foci/$ only compare as identical if they hold the same iota.",
         },
       },
       

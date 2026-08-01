@@ -37,6 +37,30 @@
       "input": "vec, vec",
       "output": "bool",
       "text": "hexcasting.page.types.compare_block/strict"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:compare_item/lenient",
+      "anchor": "hexcasting:compare_item/lenient",
+      "input": "entity, entity",
+      "output": "bool",
+      "text": "hexcasting.page.types.compare_item/lenient"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:compare_item/strict",
+      "anchor": "hexcasting:compare_item/strict",
+      "input": "entity, entity",
+      "output": "bool",
+      "text": "hexcasting.page.types.compare_item/strict"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:compare_entity",
+      "anchor": "hexcasting:compare_entity",
+      "input": "entity, entity",
+      "output": "bool",
+      "text": "hexcasting.page.types.compare_entity"
     }
   ]
 }

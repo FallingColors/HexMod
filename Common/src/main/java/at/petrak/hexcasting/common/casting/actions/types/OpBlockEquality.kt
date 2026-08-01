@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.common.casting.actions.queryblock
+package at.petrak.hexcasting.common.casting.actions.types
 
 import at.petrak.hexcasting.api.casting.asActionResult
 import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
