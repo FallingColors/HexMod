@@ -9,6 +9,7 @@ import at.petrak.hexcasting.common.items.ItemStaff;
 import at.petrak.hexcasting.common.items.pigment.ItemPridePigment;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
+import at.petrak.hexcasting.common.recipe.CopySpellbookRecipe;
 import at.petrak.hexcasting.common.recipe.SealThingsRecipe;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.EntityTypeIngredient;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.VillagerIngredient;
@@ -87,6 +88,7 @@ public class HexplatRecipes extends RecipeProvider {
     public void buildRecipes(RecipeOutput recipes) {
         specialRecipe(recipes, SealThingsRecipe.FOCUS_SERIALIZER, SealThingsRecipe::focus);
         specialRecipe(recipes, SealThingsRecipe.SPELLBOOK_SERIALIZER, SealThingsRecipe::spellbook);
+        specialRecipe(recipes, CopySpellbookRecipe.SERIALIZER, CopySpellbookRecipe::new);
 
         staffRecipe(recipes, HexItems.STAFF_OAK.get(), Items.OAK_PLANKS);
         staffRecipe(recipes, HexItems.STAFF_BIRCH.get(), Items.BIRCH_PLANKS);
