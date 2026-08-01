@@ -56,7 +56,7 @@ public class MixinItemStackComponentizationFix {
             itemStackData.moveTagToComponent("value", "hexcasting:abacus_value");
         }
         if (itemStackData.is("hexcasting:spellbook")) {
-            hexCasting$fixSpellbook(itemStackData, dynamic);
+            hexCasting$fixSpellbook(itemStackData);
         }
         if (item instanceof IotaHolderItem) {
             itemStackData.moveTagToComponent("VisualOverride", "hexcasting:visual_override");
@@ -65,7 +65,7 @@ public class MixinItemStackComponentizationFix {
             itemStackData.moveTagToComponent("variant", "hexcasting:variant");
         }
         if (item instanceof ItemPackagedHex) {
-            // TODO: wait for #1220, then hex holder component
+            hexCasting$fixPackagedHex(itemStackData, dynamic);
         }
         if (item instanceof ItemMediaHolder) {
             itemStackData.moveTagToComponent("hexcasting:media", "hexcasting:media");
@@ -191,7 +191,7 @@ public class MixinItemStackComponentizationFix {
     }
 
     @Unique
-    private static void hexCasting$fixSpellbook(ItemStackData itemStackData, Dynamic<?> dynamic) {
+    private static void hexCasting$fixSpellbook(ItemStackData itemStackData) {
         itemStackData.moveTagToComponent("page_idx", "hexcasting:page_idx");
 
         itemStackData.fixSubTag("page_names", true, d0 ->
@@ -203,5 +203,16 @@ public class MixinItemStackComponentizationFix {
         itemStackData.moveTagToComponent("pages", "hexcasting:pages");
 
         itemStackData.moveTagToComponent("sealed_pages", "hexcasting:sealed_pages");
+    }
+
+    @Unique
+    private static void hexCasting$fixPackagedHex(ItemStackData itemStackData, Dynamic<?> dynamic) {
+        Stream<Dynamic<?>> patterns = itemStackData.removeTag("patterns").asStream()
+            .map(MixinItemStackComponentizationFix::hexCasting$mapIotaData);
+        Dynamic<?> pigment = itemStackData.removeTag("pigment").orElseEmptyMap();
+        Dynamic<?> hexHolder = dynamic.createMap(Map.of(
+            dynamic.createString("hex"), dynamic.createList(patterns),
+            dynamic.createString("pigment"), pigment));
+        itemStackData.setComponent("hexcasting:hex_holder", hexHolder);
     }
 }
