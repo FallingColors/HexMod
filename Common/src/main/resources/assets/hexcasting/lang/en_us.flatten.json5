@@ -1609,6 +1609,8 @@
         "1": "A $(l:items/spellbook)$(item)Spellbook/$ is the culmination of my art-- it acts like an entire library of $(l:items/focus)$(item)Foci/$. Up to $(thing)sixty-four/$ of them, to be exact.$(br2)Each page can hold a single iota, and I can select the active page (the page that iotas are saved to and copied from) by sneak-scrolling while holding it, or simply holding it in my off-hand and scrolling while casting a _Hex.",
         "2": "Like a $(l:items/focus)$(item)Focus/$, there exists a simple method to prevent accidental overwriting. Crafting it with a $(item)Honeycomb/$ will lacquer the current page, preventing $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$ from modifying its contents. Also like a $(l:items/focus)$(item)Focus/$, using $(l:patterns/spells/hexcasting#hexcasting:erase)$(action)Erase Item/$ will remove the lacquer along with the page's contents.$(br2)I can also name each page individually in an anvil. Naming it will change only the name of the currently selected page, for easy browsing.",
         "crafting.desc": "$(italic)Wizards love words. Most of them read a great deal, and indeed one strong sign of a potential wizard is the inability to get to sleep without reading something first.",
+        "3.title": "Making Copies",
+        "3": "Exposing a spellbook to $(item)Dragon’s Breath/$ has an unusual effect: for a time, the iotas stored in the pages become less strongly bound to them, drifting around and potentially forming echoes of themselves in receptive objects nearby.$(br2)I can exploit this behavior to easily copy the contents of one spellbook into another empty one, using nothing but my crafting table.",
       },
 
       scroll: {
