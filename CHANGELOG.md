@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added the `hex_unbreakable` tag for blocks that should be immune to Break Block regardless of the configured mining tier ([#1186](https://github.com/FallingColors/HexMod/pull/1186)) @Robotgiggle @slava110
 - Added a new Ancient Cypher hex that impulses nearby items towards the caster ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
 - Added a recipe to copy a spellbook's contents into another blank spellbook using dragon's breath ([#1231](https://github.com/FallingColors/HexMod/pull/1231)) @Robotgiggle
+- Added a recipe to fully erase a spellbook's contents using soul sand ([#1231](https://github.com/FallingColors/HexMod/pull/1231)) @Robotgiggle
 
 ### Changed
 
