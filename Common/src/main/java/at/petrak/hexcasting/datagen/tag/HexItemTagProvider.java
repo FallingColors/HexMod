@@ -47,6 +47,8 @@ public class HexItemTagProvider extends ItemTagsProvider {
             Items.HONEYCOMB);
         add(tag(HexTags.Items.SPELLBOOK_COPY_MATERIALS),
             Items.DRAGON_BREATH);
+        add(tag(HexTags.Items.SPELLBOOK_ERASE_MATERIALS),
+            Items.SOUL_SAND);
 
         this.copy(HexTags.Blocks.EDIFIED_LOGS, HexTags.Items.EDIFIED_LOGS);
         this.copy(HexTags.Blocks.EDIFIED_PLANKS, HexTags.Items.EDIFIED_PLANKS);
