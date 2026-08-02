@@ -5,6 +5,7 @@ import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
@@ -54,19 +55,20 @@ public class CopySpellbookRecipe extends CustomRecipe {
     @Override
     public @NotNull ItemStack assemble(CraftingInput inv, HolderLookup.RegistryLookup.@NotNull Provider registryProvider) {
         ItemStack output = ItemStack.EMPTY;
-
+        Integer variant = null;
         for (int i = 0; i < inv.size(); i++) {
             var stack = inv.getItem(i);
-            if (stack.is(HexItems.SPELLBOOK.get()) && stack.has(HexDataComponents.SPELLBOOK_PAGES.get())) {
-                output = stack.copy();
-                break;
+            if (stack.is(HexItems.SPELLBOOK.get())) {
+                if (stack.has(HexDataComponents.SPELLBOOK_PAGES.get())) {
+                    output = stack.copyWithCount(1);
+                } else {
+                    variant = stack.get(HexDataComponents.ITEM_VARIANT.get());
+                }
             }
         }
-
-        if (!output.isEmpty()) {
-            output.setCount(1);
+        if (variant != null && output != ItemStack.EMPTY) {
+            output.set(HexDataComponents.ITEM_VARIANT.get(), variant);
         }
-
         return output;
     }
 
