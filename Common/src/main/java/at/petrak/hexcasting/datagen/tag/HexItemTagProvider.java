@@ -45,6 +45,8 @@ public class HexItemTagProvider extends ItemTagsProvider {
             HexItems.CHARGED_AMETHYST.get(), HexItems.CREATIVE_UNLOCKER.get());
         add(tag(HexTags.Items.SEAL_MATERIALS),
             Items.HONEYCOMB);
+        add(tag(HexTags.Items.SPELLBOOK_COPY_MATERIALS),
+            Items.DRAGON_BREATH);
 
         this.copy(HexTags.Blocks.EDIFIED_LOGS, HexTags.Items.EDIFIED_LOGS);
         this.copy(HexTags.Blocks.EDIFIED_PLANKS, HexTags.Items.EDIFIED_PLANKS);

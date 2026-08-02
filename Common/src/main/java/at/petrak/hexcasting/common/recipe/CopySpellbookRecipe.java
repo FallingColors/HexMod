@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.recipe;
 
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.core.HolderLookup;
@@ -25,15 +26,15 @@ public class CopySpellbookRecipe extends CustomRecipe {
 
     @Override
     public boolean matches(CraftingInput container, Level level) {
-        boolean foundBreath = false;
+        boolean foundCopyMaterial = false;
         boolean foundOriginal = false;
         boolean foundBlank = false;
 
         for (int i = 0; i < container.size(); i++) {
             var stack = container.getItem(i);
-            if (stack.is(Items.DRAGON_BREATH)) {
-                if (foundBreath) return false;
-                foundBreath = true;
+            if (stack.is(HexTags.Items.SPELLBOOK_COPY_MATERIALS)) {
+                if (foundCopyMaterial) return false;
+                foundCopyMaterial = true;
             } else if (stack.is(HexItems.SPELLBOOK.get())) {
                 if (stack.has(HexDataComponents.SPELLBOOK_PAGES.get())) {
                     if (foundOriginal) return false;
@@ -47,7 +48,7 @@ public class CopySpellbookRecipe extends CustomRecipe {
             }
         }
 
-        return foundBreath && foundOriginal && foundBlank;
+        return foundCopyMaterial && foundOriginal && foundBlank;
     }
 
     @Override
