@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.forge.interop.jei;
+package at.petrak.hexcasting.interop.jei;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
@@ -19,8 +19,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -37,7 +35,7 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
     private final Component localizedName;
 
     public BrainsweepRecipeCategory(IGuiHelper guiHelper) {
-        ResourceLocation location = modLoc("textures/gui/brainsweep_jei.png");
+        ResourceLocation location = modLoc("textures/gui/brainsweep_recipe.png");
         background = guiHelper.drawableBuilder(location, 0, 0, 118, 86).setTextureSize(128, 128).build();
         var brainsweep = modLoc("brainsweep");
         localizedName = Component.translatable("hexcasting.action." + brainsweep);
@@ -45,7 +43,6 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public @NotNull
     Component getTitle() {
         return localizedName;

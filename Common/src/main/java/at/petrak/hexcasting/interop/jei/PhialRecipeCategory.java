@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.forge.interop.jei;
+package at.petrak.hexcasting.interop.jei;
 
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.casting.actions.spells.OpMakeBattery;
@@ -14,8 +14,6 @@ import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -28,7 +26,7 @@ public class PhialRecipeCategory implements IRecipeCategory<OpMakeBattery> {
     private final Component localizedName;
 
     public PhialRecipeCategory(IGuiHelper guiHelper) {
-        ResourceLocation location = modLoc("textures/gui/phial_jei.png");
+        ResourceLocation location = modLoc("textures/gui/phial_recipe.png");
         background = guiHelper.drawableBuilder(location, 0, 0, 113, 40).setTextureSize(128, 128).build();
         var craftPhial = modLoc("craft/battery");
         localizedName = Component.translatable("hexcasting.action." + craftPhial);
@@ -36,7 +34,6 @@ public class PhialRecipeCategory implements IRecipeCategory<OpMakeBattery> {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public @NotNull Component getTitle() {
         return localizedName;
     }

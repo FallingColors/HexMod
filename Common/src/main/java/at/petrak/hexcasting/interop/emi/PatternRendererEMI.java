@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.forge.interop.jei;
+package at.petrak.hexcasting.interop.emi;
 
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.mod.HexTags;
@@ -10,23 +10,27 @@ import at.petrak.hexcasting.client.render.PatternSettings.PositionSettings;
 import at.petrak.hexcasting.client.render.PatternSettings.StrokeSettings;
 import at.petrak.hexcasting.client.render.PatternSettings.ZappySettings;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import mezz.jei.api.gui.drawable.IDrawable;
+import dev.emi.emi.api.render.EmiRenderable;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
-public class PatternDrawable implements IDrawable {
+public class PatternRendererEMI implements EmiRenderable {
+
     private final int width;
     private final int height;
 
-    private boolean strokeOrder;
-    private final HexPattern pat;
+    private int xOffset = 0;
+    private int yOffset = 0;
 
+    private boolean strokeOrder;
+
+    private final HexPattern pat;
     private PatternSettings patSets;
 
-    public PatternDrawable(ResourceLocation pattern, int w, int h) {
+    public PatternRendererEMI(ResourceLocation pattern, int w, int h) {
         var regi = IXplatAbstractions.INSTANCE.getActionRegistry();
         var entry = regi.get(pattern);
-        this.strokeOrder = !HexUtils.isOfTag(regi, pattern, HexTags.Actions.PER_WORLD_PATTERN);
+        this.strokeOrder = HexUtils.isOfTag(regi, pattern, HexTags.Actions.PER_WORLD_PATTERN);
         this.pat = entry.prototype();
         this.width = w;
         this.height = h;
@@ -37,33 +41,29 @@ public class PatternDrawable implements IDrawable {
                 ZappySettings.READABLE);
     }
 
-    @Override
-    public int getWidth() {
-        return width;
+    public PatternRendererEMI shift(int x, int y) {
+        xOffset += x;
+        yOffset += y;
+        return this;
     }
 
-    @Override
-    public int getHeight() {
-        return height;
-    }
-
-    public PatternDrawable strokeOrder(boolean order) {
+    public PatternRendererEMI strokeOrder(boolean order) {
         if(order != strokeOrder){
             patSets = new PatternSettings("pattern_drawable_" + width + "_" + height + (order ? "" : "nostroke"),
                     patSets.posSets,
                     patSets.strokeSets,
                     order ? ZappySettings.READABLE : ZappySettings.STATIC
-                    );
+            );
         }
         strokeOrder = order;
         return this;
     }
 
     @Override
-    public void draw(GuiGraphics graphics, int x, int y) {
+    public void render(GuiGraphics graphics, int x, int y, float delta) {
         var ps = graphics.pose();
         ps.pushPose();
-        ps.translate(x, y + 1, 0);
+        ps.translate(xOffset + x, yOffset + y + 1, 0);
         PatternRenderer.renderPattern(pat, graphics.pose(), patSets,
                 new PatternColors(0xc8_0c0a0c, 0xff_333030).withDotColors(0x80_666363, 0),
                 0, 10

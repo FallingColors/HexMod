@@ -33,8 +33,11 @@
     "cardinal-components": [
       "at.petrak.hexcasting.fabric.cc.HexCardinalComponents"
     ],
+    "jei_mod_plugin": [
+      "at.petrak.hexcasting.interop.jei.HexJEIPlugin"
+    ],
     "emi": [
-      "at.petrak.hexcasting.fabric.interop.emi.HexEMIPlugin"
+      "at.petrak.hexcasting.interop.emi.HexEMIPlugin"
     ],
     "modmenu": [
       "at.petrak.hexcasting.fabric.interop.ModMenuInterop"

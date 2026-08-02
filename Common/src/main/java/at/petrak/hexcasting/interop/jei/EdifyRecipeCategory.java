@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.forge.interop.jei;
+package at.petrak.hexcasting.interop.jei;
 
 import at.petrak.hexcasting.common.casting.actions.spells.OpEdifySapling;
 import at.petrak.hexcasting.common.lib.HexBlocks;
@@ -15,8 +15,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
@@ -29,7 +27,7 @@ public class EdifyRecipeCategory implements IRecipeCategory<OpEdifySapling> {
     private final Component localizedName;
 
     public EdifyRecipeCategory(IGuiHelper guiHelper) {
-        ResourceLocation location = modLoc("textures/gui/edify_jei.png");
+        ResourceLocation location = modLoc("textures/gui/edify_recipe.png");
         background = guiHelper.drawableBuilder(location, 0, 0, 79, 61).setTextureSize(128, 128).build();
         var edify = modLoc("edify");
         localizedName = Component.translatable("hexcasting.action." + edify);
@@ -37,7 +35,6 @@ public class EdifyRecipeCategory implements IRecipeCategory<OpEdifySapling> {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public @NotNull Component getTitle() {
         return localizedName;
     }

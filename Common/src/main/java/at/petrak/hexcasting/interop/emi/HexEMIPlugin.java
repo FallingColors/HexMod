@@ -1,9 +1,10 @@
-package at.petrak.hexcasting.fabric.interop.emi;
+package at.petrak.hexcasting.interop.emi;
 
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;
+import dev.emi.emi.api.EmiEntrypoint;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -14,14 +15,15 @@ import net.minecraft.resources.ResourceLocation;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
+@EmiEntrypoint
 public class HexEMIPlugin implements EmiPlugin {
 	private static final ResourceLocation BRAINSWEEP_ID = modLoc("brainsweep");
 	public static final ResourceLocation PHIAL_ID = modLoc("craft/battery");
 	public static final ResourceLocation EDIFY_ID = modLoc("edify");
 
-	private static final ResourceLocation SIMPLIFIED_ICON_BRAINSWEEP = modLoc("textures/gui/brainsweep_emi.png");
-	private static final ResourceLocation SIMPLIFIED_ICON_PHIAL = modLoc("textures/gui/phial_emi.png");
-	private static final ResourceLocation SIMPLIFIED_ICON_EDIFY = modLoc("textures/gui/edify_emi.png");
+	private static final ResourceLocation SIMPLIFIED_ICON_BRAINSWEEP = modLoc("textures/gui/brainsweep_recipe_icon.png");
+	private static final ResourceLocation SIMPLIFIED_ICON_PHIAL = modLoc("textures/gui/phial_recipe_icon.png");
+	private static final ResourceLocation SIMPLIFIED_ICON_EDIFY = modLoc("textures/gui/edify_recipe_icon.png");
 
 	public static final EmiRecipeCategory BRAINSWEEP = new EmiRecipeCategory(BRAINSWEEP_ID,
 		new PatternRendererEMI(BRAINSWEEP_ID, 16, 16),

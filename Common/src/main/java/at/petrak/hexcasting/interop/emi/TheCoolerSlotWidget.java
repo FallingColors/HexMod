@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.fabric.interop.emi;
+package at.petrak.hexcasting.interop.emi;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.emi.emi.api.render.EmiRender;
