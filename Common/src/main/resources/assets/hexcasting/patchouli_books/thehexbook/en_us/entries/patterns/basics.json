@@ -93,6 +93,14 @@
       "input": "entity",
       "output": "vector",
       "text": "hexcasting.page.basics_pattern.get_entity_velocity"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:get_media",
+      "anchor": "hexcasting:get_media",
+      "input": "",
+      "output": "num",
+      "text": "hexcasting.page.basics_pattern.get_media"
     }
   ]
 }

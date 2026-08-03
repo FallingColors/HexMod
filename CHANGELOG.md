@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added connected textures for Akashic Ligatures when using Continuity or Optifine ([#885](https://github.com/FallingColors/HexMod/pull/885)) @kineticneticat
 - Added Similarity Distillation and Dissimilarity Distillation for comparing iota types ([#1114](https://github.com/FallingColors/HexMod/pull/1114)) @IridescentVoid
 - Added Contemplation for escaping without the exponential growth of Consideration ([#1102](https://github.com/FallingColors/HexMod/pull/1102)) @IridescentVoid
+- Added Media Reflection for checking media available to the cast ([#1235](https://github.com/FallingColors/HexMod/pull/1235)) @IridescentVoid
 
 ### Changed
 
