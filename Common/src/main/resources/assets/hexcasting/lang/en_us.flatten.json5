@@ -1956,13 +1956,15 @@
         type_equals: "Compare the given iotas and push whether they are of the same type.",
         type_not_equals: "Compare the given iotas and push whether they are of different types.",
         "compare_block/": {
-          lenient: "Compare the blocks specified by the given vectors and push whether they are of the same type, in Nature's eye.",
-          strict: "Compare the blocks specified by the given vectors and push whether they appear to be identical.",
+          lenient: "Compare the blocks specified by the given vectors and push whether they are of the same type. Two $(l:items/edified#hexcasting:cut_edified_plank_variants)$(item)Edified Stairs/$ will always compare as equal regardless of their shape or if they are waterlogged.",
+          strict: "Compare the blocks specified by the given vectors and push whether they appear to be identical. Two placed $(l:items/edified#hexcasting:cut_edified_plank_variants)$(item)Edified Stairs/$ will only compare as equal if they appear exactly the same.",
+          remarks: "Nature seems a bit arbitrary as to when blocks appear identical to each other. Placed $(l:items/slate)$(item)Slates/$ appear identical if they face the same direction and share waterlogging state, even if they have different patterns written to them. Similarly, chests appear identical if their outward appearance is the same, even if their contents differ."
         },
         compare_entity: "Compare the given entities and push whether they are of the same type.",
         "compare_item/": {
-          lenient: "Compare the items within or held by the given entities and push whether they are the same type of item. Two $(l:items/focus)$(item)Foci/$ will always compare as equal.",
-          strict: "Like $(l:patterns/types#hexcasting:compare_item/lenient)$(action)Sorter's Distillation/$, but push whether they are identical items. Two $(l:items/focus)$(item)Foci/$ only compare as identical if they hold the same iota.",
+          lenient: "Compare the items represented or held by the given entities and push whether they are the same type of item. Two $(l:items/focus)$(item)Foci/$ will always compare as equal.",
+          strict: "Like $(l:patterns/types#hexcasting:compare_item/lenient)$(action)Sorter's Distillation/$, but push whether they are identical items. Two $(l:items/focus)$(item)Foci/$ only compare as identical if they hold the same iota and have $(l:patterns/spells/cyclevariant)$(thing)the same appearance/$.",
+          remarks: "The way Nature interprets a given entity depends on its type:$(li)Item entities resolve to the items it represents$(li)Item frames resolve to the item they contain, and mishap if they are empty$(li)Players resolve to the item they are currently holding, prioritizing their primary hand"
         },
       },
       
