@@ -12,16 +12,16 @@ import net.minecraft.world.item.DyeColor
  * Also throwable for your *own* name, for cases like Chronicler's Gambit
  */
 class MishapOthersName(val confidant: Player) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BLACK)
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
-        val seconds = if (this.confidant == ctx.castingEntity) 5 else 60
-        ctx.mishapEnvironment.blind(seconds * 20)
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
+        val seconds = if (this.confidant == env.castingEntity) 5 else 60
+        env.mishapEnvironment.blind(seconds * 20)
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        if (this.confidant == ctx.castingEntity)
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context) =
+        if (this.confidant == env.castingEntity)
             error("others_name.self")
         else
             error("others_name", confidant.name)

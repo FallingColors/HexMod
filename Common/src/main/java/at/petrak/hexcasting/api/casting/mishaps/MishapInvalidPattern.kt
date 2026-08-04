@@ -14,16 +14,16 @@ class MishapInvalidPattern(val pattern: HexPattern?) : Mishap() {
     @Deprecated("Provide the pattern that caused the mishap as an argument")
     constructor() : this(null) {}
 
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.YELLOW)
 
-    override fun resolutionType(ctx: CastingEnvironment) = ResolvedPatternType.INVALID
+    override fun resolutionType(env: CastingEnvironment) = ResolvedPatternType.INVALID
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         stack.add(GarbageIota())
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component? {
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context): Component? {
         if (pattern == null) return error("invalid_pattern_generic")
         return error("invalid_pattern", PatternIota.display(pattern))
     }
