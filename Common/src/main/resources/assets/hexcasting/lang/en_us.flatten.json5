@@ -797,6 +797,18 @@
           not_player: "Zone Distillation: Non-Player",
           not_living: "Zone Distillation: Non-Living",
         },
+
+        type_equals: "Similarity Distillation",
+        type_not_equals: "Dissimilarity Distillation",
+        "compare_block/": {
+          "lenient": "Surveyor's Distillation",
+          "strict": "Inspector's Distillation",
+        },
+        compare_entity: "Taxonomer's Distillation",
+        "compare_item/": {
+          "lenient": "Sorter's Distillation",
+          "strict": "Stacking Distillation",
+        },
         
         swap: "Jester's Gambit",
         rotate: "Rotation Gambit",
@@ -822,8 +834,6 @@
         less_eq: "Minimus Distillation II",
         equals: "Equality Distillation",
         not_equals: "Inequality Distillation",
-        type_equals: "Similarity Distillation",
-        type_not_equals: "Dissimilarity Distillation",
         not: "Negation Purification",
         bool_coerce: "Augur's Purification",
         if: "Augur's Exaltation",
@@ -1114,6 +1124,7 @@
             "": "an entity",
             mob: "a mob",
             item: "an item entity",
+            item_holder: "an item-holding entity",
             player: "a player",
             living: "a living entity",
           },
@@ -1319,6 +1330,7 @@
       stackmanip: "Stack Manipulation",
       logic: "Logical Operators",
       entities: "Entities",
+      types: "Types",
       lists: "List Manipulation",
       patterns_as_iotas: "Escaping Patterns",
       readwrite: "Reading and Writing",
@@ -1917,8 +1929,6 @@
         if: "If the first argument is True, keeps the second and discards the third; otherwise discards the second and keeps the third.",
         equals: "If the first argument equals the second (within a small tolerance), return True. Otherwise, return False.",
         not_equals: "If the first argument does not equal the second (outside a small tolerance), return True. Otherwise, return False.",
-        type_equals: "If the type of the first argument matches the type of the second, return True. Otherwise, return False.",
-        type_not_equals: "If the type of the first argument does not match the type of the second, return True. Otherwise, return False.",
         greater: "If the first argument is greater than the second, return True. Otherwise, return False.",
         less: "If the first argument is less than the second, return True. Otherwise, return False.",
         greater_eq: "If the first argument is greater than or equal to the second, return True. Otherwise, return False.",
@@ -1947,6 +1957,23 @@
           not_player: "Take a position and maximum distance on the stack, and combine them into a list of non-player characters near the position.",
           living: "Take a position and maximum distance on the stack, and combine them into a list of living creatures near the position.",
           not_living: "Take a position and maximum distance on the stack, and combine them into a list of non-living entities near the position.",
+        },
+      },
+
+      types: {
+        type_equals: "Compare the given iotas and push whether they are of the same type.",
+        type_not_equals: "Compare the given iotas and push whether they are of different types.",
+        "compare_block/": {
+          lenient: "Compare the blocks specified by the given vectors and push whether they are of the same type. Two $(l:items/edified#hexcasting:cut_edified_plank_variants)$(item)Edified Stairs/$ will always compare as equal regardless of their shape or if they are waterlogged.",
+          strict: "Compare the blocks specified by the given vectors and push whether they appear to be identical. Two placed $(l:items/edified#hexcasting:cut_edified_plank_variants)$(item)Edified Stairs/$ will only compare as equal if they appear exactly the same.",
+          remarks: "Nature seems a bit arbitrary as to when blocks appear identical to each other. Placed $(l:items/slate)$(item)Slates/$ appear identical if they face the same direction and share waterlogging state, even if they have different patterns written to them. Similarly, chests appear identical if their outward appearance is the same, even if their contents differ."
+        },
+        compare_entity: "Compare the given entities and push whether they are of the same type.",
+        "compare_item/": {
+          lenient: "Compare the items represented or held by the given entities and push whether they are the same type of item. Two $(l:items/focus)$(item)Foci/$ will always compare as equal.",
+          strict: "Like $(l:patterns/types#hexcasting:compare_item/lenient)$(action)Sorter's Distillation/$, but push whether they are identical items. Two $(l:items/focus)$(item)Foci/$ only compare as identical if they hold the same iota and have $(l:patterns/spells/cyclevariant)$(thing)the same appearance/$.",
+          "remarks.title": "On Item Holders",
+          remarks: "The way Nature interprets an entity given to $(l:patterns/types#hexcasting:compare_item/lenient)$(action)Sorter's Dstl./$ or $(l:patterns/types#hexcasting:compare_item/strict)$(action)Stacking Dstl./$ depends on its type:$(li)Item entities resolve to the items they represents$(li)Item frames resolve to the item they contain, and mishap if they are empty$(li)Players resolve to the item they are currently holding, prioritizing their primary hand"
         },
       },
       
