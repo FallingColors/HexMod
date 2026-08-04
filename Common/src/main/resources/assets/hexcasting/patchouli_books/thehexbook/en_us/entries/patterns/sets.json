@@ -2,7 +2,7 @@
   "name": "hexcasting.entry.sets",
   "category": "hexcasting:patterns",
   "icon": "minecraft:bundle",
-  "sortnum": 11,
+  "sortnum": 12,
   "advancement": "hexcasting:root",
   "read_by_default": true,
   "pages": [

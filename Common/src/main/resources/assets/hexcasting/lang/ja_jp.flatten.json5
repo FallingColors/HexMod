@@ -1263,7 +1263,6 @@
       mishaps: "変事",
       stack: "スタック",
       naming: "アクションの呼称",
-      influences: "作用",
       mishaps2: "啓示された変事",
       amethyst: "アメジスト",
       
@@ -1449,7 +1448,7 @@
       "101": {
         "1": "$(hex)呪紋/$を形作るのはかなり難しい...この技術が廃れていったのも無理はない！この記録を慎重に見直そう。$(br2) $(l:items/staff)$(item)杖/$を手に持ち、$(k:use)を押せば$(hex)呪紋/$を始められる。すると目の前に六角形の点のグリッドが現れる。点から点へドラッグして、グリッドに$(media)メディア/$のパターンを描ける。パターンを描き上げると、それに対応するアクション(詳細は後程)が実行される。",
         "2": "スペルを放つのに十分なパターンを描けば、グリッドは消失し、蓄えていた$(media)メディア/$が解放される。$(k:sneak)を押しながら$(l:items/staff)$(item)杖/$を使用することでもグリッドは空になる。$(br2)では、パターンはどのように機能するか？平たく言えば:$(li)$(italic)パターン/$が実行するのが...$(li)$(italic)アクション/$、それで操作するのが...$(li)$(l:casting/stack)$(italic)スタック/$、それに載っているのが...$(li)$(italic)イオタ/$、これらは単純な情報の単位だ。",
-        "3": "まずは$(thing)パターン/$。欠かせないものだ。これらを用いて自分の周囲の$(media)メディア/$を操作する。特定のパターンが描かれると、$(thing)アクション/$が発生する。アクションが実際に魔法を$(italic)かける/$のだ。すべてのパターンは決まった方法でメディアに影響を与え、それらの影響が最終的に有用であるとき、それをアクションと呼ぶ。$(br2)$(media)メディア/$は不安定だ。無効なパターンを描くと、スタックのどこかに$(l:casting/influences)$(action)ガベージ/$が生じる(詳細は後程)。",
+        "3": "まずは$(thing)パターン/$。欠かせないものだ。これらを用いて自分の周囲の$(media)メディア/$を操作する。特定のパターンが描かれると、$(thing)アクション/$が発生する。アクションが実際に魔法を$(italic)かける/$のだ。すべてのパターンは決まった方法でメディアに影響を与え、それらの影響が最終的に有用であるとき、それをアクションと呼ぶ。$(br2)$(media)メディア/$は不安定だ。無効なパターンを描くと、スタックのどこかに$(thing)ガベージ/$が生じる(詳細は後程)。",
         "4.header": "例",
         "4": "興味深いことに、パターンは$(italic)回転/$させても全く問題ないようだ。例えば、これら2つのパターンはどちらも$(l:patterns/basics#hexcasting:get_caster)$(action)精神の反射/$というアクションを果たす。",
         "5": "$(hex)呪紋/$は(有効な)アクションを順番に描くことで構成される。各アクションはおおむね以下のいずれかを実行する:$(li)周囲の情報を集め、それをスタックの1番上に残す。$(li)集めた情報を操作する(2つの数字を足すなど)。$(li)雷を召喚したり爆発したりといった魔法の効果を行使する(これらのアクションは「スペル」と呼ばれる)。$(p)$(hex)呪紋/$を描き始めると、空のスタックが生成される。アクションはスタックの1番上を操作する。",
@@ -1480,16 +1479,16 @@
         "3": "幸いなことに、変事による悪影響は確かに$(italic)迷惑/$だが、長期的な破壊を伴うものは特にない。気を取り直して再試行する他ない...が、より上手くできるように励むのが良い。$(br2)次がまとめた変事の一覧だ。",
         
         "invalid_pattern.title": "無効なパターン",
-        invalid_pattern: "描かれたパターンがどのアクションにも結び付いていない。$(br2)黄色の光が散り、$(l:casting/influences)$(action)ガベージ/$がスタックの1番上に入る。",
+        invalid_pattern: "描かれたパターンがどのアクションにも結び付いていない。$(br2)黄色の光が散り、$(thing)ガベージ/$がスタックの1番上に入る。",
         
         "not_enough_iotas.title": "イオタ不足",
-        not_enough_iotas: "アクションがスタック上にあるよりも多くのイオタを要していた。$(br2)薄灰色の光が散り、引数の数を満たすために必要なだけ$(l:casting/influences)$(action)ガベージ/$が入る。",
+        not_enough_iotas: "アクションがスタック上にあるよりも多くのイオタを要していた。$(br2)薄灰色の光が散り、引数の数を満たすために必要なだけ$(thing)ガベージ/$が入る。",
         
         "stack_size.title": "イオタ過多",
-        "stack_size": "スタックのサイズ制限を超えるスペルを描こうとした。$(br2)黒色の光が散り、スタック全体が単一の$(l:casting/influences)$(action)ガベージ/$に置き換えられる。",
+        "stack_size": "スタックのサイズ制限を超えるスペルを描こうとした。$(br2)黒色の光が散り、スタック全体が単一の$(thing)ガベージ/$に置き換えられる。",
         
         "incorrect_iota.title": "不正なイオタ",
-        incorrect_iota: "実行されたアクションは引数として特定のタイプのイオタを予期していたが、無効なものを取得した。複数のイオタが無効な場合、エラーメッセージはスタックの最深部のエラーについてのみ表示する。$(br2)灰色の光が散り、無効なイオタが$(l:casting/influences)$(action)ガベージ/$に置き換えられる。",
+        incorrect_iota: "実行されたアクションは引数として特定のタイプのイオタを予期していたが、無効なものを取得した。複数のイオタが無効な場合、エラーメッセージはスタックの最深部のエラーについてのみ表示する。$(br2)灰色の光が散り、無効なイオタが$(thing)ガベージ/$に置き換えられる。",
         
         "vector_out_of_range.title": "範囲外のベクトル",
         vector_out_of_range: "アクションが範囲外の地点で世界に影響を与えようとした。$(br2)赤紫色の光が散り、手に持っているアイテムが問題の位置に向かって投げ出される。",
@@ -1501,7 +1500,7 @@
         entity_immune: "アクションが改変できないエンティティに影響を与えようとした。$(br2)青色の光が散り、手に持っているアイテムが問題のエンティティに向かって投げ出される。",
         
         "math_error.title": "数学的エラー",
-        math_error: "アクションが0で割るなどの、数学の法則に反することをした。$(br2)赤色の光が散り、$(l:casting/influences)$(action)ガベージ/$がスタックに入り、精神が消耗し、残っている活力の半分が取られる。自然界はそのような演算に腹を立て、報復として$(italic)自分/$を除算するようだ。",
+        math_error: "アクションが0で割るなどの、数学の法則に反することをした。$(br2)赤色の光が散り、$(thing)ガベージ/$がスタックに入り、精神が消耗し、残っている活力の半分が取られる。自然界はそのような演算に腹を立て、報復として$(italic)自分/$を除算するようだ。",
         
         "incorrect_item.title": "不正なアイテム",
         incorrect_item: "アクションには何らかのアイテムが必要だが、指定したアイテムが適切ではなかった。$(br2)茶色の光が散る。問題のあるアイテムを手に持っている場合は、それが床に投げ出される。エンティティの形である場合は、それが空中に飛ばされる。",
@@ -1536,12 +1535,6 @@
         "1": "古代人がアクションにつけた名前はたしかに風変わりだが、そこにはある種の道理があると思われる。$(br2)スタックから削除したり追加したりするイオタの数に応じて名付けられた、一般的な名前から成る特定のアクションのグループがあるようだ。",
         "2": "$(li)$(thing)反射/$は何も取り出さず、1つのイオタを入れる。$(li)$(thing)浄化/$は1つ取り出し、1つ入れる。$(li)$(thing)蒸溜/$は2つ取り出し、1つ入れる。$(li)$(thing)昂揚/$は3つ以上取り出し、1つ入れる。$(li)$(thing)分解/$は1つの引数を取り出し、2つ入れる。$(li)$(thing)崩壊/$は1つ取り出し、3つ以上入れる。$(li)$(thing)仕掛/$は他の数値を入れるか取り出す(または他の方法でスタックを再配置する)。",
         "3": "スペルはこの命名法が適用されていないようで、多かれ少なかれその動作に応じて名付けられている。結局のところ、単に$(l:patterns/spells/basic#hexcasting:explode)$(action)爆発/$と言えるのに、$(action)デモマンの仕掛/$と呼ばなくていいだろう？",
-      },
-      
-      influences: {
-        "1": "作用は...控えめに言っても奇妙だ。大半のイオタは世界についての何かを示すようだが、作用はさらに...抽象的、あるいは無定形の何かを示す。$(br2)例えば、$(l:casting/influences)$(thing)Null/$と名付けた作用は何も示していないようだ。空に向かって$(l:patterns/basics#hexcasting:raycast)$(action)射手の蒸溜/$をするなど、尋ねた質問に対する適切な解答がないときに生成される。",
-        "2": "さらに、$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)検討/$、$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$、$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)回想/$、$(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)消失/$と名付けた興味深い4つの作用を発見した。それらはパターンと他の作用の両方の特性を持っているようだが、大きく異なる動作をする。これらを使用すると、パターンをアクションに照合する代わりに、イオタとしてスタックに追加できる。$(l:patterns/patterns_as_iotas)それについてここに書き留めた/$。",
-        "3": "最後に、乱雑にもつれた$(media)メディア/$のように見える、無限の作用群があるようだ。まったく実用性がないため、$(l:casting/influences)$(action)ガベージ/$と名付けた。それらは$(l:casting/mishaps)$(thing)変事/$に応じてスタックのさまざまな場所に出現するようで、感覚的には無意味な寄せ集めのように見える。",
       },
       
       mishaps2: {
@@ -1585,7 +1578,7 @@
       thought_knot: {
         "1": "忘れん坊はしばしば大事なことを覚えるために指に紐を結ぶ。この発想は術に利用できると思われる。特別な結び方をした紐はスタックと関係なく、単一のイオタを安定して保持できるはずだ。$(br2)この発明を$(item)念いの結び目/$と呼ぼう。",
         "2": "クラフトしたときには、イオタは保存されていない。$(item)念いの結び目/$を反対側の手に持ち、$(l:patterns/readwrite#hexcasting:write)$(action)筆記者の仕掛/$を使用すると、スタックの1番上が削除されて$(item)念いの結び目/$に保存される。$(l:patterns/readwrite#hexcasting:read)$(action)筆記者の反射/$を使用すると、$(item)念いの結び目/$内のイオタがコピーされ、スタックに追加される。$(br2)$(item)念いの結び目/$は1度書き込まれると消えないほどもつれ、何度でもイオタを読み込めるが、消去や上書きをする方法はない。幸いなことに、それらは高価ではない。",
-        "3": "また、エンティティを$(item)念いの結び目/$に保存し、参照されたエンティティが死亡または消失した後にそれを呼び出そうとすると、$(l:patterns/readwrite#hexcasting:read)$(action)筆記者の反射/$は代わりに$(l:casting/influences)$(thing)Null/$をスタックに追加する。",
+        "3": "また、エンティティを$(item)念いの結び目/$に保存し、参照されたエンティティが死亡または消失した後にそれを呼び出そうとすると、$(l:patterns/readwrite#hexcasting:read)$(action)筆記者の反射/$は代わりに$(thing)Null/$をスタックに追加する。",
         "crafting.desc": "$(italic)誰かが「私は魅力的でハンサムです」という看板を着けているあなたを見たらどう思うだろうか？/$",
       },
       
@@ -1763,7 +1756,7 @@
         print: "スタックの1番上のイオタを表示する。",
         raycast: {
           "1": "2つのベクトル(位置と方向)を組み合わせて、「その位置に立ってその方向を見たら、どのブロックを見ていることになる？」という質問への答えを出す。ごく少量の$(media)メディア/$を要する。",
-          "2": "何も当てはまらなかった場合、ベクトルは$(l:casting/influences)$(thing)Null/$に結合される。$(br2)「レイキャスト・マントラ」といわれる共通の一連のパターンが、$(l:patterns/basics#hexcasting:get_caster)$(action)精神の反射/$、$(l:patterns/basics#hexcasting:entity_pos/eye)$(action)羅針盤の浄化/$、$(l:patterns/basics#hexcasting:get_caster)$(action)精神の反射/$、$(l:patterns/basics#hexcasting:get_entity_look)$(action)示方規の浄化/$、$(l:patterns/basics#hexcasting:raycast)$(action)射手の蒸溜/$から成る。これらにより、自分が見ているブロックのベクトル位置が返される。",
+          "2": "何も当てはまらなかった場合、ベクトルは$(thing)Null/$に結合される。$(br2)「レイキャスト・マントラ」といわれる共通の一連のパターンが、$(l:patterns/basics#hexcasting:get_caster)$(action)精神の反射/$、$(l:patterns/basics#hexcasting:entity_pos/eye)$(action)羅針盤の浄化/$、$(l:patterns/basics#hexcasting:get_caster)$(action)精神の反射/$、$(l:patterns/basics#hexcasting:get_entity_look)$(action)示方規の浄化/$、$(l:patterns/basics#hexcasting:raycast)$(action)射手の蒸溜/$から成る。これらにより、自分が見ているブロックのベクトル位置が返される。",
         },
         "raycast/axis": {
           "1": "$(l:patterns/basics#hexcasting:raycast)$(action)射手の蒸溜/$と似ているが、代わりに「ブロックのどの$(italic)面/$を見ている？」という質問への答えを示すベクトルを返す。ごく少量の$(media)メディア/$を要する。",
@@ -1851,7 +1844,7 @@
       },
       
       "consts.const/": {
-        "null": "$(l:casting/influences)$(thing)Null/$作用をスタックの1番上に追加する。",
+        "null": "$(thing)Null/$作用をスタックの1番上に追加する。",
         "true": "$(thing)True/$をスタックの1番上に追加する。",
         "false": "$(thing)False/$をスタックの1番上に追加する。",
         
@@ -1899,7 +1892,7 @@
       },
       
       logic: {
-        bool_coerce: "引数を論理型に変換する。数値$(thing)0/$、$(l:casting/influences)$(thing)Null/$、False、空のリストはFalseになり、その他すべてはTrueになる。",
+        bool_coerce: "引数を論理型に変換する。数値$(thing)0/$、$(thing)Null/$、False、空のリストはFalseになり、その他すべてはTrueになる。",
         bool_to_number: "論理型を数値に変換する。Trueは$(thing)1/$になり、Falseは$(thing)0/$になる。",
         not: "引数がTrueであればFalseを返し、FalseであればTrueを返す。",
         or: "少なくとも1つの引数がTrueであればTrueを返し、そうでなければFalseを返す。",
@@ -1917,13 +1910,13 @@
       },
       
       entities: {
-        get_entity: "スタック上の位置を、その位置にいるエンティティ(存在しない場合は$(l:casting/influences)$(thing)Null/$)に変換する。",
+        get_entity: "スタック上の位置を、その位置にいるエンティティ(存在しない場合は$(thing)Null/$)に変換する。",
         "get_entity/": {
-          animal: "スタック上の位置を、その位置にいる動物(存在しない場合は$(l:casting/influences)$(thing)Null/$)に変換する。",
-          monster: "スタック上の位置を、その位置にいるモンスター(存在しない場合は$(l:casting/influences)$(thing)Null/$)に変換する。",
-          item: "スタック上の位置を、その位置にドロップされたアイテム(存在しない場合は$(l:casting/influences)$(thing)Null/$)に変換する。",
-          player: "スタック上の位置を、その位置にいるプレイヤー(存在しない場合は$(l:casting/influences)$(thing)Null/$)に変換する。",
-          living: "スタック上の位置を、その位置にいる生物(存在しない場合は$(l:casting/influences)$(thing)Null/$)に変換する。",
+          animal: "スタック上の位置を、その位置にいる動物(存在しない場合は$(thing)Null/$)に変換する。",
+          monster: "スタック上の位置を、その位置にいるモンスター(存在しない場合は$(thing)Null/$)に変換する。",
+          item: "スタック上の位置を、その位置にドロップされたアイテム(存在しない場合は$(thing)Null/$)に変換する。",
+          player: "スタック上の位置を、その位置にいるプレイヤー(存在しない場合は$(thing)Null/$)に変換する。",
+          living: "スタック上の位置を、その位置にいる生物(存在しない場合は$(thing)Null/$)に変換する。",
         },
         
         zone_entity: "スタック上の位置と最大距離を取得し、その位置の近くにいるすべてのエンティティのリストに結合する。",
@@ -1942,7 +1935,7 @@
       },
       
       lists: {
-        index: "スタックの1番上の数値を削除し、1番上のリストをそのリストのn番目の要素に置き換える(nは削除した数値)。数値が範囲外の場合はリストを$(l:casting/influences)$(thing)Null/$に置き換える。",
+        index: "スタックの1番上の数値を削除し、1番上のリストをそのリストのn番目の要素に置き換える(nは削除した数値)。数値が範囲外の場合はリストを$(thing)Null/$に置き換える。",
         slice: "スタックの上から2つの数値を削除し、それらのインデックス間の、スタックの1番上の下限を含み上限を含まないサブリストを取得する。例えば、[0, 1, 2, 3, 4]の0、 2のサブリストは[0, 1]となる。",
         append: "スタックの1番上を削除し、それをスタックの1番上のリストの末尾に追加する。",
         unappend: "スタックの1番上のリストの末尾にあるイオタを削除し、それをスタックの1番上に追加する。",
@@ -1962,7 +1955,7 @@
       
       patterns_as_iotas: {
         "1": "この術の多くの特徴の内の1つは$(italic)パターン自体/$がイオタとして機能できることで、描画中にそれらをスタックに加えることもできる。$(br2)ここで当然の疑問が沸く。$(br)どうやってそれらを表現すれば良い？単にパターンを描くのでは、それをスタックに追加するように自然界に伝えることは望めず、アクションに一致するだけだろう。",
-        "2": "幸い、自然界はパターンを直接操作するために使用できる$(l:casting/influences)作用/$一式を提供してくれた。$(br2)端的には、$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)検討/$で1つのパターンをスタックに追加し、$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$と$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)回想/$でリスト全体を追加できる。",
+        "2": "幸い、自然界はパターンを直接操作するために使用できる作用一式を提供してくれた。$(br2)端的には、$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)検討/$で1つのパターンをスタックに追加し、$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$と$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)回想/$でリスト全体を追加できる。",
         escape: {
           "1": "$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)検討/$を使用するには、それを描いてから、他の任意のパターンを描く。その2つ目のパターンがスタックに追加される。",
           "2": "計算機科学に精通している人であれば、パターンをスタックに「エスケープする」と考えれば分かりやすいかもしれない。$(br2)これの通常の使用法は、$(l:patterns/readwrite#hexcasting:write)$(action)筆記者の仕掛/$を使用してパターンを$(l:items/scroll)$(item)巻物/$や$(l:items/slate)$(item)石板/$にコピーし、おそらくそれらで装飾することである。",
@@ -1992,7 +1985,7 @@
         writable: "反対側の手にあるアイテムにイオタを保存できるならTrueを返す。そうでなければFalseを返す。",
         "writable/entity": "$(l:patterns/readwrite#hexcasting:writable)$(action)査定人の反射/$と似ているが、自分の反対側の手ではなくエンティティに書き込めるかどうかを確認する。",
         "local.title": "レイヴンマインド",
-        local: "とはいえ、情報を保存できる場所はアイテムだけではない。スタックと似て非なるものである、$(hex)呪紋/$自体の$(media)メディア/$に情報を保存することもできる。本文ではこれを$(l:patterns/readwrite#hexcasting:local)$(thing)レイヴンマインド/$と称する。$(l:items/focus)$(item)焦点具/$と同様に1つのイオタを保持し、同様に最初は$(l:casting/influences)$(thing)Null/$である。$(l:patterns/meta#hexcasting:for_each)$(action)トートの仕掛/$の反復間では保持されるが、直前の$(hex)呪紋/$の一部である間のみだ。描画を止めると値は消失する。",
+        local: "とはいえ、情報を保存できる場所はアイテムだけではない。スタックと似て非なるものである、$(hex)呪紋/$自体の$(media)メディア/$に情報を保存することもできる。本文ではこれを$(l:patterns/readwrite#hexcasting:local)$(thing)レイヴンマインド/$と称する。$(l:items/focus)$(item)焦点具/$と同様に1つのイオタを保持し、同様に最初は$(thing)Null/$である。$(l:patterns/meta#hexcasting:for_each)$(action)トートの仕掛/$の反復間では保持されるが、直前の$(hex)呪紋/$の一部である間のみだ。描画を止めると値は消失する。",
         "write/local": "1番上のイオタをスタックから削除し、それを$(l:patterns/readwrite#hexcasting:local)$(thing)レイヴンマインド/$に保存し、$(hex)呪紋/$の描画を止めるまで保管する。",
         "read/local": "$(l:patterns/readwrite#hexcasting:write/local)$(action)フギンの仕掛/$で書き込んだであろうイオタを、$(l:patterns/readwrite#hexcasting:local)$(thing)レイヴンマインド/$からコピーする。",
       },
@@ -2092,8 +2085,8 @@
         
         "sentinel/create": "自分の$(l:patterns/spells/sentinels)$(thing)センチネル/$を指定された位置に召喚する。約1個の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",
         "sentinel/destroy": "自分の$(l:patterns/spells/sentinels)$(thing)センチネル/$を追放し、世界から消し去る。ごく少量の$(media)メディア/$を要する。",
-        "sentinel/get_pos": "自分の$(l:patterns/spells/sentinels)$(thing)センチネル/$の位置を、召喚されていなければ$(l:casting/influences)$(thing)Null/$をスタックに追加する。ごく少量の$(media)メディア/$を要する。",
-        "sentinel/wayfind": "スタックの1番上の位置ベクトルを、その位置から自分の$(l:patterns/spells/sentinels)$(thing)センチネル/$を指し示す単位ベクトルに、召喚されていなければ$(l:casting/influences)$(thing)Null/$に変換する。ごく少量の$(media)メディア/$を要する。",
+        "sentinel/get_pos": "自分の$(l:patterns/spells/sentinels)$(thing)センチネル/$の位置を、召喚されていなければ$(thing)Null/$をスタックに追加する。ごく少量の$(media)メディア/$を要する。",
+        "sentinel/wayfind": "スタックの1番上の位置ベクトルを、その位置から自分の$(l:patterns/spells/sentinels)$(thing)センチネル/$を指し示す単位ベクトルに、召喚されていなければ$(thing)Null/$に変換する。ごく少量の$(media)メディア/$を要する。",
       },
       
       colorize: "このスペルを発動するには反対側の手に$(l:items/pigments)$(item)色素/$を持つ必要がある。すると色素が消費され、精神の色彩が(再度このスペルを描くまでは)恒久的に変化する。約1個の$(l:items/amethyst)$(item)アメジストダスト/$を要する。",

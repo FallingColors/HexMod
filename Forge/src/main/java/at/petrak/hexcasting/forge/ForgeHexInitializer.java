@@ -140,6 +140,7 @@ public class ForgeHexInitializer {
         bind(HexRegistries.ARITHMETIC, HexArithmetics::register);
         bind(HexRegistries.CONTINUATION_TYPE, HexContinuationTypes::registerContinuations);
         bind(HexRegistries.EVAL_SOUND, HexEvalSounds::register);
+        HexItemHolderHandlers.init();
 
         ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
         ForgeHexLootMods.REGISTRY.register(getModEventBus());

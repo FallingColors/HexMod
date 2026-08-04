@@ -17,8 +17,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added a config toggle (default false) for the effect that makes iota-holding items display their entire NBT data when Advanced Tooltips is enabled ([#1021](https://github.com/FallingColors/HexMod/pull/1021)) @Robotgiggle
 - Added a pattern display overlay for pattern-holding items (ie scrolls or slates) while holding shift in the inventory ([#879](https://github.com/FallingColors/HexMod/pull/879)) @SamsTheNerd
 - Added connected textures for Akashic Ligatures when using Continuity or Optifine ([#885](https://github.com/FallingColors/HexMod/pull/885)) @kineticneticat
-- Added Similarity Distillation and Dissimilarity Distillation for comparing iota types ([#1114](https://github.com/FallingColors/HexMod/pull/1114)) @IridescentVoid
+- Added type comparison patterns ([#1114](https://github.com/FallingColors/HexMod/pull/1114)) @IridescentVoid
+  - Similarity Distillation and Dissimilarity Distillation for iota types
+  - Surveyor's Distillation and Inspector's Distillation for blocks
+  - Taxonomer's Distillation for entities
+  - Sorter's Distillation and Stacking Distillation for items
 - Added Contemplation for escaping without the exponential growth of Consideration ([#1102](https://github.com/FallingColors/HexMod/pull/1102)) @IridescentVoid
+- Added Interjection, Meditation, and Recollection for advanced pattern-list creation ([#1103](https://github.com/FallingColors/HexMod/pull/1103)) @Robotgiggle
 - Added Media Reflection for checking media available to the cast ([#1235](https://github.com/FallingColors/HexMod/pull/1235)) @IridescentVoid
 
 ### Changed
@@ -27,8 +32,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Changed Wayfarer's Flight and Anchorite's Flight to both cost 2 dust per unit, and enforced a minimum cost for Anchorite's Flight ([#1040](https://github.com/FallingColors/HexMod/pull/1040)) @Robotgiggle
 - Changed the pattern limit to also include execution of non-pattern iotas like jumps ([#1035](https://github.com/FallingColors/HexMod/pull/1035)) @pythonmcpi
 - Changed the Hasty Retrospection mishap to Absent Introspection as it's now used for anything that only works while parenthesized ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
+- Updated and reorganized various entries in the guidebook to improve clarity ([#1199](https://github.com/FallingColors/HexMod/pull/1199)) @Robotgiggle
+  - Added a new entry defining what a Hex actually is and how it can be represented on the stack
+  - Changed "A Primer on Vectors" to provide its own information rather than linking to Psi's guide
+  - Reordered "Escaping Patterns" to account for the newly added Contemplation pattern
+  - Removed "Influences" and moved relevant info into "Hex Casting 101"
+- Updated the Flay Mind recipe display in EMI and JEI to cycle through all valid entities if the input is an entity tag ([#1023](https://github.com/FallingColors/HexMod/pull/1023)) @YukkuriC
 - All custom recipe displays now work with both EMI and JEI on all platforms, rather than only EMI on Fabric and only JEI on Forge ([#1206](https://github.com/FallingColors/HexMod/pull/1206)) @Robotgiggle
-- Updated the Flay Mind recipe display to cycle through all valid entities if the input is an entity tag ([#1023](https://github.com/FallingColors/HexMod/pull/1023)) @YukkuriC
 - Re-implemented the ability to extract stored media from items in trinket/curio slots ([#996](https://github.com/FallingColors/HexMod/pull/996)) @YukkuriC
 - Patterns involving entity look direction now compensate for the vanilla bug that causes projectiles and phantoms to report the wrong direction ([#1025](https://github.com/FallingColors/HexMod/pull/1025)) @Robotgiggle
 - Edified Panels are now crafted with 9 planks rather than 8 to avoid conflicting with the vanilla chest recipe ([#1080](https://github.com/FallingColors/HexMod/pull/1080)) @Robotgiggle

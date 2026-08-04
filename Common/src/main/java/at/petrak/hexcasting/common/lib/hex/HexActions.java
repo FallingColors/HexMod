@@ -30,7 +30,10 @@ import at.petrak.hexcasting.common.casting.actions.math.OpRandom;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpBoolIf;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpCoerceToBool;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpEquality;
-import at.petrak.hexcasting.common.casting.actions.math.logic.OpTypeEquality;
+import at.petrak.hexcasting.common.casting.actions.types.OpEntityEquality;
+import at.petrak.hexcasting.common.casting.actions.types.OpItemEquality;
+import at.petrak.hexcasting.common.casting.actions.types.OpTypeEquality;
+import at.petrak.hexcasting.common.casting.actions.types.OpBlockEquality;
 import at.petrak.hexcasting.common.casting.actions.queryentity.*;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockAxisRaycast;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockRaycast;
@@ -399,6 +402,12 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("qqq", HexDir.WEST), OpOpenParen.INSTANCE));
     public static final ActionRegistryEntry CLOSE_PAREN = make("close_paren",
         new ActionRegistryEntry(HexPattern.fromAngles("eee", HexDir.EAST), OpCloseParen.INSTANCE));
+    public static final ActionRegistryEntry OPEN_N_PARENS = make("open_n_parens",
+            new ActionRegistryEntry(HexPattern.fromAngles("qdaqadq", HexDir.WEST), OpOpenNParens.INSTANCE));
+    public static final ActionRegistryEntry CLOSE_ALL_PARENS = make("close_all_parens",
+            new ActionRegistryEntry(HexPattern.fromAngles("eadedae", HexDir.EAST), OpCloseAllParens.INSTANCE));
+    public static final ActionRegistryEntry READ_INTO_PARENS = make("read_into_parens",
+            new ActionRegistryEntry(HexPattern.fromAngles("aqqqqqwded", HexDir.EAST), OpReadIntoParens.INSTANCE));
     public static final ActionRegistryEntry UNDO = make("undo",
         new ActionRegistryEntry(HexPattern.fromAngles("eeedw", HexDir.EAST), OpUndo.INSTANCE));
 
@@ -545,6 +554,23 @@ public class HexActions {
             HexPattern.fromAngles("eeeeewaqaawd", HexDir.NORTH_EAST), new OpGetEntitiesBy(OpGetEntitiesBy::isLiving,
             true)
         ));
+
+    // == Types ==
+    public static final ActionRegistryEntry COMPARE_BLOCK = make("compare_block/lenient", new ActionRegistryEntry(
+        HexPattern.fromAngles("qqqqqeqeeeee", HexDir.NORTH_WEST), new OpBlockEquality(false)
+    ));
+    public static final ActionRegistryEntry COMPARE_BLOCK_STRICT = make("compare_block/strict", new ActionRegistryEntry(
+        HexPattern.fromAngles("qwawqwadadwewdwe", HexDir.NORTH_WEST), new OpBlockEquality(true)
+    ));
+    public static final ActionRegistryEntry COMPARE_ENTITY = make("compare_entity", new ActionRegistryEntry(
+        HexPattern.fromAngles("aqaeqded", HexDir.NORTH_WEST), OpEntityEquality.INSTANCE
+    ));
+    public static final ActionRegistryEntry COMPARE_ITEM = make("compare_item/lenient", new ActionRegistryEntry(
+        HexPattern.fromAngles("qaeaqeqedqde", HexDir.NORTH_WEST), new OpItemEquality(false)
+    ));
+    public static final ActionRegistryEntry COMPARE_ITEM_STRICT = make("compare_item/strict", new ActionRegistryEntry(
+        HexPattern.fromAngles("qaeaqewqedqde", HexDir.NORTH_WEST), new OpItemEquality(true)
+    ));
 
     // == Lists ==
 
