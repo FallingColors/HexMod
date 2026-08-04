@@ -1,21 +1,21 @@
 {
-  "name": "hexcasting.entry.influences",
+  "name": "hexcasting.entry.whats_a_hex",
   "category": "hexcasting:casting",
-  "icon": "minecraft:spyglass",
+  "icon": "hexcasting:focus",
   "sortnum": 2,
   "advancement": "hexcasting:root",
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.influences.1"
+      "text": "hexcasting.page.whats_a_hex.1"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.influences.2"
+      "text": "hexcasting.page.whats_a_hex.2"
     },
     {
       "type": "patchouli:text",
-      "text": "hexcasting.page.influences.3"
+      "text": "hexcasting.page.whats_a_hex.3"
     }
   ]
 }
