@@ -1965,7 +1965,7 @@
           lenient: "Compare the items represented or held by the given entities and push whether they are the same type of item. Two $(l:items/focus)$(item)Foci/$ will always compare as equal.",
           strict: "Like $(l:patterns/types#hexcasting:compare_item/lenient)$(action)Sorter's Distillation/$, but push whether they are identical items. Two $(l:items/focus)$(item)Foci/$ only compare as identical if they hold the same iota and have $(l:patterns/spells/cyclevariant)$(thing)the same appearance/$.",
           "remarks.title": "On Item Holders",
-          remarks: "The way Nature interprets an entity given to $(l:patterns/types#hexcasting:compare_item/lenient)$(action)Sorter's Dstl./$ or $(l:patterns/types#hexcasting:compare_item/strict)$(action)Stacking Dstl./$ depends on its type:$(li)Item entities resolve to the items it represents$(li)Item frames resolve to the item they contain, and mishap if they are empty$(li)Players resolve to the item they are currently holding, prioritizing their primary hand"
+          remarks: "The way Nature interprets an entity given to $(l:patterns/types#hexcasting:compare_item/lenient)$(action)Sorter's Dstl./$ or $(l:patterns/types#hexcasting:compare_item/strict)$(action)Stacking Dstl./$ depends on its type:$(li)Item entities resolve to the items they represents$(li)Item frames resolve to the item they contain, and mishap if they are empty$(li)Players resolve to the item they are currently holding, prioritizing their primary hand"
         },
       },
       
