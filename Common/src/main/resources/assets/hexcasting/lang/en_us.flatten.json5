@@ -752,6 +752,7 @@
         raycast: "Archer's Distillation",
         "raycast/axis": "Architect's Distillation",
         "raycast/entity": "Scout's Distillation",
+        get_media: "Media Reflection",
         
         "circle/": {
           impetus_pos: "Waystone Reflection",
@@ -1803,6 +1804,7 @@
         "raycast/entity": "Like $(l:patterns/basics#hexcasting:raycast)$(action)Archer's Distillation/$, but instead returns the $(italic)entity/$ I am looking at. Costs a negligible amount of _media.",
         get_entity_height: "Transforms an entity on the stack into its height.",
         get_entity_velocity: "Transforms an entity on the stack into the direction in which it's moving, with the speed of that movement as that direction's magnitude.",
+        get_media: "Pushes the amount of _media available to the current cast, in units of $(l:items/amethyst)$(item)Amethyst Dust/$.",
       },
       
       numbers: {
