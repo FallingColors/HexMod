@@ -809,7 +809,7 @@
           "lenient": "Sorter's Distillation",
           "strict": "Stacking Distillation",
         },
-        
+
         swap: "Jester's Gambit",
         rotate: "Rotation Gambit",
         rotate_reverse: "Rotation Gambit II",
@@ -940,6 +940,9 @@
         runtime_escape: "Contemplation",
         open_paren: "Introspection",
         close_paren: "Retrospection",
+        open_n_parens: "Meditation",
+        close_all_parens: "Recollection",
+        read_into_parens: "Interjection",
         undo: "Evanition",
         
         eval: "Hermes' Gambit",
@@ -1332,6 +1335,7 @@
       types: "Types",
       lists: "List Manipulation",
       patterns_as_iotas: "Escaping Patterns",
+      advanced_escaping: "Advanced Escaping",
       readwrite: "Reading and Writing",
       meta: "Meta-Evaluation",
       circle_patterns: "Spell Circle Patterns",
@@ -1489,9 +1493,9 @@
       whats_a_hex: {
         "1": "Conceptually, a _Hex is exactly as described in $(l:casting/101)Hex Casting 101/$: a sequence of actions, usually done with the goal of performing some kind of effect in the world by means of one or more spells.$(br2)This idea of a _Hex is fine for on-the-fly casting, but if I wish to record my work for posterity (or simply for my own reuse) I may need something a little more concrete.",
         "2": "Typically, this takes the form of a list of pattern iotas, as created by the techniques described in $(l:patterns/patterns_as_iotas)Escaping Patterns/$. With my _Hex placed onto the stack this way, I can cast it using meta-evaluation patterns like $(l:patterns/meta#hexcasting:eval)Hermes' Gambit/$, or infuse it into a $(l:items/hexcasting)Casting Item/$ item for easy reuse.$(br2)Note that this list is no different from any other list iota - I can manipulate it, save it into $(l:items/thought_knot)permanent/$ $(l:items/focus)storage/$, or even incorporate it into another _Hex.",
-        "3": "Note also that this list need not be composed exclusively of pattern iotas. Inserting iotas of other types into my _Hexes won't normally end well, but $(l:patterns/patterns_as_iotas#embedding)certain techniques/$ allow me to do it safely. Furthermore, some $(l:patterns/meta#hexcasting:eval/cc)special iotas/$ can be directly evaluated just like a pattern.$(br2)With this in mind, $(o)any/$ list of iotas can in theory be a _Hex - the only requirement is that I can successfully cast it.",
+        "3": "Note also that this list need not be composed exclusively of pattern iotas. Inserting iotas of other types into my _Hexes won't normally end well, but $(l:patterns/patterns_as_iotas#iota_embedding)certain techniques/$ allow me to do it safely. Furthermore, some $(l:patterns/meta#hexcasting:eval/cc)special iotas/$ can be directly evaluated just like a pattern.$(br2)With this in mind, $(o)any/$ list of iotas can in theory be a _Hex - the only requirement is that I can successfully cast it.",
       },
-      
+
       vectors: {
         "1": "It seems I will need to be adroit with vectors if I am to get anywhere in my studies. A vector is a set of three numbers that can be used to represent a variety of things, usually either a position in the world, an offset from one position to another, or a direction in space. The following pages provide a basic summary of how vectors work and what I can do with them.",
         "2": "All the vectors I will be working with as a $(hex)Hexcaster/$ are three-dimensional, since the world I inhabit has three dimensions.$(br2)Each vector has an X component, a Y component, and a Z component in that order, corresponding to the three coordinate axes of the world: the X axis runs east and west, the Y axis runs up and down, and the Z axis runs north and south.",
@@ -1543,7 +1547,7 @@
         incorrect_block: "The action requires some sort of block at a target location, but the block supplied was not suitable.$(br2)Causes bright green sparks, and causes an ephemeral explosion at the given location. The explosion doesn't seem to harm me, the world, or anything else though; it's just startling.",
         
         "needs_parens.title": "Absent Introspection",
-        needs_parens: "I attempted to draw $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ or $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ without first drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$.$(br2)Causes orange sparks, and pushes the pattern I tried to draw to the stack as an iota.",
+        needs_parens: "I attempted to draw a pattern that only works while $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)introspecting/$ without first drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$.$(br2)Causes orange sparks, and pushes the pattern I tried to draw to the stack as an iota.",
 
         "too_many_patterns.title": "Lost in Thought",
         too_many_patterns: "I attempted to evaluate too many patterns in one _Hex. Often, this happens because I've accidentally created an infinite loop.$(br2)Causes dark blue sparks, and chokes all the air out of me.",
@@ -1570,7 +1574,7 @@
         "2": "$(li)A $(thing)Reflection/$ pops nothing and pushes one iota.$(li)A $(thing)Purification/$ pops one and pushes one.$(li)A $(thing)Distillation/$ pops two and pushes one.$(li)An $(thing)Exaltation/$ pops three or more and pushes one.$(li)A $(thing)Decomposition/$ pops one argument and pushes two.$(li)A $(thing)Disintegration/$ pops one and pushes three or more.$(li)Finally, a $(thing)Gambit/$ pushes or pops some other number (or rearranges the stack in some other manner).",
         "3": "Spells seem to be exempt from this nomenclature and are more or less named after what they do-- after all, why call it a $(action)Demoman's Gambit/$ when you could just say $(l:patterns/spells/basic#hexcasting:explode)$(action)Explosion/$?",
       },
-      
+
       mishaps2: {
         "1": "I have discovered new and horrifying modes of failure. I must not succumb to them.",
         
@@ -1982,7 +1986,7 @@
           remarks: "The way Nature interprets an entity given to $(l:patterns/types#hexcasting:compare_item/lenient)$(action)Sorter's Dstl./$ or $(l:patterns/types#hexcasting:compare_item/strict)$(action)Stacking Dstl./$ depends on its type:$(li)Item entities resolve to the items they represents$(li)Item frames resolve to the item they contain, and mishap if they are empty$(li)Players resolve to the item they are currently holding, prioritizing their primary hand"
         },
       },
-      
+
       lists: {
         index: "Remove the number at the top of the stack, then replace the list at the top with the nth element of that list (where n is the number you removed). Replaces the list with $(thing)Null/$ if the number is out of bounds.",
         slice: "Remove the two numbers at the top of the stack, then take a sublist of the list at the top of the stack between those indices, lower bound inclusive, upper bound exclusive. For example, the 0, 2 sublist of [0, 1, 2, 3, 4] would be [0, 1].",
@@ -2004,23 +2008,30 @@
       
       patterns_as_iotas: {
         "1": "One of the many peculiarities of this art is that $(italic)patterns themselves/$ can act as iotas-- I can even put them onto my stack when casting.$(br2)This raises a fairly obvious question: how do I express them? If I simply drew a pattern, it would hardly tell Nature to add it to my stack-- rather, it would simply be matched to an action.",
-        "2": "Fortunately, Nature has provided me with a set of special patterns that I can use to work with other patterns directly.$(br2)In short, $(l:patterns/patterns_as_iotas#hexcasting:runtime_escape)$(action)Contemplation/$ and $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ lets me add one pattern to the stack, and $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ let me add a whole list.",
+        "2": "Fortunately, Nature has provided me with a set of special patterns that I can use to work with other patterns directly.$(br2)In short, $(l:patterns/patterns_as_iotas#hexcasting:runtime_escape)$(action)Contemplation/$ and $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ let me add one pattern to the stack, $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ let me add a whole list, and $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ lets me undo mistakes during the creation of such a list.",
         runtime_escape: {
           "1": "To use $(l:patterns/patterns_as_iotas#hexcasting:runtime_escape)$(action)Contemplation/$, I draw it, then another arbitrary pattern. That second pattern is added to the stack.",
           "2": "One may find it helpful to think of this as \"escaping\" the pattern onto the stack, if they happen to be familiar with the science of computers.$(br2)The usual use for this is to copy the pattern to a $(l:items/scroll)$(item)Scroll/$ or $(l:items/slate)$(item)Slate/$ using $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$, and then perhaps decorating with them.",
         },
         parens: {
-          "1": "Drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$ makes my drawing of patterns act differently, for a time. Until I draw $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Retrospection/$, the patterns I draw are saved. Then, when I draw $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$, they are added to the stack as a list iota.",
+          "1": "Drawing $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspection/$ makes my drawing of patterns act differently, for a time. Until I draw $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$, the patterns I draw are saved. Then, when I draw $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$, they are added to the stack as a list iota.",
           "2": "If I draw another $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Introspection/$, it'll still be saved to the list, but I'll then have to draw $(italic)two/$ $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospections/$ to get back to normal casting.",
         },
-        undo: "Finally, if I make a mistake while drawing patterns inside $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ I can draw $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ to remove the last pattern that I drew from the pattern list that is being constructed.",
+        undo: "Finally, if I make a mistake while drawing patterns inside $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$, I can draw $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)Evanition/$ to remove the last pattern that I drew from the pattern list that is being constructed.",
         escape: "Similar to $(l:patterns/patterns_as_iotas#hexcasting:runtime_escape)$(action)Contemplation/$, but acts even when drawn between $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$. This can \"escape\" other patterns that work between $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$, putting them into the list without any other effects.",
         further_notes: {
           title: "Further Notes",
           "1": "Because $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ acts immediately within $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$, I need to draw two of them if I want to actually put $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ into a pattern list. The first $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)Consideration/$ escapes the special behavior of the second, allowing it to go into the list.$(br2)$(l:patterns/patterns_as_iotas#hexcasting:runtime_escape)$(action)Contemplation/$, on the other hand, only needs to be drawn once no matter the depth.",
           "2": "If an iota other than a pattern is present in a list to be executed by $(l:patterns/meta#hexcasting:eval)$(action)Hermes' Gambit/$ or any other meta-evaluation pattern, it will normally result in a mishap. However, this can be avoided using the patterns described in this section.$(br2)Just as with pattern iotas, the patterns described here can be used to \"escape\" $(o)any other$() kind of iota, causing it to be pushed to the stack when something tries to evaluate it instead of causing a mishap.",
-          "3": "This technique may be useful if I want a _Hex to be able to reference a specific iota, such as a complicated vector or an entity reference, without having to construct or obtain it each time.$(br2)The process of getting such an iota into a list of patterns in the first place may be somewhat involved. The simplest method would be to draw a placeholder pattern when assembling the list, and then make use of $(l:patterns/lists#hexcasting:replace)$(action)Surgeon's Exaltation/$ to replace it with my desired iota.",
+          "3": "This technique may be useful if I want a _Hex to be able to reference a specific iota, such as a complicated vector or an entity reference, without having to construct or obtain it each time.$(br2)To get such an iota into a list of patterns in the first place, I can either use $(l:patterns/advanced_escaping#hexcasting:read_into_parens)$(action)Interjection/$ while creating the list, or draw a placeholder pattern and then use $(l:patterns/lists#hexcasting:replace)$(action)Surgeon's Exaltation/$ to replace it once the list has been created.",
         },
+      },
+
+      advanced_escaping: {
+        "1": "$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Intro-/$ and $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$ are very useful, but when building complex _Hexes I may need more advanced techniques.$(br2)This section describes such techniques: $(l:patterns/advanced_escaping#hexcasting:read_into_parens)$(action)Interjection/$ lets me insert iotas directly into an in-progress list, while $(l:patterns/advanced_escaping#hexcasting:open_n_parens)$(action)Meditation/$ and $(l:patterns/advanced_escaping#hexcasting:close_all_parens)$(action)Recollection/$ let me start and finish the list creation process with arbitrary levels of nesting depth.",
+        read_into_parens: "Only works while $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)introspecting/$. Reads an iota from my offhand, and adds it to the in-progress list. For iotas other than patterns, I may need to $(l:patterns/patterns_as_iotas#iota_embedding)$(action)take steps/$ to avoid a mishap when executing the list.",
+        open_n_parens: "Removes a number from the stack, then acts as though I'd drawn that many $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspections/$. Treated as a normal pattern while $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)introspecting/$, so nesting this may require $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)tricks/$ to draw extra $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospections/$.",
+        close_all_parens: "Works like $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)Retrospection/$, but closes $(italic)all/$ open $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)Introspections/$ at once. The number of layers closed, along with the list of saved patterns, are then added to the stack.",
       },
 
       readwrite: {

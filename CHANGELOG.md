@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - Taxonomer's Distillation for entities
   - Sorter's Distillation and Stacking Distillation for items
 - Added Contemplation for escaping without the exponential growth of Consideration ([#1102](https://github.com/FallingColors/HexMod/pull/1102)) @IridescentVoid
+- Added Interjection, Meditation, and Recollection for advanced pattern-list creation ([#1103](https://github.com/FallingColors/HexMod/pull/1103)) @Robotgiggle
 
 ### Changed
 
