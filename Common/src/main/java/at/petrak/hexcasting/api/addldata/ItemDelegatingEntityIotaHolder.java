@@ -85,5 +85,10 @@ public abstract class ItemDelegatingEntityIotaHolder implements ADIotaHolder {
         public boolean writeIota(@Nullable Iota datum, boolean simulate) {
             return false;
         }
+
+        @Override
+        public boolean writeable() {
+            return false;
+        }
     }
 }

@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Added the `cannot_modify_cost` tag for patterns that should ignore the `media_consumption` attribute when calculating cost ([#987](https://github.com/FallingColors/HexMod/pull/987)) @Robotgiggle
+- Added config options to scale pattern costs per action and globally ([#1041](https://github.com/FallingColors/HexMod/pull/1041)) @Robotgiggle
 - Added a config toggle for the pattern wobble animation on active slates to improve performance ([#1017](https://github.com/FallingColors/HexMod/pull/1017)) @aloaloolaola
 - Added keybinds to flip forward and backwards in a spellbook ([#1028](https://github.com/FallingColors/HexMod/pull/1028)) @pythonmcpi
 - Added a config toggle to disable scrolling through spellbooks outside of the staff grid ([#1028](https://github.com/FallingColors/HexMod/pull/1028)) @pythonmcpi
@@ -16,8 +17,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added a config toggle (default false) for the effect that makes iota-holding items display their entire NBT data when Advanced Tooltips is enabled ([#1021](https://github.com/FallingColors/HexMod/pull/1021)) @Robotgiggle
 - Added a pattern display overlay for pattern-holding items (ie scrolls or slates) while holding shift in the inventory ([#879](https://github.com/FallingColors/HexMod/pull/879)) @SamsTheNerd
 - Added connected textures for Akashic Ligatures when using Continuity or Optifine ([#885](https://github.com/FallingColors/HexMod/pull/885)) @kineticneticat
+- Added type comparison patterns ([#1114](https://github.com/FallingColors/HexMod/pull/1114)) @IridescentVoid
+  - Similarity Distillation and Dissimilarity Distillation for iota types
+  - Surveyor's Distillation and Inspector's Distillation for blocks
+  - Taxonomer's Distillation for entities
+  - Sorter's Distillation and Stacking Distillation for items
+- Added Contemplation for escaping without the exponential growth of Consideration ([#1102](https://github.com/FallingColors/HexMod/pull/1102)) @IridescentVoid
 - Added Interjection, Meditation, and Recollection for advanced pattern-list creation ([#1103](https://github.com/FallingColors/HexMod/pull/1103)) @Robotgiggle
-- Added Similarity Distillation and Dissimilarity Distillation for comparing iota types ([#1114](https://github.com/FallingColors/HexMod/pull/1114)) @IridescentVoid
 
 ### Changed
 
@@ -25,11 +31,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Changed Wayfarer's Flight and Anchorite's Flight to both cost 2 dust per unit, and enforced a minimum cost for Anchorite's Flight ([#1040](https://github.com/FallingColors/HexMod/pull/1040)) @Robotgiggle
 - Changed the pattern limit to also include execution of non-pattern iotas like jumps ([#1035](https://github.com/FallingColors/HexMod/pull/1035)) @pythonmcpi
 - Changed the Hasty Retrospection mishap to Absent Introspection as it's now used for anything that only works while parenthesized ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
+- Updated and reorganized various entries in the guidebook to improve clarity ([#1199](https://github.com/FallingColors/HexMod/pull/1199)) @Robotgiggle
+  - Added a new entry defining what a Hex actually is and how it can be represented on the stack
+  - Changed "A Primer on Vectors" to provide its own information rather than linking to Psi's guide
+  - Reordered "Escaping Patterns" to account for the newly added Contemplation pattern
+  - Removed "Influences" and moved relevant info into "Hex Casting 101"
 - Updated the Flay Mind recipe display in EMI and JEI to cycle through all valid entities if the input is an entity tag ([#1023](https://github.com/FallingColors/HexMod/pull/1023)) @YukkuriC
+- All custom recipe displays now work with both EMI and JEI on all platforms, rather than only EMI on Fabric and only JEI on Forge ([#1206](https://github.com/FallingColors/HexMod/pull/1206)) @Robotgiggle
 - Re-implemented the ability to extract stored media from items in trinket/curio slots ([#996](https://github.com/FallingColors/HexMod/pull/996)) @YukkuriC
 - Patterns involving entity look direction now compensate for the vanilla bug that causes projectiles and phantoms to report the wrong direction ([#1025](https://github.com/FallingColors/HexMod/pull/1025)) @Robotgiggle
+- Edified Panels are now crafted with 9 planks rather than 8 to avoid conflicting with the vanilla chest recipe ([#1080](https://github.com/FallingColors/HexMod/pull/1080)) @Robotgiggle
 - Drawing Evanition with nothing left to do will now undo the opening Introspection ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
-- Book pages for patterns without input/output iotas no longer display the type signature line at all ([#1118](https://github.com/FallingColors/HexMod/pull/1118)) @IridescentVoid
+- Book pages for patterns without input/output iotas will no longer display the type signature line at all ([#1118](https://github.com/FallingColors/HexMod/pull/1118)) @IridescentVoid
+- Consideration, Introspection, Retrospection, and Evanition now count towards the per-hex pattern limit ([#1172](https://github.com/FallingColors/HexMod/pull/1172)) @Robotgiggle
 - Updated Inline dependency from 1.0.1 to 1.2.2 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
 - Updated Fabric Language Kotlin dependency from 1.9.4 to 1.13.7 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
 - Updated Kotlin for Forge dependency from 4.3.0 to 4.12.0 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
@@ -46,7 +60,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed a broken translation key when trying to use Place Block with no placeable items in your hotbar ([#1010](https://github.com/FallingColors/HexMod/pull/1010)) @Robotgiggle
 - Fixed a potential chunkban when leaving a looping spell circle running for long enough ([#908](https://github.com/FallingColors/HexMod/pull/908)) @Stick404
 - Fixed a potential issue on MacOS when calculating soulglimmer color ([#984](https://github.com/FallingColors/HexMod/pull/984)) @vgskye
+- Fixed the book page for the Inert Mindflay mishap incorrectly claiming it would kill unsuitable flay subjects ([#1081](https://github.com/FallingColors/HexMod/pull/1081)) @Robotgiggle
 - Fixed Pace Purification returning nonzero velocity on nonmoving items ([#1119](https://github.com/FallingColors/HexMod/pull/1119)) @IridescentVoid
+- Fixed Accessor's Purification returning false for scrolls in item frames ([#1115](https://github.com/FallingColors/HexMod/pull/1115)) @IridescentVoid
+- Fixed Break Block being unable to break cobwebs on Fabric ([#1218](https://github.com/FallingColors/HexMod/pull/1218)) @Robotgiggle
 
 ### Internal
 
@@ -60,6 +77,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Improved handling for duplicate pattern signatures in hexdoc ([#1007](https://github.com/FallingColors/HexMod/pull/1007)) @object-Object
 - `CircleExecutionState` now stores the shape of the spell circle using two corners rather than an entire list of positions ([#908](https://github.com/FallingColors/HexMod/pull/908)) @Stick404
 - Added methods in `Action` and `Iota` to define behavior when inside parentheses, and de-hardcoded the iota-escaping patterns ([#1047](https://github.com/FallingColors/HexMod/pull/1047)) @Robotgiggle
+- Added visitor methods to `Iota` to enable walking iotas in an extensible way ([#1191](https://github.com/FallingColors/HexMod/pull/1191)) @poolcritter
 
 ## `0.11.3` - 2025-11-22
 

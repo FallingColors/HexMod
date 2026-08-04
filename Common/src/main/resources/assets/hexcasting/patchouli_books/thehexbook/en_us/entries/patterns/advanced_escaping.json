@@ -2,7 +2,7 @@
   "name": "hexcasting.entry.advanced_escaping",
   "category": "hexcasting:patterns",
   "icon": "minecraft:emerald_block",
-  "sortnum": 9,
+  "sortnum": 10,
   "advancement": "hexcasting:root",
   "read_by_default": true,
   "pages": [
