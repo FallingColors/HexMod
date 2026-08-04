@@ -9,16 +9,16 @@ import at.petrak.hexcasting.common.lib.HexDamageTypes
 import net.minecraft.world.item.DyeColor
 
 class MishapStackSize() : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BLACK)
 
-    override fun resolutionType(ctx: CastingEnvironment) = ResolvedPatternType.ERRORED
+    override fun resolutionType(env: CastingEnvironment) = ResolvedPatternType.ERRORED
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         stack.clear()
         stack.add(GarbageIota())
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context) =
         error("stack_size")
 }
