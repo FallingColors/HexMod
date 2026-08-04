@@ -3,7 +3,7 @@
   "components": [
     {
       "type": "patchouli:image",
-      "image": "hexcasting:textures/gui/brainsweep.png",
+      "image": "hexcasting:textures/gui/brainsweep_recipe_nobg.png",
       "width": 128,
       "height": 128,
       "texture_width": 128,

@@ -464,26 +464,48 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
         } else return new TreeListBuilder<A>().initFrom(this).addAll(suffix).result();
     }
 
+    /**
+     * @param n the number of elements to keep
+     * @return a new TreeList containing only the first {@code n} elements of this TreeList
+     */
     public final TreeList<A> take(int n) {
         return this.slice(0, n);
     }
 
+    /**
+     * @param n the number of elements to discard
+     * @return a new TreeList containing all but the first {@code n} elements of this TreeList
+     */
     public final TreeList<A> drop(int n) {
         return this.slice(n, this.length());
     }
 
+    /**
+     * @param n the number of elements to keep
+     * @return a new TreeList containing only the last {@code n} elements of this TreeList
+     */
     public final TreeList<A> takeRight(int n) {
         return this.slice(this.length() - Math.max(n, 0), this.length());
     }
 
+    /**
+     * @param n the number of elements to discard
+     * @return a new TreeList containing all but the last {@code n} elements of this TreeList
+     */
     public final TreeList<A> dropRight(int n) {
         return this.slice(0, this.length() - Math.max(n, 0));
     }
 
+    /**
+     * @return a new TreeList containing all the elements from this TreeList except for the first one
+     */
     public TreeList<A> tail() {
         return this.slice(1, this.length());
     }
 
+    /**
+     * @return a new TreeList containing all the elements from this TreeList except for the last one
+     */
     public TreeList<A> init() {
         return this.slice(0, this.length() - 1);
     }
@@ -498,11 +520,17 @@ public sealed abstract class TreeList<A> extends AbstractList<A> implements Rand
     /** Length of all slices up to and including index */
     abstract int treeListSlicePrefixLength(int idx);
 
+    /**
+     * @return the first element of this TreeList
+     */
     public final A head() {
         if(this.prefix1.length == 0) throw new NoSuchElementException("empty.head");
         else return (A) this.prefix1[0];
     }
 
+    /**
+     * @return the last element of this TreeList
+     */
     public A last() {
         return (A) this.prefix1[this.prefix1.length - 1];
     }
