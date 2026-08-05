@@ -24,6 +24,8 @@ public class FabricPacketHandler {
         PayloadTypeRegistry.playS2C().register(MsgNewWallScrollS2C.TYPE, MsgNewWallScrollS2C.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(MsgRecalcWallScrollDisplayS2C.TYPE, MsgRecalcWallScrollDisplayS2C.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(MsgNewSpiralPatternsS2C.TYPE, MsgNewSpiralPatternsS2C.STREAM_CODEC);
+        PayloadTypeRegistry.playS2C().register(MsgSingleParticleS2C.TYPE, MsgSingleParticleS2C.STREAM_CODEC);
+        PayloadTypeRegistry.playS2C().register(MsgParticleLinesS2C.TYPE, MsgParticleLinesS2C.STREAM_CODEC);
     }
 
     public static void init() {
