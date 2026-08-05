@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(MouseHandler.class)
 public class FabricMouseHandlerMixin {
     @Inject(method = "onScroll", cancellable = true, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isSpectator()Z"))
-    private void onScroll(long l, double d, double e, CallbackInfo ci, @Local(name = "n") int delta) {
+    private void onScroll(long winptr, double xOff, double yOff, CallbackInfo ci, @Local(name = "n") int delta) {
         var cancel = MouseScrollCallback.EVENT.invoker().interact(delta);
         if (cancel) {
             ci.cancel();
