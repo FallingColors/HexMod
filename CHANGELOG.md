@@ -26,7 +26,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Fixed Entity Iota comparison to use `equals` on entity IDs instead of reference equality ([#1101](https://github.com/FallingColors/HexMod/pull/1101)) @IridescentVoid
 - Corrected field names of the codec for Pattern Iotas and add a graceful fallback for upgrading ([#1120](https://github.com/FallingColors/HexMod/pull/1120), [#1131](https://github.com/FallingColors/HexMod/pull/1131), [#1140](https://github.com/FallingColors/HexMod/pull/1140)) @Master-Bw3 @IridescentVoid
-- Fixed spellbook scrolling being broken on Fabric ([#1237](https://github.com/FallingColors/HexMod/pull/1237)) @Olfi01
 
 ### Internal
 
