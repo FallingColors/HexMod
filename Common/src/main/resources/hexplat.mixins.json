@@ -12,6 +12,7 @@
     "MixinWanderingTrader",
     "MixinWitch",
     "accessor.AccessorAbstractArrow",
+    "accessor.AccessorBlockItem",
     "accessor.AccessorEntity",
     "accessor.AccessorLivingEntity",
     "accessor.AccessorLootTable",
