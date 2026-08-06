@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getEntity
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadEntity
+import at.petrak.hexcasting.api.utils.validateIota
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 
 object OpTheCoolerRead : ConstMediaAction {
@@ -24,6 +25,6 @@ object OpTheCoolerRead : ConstMediaAction {
         val datum = datumHolder.readIota()
             ?: datumHolder.emptyIota()
             ?: throw MishapBadEntity.of(target, "iota.read")
-        return listOf(datum)
+        return listOf(validateIota(datum, env.world))
     }
 }

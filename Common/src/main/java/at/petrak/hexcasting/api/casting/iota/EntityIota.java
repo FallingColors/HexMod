@@ -46,7 +46,7 @@ public class EntityIota extends Iota {
         return entityId;
     }
 
-    public Entity getEntity(ServerLevel level) {
+    public @Nullable Entity getEntity(ServerLevel level) {
         return level.getEntity(entityId);
     }
 

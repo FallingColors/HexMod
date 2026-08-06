@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
+import at.petrak.hexcasting.api.utils.validateIota
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 
 object OpRead : ConstMediaAction {
@@ -28,6 +29,6 @@ object OpRead : ConstMediaAction {
             ?: datumHolder.emptyIota()
             ?: throw MishapBadOffhandItem.of(handStack, "iota.read")
 
-        return listOf(datum)
+        return listOf(validateIota(datum, env.world))
     }
 }
