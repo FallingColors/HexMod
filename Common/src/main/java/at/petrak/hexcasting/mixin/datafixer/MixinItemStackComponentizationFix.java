@@ -43,6 +43,9 @@ public class MixinItemStackComponentizationFix {
     private static void fixHexItemStack(ItemStackData itemStackData, Dynamic<?> dynamic, CallbackInfo ci) {
         Item item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(itemStackData.item));
 
+        if (itemStackData.is("patchouli:guide_book")) {
+            itemStackData.moveTagToComponent("patchouli:book", "patchouli:book");
+        }
         if (itemStackData.is(Set.of("hexcasting:focus", "hexcasting:thought_knot"))) {
             hexCasting$fixIotaHolder(itemStackData, dynamic);
         }
