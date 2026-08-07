@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.datagen.tag;
 
 import at.petrak.hexcasting.api.mod.HexTags;
+import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import net.minecraft.core.HolderLookup;
@@ -45,6 +46,11 @@ public class HexItemTagProvider extends ItemTagsProvider {
             HexItems.CHARGED_AMETHYST.get(), HexItems.CREATIVE_UNLOCKER.get());
         add(tag(HexTags.Items.SEAL_MATERIALS),
             Items.HONEYCOMB);
+
+        add(tag(HexTags.Items.PHIAL_RAW_INGREDIENTS),
+                HexItems.AMETHYST_DUST.get(), Items.AMETHYST_SHARD,
+                HexItems.CHARGED_AMETHYST.get(), HexItems.QUENCHED_SHARD.get(),
+                HexBlocks.QUENCHED_ALLAY.get().asItem());
 
         this.copy(HexTags.Blocks.EDIFIED_LOGS, HexTags.Items.EDIFIED_LOGS);
         this.copy(HexTags.Blocks.EDIFIED_PLANKS, HexTags.Items.EDIFIED_PLANKS);
