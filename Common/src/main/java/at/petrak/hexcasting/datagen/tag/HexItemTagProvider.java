@@ -7,6 +7,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
@@ -46,6 +47,9 @@ public class HexItemTagProvider extends ItemTagsProvider {
         add(tag(HexTags.Items.SEAL_MATERIALS),
             Items.HONEYCOMB);
 
+        add(tag(HexTags.Items.PANS),
+                ResourceLocation.fromNamespaceAndPath("farmersdelight", "skillet"));
+
         this.copy(HexTags.Blocks.EDIFIED_LOGS, HexTags.Items.EDIFIED_LOGS);
         this.copy(HexTags.Blocks.EDIFIED_PLANKS, HexTags.Items.EDIFIED_PLANKS);
         this.copy(HexTags.Blocks.IMPETI, HexTags.Items.IMPETI);
@@ -73,6 +77,12 @@ public class HexItemTagProvider extends ItemTagsProvider {
     void add(TagAppender<Item> appender, Item... items) {
         for (Item item : items) {
             appender.add(BuiltInRegistries.ITEM.getResourceKey(item).orElseThrow());
+        }
+    }
+
+    void add(TagAppender<Item> appender, ResourceLocation... locations) {
+        for (ResourceLocation location : locations) {
+            appender.addOptional(location);
         }
     }
 }

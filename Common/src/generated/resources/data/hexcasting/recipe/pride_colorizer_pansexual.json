@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "hexcasting:pans"
+      }
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "tag": "hexcasting:pans"
+    },
+    "D": {
+      "item": "hexcasting:amethyst_dust"
+    }
+  },
+  "pattern": [
+    " D ",
+    "DCD",
+    " D "
+  ],
+  "result": {
+    "count": 1,
+    "id": "hexcasting:pride_colorizer_pansexual"
+  }
+}
