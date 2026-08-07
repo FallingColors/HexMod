@@ -1,4 +1,16 @@
 {
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:not",
+      "value": {
+        "condition": "fabric:tags_populated",
+        "registry": "minecraft:item",
+        "values": [
+          "hexcasting:pans"
+        ]
+      }
+    }
+  ],
   "parent": "minecraft:recipes/root",
   "criteria": {
     "has_item": {

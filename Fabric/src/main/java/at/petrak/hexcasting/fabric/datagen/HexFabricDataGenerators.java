@@ -13,6 +13,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonObject;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableProvider;
@@ -37,7 +38,18 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
         var xtags = IXplatAbstractions.INSTANCE.tags();
         var provider = gen.getRegistries();
 
-        pack.addProvider((FabricDataGenerator.Pack.Factory<HexplatRecipes>) x -> new HexplatRecipes(x, provider, INGREDIENTS, HexFabricConditionsBuilder::new));
+        pack.addProvider((FabricDataGenerator.Pack.Factory<FabricRecipeProvider>) x -> {
+            HexplatRecipes original = new HexplatRecipes(x, provider, INGREDIENTS, HexFabricConditionsBuilder::new);
+
+            FabricRecipeProvider wrapper = new FabricRecipeProvider(x, provider) {
+                @Override
+                public void buildRecipes(RecipeOutput exporter) {
+                    original.buildRecipes(exporter);
+                }
+            };
+
+            return wrapper;
+        });
 
         var btagProviderWrapper = new BlockTagProviderWrapper(); // CURSED
         pack.addProvider((output, lookup) -> {

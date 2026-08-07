@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.fabric.datagen;
 
 import at.petrak.hexcasting.datagen.IXplatConditionsBuilder;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceCondition;
 import net.fabricmc.fabric.api.resource.conditions.v1.ResourceConditions;
 import net.fabricmc.fabric.impl.datagen.FabricDataGenHelper;
@@ -73,14 +74,19 @@ public class HexFabricConditionsBuilder implements IXplatConditionsBuilder {
 
         RecipeOutput withConditions = new RecipeOutput() {
             @Override
-            public void accept(ResourceLocation resourceLocation, Recipe<?> recipe, @Nullable AdvancementHolder advancementHolder) {
-                FabricDataGenHelper.addConditions(consumer, array);
-                consumer.accept(resourceLocation, recipe, advancementHolder);
+            public void accept(ResourceLocation identifier, Recipe<?> recipe, @Nullable AdvancementHolder advancementEntry) {
+                FabricDataGenHelper.addConditions(recipe, array);
+                consumer.accept(identifier, recipe, advancementEntry);
             }
 
             @Override
             public Advancement.Builder advancement() {
                 return consumer.advancement();
+            }
+
+            @Override
+            public ResourceLocation getRecipeIdentifier(ResourceLocation recipeId) {
+                return consumer.getRecipeIdentifier(recipeId);
             }
         };
 
