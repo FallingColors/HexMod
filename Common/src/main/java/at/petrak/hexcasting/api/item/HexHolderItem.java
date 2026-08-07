@@ -25,7 +25,7 @@ public interface HexHolderItem extends MediaHolderItem {
     @Nullable
     List<Iota> getHex(ItemStack stack, ServerLevel level);
 
-    void writeHex(ItemStack stack, List<Iota> program, @Nullable FrozenPigment pigment, long media);
+    void writeHex(ItemStack stack, List<Iota> program, FrozenPigment pigment, long media);
 
     void clearHex(ItemStack stack);
 

@@ -90,8 +90,10 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         var savedNames = stack.get(HexDataComponents.SPELLBOOK_PAGE_NAMES.get());
 
         if(customName != null) {
+            // the stack has been given a custom name (ie via anvil)
             if(savedNames != null) {
                 if(!savedNames.containsKey(nameKey) || !savedNames.get(nameKey).equals(customName)) {
+                    // if this page doesn' have a name mapping, or it doesn't match, create/update the name mapping
                     var mutNames = new HashMap<>(savedNames);
                     mutNames.put(nameKey, customName);
                     stack.set(HexDataComponents.SPELLBOOK_PAGE_NAMES.get(), mutNames);
@@ -99,9 +101,11 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
             } else {
                 var mutNames = new HashMap<String, Component>();
                 mutNames.put(nameKey, customName);
+                // if the savedNames map doesn't exist at all, create it and map the stack's current name to this page
                 stack.set(HexDataComponents.SPELLBOOK_PAGE_NAMES.get(), mutNames);
             }
         } else if(savedNames != null) {
+            // the stack does not have a custom name, or it has been removed
             var mutNames = new HashMap<>(savedNames);
             mutNames.remove(nameKey);
             if(mutNames.isEmpty()) {
@@ -151,10 +155,12 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         var pages = stack.get(HexDataComponents.SPELLBOOK_PAGES.get());
 
         if (pages != null) {
+            // if the pages map exists, modify it accordingly
             var pagesMut = new HashMap<>(pages);
 
             if (datum == null) {
                 pagesMut.remove(key);
+                // erasing the current page (needs to unseal as well, if possible)
                 var seals = stack.get(HexDataComponents.SPELLBOOK_PAGE_SEALS.get());
                 if(seals != null) {
                     var sealsMut = new HashMap<>(seals);
@@ -169,6 +175,7 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
                 }
             } else {
                 pagesMut.put(key, datum);
+                // updating the current page
             }
 
             if (pagesMut.isEmpty()) {
@@ -179,8 +186,11 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
         } else if (datum != null) {
             var map = new HashMap<String, Iota>();
             map.put(key, datum);
+            // if the pages map doesn't exist and you're trying to update a page, create the map first
             stack.set(HexDataComponents.SPELLBOOK_PAGES.get(), map);
         } else {
+            // if the pages map doesn't exist and you're trying to erase a page, check for a seal to remove
+            // this can happen if somebody seals an empty book for some reason
             var seals = stack.get(HexDataComponents.SPELLBOOK_PAGE_SEALS.get());
             if(seals != null) {
                 var sealsMut = new HashMap<>(seals);
