@@ -60,7 +60,7 @@ public class CircleExecutionState {
 
     protected CircleExecutionState(BlockPos impetusPos, Direction impetusDir, HashSet<BlockPos> reachedPositions,
        BlockPos currentPos, Direction enteredFrom, CastingImage currentImage, @Nullable UUID caster,
-       @Nullable FrozenPigment casterPigment, Long reachedSlate, BlockPos greaterCorner, BlockPos lesserPos) {
+       @Nullable FrozenPigment casterPigment, Long reachedSlate, BlockPos greaterCorner, BlockPos lesserCorner) {
         this.impetusPos = impetusPos;
         this.impetusDir = impetusDir;
         this.reachedPositions = reachedPositions;
@@ -72,8 +72,8 @@ public class CircleExecutionState {
         this.reachedSlate = reachedSlate;
 
         this.greaterCorner = greaterCorner;
-        this.lesserCorner = lesserPos;
-        this.bounds = new BlockBox(greaterCorner, lesserPos);
+        this.lesserCorner = lesserCorner;
+        this.bounds = new BlockBox(greaterCorner, lesserCorner);
     }
 
     public @Nullable ServerPlayer getCaster(ServerLevel world) {
@@ -165,7 +165,7 @@ public class CircleExecutionState {
             new CircleExecutionState(impetus.getBlockPos(), impetus.getStartDirection(),
                 reachedPositions, impetus.getBlockPos().offset(impetus.getStartDirection().getNormal()),
                 impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer, 0L,
-                positiveBlock.move(1,1,1), negativeBlock));
+                positiveBlock, negativeBlock));
     }
 
     public CompoundTag save() {

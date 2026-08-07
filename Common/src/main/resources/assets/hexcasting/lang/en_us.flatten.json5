@@ -2029,8 +2029,8 @@
 
         "circle/impetus_pos": "Returns the position of the $(l:greatwork/impetus)$(item)Impetus/$ of this spell circle.",
         "circle/impetus_dir": "Returns the direction the $(l:greatwork/impetus)$(item)Impetus/$ of this spell circle is facing as a unit vector.",
-        "circle/bounds/min": "Returns the position of the lower-north-west corner of the bounds of this spell circle.",
-        "circle/bounds/max": "Returns the position of the upper-south-east corner of the bounds of this spell circle.",
+        "circle/bounds/min": "Returns the position of the block at the lower-north-west corner of this spell circle's bounds.",
+        "circle/bounds/max": "Returns the position of the block at the upper-south-east corner of this spell circle's bounds.",
       },
       
       akashic_patterns: {
