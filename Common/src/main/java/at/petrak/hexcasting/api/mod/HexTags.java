@@ -19,6 +19,7 @@ public class HexTags {
         public static final TagKey<Item> PHIAL_BASE = create("phial_base");
         public static final TagKey<Item> GRANTS_ROOT_ADVANCEMENT = create("grants_root_advancement");
         public static final TagKey<Item> SEAL_MATERIALS = create("seal_materials");
+        public static final TagKey<Item> PHIAL_RAW_INGREDIENTS = create("phial_raw_ingredients");
 
         public static final TagKey<Item> IMPETI = create("impeti");
         public static final TagKey<Item> DIRECTRICES = create("directrices");
@@ -27,6 +28,7 @@ public class HexTags {
         public static final TagKey<Item> SLATE_BLOCKS = create("slate_blocks");
         public static final TagKey<Item> AMETHYST_BLOCKS = create("amethyst_blocks");
         public static final TagKey<Item> QUENCHED_ALLAY_BLOCKS = create("quenched_allay_blocks");
+
 
         public static TagKey<Item> create(String name) {
             return create(modLoc(name));
