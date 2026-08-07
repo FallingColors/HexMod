@@ -28,6 +28,9 @@ public class HexTags {
         public static final TagKey<Item> AMETHYST_BLOCKS = create("amethyst_blocks");
         public static final TagKey<Item> QUENCHED_ALLAY_BLOCKS = create("quenched_allay_blocks");
 
+        public static final TagKey<Item> PANS = create("pans");
+
+
         public static TagKey<Item> create(String name) {
             return create(modLoc(name));
         }

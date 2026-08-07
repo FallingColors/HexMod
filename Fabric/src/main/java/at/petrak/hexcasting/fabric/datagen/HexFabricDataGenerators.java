@@ -16,6 +16,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.*;
@@ -134,11 +135,6 @@ public class HexFabricDataGenerators implements DataGeneratorEntrypoint {
                 new Ingredient.ItemValue(new ItemStack(Items.STICK)),
                 new Ingredient.TagValue(tag("wood_sticks"))
             ));
-        }
-
-        @Override
-        public Ingredient whenModIngredient(Ingredient defaultIngredient, String modid, Ingredient modIngredient) {
-            return FabricModConditionalIngredient.of(defaultIngredient, modid, modIngredient);
         }
 
         private final FarmersDelightToolIngredient AXE_INGREDIENT = () -> {

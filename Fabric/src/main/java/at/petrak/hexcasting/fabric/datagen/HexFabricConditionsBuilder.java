@@ -10,6 +10,7 @@ import net.minecraft.advancements.Criterion;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Recipe;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +36,18 @@ public class HexFabricConditionsBuilder implements IXplatConditionsBuilder {
     @Override
     public IXplatConditionsBuilder whenModMissing(String modid) {
         conditions.add(ResourceConditions.not(ResourceConditions.allModsLoaded(modid)));
+        return this;
+    }
+
+    @Override
+    public IXplatConditionsBuilder whenTagEmpty(TagKey<Item> tag) {
+        conditions.add(ResourceConditions.not(ResourceConditions.tagsPopulated(tag)));
+        return this;
+    }
+
+    @Override
+    public IXplatConditionsBuilder whenTagPopulated(TagKey<Item> tag) {
+        conditions.add(ResourceConditions.tagsPopulated(tag));
         return this;
     }
 
