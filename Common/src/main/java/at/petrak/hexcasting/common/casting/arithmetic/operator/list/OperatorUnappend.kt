@@ -14,7 +14,8 @@ object OperatorUnappend : OperatorBasic(1, IotaMultiPredicate.all(IotaPredicate.
     override fun apply(iotas: Iterable<Iota>, env: CastingEnvironment): Iterable<Iota> {
         val it = iotas.iterator().withIndex()
         val list = it.nextList(arity)
-        val last = if(list.isEmpty()) NullIota() else list.last()
-        return listOf(ListIota(list.init()), last)
+        if (!list.isEmpty())
+            return listOf(ListIota(list.init()), list.last())
+        return listOf(ListIota(list), NullIota())
     }
 }
