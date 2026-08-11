@@ -26,6 +26,7 @@ public class HexRecipeStuffRegistry {
     }
 
     public static final Supplier<RecipeSerializer<?>> BRAINSWEEP = REGISTER_SERIALIZER.register("brainsweep", BrainsweepRecipe.Serializer::new);
+    public static final Supplier<RecipeSerializer<?>> FREEZE = REGISTER_SERIALIZER.register("freeze", FreezeRecipe.Serializer::new);
     public static final Supplier<RecipeSerializer<SealThingsRecipe>> SEAL_FOCUS = REGISTER_SERIALIZER.register(
         "seal_focus", () -> SealThingsRecipe.FOCUS_SERIALIZER);
     public static final Supplier<RecipeSerializer<SealThingsRecipe>> SEAL_SPELLBOOK = REGISTER_SERIALIZER.register(
@@ -36,6 +37,13 @@ public class HexRecipeStuffRegistry {
                 @Override
                 public String toString() {
                     return HexAPI.MOD_ID + ":" + "brainsweep";
+                }
+            });
+    public static Supplier<RecipeType<FreezeRecipe>> FREEZE_TYPE = REGISTER_RECIPE_TYPE.register("freeze", () ->
+            new RecipeType<FreezeRecipe>() {
+                @Override
+                public String toString() {
+                    return HexAPI.MOD_ID + ":" + "freeze";
                 }
             });
 }

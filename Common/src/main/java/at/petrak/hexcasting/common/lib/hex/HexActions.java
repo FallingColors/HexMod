@@ -54,19 +54,12 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatRegister;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 @SuppressWarnings("unused")
 public class HexActions {
@@ -230,6 +223,8 @@ public class HexActions {
         new OperationAction(HexPattern.fromAngles("eqaqe", HexDir.NORTH_WEST)));
     public static final Holder<ActionRegistryEntry> MODULO = make("modulo",
         new OperationAction(HexPattern.fromAngles("addwaad", HexDir.NORTH_EAST)));
+    public static final Holder<ActionRegistryEntry> FACTORIAL = make("factorial",
+        new OperationAction(HexPattern.fromAngles("wawdedwaw", HexDir.SOUTH_EAST)));
 
     // == Sets ==
 
@@ -265,10 +260,6 @@ public class HexActions {
             Fluids.WATER)));
     public static final Holder<ActionRegistryEntry> DESTROY_WATER = REGISTER.registerHolder("destroy_water", () ->
         new ActionRegistryEntry(HexPattern.fromAngles("dedwedade", HexDir.SOUTH_WEST), OpDestroyFluid.INSTANCE));
-    public static final Holder<ActionRegistryEntry> IGNITE = REGISTER.registerHolder("ignite", () ->
-        new ActionRegistryEntry(HexPattern.fromAngles("aaqawawa", HexDir.SOUTH_EAST), OpIgnite.INSTANCE));
-    public static final Holder<ActionRegistryEntry> EXTINGUISH = REGISTER.registerHolder("extinguish", () ->
-        new ActionRegistryEntry(HexPattern.fromAngles("ddedwdwd", HexDir.SOUTH_WEST), OpExtinguish.INSTANCE));
     public static final Holder<ActionRegistryEntry> CONJURE_BLOCK = REGISTER.registerHolder("conjure_block", () ->
         new ActionRegistryEntry(HexPattern.fromAngles("qqa", HexDir.NORTH_EAST), new OpConjureBlock(false)));
     public static final Holder<ActionRegistryEntry> CONJURE_LIGHT = REGISTER.registerHolder("conjure_light", () ->
@@ -282,9 +273,22 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("qdqawwaww", HexDir.EAST), OpErase.INSTANCE));
     public static final Holder<ActionRegistryEntry> EDIFY = REGISTER.registerHolder("edify", () ->
         new ActionRegistryEntry(HexPattern.fromAngles("wqaqwd", HexDir.NORTH_EAST), OpEdifySapling.INSTANCE));
+    public static final Holder<ActionRegistryEntry> DISLODGE_BLOCK = REGISTER.registerHolder("dislodge_block", () ->
+        new ActionRegistryEntry(HexPattern.fromAngles("qaqqwwddwwq", HexDir.EAST), OpDislodgeBlock.INSTANCE));
+
+    public static final Holder<ActionRegistryEntry> IGNITE = REGISTER.registerHolder("ignite", () -> 
+        new ActionRegistryEntry(HexPattern.fromAngles("aaqawawa", HexDir.SOUTH_EAST), OpIgnite.INSTANCE));
+    public static final Holder<ActionRegistryEntry> EXTINGUISH = REGISTER.registerHolder("extinguish", () -> 
+        new ActionRegistryEntry(HexPattern.fromAngles("ddedwdwd", HexDir.SOUTH_WEST), OpExtinguish.INSTANCE));
+    public static final Holder<ActionRegistryEntry> SMELT = REGISTER.registerHolder("smelt", () -> 
+        new ActionRegistryEntry(HexPattern.fromAngles("wqqqwqqadad", HexDir.EAST), OpSmelt.INSTANCE));
+    public static final Holder<ActionRegistryEntry> FREEZE = REGISTER.registerHolder("freeze", () -> 
+        new ActionRegistryEntry(HexPattern.fromAngles("weeeweedada", HexDir.EAST), OpFreeze.INSTANCE));
 
     public static final Holder<ActionRegistryEntry> BEEP = REGISTER.registerHolder("beep", () ->
         new ActionRegistryEntry(HexPattern.fromAngles("adaa", HexDir.WEST), OpBeep.INSTANCE));
+    public static final Holder<ActionRegistryEntry> PARTICLES = REGISTER.registerHolder("particles", () -> 
+        new ActionRegistryEntry(HexPattern.fromAngles("eqqqqa", HexDir.NORTH_EAST), OpParticles.INSTANCE));
 
     public static final Holder<ActionRegistryEntry> CRAFT$CYPHER = REGISTER.registerHolder("craft/cypher", () -> new ActionRegistryEntry(
         HexPattern.fromAngles("waqqqqq", HexDir.EAST), 

@@ -41,6 +41,7 @@ public interface Arithmetic {
 	HexPattern ARCTAN2 = HexPattern.fromAngles("deadeeeeewd", HexDir.WEST);
 	HexPattern LOG = HexPattern.fromAngles("eqaqe", HexDir.NORTH_WEST);
 	HexPattern MOD = HexPattern.fromAngles("addwaad", HexDir.NORTH_EAST);
+	HexPattern FACT = HexPattern.fromAngles("wawdedwaw", HexDir.SOUTH_EAST);
 
 
 	// Vecs
