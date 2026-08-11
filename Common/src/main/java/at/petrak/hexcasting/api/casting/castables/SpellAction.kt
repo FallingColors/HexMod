@@ -11,19 +11,23 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughMedia
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
+import at.petrak.hexcasting.api.casting.mishaps.Mishap
 import net.minecraft.nbt.CompoundTag
 
 interface SpellAction : Action {
     val argc: Int
 
-    fun hasCastingSound(ctx: CastingEnvironment): Boolean = true
+    fun hasCastingSound(env: CastingEnvironment): Boolean = true
 
-    fun awardsCastingStat(ctx: CastingEnvironment): Boolean = true
+    fun awardsCastingStat(env: CastingEnvironment): Boolean = true
 
+    @Throws(Mishap::class)
     fun execute(
         args: List<Iota>,
         env: CastingEnvironment
     ): Result
+
+    @Throws(Mishap::class)
 
     fun executeWithUserdata(
         args: List<Iota>, env: CastingEnvironment, userData: CompoundTag

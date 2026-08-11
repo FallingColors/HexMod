@@ -1,6 +1,9 @@
 package at.petrak.hexcasting.fabric
 
+import at.petrak.hexcasting.api.HexAPI
+
 import at.petrak.hexcasting.client.ClientTickCounter
+import at.petrak.hexcasting.client.Keybinds
 import at.petrak.hexcasting.client.RegisterClientStuff
 import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent
@@ -13,6 +16,7 @@ import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import at.petrak.hexcasting.interop.HexInterop
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry
@@ -37,14 +41,20 @@ object FabricHexClientInitializer : ClientModInitializer {
         WorldRenderEvents.START.register { ClientTickCounter.renderTickStart(it.tickDelta()) }
         ClientTickEvents.END_CLIENT_TICK.register {
             ClientTickCounter.clientTickEnd()
+            Keybinds.clientTickEnd()
             ShiftScrollListener.clientTickEnd()
         }
         TooltipComponentCallback.EVENT.register(PatternTooltipComponent::tryConvert)
         ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
-            PatternRegistryManifest.processRegistry(null)
+            if (!FabricHexInitializer.patternRegistryIsProcessed) {
+                PatternRegistryManifest.processRegistry(null)
+                FabricHexInitializer.patternRegistryIsProcessed = true
+            }
         }
 
         MouseScrollCallback.EVENT.register(ShiftScrollListener::onScrollInGameplay)
+
+        Keybinds.ALL_BINDS.forEach(KeyBindingHelper::registerKeyBinding)
 
         RegisterClientStuff.init()
         HexModelLayers.init { loc, defn -> EntityModelLayerRegistry.registerModelLayer(loc, defn::get) }

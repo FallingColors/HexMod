@@ -16,7 +16,7 @@ import net.minecraft.world.entity.Entity
 /**
  * The state of a casting VM, containing the stack and all
  */
-data class CastingImage private constructor(
+data class CastingImage(
     val stack: List<Iota>,
 
     val parenCount: Int,
@@ -28,6 +28,10 @@ data class CastingImage private constructor(
 ) {
     constructor() : this(listOf(), 0, listOf(), false, 0, CompoundTag())
 
+    /**
+     * `escaped` is used by [OpUndo][at.petrak.hexcasting.common.casting.actions.escaping.OpUndo] to determine whether the paren count
+     * needs to be adjusted when undoing an open or close paren pattern (if the pattern was escaped, no need to change anything).
+     */
     data class ParenthesizedIota(val iota: Iota, val escaped: Boolean) {
         companion object {
             const val TAG_IOTAS = "iotas"
@@ -71,6 +75,17 @@ data class CastingImage private constructor(
      * Returns a copy of this with escape/paren-related fields cleared.
      */
     fun withResetEscape() = this.copy(parenCount = 0, parenthesized = listOf(), escapeNext = false)
+
+    /**
+     * Returns a copy of this with the provided iota added to the parenthesized list. `escaped` is used by
+     * [OpUndo][at.petrak.hexcasting.common.casting.actions.escaping.OpUndo] to determine whether undoing the
+     * parenthesized iota should adjust the paren count (escaped parens do not affect the count).
+     */
+    fun withNewParenthesized(iota: Iota, escaped: Boolean = false): CastingImage {
+        val newParens = this.parenthesized.toMutableList()
+        newParens.add(ParenthesizedIota(iota, escaped))
+        return this.copy(parenthesized = newParens)
+    }
 
     fun serializeToNbt() = NBTBuilder {
         TAG_STACK %= stack.serializeToNBT()

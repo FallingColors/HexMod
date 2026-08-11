@@ -25,12 +25,19 @@
       "id": "create:seat",
       "required": false
     },
-    "minecraft:wither",
+    {
+      "id": "#forge:bosses",
+      "required": false
+    },
+    {
+      "id": "#c:bosses",
+      "required": false
+    },
     "minecraft:end_crystal",
-    "minecraft:ender_dragon",
     "minecraft:item_frame",
     "minecraft:painting",
     "minecraft:leash_knot",
-    "minecraft:marker"
+    "minecraft:marker",
+    "minecraft:fishing_bobber"
   ]
 }

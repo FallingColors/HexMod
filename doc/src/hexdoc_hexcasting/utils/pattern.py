@@ -1,10 +1,9 @@
 from enum import Enum
 from typing import Annotated, Any
 
-from pydantic import BeforeValidator, PlainSerializer
-
 from hexdoc.core import ResourceLocation
 from hexdoc.model import HexdocModel
+from pydantic import BeforeValidator, PlainSerializer
 
 
 class Direction(Enum):
@@ -49,7 +48,7 @@ class RawPatternInfo(BasePatternInfo):
     r: int | None = None
 
 
-class PatternInfo(BasePatternInfo):
+class PatternInfo(BasePatternInfo, extra="allow"):
     """Pattern info used and exported by hexdoc for lookups."""
 
     id: ResourceLocation

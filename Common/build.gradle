@@ -1,10 +1,6 @@
 plugins {
     id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT'
-    id "at.petra-k.PKSubprojPlugin"
-}
-
-pkSubproj {
-    platform "common"
+    id "at.petra-k.pkpcpbp.PKSubprojPlugin"
 }
 
 minecraft {
@@ -15,17 +11,19 @@ minecraft {
 repositories {
     mavenCentral()
 
+    // paucal, patchi, inline, JEI
     maven { url 'https://maven.blamejared.com' }
 
     maven {
-        // location of the maven that hosts JEI files
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven {
-        // location of a maven mirror for JEI files, as a fallback
+        // fallback maven for JEI
         name = "ModMaven"
         url = "https://modmaven.dev"
+    }
+    maven {
+        // maven for EMI
+        // temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors
+        name = "Gnomecraft maven"
+        url = "https://maven.gnomecraft.net/releases"
     }
 
     maven { url "https://maven.shedaniel.me/" }
@@ -37,6 +35,8 @@ dependencies {
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
     compileOnly "at.petra-k.paucal:paucal-common-$minecraftVersion:$paucalVersion"
+    compileOnly "mezz.jei:jei-$minecraftVersion-common-api:$jeiVersion"
+    compileOnly "dev.emi:emi-xplat-mojmap:$emiVersion+$minecraftVersion"
     compileOnly "vazkii.patchouli:Patchouli-xplat:$minecraftVersion-$patchouliVersion-SNAPSHOT"
 
     compileOnly "com.samsthenerd.inline:inline-forge:$minecraftVersion-$inlineVersion"

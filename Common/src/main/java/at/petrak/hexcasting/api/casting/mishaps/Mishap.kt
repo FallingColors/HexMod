@@ -18,19 +18,20 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.phys.Vec3
+import java.lang.RuntimeException
 
-abstract class Mishap : Throwable() {
+abstract class Mishap : RuntimeException() {
     /** Mishaps spray half-red, half-this-color. */
-    abstract fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment
+    abstract fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment
 
-    open fun particleSpray(ctx: CastingEnvironment): ParticleSpray {
+    open fun particleSpray(env: CastingEnvironment): ParticleSpray {
         return ParticleSpray(
-            ctx.mishapSprayPos().add(0.0, 0.2, 0.0),
+            env.mishapSprayPos().add(0.0, 0.2, 0.0),
             Vec3(0.0, 2.0, 0.0),
             0.2, Math.PI / 4, 40)
     }
 
-    open fun resolutionType(ctx: CastingEnvironment): ResolvedPatternType = ResolvedPatternType.ERRORED
+    open fun resolutionType(env: CastingEnvironment): ResolvedPatternType = ResolvedPatternType.ERRORED
 
     /**
      * Execute the actual effect, not any sfx.
@@ -39,21 +40,21 @@ abstract class Mishap : Throwable() {
      */
     abstract fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>)
 
-    protected abstract fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component?
+    protected abstract fun errorMessage(env: CastingEnvironment, errorCtx: Context): Component?
 
-    fun executeReturnStack(ctx: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>): List<Iota> {
-        execute(ctx, errorCtx, stack)
+    fun executeReturnStack(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>): List<Iota> {
+        execute(env, errorCtx, stack)
         return stack
     }
 
     /**
      * Every error message should be prefixed with the name of the action...
      */
-    fun errorMessageWithName(ctx: CastingEnvironment, errorCtx: Context): Component? {
+    fun errorMessageWithName(env: CastingEnvironment, errorCtx: Context): Component? {
         return if (errorCtx.name != null) {
-            "hexcasting.mishap".asTranslatedComponent(errorCtx.name, this.errorMessage(ctx, errorCtx) ?: return null)
+            "hexcasting.mishap".asTranslatedComponent(errorCtx.name, this.errorMessage(env, errorCtx) ?: return null)
         } else {
-            this.errorMessage(ctx, errorCtx)
+            this.errorMessage(env, errorCtx)
         }
     }
 
@@ -71,8 +72,8 @@ abstract class Mishap : Throwable() {
     protected fun actionName(name: Component?): Component =
         name ?: "hexcasting.spell.null".asTranslatedComponent.lightPurple
 
-    protected fun blockAtPos(ctx: CastingEnvironment, pos: BlockPos): Component {
-        return ctx.world.getBlockState(pos).block.name
+    protected fun blockAtPos(env: CastingEnvironment, pos: BlockPos): Component {
+        return env.world.getBlockState(pos).block.name
     }
 
     data class Context(val pattern: HexPattern?, val name: Component?)

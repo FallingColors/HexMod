@@ -35,7 +35,8 @@ object OpErase : SpellAction {
 
         return SpellAction.Result(
             Spell(handStack),
-            MediaConstants.DUST_UNIT, listOf()
+            MediaConstants.DUST_UNIT * handStack.getCount(),
+            listOf(),
         )
     }
 

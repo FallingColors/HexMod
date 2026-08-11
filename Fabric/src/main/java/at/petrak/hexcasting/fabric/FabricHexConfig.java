@@ -7,6 +7,8 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.GsonBuilder;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
@@ -15,7 +17,6 @@ import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 
@@ -129,15 +130,21 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private boolean ctrlTogglesOffStrokeOrder = DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER;
         @ConfigEntry.Gui.Tooltip
+        private boolean disableInworldScrolling = DEFAULT_DISABLE_INWORLD_SCROLLING;
+        @ConfigEntry.Gui.Tooltip
         private boolean invertSpellbookScrollDirection = DEFAULT_INVERT_SPELLBOOK_SCROLL;
         @ConfigEntry.Gui.Tooltip
-        private boolean invertAbacusScrollDirection = DEFAULT_INVERT_SPELLBOOK_SCROLL;
+        private boolean invertAbacusScrollDirection = DEFAULT_INVERT_ABACUS_SCROLL;
         @ConfigEntry.Gui.Tooltip
         private double gridSnapThreshold = DEFAULT_GRID_SNAP_THRESHOLD;
         @ConfigEntry.Gui.Tooltip
         private boolean clickingTogglesDrawing = DEFAULT_CLICKING_TOGGLES_DRAWING;
         @ConfigEntry.Gui.Tooltip
         private boolean alwaysShowListCommas = DEFAULT_ALWAYS_SHOW_LIST_COMMAS;
+        @ConfigEntry.Gui.Tooltip
+        private boolean advancedTooltipsShowsIotaNBT = DEFAULT_ADVANCED_TOOLTIPS_SHOWS_IOTA_NBT;
+        @ConfigEntry.Gui.Tooltip
+        private boolean staticActiveSlates = DEFAULT_STATIC_ACTIVE_SLATES;
 
         @Override
         public void validatePostLoad() throws ValidationException {
@@ -147,6 +154,11 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @Override
         public boolean ctrlTogglesOffStrokeOrder() {
             return ctrlTogglesOffStrokeOrder;
+        }
+
+        @Override
+        public boolean disableInworldScrolling() {
+            return disableInworldScrolling;
         }
 
         @Override
@@ -173,6 +185,16 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         public boolean alwaysShowListCommas() {
              return alwaysShowListCommas;
         }
+
+        @Override
+        public boolean advancedTooltipsShowsIotaNBT() { 
+          return advancedTooltipsShowsIotaNBT; 
+        }
+      
+        @Override
+        public boolean staticActiveSlates() { 
+          return staticActiveSlates; 
+        }
     }
 
     @Config(name = "server")
@@ -188,6 +210,11 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private List<String> actionDenyList = List.of();
         @ConfigEntry.Gui.Tooltip
         private List<String> circleActionDenyList = List.of();
+        @ConfigEntry.Gui.Tooltip
+        private List<String> costRescaleListRaw = List.of();
+        private transient Object2DoubleMap<ResourceLocation> costRescaleMap;
+        @ConfigEntry.Gui.Tooltip
+        private double globalCostScaling = DEFAULT_GLOBAL_COST_SCALING;
         @ConfigEntry.Gui.Tooltip
         private boolean greaterTeleportSplatsItems = DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS;
         @ConfigEntry.Gui.Tooltip
@@ -233,9 +260,23 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
 
         @Override
         public void validatePostLoad() throws ValidationException {
+            this.opBreakHarvestLevel = Mth.clamp(this.opBreakHarvestLevel, 0, 4);
             this.maxOpCount = Math.max(this.maxOpCount, 0);
             this.maxSpellCircleLength = Math.max(this.maxSpellCircleLength, 4);
+            this.globalCostScaling = Math.max(this.globalCostScaling, 0);
             this.traderScrollChance = Mth.clamp(this.traderScrollChance, 0.0, 1.0);
+
+            this.costRescaleMap = new Object2DoubleOpenHashMap<>();
+            try {
+                for (var auugh : this.costRescaleListRaw) {
+                    String[] split = auugh.split(" ");
+                    ResourceLocation loc = new ResourceLocation(split[0]);
+                    double scale = Double.parseDouble(split[1]);
+                    this.costRescaleMap.put(loc, scale);
+                }
+            } catch (Exception e) {
+                throw new ValidationException("Bad parsing of action cost rescaling", e);
+            }
 
             this.scrollInjections = new Object2IntOpenHashMap<>();
             try {
@@ -245,7 +286,6 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
                     int count = Integer.parseInt(split[1]);
                     this.scrollInjections.put(loc, count);
                 }
-
             } catch (Exception e) {
                 throw new ValidationException("Bad parsing of scroll injects", e);
             }
@@ -299,6 +339,14 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         public boolean isActionAllowedInCircles(ResourceLocation actionID) {
             return noneMatch(circleActionDenyList, actionID);
         }
+
+        @Override
+        public double getActionCostScaling(ResourceLocation actionID) {
+            return this.costRescaleMap.getOrDefault(actionID, 1.0);
+        }
+
+        @Override
+        public double globalCostScaling() { return globalCostScaling; }
 
         @Override
         public boolean doesGreaterTeleportSplatItems() { return greaterTeleportSplatsItems; }

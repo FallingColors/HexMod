@@ -5,9 +5,11 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraft.util.RandomSource;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static at.petrak.hexcasting.api.mod.HexConfig.noneMatch;
 
@@ -80,16 +82,22 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
     public static class Client implements HexConfig.ClientConfigAccess {
         private static ForgeConfigSpec.BooleanValue ctrlTogglesOffStrokeOrder;
+        private static ForgeConfigSpec.BooleanValue disableInworldScrolling;
         private static ForgeConfigSpec.BooleanValue invertSpellbookScrollDirection;
         private static ForgeConfigSpec.BooleanValue invertAbacusScrollDirection;
         private static ForgeConfigSpec.DoubleValue gridSnapThreshold;
         private static ForgeConfigSpec.BooleanValue clickingTogglesDrawing;
         private static ForgeConfigSpec.BooleanValue alwaysShowListCommas;
+        private static ForgeConfigSpec.BooleanValue advancedTooltipsShowsIotaNBT;
+        private static ForgeConfigSpec.BooleanValue staticActiveSlates;
 
         public Client(ForgeConfigSpec.Builder builder) {
             ctrlTogglesOffStrokeOrder = builder.comment(
                     "Whether the ctrl key will instead turn *off* the color gradient on patterns")
                 .define("ctrlTogglesOffStrokeOrder", DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER);
+            disableInworldScrolling = builder.comment(
+                    "Disable scrolling input for spellbooks and abaci in the normal world, keeping keybinds and staff screen scrolling normal")
+                .define("disableInworldScrolling", DEFAULT_DISABLE_INWORLD_SCROLLING);
             invertSpellbookScrollDirection = builder.comment(
                     "Whether scrolling up (as opposed to down) will increase the page index of the spellbook, and " +
                         "vice versa")
@@ -102,11 +110,23 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                         "means 50% of the way.")
                 .defineInRange("gridSnapThreshold", DEFAULT_GRID_SNAP_THRESHOLD, 0.5, 1.0);
             clickingTogglesDrawing = builder.comment(
-                            "Whether you click to start and stop drawing instead of clicking and dragging")
-                    .define("clickingTogglesDrawing", DEFAULT_CLICKING_TOGGLES_DRAWING);
+                    "Whether you click to start and stop drawing instead of clicking and dragging")
+                .define("clickingTogglesDrawing", DEFAULT_CLICKING_TOGGLES_DRAWING);
             alwaysShowListCommas = builder.comment(
-                            "Whether all iota types should be comma-separated in lists (by default, pattern iotas don't use commas)")
-                    .define("alwaysShowListCommas", DEFAULT_ALWAYS_SHOW_LIST_COMMAS);
+                    "Whether all iota types should be comma-separated in lists (by default, pattern iotas don't use commas)")
+                .define("alwaysShowListCommas", DEFAULT_ALWAYS_SHOW_LIST_COMMAS);
+            advancedTooltipsShowsIotaNBT = builder.comment(
+                    "Whether enabling advanced tooltips (F3+H) should display the full NBT of iotas stored in items " +
+                        "like foci and spellbooks")
+                .define("advancedTooltipsShowsIotaNBT", DEFAULT_ADVANCED_TOOLTIPS_SHOWS_IOTA_NBT);
+            staticActiveSlates = builder.comment(
+                    "Whether patterns on active slates should be rendered without wobble (improves performance with lots of active slates)")
+                .define("staticActiveSlates", DEFAULT_STATIC_ACTIVE_SLATES);
+        }
+
+        @Override
+        public boolean disableInworldScrolling() {
+            return disableInworldScrolling.get();
         }
 
         @Override
@@ -138,6 +158,16 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         public boolean alwaysShowListCommas() {
             return alwaysShowListCommas.get();
         }
+
+        @Override
+        public boolean advancedTooltipsShowsIotaNBT() { 
+          return advancedTooltipsShowsIotaNBT.get(); 
+        }
+      
+        @Override
+        public boolean staticActiveSlates() { 
+          return staticActiveSlates.get(); 
+        }
     }
 
     public static class Server implements HexConfig.ServerConfigAccess {
@@ -146,6 +176,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ForgeConfigSpec.IntValue maxSpellCircleLength;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
+        private static ForgeConfigSpec.ConfigValue<List<? extends String>> costRescaleList;
+        private static Map<ResourceLocation, Double> costRescaleMap = new HashMap<>();
+        private static ForgeConfigSpec.DoubleValue globalCostScaling;
 
         private static ForgeConfigSpec.BooleanValue greaterTeleportSplatsItems;
         private static ForgeConfigSpec.BooleanValue villagersOffendedByMindMurder;
@@ -158,10 +191,30 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             maxOpCount = builder.comment("The maximum number of actions that can be executed in one tick, to avoid " +
                     "hanging the server.")
                 .defineInRange("maxOpCount", DEFAULT_MAX_OP_COUNT, 0, Integer.MAX_VALUE);
+
             opBreakHarvestLevel = builder.comment(
                 "The harvest level of the Break Block spell.",
                 "0 = wood, 1 = stone, 2 = iron, 3 = diamond, 4 = netherite."
             ).defineInRange("opBreakHarvestLevel", DEFAULT_OP_BREAK_HARVEST_LEVEL, 0, 4);
+
+            greaterTeleportSplatsItems = builder.comment(
+                    "Should items fly out of the player's inventory when using Greater Teleport?"
+            ).define("greaterTeleportSplatsItems", DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS);
+
+            actionDenyList = builder.comment(
+                    "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap. " +
+                        "For example, hexcasting:get_caster will prevent Mind's Reflection.")
+                .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
+
+            costRescaleList = builder.comment(
+                    "Maps resource locations to the scaling factor for that specific action's media cost. " +
+                        "For example, hexcasting:add_motion 3 will make Impulse cost 3x as much.")
+                .defineList("costRescaleList", List.of(), Server::validateAndStoreMapping);
+
+            globalCostScaling = builder.comment(
+                    "All media costs, except for actions in the #hexcasting:cannot_modify_cost tag, will be multiplied by this value." +
+                        "If you want to modify the cost of an action in that tag, use the per-action list above.")
+                .defineInRange("globalCostScaling", DEFAULT_GLOBAL_COST_SCALING, 0.0, Double.MAX_VALUE);
             builder.pop();
 
             builder.push("Spell Circles");
@@ -170,7 +223,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
             circleActionDenyList = builder.comment(
                     "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle" +
-                        " will result in a mishap. For example: hexcasting:get_caster will prevent Mind's Reflection.")
+                        " will result in a mishap. For example, hexcasting:get_caster will prevent Mind's Reflection.")
                 .defineList("circleActionDenyList", List.of(), Server::isValidReslocArg);
             builder.pop();
 
@@ -179,16 +232,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 .defineInRange("traderScrollChance", DEFAULT_TRADER_SCROLL_CHANCE, 0.0, 1.0);
 
             // builders for loot (eg. scroll/lore/cypher pools and chances) should go here
-
             builder.pop();
-
-            actionDenyList = builder.comment(
-                    "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap.")
-                .defineList("actionDenyList", List.of(), Server::isValidReslocArg);
-
-            greaterTeleportSplatsItems = builder.comment(
-                    "Should items fly out of the player's inventory when using Greater Teleport?"
-            ).define("greaterTeleportSplatsItems", DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS);
 
             villagersOffendedByMindMurder = builder.comment(
                     "Should villagers take offense when you flay the mind of their fellow villagers?")
@@ -228,6 +272,17 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         }
 
         @Override
+        public double getActionCostScaling(ResourceLocation actionID) {
+            if (costRescaleMap.size() != costRescaleList.get().size()) {
+                removeStaleCostScaleMappings();
+            }
+            return costRescaleMap.getOrDefault(actionID, 1.0);
+        }
+
+        @Override
+        public double globalCostScaling() { return globalCostScaling.get(); }
+
+        @Override
         public boolean doesGreaterTeleportSplatItems() { return greaterTeleportSplatsItems.get(); }
 
         @Override
@@ -252,6 +307,37 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
 
         private static boolean isValidReslocArg(Object o) {
             return o instanceof String s && ResourceLocation.isValidResourceLocation(s);
+        }
+
+        private static boolean validateAndStoreMapping(Object o) {
+            if (o instanceof String s) {
+                try {
+                    String[] split = s.split(" ");
+                    ResourceLocation loc = new ResourceLocation(split[0]);
+                    double scale = Double.parseDouble(split[1]);
+                    costRescaleMap.put(loc, scale);
+                    return true;
+                } catch (Exception e) {
+                    costRescaleMap.clear();
+                    return false;
+                }
+            }
+            costRescaleMap.clear();
+            return false;
+        }
+
+        /**
+         * When an element is removed from the config-backed {@code costRescaleList}, there's no way for the {@code costRescaleMap}
+         * to know that it's gone since Forge's list validation is only done on a per-element basis. To handle this, we
+         * check if {@code costRescaleList} and {@code costRescaleMap} are the same size, and if not we call this method
+         * to remove the erroneous key/value pairs from the map.
+         */
+        private static void removeStaleCostScaleMappings() {
+            var actualKeys = costRescaleList.get().stream().map(entry -> {
+                String[] split = entry.split(" ");
+                return new ResourceLocation(split[0]);
+            }).collect(Collectors.toSet());
+            costRescaleMap.keySet().retainAll(actualKeys);
         }
     }
 }

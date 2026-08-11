@@ -12,12 +12,14 @@ import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.client.ClientTickCounter
+import at.petrak.hexcasting.client.Keybinds
 import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.client.ktxt.accumulatedScroll
 import at.petrak.hexcasting.client.render.*
 import at.petrak.hexcasting.client.sound.GridSoundInstance
 import at.petrak.hexcasting.common.lib.HexAttributes
 import at.petrak.hexcasting.common.lib.HexSounds
+import at.petrak.hexcasting.common.lib.hex.HexActions
 import at.petrak.hexcasting.common.msgs.MsgNewSpellPatternC2S
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions
 import com.mojang.blaze3d.systems.RenderSystem
@@ -70,7 +72,9 @@ class GuiSpellcasting constructor(
 
         // TODO this is the kinda hacky bit
         if (info.resolutionType == ResolvedPatternType.UNDONE) {
-            this.patterns.reversed().drop(1).firstOrNull { it.type == ResolvedPatternType.ESCAPED }?.let { it.type = ResolvedPatternType.UNDONE }
+            // find the last undo-able pattern and set its coloring to UNDONE
+            this.patterns.reversed().drop(1).firstOrNull { canBeUndone(it) }?.let { it.type = ResolvedPatternType.UNDONE }
+            // use the normal EVALUATED coloring for the Evanition that was just drawn
             this.patterns.getOrNull(index)?.let { it.type = ResolvedPatternType.EVALUATED }
         } else this.patterns.getOrNull(index)?.let {
                 it.type = info.resolutionType
@@ -79,6 +83,22 @@ class GuiSpellcasting constructor(
         this.cachedStack = info.stackDescs
         this.cachedRavenmind = info.ravenmind
         this.calculateIotaDisplays()
+    }
+
+    fun canBeUndone(resolvedPat: ResolvedPattern): Boolean {
+        return when (resolvedPat.type) {
+            // standard escaped patterns can always be undone
+            ResolvedPatternType.ESCAPED -> true
+            // everything else cannot be undone, with three exceptions:
+            // - unescaped Introspection and Meditation can be undone if there's nothing else left to undo
+            // - Interjection can always be undone (undoing its inserted iota) despite using the EVALUATED coloring
+            ResolvedPatternType.EVALUATED -> {
+                resolvedPat.pattern.angles == HexActions.OPEN_PAREN.prototype.angles ||
+                resolvedPat.pattern.angles == HexActions.OPEN_N_PARENS.prototype.angles ||
+                resolvedPat.pattern.angles == HexActions.READ_INTO_PARENS.prototype.angles
+            }
+            else -> false
+        }
     }
 
     fun calculateIotaDisplays() {
@@ -311,6 +331,22 @@ class GuiSpellcasting constructor(
         ShiftScrollListener.onScroll(pDelta, false)
 
         return true
+    }
+
+    override fun keyPressed(key: Int, scancode: Int, modifiers: Int): Boolean {
+        if (super.keyPressed(key, scancode, modifiers)) return true
+
+        // because of how mouse scrolling works (scrolling upward moves the page down), a positive
+        // delta value makes the book flip backward while a negative one makes it flip forward
+        if (Keybinds.spellbookPrev.matches(key, scancode)) {
+            ShiftScrollListener.onScroll(1.0, false, false)
+            return true
+        } else if (Keybinds.spellbookNext.matches(key, scancode)) {
+            ShiftScrollListener.onScroll(-1.0, false, false)
+            return true
+        }
+
+        return false
     }
 
     override fun onClose() {

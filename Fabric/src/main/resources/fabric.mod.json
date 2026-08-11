@@ -33,8 +33,11 @@
     "cardinal-components": [
       "at.petrak.hexcasting.fabric.cc.HexCardinalComponents"
     ],
+    "jei_mod_plugin": [
+      "at.petrak.hexcasting.interop.jei.HexJEIPlugin"
+    ],
     "emi": [
-      "at.petrak.hexcasting.fabric.interop.emi.HexEMIPlugin"
+      "at.petrak.hexcasting.interop.emi.HexEMIPlugin"
     ],
     "modmenu": [
       "at.petrak.hexcasting.fabric.interop.ModMenuInterop"
@@ -50,7 +53,7 @@
     "java": ">=17",
     "fabricloader": ">=0.14",
     "fabric": ">=0.84",
-    "fabric-language-kotlin": ">=1.9.4+kotlin.1.8.21",
+    "fabric-language-kotlin": ">=1.13.7+kotlin.2.2.21",
     "cardinal-components-base": "~5.2.1",
     "cardinal-components-entity": "~5.2.1",
     "cardinal-components-item": "~5.2.1",
@@ -58,7 +61,7 @@
     "paucal": ">=0.6.0-pre <0.7.0",
     "cloth-config": "11.1.*",
     "patchouli": ">=1.20.1-80",
-    "inline": ">=1.20.1-1.0.1"
+    "inline": ">=1.20.1-1.2.2"
   },
   "suggests": {
     "pehkui": ">=3.7.6",

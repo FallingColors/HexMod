@@ -2,15 +2,18 @@ package at.petrak.hexcasting.api.casting.eval;
 
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
+import at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
 import at.petrak.hexcasting.api.casting.mishaps.MishapEntityTooFarAway;
 import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexAttributes;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -37,6 +40,7 @@ import java.util.function.Predicate;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 import static at.petrak.hexcasting.api.casting.eval.CastingEnvironmentComponent.*;
+import static at.petrak.hexcasting.api.utils.HexUtils.isOfTag;
 
 /**
  * Environment within which hexes are cast.
@@ -179,18 +183,33 @@ public abstract class CastingEnvironment {
     }
 
     /**
-     * If something about this ARE itself is invalid, mishap.
-     * <p>
-     * This is used for stuff like requiring enlightenment and pattern denylists
+     * If something about this Action itself is invalid, mishap.
+     * This is used for stuff like requiring enlightenment and pattern denylists.<br>
+     * If the Action <i>is</i> valid, this sets the CastingEnvironment's {@code costModifier} based on the
+     * appropriate modifier for that action as returned by {@code getCostModifier()}.
      */
     public void precheckAction(PatternShapeMatch match) throws Mishap {
         // TODO: this doesn't let you select special handlers.
         // Might be worth making a "no casting" tag on each thing
-        ResourceLocation key = actionKey(match);
+        ResourceLocation loc = actionKey(match);
 
-        if (!HexConfig.server().isActionAllowed(key)) {
-            throw new MishapDisallowedSpell();
+        if (!HexConfig.server().isActionAllowed(loc)) {
+            throw new MishapDisallowedSpell("disallowed", loc);
         }
+
+        costModifier = (loc != null) ? this.getCostModifier(loc) : 1.0;
+    }
+
+    /**
+     * Gets the cost modifier for a given action. By default, this is based on the cost scaling values
+     * in the config. Casting env subclasses can override this to modify the cost in other ways.
+     */
+    protected double getCostModifier(@NotNull ResourceLocation loc) {
+        if (isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), loc, HexTags.Actions.CANNOT_MODIFY_COST)) {
+            // blacklisted actions can still be manually scaled in the config, but the global scaling doesn't apply
+            return HexConfig.server().getActionCostScaling(loc);
+        }
+        return HexConfig.server().getActionCostScaling(loc) * HexConfig.server().globalCostScaling();
     }
 
     @Nullable
@@ -241,6 +260,8 @@ public abstract class CastingEnvironment {
         return false;
     }
 
+    private double costModifier = 1.0;
+
     /**
      * Attempt to extract the given amount of media. Returns the amount of media left in the cost.
      * <p>
@@ -248,9 +269,7 @@ public abstract class CastingEnvironment {
      * positive.
      */
     public long extractMedia(long cost, boolean simulate) {
-        if (this.getCastingEntity() != null){
-            cost = (long) (cost * this.getCastingEntity().getAttributeValue(HexAttributes.MEDIA_CONSUMPTION_MODIFIER));
-        }
+        cost = (long) (cost * costModifier);
         for (var extractMediaComponent : preMediaExtract)
             cost = extractMediaComponent.onExtractMedia(cost, simulate);
         cost = extractMediaEnvironment(cost, simulate);
@@ -330,13 +349,15 @@ public abstract class CastingEnvironment {
     }
 
     public final void assertPosInRange(BlockPos vec) throws MishapBadLocation {
-        this.assertVecInRange(new Vec3(vec.getX(), vec.getY(), vec.getZ()));
+        Vec3 centered = Vec3.atCenterOf(vec);
+        this.assertVecInRange(centered);
     }
 
     public final void assertPosInRangeForEditing(BlockPos vec) throws MishapBadLocation {
-        this.assertVecInRange(new Vec3(vec.getX(), vec.getY(), vec.getZ()));
+        Vec3 centered = Vec3.atCenterOf(vec);
+        this.assertVecInRange(centered);
         if (!this.canEditBlockAt(vec))
-            throw new MishapBadLocation(Vec3.atCenterOf(vec), "forbidden");
+            throw new MishapBadLocation(centered, "forbidden");
     }
 
     public final boolean canEditBlockAt(BlockPos vec) {
@@ -376,7 +397,7 @@ public abstract class CastingEnvironment {
     /**
      * Get all the item stacks this env can use.
      */
-    protected abstract List<ItemStack> getUsableStacks(StackDiscoveryMode mode);
+    public abstract List<ItemStack> getUsableStacks(StackDiscoveryMode mode);
 
     protected List<ItemStack> getUsableStacksForPlayer(StackDiscoveryMode mode, @Nullable InteractionHand castingHand
         , ServerPlayer caster) {
@@ -444,7 +465,7 @@ public abstract class CastingEnvironment {
     /**
      * Get the primary/secondary item stacks this env can use (i.e. main hand and offhand for the player).
      */
-    protected abstract List<HeldItemInfo> getPrimaryStacks();
+    public abstract List<HeldItemInfo> getPrimaryStacks();
 
     protected List<HeldItemInfo> getPrimaryStacksForPlayer(InteractionHand castingHand, ServerPlayer caster) {
         var primaryItem = caster.getItemInHand(castingHand);
@@ -597,7 +618,7 @@ public abstract class CastingEnvironment {
     /**
      * The order/mode stacks should be discovered in
      */
-    protected enum StackDiscoveryMode {
+    public enum StackDiscoveryMode {
         /**
          * When finding items to pick (hotbar)
          */

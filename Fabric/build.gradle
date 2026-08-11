@@ -1,21 +1,29 @@
 plugins {
-    id 'fabric-loom' version "1.6-SNAPSHOT"
-    id "at.petra-k.PKSubprojPlugin"
+    id 'fabric-loom' version "1.9+"
+    id "at.petra-k.pkpcpbp.PKSubprojPlugin"
 }
 
 pkSubproj {
-    platform "fabric"
-    curseforgeJar remapJar.archiveFile
+    pkPublish = true
+    curseforgeJar = remapJar.archiveFile
     curseforgeDependencies([
-            "paucal:0.6.0", "patchouli:1.20.1-80", "fabric-language-kotlin:1.9.4+kotlin.1.8.21",
-            "inline:1.20.1-1.0.1", "cloth-config:11.1.0",
-            "cardinal-components-api:5.2.1", "fabric-api:0.84"
+        "paucal",
+        "patchouli",
+        "fabric-language-kotlin",
+        "inline",
+        "cloth-config",
+        "cardinal-components-api",
+        "fabric-api",
     ])
-    modrinthJar remapJar.archiveFile
+    modrinthJar = remapJar.archiveFile
     modrinthDependencies([
-            "paucal:0.6.0", "patchouli:1.20.1-80", "fabric-language-kotlin:1.9.4+kotlin.1.8.21",
-            "inline:1.20.1-1.0.1", "cloth-config:11.1.0",
-            "cardinal-components-api:5.2.1", "fabric-api:0.84"
+        "paucal:dabyDTwJ", // 0.6.0-fabric
+        "patchouli:1.20.1-80-fabric",
+        "fabric-language-kotlin:1.13.7+kotlin.2.2.21",
+        "inline:1.20.1-1.2.2-fabric",
+        "cloth-config:11.1.106+fabric",
+        "cardinal-components-api:5.2.1",
+        "fabric-api:0.84.0+1.20.1",
     ])
 }
 
@@ -50,15 +58,18 @@ loom {
 repositories {
     mavenCentral()
 
-    // paucal and patchi
-    maven { url = 'https://maven.blamejared.com' }
+    // paucal, patchi, inline, JEI
+    maven { url 'https://maven.blamejared.com' }
     // modmenu and clothconfig
     maven { url "https://maven.shedaniel.me/" }
     maven { url 'https://maven.ladysnake.org/releases' }
     // Entity reach
     maven { url "https://maven.jamieswhiteshirt.com/libs-release/" }
     maven { url "https://mvn.devos.one/snapshots/" }
-    maven { url = "https://maven.terraformersmc.com/releases/" }
+    // JEI fallback mirror
+    maven { url "https://modmaven.dev" }
+    // EMI (temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors)
+    maven { url "https://maven.gnomecraft.net/releases" }
     exclusiveContent {
         forRepository {
             maven { url = "https://api.modrinth.com/maven" }
@@ -116,6 +127,9 @@ dependencies {
 
     modImplementation "dev.emi:trinkets:$trinketsVersion"
     modImplementation "dev.emi:emi-fabric:${emiVersion}"
+
+    modCompileOnlyApi("mezz.jei:jei-${minecraftVersion}-fabric-api:${jeiVersion}")
+    modRuntimeOnly("mezz.jei:jei-${minecraftVersion}-fabric:${jeiVersion}")
 
 //    modImplementation "maven.modrinth:gravity-api:$gravityApiVersion"
     modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {

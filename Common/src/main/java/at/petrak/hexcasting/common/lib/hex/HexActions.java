@@ -16,6 +16,8 @@ import at.petrak.hexcasting.common.casting.actions.akashic.OpAkashicWrite;
 import at.petrak.hexcasting.common.casting.actions.circles.OpCircleBounds;
 import at.petrak.hexcasting.common.casting.actions.circles.OpImpetusDir;
 import at.petrak.hexcasting.common.casting.actions.circles.OpImpetusPos;
+import at.petrak.hexcasting.common.casting.actions.environment.OpGetMedia;
+import at.petrak.hexcasting.common.casting.actions.escaping.*;
 import at.petrak.hexcasting.common.casting.actions.eval.*;
 import at.petrak.hexcasting.common.casting.actions.lists.OpEmptyList;
 import at.petrak.hexcasting.common.casting.actions.lists.OpLastNToList;
@@ -28,6 +30,10 @@ import at.petrak.hexcasting.common.casting.actions.math.OpRandom;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpBoolIf;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpCoerceToBool;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpEquality;
+import at.petrak.hexcasting.common.casting.actions.types.OpEntityEquality;
+import at.petrak.hexcasting.common.casting.actions.types.OpItemEquality;
+import at.petrak.hexcasting.common.casting.actions.types.OpTypeEquality;
+import at.petrak.hexcasting.common.casting.actions.types.OpBlockEquality;
 import at.petrak.hexcasting.common.casting.actions.queryentity.*;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockAxisRaycast;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockRaycast;
@@ -94,6 +100,8 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("weddwaa", HexDir.EAST), OpBlockAxisRaycast.INSTANCE));
     public static final ActionRegistryEntry RAYCAST_ENTITY = make("raycast/entity",
         new ActionRegistryEntry(HexPattern.fromAngles("weaqa", HexDir.EAST), OpEntityRaycast.INSTANCE));
+    public static final ActionRegistryEntry GET_MEDIA = make("get_media",
+        new ActionRegistryEntry(HexPattern.fromAngles("dde", HexDir.WEST), OpGetMedia.INSTANCE));
 
     // == spell circle getters ==
 
@@ -189,6 +197,10 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("ad", HexDir.EAST), new OpEquality(false)));
     public static final ActionRegistryEntry NOT_EQUALS = make("not_equals",
         new ActionRegistryEntry(HexPattern.fromAngles("da", HexDir.EAST), new OpEquality(true)));
+    public static final ActionRegistryEntry TYPE_EQUALS = make("type_equals",
+        new ActionRegistryEntry(HexPattern.fromAngles("wawdw", HexDir.EAST), new OpTypeEquality(false)));
+    public static final ActionRegistryEntry TYPE_NOT_EQUALS = make("type_not_equals",
+        new ActionRegistryEntry(HexPattern.fromAngles("wdwaw", HexDir.EAST), new OpTypeEquality(true)));
     public static final ActionRegistryEntry BOOL_COERCE = make("bool_coerce",
         new ActionRegistryEntry(HexPattern.fromAngles("aw", HexDir.NORTH_EAST), OpCoerceToBool.INSTANCE));
     public static final ActionRegistryEntry IF = make("if",
@@ -275,7 +287,7 @@ public class HexActions {
 
     public static final ActionRegistryEntry CRAFT$CYPHER = make("craft/cypher", new ActionRegistryEntry(
         HexPattern.fromAngles("waqqqqq", HexDir.EAST), 
-        new OpMakePackagedSpell(s -> (s.is(HexItems.CYPHER)||s.is(HexItems.ANCIENT_CYPHER)), HexItems.CYPHER.getDescription(), MediaConstants.CRYSTAL_UNIT)
+        new OpMakePackagedSpell(s -> (s.is(HexItems.CYPHER)||s.is(HexItems.ANCIENT_CYPHER)), HexItems.CYPHER::getDescription, MediaConstants.CRYSTAL_UNIT)
     ));
     public static final ActionRegistryEntry CRAFT$TRINKET = make("craft/trinket", new ActionRegistryEntry(
         HexPattern.fromAngles("wwaqqqqqeaqeaeqqqeaeq", HexDir.EAST), 
@@ -382,8 +394,22 @@ public class HexActions {
 
     // == Meta stuff ==
 
-    // Intro/Retro/Consideration are now special-form-likes and aren't even ops.
-    // TODO should there be a registry for these too
+    public static final ActionRegistryEntry ESCAPE = make("escape",
+        new ActionRegistryEntry(HexPattern.fromAngles("qqqaw", HexDir.WEST), OpEscape.INSTANCE));
+    public static final ActionRegistryEntry RUNTIME_ESCAPE = make("runtime_escape",
+        new ActionRegistryEntry(HexPattern.fromAngles("wdeee", HexDir.SOUTH_EAST), OpRuntimeEscape.INSTANCE));
+    public static final ActionRegistryEntry OPEN_PAREN = make("open_paren",
+        new ActionRegistryEntry(HexPattern.fromAngles("qqq", HexDir.WEST), OpOpenParen.INSTANCE));
+    public static final ActionRegistryEntry CLOSE_PAREN = make("close_paren",
+        new ActionRegistryEntry(HexPattern.fromAngles("eee", HexDir.EAST), OpCloseParen.INSTANCE));
+    public static final ActionRegistryEntry OPEN_N_PARENS = make("open_n_parens",
+            new ActionRegistryEntry(HexPattern.fromAngles("qdaqadq", HexDir.WEST), OpOpenNParens.INSTANCE));
+    public static final ActionRegistryEntry CLOSE_ALL_PARENS = make("close_all_parens",
+            new ActionRegistryEntry(HexPattern.fromAngles("eadedae", HexDir.EAST), OpCloseAllParens.INSTANCE));
+    public static final ActionRegistryEntry READ_INTO_PARENS = make("read_into_parens",
+            new ActionRegistryEntry(HexPattern.fromAngles("aqqqqqwded", HexDir.EAST), OpReadIntoParens.INSTANCE));
+    public static final ActionRegistryEntry UNDO = make("undo",
+        new ActionRegistryEntry(HexPattern.fromAngles("eeedw", HexDir.EAST), OpUndo.INSTANCE));
 
     // http://www.toroidalsnark.net/mkss3-pix/CalderheadJMM2014.pdf
     // eval being a space filling curve feels apt doesn't it
@@ -463,6 +489,9 @@ public class HexActions {
     public static final ActionRegistryEntry CONST$E = make("const/double/e",
         new ActionRegistryEntry(HexPattern.fromAngles("aaq",
             HexDir.EAST), Action.makeConstantOp(new DoubleIota(Math.E))));
+    public static final ActionRegistryEntry CONST$PHI = make("const/double/phi",
+        new ActionRegistryEntry(HexPattern.fromAngles("wdded",
+            HexDir.NORTH_EAST), Action.makeConstantOp(new DoubleIota(1.618033988749895))));
 
     // == Entities ==
 
@@ -526,20 +555,33 @@ public class HexActions {
             true)
         ));
 
+    // == Types ==
+    public static final ActionRegistryEntry COMPARE_BLOCK = make("compare_block/lenient", new ActionRegistryEntry(
+        HexPattern.fromAngles("qqqqqeqeeeee", HexDir.NORTH_WEST), new OpBlockEquality(false)
+    ));
+    public static final ActionRegistryEntry COMPARE_BLOCK_STRICT = make("compare_block/strict", new ActionRegistryEntry(
+        HexPattern.fromAngles("qwawqwadadwewdwe", HexDir.NORTH_WEST), new OpBlockEquality(true)
+    ));
+    public static final ActionRegistryEntry COMPARE_ENTITY = make("compare_entity", new ActionRegistryEntry(
+        HexPattern.fromAngles("aqaeqded", HexDir.NORTH_WEST), OpEntityEquality.INSTANCE
+    ));
+    public static final ActionRegistryEntry COMPARE_ITEM = make("compare_item/lenient", new ActionRegistryEntry(
+        HexPattern.fromAngles("qaeaqeqedqde", HexDir.NORTH_WEST), new OpItemEquality(false)
+    ));
+    public static final ActionRegistryEntry COMPARE_ITEM_STRICT = make("compare_item/strict", new ActionRegistryEntry(
+        HexPattern.fromAngles("qaeaqewqedqde", HexDir.NORTH_WEST), new OpItemEquality(true)
+    ));
+
     // == Lists ==
 
     public static final ActionRegistryEntry APPEND = make("append",
         new OperationAction(HexPattern.fromAngles("edqde", HexDir.SOUTH_WEST)));
     public static final ActionRegistryEntry UNAPPEND = make("unappend",
         new OperationAction(HexPattern.fromAngles("qaeaq", HexDir.NORTH_WEST)));
-    //    public static final ActionRegistryEntry CONCAT = make("concat",
-//        new ActionRegistryEntry(HexPattern.fromAngles("qaeaq", HexDir.NORTH_WEST), OpConcat.INSTANCE));
     public static final ActionRegistryEntry INDEX = make("index",
         new OperationAction(HexPattern.fromAngles("deeed", HexDir.NORTH_WEST)));
     public static final ActionRegistryEntry FOR_EACH = make("for_each",
         new ActionRegistryEntry(HexPattern.fromAngles("dadad", HexDir.NORTH_EAST), OpForEach.INSTANCE));
-    //    public static final ActionRegistryEntry LIST_SIZE = make("list_size",
-//        new ActionRegistryEntry(HexPattern.fromAngles("aqaeaq", HexDir.EAST), OpListSize.INSTANCE));
     public static final ActionRegistryEntry SINGLETON = make("singleton",
         new ActionRegistryEntry(HexPattern.fromAngles("adeeed", HexDir.EAST), OpSingleton.INSTANCE));
     public static final ActionRegistryEntry EMPTY_LIST = make("empty_list",

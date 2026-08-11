@@ -135,8 +135,8 @@ public interface ICircleComponent {
             var state = impetus.getExecutionState();
 
             // This is a good use of my time
-            var note = state.reachedPositions.size() - 1;
-            var semitone = impetus.semitoneFromScale(note);
+            var note = state.reachedSlate - 1;
+            var semitone = impetus.semitoneFromScale((int) note);
             pitch = (float) Math.pow(2.0, (semitone - 8) / 12d);
         }
         world.playSound(null, vpos.x, vpos.y, vpos.z, sound, SoundSource.BLOCKS, 1f, pitch);

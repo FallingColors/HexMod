@@ -10,6 +10,7 @@ body:
       label: Modloader
       options:
         - Forge
+        - NeoForge
         - Fabric
         - Quilt
     validations:
@@ -18,14 +19,14 @@ body:
   - type: input
     attributes:
       label: Minecraft version
-      placeholder: eg. 1.19.2
+      placeholder: eg. 1.20.1
     validations:
       required: true
 
   - type: input
     attributes:
       label: Hex Casting version
-      placeholder: eg. 0.11.1-7-pre-609
+      placeholder: eg. 0.11.3
     validations:
       required: true
 

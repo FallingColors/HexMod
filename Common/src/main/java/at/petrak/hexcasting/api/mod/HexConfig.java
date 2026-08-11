@@ -41,6 +41,8 @@ public class HexConfig {
     public interface ClientConfigAccess {
         boolean ctrlTogglesOffStrokeOrder();
 
+        boolean disableInworldScrolling();
+
         boolean invertSpellbookScrollDirection();
 
         boolean invertAbacusScrollDirection();
@@ -51,12 +53,19 @@ public class HexConfig {
 
         boolean alwaysShowListCommas();
 
+        boolean advancedTooltipsShowsIotaNBT();
+      
+        boolean staticActiveSlates();
+
         boolean DEFAULT_CTRL_TOGGLES_OFF_STROKE_ORDER = false;
+        boolean DEFAULT_DISABLE_INWORLD_SCROLLING = false;
         boolean DEFAULT_INVERT_SPELLBOOK_SCROLL = false;
         boolean DEFAULT_INVERT_ABACUS_SCROLL = false;
         double DEFAULT_GRID_SNAP_THRESHOLD = 0.5;
         boolean DEFAULT_CLICKING_TOGGLES_DRAWING = false;
         boolean DEFAULT_ALWAYS_SHOW_LIST_COMMAS = false;
+        boolean DEFAULT_ADVANCED_TOOLTIPS_SHOWS_IOTA_NBT = false;
+        boolean DEFAULT_STATIC_ACTIVE_SLATES = false;
     }
 
     public interface ServerConfigAccess {
@@ -69,6 +78,10 @@ public class HexConfig {
         boolean isActionAllowed(ResourceLocation actionID);
 
         boolean isActionAllowedInCircles(ResourceLocation actionID);
+
+        double getActionCostScaling(ResourceLocation actionID);
+
+        double globalCostScaling();
 
         boolean doesGreaterTeleportSplatItems();
 
@@ -85,6 +98,7 @@ public class HexConfig {
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
         int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;
 
+        double DEFAULT_GLOBAL_COST_SCALING = 1.0;
         double DEFAULT_TRADER_SCROLL_CHANCE = 0.2;
         boolean DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS = true;
 

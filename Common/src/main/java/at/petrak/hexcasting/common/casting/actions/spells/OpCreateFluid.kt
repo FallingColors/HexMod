@@ -4,9 +4,8 @@ import at.petrak.hexcasting.api.casting.ParticleSpray
 import at.petrak.hexcasting.api.casting.RenderedSpell
 import at.petrak.hexcasting.api.casting.castables.SpellAction
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
-import at.petrak.hexcasting.api.casting.getVec3
+import at.petrak.hexcasting.api.casting.getBlockPos
 import at.petrak.hexcasting.api.casting.iota.Iota
-import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerPlayer
@@ -24,17 +23,8 @@ class OpCreateFluid(val cost: Long, val bucket: Item, val cauldron: BlockState, 
             args: List<Iota>,
             env: CastingEnvironment
     ): SpellAction.Result {
-        val vecPos = args.getVec3(0, argc)
-        val pos = BlockPos.containing(vecPos)
-
-        if (!env.canEditBlockAt(pos) || !IXplatAbstractions.INSTANCE.isPlacingAllowed(
-                env.world,
-                pos,
-                ItemStack(bucket),
-                env.castingEntity as? ServerPlayer
-            )
-        )
-            throw MishapBadLocation(vecPos, "forbidden")
+        val pos = args.getBlockPos(0, argc)
+        env.assertPosInRangeForEditing(pos)
 
         return SpellAction.Result(
             Spell(pos, bucket, cauldron, fluid),
@@ -45,6 +35,8 @@ class OpCreateFluid(val cost: Long, val bucket: Item, val cauldron: BlockState, 
 
     private data class Spell(val pos: BlockPos, val bucket: Item, val cauldron: BlockState, val fluid: Fluid) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
+            if (!IXplatAbstractions.INSTANCE.isPlacingAllowed(env.world, pos, ItemStack(bucket), env.castingEntity as? ServerPlayer))
+                return
 
             val state = env.world.getBlockState(pos)
 

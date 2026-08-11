@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.api.casting.SpellList;
 import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.api.utils.TreeList;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import net.minecraft.ChatFormatting;
@@ -14,7 +15,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import static java.lang.Math.max;
 
@@ -35,6 +38,10 @@ public class ListIota extends Iota {
         }
         depth = maxChildDepth + 1;
         size = totalSize;
+    }
+
+    public ListIota(@NotNull TreeList<Iota> list) {
+        this(new SpellList.LList(list));
     }
 
     public ListIota(@NotNull List<Iota> list) {
@@ -93,6 +100,18 @@ public class ListIota extends Iota {
     }
 
     @Override
+    protected Iota visitChildren(UnaryOperator<Iota> visitor) {
+        var out = new ArrayList<Iota>();
+        boolean conserve = true;
+        for (Iota orig : getList()) {
+            var replacement = orig.visit(visitor);
+            conserve &= replacement == orig;
+            out.add(replacement);
+        }
+        return conserve ? this : new ListIota(out);
+    }
+
+    @Override
     public int size() {
         return size;
     }
@@ -132,11 +151,12 @@ public class ListIota extends Iota {
                 out.append(IotaType.getDisplay(csub));
 
                 // only add a comma between 2 non-patterns (commas don't look good with Inline patterns)
-                // TODO: maybe add a method on IotaType to allow it to opt out of commas?
                 if (i < list.size() - 1) {
-                    var thisIotaNeedsComma = IotaType.getTypeFromTag(csub) != PatternIota.TYPE;
-                    var nextIotaNeedsComma = IotaType.getTypeFromTag(HexUtils.downcast(list.get(i+1), CompoundTag.TYPE)) != PatternIota.TYPE;
-                    var alwaysShowCommas = HexConfig.client().alwaysShowListCommas();
+                    var thisType = IotaType.getTypeFromTag(csub);
+                    var nextType = IotaType.getTypeFromTag(HexUtils.downcast(list.get(i+1), CompoundTag.TYPE));
+                    var thisIotaNeedsComma = thisType == null || thisType.usesListCommas();
+                    var nextIotaNeedsComma = nextType == null || nextType.usesListCommas();
+                    var alwaysShowCommas = HexConfig.client() != null && HexConfig.client().alwaysShowListCommas();
                     if (thisIotaNeedsComma || nextIotaNeedsComma || alwaysShowCommas)
                         out.append(", ");
                 }

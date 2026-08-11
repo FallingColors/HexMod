@@ -10,14 +10,14 @@ import net.minecraft.world.item.DyeColor
 import net.minecraft.world.item.ItemStack
 
 class MishapBadOffhandItem(val item: ItemStack?, val wanted: Component) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BROWN)
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         env.mishapEnvironment.dropHeldItems()
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = if (item?.isEmpty == false)
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context) = if (item?.isEmpty == false)
         error("bad_item.offhand", wanted, item.count, item.displayName)
     else
         error("no_item.offhand", wanted)

@@ -6,13 +6,13 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment
 import net.minecraft.world.item.DyeColor
 
 class MishapInternalException(val exception: Exception) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BLACK)
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         // NO-OP
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context) =
         error("unknown", exception)
 }

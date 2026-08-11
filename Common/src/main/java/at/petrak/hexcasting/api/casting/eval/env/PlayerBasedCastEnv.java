@@ -3,6 +3,7 @@ package at.petrak.hexcasting.api.casting.eval.env;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.addldata.ADMediaHolder;
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
+import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.eval.CastResult;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
@@ -11,6 +12,7 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexStatistics;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.MediaHelper;
@@ -21,12 +23,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -34,7 +38,12 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
+import static at.petrak.hexcasting.api.utils.HexUtils.isOfTag;
 
+/**
+ * Player-based casting environment. Consider using {@link PlayerBasedSpiralPatternCastEnv} instead
+ * if executed patterns should be displayed in a spiral around the caster.
+ */
 public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     public static final double DEFAULT_AMBIT_RADIUS = 32.0;
     private double ambitRadius;
@@ -63,6 +72,15 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
+    protected double getCostModifier(@NotNull ResourceLocation loc) {
+        var base = super.getCostModifier(loc);
+        if (isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), loc, HexTags.Actions.CANNOT_MODIFY_COST)) {
+            return base;
+        }
+        return base * this.caster.getAttributeValue(HexAttributes.MEDIA_CONSUMPTION_MODIFIER);
+    }
+
+    @Override
     public void postExecution(CastResult result) {
         super.postExecution(result);
 
@@ -84,12 +102,12 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
-    protected List<ItemStack> getUsableStacks(StackDiscoveryMode mode) {
+    public List<ItemStack> getUsableStacks(StackDiscoveryMode mode) {
         return getUsableStacksForPlayer(mode, castingHand, caster);
     }
 
     @Override
-    protected List<HeldItemInfo> getPrimaryStacks() {
+    public List<HeldItemInfo> getPrimaryStacks() {
         return getPrimaryStacksForPlayer(this.castingHand, this.caster);
     }
 

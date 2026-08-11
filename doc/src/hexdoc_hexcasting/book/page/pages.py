@@ -7,8 +7,8 @@ from hexdoc_hexcasting.metadata import HexContext
 from hexdoc_hexcasting.utils.pattern import PatternInfo, RawPatternInfo
 from pydantic import ValidationInfo, field_validator, model_validator
 
-from ..recipes import BrainsweepRecipe
-from .abstract_pages import PageWithOpPattern, PageWithPattern
+from hexdoc_hexcasting.book.recipes import BrainsweepRecipe
+from hexdoc_hexcasting.book.page.abstract_pages import PageWithOpPattern, PageWithPattern
 
 
 class LookupPatternPage(PageWithOpPattern, type="hexcasting:pattern"):
@@ -19,7 +19,10 @@ class LookupPatternPage(PageWithOpPattern, type="hexcasting:pattern"):
     @model_validator(mode="after")
     def _post_root_lookup(self, info: ValidationInfo):
         hex_ctx = HexContext.of(info)
-        self._patterns = [hex_ctx.patterns[self.op_id]]
+        pattern = hex_ctx.patterns.get(self.op_id)
+        if pattern is None:
+            raise ValueError(f"Unknown pattern ID (check your pattern stubs in hexdoc.toml): {self.op_id}")
+        self._patterns = [pattern]
         return self
 
     @model_validator(mode="after")

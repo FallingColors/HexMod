@@ -7,20 +7,50 @@
   "advancement": "hexcasting:root",
   "pages": [
     {
-      "type": "patchouli:link",
-      "text": "hexcasting.page.vectors.1",
-      "link_text": "hexcasting.page.vectors.1.link_text",
-      "url": "https://www.youtube.com/watch?v=fNk_zzaMoSs"
+      "type": "patchouli:text",
+      "text": "hexcasting.page.vectors.1"
     },
     {
       "type": "patchouli:text",
       "text": "hexcasting.page.vectors.2"
     },
     {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.vectors.3"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.vectors.4"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.vectors.5"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.vectors.6"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.vectors.7"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.vectors.8"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.vectors.9"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.vectors.10"
+    },
+    {
       "type": "patchouli:link",
-      "text": "hexcasting.page.vectors.3",
-      "link_text": "hexcasting.page.vectors.3.link_text",
-      "url": "https://psi.vazkii.net/codex.php#vectorPrimer"
+      "text": "hexcasting.page.vectors.11",
+      "link_text": "hexcasting.page.vectors.11.link_text",
+      "url": "https://www.youtube.com/watch?v=fNk_zzaMoSs"
     }
   ]
 }
