@@ -25,6 +25,9 @@ public class HexItemTagProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+        add(tag(ItemTags.PICKAXES),
+                HexItems.JEWELER_HAMMER.get());
+
         add(tag(xtags.gems()),
             HexItems.CHARGED_AMETHYST.get());
         add(tag(xtags.amethystDust()),
