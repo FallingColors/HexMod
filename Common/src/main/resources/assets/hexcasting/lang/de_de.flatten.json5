@@ -226,4 +226,7 @@
     hexcasting: "Hex Casting",
     scrolls: "Hex Casting (Schriftrollen)",
   },
+  "gui.hexcasting": {
+    spellcasting: "Hex-Gitter",
+  },
 }
