@@ -1,1 +1,10 @@
-{}
+{
+  "item.hexcasting": {
+    book: "Hex-Notizbuch",
+    staff: {
+      oak: "Eichenholz-Stab",
+      spruce: "Fichtenholz-Stab",
+      birch: "Birkenholz-Stab",
+    },
+  },
+}
