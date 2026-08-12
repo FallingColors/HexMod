@@ -13,6 +13,37 @@
       mangrove: "Mangrovenholzstab",
       cherry: "Kirschholzstab",
       bamboo: "Bambusstab",
+      mindsplice: "Stab des verschmolzenen Geistes",
+      quenched: "Essenzscherbenstab",
     },
+    amethyst_dust: "Amethyststaub",
+    charged_amethyst: "Geladener Amethyst",
+    quenched_allay_shard: "Hilfsgeistessenzscherbe",
+    scroll_small: {
+      "": "Kleine Schriftrolle",
+      of: "Wie bist du an dieses Item von %s gekommen",
+      empty: "Leere kleine Schriftrolle",
+    },
+    scroll_medium: {
+      "": "Mittelgroße Schriftrolle",
+      of: "Wie bist du an dieses Item von %s gekommen",
+      empty: "Leere mittelgroße Schriftrolle",
+    },
+    scroll: {
+      "": "Große Schriftrolle",
+      of: "Uralte Schriftrolle: %s",
+      empty: "Leere große Schriftrolle",
+    },
+    focus: {
+      "": "Fokus",
+      sealed: "Versiegelter Fokus",
+    },
+    ancient_cypher: {
+      "": "Uralte Chiffre",
+      preset: "Uralte Chiffre: %s",
+    },
+    thought_knot: "Gedankenknoten",
+    spellbook: "Zauberbuch",
+    cypher: "Chiffre",
   },
 }
