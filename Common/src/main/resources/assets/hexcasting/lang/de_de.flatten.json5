@@ -45,5 +45,7 @@
     thought_knot: "Gedankenknoten",
     spellbook: "Zauberbuch",
     cypher: "Chiffre",
+    trinket: "Zauberspeicher",
+    artifact: "Artefakt",
   },
 }
