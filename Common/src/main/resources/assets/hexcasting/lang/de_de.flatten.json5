@@ -8,6 +8,11 @@
       jungle: "Tropenholzstab",
       acacia: "Akazienholzstab",
       dark_oak: "Schwarzeichenholzstab",
+      crimson: "Karmesinhyphenstab",
+      warped: "Wirrhyphenstab",
+      mangrove: "Mangrovenholzstab",
+      cherry: "Kirschholzstab",
+      bamboo: "Bambusstab",
     },
   },
 }
