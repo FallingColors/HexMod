@@ -2,9 +2,12 @@
   "item.hexcasting": {
     book: "Hex-Notizbuch",
     staff: {
-      oak: "Eichenholz-Stab",
-      spruce: "Fichtenholz-Stab",
-      birch: "Birkenholz-Stab",
+      oak: "Eichenholzstab",
+      spruce: "Fichtenholzstab",
+      birch: "Birkenholzstab",
+      jungle: "Tropenholzstab",
+      acacia: "Akazienholz-Stab",
+      dark_oak: "Schwarzeichenholzstab",
     },
   },
 }
