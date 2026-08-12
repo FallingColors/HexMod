@@ -23,6 +23,8 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     private static ForgeConfigSpec.IntValue trinketCooldown;
     private static ForgeConfigSpec.IntValue artifactCooldown;
 
+    private static ForgeConfigSpec.IntValue entityExplosionResistance;
+
     public ForgeHexConfig(ForgeConfigSpec.Builder builder) {
         builder.push("Media Amounts");
         dustMediaAmount = builder.comment("How much media a single Amethyst Dust item is worth")
@@ -42,6 +44,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             .defineInRange("trinketCooldown", DEFAULT_TRINKET_COOLDOWN, 0, Integer.MAX_VALUE);
         artifactCooldown = builder.comment("Cooldown in ticks of a artifact")
             .defineInRange("artifactCooldown", DEFAULT_ARTIFACT_COOLDOWN, 0, Integer.MAX_VALUE);
+        builder.pop();
+
+        builder.push("Misc");
+        entityExplosionResistance = builder.comment("How much entities should resist explosion damage, where the reduction is Value times 20%")
+                .defineInRange("entityExplosionResistance", DEFAULT_ENTITY_EXPLOSION_RESISTANCE, 0, 5);
         builder.pop();
     }
 
@@ -78,6 +85,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     @Override
     public int artifactCooldown() {
         return artifactCooldown.get();
+    }
+
+    @Override
+    public int entityExplosionResistance() {
+        return entityExplosionResistance.get();
     }
 
     public static class Client implements HexConfig.ClientConfigAccess {

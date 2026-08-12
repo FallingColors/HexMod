@@ -8,9 +8,13 @@ import at.petrak.hexcasting.api.casting.getPositiveDoubleUnderInclusive
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.common.casting.actions.selectors.OpGetEntitiesBy
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
+import net.minecraft.world.effect.MobEffectInstance
+import net.minecraft.world.effect.MobEffects
+import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.level.Level
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
@@ -52,6 +56,25 @@ class OpExplode(val fire: Boolean) : SpellAction {
             // TODO: you can use this to explode things *outside* of the worldborder?
             if (!env.canEditBlockAt(BlockPos.containing(pos)))
                 return
+
+            val resistanceLevel = HexConfig.common().entityExplosionResistance()
+
+            if (resistanceLevel > 0) {
+                val radius = strength * 4 / 3; // approximation
+                val aabb = AABB(pos.add(Vec3(-radius, -radius, -radius)), pos.add(Vec3(radius, radius, radius)))
+                val entitiesGot = env.world.getEntities(null, aabb)
+                    .filter { entity -> entity is LivingEntity && entity != env.castingEntity }
+                    .map { entity -> entity as LivingEntity }
+                entitiesGot.forEach { entity ->
+                    entity.addEffect(
+                        MobEffectInstance(
+                            MobEffects.DAMAGE_RESISTANCE,
+                            1, // 1 tick only, we want this to exclusively block the explosion
+                            resistanceLevel - 1
+                        )
+                    )
+                }
+            }
 
             env.world.explode(
                 env.castingEntity,

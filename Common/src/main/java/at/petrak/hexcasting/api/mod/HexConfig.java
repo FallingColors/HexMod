@@ -27,6 +27,8 @@ public class HexConfig {
 
         int artifactCooldown();
 
+        int entityExplosionResistance();
+
         long DEFAULT_DUST_MEDIA_AMOUNT = MediaConstants.DUST_UNIT;
         long DEFAULT_SHARD_MEDIA_AMOUNT = MediaConstants.SHARD_UNIT;
         long DEFAULT_CHARGED_MEDIA_AMOUNT = MediaConstants.CRYSTAL_UNIT;
@@ -36,6 +38,7 @@ public class HexConfig {
         int DEFAULT_TRINKET_COOLDOWN = 5;
         int DEFAULT_ARTIFACT_COOLDOWN = 3;
 
+        int DEFAULT_ENTITY_EXPLOSION_RESISTANCE = 0;
     }
 
     public interface ClientConfigAccess {
