@@ -11,6 +11,7 @@
     "MixinVillager",
     "MixinWanderingTrader",
     "MixinWitch",
+    "MixinExplosion",
     "accessor.AccessorAbstractArrow",
     "accessor.AccessorEntity",
     "accessor.AccessorLivingEntity",

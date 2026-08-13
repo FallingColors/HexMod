@@ -337,6 +337,10 @@
           "": "Artifact Cooldown",
           "@Tooltip": "Cooldown of an artifact in ticks",
         },
+        explosionScaling: {
+          "": "Explosion Scaling",
+          "@Tooltip": "Scaling for entity damage caused by explosion spells in %",
+        },
       },
       
       client: {

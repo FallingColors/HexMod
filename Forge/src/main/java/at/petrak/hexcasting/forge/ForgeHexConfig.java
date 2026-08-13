@@ -23,7 +23,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     private static ForgeConfigSpec.IntValue trinketCooldown;
     private static ForgeConfigSpec.IntValue artifactCooldown;
 
-    private static ForgeConfigSpec.IntValue entityExplosionResistance;
+    private static ForgeConfigSpec.IntValue explosionScaling;
 
     public ForgeHexConfig(ForgeConfigSpec.Builder builder) {
         builder.push("Media Amounts");
@@ -47,8 +47,8 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         builder.pop();
 
         builder.push("Misc");
-        entityExplosionResistance = builder.comment("How much entities should resist explosion damage, where the reduction is Value times 20%")
-                .defineInRange("entityExplosionResistance", DEFAULT_ENTITY_EXPLOSION_RESISTANCE, 0, 5);
+        explosionScaling = builder.comment("Scaling for entity damage caused by explosion spells in %")
+                .defineInRange("explosionScaling", DEFAULT_EXPLOSION_SCALING, 0, Integer.MAX_VALUE);
         builder.pop();
     }
 
@@ -88,8 +88,8 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     }
 
     @Override
-    public int entityExplosionResistance() {
-        return entityExplosionResistance.get();
+    public int explosionScaling() {
+        return explosionScaling.get();
     }
 
     public static class Client implements HexConfig.ClientConfigAccess {

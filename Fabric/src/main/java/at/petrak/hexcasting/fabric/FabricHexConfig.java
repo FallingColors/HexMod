@@ -81,7 +81,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         private int artifactCooldown = DEFAULT_ARTIFACT_COOLDOWN;
 
         @ConfigEntry.Gui.Tooltip
-        private int entityExplosionResistance = DEFAULT_ENTITY_EXPLOSION_RESISTANCE;
+        private int explosionScaling = DEFAULT_EXPLOSION_SCALING;
 
         @Override
         public void validatePostLoad() throws ValidationException {
@@ -127,9 +127,10 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         }
 
         @Override
-        public int entityExplosionResistance() {
-            return entityExplosionResistance;
+        public int explosionScaling() {
+            return explosionScaling;
         }
+
     }
 
     @Config(name = "client")
