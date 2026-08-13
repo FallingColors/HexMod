@@ -11,9 +11,6 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.DyeColor
 
 class MishapDisallowedSpell(val type: String, val actionKey: ResourceLocation?) : Mishap() {
-    @Deprecated("Provide the type (disallowed or disallowed_circle) and the action key that caused the mishap")
-    constructor(type: String = "disallowed") : this(type, null) {}
-
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BLACK)
 

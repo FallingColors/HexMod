@@ -63,11 +63,6 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public ServerPlayer getCaster() {
-        return this.caster;
-    }
-
-    @Override
     protected double getCostModifier(PatternShapeMatch match) {
         ResourceLocation loc = actionKey(match);
         if (loc != null && isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), loc, HexTags.Actions.CANNOT_MODIFY_COST)) {
