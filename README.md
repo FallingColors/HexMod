@@ -1,5 +1,9 @@
 # Hex Casting
 
+[![Translation language count badge](https://weblate.hexxy.media/widget/hexcasting/language-badge.svg?threshold=0)](https://weblate.hexxy.media/engage/hexcasting/)
+[![Translation percent badge](https://weblate.hexxy.media/widget/hexcasting/svg-badge.svg)](https://weblate.hexxy.media/engage/hexcasting/)
+[![Powered by hexdoc badge](https://img.shields.io/endpoint?url=https://hexxy.media/api/v0/badge/hexdoc?label=1)](https://hexcasting.hexxy.media/)
+
 [Curseforge](https://www.curseforge.com/minecraft/mc-mods/hexcasting) | [Modrinth](https://modrinth.com/mod/hex-casting)
 | [Source](https://github.com/gamma-delta/HexMod)
 
@@ -20,7 +24,7 @@ On Fabric, it requires:
 - Cardinal Components
 - ClothConfig and ModMenu
 
-[Read the documentation online here!](https://fallingcolors.github.io/HexMod/)
+[Read the documentation online here!](https://hexcasting.hexxy.media/)
 
 [Discord link](https://discord.gg/4xxHGYteWk)
 
@@ -52,3 +56,5 @@ do a very good job.) If you find you need something not in there yell at me on D
 ## Contributing
 
 Contributions are welcome via pull requests on GitHub. Please [link your PR](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue) to any issues that it fixes. Note that if your PR makes many unrelated changes, we may ask you to split it up into several smaller PRs to make it simpler to review. Also, feel free to update the `[UNRELEASED]` section in [CHANGELOG.md](./CHANGELOG.md) to document the changes in your PR (in a human-readable and concise manner, not just copying the commit messages).
+
+Translations are welcome. You can help translate Hex Casting into your language by [visiting our Weblate page](https://weblate.hexxy.media/engage/hexcasting/), or by opening a pull request to manually edit the localization files.
