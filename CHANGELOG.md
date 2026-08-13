@@ -29,7 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Internal
 
-- Removed APIs deprecated in `0.11.4` ([#1126](https://github.com/FallingColors/HexMod/pull/1126), [#1127](https://github.com/FallingColors/HexMod/pull/1127) [#1129](https://github.com/FallingColors/HexMod/pull/1129), [#1137](https://github.com/FallingColors/HexMod/pull/1137), [#1142](https://github.com/FallingColors/HexMod/pull/1142)) @s5bug
+- Removed APIs deprecated in `0.11.4` ([#1126](https://github.com/FallingColors/HexMod/pull/1126), [#1127](https://github.com/FallingColors/HexMod/pull/1127) [#1129](https://github.com/FallingColors/HexMod/pull/1129), [#1137](https://github.com/FallingColors/HexMod/pull/1137), [#1142](https://github.com/FallingColors/HexMod/pull/1142), [#1256](http://github.com/FallingColors/HexMod/pull/1256)) @s5bug @Robotgiggle
 - ListIota now uses the asymptotically-efficient TreeList internally ([#1032](https://github.com/FallingColors/HexMod/pull/1032)) @s5bug
 - SpellList has been removed ([#1032](https://github.com/FallingColors/HexMod/pull/1032)) @s5bug
 - Casting Image and Casting Frames now store iotas in a TreeList ([#1033](https://github.com/FallingColors/HexMod/pull/1033)) @s5bug
