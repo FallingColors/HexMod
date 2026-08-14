@@ -13,7 +13,32 @@ import net.minecraft.world.phys.Vec2
 /**
  * Sequence of angles to define a pattern traced.
  */
-data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = arrayListOf()) {
+data class HexPattern(val startDir: HexDir, private val anglesMutable: MutableList<HexAngle> = arrayListOf()) {
+    // cached lazy
+    private lateinit var anglesLazy: Lazy<List<HexAngle>>
+    private lateinit var anglesSignatureLazy: Lazy<String>
+    fun resetCache() {
+        if (anglesLazy.isInitialized()) anglesLazy = lazy { anglesMutable.toList() }
+        if (anglesSignatureLazy.isInitialized()) anglesSignatureLazy = lazy(::anglesSignatureImp)
+    }
+
+    init {
+        resetCache()
+    }
+
+    // old interface
+    val angles: List<HexAngle>
+        get() = anglesLazy.value
+
+    fun anglesSignature() = anglesSignatureLazy.value
+
+    fun removeLast(): HexAngle {
+        if (anglesMutable.isEmpty()) throw NoSuchElementException()
+        val ret = anglesMutable.removeLast()
+        resetCache()
+        return ret
+    }
+
     /**
      * @return True if it successfully appended, false if not.
      */
@@ -25,7 +50,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
 
         var compass = this.startDir
         var cursor = HexCoord.Origin
-        for (a in this.angles) {
+        for (a in this.anglesMutable) {
             linesSeen.add(cursor to compass)
             // Line from here to there also blocks there to here
             linesSeen.add(cursor + compass to compass.rotatedBy(HexAngle.BACK))
@@ -39,17 +64,18 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
         val nextAngle = newDir - compass
         if (nextAngle == HexAngle.BACK) return false
 
-        this.angles.add(nextAngle)
+        this.anglesMutable.add(nextAngle)
+        resetCache()
         return true
     }
 
     @JvmOverloads
     fun positions(start: HexCoord = HexCoord.Origin): List<HexCoord> {
-        val out: ArrayList<HexCoord> = ArrayList(this.angles.size + 2)
+        val out: ArrayList<HexCoord> = ArrayList(this.anglesMutable.size + 2)
         out.add(start)
         var compass: HexDir = this.startDir
         var cursor = start
-        for (a in this.angles) {
+        for (a in this.anglesMutable) {
             cursor += compass
             out.add(cursor)
             compass *= a
@@ -59,11 +85,11 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
     }
 
     fun directions(): List<HexDir> {
-        val out = ArrayList<HexDir>(this.angles.size + 1)
+        val out = ArrayList<HexDir>(this.anglesMutable.size + 1)
         out.add(this.startDir)
 
         var compass: HexDir = this.startDir
-        for (a in this.angles) {
+        for (a in this.anglesMutable) {
             compass *= a
             out.add(compass)
         }
@@ -71,12 +97,12 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
     }
 
     fun finalDir(): HexDir =
-        this.angles.fold(this.startDir) { acc, angle -> acc * angle }
+        this.anglesMutable.fold(this.startDir) { acc, angle -> acc * angle }
 
     // Terrible shorthand method for easy matching
-    fun anglesSignature(): String {
+    fun anglesSignatureImp(): String {
         return buildString {
-            for (a in this@HexPattern.angles) {
+            for (a in this@HexPattern.anglesMutable) {
                 append(
                     when (a) {
                         HexAngle.FORWARD -> "w"
@@ -109,7 +135,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
     fun toLines(hexSize: Float, origin: Vec2): List<Vec2> =
         this.positions().map { coordToPx(it, hexSize, origin) }
 
-    fun sigsEqual(that: HexPattern) = this.angles == that.angles
+    fun sigsEqual(that: HexPattern) = this.anglesMutable == that.anglesMutable
 
     override fun toString(): String = buildString {
         append("HexPattern[")
@@ -179,7 +205,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
                     throw IllegalStateException("Adding the angle $c at index $idx made the pattern invalid by looping back on itself")
                 }
 
-                out.angles.add(angle)
+                out.anglesMutable.add(angle)
             }
 
             return out
@@ -198,7 +224,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
             for ((idx, c) in signature.withIndex()) {
                 val angle = HexAngle.fromChar(c)
                     ?: throw IllegalArgumentException("Cannot match $c at idx $idx to a direction")
-                out.angles.add(angle)
+                out.anglesMutable.add(angle)
             }
 
             return out

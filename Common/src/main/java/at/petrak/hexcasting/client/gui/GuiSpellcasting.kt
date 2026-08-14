@@ -224,7 +224,7 @@ class GuiSpellcasting constructor(
                                 this.drawState = PatternDrawState.JustStarted(ds.current + newdir)
                             } else {
                                 ds.current += newdir
-                                ds.wipPattern.angles.removeLast()
+                                ds.wipPattern.removeLast()
                             }
                             playSound = true
                         } else {
