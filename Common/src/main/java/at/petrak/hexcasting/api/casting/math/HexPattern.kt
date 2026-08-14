@@ -17,13 +17,13 @@ data class HexPattern(val startDir: HexDir, private val anglesMutable: MutableLi
     // cached lazy
     private lateinit var anglesLazy: Lazy<List<HexAngle>>
     private lateinit var anglesSignatureLazy: Lazy<String>
-    fun resetCache() {
-        if (anglesLazy.isInitialized()) anglesLazy = lazy { anglesMutable.toList() }
-        if (anglesSignatureLazy.isInitialized()) anglesSignatureLazy = lazy(::anglesSignatureImp)
+    fun resetCache(force: Boolean = false) {
+        if (force || anglesLazy.isInitialized()) anglesLazy = lazy { anglesMutable.toList() }
+        if (force || anglesSignatureLazy.isInitialized()) anglesSignatureLazy = lazy(::anglesSignatureImp)
     }
 
     init {
-        resetCache()
+        resetCache(true)
     }
 
     // old interface
