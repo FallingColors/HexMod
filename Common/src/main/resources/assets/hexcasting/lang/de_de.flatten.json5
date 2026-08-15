@@ -241,6 +241,9 @@
       casting: {
         cast: {
           fail: "Missgriff knistert",
+          spell: "Zauber boinkt",
+          hermes: "Hermes zupft",
+          thoth: "Thoth zupft",
         },
         pattern: {
           start: "Zeichen beginnt",
@@ -278,7 +281,7 @@
     },
     category: {
       great_spells: {
-        desc: "Die hier katalogisierten Sprüche sollen von legendärer Schwierigkeit und Macht sein. Offenbar wurden sie $(l/scroll)spärlich/$ aufgezeichnet (laut den Texten aus gutem Grund). Wahrscheinlich handelt es sich ohnehim nur um das Geschwätz vergangener Traditionalisten -- ein Zeichen ist ein Zeichen.$(br2)Was könnte schon schiefgehen?",
+        desc: "Die hier katalogisierten Sprüche sollen von legendärer Schwierigkeit und Macht sein. Offenbar wurden sie $(l:items/scroll)spärlich/$ aufgezeichnet (laut den Texten aus gutem Grund). Wahrscheinlich handelt es sich ohnehim nur um das Geschwätz vergangener Traditionalisten -- ein Zeichen ist ein Zeichen.$(br2)Was könnte schon schiefgehen?",
       },
       spells: {
         desc: "Zeichen, die die Welt magisch beeinflussen.",
@@ -300,7 +303,7 @@
         "": "Sprüche Wirken",
       },
       basics: {
-        desc: "Die Praktizierenden dieser Kunst wirken ihre sogenannten $(o)Sprüche$(), indem sie mit einem $(l/staff)$(item)Stab/$ seltsame Zeichen in die Luft zeichnen -- oder sie fertigen $(l/hexcasting)$(item)mächtige magische Gegenstände/$ an, die das Wirken für sie übernehmen. Wie könnte ich dasselbe tun?",
+        desc: "Die Praktizierenden dieser Kunst wirken ihre sogenannten $(o)Sprüche$(), indem sie mit einem $(l:items/staff)$(item)Stab/$ seltsame Zeichen in die Luft zeichnen -- oder sie fertigen $(l:items/hexcasting)$(item)mächtige magische Gegenstände/$ an, die das Wirken für sie übernehmen. Wie könnte ich dasselbe tun?",
         "": "Grundlagen",
       },
       greatwork: {
@@ -313,6 +316,30 @@
       cant_great_spell: "Der Zauber ist irgendwie fehlgeschlagen... Bin ich etwa nicht geschickt genug?",
     },
     landing: "Ich scheine eine neue Methode der magischen Künste entdeckt zu haben, bei der man seltsame und wilde Zeichen auf einem hexagonalen Raster zeichnet. Sie fasziniert mich. Ich habe beschlossen, meine Gedanken und Erkenntnisse in einem Tagebuch festzuhalten.$(br2)$(l:https://forum.petra-k.at/index.php)Forenlink/$",
+    action: {
+      "hexcasting:": {
+        "const/": {
+          "null": "Nullreflexion",
+          "true": "Wahrreflexion",
+          "false": "Falschreflexion",
+          "vec/": {
+            px: "Vektorreflexion +X",
+            py: "Vektorreflexion +Y",
+            "0": "Nullvektorreflexion",
+            pz: "Vektorreflexion +Z",
+            nx: "Vektorreflexion -X",
+            ny: "Vektorreflexion -Y",
+            nz: "Vektorreflexion -Z",
+          },
+          "double/": {
+            phi: "Harmoniereflexion",
+            e: "Eulerreflexion",
+            tau: "Kreisreflexion",
+            pi: "Bogenreflexion",
+          },
+        },
+      },
+    },
   },
   "tag.hexcasting": {
     staves: "Stäbe",
