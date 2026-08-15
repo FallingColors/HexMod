@@ -87,8 +87,8 @@ repositories {
     // serialization hooks
     maven { url = "https://maven.hexxy.media" }
 
-    // paucal and patchi
-    maven { url = 'https://maven.blamejared.com' }
+    // paucal, patchi, inline, JEI
+    maven { url 'https://maven.blamejared.com' }
     // modmenu and clothconfig
     maven { url "https://maven.shedaniel.me/" }
     // Cardinal Components
@@ -100,9 +100,10 @@ repositories {
     }
     maven { url = "https://maven.ladysnake.org/releases" }
     maven { url "https://mvn.devos.one/snapshots/" }
-    // EMI
-    // temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors
-    maven { url = "https://maven.gnomecraft.net/releases" }
+    // JEI fallback mirror
+    maven { url "https://modmaven.dev" }
+    // EMI (temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors)
+    maven { url "https://maven.gnomecraft.net/releases" }
     exclusiveContent {
         forRepository {
             maven { url = "https://api.modrinth.com/maven" }
@@ -151,6 +152,9 @@ dependencies {
 
     modLocalRuntime "dev.architectury:architectury-fabric:$architecturyVersion"
     modLocalRuntime "com.samsthenerd.inline:inline-fabric:$minecraftVersion-$inlineVersion"
+
+    modCompileOnlyApi("mezz.jei:jei-${minecraftVersion}-fabric-api:${jeiVersion}")
+    modRuntimeOnly("mezz.jei:jei-${minecraftVersion}-fabric:${jeiVersion}")
 
 //    modImplementation "maven.modrinth:gravity-api:$gravityApiVersion"
     modApi("com.github.Virtuoel:Pehkui:${pehkuiVersion}", {

@@ -10,6 +10,7 @@ repositories {
     mavenCentral()
     mavenLocal()
 
+    // paucal, patchi, inline, JEI
     maven { url 'https://maven.blamejared.com' }
 
     maven {
@@ -18,15 +19,18 @@ repositories {
         url = "https://dvs1.progwml6.com/files/maven/"
     }
     maven {
-        // location of a maven mirror for JEI files, as a fallback
+        // fallback maven for JEI
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    maven {
+        // maven for EMI
+        // temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors
+        name = "Gnomecraft maven"
+        url = "https://maven.gnomecraft.net/releases"
+    }
 
     maven { url "https://maven.shedaniel.me/" }
-    // EMI
-    // temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors
-    maven { url = "https://maven.gnomecraft.net/releases" }
 }
 
 dependencies {
@@ -42,6 +46,7 @@ dependencies {
     modCompileOnly "com.samsthenerd.inline:inline-common:1.21.1-1.2.2-74"
 
     // === OPTIONAL DEPS ===
+    modCompileOnly "mezz.jei:jei-$minecraftVersion-common-api:$jeiVersion"
     modCompileOnly "dev.emi:emi-xplat-intermediary:${emiVersion}:api"
 
     // === OTHER STUFF ===

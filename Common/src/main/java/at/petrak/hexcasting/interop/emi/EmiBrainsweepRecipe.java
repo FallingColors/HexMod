@@ -1,4 +1,4 @@
-package at.petrak.hexcasting.fabric.interop.emi;
+package at.petrak.hexcasting.interop.emi;
 
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -16,7 +16,7 @@ public record EmiBrainsweepRecipe(EmiIngredient blockInput,
                                   EmiIngredient villagerInput,
                                   EmiStack output,
                                   ResourceLocation id) implements EmiRecipe {
-    private static final ResourceLocation OVERLAY = modLoc("textures/gui/brainsweep_jei.png");
+    private static final ResourceLocation OVERLAY = modLoc("textures/gui/brainsweep_recipe.png");
 
     @Override
     public EmiRecipeCategory getCategory() {

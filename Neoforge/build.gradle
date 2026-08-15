@@ -107,7 +107,9 @@ dependencies {
 
 
     // === OPTIONAL DEPS ===
-
+    modCompileOnly "mezz.jei:jei-$minecraftVersion-common-api:$jeiVersion"
+    modCompileOnly "mezz.jei:jei-$minecraftVersion-forge-api:$jeiVersion"
+    modRuntimeOnly "mezz.jei:jei-$minecraftVersion-forge:$jeiVersion"
     modCompileOnly "dev.emi:emi-neoforge:${emiVersion}:api"
     modRuntimeOnly "dev.emi:emi-neoforge:${emiVersion}"
 
