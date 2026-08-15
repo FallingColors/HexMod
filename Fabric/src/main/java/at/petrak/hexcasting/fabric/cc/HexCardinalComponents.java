@@ -2,7 +2,6 @@ package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.addldata.*;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
-import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.fabric.cc.adimpl.*;
 import net.fabricmc.fabric.api.lookup.v1.item.ItemApiLookup;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,14 +15,12 @@ import org.ladysnake.cca.api.v3.component.ComponentRegistry;
 import org.ladysnake.cca.api.v3.entity.EntityComponentFactoryRegistry;
 import org.ladysnake.cca.api.v3.entity.EntityComponentInitializer;
 import org.ladysnake.cca.api.v3.entity.RespawnCopyStrategy;
-import org.ladysnake.cca.api.v3.item.ItemComponentInitializer;
-import org.ladysnake.cca.api.v3.item.ItemComponentMigrationRegistry;
 
 import java.util.function.Function;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class HexCardinalComponents implements EntityComponentInitializer, ItemComponentInitializer {
+public class HexCardinalComponents implements EntityComponentInitializer {
     // entities
     public static final ComponentKey<CCBrainswept> BRAINSWEPT = ComponentRegistry.getOrCreate(modLoc("brainswept"),
         CCBrainswept.class);
@@ -86,21 +83,6 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
             ItemDelegatingEntityIotaHolder.ToItemFrame::new));
         registry.registerFor(EntityWallScroll.class, IOTA_HOLDER,
             wrapItemEntityDelegate(ItemDelegatingEntityIotaHolder.ToWallScroll::new));
-    }
-
-    @Override
-    public void registerItemComponentMigrations(ItemComponentMigrationRegistry registry) {
-        registry.registerMigration(modLoc("pigment"), HexDataComponents.PIGMENT.get());
-
-        registry.registerMigration(modLoc("iota_holder"), HexDataComponents.IOTA_HOLDER_IOTA.get());
-        // oh havoc, you think you're so funny
-        // the worst part is you're /right/
-
-        registry.registerMigration(modLoc("media_holder"), HexDataComponents.MEDIA.get());
-
-        registry.registerMigration(modLoc("hex_holder"), HexDataComponents.HEX_HOLDER_PATTERNS.get());
-
-        registry.registerMigration(modLoc("variant_item"), HexDataComponents.ITEM_VARIANT.get());
     }
 
     private <E extends Entity> ComponentFactory<E, CCEntityIotaHolder.Wrapper> wrapItemEntityDelegate(Function<E,
