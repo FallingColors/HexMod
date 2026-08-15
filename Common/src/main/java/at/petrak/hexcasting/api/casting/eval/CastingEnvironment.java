@@ -57,18 +57,6 @@ public abstract class CastingEnvironment {
         createEventListeners.add(listener);
     }
 
-    /**
-     * Add a listener that will be called whenever a new CastingEnvironment is created (legacy).
-     *
-     * @deprecated replaced by {@link #addCreateEventListener(BiConsumer)}
-     */
-    @Deprecated(since = "0.11.0-pre-660")
-    public static void addCreateEventListener(Consumer<CastingEnvironment> listener) {
-        createEventListeners.add((env, data) -> {
-            listener.accept(env);
-        });
-    }
-
     private boolean createEventTriggered = false;
 
     public final void triggerCreateEvent(CompoundTag userData) {
@@ -105,24 +93,10 @@ public abstract class CastingEnvironment {
         return HexConfig.server().maxOpCount();
     }
 
-    /**
-     * Get the caster. Might be null!
-     * <p>
-     * Implementations should NOT rely on this in general, use the methods on this class instead.
-     * This is mostly for spells (flight, etc)
-     *
-     * @deprecated as of build 0.11.1-7-pre-619 you are recommended to use {@link #getCastingEntity}
-     */
-    @Deprecated(since = "0.11.1-7-pre-619")
-    @Nullable
-    public ServerPlayer getCaster() {
-        return getCastingEntity() instanceof ServerPlayer sp ? sp : null;
-    }
-
     ;
 
     /**
-     * Gets the caster. Can be null if {@link #getCaster()} is also null
+     * Gets the caster. Can be null if there is no casting entity (such as with an unbound cleric impetus)
      *
      * @return the entity casting
      */

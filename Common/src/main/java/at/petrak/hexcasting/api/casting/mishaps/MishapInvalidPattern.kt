@@ -12,9 +12,6 @@ import net.minecraft.network.chat.Component
 import net.minecraft.world.item.DyeColor
 
 class MishapInvalidPattern(val pattern: HexPattern?) : Mishap() {
-    @Deprecated("Provide the pattern that caused the mishap as an argument")
-    constructor() : this(null) {}
-
     override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.YELLOW)
 
