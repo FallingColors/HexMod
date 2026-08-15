@@ -8,14 +8,14 @@
       jungle: "Tropenholzstab",
       acacia: "Akazienholzstab",
       dark_oak: "Schwarzeichenholzstab",
-      crimson: "Karmesinhyphenstab",
-      warped: "Wirrhyphenstab",
+      crimson: "Karmesinstab",
+      warped: "Wirrstab",
       mangrove: "Mangrovenholzstab",
       cherry: "Kirschholzstab",
       bamboo: "Bambusstab",
-      mindsplice: "Geistkopplungsstab",
+      mindsplice: "Geistfesslungsstab",
       quenched: "Essenzscherbenstab",
-      edified: "Erhabenholzstab",
+      edified: "Beseelter Holzstab",
     },
     amethyst_dust: "Amethyststaub",
     charged_amethyst: "Geladener Amethyst",
@@ -49,7 +49,7 @@
     trinket: "Zauberspeicher",
     artifact: "Artefakt",
     battery: "Substratfläschchen",
-    lens: "Kristalllinse",
+    lens: "Seherlinse",
     abacus: "Abakus",
     jeweler_hammer: "Juweliershammer",
     sub_sandwich: "U-Boot-Sandwich",
@@ -121,9 +121,9 @@
       connector: "Akasha-Ligatur",
     },
     slate: {
-      "": "Schieferplatte",
-      blank: "Leere Schieferplatte",
-      written: "Beschriftete Schieferplatte",
+      "": "Schiefertafel",
+      blank: "Leere Schiefertafel",
+      written: "Beschriftete Schiefertafel",
     },
     slate_: {
       block: "Schieferblock",
@@ -158,7 +158,7 @@
     edified_: {
       log: "Beseelter Stamm",
       log_amethyst: "Amethystbeseelter Stamm",
-      log_aventurine: "Aventurinbeseelter stamm",
+      log_aventurine: "Aventurinbeseelter Stamm",
       log_citrine: "Citrinbeseelter Stamm",
       log_purple: "Violetter beseelter Stamm",
       wood: "Beseeltes Holz",
@@ -176,7 +176,7 @@
     },
     stripped_edified_log: "Entrindeter beseelter Stamm",
     stripped_edified_wood: "Entrindetes beseeltes Holz",
-    amethyst_edified_leaves: "Amethystbeseelte blätter",
+    amethyst_edified_leaves: "Amethystbeseelte Blätter",
     aventurine_edified_leaves: "Aventurinbeseelte Blätter",
     citrine_edified_leaves: "Citrinbeseelte Blätter",
     quenched_allay: "Hilfsgeistessenz",
@@ -228,5 +228,124 @@
   },
   "gui.hexcasting": {
     spellcasting: "Hex-Gitter",
+  },
+  "category.hexcasting": {
+    binds: "Hex Casting",
+  },
+  "key.hexcasting": {
+    spellbook_prev: "Vorherige Zauberbuchseite",
+    spellbook_next: "Nächste Zauberbuchseite",
+  },
+  hexcasting: {
+    subtitles: {
+      casting: {
+        cast: {
+          fail: "Missgriff knistert",
+          spell: "Zauber boinkt",
+          hermes: "Hermes zupft",
+          thoth: "Thoth zupft",
+        },
+        pattern: {
+          start: "Zeichen beginnt",
+          add_segment: "Strecke wird hinzugefügt",
+        },
+      },
+      "scroll.scribble": "Schriftrolle wird beschrieben",
+      "flight.finish": "Flug endet",
+      "impetus.redstone.clear": "Geistlicher-Impetus wird gelöscht",
+      "impetus.fletcher.tick": "Pfeilmacher-Impetus tickt",
+      "flight.ambience": "Spieler fliegt",
+      abacus: {
+        shake: "Rechenrahmen klappert",
+        "": "Rechenrahmen klickt",
+      },
+      "lore_fragment.read": "Überlieferungsfragment gelesen",
+      "impetus.redstone.register": "Geistlicher-Impetus klingelt",
+    },
+    entry: {
+      media: "Substrat",
+    },
+    loot_hex: {
+      flight_zone: "Flugzone",
+      blastoff: "Emporschießen",
+      detonate: "Detonieren",
+      heat_wave: "Hitzewelle",
+      kindle: "Entfachen",
+      illuminate: "Erhellen",
+      shockwave: "Erschüttern",
+      sidestep: "Ausweichen",
+      wither_wave: "Verdorrungswelle",
+      radar: "Orten",
+      growth: "Wachstum",
+      ascend: "Emporsteigen",
+    },
+    category: {
+      great_spells: {
+        desc: "Die hier katalogisierten Sprüche sollen von legendärer Schwierigkeit und Macht sein. Offenbar wurden sie $(l:items/scroll)spärlich/$ aufgezeichnet (laut den Texten aus gutem Grund). Wahrscheinlich handelt es sich ohnehim nur um das Geschwätz vergangener Traditionalisten -- ein Zeichen ist ein Zeichen.$(br2)Was könnte schon schiefgehen?",
+      },
+      spells: {
+        desc: "Zeichen, die die Welt magisch beeinflussen.",
+      },
+      patterns: {
+        desc: "Eine Liste aller Zeichen, die ich entdeckt habe, sowie ihrer Wirkungen.",
+        "": "Zeichen",
+      },
+      lore: {
+        "": "Überlieferung",
+        desc: "Ich habe einige Briefe und Schriften gefunden, die nicht unmittelbar mit meine Kunst zu tun haben. Dennoch glaube ich, dass ich aus ihnen vielleicht etwas von der Geschichte dieser Welt ergründen kann. Mal sehen...",
+      },
+      items: {
+        "": "Gegenstände",
+        desc: "Diesen Abschnitt widme ich den magischen und geheimnisvollen Gegenständen, denen ich im Laufe meiner Studien begegnen könnte.",
+      },
+      casting: {
+        desc: "Ich beginne zu verstehen, wie die alten Meister ihre $(o)Sprüche$() wirken! Es ist etwas kompliziert, aber ich bin sicher, dass ich es herausfinden kann. Mal sehen...",
+        "": "Sprüche Wirken",
+      },
+      basics: {
+        desc: "Die Praktizierenden dieser Kunst wirken ihre sogenannten $(o)Sprüche$(), indem sie mit einem $(l:items/staff)$(item)Stab/$ seltsame Zeichen in die Luft zeichnen -- oder sie fertigen $(l:items/hexcasting)$(item)mächtige magische Gegenstände/$ an, die das Wirken für sie übernehmen. Wie könnte ich dasselbe tun?",
+        "": "Grundlagen",
+      },
+      greatwork: {
+        desc: "Ich habe... so viel gesehen. Ich habe... Vernichtung erlebt... Zerlegung und Wideraufbau. Ich habe gesehen, wie die Atome der Welt schrien, als sie umgekehrt und verdreht und zu Energie relegiert wurden. Ich habe gesehen, ich habe gesehen, ich habe g$(k)get stick bugged lmao/$",
+        "": "Das Große Werk",
+      },
+    },
+    message: {
+      cant_overcast: "Dieser Spruch hat mehr Substrat gebraucht, als ich hatte... Ich sollte meine Rechnung noch mal überprüfen.",
+      cant_great_spell: "Der Zauber ist irgendwie fehlgeschlagen... Bin ich etwa nicht geschickt genug?",
+    },
+    landing: "Ich scheine eine neue Methode der magischen Künste entdeckt zu haben, bei der man seltsame und wilde Zeichen auf einem hexagonalen Raster zeichnet. Sie fasziniert mich. Ich habe beschlossen, meine Gedanken und Erkenntnisse in einem Tagebuch festzuhalten.$(br2)$(l:https://forum.petra-k.at/index.php)Forenlink/$",
+    action: {
+      "hexcasting:": {
+        "const/": {
+          "null": "Nullreflexion",
+          "true": "Wahrreflexion",
+          "false": "Falschreflexion",
+          "vec/": {
+            px: "Vektorreflexion +X",
+            py: "Vektorreflexion +Y",
+            "0": "Nullvektorreflexion",
+            pz: "Vektorreflexion +Z",
+            nx: "Vektorreflexion -X",
+            ny: "Vektorreflexion -Y",
+            nz: "Vektorreflexion -Z",
+          },
+          "double/": {
+            phi: "Harmoniereflexion",
+            e: "Eulerreflexion",
+            tau: "Kreisreflexion",
+            pi: "Bogenreflexion",
+          },
+        },
+      },
+    },
+  },
+  "tag.hexcasting": {
+    staves: "Stäbe",
+  },
+  "tag.item.hexcasting": {
+    directrices: "Umlenker",
+    impeti: "Impetus",
   },
 }
