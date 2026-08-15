@@ -88,9 +88,11 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
             wrapItemEntityDelegate(ItemDelegatingEntityIotaHolder.ToWallScroll::new));
     }
 
+    // I'm disabling this stuff rather than changing it to fit the merged components,
+    // because it doesn't seem to work anyway (tested fabric 1.20 -> 1.21, nothing got migrated)
     @Override
     public void registerItemComponentMigrations(ItemComponentMigrationRegistry registry) {
-        registry.registerMigration(modLoc("pigment"), HexDataComponents.PIGMENT.get());
+        //registry.registerMigration(modLoc("pigment"), HexDataComponents.PIGMENT.get());
 
         registry.registerMigration(modLoc("iota_holder"), HexDataComponents.IOTA_HOLDER_IOTA.get());
         // oh havoc, you think you're so funny
@@ -98,7 +100,7 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
 
         registry.registerMigration(modLoc("media_holder"), HexDataComponents.MEDIA.get());
 
-        registry.registerMigration(modLoc("hex_holder"), HexDataComponents.HEX_HOLDER_PATTERNS.get());
+        //registry.registerMigration(modLoc("hex_holder"), HexDataComponents.HEX_HOLDER_PATTERNS.get());
 
         registry.registerMigration(modLoc("variant_item"), HexDataComponents.ITEM_VARIANT.get());
     }

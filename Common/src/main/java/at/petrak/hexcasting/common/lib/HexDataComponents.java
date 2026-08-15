@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
-import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.common.items.magic.ItemPackagedHex.HexHolder;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatRegister;
 import com.mojang.serialization.Codec;
@@ -27,6 +27,8 @@ public class HexDataComponents {
         REGISTER.registerAll();
     }
 
+    // ==== SCROLLS ====
+
     public static final Supplier<DataComponentType<HexPattern>> PATTERN = REGISTER.register("pattern", () ->
             DataComponentType.<HexPattern>builder()
                     .persistent(HexPattern.CODEC)
@@ -46,6 +48,28 @@ public class HexDataComponents {
             DataComponentType.<Unit>builder()
                     .networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
                     .build());
+
+    // ==== ANYTHING WITH TEXTURE VARIANTS ====
+
+    public static final Supplier<DataComponentType<Integer>> ITEM_VARIANT = REGISTER.register("variant", () ->
+            DataComponentType.<Integer>builder()
+                    .persistent(Codec.intRange(0, Integer.MAX_VALUE))
+                    .networkSynchronized(ByteBufCodecs.VAR_INT)
+                    .build());
+
+    // ==== IOTA HOLDERS ====
+
+    public static final Supplier<DataComponentType<Unit>> SEALED_IOTA_HOLDER = REGISTER.register("sealed", () ->
+            DataComponentType.<Unit>builder()
+                    .persistent(Codec.unit(Unit.INSTANCE))
+                    .networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
+                    .build());
+    // TODO port: Data components are supposed to be immutable - is EntityIota.isPlayer a problem here?
+    public static final Supplier<DataComponentType<Iota>> IOTA_HOLDER_IOTA = REGISTER.register("iota", () ->
+            DataComponentType.<Iota>builder()
+                    .persistent(IotaType.TYPED_CODEC)
+                    .networkSynchronized(IotaType.TYPED_STREAM_CODEC)
+                    .build());
     /**
      * If this datacomponent is set on the item, we ignore the rest of the item and render this as if it were of the
      * {@link at.petrak.hexcasting.api.casting.iota.IotaType IotaType} given by the resource location.
@@ -56,28 +80,17 @@ public class HexDataComponents {
             DataComponentType.<Optional<IotaType<?>>>builder()
                     .networkSynchronized(ByteBufCodecs.optional(ByteBufCodecs.registry(HexRegistries.IOTA_TYPE)))
                     .build());
-    public static final Supplier<DataComponentType<Integer>> ITEM_VARIANT = REGISTER.register("variant", () ->
-            DataComponentType.<Integer>builder()
-                    .persistent(Codec.intRange(0, Integer.MAX_VALUE))
-                    .networkSynchronized(ByteBufCodecs.VAR_INT)
-                    .build());
-    public static final Supplier<DataComponentType<Unit>> SEALED_IOTA_HOLDER = REGISTER.register("sealed", () ->
-            DataComponentType.<Unit>builder()
-                    .persistent(Codec.unit(Unit.INSTANCE))
-                    .networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
-                    .build());
-    // TODO port: Data components must implement equals and hashCode. Keep in mind they must also be immutable
-    public static final Supplier<DataComponentType<Iota>> IOTA_HOLDER_IOTA = REGISTER.register("iota", () ->
-            DataComponentType.<Iota>builder()
-                    .persistent(IotaType.TYPED_CODEC)
-                    .networkSynchronized(IotaType.TYPED_STREAM_CODEC)
+
+    // ==== CASTING ITEMS ====
+
+    public static final Supplier<DataComponentType<HexHolder>> HEX_HOLDER = REGISTER.register("hex_holder", () ->
+            DataComponentType.<HexHolder>builder()
+                    .persistent(HexHolder.CODEC)
+                    .networkSynchronized(HexHolder.STREAM_CODEC)
                     .build());
 
-    public static final Supplier<DataComponentType<List<Iota>>> HEX_HOLDER_PATTERNS = REGISTER.register("patterns", () ->
-            DataComponentType.<List<Iota>>builder()
-                    .persistent(IotaType.TYPED_CODEC.listOf())
-                    .networkSynchronized(IotaType.TYPED_STREAM_CODEC.apply(ByteBufCodecs.list()))
-                    .build());
+    // ==== CASTING ITEMS & PHIALS ====
+    
     public static final Supplier<DataComponentType<Long>> MEDIA = REGISTER.register("media", () ->
             DataComponentType.<Long>builder()
                     .persistent(Codec.LONG)
@@ -88,23 +101,24 @@ public class HexDataComponents {
                     .persistent(Codec.LONG)
                     .networkSynchronized(ByteBufCodecs.VAR_LONG)
                     .build());
+
+    // ==== ANCIENT CYPHERS ====
+
     public static final Supplier<DataComponentType<String>> HEX_NAME = REGISTER.register("hex_name", () ->
             DataComponentType.<String>builder()
                     .persistent(Codec.STRING)
                     .networkSynchronized(ByteBufCodecs.STRING_UTF8)
                     .build());
 
-    public static final Supplier<DataComponentType<FrozenPigment>> PIGMENT = REGISTER.register("pigment", () ->
-            DataComponentType.<FrozenPigment>builder()
-                    .persistent(FrozenPigment.CODEC)
-                    .networkSynchronized(FrozenPigment.STREAM_CODEC)
-                    .build());
+    // ==== ABACUS ====
 
     public static final Supplier<DataComponentType<Double>> ABACUS_VALUE = REGISTER.register("abacus_value", () ->
             DataComponentType.<Double>builder()
                     .persistent(Codec.DOUBLE)
                     .networkSynchronized(ByteBufCodecs.DOUBLE)
                     .build());
+
+    // ==== SPELLBOOKS ====
 
     public static final Supplier<DataComponentType<Integer>> SELECTED_SPELLBOOK_PAGE = REGISTER.register("page_idx", () ->
             DataComponentType.<Integer>builder()
@@ -141,6 +155,8 @@ public class HexDataComponents {
                             ByteBufCodecs.BOOL
                     ))
                     .build());
+
+    // ==== MEDIA CUBE ====
 
     public static final Supplier<DataComponentType<List<Long>>> MEDIA_EXTRACTIONS = REGISTER.register("media_extractions", () ->
             DataComponentType.<List<Long>>builder()

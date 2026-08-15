@@ -90,7 +90,7 @@ public interface IXplatAbstractions {
 
     boolean isBrainswept(Mob mob);
 
-    @Nullable FrozenPigment setPigment(Player target, @Nullable FrozenPigment colorizer);
+    FrozenPigment setPigment(Player target, FrozenPigment colorizer);
 
     void setSentinel(Player target, @Nullable Sentinel sentinel);
 

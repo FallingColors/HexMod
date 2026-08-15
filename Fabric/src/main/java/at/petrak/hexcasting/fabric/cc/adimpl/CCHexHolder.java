@@ -48,7 +48,7 @@ public abstract class CCHexHolder implements ADHexHolder, Component {
         }
 
         @Override
-        public void writeHex(List<Iota> patterns, @Nullable FrozenPigment pigment, long media) {
+        public void writeHex(List<Iota> patterns, FrozenPigment pigment, long media) {
             this.hexHolder.writeHex(this.stack, patterns, pigment, media);
         }
 
@@ -58,7 +58,7 @@ public abstract class CCHexHolder implements ADHexHolder, Component {
         }
 
         @Override
-        public @Nullable FrozenPigment getPigment() {
+        public FrozenPigment getPigment() {
             return this.hexHolder.getPigment(this.stack);
         }
 
