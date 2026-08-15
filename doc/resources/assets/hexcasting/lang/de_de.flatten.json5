@@ -1,1 +1,39 @@
-{}
+{
+  hexdoc: {
+    pattern: {
+      show: "",
+      paused: "",
+      not_supported: "",
+      hide: "",
+      multiplier: "",
+    },
+    hexcasting: {
+      title: "",
+      description: "",
+    },
+    renderer: {
+      renders: "",
+      palettes: "",
+      animated: "",
+      monocolor: "",
+      gradient: "",
+      segment: "",
+      "default": "",
+      turbo: "",
+      dark2: "",
+      tab10: "",
+    },
+    villager_requirements: {
+      any: "",
+      professional: "",
+    },
+  },
+  "tag.item.c": {
+    glowstone_dusts: "",
+    wood_sticks: "",
+    brown_dye: "",
+  },
+  "block.hexcasting": {
+    slate: "",
+  },
+}
