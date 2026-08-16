@@ -1,7 +1,7 @@
 {
   "item.hexcasting": {
     staff: {
-      oak: "Bâton en chêne",
+      oak: "Sceptre en chêne",
       spruce: "Sceptre en sapin",
       birch: "Sceptre en bouleau",
       jungle: "Sceptre en acajou",
@@ -9,10 +9,12 @@
       dark_oak: "Sceptre en chêne noir",
       crimson: "Sceptre carmin",
       warped: "Sceptre biscornu",
-      mangrove: "Bâton en palétuvier",
-      cherry: "Bâton en cerisier",
-      bamboo: "Bâton en bambou",
-      edified: "Bâton édifiant",
+      mangrove: "Sceptre en palétuvier",
+      cherry: "Sceptre en cerisier",
+      bamboo: "Sceptre en bambou",
+      edified: "Sceptre édifié",
+      quenched: "Sceptre de fragment cristallisé",
+      mindsplice: "Sceptre de l'imprégnateur d'esprit",
     },
     amethyst_dust: "Poussière d'améthyste",
     charged_amethyst: "Améthyste chargée",
@@ -89,13 +91,16 @@
       all: "Il semblerait que j'ai découvert toute l'histoire de ce monde.",
     },
     lens: "Lentille Divinatoire",
+    quenched_allay_shard: "Fragment d'allay cristallisé",
+    uuid_colorizer: "Pigment d'éclat de l'âme",
+    default_colorizer: "Pigment absent",
   },
   "entity.hexcasting": {
     wall_scroll: "Rouleau suspendu",
   },
   "block.hexcasting": {
     conjured_light: "Lumière Conjurée",
-    conjured_block: "Block Conjuré",
+    conjured_block: "Bloc Conjuré",
     akashic_: {
       record: "Archive Akashique",
       bookshelf: "Bibliothèque Akashique",
@@ -131,6 +136,11 @@
     scroll_paper_lantern: "Lanterne en Papier",
     ancient_scroll_paper_lantern: "Lanterne en Papier Antique",
     amethyst_sconce: "Applique Murale d'Améthyste",
+    directrix: {
+      empty: "Directrice vide",
+      redstone: "Directrice du Maçon",
+      boolean: "Directrice du Berger",
+    },
   },
   "effect.hexcasting": {
     enlarge_grid: "Clarté",
@@ -185,5 +195,19 @@
   "tag.hexcasting": {
     staves: "Bâtons de Hex",
     phial_base: "Fioles Vides",
+    edified_logs: "Bûches Éveillées",
+    edified_planks: "Planches Éveillées",
+  },
+  "tag.item.hexcasting": {
+    directrices: "Directrices",
+  },
+  "text.autoconfig.hexcasting": {
+    option: {
+      common: {
+        dustMediaAmount: {
+          "@Tooltip": "Combien d'unités de média vaut une seule poudre d'améthyste",
+        },
+      },
+    },
   },
 }
