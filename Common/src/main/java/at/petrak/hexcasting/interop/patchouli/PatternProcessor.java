@@ -21,12 +21,12 @@ public class PatternProcessor implements IComponentProcessor {
             String prefix = "hexcasting.action.";
             boolean hasOverride = I18n.exists(prefix + "book." + opName);
             translationKey = prefix + (hasOverride ? "book." : "") + opName;
-
-            if (vars.has("input") && !vars.get("input", level.registryAccess()).asString().isEmpty())
-                hasArgs = true;
-            else if (vars.has("output") && !vars.get("output", level.registryAccess()).asString().isEmpty())
-                hasArgs = true;
         }
+
+        if (vars.has("input") && !vars.get("input", level.registryAccess()).asString().isEmpty())
+            hasArgs = true;
+        else if (vars.has("output") && !vars.get("output", level.registryAccess()).asString().isEmpty())
+            hasArgs = true;
     }
 
     @Override

@@ -10,7 +10,7 @@ import net.minecraft.world.item.DyeColor
  * this is bad
  */
 class MishapInvalidSpellDatumType(val perpetrator: Any) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BLACK)
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: TreeList<Iota>): TreeList<Iota> {
@@ -18,6 +18,6 @@ class MishapInvalidSpellDatumType(val perpetrator: Any) : Mishap() {
         return stack
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context) =
         error("invalid_spell_datum_type", this.perpetrator.toString(), this.perpetrator.javaClass.typeName)
 }

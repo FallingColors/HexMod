@@ -10,7 +10,7 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.DyeColor
 
 class MishapBadItem(val item: ItemEntity, val wanted: Component) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BROWN)
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: TreeList<Iota>): TreeList<Iota> {
@@ -18,7 +18,7 @@ class MishapBadItem(val item: ItemEntity, val wanted: Component) : Mishap() {
         return stack
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = if (item.item.isEmpty)
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context) = if (item.item.isEmpty)
         error("no_item", wanted)
     else
         error("bad_item", wanted, item.item.count, item.item.displayName)

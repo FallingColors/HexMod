@@ -60,12 +60,12 @@ object OpAkashicWrite : SpellAction {
                 1f, 0.8f
             )
 
-            // val colorizer = HexPlayerDataHelper.getColorizer(ctx.caster)
+            // val colorizer = HexPlayerDataHelper.getColorizer(env.caster)
             // val normal = record.blockState.getValue(BlockAkashicBookshelf.FACING).normal
             // ParticleSpray(
             //     Vec3.atCenterOf(record.blockPos), Vec3.atBottomCenterOf(normal),
             //     0.5, Math.PI / 4, 10
-            // ).sprayParticles(ctx.world, colorizer)
+            // ).sprayParticles(env.world, colorizer)
         }
     }
 }

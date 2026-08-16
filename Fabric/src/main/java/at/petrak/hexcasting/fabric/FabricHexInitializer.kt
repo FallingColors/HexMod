@@ -226,7 +226,7 @@ object FabricHexInitializer : ModInitializer {
         HexEvalSounds.register()
         HexStateIngredients.register()
         HexBrainsweepeeIngredients.register()
-
+        HexItemHolderHandlers.init()
 
         // Because of Java's lazy-loading of classes, can't use Kotlin static initialization for
         // any calls that will eventually touch FeatureUtils.register(), as the growers here do,

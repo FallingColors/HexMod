@@ -16,6 +16,7 @@ import at.petrak.hexcasting.common.casting.actions.akashic.OpAkashicWrite;
 import at.petrak.hexcasting.common.casting.actions.circles.OpCircleBounds;
 import at.petrak.hexcasting.common.casting.actions.circles.OpImpetusDir;
 import at.petrak.hexcasting.common.casting.actions.circles.OpImpetusPos;
+import at.petrak.hexcasting.common.casting.actions.environment.OpGetMedia;
 import at.petrak.hexcasting.common.casting.actions.escaping.*;
 import at.petrak.hexcasting.common.casting.actions.eval.*;
 import at.petrak.hexcasting.common.casting.actions.lists.OpEmptyList;
@@ -29,7 +30,10 @@ import at.petrak.hexcasting.common.casting.actions.math.OpRandom;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpBoolIf;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpCoerceToBool;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpEquality;
-import at.petrak.hexcasting.common.casting.actions.math.logic.OpTypeEquality;
+import at.petrak.hexcasting.common.casting.actions.types.OpEntityEquality;
+import at.petrak.hexcasting.common.casting.actions.types.OpItemEquality;
+import at.petrak.hexcasting.common.casting.actions.types.OpTypeEquality;
+import at.petrak.hexcasting.common.casting.actions.types.OpBlockEquality;
 import at.petrak.hexcasting.common.casting.actions.queryentity.*;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockAxisRaycast;
 import at.petrak.hexcasting.common.casting.actions.raycast.OpBlockRaycast;
@@ -103,6 +107,8 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("weddwaa", HexDir.EAST), OpBlockAxisRaycast.INSTANCE));
     public static final Holder<ActionRegistryEntry> RAYCAST_ENTITY = REGISTER.registerHolder("raycast/entity", () ->
         new ActionRegistryEntry(HexPattern.fromAngles("weaqa", HexDir.EAST), OpEntityRaycast.INSTANCE));
+    public static final Holder<ActionRegistryEntry> GET_MEDIA = REGISTER.registerHolder("get_media", () ->
+        new ActionRegistryEntry(HexPattern.fromAngles("dde", HexDir.WEST), OpGetMedia.INSTANCE));
 
     // == spell circle getters ==
 
@@ -403,6 +409,12 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("qqq", HexDir.WEST), OpOpenParen.INSTANCE));
     public static final Holder<ActionRegistryEntry> CLOSE_PAREN = REGISTER.registerHolder("close_paren", () ->
         new ActionRegistryEntry(HexPattern.fromAngles("eee", HexDir.EAST), OpCloseParen.INSTANCE));
+    public static final Holder<ActionRegistryEntry> OPEN_N_PARENS = REGISTER.registerHolder("open_n_parens", () ->
+            new ActionRegistryEntry(HexPattern.fromAngles("qdaqadq", HexDir.WEST), OpOpenNParens.INSTANCE));
+    public static final Holder<ActionRegistryEntry> CLOSE_ALL_PARENS = REGISTER.registerHolder("close_all_parens", () ->
+            new ActionRegistryEntry(HexPattern.fromAngles("eadedae", HexDir.EAST), OpCloseAllParens.INSTANCE));
+    public static final Holder<ActionRegistryEntry> READ_INTO_PARENS = REGISTER.registerHolder("read_into_parens", () ->
+            new ActionRegistryEntry(HexPattern.fromAngles("aqqqqqwded", HexDir.EAST), OpReadIntoParens.INSTANCE));
     public static final Holder<ActionRegistryEntry> UNDO = REGISTER.registerHolder("undo", () ->
         new ActionRegistryEntry(HexPattern.fromAngles("eeedw", HexDir.EAST), OpUndo.INSTANCE));
 
@@ -544,6 +556,23 @@ public class HexActions {
             HexPattern.fromAngles("eeeeewaqaawd", HexDir.NORTH_EAST), new OpGetEntitiesBy(OpGetEntitiesBy::isLiving,
             true)
         ));
+
+    // == Types ==
+    public static final Holder<ActionRegistryEntry> COMPARE_BLOCK = REGISTER.registerHolder("compare_block/lenient", () -> new ActionRegistryEntry(
+        HexPattern.fromAngles("qqqqqeqeeeee", HexDir.NORTH_WEST), new OpBlockEquality(false)
+    ));
+    public static final Holder<ActionRegistryEntry> COMPARE_BLOCK_STRICT = REGISTER.registerHolder("compare_block/strict", () -> new ActionRegistryEntry(
+        HexPattern.fromAngles("qwawqwadadwewdwe", HexDir.NORTH_WEST), new OpBlockEquality(true)
+    ));
+    public static final Holder<ActionRegistryEntry> COMPARE_ENTITY = REGISTER.registerHolder("compare_entity", () -> new ActionRegistryEntry(
+        HexPattern.fromAngles("aqaeqded", HexDir.NORTH_WEST), OpEntityEquality.INSTANCE
+    ));
+    public static final Holder<ActionRegistryEntry> COMPARE_ITEM = REGISTER.registerHolder("compare_item/lenient", () -> new ActionRegistryEntry(
+        HexPattern.fromAngles("qaeaqeqedqde", HexDir.NORTH_WEST), new OpItemEquality(false)
+    ));
+    public static final Holder<ActionRegistryEntry> COMPARE_ITEM_STRICT = REGISTER.registerHolder("compare_item/strict", () -> new ActionRegistryEntry(
+        HexPattern.fromAngles("qaeaqewqedqde", HexDir.NORTH_WEST), new OpItemEquality(true)
+    ));
 
     // == Lists ==
 
