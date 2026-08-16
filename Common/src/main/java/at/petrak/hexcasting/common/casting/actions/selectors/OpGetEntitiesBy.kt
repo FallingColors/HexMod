@@ -38,8 +38,8 @@ class OpGetEntitiesBy(val checker: Predicate<Entity>, val negate: Boolean) : Con
 
     companion object {
         // Ignore truename ambit to fix #792 so you can't slurp up all players in the whole world
-        fun isReasonablySelectable(ctx: CastingEnvironment, e: Entity) =
-            ctx.isEntityInRange(e, true) && e.isAlive && !e.isSpectator
+        fun isReasonablySelectable(env: CastingEnvironment, e: Entity) =
+            env.isEntityInRange(e, true) && e.isAlive && !e.isSpectator
 
         @JvmStatic
         fun isAnimal(e: Entity): Boolean = e is Animal || e is WaterAnimal

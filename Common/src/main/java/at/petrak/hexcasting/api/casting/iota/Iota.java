@@ -72,7 +72,7 @@ public abstract class Iota {
         return new CastResult(
                 this,
                 continuation,
-                vm.getImage().withNewParenthesized(this),
+                vm.getImage().withNewParenthesized(this, false),
                 List.of(),
                 ResolvedPatternType.ESCAPED,
                 HexEvalSounds.NORMAL_EXECUTE.get());

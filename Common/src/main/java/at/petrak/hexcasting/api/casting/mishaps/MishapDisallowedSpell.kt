@@ -11,17 +11,17 @@ import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.item.DyeColor
 
 class MishapDisallowedSpell(val type: String, val actionKey: ResourceLocation?) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BLACK)
 
-    override fun resolutionType(ctx: CastingEnvironment) = ResolvedPatternType.INVALID
+    override fun resolutionType(env: CastingEnvironment) = ResolvedPatternType.INVALID
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: TreeList<Iota>): TreeList<Iota> {
         // NO-OP
         return stack
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component? {
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context): Component? {
         if (actionKey == null) return error(type + "_generic")
         return error(type, "hexcasting.action.$actionKey".asTranslatedComponent)
     }
