@@ -3,7 +3,6 @@ package at.petrak.hexcasting.api.casting.mishaps
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.pigment.FrozenPigment
-import at.petrak.hexcasting.api.utils.TreeList
 import net.minecraft.network.chat.ClickEvent
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.HoverEvent
