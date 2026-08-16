@@ -356,228 +356,41 @@
     },
     creative_unlocker: {
       "": "¡PODER INFINITO!",
-      desc: "",
-    },
-    enlightenment: {
-      "": "",
-      desc: "",
-    },
-    wasteful_cast: {
-      "": "",
-      desc: "",
-    },
-    big_cast: {
-      "": "",
-      desc: "",
-    },
-    y_u_no_cast_angy: {
-      "": "",
-      desc: "",
-    },
-    opened_eyes: {
-      "": "",
-      desc: "",
     },
     lore: {
       "": "Relatos del Magificio",
-      desc: "",
-    },
-    "lore/": {
-      cardamom1: {
-        "": "",
-        desc: "",
-      },
-      cardamom2: {
-        "": "",
-        desc: "",
-      },
-      cardamom3: {
-        "": "",
-        desc: "",
-      },
-      cardamom4: {
-        "": "",
-        desc: "",
-      },
-      cardamom5: {
-        "": "",
-        desc: "",
-      },
-      experiment1: "",
-      experiment2: "",
-      inventory: "",
-    },
-  },
-  "stat.hexcasting": {
-    media_used: "",
-    media_overcast: "",
-    patterns_drawn: "",
-    spells_cast: "",
-  },
-  "death.attack.hexcasting": {
-    overcast: {
-      "": "",
-      player: "",
-    },
-  },
-  "command.hexcasting": {
-    recalc: "",
-    pats: {
-      listing: "",
-      all: "",
-      "specific.success": "",
-    },
-    brainsweep: {
-      "": "",
-      "fail.badtype": "",
-      "fail.already": "",
     },
   },
   "matcher.hexcasting.pattern": {
-    title: "",
-    "title.styled": "",
-    description: "",
     example: "<ne,qaq><e,aa><ne,qaq><e,wa><e,wqaawdd><e,aawaawaa>",
   },
   hexcasting: {
-    "pattern.unknown": "",
-    debug: {
-      media_withdrawn: "",
-      "media_withdrawn.with_dust": "",
-      media_inserted: "",
-      "media_inserted.with_dust": "",
-      all_media: "",
-      infinite_media: "",
-    },
-    message: {
-      cant_overcast: "",
-      cant_great_spell: "",
-    },
     tooltip: {
-      spellbook: {
-        page: {
-          "": "",
-          sealed: "",
-        },
-        page_with_name: {
-          "": "",
-          sealed: "",
-        },
-        empty: {
-          "": "",
-          sealed: "",
-        },
-        sealed: "",
-      },
       abacus: {
         "": "%d",
         reset: "Reset to 0",
-        "reset.nice": "",
-      },
-      circle: {
-        no_exit: "",
-        many_exits: "",
-        no_closure: "",
-      },
-      lens: {
-        "pattern.invalid": "",
-        bee: {
-          "": "",
-          single: "",
-        },
-        "impetus.redstone.bound": {
-          "": "",
-          none: "",
-        },
-        akashic: {
-          "bookshelf.location": "",
-          "record.count": {
-            "": "",
-            single: "",
-          },
-        },
       },
       brainsweep: {
-        min_level: "",
         level: "Level %s",
-        product: "",
       },
-      media: "",
-      media_amount: "",
-      "media_amount.advanced": "",
       list_contents: "[%s]",
       null_iota: "Null",
-      jump_iota: "",
-      pattern_iota: "",
       boolean_true: "True",
       boolean_false: "False",
     },
-    spelldata: {
-      onitem: "",
-      anything: "",
-      unknown: "",
-      "entity.whoknows": "",
-      "akashic.nopos": "",
-    },
     subtitles: {
-      casting: {
-        pattern: {
-          start: "",
-          add_segment: "",
-        },
-        cast: {
-          normal: "",
-          spell: "",
-          hermes: "",
-          thoth: "",
-        },
-      },
-      ambiance: "",
-      "staff.reset": "",
-      abacus: {
-        "": "",
-        shake: "",
-      },
-      "spellcircle.add_pattern": "",
-      "spellcircle.fail": "",
       "scroll.dust": "t",
-      "scroll.scribble": "",
       "impetus.fletcher.tick": "s",
-      "impetus.redstone.register": "",
-      "impetus.redstone.clear": "",
-      "lore_fragment.read": "",
-      "flight.ambience": "",
-      "flight.finish": "",
-    },
-    attributes: {
-      grid_zoom: "",
-      scry_sight: "",
     },
     action: {
       "hexcasting:": {
         "const/": {
-          "null": "",
-          "true": "",
-          "false": "",
           "vec/": {
-            px: "",
-            py: "",
-            pz: "",
-            nx: "",
-            ny: "",
-            nz: "",
             "0": "o",
-          },
-          "double/": {
-            pi: "",
-            tau: "",
-            e: "",
           },
         },
         get_caster: "Reflejo de mente",
-        "entity_pos/eye": "",
         "entity_pos/foot": "II",
-        get_entity_look: "",
         get_entity_height: "Stadiometer's Purification",
         get_entity_velocity: "Pace Purification",
         raycast: "Archer's Distillation",
