@@ -99,6 +99,7 @@
       all: "Wygląda na to, że posiadam całą wiedzę oferowaną przez ten świat.",
     },
     sub_sandwich: "Kanapka z Wędliną i Ametystem",
+    book: "Heksonomikon",
   },
   "entity.hexcasting": {
     wall_scroll: "Wiszący Zwój",
@@ -136,13 +137,24 @@
     },
     amethyst_: {
       dust_block: "Blok Ametystowego Pyłu",
+      tiles: "Ametystowe Kafelki",
+      bricks: "Ametystowe Cegły",
+      bricks_small: "Drobne Ametystowe Cegły",
+      pillar: "Ametystowy Filar",
     },
     slate_amethyst_: {
       bricks_small: "Drobne Ametystowo-Płytowe Cegły",
       pillar: "Ametystowo-Płytowy Filar",
+      tiles: "Ametystowo-Płytowe Kafelki",
+      bricks: "Ametystowo-Płytowe Cegły",
     },
     scroll_paper_lantern: "Papierowy Lampion",
     ancient_scroll_paper_lantern: "Starożytny Papierowy Lampion",
     amethyst_sconce: "Ametystowy Znicz",
+    scroll_paper: "Pergamin",
+    ancient_scroll_paper: "Starożytny Pergamin",
+    edified_: {
+      log: "Oświecona Kłoda",
+    },
   },
 }
