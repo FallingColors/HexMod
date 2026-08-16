@@ -15,9 +15,9 @@ authors = [
     { name="Alwinfy" },
 ]
 readme = "doc/README.md"
-license = { file = "doc/LICENSE.txt" }
+license = { file = "LICENSE.txt" }
 keywords = ["hexdoc"]
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 dynamic = ["version", "dependencies", "optional-dependencies"]
 
 [project.urls]
@@ -30,16 +30,23 @@ Source = "https://github.com/FallingColors/HexMod/"
 scheme = "gradle"
 source = "gradle-properties"
 py-path = "doc/src/hexdoc_hexcasting/__version__.py"
+# exclude -devel from the version hexdoc sees
+gradle-version-regex = "(.+?)(?:-devel)?"
 
 [tool.hatch.metadata.hooks.gradle-properties]
 dependencies = [
-    "hexdoc~=1!0.1.0a11",
-    { package="hexdoc-minecraft", op="~=", py-version="1.0.dev", key="minecraftVersion" },
+    "hexdoc~=2.0rc1",
+    { package="hexdoc-minecraft", op="~=", py-version="2.0", key="minecraftVersion" },
 ]
 
-[tool.hatch.metadata.hooks.gradle-properties.optional-dependencies]
+[dependency-groups]
 dev = [
-    "ruff~=0.1.4",
+    "ruff~=0.16.3",
+]
+
+[tool.uv]
+find-links = [
+    "./libs",
 ]
 
 # project structure
@@ -66,80 +73,77 @@ packages = [
 [project.entry-points.hexdoc]
 hexcasting = "hexdoc_hexcasting._hooks:HexcastingPlugin"
 
-# Pytest
+# Ruff
 
-[tool.pytest.ini_options]
-addopts = ["--import-mode=importlib"]
-markers = ["template"]
+[tool.ruff]
+preview = true
+extend-exclude = [
+    "**/venv",
+    "**/.*",
+    "**/node_modules",
+    "**/__pycache__",
+]
 
-[tool.coverage.report]
-include_namespace_packages = true
+[tool.ruff.lint]
+extend-select = [
+    "I", # import sorting
+    "RUF022", # __all__ sorting
+    "TID252", # ban relative imports
+]
+extend-ignore = [
+    # false positives
+    "UP035", # deprecated import
+    "PIE807", # reimplemented container builtin
+    # covered by Pyright
+    "F821", # undefined variable
+    "F401", # imported but unused
+    "F841", # unused variable
+]
 
-# formatting and linting
+[tool.ruff.lint.isort]
+combine-as-imports = true
 
-[tool.isort]
-profile = "black"
-combine_as_imports = true
-known_first_party = ["hexdoc_hexcasting"]
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "parents"
+
+# Pyright
 
 [tool.pyright]
-pythonVersion = "3.11"
+pythonVersion = "3.12"
 pythonPlatform = "All"
 
-include = [
-    "doc/src",
-]
-extraPaths = [
-    "doc/src",
-]
-
-enableExperimentalFeatures = true
-
-# mostly we use strict mode
-# but pyright doesn't allow decreasing error severity in strict mode
-# so we need to manually specify all of the strict mode overrides so we can do that :/
 typeCheckingMode = "standard"
 
 strictDictionaryInference = true
 strictListInference = true
 strictSetInference = true
 
-reportAssertAlwaysTrue = "error"
 reportConstantRedefinition = "error"
-reportDeprecated = "error"
-reportDuplicateImport = "error"
-reportFunctionMemberAccess = "error"
-reportIncompatibleMethodOverride = "error"
-reportIncompatibleVariableOverride = "error"
 reportIncompleteStub = "error"
 reportInconsistentConstructor = "error"
-reportInvalidStringEscapeSequence = "error"
 reportInvalidStubStatement = "error"
-reportInvalidTypeVarUse = "error"
-reportMatchNotExhaustive = "error"
-reportMissingParameterType = "error"
-reportMissingTypeStubs = "error"
-reportOverlappingOverload = "error"
-reportSelfClsParameterName = "error"
-reportTypeCommentUsage = "error"
-reportUnknownParameterType = "error"
-reportUnnecessaryCast = "error"
-reportUnnecessaryContains = "error"
-reportUnsupportedDunderAll = "error"
-reportUntypedBaseClass = "error"
-reportUntypedClassDecorator = "error"
-reportUntypedFunctionDecorator = "error"
-reportUntypedNamedTuple = "error"
-reportWildcardImportFromLibrary = "error"
 
+reportDeprecated = "warning"
+reportDuplicateImport = "warning"
+reportMatchNotExhaustive = "warning"
+reportMissingParameterType = "warning"
 reportMissingTypeArgument = "warning"
+reportMissingTypeStubs = "warning"
 reportPrivateUsage = "warning"
+reportTypeCommentUsage = "warning"
 reportUnknownArgumentType = "warning"
 reportUnknownLambdaType = "warning"
 reportUnknownMemberType = "warning"
+reportUnknownParameterType = "warning"
 reportUnknownVariableType = "warning"
+reportUnnecessaryCast = "warning"
 reportUnnecessaryComparison = "warning"
+reportUnnecessaryContains = "warning"
 reportUnnecessaryIsInstance = "warning"
+reportUntypedBaseClass = "warning"
+reportUntypedClassDecorator = "warning"
+reportUntypedFunctionDecorator = "warning"
+reportUntypedNamedTuple = "warning"
 reportUnusedClass = "warning"
 reportUnusedExpression = "warning"
 reportUnusedFunction = "warning"
