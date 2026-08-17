@@ -91,8 +91,8 @@ public class PatternRegistryManifest {
         // I am PURPOSELY checking normal actions before special handlers
         // This way we don't get a repeat of the phial number literal incident
         var sig = pat.getSignature();
-        if (NORMAL_ACTION_LOOKUP.containsKey(sig)) {
-            var key = NORMAL_ACTION_LOOKUP.get(sig);
+        var key = NORMAL_ACTION_LOOKUP.get(sig);
+        if (key != null) {
             return new PatternShapeMatch.Normal(key);
         }
 
