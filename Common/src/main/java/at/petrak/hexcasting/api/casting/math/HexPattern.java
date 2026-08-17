@@ -89,6 +89,10 @@ public final class HexPattern {
                 ']';
     }
 
+    public String toChatString() {
+        return "HexPattern[" + orientation + ", " + signature.toAnglesString() + ']';
+    }
+
     public static final Codec<HexPattern> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             HexDir.CODEC.fieldOf("orientation").forGetter(HexPattern::getOrientation),
             HexSignature.CODEC.fieldOf("signature").forGetter(HexPattern::getSignature)
