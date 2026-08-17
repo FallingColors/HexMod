@@ -56,7 +56,7 @@ class SpecialHandlerForEach(val n: Int) : SpecialHandler {
 
     class Factory : SpecialHandler.Factory<SpecialHandlerForEach> {
         override fun tryMatch(pat: HexPattern, env: CastingEnvironment): SpecialHandlerForEach? {
-            val sig = pat.anglesSignature()
+            val sig = pat.signature.toAnglesString()
             if (!sig.startsWith("waaddw")) return null
 
             val tail = sig.substring(6)

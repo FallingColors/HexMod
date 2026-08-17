@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.castables.SpecialHandler;
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.math.HexAngle;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
+import at.petrak.hexcasting.api.casting.math.HexSignature;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.server.ScrungledPatternsSave;
@@ -23,7 +24,7 @@ import java.util.concurrent.ConcurrentMap;
 
 // Now an internal-only class used to do final processing on the registered stuff
 public class PatternRegistryManifest {
-    private static final ConcurrentMap<List<HexAngle>, ResourceKey<ActionRegistryEntry>> NORMAL_ACTION_LOOKUP =
+    private static final ConcurrentMap<HexSignature, ResourceKey<ActionRegistryEntry>> NORMAL_ACTION_LOOKUP =
         new ConcurrentHashMap<>();
 
     /**
@@ -48,7 +49,7 @@ public class PatternRegistryManifest {
                 continue;
 
             if (!HexUtils.isOfTag(registry, key, HexTags.Actions.PER_WORLD_PATTERN)) {
-                var old = NORMAL_ACTION_LOOKUP.put(entry.prototype().getAngles(), key);
+                var old = NORMAL_ACTION_LOOKUP.put(entry.prototype().getSignature(), key);
                 if (old != null) {
                     HexAPI.LOGGER.warn("Inserted %s which has same signature as %s, overriding it.".formatted(key, old));
                 }
@@ -89,7 +90,7 @@ public class PatternRegistryManifest {
     public static PatternShapeMatch matchPattern(HexPattern pat, CastingEnvironment environment) {
         // I am PURPOSELY checking normal actions before special handlers
         // This way we don't get a repeat of the phial number literal incident
-        var sig = pat.getAngles();
+        var sig = pat.getSignature();
         if (NORMAL_ACTION_LOOKUP.containsKey(sig)) {
             var key = NORMAL_ACTION_LOOKUP.get(sig);
             return new PatternShapeMatch.Normal(key);
@@ -97,7 +98,7 @@ public class PatternRegistryManifest {
 
         // Look it up in the world?
         var perWorldPatterns = ScrungledPatternsSave.open(environment.getWorld().getServer().overworld());
-        var entry = perWorldPatterns.lookup(pat.anglesSignature());
+        var entry = perWorldPatterns.lookup(pat.getSignature().toAnglesString());
         if (entry != null) {
             return new PatternShapeMatch.PerWorld(entry.key(), true);
         }
@@ -119,6 +120,6 @@ public class PatternRegistryManifest {
 
         var sig = pair.getFirst();
         var entry = pair.getSecond();
-        return HexPattern.fromAnglesUnchecked(sig, entry.canonicalStartDir());
+        return HexPattern.fromAngles(sig, entry.canonicalStartDir(), false);
     }
 }
