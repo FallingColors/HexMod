@@ -17,6 +17,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class HexSignature implements Iterable<HexAngle> {
     public static final int BITS_PER_TURN = 3;
@@ -54,6 +55,20 @@ public final class HexSignature implements Iterable<HexAngle> {
                 return BITS_TO_ANGLE[bits];
             }
         };
+    }
+
+    /**
+     * @return null if this does not start with prefix, an Iterator with the remainder after the prefix otherwise
+     */
+    public @Nullable Iterator<HexAngle> stripPrefix(HexSignature prefix) {
+        Iterator<HexAngle> strIt = this.iterator();
+        Iterator<HexAngle> prefixIt = prefix.iterator();
+
+        while(strIt.hasNext() && prefixIt.hasNext()) {
+            if(!strIt.next().equals(prefixIt.next())) return null;
+        }
+        if(!prefixIt.hasNext()) return strIt;
+        else return null;
     }
 
     public String toAnglesString() {
@@ -117,6 +132,16 @@ public final class HexSignature implements Iterable<HexAngle> {
             buf.writerIndex(buf.writerIndex() + byteLength);
         }
     };
+
+    public static HexSignature fromAnglesStringUnchecked(String anglesString) {
+        Builder b = new Builder(false);
+        for(int i = 0; i < anglesString.length(); i++) {
+            char c = anglesString.charAt(i);
+            HexAngle a = HexAngle.fromChar(c);
+            b.addAngle(a);
+        }
+        return b.build();
+    }
 
     public static final class Builder {
         private final IntArrayList turnsBuilder;

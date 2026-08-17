@@ -239,7 +239,7 @@ class GuiSpellcasting constructor(
                             }
                             playSound = true
                         } else {
-                            ds.go(newdir)
+                            playSound = ds.go(newdir)
                         }
                     }
                 }
