@@ -3,6 +3,7 @@ package at.petrak.hexcasting.server;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.casting.math.EulerPathFinder;
 import at.petrak.hexcasting.api.casting.math.HexDir;
+import at.petrak.hexcasting.api.casting.math.HexSignature;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -32,16 +33,16 @@ public class ScrungledPatternsSave extends SavedData {
     /**
      * Maps scrungled signatures to their keys.
      */
-    private final Map<String, PerWorldEntry> lookup;
+    private final Map<HexSignature, PerWorldEntry> lookup;
 
     /**
      * Reverse-maps resource keys to their signature; you can use that in {@code lookup}.
      * <p>
      * This way we can look up things if we know their resource key, for commands and such
      */
-    private final Map<ResourceKey<ActionRegistryEntry>, String> reverseLookup;
+    private final Map<ResourceKey<ActionRegistryEntry>, HexSignature> reverseLookup;
 
-    private ScrungledPatternsSave(Map<String, PerWorldEntry> lookup) {
+    private ScrungledPatternsSave(Map<HexSignature, PerWorldEntry> lookup) {
         this.lookup = lookup;
         this.reverseLookup = new HashMap<>();
         this.lookup.forEach((sig, entry) -> {
@@ -50,12 +51,12 @@ public class ScrungledPatternsSave extends SavedData {
     }
 
     @Nullable
-    public PerWorldEntry lookup(String signature) {
+    public PerWorldEntry lookup(HexSignature signature) {
         return this.lookup.get(signature);
     }
 
     @Nullable
-    public Pair<String, PerWorldEntry> lookupReverse(ResourceKey<ActionRegistryEntry> key) {
+    public Pair<HexSignature, PerWorldEntry> lookupReverse(ResourceKey<ActionRegistryEntry> key) {
         var sig = this.reverseLookup.get(key);
         if (sig == null) return null;
 
@@ -69,7 +70,7 @@ public class ScrungledPatternsSave extends SavedData {
             var inner = new CompoundTag();
             inner.putByte(TAG_DIR, (byte) entry.canonicalStartDir.ordinal());
             inner.putString(TAG_KEY, entry.key().location().toString());
-            tag.put(sig, inner);
+            tag.put(sig.toAnglesString(), inner);
         });
         return tag;
     }
@@ -77,24 +78,24 @@ public class ScrungledPatternsSave extends SavedData {
     private static ScrungledPatternsSave load(CompoundTag tag, HolderLookup.Provider lookup) {
         var registryKey = IXplatAbstractions.INSTANCE.getActionRegistry().key();
 
-        var map = new HashMap<String, PerWorldEntry>();
+        var map = new HashMap<HexSignature, PerWorldEntry>();
         for (var sig : tag.getAllKeys()) {
             var inner = tag.getCompound(sig);
 
             var rawDir = inner.getByte(TAG_DIR);
             var rawKey = inner.getString(TAG_KEY);
 
-            var dir = HexDir.values()[rawDir];
+            var dir = HexDir.getEntries().get(rawDir);
             var key = ResourceKey.create(registryKey, ResourceLocation.parse(rawKey));
 
-            map.put(sig, new PerWorldEntry(key, dir));
+            map.put(HexSignature.fromAnglesStringUnchecked(sig), new PerWorldEntry(key, dir));
         }
 
         return new ScrungledPatternsSave(map);
     }
 
     public static ScrungledPatternsSave createFromScratch(long seed) {
-        var map = new HashMap<String, PerWorldEntry>();
+        var map = new HashMap<HexSignature, PerWorldEntry>();
 
         var registry = IXplatAbstractions.INSTANCE.getActionRegistry();
 
@@ -107,7 +108,7 @@ public class ScrungledPatternsSave extends SavedData {
             var entry = registry.get(key);
             if (HexUtils.isOfTag(registry, key, HexTags.Actions.PER_WORLD_PATTERN)) {
                 var scrungledPat = EulerPathFinder.findAltDrawing(entry.prototype(), seed);
-                map.put(scrungledPat.getSignature().toAnglesString(), new PerWorldEntry(key, scrungledPat.getOrientation()));
+                map.put(scrungledPat.getSignature(), new PerWorldEntry(key, scrungledPat.getOrientation()));
             }
         }
 
