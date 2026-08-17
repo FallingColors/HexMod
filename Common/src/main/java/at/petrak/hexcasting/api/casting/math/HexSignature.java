@@ -199,8 +199,8 @@ public final class HexSignature implements Iterable<HexAngle> {
             short toQ = (short) to.getQ();
             short toR = (short) to.getR();
 
-            int fromI = (fromQ << Short.SIZE) | (fromR & Short.MAX_VALUE);
-            int toI = (toQ << Short.SIZE) | (toR & Short.MAX_VALUE);
+            int fromI = (fromQ << Short.SIZE) | (fromR & 0xFFFF);
+            int toI = (toQ << Short.SIZE) | (toR & 0xFFFF);
 
             if(toI < fromI) {
                 int tmp = fromI;
@@ -208,7 +208,7 @@ public final class HexSignature implements Iterable<HexAngle> {
                 toI = tmp;
             }
 
-            return ((long) fromI << Integer.SIZE) | ((long) toI & (long) Integer.MAX_VALUE);
+            return ((long) fromI << Integer.SIZE) | ((long) toI & (long) 0xFFFF_FFFFL);
         }
 
         public Builder addAngle(HexAngle angle) {
