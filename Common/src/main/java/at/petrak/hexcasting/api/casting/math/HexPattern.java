@@ -3,13 +3,9 @@ package at.petrak.hexcasting.api.casting.math;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import io.netty.buffer.ByteBuf;
-import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.PrimitiveIterator;
-import java.util.stream.IntStream;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.phys.Vec2;
@@ -104,11 +100,11 @@ public final class HexPattern {
             HexPattern::new
     );
 
-    public static HexPattern fromAngles(String angleString, HexDir startDir) {
-        return fromAngles(angleString, startDir, true);
+    public static HexPattern fromAngleString(String angleString, HexDir startDir) {
+        return fromAngleString(angleString, startDir, true);
     }
 
-    public static HexPattern fromAngles(String angleString, HexDir startDir, boolean rejectOverlap) {
+    public static HexPattern fromAngleString(String angleString, HexDir startDir, boolean rejectOverlap) {
         HexSignature.Builder signature = new HexSignature.Builder(rejectOverlap);
 
         for (int i = 0; i < angleString.length(); i++) {
