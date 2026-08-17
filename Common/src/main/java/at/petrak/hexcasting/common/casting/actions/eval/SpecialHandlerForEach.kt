@@ -10,7 +10,9 @@ import at.petrak.hexcasting.api.casting.eval.vm.FrameForEach
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.getEvaluatable
 import at.petrak.hexcasting.api.casting.getList
+import at.petrak.hexcasting.api.casting.math.HexAngle
 import at.petrak.hexcasting.api.casting.math.HexPattern
+import at.petrak.hexcasting.api.casting.math.HexSignature
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
@@ -54,22 +56,26 @@ class SpecialHandlerForEach(val n: Int) : SpecialHandler {
         }
     }
 
+    companion object {
+        @JvmField
+        val PREFIX: HexSignature = HexSignature.fromAnglesStringUnchecked("waaddw")
+    }
+
     class Factory : SpecialHandler.Factory<SpecialHandlerForEach> {
         override fun tryMatch(pat: HexPattern, env: CastingEnvironment): SpecialHandlerForEach? {
-            val sig = pat.signature.toAnglesString()
-            if (!sig.startsWith("waaddw")) return null
+            val sig = pat.signature
+            val suffix = (sig.stripPrefix(PREFIX) ?: return null).asSequence()
 
-            val tail = sig.substring(6)
-            if (tail.length % 2 != 0) return null
-
-            for ((index, segment) in tail.chunked(2).withIndex()) {
+            var tailLength = 0
+            for ((index, segment) in suffix.chunked(2).withIndex()) {
                 when (index % 2) {
-                    0 -> if (segment != "da") return null
-                    1 -> if (segment != "ad") return null
+                    0 -> if (segment != listOf(HexAngle.RIGHT_BACK, HexAngle.LEFT_BACK)) return null
+                    1 -> if (segment != listOf(HexAngle.LEFT_BACK, HexAngle.RIGHT_BACK)) return null
                 }
+                tailLength++
             }
 
-            return SpecialHandlerForEach(tail.length / 2)
+            return SpecialHandlerForEach(tailLength)
         }
     }
 }
