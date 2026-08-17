@@ -30,10 +30,12 @@ enum class HexDir {
         }
 
     companion object {
+        @JvmField
         val CODEC: Codec<HexDir> = Codec.STRING.xmap(
             HexDir::fromString,
             HexDir::name
         )
+        @JvmField
         val STREAM_CODEC: StreamCodec<ByteBuf, HexDir> = ByteBufCodecs.STRING_UTF8.map(
             HexDir::fromString,
             HexDir::name

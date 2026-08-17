@@ -107,7 +107,7 @@ public class ScrungledPatternsSave extends SavedData {
             var entry = registry.get(key);
             if (HexUtils.isOfTag(registry, key, HexTags.Actions.PER_WORLD_PATTERN)) {
                 var scrungledPat = EulerPathFinder.findAltDrawing(entry.prototype(), seed);
-                map.put(scrungledPat.anglesSignature(), new PerWorldEntry(key, scrungledPat.getStartDir()));
+                map.put(scrungledPat.getSignature().toAnglesString(), new PerWorldEntry(key, scrungledPat.getOrientation()));
             }
         }
 

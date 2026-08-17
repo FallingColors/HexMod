@@ -47,37 +47,66 @@ class SpecialHandlerMask(val mask: BooleanList) : SpecialHandler {
 
     class Factory : SpecialHandler.Factory<SpecialHandlerMask> {
         override fun tryMatch(pat: HexPattern, env: CastingEnvironment): SpecialHandlerMask? {
-            val directions = pat.directions()
+            val iterator = pat.signature.iterator()
+            // if there's a first angle we need it
+            val firstTurn = if (iterator.hasNext()) iterator.next() else null
 
-            var flatDir = pat.startDir
-            if (pat.angles.isNotEmpty() && pat.angles[0] == HexAngle.LEFT_BACK) {
-                flatDir = directions[0].rotatedBy(HexAngle.LEFT);
+            // if we start with `a`, that means the first segment is a spike
+            // this means if we extended backwards, the spike would start with `e`
+            // meaning the direction of flatness is the inverse of `e`, which is `q`
+            //
+            // if we don't start with `a`, we started with something flat
+            val flatDir = if (firstTurn == HexAngle.LEFT_BACK) {
+                pat.orientation.rotatedBy(HexAngle.LEFT)
+            } else {
+                pat.orientation
             }
 
-            // TODO: we could probably definitely do this with a long to make it faster
             val mask = BooleanArrayList()
-            var i = 0;
-            while (i < directions.size) {
-                // Angle with respect to the *start direction*
-                val angle = directions[i].angleFrom(flatDir);
-                if (angle == HexAngle.FORWARD) {
+            var direction = pat.orientation
+
+            var currentAngleFromForward = direction.angleFrom(flatDir)
+            // 0 angles = 1 straight line, so we have to hold the angle between our current segment and next segment
+            var nextAngle = firstTurn
+
+            while (true) {
+                if (currentAngleFromForward == HexAngle.FORWARD) {
+                    // a line means keep this stack element
                     mask.add(true)
-                    i++
-                    continue;
-                }
-                if (i >= directions.size - 1) {
-                    // then we're out of angles!
+
+                    // no more angles, we're done
+                    if (nextAngle == null) break
+
+                    // since this was a flat segment, we just advance to the next segment
+                    direction *= nextAngle
+                    currentAngleFromForward = direction.angleFrom(flatDir)
+                    nextAngle = if (iterator.hasNext()) iterator.next() else null
+                } else if (currentAngleFromForward == HexAngle.RIGHT) {
+                    // if we are starting a spike, but there's nothing after the start, we don't match
+                    if (nextAngle == null) return null
+
+                    // if we aren't finishing the spike with `a` (`q` relative to flatDir), we don't match
+                    direction *= nextAngle
+                    if (direction.angleFrom(flatDir) != HexAngle.LEFT) return null
+
+                    // a spike means drop this stack element
+                    mask.add(false)
+
+                    // chomp the end of the spike
+                    nextAngle = if (iterator.hasNext()) iterator.next() else null
+                    // if there's nothing after the spike, we're done
+                    if (nextAngle == null) break
+
+                    // since we chomped the end of the spike, we just advance to the next segment
+                    direction *= nextAngle
+                    currentAngleFromForward = direction.angleFrom(flatDir)
+                    nextAngle = if (iterator.hasNext()) iterator.next() else null
+                } else {
+                    // only FORWARD and RIGHT can appear as transitions in the state machine
                     return null
                 }
-                val angle2 = directions[i + 1].angleFrom(flatDir);
-                if (angle == HexAngle.RIGHT && angle2 == HexAngle.LEFT) {
-                    mask.add(false)
-                    // skip both segments of the dip
-                    i += 2
-                    continue
-                }
-                return null
             }
+
             return SpecialHandlerMask(mask)
         }
     }

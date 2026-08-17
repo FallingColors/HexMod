@@ -31,9 +31,9 @@ object OpUndo : Action {
             newParenCount = 0
         } else if (last.iota is PatternIota && !last.escaped) {
             // adjust paren count if undoing a non-escaped open or close paren
-            when (last.iota.pattern.angles) {
-                HexActions.OPEN_PAREN.value().prototype.angles -> newParenCount--
-                HexActions.CLOSE_PAREN.value().prototype.angles -> newParenCount++
+            when (last.iota.pattern.signature) {
+                HexActions.OPEN_PAREN.value().prototype.signature -> newParenCount--
+                HexActions.CLOSE_PAREN.value().prototype.signature -> newParenCount++
             }
         }
         val image2 = image.withUsedOp().copy(

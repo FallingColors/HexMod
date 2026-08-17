@@ -57,7 +57,7 @@ public class PatternIota extends Iota {
     public boolean toleratesOther(Iota that) {
         return typesMatch(this, that)
             && that instanceof PatternIota piota
-            && this.getPattern().getAngles().equals(piota.getPattern().getAngles());
+            && this.getPattern().getSignature().equals(piota.getPattern().getSignature());
     }
 
     @Override
@@ -224,12 +224,12 @@ public class PatternIota extends Iota {
     // keep around just in case it's needed.
     public static Component displayNonInline(HexPattern pat){
         var bob = new StringBuilder();
-        bob.append(pat.getStartDir());
+        bob.append(pat.getOrientation());
 
-        var sig = pat.anglesSignature();
-        if (!sig.isEmpty()) {
+        var sig = pat.getSignature();
+        if (sig.sizeUpperBound() > 0) {
             bob.append(" ");
-            bob.append(sig);
+            bob.append(sig.toAnglesString());
         }
         return Component.translatable("hexcasting.tooltip.pattern_iota",
                         Component.literal(bob.toString()).withStyle(ChatFormatting.WHITE))
