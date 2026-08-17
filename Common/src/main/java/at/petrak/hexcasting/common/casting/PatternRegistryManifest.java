@@ -98,7 +98,7 @@ public class PatternRegistryManifest {
 
         // Look it up in the world?
         var perWorldPatterns = ScrungledPatternsSave.open(environment.getWorld().getServer().overworld());
-        var entry = perWorldPatterns.lookup(pat.getSignature().toAnglesString());
+        var entry = perWorldPatterns.lookup(pat.getSignature());
         if (entry != null) {
             return new PatternShapeMatch.PerWorld(entry.key(), true);
         }
@@ -120,6 +120,6 @@ public class PatternRegistryManifest {
 
         var sig = pair.getFirst();
         var entry = pair.getSecond();
-        return HexPattern.fromAngles(sig, entry.canonicalStartDir(), false);
+        return new HexPattern(entry.canonicalStartDir(), sig);
     }
 }
