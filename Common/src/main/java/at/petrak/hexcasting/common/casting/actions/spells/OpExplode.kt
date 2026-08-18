@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.common.casting.actions.selectors.OpGetEntitiesBy
+import at.petrak.hexcasting.helper.ExplosionSourceTracker
 import net.minecraft.core.BlockPos
 import net.minecraft.util.Mth
 import net.minecraft.world.level.Level
@@ -53,15 +54,20 @@ class OpExplode(val fire: Boolean) : SpellAction {
             if (!env.canEditBlockAt(BlockPos.containing(pos)))
                 return
 
-            env.world.explode(
-                env.castingEntity,
-                pos.x,
-                pos.y,
-                pos.z,
-                strength.toFloat(),
-                this.fire,
-                Level.ExplosionInteraction.TNT
-            )
+            ExplosionSourceTracker.setSpellSource(true)
+            try {
+                env.world.explode(
+                    env.castingEntity,
+                    pos.x,
+                    pos.y,
+                    pos.z,
+                    strength.toFloat(),
+                    this.fire,
+                    Level.ExplosionInteraction.TNT
+                )
+            } finally {
+                ExplosionSourceTracker.setSpellSource(false)
+            }
         }
     }
 }
