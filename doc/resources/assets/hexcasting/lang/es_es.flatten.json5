@@ -1,1 +1,36 @@
-{}
+{
+  hexdoc: {
+    hexcasting: {
+      title: "Libro Hex",
+      description: "El libro hex, todo en un lugar.",
+    },
+    renderer: {
+      palettes: "Paletas",
+      animated: "animado",
+      monocolor: "monocromo",
+      gradient: "gradiente",
+      segment: "segmento",
+      "default": "por defecto",
+      turbo: "turbo",
+      dark2: "oscuro2",
+    },
+    pattern: {
+      show: "Haz clic para mostrar el hechizo",
+      hide: "Haz clic para ocultar el hechizo",
+      paused: "Pausado",
+      not_supported: "Su navegador no admite la visualización de patrones. Código del patrón: {}",
+    },
+    villager_requirements: {
+      any: "El aldeano debe ser un {level} o superior",
+      professional: "El aldeano debe ser un {level} {profession} o superior",
+    },
+  },
+  "block.hexcasting": {
+    slate: "Pizarra en blanco",
+  },
+  "tag.item.c": {
+    brown_dye: "Tintes marrones",
+    glowstone_dusts: "Polvos de piedra luminosa",
+    wood_sticks: "Palos de madera",
+  },
+}

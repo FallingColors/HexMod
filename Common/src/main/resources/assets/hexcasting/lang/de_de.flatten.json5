@@ -285,6 +285,7 @@
       },
       spells: {
         desc: "Zeichen, die die Welt magisch beeinflussen.",
+        "": "Zauber",
       },
       patterns: {
         desc: "Eine Liste aller Zeichen, die ich entdeckt habe, sowie ihrer Wirkungen.",
@@ -343,6 +344,8 @@
   },
   "tag.hexcasting": {
     staves: "Stäbe",
+    edified_logs: "Beseelter Stamm",
+    edified_planks: "Beseelte Holzbretter",
   },
   "tag.item.hexcasting": {
     directrices: "Umlenker",

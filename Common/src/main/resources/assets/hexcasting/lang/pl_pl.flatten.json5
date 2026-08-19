@@ -13,12 +13,12 @@
       cherry: "Wiśniowy Kostur",
       bamboo: "Bambusowy Kostur",
       edified: "Oświecony Kostur",
-      quenched: "Stłamszony kostur",
-      mindsplice: "Spleciony kostur",
+      quenched: "Stłamszony Kostur",
+      mindsplice: "Spleciony Kostur",
     },
     amethyst_dust: "Ametystowy Pył",
     charged_amethyst: "Naładowany Ametyst",
-    quenched_allay_shard: "Odłamek Wygaszonego Otuszka",
+    quenched_allay_shard: "Odłamek Stłamszonego Otuszka",
     scroll_small: {
       "": "Mały Zwój",
       empty: "Mały Pusty Zwój",
@@ -29,7 +29,7 @@
     },
     scroll: {
       "": "Duży Zwój",
-      of: "Starożytny Zwój - %s",
+      of: "Starożytny Zwój: %s",
       empty: "Duży Pusty Zwój",
     },
     focus: {
@@ -113,10 +113,10 @@
       boolean: "Zwrotnica Pasterza",
     },
     impetus: {
-      empty: "Pusta Wyrzutnia",
-      rightclick: "Wyrzutnia Płatnerza",
-      look: "Wyrzutnia Łuczarza",
-      redstone: "Wyrzutnia Kapłana",
+      empty: "Pusty Rdzeń",
+      rightclick: "Płatnerski Rdzeń",
+      look: "Łuczarski Rdzeń",
+      redstone: "Kapłański Rdzeń",
     },
     akashic_: {
       record: "Kronika Akaszy",
@@ -130,7 +130,7 @@
     },
     slate_: {
       block: "Blok Płyty",
-      tiles: "Płytowe Schodki",
+      tiles: "Płytowe Kafelki",
       bricks: "Płytowe Cegły",
       bricks_small: "Drobne Płytowe Cegły",
       pillar: "Płytowy Filar",
@@ -155,6 +155,490 @@
     ancient_scroll_paper: "Starożytny Pergamin",
     edified_: {
       log: "Oświecona Kłoda",
+      log_amethyst: "Ametystowy Oświecony Pień",
+      log_aventurine: "Awenturynowy Oświecony Pień",
+      log_citrine: "Topazowy Oświecony Pień",
+      log_purple: "Fioletowy Oświecony Pień",
+      wood: "Oświecone Drewno",
+      planks: "Oświecone Deski",
+      panel: "Oświecony Panel",
+      tile: "Oświecone Kafelki",
+      door: "Oświecone Drzwi",
+      trapdoor: "Oświecona Klapa",
+      stairs: "Oświecone Schody",
+      slab: "Oświecona Płyta",
+      button: "Oświecony Przycisk",
+      pressure_plate: "Oświecona Płyta Naciskowa",
+      fence: "Oświecony Płot",
+      fence_gate: "Oświecona Furtka",
     },
+    quenched_allay: "Stłamszony Otuszek",
+    quenched_allay_: {
+      tiles: "Stłamszone Kafelki",
+      bricks: "Stłamszone Cegły",
+      bricks_small: "Drobne Stłamszone Cegły",
+    },
+    stripped_edified_log: "Okorowany Oświecony Pień",
+    stripped_edified_wood: "Okorowane Oświecone Drewno",
+    amethyst_edified_leaves: "Ametystowe Oświecone Liście",
+    aventurine_edified_leaves: "Awenturynowe Oświecone Liście",
+    citrine_edified_leaves: "Opalowe Oświecone Liście",
+  },
+  "effect.hexcasting": {
+    enlarge_grid: "Olśnienie",
+    shrink_grid: "Otumanienie",
+  },
+  "item.minecraft.potion.effect": {
+    enlarge_grid: "Mikstura Olśnienia",
+    enlarge_grid_long: "Mikstura Olśnienia",
+    enlarge_grid_strong: "Mikstura Olśnienia",
+    shrink_grid: "Mikstura Otumanienia",
+    shrink_grid_long: "Mikstura Otumanienia",
+    shrink_grid_strong: "Mikstura Otumanienia",
+  },
+  "item.minecraft.splash_potion.effect": {
+    enlarge_grid: "Miotana Mikstura Olśnienia",
+    enlarge_grid_long: "Miotana Mikstura Olśnienia",
+    enlarge_grid_strong: "Miotana Mikstura Olśnienia",
+    shrink_grid: "Miotana Mikstura Otumanienia",
+    shrink_grid_long: "Miotana Mikstura Otumanienia",
+    shrink_grid_strong: "Miotana Mikstura Otumanienia",
+  },
+  "item.minecraft.lingering_potion.effect": {
+    enlarge_grid: "Trwała Mikstura Olśnienia",
+    enlarge_grid_long: "Trwała Mikstura Olśnienia",
+    enlarge_grid_strong: "Trwała Mikstura Olśnienia",
+    shrink_grid: "Trwała Mikstura Otumanienia",
+    shrink_grid_long: "Trwała Mikstura Otumanienia",
+    shrink_grid_strong: "Trwała Mikstura Otumanienia",
+  },
+  "item.minecraft.tipped_arrow.effect": {
+    enlarge_grid: "Strzała Olśnienia",
+    enlarge_grid_long: "Strzała Olśnienia",
+    enlarge_grid_strong: "Strzała Olśnienia",
+    shrink_grid: "Strzała Otumanienia",
+    shrink_grid_long: "Strzała Otumanienia",
+    shrink_grid_strong: "Strzała Otumanienia",
+  },
+  "itemGroup.hexcasting": {
+    hexcasting: "Hex Casting",
+    scrolls: "Hex Casting (Zwoje)",
+  },
+  "category.hexcasting": {
+    binds: "Hex Casting",
+  },
+  "key.hexcasting": {
+    spellbook_prev: "Poprzednia Strona Księgi Zaklęć",
+    spellbook_next: "Następna Strona Księgi Zaklęć",
+  },
+  "tag.hexcasting": {
+    staves: "Kostury",
+    edified_logs: "Oświecone Kłody",
+    edified_planks: "Oświecone Deski",
+    phial_base: "Puste Fiolki",
+  },
+  "tag.item.hexcasting": {
+    directrices: "Zwrotnice",
+    grants_root_advancement: "Przyznaje Pierwotny Postęp",
+    brainswept_circle_components: "Umózgowione Elementy Kręgów",
+    seal_materials: "Pieczętujące Materiały",
+    impeti: "Rdzenie",
+  },
+  "emi.category.hexcasting": {
+    brainsweep: "Obrzynanie Umysłów",
+    "craft.battery": "Tworzenie Fiolki",
+    edify: "Oświecanie Sadzonki",
+    villager_leveling: "Ulepszanie Ofert",
+    villager_profession: "Profesja Osadnika",
+  },
+  "gui.hexcasting": {
+    spellcasting: "Splot",
+  },
+  "text.autoconfig.hexcasting": {
+    title: "Opcje Hexcasting",
+    category: {
+      common: "Ogólne",
+      client: "Użytkownik",
+      server: "Serwer",
+    },
+    option: {
+      common: {
+        dustMediaAmount: {
+          "@Tooltip": "Ilość przepływu, jaką mieści w sobie pojedynczy Ametystowy Pył",
+          "": "Ilość Przepływu w Pyle",
+        },
+        shardMediaAmount: {
+          "": "Ilość Przepływu w Odłamkach",
+          "@Tooltip": "Ilość przepływu, jaką mieści w sobie pojedynczy Odłamek Ametystu",
+        },
+        chargedCrystalMediaAmount: {
+          "": "Ilość Przepływu w Naładowanych Kryształach",
+          "@Tooltip": "Ilość przepływu, jaką mieści w sobie pojedynczy Naładowany Kryształ Ametystu",
+        },
+        mediaToHealthRate: {
+          "": "Stosunek Przepływu do Życia",
+          "@Tooltip": "Ilość punktów przepływu równych połowie serca podczas czarowania za pomocą HP",
+        },
+        cypherCooldown: {
+          "": "Czas Odnowy Cacek",
+          "@Tooltip": "Czas odnowy cacek, liczony w tickach",
+        },
+        trinketCooldown: {
+          "": "Czas Odnowy Bibelotów",
+          "@Tooltip": "Czas odnowy bibelotów, liczony w tickach",
+        },
+        artifactCooldown: {
+          "": "Czas Odnowy Artefaktów",
+          "@Tooltip": "Czas odnowy artefaktów, liczony w tickach",
+        },
+      },
+      client: {
+        ctrlTogglesOffStrokeOrder: {
+          "": "Ctrl Chowa Kolejność Pociągnięć",
+          "@Tooltip": "Przytrzymanie klawisza ctrl teraz *wyłączy* pokazywanie gradientu na symbolach",
+        },
+        disableInworldScrolling: {
+          "": "Wyłącz Przewijanie Poza Czarowaniem",
+          "@Tooltip": "Wyłącza interakcje środkowego przycisku myszy z księgami zaklęć i liczydłami w normalnym świecie, pozostawiając przypisane klawisze i interakcje w ekranie kostura takie same",
+        },
+        invertSpellbookScrollDirection: {
+          "": "Odwróć Przewijanie Księgi Zaklęć",
+          "@Tooltip": "Zmienia kierunek przewijania zwiększający numer strony w księdze zaklęć na górę, i vice versa",
+        },
+        invertAbacusScrollDirection: {
+          "": "Odwróć Przewijanie Liczydła",
+          "@Tooltip": "Zmienia kierunek przewijania zwiększający numer w liczydle na górę, i vice versa",
+        },
+        gridSnapThreshold: {
+          "": "Próg Zahaczania w Splocie",
+          "@Tooltip": "Odległość, na którą musisz zbliżyć się myszką do następnego punktu w Splocie, by do niego automatycznie dociągnąć. 0.5 oznacza 50% odległości między punktami (0.5-1)",
+        },
+        clickingTogglesDrawing: {
+          "": "Kliknięcie Przełącza Rysowanie",
+          "@Tooltip": "Kliknięcie rozpocznie i zakończy rysowanie symbolu, zamiast potrzeby przytrzymywania i przeciągania myszki",
+        },
+        alwaysShowListCommas: {
+          "": "Zawsze Używaj Przecinków w Listach",
+          "@Tooltip": "Wszystkie joty w listach będą oddzielone przecinkami (domyślnie nie tyczy się to jot symboli)",
+        },
+        advancedTooltipsShowsIotaNBT: {
+          "": "Zaawansowane Etykiety Pokazują Dane NBT o Jotach",
+          "@Tooltip": "Włączenie opcji zaawansowanych etykiet (F3+H) pokaże pełne dane NBT o jotach zapisanych w przedmiotach jak talizmany i księgi zaklęć",
+        },
+        staticActiveSlates: {
+          "": "Statyczne Aktywne Płyty",
+          "@Tooltip": "Symbole na aktywnych płytach będą wyświetlone bez efektu trzęsienia się (poprawia wydajność przy większej ilości aktywnych płyt)",
+        },
+      },
+      server: {
+        opBreakHarvestLevel: {
+          "": "Siła Zaklęcia Zniszcz Blok",
+          "@Tooltip": "Decyduje, jakiemu poziomowi narzędzi odpowiada zaklęcie Zniszcz Block.\n0 = drewniane, 1 = kamienne, 2 = żelazne, 3 = diamentowe, 4 = netherytowe.",
+        },
+        maxOpCount: {
+          "": "Maksymalna Ilość Działań",
+          "@Tooltip": "Maksymalna liczba działań, które można wykonać w jednym ticku, by uniknąć przeciążania serwera.",
+        },
+        maxSpellCircleLength: {
+          "": "Maksymalna Długość Kręgu",
+          "@Tooltip": "Maksymalna liczba płyt, z których składa się krąg",
+        },
+        actionDenyList: {
+          "": "Lista Zakazanych Działań",
+          "@Tooltip": "Lokalizacje zakazanych działań. Próba wykonania jednej z nich zakończy się zerwaniem. Na przykład, hexcasting:get_caster uniemożliwi Odbicie Umysłu.",
+        },
+        circleActionDenyList: {
+          "": "Lista Działań Zabronionych dla Kręgów",
+          "@Tooltip": "Lokalizacje zakazanych działań wewnątrz kręgów. Próba wykonania jednej z nich przez krąg zakończy się zerwaniem. Na przykład, hexcasting:get_caster uniemożliwi Odbicie Umysłu.",
+        },
+        globalCostScaling: {
+          "": "Globalny Mnożnik Kosztów",
+          "@Tooltip": "Wszystkie koszty przepływu, poza działaniami w tagu #hexcasting:cannot_modify_cost, będą pomnożone przez ten czynnik. Jeśli chcesz zmodyfikować koszt działania w tym tagu, użyj listy konkretnych działań.",
+        },
+        costRescaleListRaw: {
+          "": "Mnożniki Kosztów Konkretnych Działań",
+          "@Tooltip": "Przypisuje lokalizacje działań do mnożnika dla kosztów przepływu tego konkretnego działania. Na przykład, hexcasting:add_motion 3 sprawi, że Impuls będzie kosztował trzykrotnie więcej.",
+        },
+        greaterTeleportSplatsItems: {
+          "": "Rozrzucanie Przedmiotów przez Wyższą Teleportację",
+          "@Tooltip": "Decyduje, czy przedmioty wylatują z ekwipunku graczy po rzuceniu Wyższej Teleportacji",
+        },
+        doesTrueNameHaveAmbit: {
+          "": "Czy Prawdziwe Imię Przyznaje Zasięg",
+          "@Tooltip": "Decyduje, czy Prawdziwe Imiona (tj. joty bytu odwołujące się do gracza) pozwalają na rzucanie zaklęć na tego gracza nawet poza typowym zasięgiem",
+        },
+        tpDimDenylist: {
+          "": "Lista Wymiarów z Zakazem Teleportacji",
+          "@Tooltip": "Lokalizacje zasobów odwołujących się do wymiarów, w których chcesz zakazać teleportację",
+        },
+        villagersOffendedByMindMurder: {
+          "": "Czy Osadników Oburza Mózgo-Mord",
+          "@Tooltip": "Decyduje, czy osadnicy złoszczą się na gracza obrzynającego umysły innych osadników",
+        },
+        traderScrollChance: {
+          "": "Szansa na Zwoje u Wędrownego Handlarza",
+          "@Tooltip": "Szansa na to, że Starożytny Zwój pojawi się w ofercie danego wędrownego handlarza",
+        },
+        scrollInjectionsRaw: {
+          "": "Ilości Wstawionych Zwojów",
+          "@Tooltip": "Przypisuje nazwy tabelek łupów do ilości Starożytnych Zwojów, jakie powinny się w nich znaleźć. Jest szansa mniej więcej 50% na pojawienie się zwojów w jednej z wymienionych tam skrzyń; gdy ta się spełni, wygeneruje się w niej od 1 do wpisanej tu ilości zwojów.",
+        },
+        loreInjectionsRaw: {
+          "": "Miejsca Wstawiania Skrawków Wiedzy",
+          "@Tooltip": "Lista tabelek łupów, do których powinny zostać dodane skrawki wiedzy.",
+        },
+        loreChance: {
+          "": "Szansa na Skrawki Wiedzy",
+          "@Tooltip": "Szansa na pojawienie się skrawków wiedzy w powyższych tabelkach łupów.",
+        },
+        cypherInjectionsRaw: {
+          "": "Miejsca Wstawiania Starożytnych Cacek",
+          "@Tooltip": "Lista tabelek łupów, do których powinny zostać dodane starożytne cacka.",
+        },
+        cypherChance: {
+          "": "Szansa na Starożytne Cacka",
+          "@Tooltip": "Szansa na pojawienie się starożytnych cacek w powyższych tabelkach łupów.",
+        },
+        amethystShardModification: {
+          "": "Zmień Ilość Wydobytych Odłamków Ametystu",
+          "@Tooltip": "Ilość, o którą zostają zmniejszone, lub zwiększone zbiory odłamków ametystu z pojedynczego skupiska.",
+        },
+      },
+    },
+  },
+  hexcasting: {
+    loot_hex: {
+      shatter: "Rozbij",
+      kindle: "Zapłon",
+      illuminate: "Oświetl",
+      growth: "Wzrost",
+      lunge: "Wyskok",
+      sidestep: "Unik",
+      ascend: "Uniesienie",
+      blink: "Mignięcie",
+      blastoff: "Wystrzał",
+      radar: "Szósty Zmysł",
+      beckon: "Przyciągnięcie",
+      detonate: "Detonuj",
+      shockwave: "Fala Uderzeniowa",
+      heat_wave: "Ognista Aura",
+      wither_wave: "Fala Śmierci",
+      flight_zone: "Strefa Lotu",
+    },
+    message: {
+      cant_overcast: "Wygląda na to, że ten czar wymagał więcej przepływu niż mi się wydawało... Muszę poprawić obliczenia.",
+      cant_great_spell: "Z jakiegoś powodu, to zaklęcie nie zadziałało... Czy brakuje mi doświadczenia?",
+    },
+    tooltip: {
+      spellbook: {
+        page: {
+          "": "Wybrana Strona: %d/%d",
+          sealed: "Wybrana Strona: %d/%d (%s)",
+        },
+        page_with_name: {
+          "": "Wybrana Strona: %d/%d (\"%s\")",
+          sealed: "Wybrana Strona: %d/%d (\"%s\") (%s)",
+        },
+        empty: {
+          "": "Pusta",
+          sealed: "Pusta (%s)",
+        },
+        sealed: "Zapieczętowana",
+      },
+      scroll: {
+        needs_purchase: "Kup zwój, aby zobaczyć symbol",
+        pattern_not_loaded: "Włóż do ekwipunku, aby zobaczyć symbol",
+        "recalc_warning.line1": "Unikatowy symbol %s dla tego świata nie został jeszcze obliczony!",
+        "recalc_warning.line2": "Użyj komendy /hexcasting recalcPatterns, a następnie zdobądź nowy zwój.",
+      },
+      abacus: {
+        "": "%d",
+        reset: "Zresetowano do 0",
+        "reset.nice": "hehe",
+      },
+      circle: {
+        no_exit: "Fala przepływu nie znalazła dalszej drogi na %s",
+        many_exits: "Fala przepływu znalazła za dużo możliwych dróg na %s",
+        no_closure: "Fala przepływu nie będzie w stanie wrócić do rdzenia na %s",
+      },
+      lens: {
+        "pattern.invalid": "Niepoprawny symbol",
+        bee: {
+          "": "Liczba pszczół w ulu: %s",
+          single: "Ilość pszczół w ulu: %s",
+        },
+        "impetus.redstone.bound": {
+          "": "Związany z %s",
+          none: "Niezwiązany",
+        },
+        akashic: {
+          "bookshelf.location": "Kronika na %s",
+          "record.count": {
+            "": "Zapisane joty: %s",
+            single: "Zapisane joty: %s",
+          },
+        },
+      },
+      brainsweep: {
+        min_level: "Poziom %s, lub wyższy",
+        level: "Poziom %s",
+        product: "Sformatowane ciało",
+      },
+      media: "%d jednostek pyłu",
+      media_amount: "Zawiera: %s (%s)",
+      "media_amount.advanced": "Zawiera: %s/%s (%s)",
+      stored_hex: "Czar: ",
+      list_contents: "[%s]",
+      boolean_true: "Prawda",
+      boolean_false: "Fałsz",
+      jump_iota: "[Skok]",
+      pattern_iota: "Symbol(%s)",
+      null_iota: "Null",
+    },
+    spelldata: {
+      unknown: "Splątana jota",
+      "entity.whoknows": "Nieznany byt",
+      "akashic.nopos": "Nadrzędna kronika nie zna żadnej joty pod tym adresem (to jest błąd w modzie)",
+      onitem: "Zawiera: %d",
+      anything: "Cokolwiek",
+    },
+    subtitles: {
+      casting: {
+        pattern: {
+          start: "Początek tkania",
+          add_segment: "Naciągnięcie nici",
+        },
+        cast: {
+          normal: "Symbol szumi",
+          fail: "Zerwanie trzeszczy",
+          spell: "Zaklęcie skrzypi",
+          hermes: "Gambit Hermesa brzdęka",
+          thoth: "Gambit Tota brzdęka",
+        },
+      },
+      ambiance: "Splot buczy",
+      abacus: {
+        "": "Liczydło klika",
+        shake: "Liczydło grzechocze",
+      },
+      "scroll.scribble": "Zwój jest zapisany",
+      "impetus.fletcher.tick": "Łuczarski Rdzeń tyka",
+      "impetus.redstone.register": "Kapłański Rdzeń dzwoni",
+      "impetus.redstone.clear": "Kapłański Rdzeń usypia",
+      "lore_fragment.read": "Przeczytano skrawek wiedzy",
+      "flight.ambience": "Gracz leci",
+      "flight.finish": "Lot się kończy",
+      "staff.reset": "Czar zostaje rozpruty",
+      "spellcircle.add_pattern": "Krąg trzeszczy",
+      "spellcircle.fail": "Krąg wygasa",
+      "scroll.dust": "Zwój zostaje pokryty pyłem",
+    },
+    "pattern.unknown": "Nieznana lokalizacja zasobu symbolu",
+    debug: {
+      media_withdrawn: "%s - Wydano przepływ: %s",
+      "media_withdrawn.with_dust": "%s - Wydano przepływ: %s (%s jednostek pyłu)",
+      media_inserted: "%s - Przepływ wstawiony: %s",
+      "media_inserted.with_dust": "%s - Przepływ wstawiony: %s (%s w jednostkach pyłu",
+      all_media: "Pełna zawartość",
+      infinite_media: "Nieskończony",
+    },
+    attributes: {
+      grid_zoom: "Rozmiar Splotu",
+      media_consumption: "Zużycie Przepływu",
+      ambit_radius: "Promień Zasięgu Gracza",
+      sentinel_radius: "Promień Zasięgu Wartownika",
+      scry_sight: "Soczewkowa Wizja",
+      feeble_mind: "Ograniczony Umysł",
+    },
+  },
+  "advancement.hexcasting:": {
+    root: {
+      "": "Badania nad Splotem",
+      desc: "Odnajdź i wydobądź skupioną formę przepływu, rosnącą głęboko pod powierzchnią ziemi.",
+    },
+    creative_unlocker: {
+      desc: "No i masz swój kreatywny przedmiot do debugowania.",
+      "": "Jestem hardkorem!",
+    },
+    enlightenment: {
+      "": "Wtajemniczenie",
+      desc: "Roztrzaskaj granicę poprzez rzucenie czaru zużywając prawie całe swoje życie.",
+    },
+    wasteful_cast: {
+      "": "Nie marnuj...",
+      desc: "Zmarnuj wielką ilość przepływu rzucając czar.",
+    },
+    big_cast: {
+      "": "...I nie pragnij",
+      desc: "Rzuć pojedynczy czar wymagający przeogromnej ilości przepływu.",
+    },
+    y_u_no_cast_angy: {
+      "": "Strzał na ślepo",
+      desc: "Spróbuj rzucić zaklęcie ze zwoju, lecz zawiedź.",
+    },
+    opened_eyes: {
+      "": "Rozwarte oczy",
+      desc: "Pozwól naturze odebrać fragment twojego umysłu, jako zapłatę za czar. Co może się stać, jeśli dasz jej więcej?",
+    },
+    lore: {
+      "": "Wiedza sprzed lat",
+      desc: "Przeczytaj Skrawek Wiedzy",
+    },
+    "lore/": {
+      cardamom1: {
+        "": "Kardamoma Steles #1",
+        desc: "List od Kardamomy Steles do jej ojca, #1",
+      },
+      cardamom2: {
+        "": "Kardamoma Steles #2",
+        desc: "List od Kardamomy Steles do jej ojca, #2",
+      },
+      cardamom3: {
+        "": "Kardamoma Steles #3",
+        desc: "List od Kardamomy Steles do jej ojca, #3, 1/2",
+      },
+      cardamom4: {
+        "": "Kardamoma Steles #3 cz2",
+        desc: "List od Kardamomy Steles do jej ojca, #3, 2/2",
+      },
+      cardamom5: {
+        "": "Kardamoma Steles #4",
+        desc: "List od Kardamomy Steles do jej ojca, #4",
+      },
+      inventory: "Dziennik Renowacji 72",
+      experiment1: "Raport Projektu Spętane Oczy",
+      experiment2: "Przesłuchania Spętanych Oczu",
+    },
+  },
+  "stat.hexcasting": {
+    media_used: "Użyty Przepływ (w jednostkach pyłu)",
+    patterns_drawn: "Narysowane Symbole",
+    spells_cast: "Rzucone Zaklęcia",
+    media_overcast: "Nadczarowany Przepływ (w jednostkach pyłu)",
+  },
+  "death.attack.hexcasting": {
+    overcast: {
+      "": "Umysł %s rozwiał się w pył",
+      player: "Umysł %s rozwiał się w pył walcząc %s",
+    },
+  },
+  "command.hexcasting": {
+    recalc: "Przeliczono symbole",
+    pats: {
+      listing: "Symbole w tym świecie:",
+      all: "Dano wszystkie zwoje %d graczowi %s",
+      "specific.success": "Dano %s o id %s graczowi %s",
+    },
+    brainsweep: {
+      "": "Przekartkowano mózg %s",
+      "fail.badtype": "%s nie jest mobem",
+      "fail.already": "Umysł %s już jest pusty",
+    },
+  },
+  "matcher.hexcasting.pattern": {
+    title: "Symbol",
+    "title.styled": "Symbol <se,deaqq>",
+    description: "Wizualne Symbole",
+    example: "<ne,qaq><e,aa><ne,qaq><e,wa><e,wqaawdd><e,aawaawaa>",
   },
 }
