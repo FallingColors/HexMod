@@ -21,9 +21,12 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -159,11 +162,6 @@ public class ForgeHexDataGenerators {
                 new Ingredient.ItemValue(new ItemStack(Items.STICK)),
                 new Ingredient.TagValue(ItemTags.create(ResourceLocation.fromNamespaceAndPath("forge", "rods/wooden")))
             ));
-        }
-
-        @Override
-        public Ingredient whenModIngredient(Ingredient defaultIngredient, String modid, Ingredient modIngredient) {
-            return ForgeModConditionalIngredient.of(defaultIngredient, modid, modIngredient).toVanilla();
         }
 
         // https://github.com/vectorwing/FarmersDelight/blob/1.18.2/src/generated/resources/data/farmersdelight/recipes/cutting/amethyst_block.json
