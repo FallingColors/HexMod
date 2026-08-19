@@ -31,10 +31,10 @@ summary {
   margin-bottom: 0.5em;
 }
 .details-collapsible .collapse-details.collapse-spell::before {
-  content: "Click to show spell";
+  content: "Kliknij, aby pokazać zaklęcie";
 }
 .details-collapsible[open] .collapse-details.collapse-spell::before {
-  content: "Click to hide spell";
+  content: "Kliknij, aby ukryć zaklęcie";
 }
 /* if the collapsible is closed, hide the "hide recipe" message */
 .details-collapsible:not([open]) > .collapse-details > .collapse-recipe-hide {
