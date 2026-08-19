@@ -63,16 +63,17 @@ object EulerPathFinder {
         out.add(current)
 
         val dirs = out.zipWithNext { a, b -> a.immediateDelta(b)!! }
-        val angles = dirs.zipWithNext { a, b -> b.angleFrom(a) }
-        return HexPattern(dirs[0], angles.toMutableList())
+        val signatureBuilder = HexSignature.Builder(false)
+        dirs.zipWithNext().forEach { (a, b) -> signatureBuilder.addAngle(b.angleFrom(a)) }
+        return HexPattern(dirs[0], signatureBuilder.build())
     }
 
     private fun toGraph(pat: HexPattern): HashMap<HexCoord, EnumSet<HexDir>> {
         val graph = HashMap<HexCoord, EnumSet<HexDir>>()
 
-        var compass: HexDir = pat.startDir
+        var compass: HexDir = pat.orientation
         var cursor = HexCoord.Origin
-        for (a in pat.angles) {
+        for (a in pat.signature) {
             // i hate kotlin
             graph.getOrPut(cursor) { EnumSet.noneOf(HexDir::class.java) }.add(compass)
             graph.getOrPut(cursor + compass) { EnumSet.noneOf(HexDir::class.java) }.add(compass * HexAngle.BACK)

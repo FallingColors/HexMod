@@ -7,7 +7,9 @@ import at.petrak.hexcasting.api.casting.castables.ConstMediaAction
 import at.petrak.hexcasting.api.casting.castables.SpecialHandler
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.math.HexAngle
 import at.petrak.hexcasting.api.casting.math.HexPattern
+import at.petrak.hexcasting.api.casting.math.HexSignature
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.lightPurple
 import at.petrak.hexcasting.common.lib.hex.HexSpecialHandlers
@@ -33,45 +35,51 @@ class SpecialHandlerNumberLiteral(val x: Double) : SpecialHandler {
         }
     }
 
+    companion object {
+        @JvmField
+        val POSITIVE_PREFIX = HexSignature.fromAnglesStringUnchecked("aqaa")
+        @JvmField
+        val NEGATIVE_PREFIX = HexSignature.fromAnglesStringUnchecked("dedd")
+    }
+
     class Factory : SpecialHandler.Factory<SpecialHandlerNumberLiteral> {
         override fun tryMatch(pat: HexPattern, env: CastingEnvironment): SpecialHandlerNumberLiteral? {
-            val sig = pat.anglesSignature()
-            if (sig.startsWith("aqaa") || sig.startsWith("dedd")) {
-                val negate = sig.startsWith("dedd");
-                var accumulator = 0.0;
-                for (ch in sig.substring(4)) {
-                    when (ch) {
-                        'w' -> {
-                            accumulator += 1;
-                        }
+            val sig = pat.signature
+            val (suffix, negate) = sig.stripPrefix(POSITIVE_PREFIX)?.let { it to false }
+                ?: sig.stripPrefix(NEGATIVE_PREFIX)?.let { it to true }
+                ?: return null
 
-                        'q' -> {
-                            accumulator += 5;
-                        }
-
-                        'e' -> {
-                            accumulator += 10;
-                        }
-
-                        'a' -> {
-                            accumulator *= 2;
-                        }
-
-                        'd' -> {
-                            accumulator /= 2;
-                        }
-                        // ok funny man
-                        's' -> {}
-                        else -> throw IllegalStateException()
+            var accumulator = 0.0;
+            for (angle in suffix) {
+                when (angle) {
+                    HexAngle.FORWARD -> {
+                        accumulator += 1;
                     }
+
+                    HexAngle.LEFT -> {
+                        accumulator += 5;
+                    }
+
+                    HexAngle.RIGHT -> {
+                        accumulator += 10;
+                    }
+
+                    HexAngle.LEFT_BACK -> {
+                        accumulator *= 2;
+                    }
+
+                    HexAngle.RIGHT_BACK -> {
+                        accumulator /= 2;
+                    }
+                    // ok funny man
+                    HexAngle.BACK -> {}
+                    else -> throw IllegalStateException()
                 }
-                if (negate) {
-                    accumulator = -accumulator;
-                }
-                return SpecialHandlerNumberLiteral(accumulator);
-            } else {
-                return null;
             }
+            if (negate) {
+                accumulator = -accumulator;
+            }
+            return SpecialHandlerNumberLiteral(accumulator);
         }
 
     }
