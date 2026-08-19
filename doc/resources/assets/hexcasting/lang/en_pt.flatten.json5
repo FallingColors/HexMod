@@ -1,1 +1,7 @@
-{}
+{
+  hexdoc: {
+    pattern: {
+      not_supported: "Yer mapviewer hasn't got support for visualizin' these patterns. Pattern code: {}",
+    },
+  },
+}
