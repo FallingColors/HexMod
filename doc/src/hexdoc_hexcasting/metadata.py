@@ -46,10 +46,10 @@ class BasePatternStubProps(StripHiddenModel, ABC):
                 if per_world_tag is not None:
                     pattern.is_per_world = pattern.id in per_world_tag.values
                 patterns.append(pattern)
-        except Exception as e:
+        except Exception:
             # hack: notes don't seem to be working on pydantic exceptions :/
             logger.error(f"Failed to load {self.type} pattern stub from {self.path}.")
-            raise e
+            raise
 
         pretty_path = self.path.resolve().relative_to(Path.cwd())
 
@@ -119,14 +119,14 @@ PatternStubProps = RegexPatternStubProps | JsonPatternStubProps
 
 
 class HexProperties(StripHiddenModel):
-    pattern_stubs: list[PatternStubProps] = Field(default_factory=list)
+    pattern_stubs: list[PatternStubProps] = Field(default_factory=lambda: [])
     allow_duplicates: bool = False
 
 
 # conthext, perhaps
 class HexContext(ValidationContextModel):
     hex_props: HexProperties
-    patterns: dict[ResourceLocation, PatternInfo] = Field(default_factory=dict)
+    patterns: dict[ResourceLocation, PatternInfo] = Field(default_factory=lambda: {})
 
     def load_patterns(self, loader: ModResourceLoader):
         signatures = dict[str, PatternInfo]()  # just for duplicate checking
@@ -165,7 +165,7 @@ class HexContext(ValidationContextModel):
     ):
         # load the tag that specifies which patterns are random per world
         per_world = Tag.load(
-            registry="action",
+            registry="hexcasting/action",
             id=ResourceLocation("hexcasting", "per_world_pattern"),
             loader=loader,
         )
