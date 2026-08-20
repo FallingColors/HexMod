@@ -69,6 +69,8 @@ object FabricHexInitializer : ModInitializer {
 
         HexInterop.init()
         RegisterMisc.register()
+
+        HexGaslighting.init()
     }
 
     // this global is for both server and client because PatternRegistryManifest.processRegistry
