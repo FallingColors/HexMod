@@ -13,6 +13,7 @@
       "default": "por defecto",
       turbo: "turbo",
       dark2: "oscuro2",
+      renders: "Renderizados",
     },
     pattern: {
       show: "Haz clic para mostrar el hechizo",
