@@ -1,1 +1,39 @@
-{}
+{
+  hexdoc: {
+    hexcasting: {
+      title: "Carnet de Sortilèges",
+      description: "Le Carnet de Sortilèges, dans son intégralité.",
+    },
+    renderer: {
+      renders: "Rendu",
+      palettes: "Palettes",
+      animated: "animé",
+      monocolor: "monochrome",
+      gradient: "dégradé",
+      segment: "segment",
+      "default": "défaut",
+      turbo: "turbo",
+      dark2: "sombre2",
+      tab10: "tab10",
+    },
+    pattern: {
+      show: "Cliquer pour montrer le Sort",
+      hide: "Cliquer pour cacher le sort",
+      multiplier: "${speedScale()}x",
+      paused: "En pause",
+      not_supported: "Votre navigateur ne prend pas en charge la visualisation de Runes. Code de la Rune: {}",
+    },
+    villager_requirements: {
+      any: "Le villageois doit être {level} ou supérieur",
+      professional: "Le villageois doit être un {profession} de {level} ou supérieur",
+    },
+  },
+  "block.hexcasting": {
+    slate: "Ardoise vide",
+  },
+  "tag.item.c": {
+    brown_dye: "Teintures marron",
+    glowstone_dusts: "Poussières de pierre lumineuse",
+    wood_sticks: "Bâtons en bois",
+  },
+}
