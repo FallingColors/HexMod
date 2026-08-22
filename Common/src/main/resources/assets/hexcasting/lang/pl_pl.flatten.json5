@@ -1049,7 +1049,7 @@
       hexcasting: "Czarujące Przedmioty",
       ancient_cyphers: "Starożytne Cacka",
       phials: "Fiolki Przepływu",
-      potions: "Mikstury do Czarowania",
+      potions: "Mikstury Czarownicze",
       pigments: "Pigmenty",
       edified: "Oświecone Drzewa",
       decoration: "Bloki Ozdobne",
@@ -1082,8 +1082,8 @@
       basic_spell: "Podstawowe Zaklęcia",
       blockworks: "Manipulacja Bloków",
       nadirs: "Nadiry",
-      meta: "Meta-Analiza",
-      hexcasting_spell: "Tworzenie Czarujących Przedmiotów",
+      meta: "Meta-Ewaluacja",
+      hexcasting_spell: "Tworzenie Przedmiotów Czarowniczych",
       sentinels: "Wartownicy",
       flights: "Lot",
       weather_manip: "Manipulacja Pogody",
@@ -1107,7 +1107,7 @@
     page: {
       creative_items: {
         "1": "Udało mi się wynaleźć parę teoretycznych przedmiotów, które da się skonstruować wyłącznie przez $(italic)kreatywne/$ sposoby.",
-        creative_unlocker: "$(#74b3f2)Kostka Przepływu/$ to prawie nieograniczone źródło mocy, którym mogę się posilić, by mieć nieskończony _przepływ, dla jakichkolwiek_ czarów, jakie sobie wymarzę. Jako dodatkowa zaleta, wygląda całkiem smacznie. Być może zjedzenie jej da mi więcej wiedzy o świecie, choć to byłoby wkraczanie na terytorium spojlerów...",
+        creative_unlocker: "$(#74b3f2)Kostka Przepływu/$ to prawie nieograniczone źródło mocy, który mogę wykorzystać jako źródło nieskończonego _przepływu, dla jakichkolwiek_ czarów, jakie sobie wymarzę. Jako dodatkowa zaleta, wygląda całkiem smacznie. Być może zjedzenie jej da mi więcej wiedzy o świecie, choć to byłoby wkraczanie na terytorium spojlerów...",
         "2": "Dodatkowo, zmiana nazwy $(#74b3f2)Kostki Przepływu/$ na kowadle powinna pozwolić mi na testowanie i lepsze zrozumienie moich _Czarów. Jeżeli ktoś z Kreatywną kontrolą nad światem napotkał moje notatki, polecam wyłączyć ją przed próbowaniem następujących rzeczy.",
         debug_media: {
           title: "debug media",
@@ -1118,6 +1118,28 @@
         "1": "$(media)Przepływ/$ to forma psychicznej energii znajdującej się poza umysłem. Każda żywa istota produkuje śladowe ilości Przepływu myśląc o czymkolwiek; gdy dana myśl się kończy, przepływ przez nią wytworzony zostaje uwolniony na zewnątrz.$(br2)Sztuka rzucania czarów polega właśnie na kontrolowaniu przepływu i używaniu go, by giąć rzeczywistość do swojej woli.",
         "2": "$(media)Przepływ/$ może wpływać na inne formy przepływu -- siła i typ ego wpływu mogą być zmienione przez tkanie $(media)przepływu/$ w glify.$(p)Uczeni tej sztuki używali $(media)przepływu/$ skupionego w formę grudki na końcu kija: machając nim w powietrzu w precyzyjnych sekwencjach, byli w stanie wpłynąć na wystarczająco $(media)przepływu/$ z wystarczającą precyzją, by wpłynąć na sam świat, co przyjmowało formę $(hex)czaru/$.",
         "3": "Niestety, nawet w pełni świadoma istota (jak ja... chyba) może wyprodukować tylko nieznaczne ilości $(media)przepływu/$. Używanie samej siły woli do czarowania byłoby więc raczej niepraktyczne.$(br2) Według legend głęboko pod ziemią można znaleźć złoża, w których $(media)przepływ/$ skupia się i powoli rośnie w formie kryształu.$(p)Tylko jak je znaleźć...",
+      },
+      geodes: {
+        "1": "Eureka! Podczas kopania, udało mi się natrafić na ogromną geodę, która wręcz wibrowała od energii w niej skupionej - energii naciskającej na mój umysł, zalewającej moje myśli. A teraz, trzymam krystaliczny odłamek tej właśnie energii w dłoni. Fakt istnienia tej geody $(italic)potwierdza/$ starożytne legendy, opowiadające o miejscach, w których przepływ akumuluje i krystalizuje się bez problemu. Te $(l:items/amethyst)$(item)kryształy ametystu/$ muszą być $(l:items/amethyst)$(thing)fizyczną manifestacją przepływu/$.",
+        "2": "Wygląda na to, że oprócz zwyczajnych $(l:items/amethyst)$(item)odłamków ametystów/$, z ametystowych kryształów mogą także wypaść $(l:items/amethyst)$(item)ametystowy pył/$ oraz $(l:items/amethyst)$(item)naładowany ametyst/$. Mam większą szansę na znalezienie $(l:items/amethyst)$(item)naładowanego ametystu/$, jeśli użyję kilofu zaklętego na Fortunę.",
+        "3": "Przyglądając się pięknie tego kryształu, czuję moje synapsy wystrzeliwujące chaotycznie, formując połączenia mózgowe. Czuję się, jakby sam Przepływ płynął przez mój układ nerwowy, przyśpieszał moje myśli, zaostrzał moje zmysły... Jakież to wspaniałe uczucie. $(br2)W końcu, moje badania sztuk tajemnych zaczynają nabierać sensu!$(p)Teraz gdy wiem na co patrzę, muszę jeszcze raz przejrzeć te stare legendy.",
+      },
+      couldnt_cast: {
+        "2": "Bariera powstrzymująca mnie przed rzuceniem tego zaklęcia została lekko osłabiona od siły, na którą wystawiłem to zaklęcie; lecz mimo moich największych starań, najwyższej jakości ametystu, najbardziej precyzyjnych glifów -- dalej $(italic)nie mogę/$ przebić tej bariery. Jest to niemożliwie frustrujące. Czy tak kończą się moje badania? Przeklęte przez bark kompetencji, odmawiający mi mojej prawowitej potęgi?$(br2)Muszę się uspokoić i przemyśleć wszystko co się wydarzyło. W końcu, nawet porażka wprowadza nowe dane do wzięcia pod uwagę.",
+        "3": "Po dokładniejszym przemyśleniu informacji, wydaje mi się, że ta porażka w pewien zmieniła moją relację z przepływem i splotem.$(p)Wygląda na to, że zamiast $(l:items/amethyst)$(item)ametystu/$, jestem teraz w stanie użyć mojej własnej energii życiowej -- tak jak pisano w niektórych legendach.$(p)Nie mam pojęcia dlaczego dopiero teraz. Ciężar prawdy i wiedzy był na moich ramionach cały czas, i teraz to widzę. Noszę go.$(br2)Na szczęście, mam jako taką świadomość własnych ograniczeń -- mam do dyspozycji mniej-więcej dwa kawałki $(l:items/amethyst)$(item)Naładowanego Ametystu/$ przy pełnym zdrowiu.",
+        "4": "Przechodzą mnie ciarki myśląc o tym -- do tej pory, mój umysł nie ucierpiał zbyt bardzo od moich badań. Ale prawdą jest, że jestem tylko połową swego rodzaju łącza.$(p)Jego druga strona, jest oddzielona pewną granicą -- granicą, którą powoli osłabiam, drążąc coraz głębiej. Za tą granicą leży miejsce, gdzie proste czyny i czary prowadzą do wiecznej chwały.$(p)Czy to grzech, chcieć tego dla siebie?",
+        "1": "Argh! Czemu natura nie pozwala mi rzucić tego zaklęcia?!$(br2)Sam zwój szumi autentycznością. Mogę $(italic)wyczuć/$, jak buczy mi pomiędzy palcami -- glif jest prawdziwy, a przynajmniej tak bardzo, jak może być. To zaklęcie jest $(italic)tuż przede mną/$.$(p)A jednak chowa się, jak gdyby za jakąś cieniutką błoną. Zostało wezwane-- spróbowało się zjawić, lecz $(italic)NIE MOGŁO/$.",
+      },
+      start_to_see: {
+        "1": "Zwoje nie kłamały. Natura wzięła to, co było jej należne.",
+        "2": "To... To była...$(p)...to była jedna z $(italic)najgorszych/$ rzeczy jakie $(italic)kiedykolwiek/$ mi się przydarzyły. Natura spojrzała na mój plan, a w zamian dała mi uśmiech i uczucie pękania -- fragment mnie, odłamek mojej psychiki pękający i odpadający od reszty mojego umysłu, jak kryształ ametystu od geody.$(p)Samo przetrwanie czegoś takiego jest cudem, a co dopiero zachowując wystarczającą ilość świadomości, żeby dalej pisać-- najrozsądniej byłoby uznać tą sprawę za zamkniętą, dopracować moje rachunki zanim rzucę jakiekolwiek czary i NIGDY nie popełniać znowu takiego błędu.",
+        "3": "...Jednakże.$(br2) Na najprzelotniejsze mgnienie oka, ta część mnie... $(italic)ujrzała/$... $(l:greatwork/the_work)$(thing)coś/$. Miejsce-- a być może projekt? (Różnice między takimi określeniami nie wydawały się zbyt ważne w obliczu... tego.)$(p)A ta... ta błonka, bariera, czy granica oddzielająca mnie od domeny czystej myśli, przepływu, światła, może energii. Pamiętam-- wizję, myśl, wspomnienie, odczucie-- tej granicy, iskrzącej się przy jej końcówkach, tylko leciutko. $(p)W mojej głowie było już tylko jedno: $(italic)przejście./$",
+        "4": "Nie mogę. $(italic)Wiem/$, że nie mogę. To zbyt groźne. Siła, potrzebna by... Do tego trzebaby znaleźć się na włos od samej Śmierci, i to $(italic)jednym ciosem/$.$(br3)Ale jestem już. Tak bardzo. $(italic)Blisko/$.$(p)$(italic)To/$ jest kulminacja mojej sztuki. Moje Magnum Opus. Tak długo pożądane $(#54398a)Wtajemniczenie/$. $(br2)Żądam więcej. Muszę je znowu ujrzeć. Na $(italic)pewno/$ je znowu ujrzę.$(p)Czym jest mój śmiertelny umysł w obliczu nieśmiertelnej chwały?",
+      },
+      casting: {
+        overview: {
+          "1": "Myślę, że zawsze dobrze zaczynać od podstaw. Tak więc, mam tu proste wzory składające się na $(hex)czar/$, który wywoła pomniejszą eksplozję w miejscu, na które skupiam swój wzrok. Uważna analiza zasady działania tego $(hex)czaru/$ może być całkiem oświecająca.",
+        },
       },
     },
   },
