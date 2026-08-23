@@ -22,7 +22,8 @@ public class HexDamageTypeTagProvider extends DamageTypeTagsProvider {
         add(HexDamageTypes.OVERCAST,
             DamageTypeTags.BYPASSES_ARMOR,
             DamageTypeTags.BYPASSES_EFFECTS,
-            DamageTypeTags.BYPASSES_SHIELD
+            DamageTypeTags.BYPASSES_SHIELD,
+            DamageTypeTags.NO_KNOCKBACK
         );
     }
 
