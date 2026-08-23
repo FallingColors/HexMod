@@ -14,7 +14,6 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -119,6 +118,6 @@ public class PatternRegistryManifest {
 
         var sig = pair.getFirst();
         var entry = pair.getSecond();
-        return HexPattern.fromAnglesUnchecked(sig, entry.canonicalStartDir());
+        return HexPattern.fromAnyAngles(sig, entry.canonicalStartDir());
     }
 }

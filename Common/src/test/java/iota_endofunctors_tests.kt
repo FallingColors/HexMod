@@ -9,8 +9,6 @@ import at.petrak.hexcasting.xplat.DummyXplatAbstractions
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.opentest4j.AssertionFailedError
-import java.util.function.UnaryOperator
 
 internal class IotaEndofunctorsTests {
     fun exampleWalker(iota: Iota) =
@@ -63,9 +61,9 @@ internal class IotaEndofunctorsTests {
     @Test
     fun `a list of untouched iotas should be conserved`() {
         val iota = ListIota(listOf(
-            PatternIota(HexPattern.fromAnglesUnchecked("aqaaw", HexDir.SOUTH_EAST)),
-            PatternIota(HexPattern.fromAnglesUnchecked("aqaawa", HexDir.SOUTH_EAST)),
-            PatternIota(HexPattern.fromAnglesUnchecked("aqaawaw", HexDir.SOUTH_EAST)),
+            PatternIota(HexPattern.fromAnyAngles("aqaaw", HexDir.SOUTH_EAST)),
+            PatternIota(HexPattern.fromAnyAngles("aqaawa", HexDir.SOUTH_EAST)),
+            PatternIota(HexPattern.fromAnyAngles("aqaawaw", HexDir.SOUTH_EAST)),
         ))
         Assertions.assertSame(iota, iota.visit(::exampleWalker))
     }

@@ -53,7 +53,7 @@ public class HexPatternMatcher implements RegexMatcher {
             angleSigs = "";
         }
         try{
-            pat = HexPattern.fromAnglesUnchecked(angleSigs.toLowerCase(), dir);
+            pat = HexPattern.fromAnyAngles(angleSigs.toLowerCase(), dir);
             InlinePatternData patData = new InlinePatternData(pat);
             Style patDataStyle = patData.getExtraStyle();
             if(sizeModString != null && sizeModString.equals("+"))
