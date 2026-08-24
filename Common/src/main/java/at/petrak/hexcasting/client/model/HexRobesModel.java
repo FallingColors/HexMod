@@ -50,14 +50,14 @@ public class HexRobesModel extends HumanoidArmorModel<LivingEntity> {
 
         head.addOrReplaceChild("Hood",
             CubeListBuilder.create()
-                .texOffs(0, 0).addBox(-8.0F, 0.0F, 0.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 16).addBox(-8.0F, 0.0F, 0.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)),
+                .texOffs(0, 0).addBox(-8.0F, 0.0F, 0.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.5F))
+                .texOffs(0, 16).addBox(-8.0F, 0.0F, 0.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.5F)),
             PartPose.offset(4.0F, -8.0F, -4.0F));
 
         head.addOrReplaceChild("Horns",
             CubeListBuilder.create()
-                .texOffs(24, 0).addBox(8.5F, 0.0F, 0.0F, 8.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
-                .texOffs(24, 0).mirror().addBox(-7F, 0.0F, 0.0F, 8.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
+                .texOffs(24, 0).addBox(8.5F, 0.0F, 0.0F, 8.0F, 4.0F, 0.0F, new CubeDeformation(0.5F))
+                .texOffs(24, 0).mirror().addBox(-7F, 0.0F, 0.0F, 8.0F, 4.0F, 0.0F, new CubeDeformation(0.5F))
                 .mirror(false),
             PartPose.offset(-4.8F, -8.2F, 0.0F));
 
@@ -65,22 +65,22 @@ public class HexRobesModel extends HumanoidArmorModel<LivingEntity> {
 
         body.addOrReplaceChild("Torso",
             CubeListBuilder.create()
-                .texOffs(40, 0).addBox(-8.0F, 0.0F, 0.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(40, 16).addBox(-8.0F, 0.0F, 0.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)),
+                .texOffs(40, 0).addBox(-8.0F, 0.0F, 0.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.5F))
+                .texOffs(40, 16).addBox(-8.0F, 0.0F, 0.0F, 8.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)),
             PartPose.offset(4.0F, 0.0F, -2.0F));
 
         var rightArm = root.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.ZERO);
 
         rightArm.addOrReplaceChild("right_sleeve",
             CubeListBuilder.create()
-                .texOffs(0, 32).addBox(0.0F, 0.0F, 0.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)),
+                .texOffs(0, 32).addBox(0.0F, 0.0F, 0.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)),
             PartPose.offset(-3.0F, -2.0F, -2.0F));
 
         var leftArm = root.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.ZERO);
 
         leftArm.addOrReplaceChild("left_sleeve",
             CubeListBuilder.create()
-                .texOffs(0, 32).mirror().addBox(0, 0.0F, 0.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 32).mirror().addBox(0, 0.0F, 0.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F))
                 .mirror(false),
             PartPose.offset(-1.0F, -2.0F, -2.0F));
 
@@ -88,25 +88,25 @@ public class HexRobesModel extends HumanoidArmorModel<LivingEntity> {
 
         PartDefinition Right_r1 = rightLeg.addOrReplaceChild("right_skirt",
             CubeListBuilder.create()
-                .texOffs(48, 32).mirror().addBox(-2.2F, -0.5F, -6.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(48, 32).mirror().addBox(-2.2F, -0.5F, -6.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F))
                 .mirror(false),
             PartPose.offsetAndRotation(0.0F, 0.0F, 4.0F, 0.0F, 0.0F, 0.1309F));
 
         rightLeg.addOrReplaceChild("right_boot",
             CubeListBuilder.create()
-                .texOffs(16, 41).addBox(-4.0F, 0.0F, 0.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.0F)),
+                .texOffs(16, 41).addBox(-4.0F, 0.0F, 0.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.5F)),
             PartPose.offset(2.0F, 9.0F, -2.0F));
 
         var leftLeg = root.addOrReplaceChild("left_leg", CubeListBuilder.create(), PartPose.ZERO);
 
         PartDefinition Left_r1 = leftLeg.addOrReplaceChild("left_skirt",
             CubeListBuilder.create()
-                .texOffs(48, 32).addBox(-1.8F, -0.5F, -6.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)),
+                .texOffs(48, 32).addBox(-1.8F, -0.5F, -6.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.5F)),
             PartPose.offsetAndRotation(0.0F, 0.0F, 4.0F, 0.0F, 0.0F, -0.1309F));
 
         leftLeg.addOrReplaceChild("left_boot",
             CubeListBuilder.create()
-                .texOffs(16, 41).addBox(0.0F, 0.0F, 0.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.0F)),
+                .texOffs(16, 41).addBox(0.0F, 0.0F, 0.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.5F)),
             PartPose.offset(-2.0F, 9.0F, -2.0F));
 
         return LayerDefinition.create(meshdef, 64, 64);
