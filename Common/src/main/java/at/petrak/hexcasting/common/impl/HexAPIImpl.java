@@ -22,6 +22,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Consumer;
@@ -117,7 +118,7 @@ public class HexAPIImpl implements HexAPI {
             0,
             SoundEvents.ARMOR_EQUIP_LEATHER,
             () -> Ingredient.EMPTY,
-            Collections.emptyList(), // TODO check textures. If not - use robes here from original code
+            List.of(new ArmorMaterial.Layer(HexAPI.modLoc("robes"))),
             0,
             0
     );

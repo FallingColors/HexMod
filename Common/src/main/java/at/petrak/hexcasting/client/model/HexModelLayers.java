@@ -29,6 +29,6 @@ public class HexModelLayers {
     // https://github.com/VazkiiMods/Botania/blob/1.19.x/Xplat/src/main/java/vazkii/botania/client/model/BotaniaLayerDefinitions.java
     public static void init(BiConsumer<ModelLayerLocation, Supplier<LayerDefinition>> consumer) {
         consumer.accept(ALTIORA, ElytraModel::createLayer);
-        consumer.accept(ROBES, HexRobesModels::variant1);
+        consumer.accept(ROBES, HexRobesModel::variant1);
     }
 }
