@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.forge;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.Keybinds;
 import at.petrak.hexcasting.client.RegisterClientStuff;
@@ -7,17 +8,23 @@ import at.petrak.hexcasting.client.ShiftScrollListener;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.client.model.AltioraLayer;
 import at.petrak.hexcasting.client.model.HexModelLayers;
+import at.petrak.hexcasting.client.model.HexRobesModel;
 import at.petrak.hexcasting.client.render.HexAdditionalRenderers;
 import at.petrak.hexcasting.client.render.shader.HexShaders;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexParticles;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import at.petrak.hexcasting.forge.lib.ForgeHexAttachments;
 import at.petrak.hexcasting.interop.HexInterop;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
@@ -25,13 +32,20 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.ClientHooks;
 import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.function.Function;
 
 // This is Java because I can't kotlin-fu some of the consumers
@@ -145,6 +159,24 @@ public class ForgeHexClientInitializer {
 
             skin.addLayer(new AltioraLayer<>(skin, evt.getEntityModels()));
         });
+    }
+
+    @SubscribeEvent
+    public static void registerArmorRenderer(RegisterClientExtensionsEvent evt) {
+        evt.registerItem(new IClientItemExtensions() {
+            private final Map<EquipmentSlot, HumanoidModel<LivingEntity>> MODELS = new Object2ObjectArrayMap<>();
+
+            @Override
+            public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
+                return MODELS.computeIfAbsent(equipmentSlot, this::provideArmorModelForSlot);
+            }
+
+            private HumanoidModel<LivingEntity> provideArmorModelForSlot(EquipmentSlot slot) {
+                EntityModelSet models = Minecraft.getInstance().getEntityModels();
+                ModelPart root = models.bakeLayer(HexModelLayers.ROBES);
+                return new HexRobesModel(root, slot);
+            }
+        }, HexItems.ROBE_MASK.get(), HexItems.ROBE_TUNIC.get(), HexItems.ROBE_LEGS.get(), HexItems.ROBE_BOOTS.get());
     }
 
     @SubscribeEvent
