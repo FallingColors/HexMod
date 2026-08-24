@@ -12,6 +12,7 @@ import at.petrak.hexcasting.client.model.HexRobesModel;
 import at.petrak.hexcasting.client.render.HexAdditionalRenderers;
 import at.petrak.hexcasting.client.render.shader.HexShaders;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
+import at.petrak.hexcasting.common.items.armor.ItemRobes;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexParticles;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
@@ -168,13 +169,7 @@ public class ForgeHexClientInitializer {
 
             @Override
             public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
-                return MODELS.computeIfAbsent(equipmentSlot, this::provideArmorModelForSlot);
-            }
-
-            private HumanoidModel<LivingEntity> provideArmorModelForSlot(EquipmentSlot slot) {
-                EntityModelSet models = Minecraft.getInstance().getEntityModels();
-                ModelPart root = models.bakeLayer(HexModelLayers.ROBES);
-                return new HexRobesModel(root, slot);
+                return MODELS.computeIfAbsent(equipmentSlot, ItemRobes::provideArmorModelForSlot);
             }
         }, HexItems.ROBE_MASK.get(), HexItems.ROBE_TUNIC.get(), HexItems.ROBE_LEGS.get(), HexItems.ROBE_BOOTS.get());
     }
