@@ -76,10 +76,10 @@ public class HexItems {
             IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
                     .stacksTo(1).attributes(ItemLens.MODIFIERS)));
 
-    public static final Supplier<ItemRobes> ROBE_MASK = make("robe/mask", () -> new ItemRobes(ArmorItem.Type.HELMET, unstackable()));
-    public static final Supplier<ItemRobes> ROBE_TUNIC = make("robe/tunic", () -> new ItemRobes(ArmorItem.Type.CHESTPLATE, unstackable()));
-    public static final Supplier<ItemRobes> ROBE_LEGS = make("robe/legs", () -> new ItemRobes(ArmorItem.Type.LEGGINGS, unstackable()));
-    public static final Supplier<ItemRobes> ROBE_BOOTS = make("robe/boots", () -> new ItemRobes(ArmorItem.Type.BOOTS, unstackable()));
+    public static final Supplier<ItemRobes> ROBES_MASK = make("robes/mask", () -> new ItemRobes(ArmorItem.Type.HELMET, unstackable()));
+    public static final Supplier<ItemRobes> ROBES_TUNIC = make("robes/tunic", () -> new ItemRobes(ArmorItem.Type.CHESTPLATE, unstackable()));
+    public static final Supplier<ItemRobes> ROBES_LEGS = make("robes/legs", () -> new ItemRobes(ArmorItem.Type.LEGGINGS, unstackable()));
+    public static final Supplier<ItemRobes> ROBES_BOOTS = make("robes/boots", () -> new ItemRobes(ArmorItem.Type.BOOTS, unstackable()));
 
     public static final Supplier<ItemAbacus> ABACUS = make("abacus", () -> new ItemAbacus(unstackable()));
     public static final Supplier<ItemThoughtKnot> THOUGHT_KNOT = make("thought_knot", () -> new ItemThoughtKnot(unstackable()));

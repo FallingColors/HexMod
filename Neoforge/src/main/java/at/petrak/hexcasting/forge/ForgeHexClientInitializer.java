@@ -1,6 +1,5 @@
 package at.petrak.hexcasting.forge;
 
-import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.Keybinds;
 import at.petrak.hexcasting.client.RegisterClientStuff;
@@ -8,7 +7,6 @@ import at.petrak.hexcasting.client.ShiftScrollListener;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.client.model.AltioraLayer;
 import at.petrak.hexcasting.client.model.HexModelLayers;
-import at.petrak.hexcasting.client.model.HexRobesModel;
 import at.petrak.hexcasting.client.render.HexAdditionalRenderers;
 import at.petrak.hexcasting.client.render.shader.HexShaders;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
@@ -24,8 +22,6 @@ import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
-import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
@@ -39,7 +35,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.ClientHooks;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
@@ -171,7 +166,7 @@ public class ForgeHexClientInitializer {
             public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
                 return MODELS.computeIfAbsent(equipmentSlot, ItemRobes::provideArmorModelForSlot);
             }
-        }, HexItems.ROBE_MASK.get(), HexItems.ROBE_TUNIC.get(), HexItems.ROBE_LEGS.get(), HexItems.ROBE_BOOTS.get());
+        }, HexItems.ROBES_MASK.get(), HexItems.ROBES_TUNIC.get(), HexItems.ROBES_LEGS.get(), HexItems.ROBES_BOOTS.get());
     }
 
     @SubscribeEvent
