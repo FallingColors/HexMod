@@ -80,6 +80,11 @@ public class HexItemModels extends PaucalItemModelProvider {
             .translation(-2.5f, 0f, -8f)
             .scale(0.4f);
 
+        buildRobes(HexItems.ROBES_MASK.get(), "helmet", 1);
+        buildRobes(HexItems.ROBES_TUNIC.get(), "chestplate", 1);
+        buildRobes(HexItems.ROBES_LEGS.get(), "leggings", 1);
+        buildRobes(HexItems.ROBES_BOOTS.get(), "boots", 1);
+
         singleTexture("old_staff", ResourceLocation.withDefaultNamespace("item/handheld_rod"),
             "layer0", modLoc("item/staff/old"));
         singleTexture("cherry_staff", ResourceLocation.withDefaultNamespace("item/handheld_rod"),
@@ -274,6 +279,12 @@ public class HexItemModels extends PaucalItemModelProvider {
             .predicate(ItemStaff.FUNNY_LEVEL_PREDICATE, 2)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/cherry_staff")))
             .end();
+    }
+
+    private void buildRobes(Item item, String type, int numVariants) {
+        // TODO: actually handle the variants
+        singleTexture("item/" + getPath(item), ResourceLocation.withDefaultNamespace("item/generated"),
+            "layer0", modLoc("item/robes/"+type+"1"));
     }
 
     private void buildPackagedSpell(Item item, String stub, int numVariants) {

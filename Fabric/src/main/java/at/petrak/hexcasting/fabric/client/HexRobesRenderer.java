@@ -11,10 +11,10 @@ import java.util.List;
 public class HexRobesRenderer {
     public static final List<Item> ROBE_ITEMS =
         List.of(
-            HexItems.ROBE_MASK.get(),
-            HexItems.ROBE_TUNIC.get(),
-            HexItems.ROBE_LEGS.get(),
-            HexItems.ROBE_BOOTS.get()
+            HexItems.ROBES_MASK.get(),
+            HexItems.ROBES_TUNIC.get(),
+            HexItems.ROBES_LEGS.get(),
+            HexItems.ROBES_BOOTS.get()
         );
 
     public static void init() {
