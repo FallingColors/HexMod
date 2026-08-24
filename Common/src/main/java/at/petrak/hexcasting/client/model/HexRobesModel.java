@@ -56,8 +56,8 @@ public class HexRobesModel extends HumanoidArmorModel<LivingEntity> {
 
         head.addOrReplaceChild("Horns",
             CubeListBuilder.create()
-                .texOffs(24, 0).addBox(-8.0F, 0.0F, 0.0F, 8.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
-                .texOffs(24, 0).mirror().addBox(9.5F, 0.0F, 0.0F, 8.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
+                .texOffs(24, 0).addBox(8.5F, 0.0F, 0.0F, 8.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
+                .texOffs(24, 0).mirror().addBox(-7F, 0.0F, 0.0F, 8.0F, 4.0F, 0.0F, new CubeDeformation(0.0F))
                 .mirror(false),
             PartPose.offset(-4.8F, -8.2F, 0.0F));
 
@@ -71,42 +71,43 @@ public class HexRobesModel extends HumanoidArmorModel<LivingEntity> {
 
         var rightArm = root.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.ZERO);
 
-        rightArm.addOrReplaceChild("Arms",
+        rightArm.addOrReplaceChild("right_sleeve",
             CubeListBuilder.create()
-                .texOffs(0, 32).addBox(-4.0F, 0.0F, 0.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 32).mirror().addBox(8.0F, 0.0F, 0.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
-                .mirror(false),
-            PartPose.offset(-4.0F, 0.0F, -2.0F));
+                .texOffs(0, 32).addBox(0.0F, 0.0F, 0.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)),
+            PartPose.offset(-3.0F, -2.0F, -2.0F));
 
         var leftArm = root.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.ZERO);
 
-        // TODO: split up arms?
-
-        PartDefinition Skirt = body.addOrReplaceChild("Skirt", CubeListBuilder.create(),
-            PartPose.offset(0.0F, 12.0F, -2.0F));
-
-        PartDefinition Left_r1 = Skirt.addOrReplaceChild("Left_r1",
+        leftArm.addOrReplaceChild("left_sleeve",
             CubeListBuilder.create()
-                .texOffs(48, 32).mirror().addBox(0.1F, 0.0F, -4.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 32).mirror().addBox(0, 0.0F, 0.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
                 .mirror(false),
-            PartPose.offsetAndRotation(0.0F, 0.0F, 4.0F, 0.0F, 0.0F, -0.1309F));
-
-        PartDefinition Right_r1 = Skirt.addOrReplaceChild("Right_r1",
-            CubeListBuilder.create()
-                .texOffs(48, 32).addBox(-4.0F, 0.0F, -4.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)),
-            PartPose.offsetAndRotation(0.0F, 0.0F, 4.0F, 0.0F, 0.0F, 0.1309F));
+            PartPose.offset(-1.0F, -2.0F, -2.0F));
 
         var rightLeg = root.addOrReplaceChild("right_leg", CubeListBuilder.create(), PartPose.ZERO);
 
-        rightLeg.addOrReplaceChild("Legs",
-            CubeListBuilder.create().texOffs(16, 41)
-                .addBox(-4.0F, 0.0F, 0.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.0F))
-                .texOffs(16, 41).addBox(0.0F, 0.0F, 0.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.0F)),
-            PartPose.offset(0.0F, 21.0F, -2.0F));
+        PartDefinition Right_r1 = rightLeg.addOrReplaceChild("right_skirt",
+            CubeListBuilder.create()
+                .texOffs(48, 32).mirror().addBox(-2.2F, -0.5F, -6.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F))
+                .mirror(false),
+            PartPose.offsetAndRotation(0.0F, 0.0F, 4.0F, 0.0F, 0.0F, 0.1309F));
+
+        rightLeg.addOrReplaceChild("right_boot",
+            CubeListBuilder.create()
+                .texOffs(16, 41).addBox(-4.0F, 0.0F, 0.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.0F)),
+            PartPose.offset(2.0F, 9.0F, -2.0F));
 
         var leftLeg = root.addOrReplaceChild("left_leg", CubeListBuilder.create(), PartPose.ZERO);
 
-        // TODO: split up legs?
+        PartDefinition Left_r1 = leftLeg.addOrReplaceChild("left_skirt",
+            CubeListBuilder.create()
+                .texOffs(48, 32).addBox(-1.8F, -0.5F, -6.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.0F)),
+            PartPose.offsetAndRotation(0.0F, 0.0F, 4.0F, 0.0F, 0.0F, -0.1309F));
+
+        leftLeg.addOrReplaceChild("left_boot",
+            CubeListBuilder.create()
+                .texOffs(16, 41).addBox(0.0F, 0.0F, 0.0F, 4.0F, 3.0F, 4.0F, new CubeDeformation(0.0F)),
+            PartPose.offset(-2.0F, 9.0F, -2.0F));
 
         return LayerDefinition.create(meshdef, 64, 64);
     }
@@ -119,11 +120,10 @@ public class HexRobesModel extends HumanoidArmorModel<LivingEntity> {
 
     private void renderArmorPart(EquipmentSlot slot) {
         setAllVisible(false);
-        rightLeg.getChild("Legs").visible = false;
-        body.getChild("Skirt").visible = false;
-        //leftLeg.getChild("left_leg_armor").visible = false;
-        //rightLeg.getChild("right_boot").visible = false;
-        //leftLeg.getChild("left_boot").visible = false;
+        rightLeg.getChild("right_skirt").visible = false;
+        leftLeg.getChild("left_skirt").visible = false;
+        rightLeg.getChild("right_boot").visible = false;
+        leftLeg.getChild("left_boot").visible = false;
 
         switch (slot) {
             case HEAD -> head.visible = true;
@@ -135,15 +135,14 @@ public class HexRobesModel extends HumanoidArmorModel<LivingEntity> {
             case LEGS -> {
                 rightLeg.visible = true;
                 leftLeg.visible = true;
-                rightLeg.getChild("Legs").visible = true;
-                //leftLeg.getChild("left_leg_armor").visible = true;
-                body.getChild("Skirt").visible = true;
+                rightLeg.getChild("right_skirt").visible = true;
+                leftLeg.getChild("left_skirt").visible = true;
             }
             case FEET -> {
                 rightLeg.visible = true;
                 leftLeg.visible = true;
-                //rightLeg.getChild("right_boot").visible = true;
-                //leftLeg.getChild("left_boot").visible = true;
+                rightLeg.getChild("right_boot").visible = true;
+                leftLeg.getChild("left_boot").visible = true;
             }
             case MAINHAND, OFFHAND -> {
             }
