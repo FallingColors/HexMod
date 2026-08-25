@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.lib;
 
+import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexTags;
@@ -76,11 +77,6 @@ public class HexItems {
             IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
                     .stacksTo(1).attributes(ItemLens.MODIFIERS)));
 
-    public static final Supplier<ItemRobes> ROBES_HOOD = make("robes/hood", () -> new ItemRobes(ArmorItem.Type.HELMET, unstackable()));
-    public static final Supplier<ItemRobes> ROBES_TUNIC = make("robes/tunic", () -> new ItemRobes(ArmorItem.Type.CHESTPLATE, unstackable()));
-    public static final Supplier<ItemRobes> ROBES_LEGS = make("robes/legs", () -> new ItemRobes(ArmorItem.Type.LEGGINGS, unstackable()));
-    public static final Supplier<ItemRobes> ROBES_BOOTS = make("robes/boots", () -> new ItemRobes(ArmorItem.Type.BOOTS, unstackable()));
-
     public static final Supplier<ItemAbacus> ABACUS = make("abacus", () -> new ItemAbacus(unstackable()));
     public static final Supplier<ItemThoughtKnot> THOUGHT_KNOT = make("thought_knot", () -> new ItemThoughtKnot(unstackable()));
     public static final Supplier<ItemFocus> FOCUS = make("focus", () -> new ItemFocus(unstackable()));
@@ -104,6 +100,31 @@ public class HexItems {
                             .build()
                     )
             )
+    );
+
+    public static final Supplier<ItemRobes> ROBES_HOOD = make("robes/hood", () ->
+        new ItemRobes(ArmorItem.Type.HELMET, unstackable()
+            .durability(270)
+            .attributes(ItemRobes.HOOD_MODIFIERS)
+        )
+    );
+    public static final Supplier<ItemRobes> ROBES_TUNIC = make("robes/tunic", () ->
+        new ItemRobes(ArmorItem.Type.CHESTPLATE, unstackable()
+            .durability(400)
+            .attributes(ItemRobes.TUNIC_MODIFIERS)
+        )
+    );
+    public static final Supplier<ItemRobes> ROBES_LEGS = make("robes/legs", () ->
+        new ItemRobes(ArmorItem.Type.LEGGINGS, unstackable()
+            .durability(350)
+            .attributes(ItemRobes.LEGS_MODIFIERS)
+        )
+    );
+    public static final Supplier<ItemRobes> ROBES_BOOTS = make("robes/boots", () ->
+        new ItemRobes(ArmorItem.Type.BOOTS, unstackable()
+            .durability(315)
+            .attributes(ItemRobes.BOOTS_MODIFIERS)
+        )
     );
 
     public static final Supplier<ItemScroll> SCROLL_SMOL = make("scroll_small", () -> new ItemScroll(props(), 1));
