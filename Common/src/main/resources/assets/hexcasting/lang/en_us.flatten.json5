@@ -62,6 +62,15 @@
     abacus: "Abacus",
     jeweler_hammer: "Jeweler's Hammer",
     sub_sandwich: "Submarine Sandwich",
+
+    robes: {
+      hood: "Grand Caster Hood",
+      tunic: "Grand Caster Tunic",
+      "legs.0": "Grand Caster Robe",
+      "legs.1": "Grand Caster Pants",
+      "legs.2": "Grand Caster Leggings",
+      boots: "Grand Caster Boots",
+    },
     
     dye_colorizer_: {
       white: "White Pigment",
