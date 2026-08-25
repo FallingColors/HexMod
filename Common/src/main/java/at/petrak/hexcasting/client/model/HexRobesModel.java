@@ -223,13 +223,15 @@ public class HexRobesModel extends HumanoidArmorModel<LivingEntity> {
 
         var sash = body.addOrReplaceChild("sash",
             CubeListBuilder.create()
-                .texOffs(32, 48).addBox(-10.4F, -3.9F, 0.0F, 3.0F, 3.0F, 6.0F, new CubeDeformation(0.1F)),
-            PartPose.offset(5.5F, 10.8F, -3.0F));
+                .texOffs(32, 48).mirror().addBox(7.4F, -3.9F, 0.0F, 3.0F, 3.0F, 6.0F, new CubeDeformation(0.1F))
+                .mirror(false),
+            PartPose.offset(-5.45F, 10.8F, -3.0F));
 
         sash.addOrReplaceChild("strap",
             CubeListBuilder.create()
-                .texOffs(0, 48).addBox(-9.05F, -13.2F, -3.0F, 10.0F, 3.0F, 6.0F, new CubeDeformation(0.0F)),
-            PartPose.offsetAndRotation(-6.2F, 11.45F, 3.0F, 0.0F, 0.0F, 0.3927F));
+                .texOffs(0, 48).mirror().addBox(-0.95F, -13.2F, -3.0F, 10.0F, 3.0F, 6.0F, new CubeDeformation(0.0F))
+                .mirror(false),
+            PartPose.offsetAndRotation(6.2F, 11.45F, 3.0F, 0.0F, 0.0F, -0.3927F));
 
         var rightArm = root.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.ZERO);
 
