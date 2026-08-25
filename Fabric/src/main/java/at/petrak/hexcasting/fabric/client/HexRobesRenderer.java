@@ -2,6 +2,7 @@ package at.petrak.hexcasting.fabric.client;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.items.armor.ItemRobes;
+import at.petrak.hexcasting.common.lib.HexArmorMaterials;
 import at.petrak.hexcasting.common.lib.HexItems;
 import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
 import net.minecraft.world.item.Item;
@@ -22,7 +23,7 @@ public class HexRobesRenderer {
 
             ItemRobes armor = (ItemRobes) stack.getItem();
             var model = armor.getArmorModels()[armor.getVariant(stack)];
-            var texture = armor.getArmorTexture(stack, entity, slot, HexAPI.instance().robesMaterial().layers().getFirst(), false);
+            var texture = armor.getArmorTexture(stack, entity, slot, HexArmorMaterials.ROBES.value().layers().getFirst(), false);
             contextModel.copyPropertiesTo(model);
 
             ArmorRenderer.renderPart(matrices, vertexConsumers, light, stack, model, texture);
