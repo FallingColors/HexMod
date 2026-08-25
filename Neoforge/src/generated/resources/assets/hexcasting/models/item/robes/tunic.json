@@ -1,6 +1,26 @@
 {
   "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "hexcasting:item/robes/tunic",
+      "predicate": {
+        "hexcasting:variant": 0.0
+      }
+    },
+    {
+      "model": "hexcasting:item/robes/tunic_1",
+      "predicate": {
+        "hexcasting:variant": 1.0
+      }
+    },
+    {
+      "model": "hexcasting:item/robes/tunic_2",
+      "predicate": {
+        "hexcasting:variant": 2.0
+      }
+    }
+  ],
   "textures": {
-    "layer0": "hexcasting:item/robes/chestplate1"
+    "layer0": "hexcasting:item/robes/0_tunic"
   }
 }

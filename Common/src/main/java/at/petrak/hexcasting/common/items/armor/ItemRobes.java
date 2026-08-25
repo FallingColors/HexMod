@@ -2,18 +2,15 @@ package at.petrak.hexcasting.common.items.armor;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.client.model.HexModelLayers;
 import at.petrak.hexcasting.client.model.HexRobesModel;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.EntityModelSet;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
@@ -21,33 +18,37 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * To get the armor model in;
- * On forge: cursed self-mixin
- * On fabric: hook in ClientInit
+ * On forge: client item extension in ForgeHexClientInitializer (line 161)
+ * On fabric: custom HexRobesRenderer set up from FabricHexClientInitializer (line 60)
  */
-public class ItemRobes extends ArmorItem {
+public class ItemRobes extends ArmorItem implements VariantItem {
     public final ArmorItem.Type type;
-    private @Nullable HexRobesModel model;
+    private @Nullable HexRobesModel[] models;
 
     public ItemRobes(ArmorItem.Type type, Properties properties) {
         super(Holder.direct(HexAPI.instance().robesMaterial()), type, properties);
         this.type = type;
     }
 
-    // TODO: return a collection holding all the variants for the given slot
-    public static HexRobesModel provideArmorModelForSlot(EquipmentSlot slot) {
+    public static HexRobesModel[] provideArmorModelsForSlot(EquipmentSlot slot) {
         EntityModelSet models = Minecraft.getInstance().getEntityModels();
-        ModelPart root = models.bakeLayer(HexModelLayers.ROBES);
-        return new HexRobesModel(root, slot);
+        return new HexRobesModel[] {
+            new HexRobesModel(models.bakeLayer(HexModelLayers.ROBES_0), slot),
+            new HexRobesModel(models.bakeLayer(HexModelLayers.ROBES_1), slot),
+            new HexRobesModel(models.bakeLayer(HexModelLayers.ROBES_2), slot)
+        };
     }
 
-    public HexRobesModel getArmorModel() {
-        if (model == null) model = provideArmorModelForSlot(getEquipmentSlot());
-        return model;
+    public HexRobesModel[] getArmorModels() {
+        if (models == null) models = provideArmorModelsForSlot(getEquipmentSlot());
+        return models;
     }
 
     @SoftImplement("IItemExtension")
     public ResourceLocation getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel) {
-        // TODO: detect variant based on itemstack data
-        return HexAPI.modLoc("textures/armor/robes1.png");
+        return HexAPI.modLoc("textures/armor/robes"+getVariant(stack)+".png");
     }
+
+    @Override
+    public int numVariants() { return 3; }
 }

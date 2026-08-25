@@ -13,7 +13,9 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 public class HexModelLayers {
     public static final ModelLayerLocation ALTIORA = make("altiora");
 
-    public static final ModelLayerLocation ROBES = make("robes");
+    public static final ModelLayerLocation ROBES_0 = make("robes_0");
+    public static final ModelLayerLocation ROBES_1 = make("robes_1");
+    public static final ModelLayerLocation ROBES_2 = make("robes_2");
 
     private static ModelLayerLocation make(String name) {
         return make(name, "main");
@@ -29,6 +31,8 @@ public class HexModelLayers {
     // https://github.com/VazkiiMods/Botania/blob/1.19.x/Xplat/src/main/java/vazkii/botania/client/model/BotaniaLayerDefinitions.java
     public static void init(BiConsumer<ModelLayerLocation, Supplier<LayerDefinition>> consumer) {
         consumer.accept(ALTIORA, ElytraModel::createLayer);
-        consumer.accept(ROBES, HexRobesModel::variant1);
+        consumer.accept(ROBES_0, HexRobesModel::variant0);
+        consumer.accept(ROBES_1, HexRobesModel::variant1);
+        consumer.accept(ROBES_2, HexRobesModel::variant2);
     }
 }
