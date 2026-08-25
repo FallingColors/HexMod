@@ -112,19 +112,4 @@ public class HexAPIImpl implements HexAPI {
     public FrozenPigment getColorizer(Player player) {
         return IXplatAbstractions.INSTANCE.getPigment(player);
     }
-
-    ArmorMaterial ARMOR_MATERIAL = new ArmorMaterial(
-            Collections.emptyMap(),
-            0,
-            SoundEvents.ARMOR_EQUIP_LEATHER,
-            () -> Ingredient.EMPTY,
-            List.of(new ArmorMaterial.Layer(HexAPI.modLoc("robes"))),
-            0,
-            0
-    );
-
-    @Override
-    public ArmorMaterial robesMaterial() {
-        return ARMOR_MATERIAL;
-    }
 }

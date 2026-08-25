@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.item.VariantItem;
 import at.petrak.hexcasting.client.model.HexModelLayers;
 import at.petrak.hexcasting.client.model.HexRobesModel;
+import at.petrak.hexcasting.common.lib.HexArmorMaterials;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.core.Holder;
@@ -27,7 +28,7 @@ public class ItemRobes extends ArmorItem implements VariantItem {
     private @Nullable HexRobesModel[] models;
 
     public ItemRobes(Type type, Properties properties) {
-        super(Holder.direct(HexAPI.instance().robesMaterial()), type, properties);
+        super(HexArmorMaterials.ROBES, type, properties);
         this.type = type;
     }
 

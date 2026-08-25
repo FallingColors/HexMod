@@ -158,20 +158,6 @@ public interface HexAPI {
         return FrozenPigment.DEFAULT.get();
     }
 
-    ArmorMaterial DUMMY_ARMOR_MATERIAL = new ArmorMaterial(
-            Collections.emptyMap(),
-            0,
-            SoundEvents.ARMOR_EQUIP_LEATHER,
-            () -> Ingredient.EMPTY,
-            Collections.emptyList(),
-            0,
-            0
-    );
-
-    default ArmorMaterial robesMaterial() {
-        return DUMMY_ARMOR_MATERIAL;
-    }
-
     /**
      * Location in the userdata of the ravenmind
      */
