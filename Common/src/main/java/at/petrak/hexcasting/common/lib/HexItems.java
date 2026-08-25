@@ -76,7 +76,7 @@ public class HexItems {
             IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
                     .stacksTo(1).attributes(ItemLens.MODIFIERS)));
 
-    public static final Supplier<ItemRobes> ROBES_MASK = make("robes/mask", () -> new ItemRobes(ArmorItem.Type.HELMET, unstackable()));
+    public static final Supplier<ItemRobes> ROBES_HOOD = make("robes/hood", () -> new ItemRobes(ArmorItem.Type.HELMET, unstackable()));
     public static final Supplier<ItemRobes> ROBES_TUNIC = make("robes/tunic", () -> new ItemRobes(ArmorItem.Type.CHESTPLATE, unstackable()));
     public static final Supplier<ItemRobes> ROBES_LEGS = make("robes/legs", () -> new ItemRobes(ArmorItem.Type.LEGGINGS, unstackable()));
     public static final Supplier<ItemRobes> ROBES_BOOTS = make("robes/boots", () -> new ItemRobes(ArmorItem.Type.BOOTS, unstackable()));

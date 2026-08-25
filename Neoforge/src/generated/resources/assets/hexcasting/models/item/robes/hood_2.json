@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "hexcasting:item/robes/helmet1"
+    "layer0": "hexcasting:item/robes/2_hood"
   }
 }

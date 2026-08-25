@@ -40,7 +40,7 @@ public class HexRobesModel extends HumanoidArmorModel<LivingEntity> {
         this.leftLeg = root.getChild("left_leg");
     }
 
-    public static LayerDefinition variant1() {
+    public static LayerDefinition variant0() {
         MeshDefinition meshdef = new MeshDefinition();
         PartDefinition root = meshdef.getRoot();
 
@@ -112,7 +112,7 @@ public class HexRobesModel extends HumanoidArmorModel<LivingEntity> {
         return LayerDefinition.create(meshdef, 64, 64);
     }
 
-    public static LayerDefinition variant2() {
+    public static LayerDefinition variant1() {
         MeshDefinition meshdef = new MeshDefinition();
         PartDefinition root = meshdef.getRoot();
 
@@ -188,7 +188,7 @@ public class HexRobesModel extends HumanoidArmorModel<LivingEntity> {
         return LayerDefinition.create(meshdef, 64, 64);
     }
 
-    public static LayerDefinition variant3() {
+    public static LayerDefinition variant2() {
         MeshDefinition meshdef = new MeshDefinition();
         PartDefinition root = meshdef.getRoot();
 

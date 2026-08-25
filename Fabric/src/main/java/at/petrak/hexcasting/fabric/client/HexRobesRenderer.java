@@ -11,7 +11,7 @@ import java.util.List;
 public class HexRobesRenderer {
     public static final List<Item> ROBE_ITEMS =
         List.of(
-            HexItems.ROBES_MASK.get(),
+            HexItems.ROBES_HOOD.get(),
             HexItems.ROBES_TUNIC.get(),
             HexItems.ROBES_LEGS.get(),
             HexItems.ROBES_BOOTS.get()
@@ -21,7 +21,7 @@ public class HexRobesRenderer {
         ArmorRenderer renderer = (matrices, vertexConsumers, stack, entity, slot, light, contextModel) -> {
 
             ItemRobes armor = (ItemRobes) stack.getItem();
-            var model = armor.getArmorModel();
+            var model = armor.getArmorModels()[armor.getVariant(stack)];
             var texture = armor.getArmorTexture(stack, entity, slot, HexAPI.instance().robesMaterial().layers().getFirst(), false);
             contextModel.copyPropertiesTo(model);
 

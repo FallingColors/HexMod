@@ -16,7 +16,6 @@ import at.petrak.hexcasting.common.lib.HexParticles;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import at.petrak.hexcasting.forge.lib.ForgeHexAttachments;
 import at.petrak.hexcasting.interop.HexInterop;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
@@ -41,7 +40,6 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import net.neoforged.neoforge.common.NeoForge;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.function.Function;
 
 // This is Java because I can't kotlin-fu some of the consumers
@@ -160,13 +158,18 @@ public class ForgeHexClientInitializer {
     @SubscribeEvent
     public static void registerArmorRenderer(RegisterClientExtensionsEvent evt) {
         evt.registerItem(new IClientItemExtensions() {
-            private final Map<EquipmentSlot, HumanoidModel<LivingEntity>> MODELS = new Object2ObjectArrayMap<>();
+            //private final Map<EquipmentSlot, HumanoidModel<LivingEntity>[]> MODEL_SETS = new Object2ObjectArrayMap<>();
 
             @Override
             public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
-                return MODELS.computeIfAbsent(equipmentSlot, ItemRobes::provideArmorModelForSlot);
+                ItemRobes armor = (ItemRobes) itemStack.getItem();
+                return armor.getArmorModels()[armor.getVariant(itemStack)];
+
+//                var variant = itemStack.get(HexDataComponents.ITEM_VARIANT.get());
+//                var modelSet = MODEL_SETS.computeIfAbsent(equipmentSlot, ItemRobes::provideArmorModelsForSlot);
+//                return variant != null ? modelSet[variant] : modelSet[0];
             }
-        }, HexItems.ROBES_MASK.get(), HexItems.ROBES_TUNIC.get(), HexItems.ROBES_LEGS.get(), HexItems.ROBES_BOOTS.get());
+        }, HexItems.ROBES_HOOD.get(), HexItems.ROBES_TUNIC.get(), HexItems.ROBES_LEGS.get(), HexItems.ROBES_BOOTS.get());
     }
 
     @SubscribeEvent

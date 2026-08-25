@@ -2,25 +2,25 @@
   "parent": "minecraft:item/generated",
   "overrides": [
     {
-      "model": "hexcasting:item/robes/legs",
+      "model": "hexcasting:item/robes/hood",
       "predicate": {
         "hexcasting:variant": 0.0
       }
     },
     {
-      "model": "hexcasting:item/robes/legs_1",
+      "model": "hexcasting:item/robes/hood_1",
       "predicate": {
         "hexcasting:variant": 1.0
       }
     },
     {
-      "model": "hexcasting:item/robes/legs_2",
+      "model": "hexcasting:item/robes/hood_2",
       "predicate": {
         "hexcasting:variant": 2.0
       }
     }
   ],
   "textures": {
-    "layer0": "hexcasting:item/robes/0_legs"
+    "layer0": "hexcasting:item/robes/0_hood"
   }
 }
