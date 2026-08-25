@@ -33,7 +33,7 @@ public class HexAttributes {
 
     //a multiplier to adjust media consumption across the board
     public static final Holder<Attribute> MEDIA_CONSUMPTION_MODIFIER = REGISTER.registerHolder("media_consumption", () -> new RangedAttribute(
-            MOD_ID + ".attributes.media_consumption", 1.0, 0.0, Double.MAX_VALUE).setSyncable(true));
+            MOD_ID + ".attributes.media_consumption", 1.0, 0.0, Double.MAX_VALUE).setSyncable(true).setSentiment(Attribute.Sentiment.NEGATIVE));
 
     public static final Holder<Attribute> AMBIT_RADIUS = REGISTER.registerHolder("ambit_radius", () -> new RangedAttribute(
             MOD_ID + ".attributes.ambit_radius", PlayerBasedCastEnv.DEFAULT_AMBIT_RADIUS, 0.0, Double.MAX_VALUE).setSyncable(true));
