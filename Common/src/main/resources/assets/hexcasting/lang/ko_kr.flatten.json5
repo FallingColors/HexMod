@@ -1449,7 +1449,7 @@
       "101": {
         "1": "$(hex)주문문양/$을 시전하는 것은 꽤 어렵다. 이 기술이 세월 속에 사라진 것도 무리가 아니다! 기록을 꼼꼼히 다시 읽어야겠다.$(br2)손에 $(l:items/staff)$(item)지팡이/$를 들고 $(k:use)를 누르면 $(hex)주문문양/$을 시작할 수 있다. 그러면 내 앞에 육각형 점 격자가 나타난다. 이후 점에서 점으로 클릭하고 끌어 격자의 $(media)미디어/$에 패턴을 그릴 수 있다. 패턴을 완성하면 그에 해당하는 액션이 실행된다(자세한 건 뒤에서).",
         "2": "주문을 시전할 만큼 충분한 패턴을 그리면, 저장해 둔 $(media)미디어/$가 방출되며 격자가 사라진다. $(l:items/staff)$(item)지팡이/$를 사용할 때 $(k:sneak)를 누르고 있어도 격자를 비울 수 있다.$(br2)그렇다면 패턴은 어떻게 작동하는가? 짧게 말하면:$(li)$(italic)패턴/$이 실행하는 것은...$(li)$(italic)액션/$이고, 액션이 조작하는 것은...$(li)$(l:casting/stack)$(italic)스택/$이며, 스택은...$(li)$(italic)이오타/$의 목록이다. 이오타는 단순한 정보 단위다.",
-        "3": "먼저 $(thing)패턴/$이다. 이것들은 필수적이다. 내 주변의 $(media)미디어/$를 조작하는 데 쓰는 것이 바로 패턴이다. 특정 패턴을 그리면 $(thing)액션/$이 일어난다. 실제로 마법을 $(italic)행하는/$ 것은 액션이다. 모든 패턴은 특정한 방식으로 $(media)미디어/$에 영향을 주며, 그 영향이 유용한 일을 하게 되면 우리는 그것을 액션이라 부른다.$(br2)$(media)미디어/$는 변덕스럽다. 잘못된 패턴을 그리면 스택 어딘가에 $(l:casting/influences)$(action)가비지/$ 결과가 생긴다(계속 읽어 보자...).",
+        "3": "먼저 $(thing)패턴/$이다. 이것들은 필수적이다. 내 주변의 $(media)미디어/$를 조작하는 데 쓰는 것이 바로 패턴이다. 특정 패턴을 그리면 $(thing)액션/$이 일어난다. 실제로 마법을 $(italic)행하는/$ 것은 액션이다. 모든 패턴은 특정한 방식으로 $(media)미디어/$에 영향을 주며, 그 영향이 유용한 일을 하게 되면 우리는 그것을 액션이라 부른다.$(br2)$(media)미디어/$는 변덕스럽다. 잘못된 패턴을 그리면 스택 어딘가에 $(thing)가비지/$ 결과가 생긴다(계속 읽어 보자...).",
         "4.header": "예시",
         "4": "흥미롭게도 패턴의 $(italic)회전/$은 전혀 문제가 되지 않는 듯하다. 예를 들어 이 두 패턴은 둘 다 $(l:patterns/basics#hexcasting:get_caster)$(action)정신의 반사/$라는 액션을 수행한다.",
         "5": "$(hex)주문문양/$은 (유효한) 액션들을 순서대로 그려 시전한다. 각 액션은 대체로 다음 중 하나를 한다:$(li)환경에 대한 정보를 모아 스택 맨 위에 남긴다.$(li)모은 정보를 조작한다(예: 두 숫자를 더한다).$(li)번개나 폭발을 소환하는 것처럼 마법적 효과를 일으킨다. (이런 액션을 \"주문\"이라 부른다.)$(p)$(hex)주문문양/$ 시전을 시작하면 빈 스택이 만들어진다. 액션은 그 스택의 맨 위를 조작한다.",
@@ -1480,16 +1480,16 @@
         "3": "다행히 변고의 나쁜 효과들은 분명 $(italic)성가시지만/$ 장기적으로 특별히 파괴적인 것은 없다. 먼지를 털고 다시 시도하는 수밖에 없다... 그래도 더 잘하려고 노력해야 한다.$(br2)다음은 내가 정리한 변고 목록이다.",
         
         "invalid_pattern.title": "잘못된 패턴",
-        invalid_pattern: "그린 패턴이 어떤 액션에도 연결되어 있지 않다.$(br2)노란 불꽃을 일으키며, $(l:casting/influences)$(action)가비지/$ 하나가 내 스택 맨 위로 밀려 들어간다.",
+        invalid_pattern: "그린 패턴이 어떤 액션에도 연결되어 있지 않다.$(br2)노란 불꽃을 일으키며, $(thing)가비지/$ 하나가 내 스택 맨 위로 밀려 들어간다.",
         
         "not_enough_iotas.title": "이오타 부족",
-        not_enough_iotas: "액션이 스택에 있는 것보다 더 많은 이오타를 요구했다.$(br2)밝은 회색 불꽃을 일으키며, 인수 개수를 채우는 데 필요한 만큼의 $(l:casting/influences)$(action)가비지/$가 밀려 들어간다.",
+        not_enough_iotas: "액션이 스택에 있는 것보다 더 많은 이오타를 요구했다.$(br2)밝은 회색 불꽃을 일으키며, 인수 개수를 채우는 데 필요한 만큼의 $(thing)가비지/$가 밀려 들어간다.",
         
         "stack_size.title": "이오타 과다",
-        "stack_size": "스택 크기 제한을 초과하는 주문을 시전하려 했다.$(br2)검은 불꽃을 일으키며, 내 스택 전체가 단 하나의 $(l:casting/influences)$(action)가비지/$로 대체된다.",
+        "stack_size": "스택 크기 제한을 초과하는 주문을 시전하려 했다.$(br2)검은 불꽃을 일으키며, 내 스택 전체가 단 하나의 $(thing)가비지/$로 대체된다.",
         
         "incorrect_iota.title": "잘못된 이오타",
-        incorrect_iota: "실행된 액션은 인수로 특정 타입의 이오타를 기대했지만, 잘못된 것을 받았다. 잘못된 이오타가 여럿이면 오류 메시지는 스택 가장 깊은 곳의 오류만 알려 준다.$(br2)짙은 회색 불꽃을 일으키며, 잘못된 이오타가 $(l:casting/influences)$(action)가비지/$로 대체된다.",
+        incorrect_iota: "실행된 액션은 인수로 특정 타입의 이오타를 기대했지만, 잘못된 것을 받았다. 잘못된 이오타가 여럿이면 오류 메시지는 스택 가장 깊은 곳의 오류만 알려 준다.$(br2)짙은 회색 불꽃을 일으키며, 잘못된 이오타가 $(thing)가비지/$로 대체된다.",
         
         "vector_out_of_range.title": "영향 범위 밖 벡터",
         vector_out_of_range: "액션이 내 범위 밖의 지점에서 세계에 영향을 주려 했다.$(br2)자홍색 불꽃을 일으키며, 내 손의 아이템들이 문제의 위치를 향해 잡아당겨져 날아간다.",
@@ -1501,7 +1501,7 @@
         entity_immune: "액션이 그것으로는 바꿀 수 없는 엔티티에 영향을 주려 했다.$(br2)파란 불꽃을 일으키며, 내 손의 아이템들이 문제의 엔티티를 향해 잡아당겨져 날아간다.",
         
         "math_error.title": "수학적 오류",
-        math_error: "액션이 0으로 나누기처럼 수학 법칙에 불쾌한 일을 저질렀다.$(br2)붉은 불꽃을 일으키고, $(l:casting/influences)$(action)가비지/$를 내 스택에 밀어 넣으며, 내 정신이 깎여 남은 활력의 절반을 빼앗긴다. 자연은 그런 연산에 모욕을 느끼고 보복으로 $(italic)나/$를 나누는 듯하다.",
+        math_error: "액션이 0으로 나누기처럼 수학 법칙에 불쾌한 일을 저질렀다.$(br2)붉은 불꽃을 일으키고, $(thing)가비지/$를 내 스택에 밀어 넣으며, 내 정신이 깎여 남은 활력의 절반을 빼앗긴다. 자연은 그런 연산에 모욕을 느끼고 보복으로 $(italic)나/$를 나누는 듯하다.",
         
         "incorrect_item.title": "잘못된 아이템",
         incorrect_item: "액션에는 어떤 아이템이 필요했지만, 내가 제공한 아이템은 적합하지 않았다.$(br2)갈색 불꽃을 일으킨다. 문제의 아이템이 내 손에 있었다면 바닥으로 던져지고, 엔티티 형태였다면 공중으로 날아간다.",
@@ -1539,9 +1539,9 @@
       },
       
       influences: {
-        "1": "영향은... 좋게 말해도 이상하다. 대부분의 이오타가 세계에 관한 무언가를 나타내는 듯한 반면, 영향은 더... 추상적이거나 형태 없는 것을 나타낸다.$(br2)예를 들어 내가 $(l:casting/influences)$(thing)Null/$이라고 이름 붙인 영향 하나는 아무것도 나타내지 않는 듯하다. 하늘을 향한 $(l:patterns/basics#hexcasting:raycast)$(action)궁수의 증류/$처럼 질문에 적절한 답이 없을 때 만들어진다.",
+        "1": "영향은... 좋게 말해도 이상하다. 대부분의 이오타가 세계에 관한 무언가를 나타내는 듯한 반면, 영향은 더... 추상적이거나 형태 없는 것을 나타낸다.$(br2)예를 들어 내가 $(thing)Null/$이라고 이름 붙인 영향 하나는 아무것도 나타내지 않는 듯하다. 하늘을 향한 $(l:patterns/basics#hexcasting:raycast)$(action)궁수의 증류/$처럼 질문에 적절한 답이 없을 때 만들어진다.",
         "2": "또한 $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)고려/$, $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)내성/$, $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)회상/$, $(l:patterns/patterns_as_iotas#hexcasting:undo)$(action)소실/$이라 이름 붙인 흥미로운 네 가지 영향도 발견했다. 이들은 패턴과 다른 영향 양쪽의 성질을 지닌 듯하지만, 매우 다르게 작동한다. 이것들을 사용하면 패턴을 액션에 맞추는 대신 이오타로 스택에 추가할 수 있다. $(l:patterns/patterns_as_iotas)이 주제에 관한 내 기록은 여기 있다/$.",
-        "3": "마지막으로, 그저 $(media)미디어/$가 뒤엉킨 난장판처럼 보이는 무한한 영향 계열이 있는 듯하다. 완전히 쓸모없기 때문에 나는 그것들을 $(l:casting/influences)$(action)가비지/$라고 이름 붙였다. 이들은 $(l:casting/mishaps)$(thing)변고/$에 대한 반응으로 스택 곳곳에 나타나는 듯하며, 내 감각에는 무의미한 뒤죽박죽으로 보인다.",
+        "3": "마지막으로, 그저 $(media)미디어/$가 뒤엉킨 난장판처럼 보이는 무한한 영향 계열이 있는 듯하다. 완전히 쓸모없기 때문에 나는 그것들을 $(thing)가비지/$라고 이름 붙였다. 이들은 $(l:casting/mishaps)$(thing)변고/$에 대한 반응으로 스택 곳곳에 나타나는 듯하며, 내 감각에는 무의미한 뒤죽박죽으로 보인다.",
       },
       
       mishaps2: {
@@ -1585,7 +1585,7 @@
       thought_knot: {
         "1": "잘 잊는 사람들은 중요한 일을 기억하려고 손가락에 실을 묶곤 한다. 이 발상은 내 기술에도 쓸모가 있을 것 같다. 특별하게 묶은 실 조각은 내 스택과 무관하게 단 하나의 이오타를 안정적으로 붙잡을 수 있을 것이다.$(br2)나는 이 발명품을 $(item)생각 매듭/$이라 부르겠다.",
         "2": "제작했을 때 이것은 아무 이오타도 저장하지 않는다. 다른 손에 $(item)생각 매듭/$을 들고 $(l:patterns/readwrite#hexcasting:write)$(action)필경사의 묘수/$를 사용하면 스택 맨 위가 제거되어 $(item)생각 매듭/$에 저장된다. $(l:patterns/readwrite#hexcasting:read)$(action)필경사의 반사/$를 사용하면 $(item)생각 매듭/$ 안의 이오타가 복사되어 스택에 추가된다.$(br2)한번 $(item)생각 매듭/$에 기록되면 실은 지울 수 없게 얽힌다. 이오타는 몇 번이고 읽을 수 있지만, 지우거나 덮어쓸 방법은 없다. 다행히 비싸지는 않다.",
-        "3": "또한 엔티티를 $(item)생각 매듭/$에 저장한 뒤, 참조된 엔티티가 죽거나 사라진 후에 다시 불러오려 하면 $(l:patterns/readwrite#hexcasting:read)$(action)필경사의 반사/$는 대신 $(l:casting/influences)$(thing)Null/$을 스택에 추가한다.",
+        "3": "또한 엔티티를 $(item)생각 매듭/$에 저장한 뒤, 참조된 엔티티가 죽거나 사라진 후에 다시 불러오려 하면 $(l:patterns/readwrite#hexcasting:read)$(action)필경사의 반사/$는 대신 $(thing)Null/$을 스택에 추가한다.",
         "crafting.desc": "$(italic)누군가가 \"나는 멋지고 잘생겼다\"라고 적힌 팻말을 네가 달고 있는 것을 보면 어떤 기분일까?/$",
       },
       
@@ -1763,7 +1763,7 @@
         print: "스택 맨 위의 이오타를 내게 표시한다.",
         raycast: {
           "1": "두 벡터(위치와 방향)를 결합해 다음 질문의 답을 구한다. 내가 그 위치에 서서 그 방향을 본다면 어떤 블록을 보고 있을까? 무시할 만한 양의 $(media)미디어/$를 소비한다.",
-          "2": "아무것도 맞히지 못하면 벡터들은 $(l:casting/influences)$(thing)Null/$로 결합된다.$(br2)흔한 패턴 순서, 이른바 \"레이캐스트 만트라\"는 $(l:patterns/basics#hexcasting:get_caster)$(action)정신의 반사/$, $(l:patterns/basics#hexcasting:entity_pos/eye)$(action)나침반의 정화/$, $(l:patterns/basics#hexcasting:get_caster)$(action)정신의 반사/$, $(l:patterns/basics#hexcasting:get_entity_look)$(action)시준기의 정화/$, $(l:patterns/basics#hexcasting:raycast)$(action)궁수의 증류/$로 이루어진다. 함께 사용하면 내가 보고 있는 블록의 벡터 위치를 반환한다.",
+          "2": "아무것도 맞히지 못하면 벡터들은 $(thing)Null/$로 결합된다.$(br2)흔한 패턴 순서, 이른바 \"레이캐스트 만트라\"는 $(l:patterns/basics#hexcasting:get_caster)$(action)정신의 반사/$, $(l:patterns/basics#hexcasting:entity_pos/eye)$(action)나침반의 정화/$, $(l:patterns/basics#hexcasting:get_caster)$(action)정신의 반사/$, $(l:patterns/basics#hexcasting:get_entity_look)$(action)시준기의 정화/$, $(l:patterns/basics#hexcasting:raycast)$(action)궁수의 증류/$로 이루어진다. 함께 사용하면 내가 보고 있는 블록의 벡터 위치를 반환한다.",
         },
         "raycast/axis": {
           "1": "$(l:patterns/basics#hexcasting:raycast)$(action)궁수의 증류/$와 비슷하지만, 대신 \"블록의 어느 $(italic)면/$을 보고 있는가?\"라는 질문의 답을 나타내는 벡터를 반환한다. 무시할 만한 양의 $(media)미디어/$를 소비한다.",
@@ -1851,7 +1851,7 @@
       },
       
       "consts.const/": {
-        "null": "$(l:casting/influences)$(thing)Null/$ 영향을 스택 맨 위에 추가한다.",
+        "null": "$(thing)Null/$ 영향을 스택 맨 위에 추가한다.",
         "true": "$(thing)True/$를 스택 맨 위에 추가한다.",
         "false": "$(thing)False/$를 스택 맨 위에 추가한다.",
         
@@ -1899,7 +1899,7 @@
       },
       
       logic: {
-        bool_coerce: "인수를 논리값으로 변환한다. 숫자 $(thing)0/$, $(l:casting/influences)$(thing)Null/$, False, 빈 목록은 False가 되고, 그 밖의 모든 것은 True가 된다.",
+        bool_coerce: "인수를 논리값으로 변환한다. 숫자 $(thing)0/$, $(thing)Null/$, False, 빈 목록은 False가 되고, 그 밖의 모든 것은 True가 된다.",
         bool_to_number: "논리값을 숫자로 변환한다. True는 $(thing)1/$, False는 $(thing)0/$이 된다.",
         not: "인수가 True이면 False를, False이면 True를 반환한다.",
         or: "인수 중 하나 이상이 True이면 True를, 아니면 False를 반환한다.",
@@ -1917,13 +1917,13 @@
       },
       
       entities: {
-        get_entity: "스택 위의 위치를 그 위치의 엔티티로 변환한다(없으면 $(l:casting/influences)$(thing)Null/$).",
+        get_entity: "스택 위의 위치를 그 위치의 엔티티로 변환한다(없으면 $(thing)Null/$).",
         "get_entity/": {
-          animal: "스택 위의 위치를 그 위치의 동물로 변환한다(없으면 $(l:casting/influences)$(thing)Null/$).",
-          monster: "스택 위의 위치를 그 위치의 몬스터로 변환한다(없으면 $(l:casting/influences)$(thing)Null/$).",
-          item: "스택 위의 위치를 그 위치의 떨어진 아이템으로 변환한다(없으면 $(l:casting/influences)$(thing)Null/$).",
-          player: "스택 위의 위치를 그 위치의 플레이어로 변환한다(없으면 $(l:casting/influences)$(thing)Null/$).",
-          living: "스택 위의 위치를 그 위치의 살아있는 생물로 변환한다(없으면 $(l:casting/influences)$(thing)Null/$).",
+          animal: "스택 위의 위치를 그 위치의 동물로 변환한다(없으면 $(thing)Null/$).",
+          monster: "스택 위의 위치를 그 위치의 몬스터로 변환한다(없으면 $(thing)Null/$).",
+          item: "스택 위의 위치를 그 위치의 떨어진 아이템으로 변환한다(없으면 $(thing)Null/$).",
+          player: "스택 위의 위치를 그 위치의 플레이어로 변환한다(없으면 $(thing)Null/$).",
+          living: "스택 위의 위치를 그 위치의 살아있는 생물로 변환한다(없으면 $(thing)Null/$).",
         },
         
         zone_entity: "스택 위의 위치와 최대 거리를 가져와, 그 위치 근처의 모든 엔티티 목록으로 결합한다.",
@@ -1942,7 +1942,7 @@
       },
       
       lists: {
-        index: "스택 맨 위의 숫자를 제거한 뒤, 맨 위의 목록을 그 목록의 n번째 요소로 바꾼다(n은 제거한 숫자). 숫자가 범위를 벗어나면 목록을 $(l:casting/influences)$(thing)Null/$로 바꾼다.",
+        index: "스택 맨 위의 숫자를 제거한 뒤, 맨 위의 목록을 그 목록의 n번째 요소로 바꾼다(n은 제거한 숫자). 숫자가 범위를 벗어나면 목록을 $(thing)Null/$로 바꾼다.",
         slice: "스택 맨 위의 숫자 두 개를 제거한 뒤, 스택 맨 위 목록에서 그 인덱스 사이의 부분 목록을 취한다. 하한은 포함하고 상한은 제외한다. 예를 들어 [0, 1, 2, 3, 4]의 0, 2 부분 목록은 [0, 1]이다.",
         append: "스택 맨 위를 제거한 뒤, 그것을 스택 맨 위 목록의 끝에 추가한다.",
         unappend: "스택 맨 위 목록의 끝에 있는 이오타를 제거해 스택 맨 위에 추가한다.",
@@ -1962,7 +1962,7 @@
       
       patterns_as_iotas: {
         "1": "이 기술의 여러 특이점 중 하나는 $(italic)패턴 자체/$가 이오타처럼 작동할 수 있다는 것이다. 시전 중 내 스택에 올릴 수도 있다.$(br2)이로부터 꽤 명백한 질문이 생긴다. 그것들을 어떻게 표현할 것인가? 단순히 패턴을 그린다면 자연에게 그것을 내 스택에 추가하라고 말하는 것이 아니라, 그냥 액션에 대응될 것이다.",
-        "2": "다행히 자연은 패턴을 직접 다룰 수 있게 해 주는 $(l:casting/influences)영향/$들의 집합을 제공했다.$(br2)간단히 말해 $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)고려/$는 패턴 하나를 스택에 추가하게 해 주고, $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)내성/$과 $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)회상/$은 전체 목록을 추가하게 해 준다.",
+        "2": "다행히 자연은 패턴을 직접 다룰 수 있게 해 주는 패턴들의 집합을 제공했다.$(br2)간단히 말해 $(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)고려/$는 패턴 하나를 스택에 추가하게 해 주고, $(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)내성/$과 $(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)회상/$은 전체 목록을 추가하게 해 준다.",
         escape: {
           "1": "$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)고려/$를 사용하려면 그것을 그린 뒤 임의의 다른 패턴을 하나 그린다. 그 두 번째 패턴이 스택에 추가된다.",
           "2": "컴퓨터 과학에 익숙하다면 이것을 패턴을 스택으로 \"이스케이프\"한다고 생각하면 도움이 될 수 있다.$(br2)일반적인 용도는 $(l:patterns/readwrite#hexcasting:write)$(action)필경사의 묘수/$를 사용해 패턴을 $(l:items/scroll)$(item)두루마리/$나 $(l:items/slate)$(item)석판/$에 복사하고, 어쩌면 그것들로 장식하는 것이다.",
@@ -1992,7 +1992,7 @@
         writable: "다른 손의 아이템에 이오타를 저장할 수 있으면 True를 반환한다. 아니면 False를 반환한다.",
         "writable/entity": "$(l:patterns/readwrite#hexcasting:writable)$(action)평가자의 반사/$와 같지만, 다른 손 대신 엔티티의 쓰기 가능 여부를 확인한다.",
         "local.title": "까마귀정신",
-        local: "하지만 아이템만이 정보를 저장할 수 있는 장소는 아니다. 스택과 비슷하지만 별도로, $(hex)주문문양/$ 자체의 $(media)미디어/$ 안에도 그 정보를 저장할 수 있다. 문헌은 이를 $(l:patterns/readwrite#hexcasting:local)$(thing)까마귀정신/$이라 부른다. $(l:items/focus)$(item)초점구/$와 비슷하게 하나의 이오타를 담고, 역시 $(l:casting/influences)$(thing)Null/$로 시작한다. $(l:patterns/meta#hexcasting:for_each)$(action)토트의 묘수/$ 반복 사이에서는 보존되지만, 그것이 속한 $(hex)주문문양/$이 지속되는 동안에만 남는다. 시전을 멈추면 값은 사라진다.",
+        local: "하지만 아이템만이 정보를 저장할 수 있는 장소는 아니다. 스택과 비슷하지만 별도로, $(hex)주문문양/$ 자체의 $(media)미디어/$ 안에도 그 정보를 저장할 수 있다. 문헌은 이를 $(l:patterns/readwrite#hexcasting:local)$(thing)까마귀정신/$이라 부른다. $(l:items/focus)$(item)초점구/$와 비슷하게 하나의 이오타를 담고, 역시 $(thing)Null/$로 시작한다. $(l:patterns/meta#hexcasting:for_each)$(action)토트의 묘수/$ 반복 사이에서는 보존되지만, 그것이 속한 $(hex)주문문양/$이 지속되는 동안에만 남는다. 시전을 멈추면 값은 사라진다.",
         "write/local": "스택 맨 위 이오타를 제거하고 내 $(l:patterns/readwrite#hexcasting:local)$(thing)까마귀정신/$에 저장해, $(hex)주문문양/$ 시전을 멈출 때까지 그곳에 보관한다.",
         "read/local": "내 $(l:patterns/readwrite#hexcasting:local)$(thing)까마귀정신/$에서 이오타를 복사한다. 아마 방금 $(l:patterns/readwrite#hexcasting:write/local)$(action)후긴의 묘수/$로 쓴 것일 것이다.",
       },
@@ -2092,8 +2092,8 @@
         
         "sentinel/create": "주어진 위치에 내 $(l:patterns/spells/sentinels)$(thing)감시자/$를 소환한다. 비용은 $(l:items/amethyst)$(item)자수정 가루/$ 약 하나.",
         "sentinel/destroy": "내 $(l:patterns/spells/sentinels)$(thing)감시자/$를 추방해 세계에서 제거한다. 무시할 만한 양의 $(media)미디어/$를 소비한다.",
-        "sentinel/get_pos": "내 $(l:patterns/spells/sentinels)$(thing)감시자/$의 위치를 스택에 추가한다. 소환되어 있지 않다면 $(l:casting/influences)$(thing)Null/$을 추가한다. 무시할 만한 양의 $(media)미디어/$를 소비한다.",
-        "sentinel/wayfind": "스택 맨 위의 위치 벡터를 그 위치에서 내 $(l:patterns/spells/sentinels)$(thing)감시자/$를 가리키는 단위 벡터로 변환한다. 소환되어 있지 않다면 $(l:casting/influences)$(thing)Null/$이 된다. 무시할 만한 양의 $(media)미디어/$를 소비한다.",
+        "sentinel/get_pos": "내 $(l:patterns/spells/sentinels)$(thing)감시자/$의 위치를 스택에 추가한다. 소환되어 있지 않다면 $(thing)Null/$을 추가한다. 무시할 만한 양의 $(media)미디어/$를 소비한다.",
+        "sentinel/wayfind": "스택 맨 위의 위치 벡터를 그 위치에서 내 $(l:patterns/spells/sentinels)$(thing)감시자/$를 가리키는 단위 벡터로 변환한다. 소환되어 있지 않다면 $(thing)Null/$이 된다. 무시할 만한 양의 $(media)미디어/$를 소비한다.",
       },
       
       colorize: "이 주문을 시전하려면 다른 손에 $(l:items/pigments)$(item)안료/$를 들고 있어야 한다. 그렇게 하면 염료를 소비하고 내 정신의 색을 영구적으로 바꾼다(적어도 이 주문을 다시 시전할 때까지). 비용은 $(l:items/amethyst)$(item)자수정 가루/$ 약 하나.",
