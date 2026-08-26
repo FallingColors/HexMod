@@ -14,6 +14,7 @@ pluginManagement {
 
     plugins {
         id "org.jetbrains.kotlin.jvm" version kotlinVersion
+        id "me.modmuss50.mod-publish-plugin" version "2.1.1"
     }
 }
 
