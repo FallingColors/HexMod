@@ -65,6 +65,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed Pace Purification returning nonzero velocity on nonmoving items ([#1119](https://github.com/FallingColors/HexMod/pull/1119)) @IridescentVoid
 - Fixed Accessor's Purification returning false for scrolls in item frames ([#1115](https://github.com/FallingColors/HexMod/pull/1115)) @IridescentVoid
 - Fixed Break Block being unable to break cobwebs on Fabric ([#1218](https://github.com/FallingColors/HexMod/pull/1218)) @Robotgiggle
+- Fixed the command to list all per-world patterns not working ([#1277](https://github.com/FallingColors/HexMod/pull/1277)) @Olfi01
 
 ### Internal
 
