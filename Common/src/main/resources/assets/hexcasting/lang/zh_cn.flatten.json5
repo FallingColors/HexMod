@@ -427,7 +427,7 @@
     },
     big_cast: {
       "": "……吃穿不缺",
-      desc: "耗费巨量媒质以施放一个咒术",
+      desc: "耗费巨量媒质以施放一个法术",
     },
     y_u_no_cast_angy: {
       "": "盲目绘制",
@@ -1744,7 +1744,7 @@
         break_block: "移除一个位置向量，然后破坏给定位置的方块。此法术能破坏几乎所有钻石镐能破坏的方块。$(br)消耗大约 1/8 个$(l:items/amethyst)$(item)紫水晶粉/$。破坏$(l:patterns/spells/blockworks#hexcasting:conjure_block)$(action)构筑的方块/$或$(l:patterns/spells/blockworks#hexcasting:conjure_light)$(action)构筑的光源/$时仅消耗极少量媒质。",
         create_water: "在给定位置生成一格水（或给流体容器注入至多一桶水）。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
         destroy_water: "清空给定位置的流体容器，或是清除给定位置周围的液体。消耗大约 2 个$(l:items/amethyst)$(item)充能紫水晶/$。",
-        conjure_block: "在给定位置构筑一个空灵缥缈却坚硬可触的，闪着光的方块。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
+        conjure_block: "在给定位置按照我的染色剂构筑一个空灵缥缈却坚硬可触的，闪着光的方块。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
         conjure_light: "在给定位置构筑一个发着我染色剂颜色的光的魔法光源。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
         bonemeal: "使目标位置的植物或树苗更快成长，就像对其施以$(item)骨粉/$一样。消耗略多于 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
         edify: "将$(media)媒质/$强制注入目标位置的树苗，使其长为$(l:items/edified)$(thing)启迪树/$。消耗大约 1 个$(l:items/amethyst)$(item)充能紫水晶/$。",
