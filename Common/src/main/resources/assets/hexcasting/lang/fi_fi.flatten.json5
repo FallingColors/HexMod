@@ -1,0 +1,69 @@
+{
+  "item.hexcasting": {
+    book: "Hex Muistivihko",
+    staff: {
+      oak: "Tammisauva",
+      spruce: "Kuusisauva",
+      birch: "Koivusauva",
+      jungle: "Viidakkopuusauva",
+      acacia: "Akaasiasauva",
+      dark_oak: "Tumma Tammisauva",
+      crimson: "Karmiinisauva",
+      warped: "Kummasauva",
+      mangrove: "Mangrovepuusauva",
+      cherry: "Kirsikkapuusauva",
+      bamboo: "Bambusauva",
+      edified: "Sivistetty Sauva",
+    },
+    amethyst_dust: "Ametistijauhe",
+    charged_amethyst: "Jännitetty Ametisti",
+    scroll_small: {
+      "": "Pieni Käärö",
+      of: "Miten sait tämän %s-tavaran",
+      empty: "Tyhjä Pieni Käärö",
+    },
+    scroll_medium: {
+      "": "Keskikokoinen Käärö",
+      of: "Miten sait tämän %s-tavaran",
+      empty: "Tyhjä Keskikokoinen Käärö",
+    },
+    scroll: {
+      "": "Iso Käärö",
+      of: "%s-Muinaiskäärö",
+      empty: "Tyhjä Iso Käärö",
+    },
+    focus: {
+      "": "Kohde",
+    },
+    spellbook: "Loitsukirja",
+    abacus: "Helmitaulu",
+    lore_fragment: {
+      all: "Olen vissiin löytänyt kaiket tarinat tarjoilla tässä maailmassa.",
+    },
+  },
+  hexcasting: {
+    tooltip: {
+      spellbook: {
+        empty: {
+          "": "Tyhjä",
+          sealed: "Tyhjä (%s)",
+        },
+        sealed: "Suljettu",
+      },
+      scroll: {
+        needs_purchase: "Osta kuvion näyttyeksi",
+        pattern_not_loaded: "Pistä tavaraluetteloon kuvion näytöksi",
+      },
+      list_contents: "[%s]",
+      lens: {
+        bee: {
+          single: "[%s] mehiläinen",
+          "": "[%s] mehiläisiä",
+        },
+      },
+      media: "%d jauhea",
+      media_amount: "Sisältää: %s (%s)",
+      "media_amount.advanced": "Sisältää: %s/%s (%s)",
+    },
+  },
+}
