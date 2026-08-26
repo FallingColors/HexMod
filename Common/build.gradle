@@ -13,11 +13,11 @@ repositories {
     // paucal, patchi, inline, JEI
     maven { url 'https://maven.blamejared.com' }
 
-    /*maven {
-        // location of the maven that hosts JEI files, temporarily disabled due to HTTP 523 errors
+    maven {
+        // location of the maven that hosts JEI files
         name = "Progwml6 maven"
         url = "https://dvs1.progwml6.com/files/maven/"
-    }*/
+    }
     maven {
         // fallback maven for JEI
         name = "ModMaven"
