@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Contemplation for escaping without the exponential growth of Consideration ([#1102](https://github.com/FallingColors/HexMod/pull/1102)) @IridescentVoid
 - Added Interjection, Meditation, and Recollection for advanced pattern-list creation ([#1103](https://github.com/FallingColors/HexMod/pull/1103)) @Robotgiggle
 - Added Media Reflection for checking media available to the cast ([#1235](https://github.com/FallingColors/HexMod/pull/1235)) @IridescentVoid
+- Added ko_kr translations ([#1187](https://github.com/FallingColors/HexMod/pull/1187)) @Bananamilk452
 - Added a variety of new translations via Weblate ([#1251](https://github.com/FallingColors/HexMod/pull/1251), [#1261](https://github.com/FallingColors/HexMod/pull/1261), [#1265](https://github.com/FallingColors/HexMod/pull/1265), [#1269](https://github.com/FallingColors/HexMod/pull/1269), [#1272](https://github.com/FallingColors/HexMod/pull/1272), [#1274](https://github.com/FallingColors/HexMod/pull/1274))
   - de_de by @Olfi01 and @miyucomics
   - en_pt by @frostedlyre and @penguinencounter
@@ -78,6 +79,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed Pace Purification returning nonzero velocity on nonmoving items ([#1119](https://github.com/FallingColors/HexMod/pull/1119)) @IridescentVoid
 - Fixed Accessor's Purification returning false for scrolls in item frames ([#1115](https://github.com/FallingColors/HexMod/pull/1115)) @IridescentVoid
 - Fixed Break Block being unable to break cobwebs on Fabric ([#1218](https://github.com/FallingColors/HexMod/pull/1218)) @Robotgiggle
+- Fixed the zero vector not being listed as falsy on the Augur's Purification page ([#1273](https://github.com/FallingColors/HexMod/pull/1273)) @DetermiedMech1
 - Fixed the command to list all per-world patterns not working ([#1277](https://github.com/FallingColors/HexMod/pull/1277)) @Olfi01
 
 ### Internal
