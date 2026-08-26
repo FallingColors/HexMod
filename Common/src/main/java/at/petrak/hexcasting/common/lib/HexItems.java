@@ -106,6 +106,8 @@ public class HexItems {
             )
     );
 
+    public static final Supplier<Item> NEURAL_FIBER = make("neural_fiber", () -> new Item(props()));
+
     public static final Supplier<ItemScroll> SCROLL_SMOL = make("scroll_small", () -> new ItemScroll(props(), 1));
     public static final Supplier<ItemScroll> SCROLL_MEDIUM = make("scroll_medium", () -> new ItemScroll(props(), 2));
     public static final Supplier<ItemScroll> SCROLL_LARGE = make("scroll", () -> new ItemScroll(props(), 3));

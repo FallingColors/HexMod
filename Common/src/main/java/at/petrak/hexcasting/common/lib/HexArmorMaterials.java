@@ -29,7 +29,7 @@ public class HexArmorMaterials {
             Map.of(), // no defense here since it's specified with the other attributes in ItemRobes
             ArmorMaterials.GOLD.value().enchantmentValue(),
             SoundEvents.ARMOR_EQUIP_LEATHER,
-            () -> Ingredient.EMPTY,  // TODO: repair with whatever it's crafted with
+            () -> Ingredient.of(HexItems.NEURAL_FIBER.get()),
             List.of(new ArmorMaterial.Layer(HexAPI.modLoc("robes"))),
             0, 0  // no toughness or knockback resistance
         ));

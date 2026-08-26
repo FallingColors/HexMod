@@ -261,6 +261,35 @@ public class HexplatRecipes extends RecipeProvider {
             .pattern(" S ")
             .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, HexItems.ROBES_HOOD.get())
+            .define('F', HexItems.NEURAL_FIBER.get())
+            .define('B', Items.BONE)
+            .pattern("BFB")
+            .pattern("F F")
+            .unlockedBy("has_item", hasItem(HexItems.NEURAL_FIBER.get())).save(recipes);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, HexItems.ROBES_TUNIC.get())
+            .define('F', HexItems.NEURAL_FIBER.get())
+            .pattern("F F")
+            .pattern("FFF")
+            .pattern("FFF")
+            .unlockedBy("has_item", hasItem(HexItems.NEURAL_FIBER.get())).save(recipes);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, HexItems.ROBES_LEGS.get())
+            .define('F', HexItems.NEURAL_FIBER.get())
+            .pattern("FFF")
+            .pattern("F F")
+            .pattern("F F")
+            .unlockedBy("has_item", hasItem(HexItems.NEURAL_FIBER.get())).save(recipes);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, HexItems.ROBES_BOOTS.get())
+            .define('F', HexItems.NEURAL_FIBER.get())
+            .define('B', Items.BONE)
+            .pattern("   ")
+            .pattern("B B")
+            .pattern("F F")
+            .unlockedBy("has_item", hasItem(HexItems.NEURAL_FIBER.get())).save(recipes);
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, HexItems.AMETHYST_DUST.get(),
                 (int) (MediaConstants.QUENCHED_SHARD_UNIT / MediaConstants.DUST_UNIT) + 1)
             .requires(HexItems.QUENCHED_SHARD.get())
