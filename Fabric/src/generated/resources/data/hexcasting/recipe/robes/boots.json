@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:bone"
+    },
+    "F": {
+      "item": "hexcasting:neural_fiber"
+    }
+  },
+  "pattern": [
+    "   ",
+    "B B",
+    "F F"
+  ],
+  "result": {
+    "count": 1,
+    "id": "hexcasting:robes/boots"
+  }
+}

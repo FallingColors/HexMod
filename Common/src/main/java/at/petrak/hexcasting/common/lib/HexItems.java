@@ -102,6 +102,8 @@ public class HexItems {
             )
     );
 
+    public static final Supplier<Item> NEURAL_FIBER = make("neural_fiber", () -> new Item(props()));
+
     public static final Supplier<ItemRobes> ROBES_HOOD = make("robes/hood", () ->
         new ItemRobes(ArmorItem.Type.HELMET, unstackable()
             .durability(270)
