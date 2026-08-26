@@ -25,6 +25,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Contemplation for escaping without the exponential growth of Consideration ([#1102](https://github.com/FallingColors/HexMod/pull/1102)) @IridescentVoid
 - Added Interjection, Meditation, and Recollection for advanced pattern-list creation ([#1103](https://github.com/FallingColors/HexMod/pull/1103)) @Robotgiggle
 - Added Media Reflection for checking media available to the cast ([#1235](https://github.com/FallingColors/HexMod/pull/1235)) @IridescentVoid
+- Added a variety of new translations via Weblate ([#1251](https://github.com/FallingColors/HexMod/pull/1251), [#1261](https://github.com/FallingColors/HexMod/pull/1261), [#1265](https://github.com/FallingColors/HexMod/pull/1265), [#1269](https://github.com/FallingColors/HexMod/pull/1269), [#1272](https://github.com/FallingColors/HexMod/pull/1272), [#1274](https://github.com/FallingColors/HexMod/pull/1274))
+  - de_de by @Olfi01 and @miyucomics
+  - en_pt by @frostedlyre and @penguinencounter
+  - es_es by @Chichi and @ElNico56
+  - fi_fi by @hauveli
+  - fr_fr by @Spectramaris, @Sixela963, @arsvenutia, @drawnbadden
+  - ja_jp by @ViktoriaNtro
+  - no_no by @ShyRasan123
+  - pl_pl by @ManicTv and @Welesen
+  - sv_se by @hauveli
 
 ### Changed
 
@@ -49,6 +59,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Updated Fabric Language Kotlin dependency from 1.9.4 to 1.13.7 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
 - Updated Kotlin for Forge dependency from 4.3.0 to 4.12.0 ([#1043](https://github.com/FallingColors/HexMod/pull/1043)) @Robotgiggle
 - Updated zh_cn translations ([#995](https://github.com/FallingColors/HexMod/pull/995), [#1037](https://github.com/FallingColors/HexMod/pull/1037), [#1045](https://github.com/FallingColors/HexMod/pull/1045)) @ChuijkYahus
+- Updated various translations via Weblate ([#1251](https://github.com/FallingColors/HexMod/pull/1251), [#1261](https://github.com/FallingColors/HexMod/pull/1261), [#1265](https://github.com/FallingColors/HexMod/pull/1265), [#1269](https://github.com/FallingColors/HexMod/pull/1269), [#1272](https://github.com/FallingColors/HexMod/pull/1272), [#1274](https://github.com/FallingColors/HexMod/pull/1274))
+  - ru_ru by @DarkThunderer and @KOCTEP
+  - zh_cn by @ChuijkYahus
 
 ### Fixed
 
