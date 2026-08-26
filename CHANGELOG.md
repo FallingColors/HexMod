@@ -81,6 +81,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed Break Block being unable to break cobwebs on Fabric ([#1218](https://github.com/FallingColors/HexMod/pull/1218)) @Robotgiggle
 - Fixed the zero vector not being listed as falsy on the Augur's Purification page ([#1273](https://github.com/FallingColors/HexMod/pull/1273)) @DetermiedMech1
 - Fixed the command to list all per-world patterns not working ([#1277](https://github.com/FallingColors/HexMod/pull/1277)) @Olfi01
+- Fixed a mixin issue that made gaslighting not work properly on Fabric ([#1281](https://github.com/FallingColors/HexMod/pull/1281)) @Robotgiggle
 
 ### Internal
 
