@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Contemplation for escaping without the exponential growth of Consideration ([#1102](https://github.com/FallingColors/HexMod/pull/1102)) @IridescentVoid
 - Added Interjection, Meditation, and Recollection for advanced pattern-list creation ([#1103](https://github.com/FallingColors/HexMod/pull/1103)) @Robotgiggle
 - Added Media Reflection for checking media available to the cast ([#1235](https://github.com/FallingColors/HexMod/pull/1235)) @IridescentVoid
+- Added ko_kr translations ([#1187](https://github.com/FallingColors/HexMod/pull/1187)) @Bananamilk452
 
 ### Changed
 
