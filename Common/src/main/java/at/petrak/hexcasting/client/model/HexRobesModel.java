@@ -252,12 +252,12 @@ public class HexRobesModel extends HumanoidArmorModel<LivingEntity> {
 
         rightLeg.addOrReplaceChild("right_skirt",
             CubeListBuilder.create()
-                .texOffs(48, 32).addBox(-4.0F, 0.0F, 0.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.3F)),
+                .texOffs(48, 32).addBox(-4.0F, 0.0F, 0.0F, 4.0F, 12.0F, 4.0F, new CubeDeformation(0.35F)),
             PartPose.offset(2.0F, 0.0F, -2.0F));
 
         rightLeg.addOrReplaceChild("right_boot",
             CubeListBuilder.create()
-                .texOffs(16, 40).addBox(-4.0F, 8.0F, 0.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.35F)),
+                .texOffs(16, 40).addBox(-4.0F, 8.0F, 0.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(0.3F)),
             PartPose.offset(2.0F, 0.0F, -2.0F));
 
         var leftLeg = root.addOrReplaceChild("left_leg", CubeListBuilder.create(), PartPose.ZERO);
