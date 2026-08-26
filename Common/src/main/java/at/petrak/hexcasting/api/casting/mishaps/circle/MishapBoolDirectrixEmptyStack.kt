@@ -12,13 +12,13 @@ import net.minecraft.world.item.DyeColor
 class MishapBoolDirectrixEmptyStack(
     val pos: BlockPos,
 ) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.GRAY)
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         env.world.destroyBlock(this.pos, true)
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component =
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context): Component =
         error("circle.bool_directrix.empty_stack", pos.toShortString())
 }

@@ -12,10 +12,10 @@ import net.minecraft.sounds.SoundSource
 import net.minecraft.world.item.DyeColor
 
 class MishapUnenlightened : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.RED)
 
-    override fun resolutionType(ctx: CastingEnvironment) = ResolvedPatternType.INVALID
+    override fun resolutionType(env: CastingEnvironment) = ResolvedPatternType.INVALID
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         env.mishapEnvironment.dropHeldItems()
@@ -31,5 +31,5 @@ class MishapUnenlightened : Mishap() {
         }
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) = null
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context) = null
 }

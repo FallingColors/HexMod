@@ -7,14 +7,14 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment
 import net.minecraft.world.item.DyeColor
 
 class MishapNotEnoughArgs(val expected: Int, val got: Int) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.LIGHT_GRAY)
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         repeat(expected - got) { stack.add(GarbageIota()) }
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context) =
         if (got == 0)
             error("no_args", expected)
         else
