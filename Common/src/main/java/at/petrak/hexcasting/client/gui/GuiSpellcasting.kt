@@ -52,6 +52,8 @@ class GuiSpellcasting constructor(
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
     private val usedSpots: MutableSet<HexCoord> = HashSet()
 
+    private var panOffset: Vec2 = Vec2.ZERO
+
     private var ambianceSoundInstance: GridSoundInstance? = null
 
     private val randSrc = SoundInstance.createUnseededRandom()
@@ -149,11 +151,11 @@ class GuiSpellcasting constructor(
         }
         if (HexConfig.client().clickingTogglesDrawing()) {
             return if (this.drawState is PatternDrawState.BetweenPatterns)
-                drawStart(mxOut, myOut)
+                pButton != 1 && drawStart(mxOut, myOut)
             else
                 drawEnd()
         }
-        return drawStart(mxOut, myOut)
+        return pButton != 1 && drawStart(mxOut, myOut)
     }
 
     private fun drawStart(mxOut: Double, myOut: Double): Boolean {
@@ -194,7 +196,17 @@ class GuiSpellcasting constructor(
         }
         if (HexConfig.client().clickingTogglesDrawing())
             return false
+        if (pButton == 1) {
+            return panGrid(pDragX, pDragY)
+        }
         return drawMove(mxOut, myOut)
+    }
+
+    private fun panGrid(pDragX: Double, pDragY: Double): Boolean {
+        val shift = Vec2(pDragX.toFloat(), pDragY.toFloat())
+        this.panOffset = this.panOffset.add(shift)
+        this.drawState = PatternDrawState.BetweenPatterns
+        return false;
     }
 
     private fun drawMove(mxOut: Double, myOut: Double): Boolean {
@@ -532,7 +544,7 @@ class GuiSpellcasting constructor(
         return (baseScale / scaleModifier).toFloat()
     }
 
-    fun coordsOffset(): Vec2 = Vec2(this.width.toFloat() * 0.5f, this.height.toFloat() * 0.5f)
+    fun coordsOffset(): Vec2 = Vec2(this.width.toFloat() * 0.5f, this.height.toFloat() * 0.5f).add(this.panOffset)
 
     fun coordToPx(coord: HexCoord) =
         at.petrak.hexcasting.api.utils.coordToPx(coord, this.hexSize(), this.coordsOffset())
@@ -541,7 +553,7 @@ class GuiSpellcasting constructor(
 
 
     private sealed class PatternDrawState {
-        /** We're waiting on the player to right-click again */
+        /** We're waiting on the player to left-click again */
         object BetweenPatterns : PatternDrawState()
 
         /** We just started drawing and haven't drawn the first line yet. */
