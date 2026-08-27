@@ -151,11 +151,11 @@ class GuiSpellcasting constructor(
         }
         if (HexConfig.client().clickingTogglesDrawing()) {
             return if (this.drawState is PatternDrawState.BetweenPatterns)
-                pButton != 1 && drawStart(mxOut, myOut)
+                drawStart(mxOut, myOut) && pButton != HexConfig.client().gridPanMouseButton()
             else
                 drawEnd()
         }
-        return pButton != 1 && drawStart(mxOut, myOut)
+        return drawStart(mxOut, myOut) && pButton != HexConfig.client().gridPanMouseButton()
     }
 
     private fun drawStart(mxOut: Double, myOut: Double): Boolean {
@@ -196,7 +196,7 @@ class GuiSpellcasting constructor(
         }
         if (HexConfig.client().clickingTogglesDrawing())
             return false
-        if (pButton == 1) {
+        if (pButton == HexConfig.client().gridPanMouseButton() && this.drawState is PatternDrawState.BetweenPatterns) {
             return panGrid(pDragX, pDragY)
         }
         return drawMove(mxOut, myOut)

@@ -140,6 +140,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private boolean clickingTogglesDrawing = DEFAULT_CLICKING_TOGGLES_DRAWING;
         @ConfigEntry.Gui.Tooltip
+        private int gridPanMouseButton = DEFAULT_GRID_PAN_MOUSE_BUTTON;
+        @ConfigEntry.Gui.Tooltip
         private boolean advancedTooltipsShowsIotaNBT = DEFAULT_ADVANCED_TOOLTIPS_SHOWS_IOTA_NBT;
         @ConfigEntry.Gui.Tooltip
         private boolean staticActiveSlates = DEFAULT_STATIC_ACTIVE_SLATES;
@@ -147,6 +149,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @Override
         public void validatePostLoad() throws ValidationException {
             this.gridSnapThreshold = Mth.clamp(this.gridSnapThreshold, 0.5, 1.0);
+            this.gridPanMouseButton = Math.max(this.gridPanMouseButton, 1);
         }
 
         @Override
@@ -178,6 +181,9 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         public boolean clickingTogglesDrawing() {
              return clickingTogglesDrawing;
         }
+
+        @Override
+        public int gridPanMouseButton() { return gridPanMouseButton; }
 
         @Override
         public boolean advancedTooltipsShowsIotaNBT() { 

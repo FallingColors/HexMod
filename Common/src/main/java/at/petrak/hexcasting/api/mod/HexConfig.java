@@ -51,6 +51,8 @@ public class HexConfig {
 
         boolean clickingTogglesDrawing();
 
+        int gridPanMouseButton();
+
         boolean advancedTooltipsShowsIotaNBT();
 
         boolean staticActiveSlates();
@@ -61,6 +63,7 @@ public class HexConfig {
         boolean DEFAULT_INVERT_ABACUS_SCROLL = false;
         double DEFAULT_GRID_SNAP_THRESHOLD = 0.5;
         boolean DEFAULT_CLICKING_TOGGLES_DRAWING = false;
+        int DEFAULT_GRID_PAN_MOUSE_BUTTON = 1;
         boolean DEFAULT_ADVANCED_TOOLTIPS_SHOWS_IOTA_NBT = false;
         boolean DEFAULT_STATIC_ACTIVE_SLATES = false;
     }

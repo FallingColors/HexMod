@@ -364,6 +364,10 @@
           "": "Clicking Toggles Drawing",
           "@Tooltip": "Whether you click to start and stop drawing instead of clicking and dragging to draw",
         },
+        gridPanMouseButton: {
+          "": "Grid Pan Mouse Button",
+          "@Tooltip": "Which mouse button is used to pan the hex grid (once that ability is unlocked)",
+        },
         advancedTooltipsShowsIotaNBT: {
           "": "Advanced Tooltips Shows Iota NBT",
           "@Tooltip": "Whether enabling advanced tooltips (F3+H) should display the full NBT of iotas stored in items like foci and spellbooks",
