@@ -149,13 +149,15 @@ class GuiSpellcasting constructor(
         if (super.mouseClicked(mxOut, myOut, pButton)) {
             return true
         }
+        if (pButton == HexConfig.client().gridPanMouseButton())
+            return false
         if (HexConfig.client().clickingTogglesDrawing()) {
             return if (this.drawState is PatternDrawState.BetweenPatterns)
-                drawStart(mxOut, myOut) && pButton != HexConfig.client().gridPanMouseButton()
+                drawStart(mxOut, myOut)
             else
                 drawEnd()
         }
-        return drawStart(mxOut, myOut) && pButton != HexConfig.client().gridPanMouseButton()
+        return drawStart(mxOut, myOut)
     }
 
     private fun drawStart(mxOut: Double, myOut: Double): Boolean {
@@ -205,7 +207,6 @@ class GuiSpellcasting constructor(
     private fun panGrid(pDragX: Double, pDragY: Double): Boolean {
         val shift = Vec2(pDragX.toFloat(), pDragY.toFloat())
         this.panOffset = this.panOffset.add(shift)
-        this.drawState = PatternDrawState.BetweenPatterns
         return false;
     }
 
@@ -287,6 +288,8 @@ class GuiSpellcasting constructor(
             return true
         }
         if (HexConfig.client().clickingTogglesDrawing())
+            return false
+        if (pButton == HexConfig.client().gridPanMouseButton())
             return false
         return drawEnd()
     }
