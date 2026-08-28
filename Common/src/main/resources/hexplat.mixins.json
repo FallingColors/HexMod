@@ -27,6 +27,7 @@
     "accessor.client.AccessorRenderStateShard",
     "accessor.client.AccessorRenderType",
     "client.MixinClientLevel",
-    "client.MixinPlayerRenderer"
+    "client.MixinPlayerRenderer",
+    "client.MixinGameRenderer"
   ]
 }
