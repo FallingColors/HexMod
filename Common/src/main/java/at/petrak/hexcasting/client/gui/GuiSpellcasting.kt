@@ -65,6 +65,10 @@ class GuiSpellcasting constructor(
         this.calculateIotaDisplays()
     }
 
+    fun getPanDistance(): Float {
+        return panOffset.length()
+    }
+
     fun recvServerUpdate(info: ExecutionClientView, index: Int) {
         if (info.isStackClear) {
             this.minecraft?.setScreen(null)
@@ -373,6 +377,9 @@ class GuiSpellcasting constructor(
         super.onClose()
     }
 
+    override fun renderBackground(guiGraphics: GuiGraphics, i: Int, j: Int, f: Float) {
+        this.renderBlurredBackground(f)
+    }
 
     override fun render(graphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         super.render(graphics, pMouseX, pMouseY, pPartialTick)
