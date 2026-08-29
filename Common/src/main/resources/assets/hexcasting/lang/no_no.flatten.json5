@@ -1,6 +1,6 @@
 {
   "item.hexcasting": {
-    book: "Hex Notisbok",
+    book: "Hex Notisblokk",
     staff: {
       oak: "Eikestav",
       spruce: "Granstav",
@@ -91,5 +91,237 @@
     trinket: "Tingel",
     artifact: "Artefakt",
     battery: "Flaske med Medie",
+    creative_unlocker: {
+      "": "Mediekuben",
+      for_emphasis: "UENDELIG MEDIE",
+      tooltip: "Spis for å låse opp all kunnskap om %s.",
+      mod_name: "Hexmaning",
+    },
+    lore_fragment: {
+      "": "Historie Fragment",
+      all: "Det virker som om at jeg har funnet alle historiene denne verden har å tilby.",
+    },
+  },
+  "entity.hexcasting": {
+    wall_scroll: "Hengende Rull",
+  },
+  "block.hexcasting": {
+    conjured_light: "Fremmanet Lys",
+    conjured_block: "Fremmanet Blokk",
+    directrix: {
+      empty: "Tomt Direktiv",
+      redstone: "Murer Direktiv",
+      boolean: "Gjeter Direktiv",
+    },
+    impetus: {
+      empty: "Tom Manemotor",
+      rightclick: "Verktøysmed Manemotor",
+      look: "Pilmaker Manemotor",
+      redstone: "Geistlig Manemotor",
+    },
+    akashic_: {
+      record: "Akasisk Register",
+      bookshelf: "Akasisk Bokhylle",
+      connector: "Akasisk Ligatur",
+    },
+    slate: {
+      "": "Tavle",
+      blank: "Blank Tavle",
+      written: "Mønstret Tavle",
+    },
+    slate_: {
+      block: "Tavleblokk",
+      tiles: "Tavlefliser",
+      bricks: "Tavlemur",
+      bricks_small: "Småtavlemur",
+      pillar: "Tavlesøyle",
+    },
+    amethyst_: {
+      dust_block: "Ametyststøvblokk",
+      tiles: "Ametystfliser",
+      bricks: "Ametystmur",
+      bricks_small: "Småametystmur",
+      pillar: "Ametystsøyle",
+    },
+    slate_amethyst_: {
+      tiles: "Tavle og Ametystfliser",
+      bricks: "Tavle og Ametystmur",
+      bricks_small: "Småtavle og ametystmur",
+      pillar: "Tavle og Ametystsøyle",
+    },
+    scroll_paper: "Rullepapir",
+    ancient_scroll_paper: "Eldgammelt Rullepapir",
+    scroll_paper_lantern: "Papirlykt",
+    ancient_scroll_paper_lantern: "Eldgammel Papirlykt",
+    amethyst_sconce: "Ametystlampe",
+    edified_: {
+      log: "Åpenbartømmer",
+      log_amethyst: "Ametystfylt Åpenbartømmer",
+      log_aventurine: "Adventurinfylt åpenbartømmer",
+      log_citrine: "Citrinfylt Åpenbartømmer",
+      log_purple: "Lilla Åpenbartømmer",
+      wood: "Åpenbartre",
+      planks: "Åpenbarplanker",
+      panel: "Åpenbarpaneler",
+      tile: "Åpenbarfliser",
+      door: "Åpenbardør",
+      trapdoor: "Åpenbarfallem",
+      stairs: "Åpenbartrapp",
+      slab: "Åpenbarhelle",
+      button: "Åpenbarknapp",
+      pressure_plate: "Åpenbartrykkplate",
+      fence: "Åpenbargjerde",
+      fence_gate: "Åpenbargrind",
+    },
+    stripped_edified_log: "Slinket Åpenbartømmer",
+    stripped_edified_wood: "Slinket Åpenbartre",
+    amethyst_edified_leaves: "Ametyståpenbarløv",
+    aventurine_edified_leaves: "Adventurinåpenbarløv",
+    citrine_edified_leaves: "Citrinåpenbarløv",
+    quenched_allay: "Slukket Hjelpeånd",
+    quenched_allay_: {
+      tiles: "Slukket Hjelpeåndfliser",
+      bricks: "Slukket Hjelpeåndmur",
+      bricks_small: "Små Mettet Hjelpeåndmur",
+    },
+  },
+  "effect.hexcasting": {
+    enlarge_grid: "Klarhet",
+    shrink_grid: "Uklarhet",
+  },
+  "item.minecraft.potion.effect": {
+    enlarge_grid: "Klarhetsbrygg",
+    enlarge_grid_long: "Klarhetsbrygg",
+    enlarge_grid_strong: "Klarhetsbrygg",
+    shrink_grid: "Uklarhetsbrygg",
+    shrink_grid_long: "Uklarhetsbrygg",
+    shrink_grid_strong: "Uklarhetsbrygg",
+  },
+  "item.minecraft.splash_potion.effect": {
+    enlarge_grid: "Kastbart klarhetsbrygg",
+    enlarge_grid_long: "Kastbart klarhetsbrygg",
+    enlarge_grid_strong: "Kastbart klarhetsbrygg",
+    shrink_grid: "Kastbart uklarhetsbrygg",
+    shrink_grid_long: "Kastbart uklarhetsbrygg",
+    shrink_grid_strong: "Kastbart uklarhetsbrygg",
+  },
+  "item.minecraft.lingering_potion.effect": {
+    enlarge_grid: "Vedvarende klarhetsbrygg",
+    enlarge_grid_long: "Vedvarende klarhetsbrygg",
+    enlarge_grid_strong: "Vedvarende klarhetsbrygg",
+    shrink_grid: "Vedvarende uklarhetsbrygg",
+    shrink_grid_long: "Vedvarende uklarhetsbrygg",
+    shrink_grid_strong: "Vedvarende uklarhetsbrygg",
+  },
+  "item.minecraft.tipped_arrow.effect": {
+    enlarge_grid: "Klarhetspil",
+    enlarge_grid_long: "Klarhetspil",
+    enlarge_grid_strong: "Klarhetspil",
+    shrink_grid: "Uklarhetspil",
+    shrink_grid_long: "Uklarhetspil",
+    shrink_grid_strong: "Uklarhetspil",
+  },
+  "itemGroup.hexcasting": {
+    hexcasting: "Hex Maning",
+    scrolls: "Hex Maning (Ruller)",
+  },
+  "gui.hexcasting": {
+    spellcasting: "Hex Rutenett",
+  },
+  "category.hexcasting": {
+    binds: "Hex Maning",
+  },
+  "key.hexcasting": {
+    spellbook_prev: "Forrige Tryllebokside",
+    spellbook_next: "Neste Tryllebokside",
+  },
+  "tag.hexcasting": {
+    staves: "Hex Staver",
+    edified_logs: "Åpenbartømmer",
+    edified_planks: "Åpenbarplanker",
+    phial_base: "Tom Medieflaske",
+  },
+  "tag.item.hexcasting": {
+    brainswept_circle_components: "Hjernevaskede Sirkelkomponenter",
+    directrices: "Direktiver",
+    impeti: "Manemotorer",
+    seal_materials: "Lukkematerialer",
+  },
+  "emi.category.hexcasting": {
+    brainsweep: "Flå Sinn",
+    "craft.battery": "Lage Medieflaske",
+    edify: "Åpenbar Spire",
+    villager_leveling: "Handelsnivåheving",
+    villager_profession: "Bygdingsyrke",
+  },
+  "text.autoconfig.hexcasting": {
+    title: "Hexmaning Konfigurering",
+    category: {
+      common: "Felles",
+      client: "Klient",
+      server: "Server",
+    },
+    option: {
+      common: {
+        dustMediaAmount: {
+          "": "Støvmediemengde",
+          "@Tooltip": "Hvor mye medie ett eneste ametyststøv er verdt",
+        },
+        shardMediaAmount: {
+          "": "Skårmediemengde",
+          "@Tooltip": "Hvor mye medie ett eneste ametystskår er verdt",
+        },
+        chargedCrystalMediaAmount: {
+          "": "Ladet Ametysts mediemengde",
+          "@Tooltip": "Hvor mye medie er en eneste ladet ametyst verdt",
+        },
+        mediaToHealthRate: {
+          "": "Medie til Helse kurs",
+          "@Tooltip": "Hvor mye medie ett halvt hjerte er verdt når helse er brukt til å mane",
+        },
+        cypherCooldown: {
+          "": "Cypher Avkjølingstid",
+          "@Tooltip": "Hvor lang tid i ticks (en tjuendedel av ett sekund) ett cypher bruker på å avkjøles",
+        },
+        trinketCooldown: {
+          "": "Tingel Avkjølingstid",
+          "@Tooltip": "Hvor lang tid i ticks (en tjuendedel av ett sekund) ett tingel bruker på å avkjøles",
+        },
+        artifactCooldown: {
+          "": "Artefakt Nedkjølingstid",
+          "@Tooltip": "Hvor lang tid i ticks (en tjuendedel av ett sekund) en artefakt bruker på å avkjøles",
+        },
+      },
+      client: {
+        ctrlTogglesOffStrokeOrder: {
+          "": "Ctrl skrur av strekrekkefølge",
+          "@Tooltip": "Om ctrl-tasten vill istedenfor skru *av* fargegradienten på mønstre",
+        },
+        disableInworldScrolling: {
+          "": "Skru av skrolling utenfor rutenettet",
+          "@Tooltip": "Om skrolling skal være avskrudd for abakus og trylleboker utenfor rutenettet (Dette gjelder ikke tastebindinger).",
+        },
+        invertSpellbookScrollDirection: {
+          "": "Inverter Tryllebokskrolleretning",
+          "@Tooltip": "Om å skrolle oppover vil bla oppover ifølge sidenummer, og vice versa",
+        },
+        invertAbacusScrollDirection: {
+          "": "Inverter abakusskrolleretning",
+          "@Tooltip": "Om å skrolle oppover vil øke nummeret til abakuset, og vice versa",
+        },
+        gridSnapThreshold: {
+          "": "Rutenetttiltrekningsterskel",
+          "@Tooltip": "I manerutenettet, lengden fra en dott musepekeren må være for at streken blir tiltrukket og kjørt gjennom den neste dotten, der 0.5 betyr 50% av veien (0.5-1)",
+        },
+        clickingTogglesDrawing: {
+          "": "Klikking veksler på og av tegning",
+          "@Tooltip": "Om du klikker for å starte og slutte å tegne, istedenfor å holde ned og dra for å tegne",
+        },
+        alwaysShowListCommas: {
+          "": "Alltid vis listekomma",
+          "@Tooltip": "Om alle iotatyper skal være separert av komma når vist i lister (Originalt bruker ikke mønsteriotaer komma)",
+        },
+      },
+    },
   },
 }
