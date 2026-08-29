@@ -33,7 +33,7 @@
       intersex: "Pigment o' intersex",
       lesbian: "Pigment o' lesbos",
       nonbinary: "Pigment o' not-binary",
-      pansexual: "Pigment o' pansexua",
+      pansexual: "Pigment o' pansexual",
       plural: "Pigment o' plurality",
       transgender: "Pigment o' transgender",
     },
@@ -130,6 +130,18 @@
     edified_: {
       log: "Log o' saints",
       log_amethyst: "Purple gem log o' saints",
+      wood: "Timber o' saints",
+    },
+    directrix: {
+      boolean: "Clother navigatrix",
+      empty: "Em'ty navigatrix",
+      redstone: "Smith o' chiselin' parts navigatrix",
+    },
+    impetus: {
+      empty: "Em'ty mainsail",
+      redstone: "Man o' magic mainsail",
+      rightclick: "Smith o' cutlasses mainsail",
+      look: "Stick sharpen'r mainsail",
     },
   },
   "effect.hexcasting": {
