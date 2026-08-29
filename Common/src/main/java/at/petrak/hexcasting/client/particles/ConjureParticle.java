@@ -88,6 +88,25 @@ public class ConjureParticle extends TextureSheetParticle {
         }
     }
 
+    // the code in LivingEntity that creates status effect particles hardcodes their velocity to (1,1,1) for some reason
+    // all the vanilla particles *used* for status effects have custom providers which completely ignore that velocity
+    // so we need to do that too, otherwise the particles just shoot off in a diagonal line
+    public static class StatusEffectProvider implements ParticleProvider<ConjureParticleOptions> {
+        private final SpriteSet sprite;
+
+        public StatusEffectProvider(SpriteSet pSprites) {
+            this.sprite = pSprites;
+        }
+
+        @Nullable
+        @Override
+        public Particle createParticle(ConjureParticleOptions type, ClientLevel level,
+            double pX, double pY, double pZ,
+            double pXSpeed, double pYSpeed, double pZSpeed) {
+            return new ConjureParticle(level, pX, pY, pZ, 0, 0, 0, this.sprite, type.color());
+        }
+    }
+
     // https://github.com/VazkiiMods/Botania/blob/db85d778ab23f44c11181209319066d1f04a9e3d/Xplat/src/main/java/vazkii/botania/client/fx/FXWisp.java
     private record ConjureRenderType() implements ParticleRenderType {
         @Override

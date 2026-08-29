@@ -10,27 +10,38 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public record ConjureParticleOptions(int color) implements ParticleOptions {
+public record ConjureParticleOptions(int color, boolean isStatus) implements ParticleOptions {
     @Override
     public ParticleType<?> getType() {
+        if (isStatus) return HexParticles.STATUS_PARTICLE.get();
         return HexParticles.CONJURE_PARTICLE.get();
     }
 
+    public ConjureParticleOptions(int color) {
+        this(color, false);
+    }
+
     public static class Type extends ParticleType<ConjureParticleOptions> {
-        public Type(boolean pOverrideLimiter) {
+        public boolean isStatus;
+
+        public Type(boolean pOverrideLimiter, boolean isStatus) {
             super(pOverrideLimiter);
+            this.isStatus = isStatus;
         }
 
         public static final MapCodec<ConjureParticleOptions> CODEC = RecordCodecBuilder.mapCodec(
             instance -> instance.group(
                     Codec.INT.fieldOf("color")
-                        .forGetter((ConjureParticleOptions o) -> o.color)
+                        .forGetter((ConjureParticleOptions o) -> o.color),
+                    Codec.BOOL.fieldOf("status")
+                            .forGetter((ConjureParticleOptions o) -> o.isStatus)
                 )
                 .apply(instance, ConjureParticleOptions::new)
         );
         public static final StreamCodec<RegistryFriendlyByteBuf, ConjureParticleOptions> STREAM_CODEC =
                 StreamCodec.composite(
                         ByteBufCodecs.VAR_INT, ConjureParticleOptions::color,
+                        ByteBufCodecs.BOOL, ConjureParticleOptions::isStatus,
                         ConjureParticleOptions::new
                 );
 
