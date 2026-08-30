@@ -19,6 +19,8 @@ public class HexTags {
         public static final TagKey<Item> PHIAL_BASE = create("phial_base");
         public static final TagKey<Item> GRANTS_ROOT_ADVANCEMENT = create("grants_root_advancement");
         public static final TagKey<Item> SEAL_MATERIALS = create("seal_materials");
+        public static final TagKey<Item> SPELLBOOK_COPY_MATERIALS = create("spellbook_copy_materials");
+        public static final TagKey<Item> SPELLBOOK_ERASE_MATERIALS = create("spellbook_erase_materials");
 
         public static final TagKey<Item> IMPETI = create("impeti");
         public static final TagKey<Item> DIRECTRICES = create("directrices");
