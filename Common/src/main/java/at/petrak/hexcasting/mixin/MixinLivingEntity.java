@@ -28,9 +28,10 @@ public abstract class MixinLivingEntity {
             int dust = rand.nextIntBetweenInclusive(4,7);
             int extra = 0;
             if (self instanceof Villager vill) {
-                int scaledLvl = vill.getVillagerData().getLevel() - 2;
-                if (rand.nextIntBetweenInclusive(0, 1) <= scaledLvl) extra++;
-                if (rand.nextIntBetweenInclusive(2, 3) <= scaledLvl) extra++;
+                // lv2 = 50% +1 drop; lv3 = +1 drop; lv4 = +2 drops; lv5 = +3 drops
+                int lvl = vill.getVillagerData().getLevel();
+                if (rand.nextIntBetweenInclusive(2, 3) <= lvl) extra++;
+                extra += Math.max(lvl-3, 0);
             }
             self.spawnAtLocation(new ItemStack(HexItems.NEURAL_FIBER.get(), fibers + extra));
             self.spawnAtLocation(new ItemStack(HexItems.AMETHYST_DUST.get(), dust + extra));

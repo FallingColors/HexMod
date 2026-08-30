@@ -26,6 +26,6 @@ public class HexMobEffects {
     public static final Holder<MobEffect> SHRINK_GRID = REGISTER.registerHolder("shrink_grid",
             () -> new HexMobEffect(MobEffectCategory.HARMFUL, 0xc0e660).addAttributeModifier(HexAttributes.GRID_ZOOM, HexAPI.modLoc("shrink_grid"),
                 -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-    public static final Holder<MobEffect> CRYSTALLIZED = REGISTER.registerHolder("crystallize",
+    public static final Holder<MobEffect> CRYSTALLIZED = REGISTER.registerHolder("crystallized",
             () -> new HexMobEffect(MobEffectCategory.HARMFUL, 0x8932b8, new ConjureParticleOptions(0x8932b8, true)));
 }
