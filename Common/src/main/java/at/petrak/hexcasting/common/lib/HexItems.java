@@ -103,28 +103,32 @@ public class HexItems {
             )
     );
 
-    public static final Supplier<Item> NEURAL_FIBER = make("neural_fiber", () -> new Item(props()));
+    public static final Supplier<Item> NEURAL_FIBER = make("neural_fiber", () -> new Item(props().rarity(Rarity.UNCOMMON)));
 
     public static final Supplier<ItemRobes> ROBES_HOOD = make("robes/hood", () ->
         new ItemRobes(ArmorItem.Type.HELMET, unstackable()
+            .rarity(Rarity.UNCOMMON)
             .durability(270)
             .attributes(ItemRobes.HOOD_MODIFIERS)
         )
     );
     public static final Supplier<ItemRobes> ROBES_TUNIC = make("robes/tunic", () ->
         new ItemRobes(ArmorItem.Type.CHESTPLATE, unstackable()
+            .rarity(Rarity.UNCOMMON)
             .durability(400)
             .attributes(ItemRobes.TUNIC_MODIFIERS)
         )
     );
     public static final Supplier<ItemRobes> ROBES_LEGS = make("robes/legs", () ->
         new ItemRobes(ArmorItem.Type.LEGGINGS, unstackable()
+            .rarity(Rarity.UNCOMMON)
             .durability(350)
             .attributes(ItemRobes.LEGS_MODIFIERS)
         )
     );
     public static final Supplier<ItemRobes> ROBES_BOOTS = make("robes/boots", () ->
         new ItemRobes(ArmorItem.Type.BOOTS, unstackable()
+            .rarity(Rarity.UNCOMMON)
             .durability(315)
             .attributes(ItemRobes.BOOTS_MODIFIERS)
         )
