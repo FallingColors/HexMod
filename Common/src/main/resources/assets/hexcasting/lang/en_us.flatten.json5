@@ -230,6 +230,7 @@
   "effect.hexcasting": {
     enlarge_grid: "Clarity",
     shrink_grid: "Clouding",
+    crystallized: "Crystallized"
   },
   
   "item.minecraft.potion.effect": {
