@@ -27,6 +27,7 @@ import net.minecraft.sounds.SoundEvents
 import net.minecraft.sounds.SoundSource
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.Mob
+import net.minecraft.world.entity.npc.AbstractVillager
 import net.minecraft.world.entity.npc.Villager
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
@@ -60,7 +61,7 @@ object OpBrainsweep : SpellAction {
             throw MishapAlreadyBrainswept(sacrifice)
 
         // special behavior for crystallization
-        if (vecPos == sacrifice.eyePosition && sacrifice.hasEffect(HexMobEffects.ENLARGE_GRID)) {
+        if (vecPos == sacrifice.eyePosition && sacrifice.hasEffect(HexMobEffects.ENLARGE_GRID) && sacrifice is AbstractVillager) {
             return SpellAction.Result(
                 AltSpell(sacrifice, pos),
                 MediaConstants.CRYSTAL_UNIT * 10,

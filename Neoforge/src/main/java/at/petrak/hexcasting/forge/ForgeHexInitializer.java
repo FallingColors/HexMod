@@ -131,6 +131,7 @@ public class ForgeHexInitializer {
         HexMobEffects.register();
         HexPotions.register();
         HexParticles.register();
+        HexArmorMaterials.register();
 
         HexAdvancementTriggers.register();
 
