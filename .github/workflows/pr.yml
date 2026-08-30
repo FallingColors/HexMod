@@ -188,7 +188,7 @@ jobs:
     secrets:
       GH_TOKEN: ""
     with:
-      python-version: "3.11"
+      python-version: "3.12"
       release: false
       deploy-pages: false
       site-url: https://hexcasting.hexxy.media

@@ -1,4 +1,4 @@
-{% import "macros/textures.html.jinja" as texture_macros with context -%}
+{% import "macros/images.html.jinja" as Images with context -%}
 
 <details class="details-collapsible flay-recipe-details">
   {% block collapse %}
@@ -9,7 +9,7 @@
   {% endblock collapse %}
 
   <div>
-    {% block title %}<h5>{{ recipe.result.name.name }}</h5>{% endblock %}
+    {% block title %}<h5>{{ recipe.result.Name.name }}</h5>{% endblock %}
 
     <div class="flay-recipe">
       {% block background %}
@@ -17,20 +17,20 @@
           class="flay-recipe-background"
           alt="Flay Mind Recipe GUI"
           src="{% block background_image %}{{
-            'hexcasting:textures/gui/hexdoc/brainsweep.png'|hexdoc_texture
+            'hexcasting:textures/gui/hexdoc/brainsweep.png'|hexdoc_texture_image
           }}{% endblock %}"
         >
       {% endblock background %}
 
       {% block brainsweepee %}
-        {% with brainsweepee=recipe.brainsweepee %}
-          {% include recipe.brainsweepee.template~".html.jinja" %}
+        {% with brainsweepee=recipe.entity_in %}
+          {% include recipe.entity_in.template~".html.jinja" %}
         {% endwith %}
       {% endblock brainsweepee %}
 
       {% block ingredient %}
         <div class="flay-recipe-block-ingredient">
-          {{ texture_macros.render_item(recipe.blockIn.block) }}
+          {{ Images.item(recipe.block_in.block) }}
         </div>
       {% endblock ingredient %}
 
@@ -38,7 +38,7 @@
         <div class="flay-recipe-cost texture item-texture multi-textures cycle-textures">
           {% for item in recipe.cost_items %}
             <div class="texture item-texture {{ 'multi-texture-active' if loop.first }}">
-              {{ texture_macros.render_item(item|hexdoc_item, count=item.count, is_first=true) }}
+              {{ Images.item(item|hexdoc_item_image, count=item.count, is_first=true) }}
             </div>
           {% endfor %}
         </div>
@@ -46,7 +46,7 @@
 
       {% block result %}
         <div class="flay-recipe-result">
-          {{ texture_macros.render_item(recipe.result.name) }}
+          {{ Images.item(recipe.result.Name) }}
         </div>
       {% endblock result %}
     </div>
