@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.client.gui.GuiSpellcasting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -11,6 +12,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.Vec2;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -23,7 +25,8 @@ public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> pat
                                  List<Iota> stack,
                                  @Nullable
                                  Iota ravenmind,
-                                 int parenCount
+                                 int parenCount,
+                                 Vec2 panOffset
 )
     implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MsgOpenSpellGuiS2C> TYPE = new CustomPacketPayload.Type<>(HexAPI.modLoc("cgui"));
@@ -40,6 +43,7 @@ public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> pat
                     Optional::ofNullable
             ), MsgOpenSpellGuiS2C::ravenmind,
             ByteBufCodecs.VAR_INT, MsgOpenSpellGuiS2C::parenCount,
+            HexUtils.VEC2_STREAM_CODEC, MsgOpenSpellGuiS2C::panOffset,
             MsgOpenSpellGuiS2C::new
     );
 
@@ -59,7 +63,7 @@ public record MsgOpenSpellGuiS2C(InteractionHand hand, List<ResolvedPattern> pat
                 var mc = Minecraft.getInstance();
                 mc.setScreen(
                         new GuiSpellcasting(msg.hand(), msg.patterns(), msg.stack, msg.ravenmind,
-                                msg.parenCount));
+                                msg.parenCount, msg.panOffset));
             });
         }
     }

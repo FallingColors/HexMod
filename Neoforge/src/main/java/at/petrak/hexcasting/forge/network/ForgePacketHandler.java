@@ -21,6 +21,8 @@ public class ForgePacketHandler {
             // Client -> server
             registar.playToServer(MsgNewSpellPatternC2S.TYPE, MsgNewSpellPatternC2S.STREAM_CODEC,
                     makeServerBoundHandler(MsgNewSpellPatternC2S::handle));
+            registar.playToServer(MsgPannedGridC2S.TYPE, MsgPannedGridC2S.STREAM_CODEC,
+                    makeServerBoundHandler(MsgPannedGridC2S::handle));
             registar.playToServer(MsgShiftScrollC2S.TYPE, MsgShiftScrollC2S.STREAM_CODEC,
                     makeServerBoundHandler(MsgShiftScrollC2S::handle));
 

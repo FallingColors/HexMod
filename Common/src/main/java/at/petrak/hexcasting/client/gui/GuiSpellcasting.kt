@@ -22,6 +22,7 @@ import at.petrak.hexcasting.common.lib.HexAttributes
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.lib.hex.HexActions
 import at.petrak.hexcasting.common.msgs.MsgNewSpellPatternC2S
+import at.petrak.hexcasting.common.msgs.MsgPannedGridC2S
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
@@ -31,7 +32,6 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.resources.sounds.SoundInstance
-import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.FormattedCharSequence
 import net.minecraft.util.Mth
@@ -46,6 +46,7 @@ class GuiSpellcasting constructor(
     private var cachedStack: List<Iota>,
     private var cachedRavenmind: Iota?,
     private var parenCount: Int,
+    private var panOffset: Vec2,
 ) : Screen("gui.hexcasting.spellcasting".asTranslatedComponent) {
     private var stackDescs: List<FormattedCharSequence> = listOf()
     private var parenDescs: List<FormattedCharSequence> = listOf()
@@ -54,7 +55,7 @@ class GuiSpellcasting constructor(
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
     private val usedSpots: MutableSet<HexCoord> = HashSet()
 
-    private var panOffset = Vec2.ZERO
+    private var prevPanOffset = Vec2.ZERO
     private val bgLocation = HexAPI.modLoc("textures/gui/casting_bg.png")
 
     private var ambianceSoundInstance: GridSoundInstance? = null
@@ -214,6 +215,10 @@ class GuiSpellcasting constructor(
     private fun panGrid(pDragX: Double, pDragY: Double): Boolean {
         val shift = Vec2(pDragX.toFloat(), pDragY.toFloat())
         this.panOffset = this.panOffset.add(shift)
+        if (panOffset.distanceToSqr(prevPanOffset) > 40000) {
+            IClientXplatAbstractions.INSTANCE.sendPacketToServer(MsgPannedGridC2S(panOffset))
+            prevPanOffset = panOffset;
+        }
         return false;
     }
 
@@ -296,8 +301,13 @@ class GuiSpellcasting constructor(
         }
         if (HexConfig.client().clickingTogglesDrawing())
             return false
-        if (pButton == HexConfig.client().gridPanMouseButton())
+        if (pButton == HexConfig.client().gridPanMouseButton()) {
+            if (panOffset != prevPanOffset) {
+                IClientXplatAbstractions.INSTANCE.sendPacketToServer(MsgPannedGridC2S(panOffset))
+                prevPanOffset = panOffset;
+            }
             return false
+        }
         return drawEnd()
     }
 

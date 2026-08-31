@@ -10,13 +10,17 @@ import at.petrak.hexcasting.api.casting.math.HexCoord
 import at.petrak.hexcasting.api.casting.validateSubIotas
 import at.petrak.hexcasting.api.mod.HexTags
 import com.mojang.datafixers.util.Function6
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.ChatFormatting
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
 import net.minecraft.nbt.*
+import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
+import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
@@ -61,14 +65,24 @@ fun vecFromNBT(tag: CompoundTag): Vec3 {
         Vec3(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z"))
 }
 
-fun Vec2.serializeToNBT(): LongArrayTag =
-    LongArrayTag(longArrayOf(this.x.toDouble().toRawBits(), this.y.toDouble().toRawBits()))
+fun Vec2.serializeToNBT(): CompoundTag {
+    val tag = CompoundTag()
+    tag.putFloat("x", this.x)
+    tag.putFloat("y", this.y)
+    return tag
+}
 
 fun vec2FromNBT(tag: LongArray): Vec2 = if (tag.size != 2) Vec2.ZERO else
     Vec2(
         Double.fromBits(tag[0]).toFloat(),
         Double.fromBits(tag[1]).toFloat(),
     )
+fun vec2FromNBT(tag: CompoundTag): Vec2 {
+    return if (!tag.contains("x") || !tag.contains("y"))
+        Vec2.ZERO
+    else
+        Vec2(tag.getFloat("x"), tag.getFloat("y"))
+}
 
 fun otherHand(hand: InteractionHand) =
     if (hand == InteractionHand.MAIN_HAND) InteractionHand.OFF_HAND else InteractionHand.MAIN_HAND
@@ -333,6 +347,20 @@ fun <T : Iota> validateIotaList(iotaList: TreeList<T>, serverLevel: ServerLevel)
     return iotaList.map { validateIota(it, serverLevel) }
 }
 
+// why is there not already a codec defined for vec2
+@JvmField
+val VEC2_CODEC: Codec<Vec2> = RecordCodecBuilder.create<Vec2>({ instance ->
+    instance.group(
+        Codec.FLOAT.fieldOf("x").forGetter { it.x },
+        Codec.FLOAT.fieldOf("y").forGetter { it.y }
+    ).apply(instance, ::Vec2)
+}).orElseGet({ Vec2.ZERO })
+@JvmField
+val VEC2_STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, Vec2> = StreamCodec.composite(
+    ByteBufCodecs.FLOAT, Vec2::x,
+    ByteBufCodecs.FLOAT, Vec2::y,
+    ::Vec2
+)
 
 // vanilla's StreamCodec.composite() only supports up to six fields in 1.21
 fun <B, C, T1, T2, T3, T4, T5, T6, T7> compositeCodecSeven(

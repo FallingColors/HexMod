@@ -16,6 +16,7 @@ public class FabricPacketHandler {
         PayloadTypeRegistry.playC2S().register(MsgShiftScrollC2S.TYPE, MsgShiftScrollC2S.STREAM_CODEC);
         PayloadTypeRegistry.playC2S().register(MsgNewSpellPatternC2S.TYPE, MsgNewSpellPatternC2S.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(MsgNewSpellPatternS2C.TYPE, MsgNewSpellPatternS2C.STREAM_CODEC);
+        PayloadTypeRegistry.playC2S().register(MsgPannedGridC2S.TYPE, MsgPannedGridC2S.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(MsgOpenSpellGuiS2C.TYPE, MsgOpenSpellGuiS2C.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(MsgBeepS2C.TYPE, MsgBeepS2C.STREAM_CODEC);
         PayloadTypeRegistry.playS2C().register(MsgShiftScrollC2S.TYPE, MsgShiftScrollC2S.STREAM_CODEC);
@@ -31,6 +32,8 @@ public class FabricPacketHandler {
                 makeServerBoundHandler(MsgShiftScrollC2S::handle));
         ServerPlayNetworking.registerGlobalReceiver(MsgNewSpellPatternC2S.TYPE,
                 makeServerBoundHandler(MsgNewSpellPatternC2S::handle));
+        ServerPlayNetworking.registerGlobalReceiver(MsgPannedGridC2S.TYPE,
+                makeServerBoundHandler(MsgPannedGridC2S::handle));
     }
 
     private static <T extends CustomPacketPayload> ServerPlayNetworking.PlayPayloadHandler<T> makeServerBoundHandler(

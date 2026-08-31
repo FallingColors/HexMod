@@ -80,6 +80,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.predicates.AnyOfCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import virtuoel.pehkui.api.ScaleTypes;
@@ -190,6 +191,12 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public void setPanOffset(ServerPlayer target, Vec2 panOffset) {
+        var cc = HexCardinalComponents.PAN_OFFSET.get(target);
+        cc.setPanOffset(panOffset);
+    }
+
+    @Override
     public boolean isBrainswept(Mob mob) {
         var cc = HexCardinalComponents.BRAINSWEPT.get(mob);
         return cc.isBrainswept();
@@ -232,9 +239,16 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public Vec2 getPanOffset(ServerPlayer player) {
+        var cc = HexCardinalComponents.PAN_OFFSET.get(player);
+        return cc.getPanOffset();
+    }
+
+    @Override
     public void clearCastingData(ServerPlayer player) {
         this.setStaffcastImage(player, null);
         this.setPatterns(player, List.of());
+        this.setPanOffset(player, Vec2.ZERO);
     }
 
     @Override
