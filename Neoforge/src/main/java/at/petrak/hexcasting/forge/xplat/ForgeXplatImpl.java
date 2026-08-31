@@ -187,7 +187,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public @Nullable FrozenPigment setPigment(Player player, @Nullable FrozenPigment pigment) {
+    public FrozenPigment setPigment(Player player, FrozenPigment pigment) {
         var old = getPigment(player);
 
         CompoundTag tag = player.getPersistentData();

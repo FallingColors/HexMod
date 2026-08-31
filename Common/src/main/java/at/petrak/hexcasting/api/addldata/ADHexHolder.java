@@ -16,7 +16,7 @@ public interface ADHexHolder {
     @Nullable
     List<Iota> getHex(ServerLevel level);
 
-    void writeHex(List<Iota> patterns, @Nullable FrozenPigment pigment, long media);
+    void writeHex(List<Iota> patterns, FrozenPigment pigment, long media);
 
     void clearHex();
 
