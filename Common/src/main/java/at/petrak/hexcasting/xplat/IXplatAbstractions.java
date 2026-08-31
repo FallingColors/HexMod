@@ -38,7 +38,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -47,6 +46,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -103,6 +103,8 @@ public interface IXplatAbstractions {
 
     void setPatterns(ServerPlayer target, List<ResolvedPattern> patterns);
 
+    void setPanOffset(ServerPlayer target, Vec2 panOffset);
+
     @Nullable FlightAbility getFlight(ServerPlayer player);
 
     @Nullable AltioraAbility getAltiora(Player player);
@@ -114,6 +116,8 @@ public interface IXplatAbstractions {
     CastingVM getStaffcastVM(ServerPlayer player, InteractionHand hand);
 
     List<ResolvedPattern> getPatternsSavedInUi(ServerPlayer player);
+
+    Vec2 getPanOffset(ServerPlayer player);
 
     void clearCastingData(ServerPlayer player);
 
