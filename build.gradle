@@ -1,5 +1,3 @@
-import at.petrak.pkpcpbp.MiscUtil
-
 plugins {
     // used for something??
     id 'dev.architectury.loom' version '1.13-SNAPSHOT' apply false
@@ -14,63 +12,37 @@ plugins {
     // Also it looks like property lookups don't work this early
     id 'fabric-loom' version '1.9+' apply false
 
-    id("at.petra-k.pkpcpbp.PKPlugin") version "0.2.0-pre-104"
-    id("at.petra-k.pkpcpbp.PKSubprojPlugin") version "0.2.0-pre-104" apply false
     id("at.petra-k.pkpcpbp.PKJson5Plugin") version "0.2.0-pre-104" apply false
+    id "me.modmuss50.mod-publish-plugin"
 }
 
 architectury {
     minecraft = project.minecraftVersion
 }
 
-pkpcpbp {
-    // if something goes wrong in CI, make sure we can see the logs to figure out why
-    superDebugInfo = System.getenv("CI") != null
-    // we set the maven coordinates manually in the subprojects block
-    doProjectMetadata = false
-    setupJarMetadata = true
-    setupMavenMetadata = true
-    javaVersion = 21
-    modInfo {
-        modID = project.modID
-        mcVersion = project.minecraftVersion
-        modVersion = project.modVersion
-    }
-    curseforgeInfo {
-        id = 569849
-        stability = "beta"
-        token = System.getenv("CURSEFORGE_TOKEN")
-    }
-    modrinthInfo {
-        id = "nTW3yKrm"
-        stability = "beta"
-        token = System.getenv("MODRINTH_TOKEN")
-    }
-}
-
-subprojects {
+subprojects { subproject ->
     apply plugin: 'dev.architectury.loom'
     apply plugin: 'architectury-plugin'
     apply plugin: 'java'
     apply plugin: 'kotlin'
     apply plugin: 'maven-publish'
-    apply plugin: 'at.petra-k.pkpcpbp.PKSubprojPlugin'
     apply plugin: 'at.petra-k.pkpcpbp.PKJson5Plugin'
-
+    if(subproject.path != ":Common") {
+        apply plugin: 'me.modmuss50.mod-publish-plugin'
+    }
     group = "at.petra-k.$modID"
     base.archivesName = "$modID-$platform-$minecraftVersion"
     version = modVersion
 
-    def isRelease = MiscUtil.isRelease(MiscUtil.getMostRecentPush(project))
+    def isRelease = System.getenv("FORMAL_RELEASE") ?
+            System.getenv("FORMAL_RELEASE").toBoolean() : false
     def buildNumber = System.getenv("BUILD_NUMBER")
     if (!isRelease && buildNumber != null) {
         version += "-pre-$buildNumber"
     }
 
-    pkSubproj {
-        platform = project.platform
-        artifactId = base.archivesName.get()
-        versionDisplayName = "$platform-$minecraftVersion-$modVersion"
+    kotlin {
+        jvmToolchain(21)
     }
 
     pkJson5 {
@@ -129,6 +101,28 @@ subprojects {
             }
             forRepository {
                 flatDir { dir(rootProject.file("libs")) }
+            }
+        }
+    }
+    if(subproject.path != ":Common") {
+        publishMods {
+            type = BETA
+            changelog = ""
+
+            modrinth {
+                accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+                projectId = "nTW3yKrm"
+                minecraftVersions.add("1.21.1")
+            }
+            curseforge {
+                accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+                projectId = "569849"
+                minecraftVersions.add("1.21.1")
+                client = true
+                server = true
+            }
+            discord {
+                webhookUrl = providers.environmentVariable("discordWebhook")
             }
         }
     }
