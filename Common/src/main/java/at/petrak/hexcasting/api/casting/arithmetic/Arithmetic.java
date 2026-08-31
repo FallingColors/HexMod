@@ -24,49 +24,49 @@ public interface Arithmetic {
 
 	// Below are some common Operator patterns that you can make use of in your Arithmetic:
 
-	HexPattern ADD = HexPattern.fromAngles("waaw", HexDir.NORTH_EAST);
-	HexPattern SUB = HexPattern.fromAngles("wddw", HexDir.NORTH_WEST);
-	HexPattern MUL = HexPattern.fromAngles("waqaw", HexDir.SOUTH_EAST);
-	HexPattern DIV = HexPattern.fromAngles("wdedw", HexDir.NORTH_EAST);
-	HexPattern ABS = HexPattern.fromAngles("wqaqw", HexDir.NORTH_EAST);
-	HexPattern POW = HexPattern.fromAngles("wedew", HexDir.NORTH_WEST);
-	HexPattern FLOOR = HexPattern.fromAngles("ewq", HexDir.EAST);
-	HexPattern CEIL = HexPattern.fromAngles("qwe", HexDir.EAST);
-	HexPattern SIN = HexPattern.fromAngles("qqqqqaa", HexDir.SOUTH_EAST);
-	HexPattern COS = HexPattern.fromAngles("qqqqqad", HexDir.SOUTH_EAST);
-	HexPattern TAN = HexPattern.fromAngles("wqqqqqadq", HexDir.SOUTH_WEST);
-	HexPattern ARCSIN = HexPattern.fromAngles("ddeeeee", HexDir.SOUTH_EAST);
-	HexPattern ARCCOS = HexPattern.fromAngles("adeeeee", HexDir.NORTH_EAST);
-	HexPattern ARCTAN = HexPattern.fromAngles("eadeeeeew", HexDir.NORTH_EAST);
-	HexPattern ARCTAN2 = HexPattern.fromAngles("deadeeeeewd", HexDir.WEST);
-	HexPattern LOG = HexPattern.fromAngles("eqaqe", HexDir.NORTH_WEST);
-	HexPattern MOD = HexPattern.fromAngles("addwaad", HexDir.NORTH_EAST);
+	HexPattern ADD = HexPattern.fromDrawableAngles("waaw", HexDir.NORTH_EAST);
+	HexPattern SUB = HexPattern.fromDrawableAngles("wddw", HexDir.NORTH_WEST);
+	HexPattern MUL = HexPattern.fromDrawableAngles("waqaw", HexDir.SOUTH_EAST);
+	HexPattern DIV = HexPattern.fromDrawableAngles("wdedw", HexDir.NORTH_EAST);
+	HexPattern ABS = HexPattern.fromDrawableAngles("wqaqw", HexDir.NORTH_EAST);
+	HexPattern POW = HexPattern.fromDrawableAngles("wedew", HexDir.NORTH_WEST);
+	HexPattern FLOOR = HexPattern.fromDrawableAngles("ewq", HexDir.EAST);
+	HexPattern CEIL = HexPattern.fromDrawableAngles("qwe", HexDir.EAST);
+	HexPattern SIN = HexPattern.fromDrawableAngles("qqqqqaa", HexDir.SOUTH_EAST);
+	HexPattern COS = HexPattern.fromDrawableAngles("qqqqqad", HexDir.SOUTH_EAST);
+	HexPattern TAN = HexPattern.fromDrawableAngles("wqqqqqadq", HexDir.SOUTH_WEST);
+	HexPattern ARCSIN = HexPattern.fromDrawableAngles("ddeeeee", HexDir.SOUTH_EAST);
+	HexPattern ARCCOS = HexPattern.fromDrawableAngles("adeeeee", HexDir.NORTH_EAST);
+	HexPattern ARCTAN = HexPattern.fromDrawableAngles("eadeeeeew", HexDir.NORTH_EAST);
+	HexPattern ARCTAN2 = HexPattern.fromDrawableAngles("deadeeeeewd", HexDir.WEST);
+	HexPattern LOG = HexPattern.fromDrawableAngles("eqaqe", HexDir.NORTH_WEST);
+	HexPattern MOD = HexPattern.fromDrawableAngles("addwaad", HexDir.NORTH_EAST);
 
 
 	// Vecs
-	HexPattern PACK = HexPattern.fromAngles("eqqqqq", HexDir.EAST);
-	HexPattern UNPACK = HexPattern.fromAngles("qeeeee", HexDir.EAST);
+	HexPattern PACK = HexPattern.fromDrawableAngles("eqqqqq", HexDir.EAST);
+	HexPattern UNPACK = HexPattern.fromDrawableAngles("qeeeee", HexDir.EAST);
 
 	// Lists
-	HexPattern INDEX = HexPattern.fromAngles("deeed", HexDir.NORTH_WEST);
-	HexPattern SLICE = HexPattern.fromAngles("qaeaqwded", HexDir.NORTH_WEST);
-	HexPattern APPEND = HexPattern.fromAngles("edqde", HexDir.SOUTH_WEST);
-	HexPattern UNAPPEND = HexPattern.fromAngles("qaeaq", HexDir.NORTH_WEST);
-	HexPattern REV = HexPattern.fromAngles("qqqaede", HexDir.EAST);
-	HexPattern INDEX_OF = HexPattern.fromAngles("dedqde", HexDir.EAST);
-	HexPattern REMOVE = HexPattern.fromAngles("edqdewaqa", HexDir.SOUTH_WEST);
-	HexPattern REPLACE = HexPattern.fromAngles("wqaeaqw", HexDir.NORTH_WEST);
-	HexPattern CONS = HexPattern.fromAngles("ddewedd", HexDir.SOUTH_EAST);
-	HexPattern UNCONS = HexPattern.fromAngles("aaqwqaa", HexDir.SOUTH_WEST);
+	HexPattern INDEX = HexPattern.fromDrawableAngles("deeed", HexDir.NORTH_WEST);
+	HexPattern SLICE = HexPattern.fromDrawableAngles("qaeaqwded", HexDir.NORTH_WEST);
+	HexPattern APPEND = HexPattern.fromDrawableAngles("edqde", HexDir.SOUTH_WEST);
+	HexPattern UNAPPEND = HexPattern.fromDrawableAngles("qaeaq", HexDir.NORTH_WEST);
+	HexPattern REV = HexPattern.fromDrawableAngles("qqqaede", HexDir.EAST);
+	HexPattern INDEX_OF = HexPattern.fromDrawableAngles("dedqde", HexDir.EAST);
+	HexPattern REMOVE = HexPattern.fromDrawableAngles("edqdewaqa", HexDir.SOUTH_WEST);
+	HexPattern REPLACE = HexPattern.fromDrawableAngles("wqaeaqw", HexDir.NORTH_WEST);
+	HexPattern CONS = HexPattern.fromDrawableAngles("ddewedd", HexDir.SOUTH_EAST);
+	HexPattern UNCONS = HexPattern.fromDrawableAngles("aaqwqaa", HexDir.SOUTH_WEST);
 
 	// Boolean Logic, Comparisons, & Sets
-	HexPattern AND = HexPattern.fromAngles("wdw", HexDir.NORTH_EAST);
-	HexPattern OR = HexPattern.fromAngles("waw", HexDir.SOUTH_EAST);
-	HexPattern XOR = HexPattern.fromAngles("dwa", HexDir.NORTH_WEST);
-	HexPattern GREATER = HexPattern.fromAngles("e", HexDir.SOUTH_EAST);
-	HexPattern LESS = HexPattern.fromAngles("q", HexDir.SOUTH_WEST);
-	HexPattern GREATER_EQ = HexPattern.fromAngles("ee", HexDir.SOUTH_EAST);
-	HexPattern LESS_EQ = HexPattern.fromAngles("qq", HexDir.SOUTH_WEST);
-	HexPattern NOT = HexPattern.fromAngles("dw", HexDir.NORTH_WEST);
-	HexPattern UNIQUE = HexPattern.fromAngles("aweaqa", HexDir.NORTH_EAST);
+	HexPattern AND = HexPattern.fromDrawableAngles("wdw", HexDir.NORTH_EAST);
+	HexPattern OR = HexPattern.fromDrawableAngles("waw", HexDir.SOUTH_EAST);
+	HexPattern XOR = HexPattern.fromDrawableAngles("dwa", HexDir.NORTH_WEST);
+	HexPattern GREATER = HexPattern.fromDrawableAngles("e", HexDir.SOUTH_EAST);
+	HexPattern LESS = HexPattern.fromDrawableAngles("q", HexDir.SOUTH_WEST);
+	HexPattern GREATER_EQ = HexPattern.fromDrawableAngles("ee", HexDir.SOUTH_EAST);
+	HexPattern LESS_EQ = HexPattern.fromDrawableAngles("qq", HexDir.SOUTH_WEST);
+	HexPattern NOT = HexPattern.fromDrawableAngles("dw", HexDir.NORTH_WEST);
+	HexPattern UNIQUE = HexPattern.fromDrawableAngles("aweaqa", HexDir.NORTH_EAST);
 }
