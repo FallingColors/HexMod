@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Simulate, which causes the next pattern drawn to be simulated (to check for mishaps) rather than executed ([#1194](https://github.com/FallingColors/HexMod/pull/1194)) @Robotgiggle
 - Added the `hex_unbreakable` tag for blocks that should be immune to Break Block regardless of the configured mining tier ([#1186](https://github.com/FallingColors/HexMod/pull/1186)) @Robotgiggle @slava110
 - Added a new Ancient Cypher hex that impulses nearby items towards the caster ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
+- Added automatic item fixing for items carried over from 1.20.x (might not work on items stored inside modded containers) ([#1226](https://github.com/FallingColors/HexMod/pull/1226)) @Olfi01
 
 ### Changed
 
