@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.client.gui
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.eval.ExecutionClientView
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
@@ -30,6 +31,7 @@ import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.resources.sounds.SoundInstance
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.sounds.SoundSource
 import net.minecraft.util.FormattedCharSequence
 import net.minecraft.util.Mth
@@ -52,7 +54,8 @@ class GuiSpellcasting constructor(
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
     private val usedSpots: MutableSet<HexCoord> = HashSet()
 
-    private var panOffset: Vec2 = Vec2.ZERO
+    private var panOffset = Vec2.ZERO
+    private val bgLocation = HexAPI.modLoc("textures/gui/casting_bg.png")
 
     private var ambianceSoundInstance: GridSoundInstance? = null
 
@@ -66,7 +69,7 @@ class GuiSpellcasting constructor(
     }
 
     fun getPanDistance(): Float {
-        return panOffset.length()
+        return panOffset.length() / 20
     }
 
     fun recvServerUpdate(info: ExecutionClientView, index: Int) {
@@ -378,6 +381,9 @@ class GuiSpellcasting constructor(
     }
 
     override fun renderBackground(guiGraphics: GuiGraphics, i: Int, j: Int, f: Float) {
+        guiGraphics.setColor(1f,1f,1f, (getPanDistance() / 15).coerceAtMost(1f))
+        renderMenuBackgroundTexture(guiGraphics, bgLocation, 0, 0, 0f, 0f, this.width, this.height)
+        guiGraphics.setColor(1f, 1f, 1f, 1f)
         this.renderBlurredBackground(f)
     }
 

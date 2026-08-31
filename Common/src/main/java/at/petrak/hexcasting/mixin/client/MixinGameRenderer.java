@@ -20,7 +20,7 @@ public abstract class MixinGameRenderer {
         GameRenderer renderer = (GameRenderer)(Object)this;
         Screen screen = renderer.getMinecraft().screen;
         if (screen instanceof GuiSpellcasting grid) {
-            original.call(instance, string, grid.getPanDistance() / 10);
+            original.call(instance, string, Math.min(grid.getPanDistance(), 12f));
         } else {
             original.call(instance, string, f);
         }
