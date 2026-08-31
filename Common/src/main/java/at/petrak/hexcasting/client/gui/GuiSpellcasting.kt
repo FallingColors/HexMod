@@ -443,12 +443,13 @@ class GuiSpellcasting constructor(
 
         for ((idx, elts) in this.patterns.withIndex()) {
             val (pat, origin, valid) = elts
+            val points = pat.toLines(this.hexSize(), this.coordToPx(origin))
+            val center = Vec2(graphics.guiWidth() / 2f, graphics.guiHeight() / 2f)
+            if (points.all{ point -> point.distanceToSqr(center) > center.lengthSquared()+2500 })
+                continue // don't render the pattern if it's completely offscreen
             drawPatternFromPoints(
                 mat,
-                pat.toLines(
-                    this.hexSize(),
-                    this.coordToPx(origin)
-                ),
+                points,
                 findDupIndices(pat.positions()),
                 true,
                 valid.color or (0xC8 shl 24),
