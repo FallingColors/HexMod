@@ -198,7 +198,7 @@ public class HexBlocks {
         new BlockNeuralMesh(BlockBehaviour.Properties.of()
             .noCollission()
             .strength(0.2F)
-            .sound(SoundType.GLOW_LICHEN)
+            .sound(SoundType.DEEPSLATE_TILES)
             .pushReaction(PushReaction.DESTROY)
         )
     );

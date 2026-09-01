@@ -81,9 +81,7 @@ public class HexItemModels extends PaucalItemModelProvider {
             .translation(-2.5f, 0f, -8f)
             .scale(0.4f);
 
-        singleTexture(getPath(HexBlocks.NEURAL_MESH.get()),
-            ResourceLocation.withDefaultNamespace("item/generated"),
-            "layer0", modLoc("block/neural_mesh"));
+        simpleItem(modLoc("neural_mesh"));
 
         buildRobes(HexItems.ROBES_HOOD.get(), "hood", HexItems.ROBES_HOOD.get().numVariants());
         buildRobes(HexItems.ROBES_TUNIC.get(), "tunic", HexItems.ROBES_HOOD.get().numVariants());
