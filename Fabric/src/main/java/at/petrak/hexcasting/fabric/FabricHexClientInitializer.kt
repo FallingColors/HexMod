@@ -4,6 +4,7 @@ import at.petrak.hexcasting.client.ClientTickCounter
 import at.petrak.hexcasting.client.Keybinds
 import at.petrak.hexcasting.client.RegisterClientStuff
 import at.petrak.hexcasting.client.ShiftScrollListener
+import at.petrak.hexcasting.client.gui.GuiSpellcasting
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent
 import at.petrak.hexcasting.client.model.HexModelLayers
 import at.petrak.hexcasting.client.render.HexAdditionalRenderers
@@ -37,10 +38,11 @@ object FabricHexClientInitializer : ClientModInitializer {
         }
         HudRenderCallback.EVENT.register(HexAdditionalRenderers::overlayGui)
         WorldRenderEvents.START.register { ClientTickCounter.renderTickStart(it.tickCounter().gameTimeDeltaTicks) }
-        ClientTickEvents.END_CLIENT_TICK.register {
+        ClientTickEvents.END_CLIENT_TICK.register { ctx ->
             ClientTickCounter.clientTickEnd()
             Keybinds.clientTickEnd()
             ShiftScrollListener.clientTickEnd()
+            GuiSpellcasting.clientTickEnd(ctx.screen)
         }
         TooltipComponentCallback.EVENT.register(PatternTooltipComponent::tryConvert)
         ClientPlayConnectionEvents.JOIN.register { _, _, _ ->

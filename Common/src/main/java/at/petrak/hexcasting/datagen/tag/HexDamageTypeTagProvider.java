@@ -24,6 +24,11 @@ public class HexDamageTypeTagProvider extends DamageTypeTagsProvider {
             DamageTypeTags.BYPASSES_EFFECTS,
             DamageTypeTags.BYPASSES_SHIELD
         );
+        add(HexDamageTypes.FORGOT_TO_BREATHE,
+            DamageTypeTags.BYPASSES_ARMOR,
+            DamageTypeTags.BYPASSES_EFFECTS,
+            DamageTypeTags.NO_KNOCKBACK
+        );
     }
 
     @SafeVarargs

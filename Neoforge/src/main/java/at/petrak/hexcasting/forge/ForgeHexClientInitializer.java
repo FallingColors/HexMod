@@ -4,6 +4,7 @@ import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.Keybinds;
 import at.petrak.hexcasting.client.RegisterClientStuff;
 import at.petrak.hexcasting.client.ShiftScrollListener;
+import at.petrak.hexcasting.client.gui.GuiSpellcasting;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.client.model.AltioraLayer;
 import at.petrak.hexcasting.client.model.HexModelLayers;
@@ -78,6 +79,7 @@ public class ForgeHexClientInitializer {
             ClientTickCounter.clientTickEnd();
             Keybinds.clientTickEnd();
             ShiftScrollListener.clientTickEnd();
+            GuiSpellcasting.Companion.clientTickEnd(Minecraft.getInstance().screen);
             ClientLevel level = Minecraft.getInstance().level;
             if (level != null) {
                 for (Player player : level.players()) {

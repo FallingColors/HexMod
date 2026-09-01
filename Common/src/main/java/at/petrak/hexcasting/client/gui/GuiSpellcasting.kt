@@ -73,6 +73,13 @@ class GuiSpellcasting constructor(
         return panOffset.length() / 20
     }
 
+    fun syncPanDistance() {
+        if (panOffset != prevPanOffset || ClientTickCounter.ticksInGame % 10 == 0L) {
+            IClientXplatAbstractions.INSTANCE.sendPacketToServer(MsgPannedGridC2S(panOffset))
+            prevPanOffset = panOffset;
+        }
+    }
+
     fun recvServerUpdate(info: ExecutionClientView, index: Int) {
         if (info.isStackClear) {
             this.minecraft?.setScreen(null)
@@ -214,11 +221,11 @@ class GuiSpellcasting constructor(
 
     private fun panGrid(pDragX: Double, pDragY: Double): Boolean {
         val shift = Vec2(pDragX.toFloat(), pDragY.toFloat())
-        this.panOffset = this.panOffset.add(shift)
-        if (panOffset.distanceToSqr(prevPanOffset) > 40000) {
-            IClientXplatAbstractions.INSTANCE.sendPacketToServer(MsgPannedGridC2S(panOffset))
-            prevPanOffset = panOffset;
-        }
+        val newOffset = this.panOffset.add(shift)
+        if (newOffset.lengthSquared() < 900*900)
+            this.panOffset = newOffset
+        else
+            this.panOffset = newOffset.normalized().scale(900f);
         return false;
     }
 
@@ -301,13 +308,8 @@ class GuiSpellcasting constructor(
         }
         if (HexConfig.client().clickingTogglesDrawing())
             return false
-        if (pButton == HexConfig.client().gridPanMouseButton()) {
-            if (panOffset != prevPanOffset) {
-                IClientXplatAbstractions.INSTANCE.sendPacketToServer(MsgPannedGridC2S(panOffset))
-                prevPanOffset = panOffset;
-            }
+        if (pButton == HexConfig.client().gridPanMouseButton())
             return false
-        }
         return drawEnd()
     }
 
@@ -599,6 +601,10 @@ class GuiSpellcasting constructor(
             RenderSystem.enableBlend()
             renderQuad(ps, x, y, w, h, 0x50_303030)
             renderQuad(ps, x + leftMargin, y + 2.5f, w - leftMargin - 2.5f, h - 5f, 0x50_303030)
+        }
+
+        fun clientTickEnd(screen: Screen?) {
+            if (screen is GuiSpellcasting) screen.syncPanDistance()
         }
     }
 }

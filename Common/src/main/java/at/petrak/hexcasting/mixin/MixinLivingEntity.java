@@ -1,5 +1,7 @@
 package at.petrak.hexcasting.mixin;
 
+import at.petrak.hexcasting.common.effects.DissociationEffect;
+import at.petrak.hexcasting.common.lib.HexMobEffects;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -19,6 +21,15 @@ public abstract class MixinLivingEntity {
             var brain = cir.getReturnValue();
             brain.removeAllBehaviors();
             cir.setReturnValue(brain);
+        }
+    }
+
+    @Inject(method = "increaseAirSupply", at = @At("HEAD"), cancellable = true)
+    private void forgetToBreathe(int i, CallbackInfoReturnable<Integer> cir) {
+        var self = (LivingEntity) (Object) this;
+        var inst = self.getEffect(HexMobEffects.DISSOCIATION);
+        if (inst != null && DissociationEffect.shouldPreventBreathing(inst.getDuration(), inst.getAmplifier())) {
+            cir.setReturnValue(i);
         }
     }
 }
