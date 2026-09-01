@@ -81,6 +81,10 @@ public class HexItemModels extends PaucalItemModelProvider {
             .translation(-2.5f, 0f, -8f)
             .scale(0.4f);
 
+        singleTexture(getPath(HexBlocks.NEURAL_MESH.get()),
+            ResourceLocation.withDefaultNamespace("item/generated"),
+            "layer0", modLoc("block/neural_mesh"));
+
         buildRobes(HexItems.ROBES_HOOD.get(), "hood", HexItems.ROBES_HOOD.get().numVariants());
         buildRobes(HexItems.ROBES_TUNIC.get(), "tunic", HexItems.ROBES_HOOD.get().numVariants());
         buildRobes(HexItems.ROBES_LEGS.get(), "legs", HexItems.ROBES_HOOD.get().numVariants());
@@ -284,9 +288,6 @@ public class HexItemModels extends PaucalItemModelProvider {
     }
 
     private void buildRobes(Item item, String type, int numVariants) {
-        // TODO: actually handle the variants
-//        singleTexture("item/" + getPath(item), ResourceLocation.withDefaultNamespace("item/generated"),
-//            "layer0", modLoc("item/robes/1_"+type));
         var name = "item/" + getPath(item);
         var builder = getBuilder(name);
         for (int i = 0; i < numVariants; i++) {
