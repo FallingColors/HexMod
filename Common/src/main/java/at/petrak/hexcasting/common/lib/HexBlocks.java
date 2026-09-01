@@ -142,10 +142,19 @@ public class HexBlocks {
                 .isViewBlocking(HexBlocks::never)),
         new Item.Properties());
 
-    // "no" item because we add it manually
+    // "no" item because we add them manually in HexItems
+    // these must be registered before anything that references HexItems to avoid initializer errors
     public static final Supplier<BlockSlate> SLATE = blockNoItem("slate", () ->
         new BlockSlate(slateish()
             .pushReaction(PushReaction.DESTROY)));
+    public static final Supplier<BlockNeuralMesh> NEURAL_MESH = blockNoItem("neural_mesh", () ->
+        new BlockNeuralMesh(BlockBehaviour.Properties.of()
+            .noCollission()
+            .strength(0.2F)
+            .sound(SoundType.CANDLE)
+            .pushReaction(PushReaction.DESTROY)
+        )
+    );
 
     public static final Supplier<BlockEmptyImpetus> IMPETUS_EMPTY = blockItem("impetus/empty", () ->
         new BlockEmptyImpetus(slateish()
@@ -194,14 +203,7 @@ public class HexBlocks {
         HexItems.props().rarity(Rarity.UNCOMMON)
     );
 
-    public static final Supplier<BlockNeuralMesh> NEURAL_MESH = blockItem("neural_mesh", () ->
-        new BlockNeuralMesh(BlockBehaviour.Properties.of()
-            .noCollission()
-            .strength(0.2F)
-            .sound(SoundType.DEEPSLATE_TILES)
-            .pushReaction(PushReaction.DESTROY)
-        )
-    );
+
 
     // Decoration?!
     public static final Supplier<BlockQuenchedAllay> QUENCHED_ALLAY_TILES = blockItem("quenched_allay_tiles", () -> new BlockQuenchedAllay(quenched()));

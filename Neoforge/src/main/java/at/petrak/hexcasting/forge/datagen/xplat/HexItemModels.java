@@ -81,7 +81,7 @@ public class HexItemModels extends PaucalItemModelProvider {
             .translation(-2.5f, 0f, -8f)
             .scale(0.4f);
 
-        simpleItem(modLoc("neural_mesh"));
+        simpleItem(HexItems.NEURAL_MESH.get());
 
         buildRobes(HexItems.ROBES_HOOD.get(), "hood", HexItems.ROBES_HOOD.get().numVariants());
         buildRobes(HexItems.ROBES_TUNIC.get(), "tunic", HexItems.ROBES_HOOD.get().numVariants());

@@ -270,6 +270,9 @@ public class HexplatRecipes extends RecipeProvider {
             .pattern(" S ")
             .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
 
+        ring(RecipeCategory.REDSTONE, HexItems.NEURAL_MESH.get(), 1, HexItems.NEURAL_FIBER.get(), Blocks.BONE_BLOCK)
+            .unlockedBy("has_item", hasItem(HexItems.NEURAL_FIBER.get())).save(recipes);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, HexItems.ROBES_HOOD.get())
             .define('F', HexItems.NEURAL_FIBER.get())
             .define('B', Items.BONE)

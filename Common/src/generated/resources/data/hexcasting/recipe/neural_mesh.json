@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": {
+      "item": "hexcasting:neural_fiber"
+    },
+    "D": {
+      "item": "hexcasting:neural_fiber"
+    },
+    "I": {
+      "item": "minecraft:bone_block"
+    }
+  },
+  "pattern": [
+    "DCD",
+    "CIC",
+    "DCD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "hexcasting:neural_mesh"
+  }
+}
