@@ -1,7 +1,9 @@
 package at.petrak.hexcasting.common.blocks;
 
+import at.petrak.hexcasting.common.lib.HexItems;
 import com.mojang.serialization.MapCodec;
 
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.GlowLichenBlock;
 import net.minecraft.world.level.block.MultifaceBlock;
 import net.minecraft.world.level.block.MultifaceSpreader;
@@ -23,5 +25,10 @@ public class BlockNeuralMesh extends MultifaceBlock {
 
     public MultifaceSpreader getSpreader() {
         return this.spreader;
+    }
+
+    @Override
+    protected boolean canBeReplaced(BlockState blockState, BlockPlaceContext blockPlaceContext) {
+        return blockPlaceContext.getItemInHand().is(HexItems.NEURAL_MESH.get());
     }
 }
