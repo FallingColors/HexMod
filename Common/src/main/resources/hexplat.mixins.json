@@ -7,6 +7,7 @@
   "mixins": [
     "MixinLivingEntity",
     "MixinAbstractVillager",
+    "MixinLivingEntity",
     "MixinMob",
     "MixinRaider",
     "MixinVillager",

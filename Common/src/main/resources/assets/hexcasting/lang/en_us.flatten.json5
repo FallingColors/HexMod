@@ -229,7 +229,8 @@
   "effect.hexcasting": {
     enlarge_grid: "Clarity",
     shrink_grid: "Clouding",
-    crystallized: "Crystallized"
+    crystallized: "Crystallized",
+    dissociation: "Dissociation",
   },
   
   "item.minecraft.potion.effect": {
@@ -538,6 +539,10 @@
       "": "%s's mind was subsumed into energy",
       player: "%s's mind was subsumed into energy while fighting %s",
     },
+    forgot_to_breathe: {
+      "": "%s forgot to breathe",
+      player: "%s forgot to breathe while fighting %s",
+    }
   },
   
   "command.hexcasting": {
