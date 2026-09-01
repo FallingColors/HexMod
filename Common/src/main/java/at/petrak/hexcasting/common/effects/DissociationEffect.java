@@ -9,6 +9,13 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 
+/**
+ * Applied when the casting grid is panned too far. During the first second of duration (ie continuously, so long as
+ * the effect is constantly being topped up) the player slowly loses oxygen. Once the grid is closed or panned back
+ * to center, the effect can start to tick down, and the oxygen drain stops.
+ * <br><br>
+ * Make sure to use the provided constants for effect duration, or the oxygen drain system may behave oddly.
+ */
 public class DissociationEffect extends MobEffect {
     public static final int AMP_0_DURATION = 300;
     public static final int AMP_1_DURATION = 600;
