@@ -74,7 +74,7 @@ class GuiSpellcasting constructor(
         return panOffset.length() / 20
     }
 
-    fun syncPanDistance() {
+    fun syncPanOffset() {
         if (panOffset != prevPanOffset || ClientTickCounter.ticksInGame % 10 == 0L) {
             IClientXplatAbstractions.INSTANCE.sendPacketToServer(MsgPannedGridC2S(panOffset))
             prevPanOffset = panOffset;
@@ -636,7 +636,7 @@ class GuiSpellcasting constructor(
         }
 
         fun clientTickEnd(screen: Screen?) {
-            if (screen is GuiSpellcasting) screen.syncPanDistance()
+            if (screen is GuiSpellcasting) screen.syncPanOffset()
         }
     }
 }

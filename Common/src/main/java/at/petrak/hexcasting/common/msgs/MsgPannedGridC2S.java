@@ -19,7 +19,9 @@ import net.minecraft.world.phys.Vec2;
 import org.joml.Vector3f;
 
 /**
- * Sent client->server when the player pans the casting grid.
+ * Sent client->server to sync the player's casting grid pan offset and potentially apply the Dissociation debuff
+ * if they've panned too far. Sent whenever the pan offset is upated, and also every 10 ticks while the GUI is
+ * open so that the debuff can be kept active.
  */
 public record MsgPannedGridC2S(Vec2 panOffset) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MsgPannedGridC2S> TYPE = new CustomPacketPayload.Type<>(HexAPI.modLoc("pan_cs"));
