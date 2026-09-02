@@ -150,6 +150,7 @@ public class HexBlocks {
     public static final Supplier<BlockNeuralMesh> NEURAL_MESH = blockNoItem("neural_mesh", () ->
         new BlockNeuralMesh(BlockBehaviour.Properties.of()
             .noCollission()
+            .randomTicks()
             .strength(0.2F)
             .sound(SoundType.CANDLE)
             .pushReaction(PushReaction.DESTROY)
