@@ -64,6 +64,7 @@
     jeweler_hammer: "Jeweler's Hammer",
     sub_sandwich: "Submarine Sandwich",
     neural_fiber: "Neural Fiber",
+    neural_mesh: "Neural Mesh",
 
     robes: {
       hood: "Grand Caster Hood",
@@ -136,6 +137,8 @@
   "block.hexcasting": {
     conjured_light: "Conjured Light",
     conjured_block: "Conjured Block",
+
+    neural_mesh: "Neural Mesh",
     
     directrix: {
       empty: "Empty Directrix",

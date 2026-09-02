@@ -5,8 +5,9 @@
   "refmap": "hexcasting.mixins.refmap.json",
   "package": "at.petrak.hexcasting.mixin",
   "mixins": [
-    "MixinLivingEntity",
     "MixinAbstractVillager",
+    "MixinBuddingAmethystBlock",
+    "MixinLivingEntity",
     "MixinMob",
     "MixinRaider",
     "MixinVillager",

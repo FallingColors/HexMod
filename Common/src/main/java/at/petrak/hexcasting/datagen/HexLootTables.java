@@ -8,6 +8,7 @@ import at.petrak.hexcasting.common.loot.HexLootHandler;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.paucal.api.datagen.PaucalLootTableSubProvider;
 import net.minecraft.advancements.critereon.*;
+import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -16,7 +17,9 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.MultifaceBlock;
 import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -84,6 +87,18 @@ public class HexLootTables extends PaucalLootTableSubProvider {
                 StatePropertiesPredicate.Builder.properties().hasProperty(DoorBlock.HALF, DoubleBlockHalf.LOWER)
             ));
         blockTables.put(HexBlocks.EDIFIED_DOOR.get(), LootTable.lootTable().withPool(doorPool));
+
+        var meshEntry = LootItem.lootTableItem(HexBlocks.NEURAL_MESH.get())
+            .apply(SetItemCountFunction.setCount(ConstantValue.exactly(-1), true));
+        for (var dir : Direction.values()) {
+            meshEntry.apply(SetItemCountFunction.setCount(ConstantValue.exactly(1), true)
+                .when(new LootItemBlockStatePropertyCondition.Builder(HexBlocks.NEURAL_MESH.get()).setProperties(
+                        StatePropertiesPredicate.Builder.properties().hasProperty(MultifaceBlock.getFaceProperty(dir), true)
+                ))
+            );
+        }
+        var meshPool = LootPool.lootPool().setRolls(ConstantValue.exactly(1)).add(meshEntry);
+        blockTables.put(HexBlocks.NEURAL_MESH.get(), LootTable.lootTable().withPool(meshPool));
 
         var silkTouchCond = MatchTool.toolMatches(
             ItemPredicate.Builder.item().withSubPredicate(
