@@ -1,18 +1,18 @@
 {
   "item.hexcasting": {
     staff: {
-      oak: "Sceptre en chêne",
-      spruce: "Sceptre en sapin",
-      birch: "Sceptre en bouleau",
-      jungle: "Sceptre en acajou",
-      acacia: "Sceptre en acacia",
-      dark_oak: "Sceptre en chêne noir",
-      crimson: "Sceptre carmin",
-      warped: "Sceptre biscornu",
-      mangrove: "Sceptre en palétuvier",
-      cherry: "Sceptre en cerisier",
-      bamboo: "Sceptre en bambou",
-      edified: "Sceptre en bois ensorcelé",
+      oak: "Sceptre en Chêne",
+      spruce: "Sceptre en Sapin",
+      birch: "Sceptre en Bouleau",
+      jungle: "Sceptre en Acajou",
+      acacia: "Sceptre en Acacia",
+      dark_oak: "Sceptre en Chêne Noir",
+      crimson: "Sceptre Carmin",
+      warped: "Sceptre Biscornu",
+      mangrove: "Sceptre en Palétuvier",
+      cherry: "Sceptre en Cerisier",
+      bamboo: "Sceptre en Bambou",
+      edified: "Sceptre en Bois Ensorcelé",
       quenched: "Sceptre d'éclat imprégné",
       mindsplice: "Sceptre de transfusion de psyché",
     },
@@ -34,7 +34,7 @@
       empty: "Grand parchemin vierge",
     },
     thought_knot: "Nœud-Pensée",
-    spellbook: "Livre de Sorts",
+    spellbook: "Grimoire",
     trinket: "Relique",
     battery: "Fiole de Média",
     abacus: "Abaque",
@@ -749,7 +749,7 @@
       couldnt_cast: {
         "3": "... Après mûre réflexion... J'ai découvert un changement dans mon corps .$(p)Il semblerait qu'à la place d'utiliser de l'$(l:items/amethyst)$(item)améthyste/$, je suis maintenant capable de lancer des Sorts en utilisant ma propre force vitale et mentale-- exactement comme dans les légendes d'autrefois .$(p)Maintenant que j'y pense, je ne suis pas sûr de savoir pourquoi j'en suis capable. C'est juste que... la vérité-science-fardeau a toujours été là, et je peux la voir clairement désormais. Je la connais. Je l'endure .$(br2)Bienheureusement, je suis également bien conscient de mes limites-- Je pense avoir accès à approximativement deux cristaux d'$(l:items/amethyst)$(item)Améthyste chargée/$ de $(media)Média/$ lorsque ma santé est à son sommet.",
         "1": "Argh ! Pourquoi est-ce qu'Elle ne me laisse pas lancer le Sort ?!$(br2)Le parchemin que j'ai trouvé résonne d'authenticité. Je peux le $(italic)sentir/$ vibrer dans le parchemin-- la Rune est vraie, ou du moins aussi vraie qu'une Rune peut l'être. Le Sort est $(italic)juste là/$.$(p)Mais on dirait qu'elle se cache de l'autre côté d'une sorte de voile. Je l'ai appelé-- il a essayé de se manifester-- mais il ne $(italic)POUVAIT PAS/$.",
-        "2": "On dirait que la barrière s'est légèrement affaiblie avec la force que j'ai exercé qur le Sort ; pourtant malgré tous mes efforts-- ma concentration la plus profonde, mon améthyste la plus pure, mes dessins les plus précis-- La barrière $(italic)refuse/$ de se laisser traverser. Ça me rend dingue.$(p)C'est $(italic)ici/$ que mes recherches s'arrêtent ? Maudit par mon impuissance, forcé d'abandonner les pouvoirs qui me reviennent de droit?$(br2)Je dois respirer un bon coup. Je devrais méditer sur ce que j'ai appris, même si ce n'était pas grand-chose...",
+        "2": "On dirait que la barrière s'est légèrement affaiblie avec la force que j'ai exercé sur le Sort ; pourtant malgré tous mes efforts-- ma concentration la plus profonde, mon améthyste la plus pure, mes dessins les plus précis-- La barrière $(italic)refuse/$ de se laisser traverser. Ça me rend dingue.$(p)C'est $(italic)ici/$ que mes recherches s'arrêtent ? Maudit par mon impuissance, forcé d'abandonner les pouvoirs qui me reviennent de droit?$(br2)Je dois respirer un bon coup. Je devrais méditer sur ce que j'ai appris, même si ce n'était pas grand-chose...",
         "4": "J'en tremble rien qu'à l'idée-- J'ai gardé ma psyché intacte jusqu'à maintenant, dans mes recherches. Mais le fait est-- Je forme une moitié d'un lien précaire.$(p)Je suis connecté à une autre moitié-- une moitié dont les frontières ont faibli à cause de ce traumatisme. Un endroit où de simples Actions écrivent une gloire éternelle.$(p)Ai-je vraiment tord de vouloir y accéder pour mes fins ?",
       },
       stack: {
@@ -770,7 +770,7 @@
         "1": "Les gens distraits attachent parfois un bout de ficelle à leur doigt pour les aider à se rappeler de quelque chose d'important. Je pense pouvoir utiliser cette idée dans mon art. En nouant du fil d'une façon spécifique, je devrais pouvoir conserver un iota stable, en dehors de ma Stack.$(br2)J'appellerai mon invention le $(item)Nœud-Pensée/$.",
       },
       spellcircles: {
-        "2": "Pour commencer le rituel j'ai besoin d'un $(l:greatwork/impetus)$(item)Impetus/$ pour créer une vague de $(media)Média/$ auto-suffisante. Cette vague voyage au travers d'$(l:items/slate)$(item)slates/$ ou d'autres blocs adaptés, activant chaque Rune qu'elle rencontre.$(br2)S'il n'y a aucun moyen pour la vague de rejoindre l'$(l:greatwork/impetus)$(item)Impetus/$, le rituel échouera immédiatement. Il faut également prendre en compte que la direction dans laquelle la vague sort d'un bloc DOIT être claire, ou le rituel échouera au bloc avec trop de voisins.",
+        "2": "Pour commencer le rituel j'ai besoin d'un $(l:greatwork/impetus)$(item)Impetus/$ pour créer une vague de $(media)Média/$ auto-suffisante. Cette vague voyage au travers d'$(l:items/slate)$(item)ardoises/$ ou d'autres blocs adaptés, activant chaque Rune qu'elle rencontre.$(br2)S'il n'y a aucun moyen pour la vague de rejoindre l'$(l:greatwork/impetus)$(item)Impetus/$, le rituel échouera immédiatement. Il faut également prendre en compte que la direction dans laquelle la vague sort d'un bloc DOIT être claire, ou le rituel échouera au bloc avec trop de voisins.",
         "4": "Miracle parmi les miracles, le cercle ne consommera ni le $(media)Média/$ de mon inventaire ni de mon esprit. A la place, des éclats cristallisés de $(media)Média/$ doivent être fournis à l'$(l:greatwork/impetus)$(item)Impetus/$ via un entonnoir, ou des méthodes similaires.$(br2)L'utilisation d'une $(l:items/lens)$(item)Lentille Divinatoire/$ montrera combien de $(media)Média/$ est contenu dans l'$(l:greatwork/impetus)$(item)Impetus/$, en équivalent de poussière.",
         "7": "J'ai aussi trouvé un croquis d'un Cercle Runique utilisé par les anciens enfoui quelque part dans mes notes. Sur l'autre page se trouve ma copie (bien que de piètre qualité) de celui-ci.$(br2)Les runes là-dessus auraient été éxécutées dans le sens inverse des aiguilles d'une montre, en commençant par le $(l:patterns/basics#hexcasting:get_caster)$(action)Reflet de l'Esprit/$ et en se terminant par $(l:patterns/great_spells/teleport#hexcasting:teleport/great)$(action)Téléportation Supérieure/$.",
         "teleport_circle.title": "Cercle de Téléportation",
@@ -885,8 +885,8 @@
       start_to_see: {
         "1": "Les textes ne mentaient pas. Mère-Nature a pris son dû.",
         "2": "Ç... Ça...$(p)...c'était l'une des $(italic)pires/$ choses que j'ai $(italic)jamais/$ vécu. J'ai offert mon plan à Mère-Nature, elle m'a rendu un sourire imperturbable et une sensation de déchirure en retour-- une partie de moi se faisait balayer comme de la Poussière d'améthyste dans le vent.$(p) J'ai déjà de la chance d'avoir $(italic)survécu/$ alors avoir la lucidité nécessaire pour écrire ces mots-- Je dois déclarer cette affaire classée et vérifier plus attentivement avant de lancer plus de $(hex)Sortilèges/$. Je ne referai jamais une telle erreur.",
-        "3": "... Mais. $(br2)Mais pour un bref instant, cette partie de moi... elle a $(italic)vu/$... $(l:greatwork/the_work)$(thing)quelque chose/$. Un endroit-- un schéma peut-être ? (Considérations futiles pour... ça.)$(p)Et une... une membrane-barrière-peau-frontière, qui me séparait d'un royaume de pure imagination-flux-lumière-énergie.Je me souviens-- J'ai vu- j'ai pensé- je me suis souvenu- j'ai ressenti-- la barrière se flouter sur les bords, juste un tout petit peu.$(p)Je voulais la $(italic)traverser./$",
-        "4": "Je ne devrais pas. Je $(italic)sais/$ que je ne devrais pas. C'est dangereux. Trop dangereux. La force requise... J'aurais besoin de m'amener aux portes de la Mort elle-même en un $(italic)seul dessin/$. $(br2)Mais je suis. Si. $(italic)Proche du But/$. $(p)$(italic)Ceci/$est la culmination de mon art. C'est l'$(#54398a)Illumination/$que je cherchais à atteindre. $(br2)Je veux plus. J'ai besoin de le revoir. Je $(italic)vais/$ le revoir. $(p)Ai-je vraiment peur de perdre mon âme de mortel si je gagne une gloire immortelle en retour ?",
+        "3": "... Mais. $(br2)Pour un bref instant, cette partie de moi... elle a $(italic)vu/$... $(l:greatwork/the_work)$(thing)quelque chose/$. Un endroit-- un schéma peut-être ? (Considérations futiles pour... ça.)$(p)Et une... une membrane-barrière-peau-frontière, qui me séparait d'un royaume de pure imagination-flux-lumière-énergie.Je me souviens-- J'ai vu- j'ai pensé- je me suis souvenu- j'ai ressenti-- la barrière se flouter sur les bords, juste un tout petit peu.$(p)Je voulais la $(italic)traverser./$",
+        "4": "Je ne devrais pas. Je $(italic)sais/$ que je ne devrais pas. C'est dangereux. Trop dangereux. La force requise... J'aurais besoin de m'amener aux portes de la Mort elle-même en un $(italic)seul dessin/$. $(br2)Mais je suis. Si. $(italic)Proche du But/$. $(p)$(italic)Ceci/$ est la culmination de mon art. C'est l'$(#54398a)Illumination/$ que je cherchais à atteindre. $(br2)Je veux plus. J'ai besoin de le revoir. Je $(italic)vais/$ le revoir. $(p)Ai-je vraiment peur de perdre mon âme de mortel si je gagne une gloire immortelle en retour ?",
       },
       whats_a_hex: {
         "2": "En général, cela prend la forme d'une Liste d'Iotas de Rune, créée par les techniques décrites dans $(l:patterns/patterns_as_iotas)Runes d'Échappement/$. Avec mon $(hex)Sortilège/$ placé ainsi dans la Stack, je peux le lancer en utilisant des Runes de meta-évaluation comme le $(l:patterns/meta#hexcasting:eval)Gambit d'Hermes/$, ou infuser cela dans un $(l:items/hexcasting)Catalyseur de Sortilèges/$ pour être réutilisé facilement.$(br2)À noter que c'est un iota de liste classique - Je peux le manipuler, le sauvegarder dans des $(l:items/focus)objets de stockage/$ ou de manière $(l:items/thought_knot)permanente/$, ou même l'incorporer dans un autre $(hex)Sortilège/$.",
@@ -1444,7 +1444,7 @@
         break_block: "Prend une position de la Stack, puis brise le bloc qui s'y situe. Ce sort peut casser à peu près tout ce que pourrait briser une pioche en diamant.$(br)Coûte environ un huitième d'une $(l:items/amethyst)$(item)Poussière d'améthyste/$, ou une quantité négligeable s'il brise un $(l:patterns/spells/blockworks#hexcasting:conjure_block)$(action)Bloc conjuré/$ ou une $(l:patterns/spells/blockworks#hexcasting:conjure_light)$(action)Lumière conjurée/$.",
       },
       greater_sentinel: {
-        "1": "Invoque une version supérieure de ma (l:patterns/spells/sentinels)$(thing)sentinelle/$ Coûte environ deux $(l:items/amethyst)$(item)Poussière d'améthyste/$.",
+        "1": "Invoque une version supérieure de ma $(l:patterns/spells/sentinels)$(thing)Sentinelle/$ Coûte environ deux $(l:items/amethyst)$(item)Poussière d'améthyste/$.",
         "2": "Cette $(l:patterns/spells/sentinels)$(thing)Sentinelle/$ plus puissante agit comme une classique que je peux invoquer sans un Sort Supérieur, même si plus visuellement attrayante. Cependant, la portée de mes sorts est étendue à une zone autour de ma $(l:patterns/spells/sentinels)$(thing)Sentinelle Supérieure/$ d'environ 16 blocs. En d'autres termes, peu importe où je suis dans le monde, je peux interagir avec les choses se trouvent autour de ma $(l:patterns/spells/sentinels)$(thing)Sentinelle/$ (et ce malgré les mystérieuses forces du chargement des chunks).",
       },
       weather_manip: {
