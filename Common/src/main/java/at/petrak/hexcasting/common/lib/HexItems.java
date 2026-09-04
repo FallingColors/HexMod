@@ -105,7 +105,11 @@ public class HexItems {
 
     public static final Supplier<Item> NEURAL_FIBER = make("neural_fiber", () -> new Item(props().rarity(Rarity.UNCOMMON)));
 
-    public static final Supplier<BlockItem> NEURAL_MESH = make("neural_mesh", () -> new BlockItem(HexBlocks.NEURAL_MESH.get(), props()));
+    public static final Supplier<BlockItem> NEURAL_MESH = make("neural_mesh", () ->
+        new BlockItem(HexBlocks.NEURAL_MESH.get(), props()
+            .rarity(Rarity.UNCOMMON)
+        )
+    );
 
     public static final Supplier<ItemRobes> ROBES_HOOD = make("robes/hood", () ->
         new ItemRobes(ArmorItem.Type.HELMET, unstackable()
