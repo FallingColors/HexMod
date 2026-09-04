@@ -205,7 +205,6 @@ public class HexBlocks {
     );
 
 
-
     // Decoration?!
     public static final Supplier<BlockQuenchedAllay> QUENCHED_ALLAY_TILES = blockItem("quenched_allay_tiles", () -> new BlockQuenchedAllay(quenched()));
     public static final Supplier<BlockQuenchedAllay> QUENCHED_ALLAY_BRICKS = blockItem("quenched_allay_bricks", () -> new BlockQuenchedAllay(quenched()));

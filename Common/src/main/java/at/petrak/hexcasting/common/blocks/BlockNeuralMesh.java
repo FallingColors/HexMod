@@ -44,7 +44,7 @@ public class BlockNeuralMesh extends MultifaceBlock {
         for (var dir : availableFaces(blockState)) {
             BlockPos targetPos = blockPos.relative(dir);
             BlockState targetState = serverLevel.getBlockState(targetPos);
-            if (targetState.is(Blocks.BUDDING_AMETHYST) && randomSource.nextDouble() < 0.5) {
+            if (targetState.is(Blocks.BUDDING_AMETHYST)) {
                 targetState.randomTick(serverLevel, targetPos, randomSource);
             }
         }
@@ -57,13 +57,8 @@ public class BlockNeuralMesh extends MultifaceBlock {
         } else {
             if (hasFace(blockState, direction) && !canAttachTo(levelAccessor, direction, blockPos2, blockState2)) {
                 var resultState = removeFace(blockState, getFaceProperty(direction));
-                if (resultState.is(HexBlocks.NEURAL_MESH.get())) {
-                    if (!levelAccessor.isClientSide() && levelAccessor instanceof Level level) {
-                        var pos = blockPos.getCenter();
-                        var entity = new ItemEntity(level, pos.x, pos.y, pos.z, new ItemStack(HexItems.NEURAL_MESH.get()));
-                        entity.setDefaultPickUpDelay();
-                        level.addFreshEntity(entity);
-                    }
+                if (resultState.is(HexBlocks.NEURAL_MESH.get()) && levelAccessor instanceof Level level) {
+                    popResource(level, blockPos, new ItemStack(HexItems.NEURAL_MESH.get()));
                 }
                 return resultState;
             }
@@ -73,7 +68,7 @@ public class BlockNeuralMesh extends MultifaceBlock {
 
     // this is private in MultifaceBlock so here's a reimpl
     private static BlockState removeFace(BlockState blockState, BooleanProperty booleanProperty) {
-        BlockState blockState2 = (BlockState)blockState.setValue(booleanProperty, false);
+        BlockState blockState2 = blockState.setValue(booleanProperty, false);
         return hasAnyFace(blockState2) ? blockState2 : Blocks.AIR.defaultBlockState();
     }
 }
