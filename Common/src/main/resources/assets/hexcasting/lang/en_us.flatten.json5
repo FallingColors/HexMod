@@ -74,7 +74,7 @@
       "legs.2": "Grand Caster Leggings",
       boots: "Grand Caster Boots",
     },
-    
+
     dye_colorizer_: {
       white: "White Pigment",
       orange: "Orange Pigment",
@@ -139,7 +139,7 @@
     conjured_block: "Conjured Block",
 
     neural_mesh: "Neural Mesh",
-    
+
     directrix: {
       empty: "Empty Directrix",
       redstone: "Mason Directrix",
@@ -233,7 +233,8 @@
   "effect.hexcasting": {
     enlarge_grid: "Clarity",
     shrink_grid: "Clouding",
-    crystallized: "Crystallized"
+    crystallized: "Crystallized",
+    dissociation: "Dissociation",
   },
   
   "item.minecraft.potion.effect": {
@@ -378,6 +379,10 @@
         clickingTogglesDrawing: {
           "": "Clicking Toggles Drawing",
           "@Tooltip": "Whether you click to start and stop drawing instead of clicking and dragging to draw",
+        },
+        gridPanMouseButton: {
+          "": "Grid Pan Mouse Button",
+          "@Tooltip": "Which mouse button is used to pan the hex grid (once that ability is unlocked)",
         },
         advancedTooltipsShowsIotaNBT: {
           "": "Advanced Tooltips Shows Iota NBT",
@@ -538,6 +543,10 @@
       "": "%s's mind was subsumed into energy",
       player: "%s's mind was subsumed into energy while fighting %s",
     },
+    forgot_to_breathe: {
+      "": "%s forgot to breathe",
+      player: "%s forgot to breathe while fighting %s",
+    }
   },
   
   "command.hexcasting": {

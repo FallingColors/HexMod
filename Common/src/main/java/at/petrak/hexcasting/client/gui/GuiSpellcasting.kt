@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.client.gui
 
+import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.eval.ExecutionClientView
 import at.petrak.hexcasting.api.casting.eval.ResolvedPattern
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
@@ -21,6 +22,7 @@ import at.petrak.hexcasting.common.lib.HexAttributes
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.lib.hex.HexActions
 import at.petrak.hexcasting.common.msgs.MsgNewSpellPatternC2S
+import at.petrak.hexcasting.common.msgs.MsgPannedGridC2S
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions
 import com.mojang.blaze3d.systems.RenderSystem
 import com.mojang.blaze3d.vertex.PoseStack
@@ -44,6 +46,7 @@ class GuiSpellcasting constructor(
     private var cachedStack: List<Iota>,
     private var cachedRavenmind: Iota?,
     private var parenCount: Int,
+    private var panOffset: Vec2,
 ) : Screen("gui.hexcasting.spellcasting".asTranslatedComponent) {
     private var stackDescs: List<FormattedCharSequence> = listOf()
     private var parenDescs: List<FormattedCharSequence> = listOf()
@@ -51,6 +54,9 @@ class GuiSpellcasting constructor(
 
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
     private val usedSpots: MutableSet<HexCoord> = HashSet()
+
+    private var prevPanOffset = Vec2.ZERO
+    private val bgLocation = HexAPI.modLoc("textures/gui/casting_bg.png")
 
     private var ambianceSoundInstance: GridSoundInstance? = null
 
@@ -61,6 +67,17 @@ class GuiSpellcasting constructor(
             this.usedSpots.addAll(pattern.positions(origin))
         }
         this.calculateIotaDisplays()
+    }
+
+    fun getPanDistance(): Float {
+        return panOffset.length() / 20
+    }
+
+    fun syncPanOffset() {
+        if (panOffset != prevPanOffset || ClientTickCounter.ticksInGame % 10 == 0L) {
+            IClientXplatAbstractions.INSTANCE.sendPacketToServer(MsgPannedGridC2S(panOffset))
+            prevPanOffset = panOffset;
+        }
     }
 
     fun recvServerUpdate(info: ExecutionClientView, index: Int) {
@@ -147,6 +164,8 @@ class GuiSpellcasting constructor(
         if (super.mouseClicked(mxOut, myOut, pButton)) {
             return true
         }
+        if (pButton == HexConfig.client().gridPanMouseButton())
+            return false
         if (HexConfig.client().clickingTogglesDrawing()) {
             return if (this.drawState is PatternDrawState.BetweenPatterns)
                 drawStart(mxOut, myOut)
@@ -194,7 +213,20 @@ class GuiSpellcasting constructor(
         }
         if (HexConfig.client().clickingTogglesDrawing())
             return false
+        if (pButton == HexConfig.client().gridPanMouseButton() && this.drawState is PatternDrawState.BetweenPatterns) {
+            return panGrid(pDragX, pDragY)
+        }
         return drawMove(mxOut, myOut)
+    }
+
+    private fun panGrid(pDragX: Double, pDragY: Double): Boolean {
+        val shift = Vec2(pDragX.toFloat(), pDragY.toFloat())
+        val newOffset = this.panOffset.add(shift)
+        if (newOffset.lengthSquared() < 900*900)
+            this.panOffset = newOffset
+        else
+            this.panOffset = newOffset.normalized().scale(900f);
+        return false;
     }
 
     private fun drawMove(mxOut: Double, myOut: Double): Boolean {
@@ -275,6 +307,8 @@ class GuiSpellcasting constructor(
             return true
         }
         if (HexConfig.client().clickingTogglesDrawing())
+            return false
+        if (pButton == HexConfig.client().gridPanMouseButton())
             return false
         return drawEnd()
     }
@@ -358,6 +392,12 @@ class GuiSpellcasting constructor(
         super.onClose()
     }
 
+    override fun renderBackground(guiGraphics: GuiGraphics, i: Int, j: Int, f: Float) {
+        guiGraphics.setColor(1f,1f,1f, (getPanDistance() / 15).coerceAtMost(1f))
+        renderMenuBackgroundTexture(guiGraphics, bgLocation, 0, 0, 0f, 0f, this.width, this.height)
+        guiGraphics.setColor(1f, 1f, 1f, 1f)
+        this.renderBlurredBackground(f)
+    }
 
     override fun render(graphics: GuiGraphics, pMouseX: Int, pMouseY: Int, pPartialTick: Float) {
         super.render(graphics, pMouseX, pMouseY, pPartialTick)
@@ -405,12 +445,13 @@ class GuiSpellcasting constructor(
 
         for ((idx, elts) in this.patterns.withIndex()) {
             val (pat, origin, valid) = elts
+            val points = pat.toLines(this.hexSize(), this.coordToPx(origin))
+            val center = Vec2(graphics.guiWidth() / 2f, graphics.guiHeight() / 2f)
+            if (points.all{ point -> point.distanceToSqr(center) > center.lengthSquared()+2500 })
+                continue // don't render the pattern if it's completely offscreen
             drawPatternFromPoints(
                 mat,
-                pat.toLines(
-                    this.hexSize(),
-                    this.coordToPx(origin)
-                ),
+                points,
                 findDupIndices(pat.positions()),
                 true,
                 valid.color or (0xC8 shl 24),
@@ -532,7 +573,7 @@ class GuiSpellcasting constructor(
         return (baseScale / scaleModifier).toFloat()
     }
 
-    fun coordsOffset(): Vec2 = Vec2(this.width.toFloat() * 0.5f, this.height.toFloat() * 0.5f)
+    fun coordsOffset(): Vec2 = Vec2(this.width.toFloat() * 0.5f, this.height.toFloat() * 0.5f).add(this.panOffset)
 
     fun coordToPx(coord: HexCoord) =
         at.petrak.hexcasting.api.utils.coordToPx(coord, this.hexSize(), this.coordsOffset())
@@ -541,7 +582,7 @@ class GuiSpellcasting constructor(
 
 
     private sealed class PatternDrawState {
-        /** We're waiting on the player to right-click again */
+        /** We're waiting on the player to left-click again */
         object BetweenPatterns : PatternDrawState()
 
         /** We just started drawing and haven't drawn the first line yet. */
@@ -560,6 +601,10 @@ class GuiSpellcasting constructor(
             RenderSystem.enableBlend()
             renderQuad(ps, x, y, w, h, 0x50_303030)
             renderQuad(ps, x + leftMargin, y + 2.5f, w - leftMargin - 2.5f, h - 5f, 0x50_303030)
+        }
+
+        fun clientTickEnd(screen: Screen?) {
+            if (screen is GuiSpellcasting) screen.syncPanOffset()
         }
     }
 }

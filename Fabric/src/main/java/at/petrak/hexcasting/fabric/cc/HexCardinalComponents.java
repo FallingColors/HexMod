@@ -41,6 +41,8 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         CCStaffcastImage.class);
     public static final ComponentKey<CCPatterns> PATTERNS = ComponentRegistry.getOrCreate(modLoc("patterns"),
         CCPatterns.class);
+    public static final ComponentKey<CCPanOffset> PAN_OFFSET = ComponentRegistry.getOrCreate(modLoc("pan_offset"),
+        CCPanOffset.class);
 
     public static final ComponentKey<CCClientCastingStack> CLIENT_CASTING_STACK = ComponentRegistry.getOrCreate(modLoc("client_casting_stack"),
             CCClientCastingStack.class);
@@ -78,6 +80,7 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
         registry.registerFor(ServerPlayer.class, FLIGHT, CCFlight::new);
         registry.registerFor(ServerPlayer.class, STAFFCAST_IMAGE, CCStaffcastImage::new);
         registry.registerFor(ServerPlayer.class, PATTERNS, CCPatterns::new);
+        registry.registerFor(ServerPlayer.class, PAN_OFFSET, CCPanOffset::new);
 
 
         registry.registerFor(ItemEntity.class, IOTA_HOLDER, wrapItemEntityDelegate(

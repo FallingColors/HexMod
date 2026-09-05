@@ -60,7 +60,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -70,6 +69,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.ModContainer;
@@ -233,6 +233,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public void setPanOffset(ServerPlayer player, Vec2 panOffset) {
+        player.getPersistentData().put(TAG_PAN_OFFSET, HexUtils.VEC2_CODEC.encodeStart(NbtOps.INSTANCE, panOffset).getOrThrow());
+    }
+
+    @Override
     public boolean isBrainswept(Mob e) {
         return e.getPersistentData().getBoolean(TAG_BRAINSWEPT);
     }
@@ -296,9 +301,15 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
+    public Vec2 getPanOffset(ServerPlayer player) {
+        return HexUtils.VEC2_CODEC.parse(NbtOps.INSTANCE, player.getPersistentData().getCompound(TAG_PAN_OFFSET)).getOrThrow();
+    }
+
+    @Override
     public void clearCastingData(ServerPlayer player) {
         player.getPersistentData().remove(TAG_VM);
         player.getPersistentData().remove(TAG_PATTERNS);
+        player.getPersistentData().remove(TAG_PAN_OFFSET);
     }
 
     @Override
@@ -572,4 +583,5 @@ public class ForgeXplatImpl implements IXplatAbstractions {
 
     public static final String TAG_VM = "hexcasting:spell_harness";
     public static final String TAG_PATTERNS = "hexcasting:spell_patterns";
+    public static final String TAG_PAN_OFFSET = "hexcasting:pan_offset";
 }
