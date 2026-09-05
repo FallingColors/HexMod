@@ -177,8 +177,6 @@ public interface HexAPI {
      */
     String RAVENMIND_USERDATA = modLoc("ravenmind").toString();
 
-    String MARKED_MOVED_USERDATA = modLoc("impulsed").toString();
-
     static HexAPI instance() {
         return INSTANCE.get();
     }

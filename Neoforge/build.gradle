@@ -49,11 +49,6 @@ repositories {
     mavenCentral()
     mavenLocal()
 
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    flatDir {
-        dir 'libs'
-    }
-
     maven { url = "https://maven.neoforged.net/releases/" }
     // paucal and patchi
     maven { url = 'https://maven.blamejared.com' }
@@ -96,7 +91,7 @@ dependencies {
     compileOnly("top.theillusivec4.curios:curios-neoforge:$curiosVersion+$minecraftVersion:api")
     runtimeOnly("top.theillusivec4.curios:curios-neoforge:$curiosVersion+$minecraftVersion")
 
-    modImplementation "libs:paucal:$paucalVersion+$minecraftVersion-neoforge"
+    modImplementation "at.petra-k:paucal:$paucalVersion+$minecraftVersion-neoforge"
     modImplementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-NEOFORGE-SNAPSHOT"
     modImplementation "com.illusivesoulworks.caelus:caelus-neoforge:$caelusVersion"
     modImplementation "com.samsthenerd.inline:inline-neoforge:1.21.1-1.2.2-74"
