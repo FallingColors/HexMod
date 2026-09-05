@@ -77,6 +77,9 @@ public final class HexSignature implements Iterable<HexAngle> {
         return builder.toString();
     }
 
+    /**
+     * @return an upper-bound on the size of the pattern
+     */
     public int sizeUpperBound() {
         return this.packedTurns.length * TURNS_PER_ARRAY_ELEMENT;
     }
@@ -152,10 +155,17 @@ public final class HexSignature implements Iterable<HexAngle> {
         private HexDir compass;
         private final LongOpenHashSet edges;
 
+        /**
+         * Equivalent to {@code new Builder(true)}.
+         * @see #Builder(boolean) 
+         */
         public Builder() {
             this(true);
         }
 
+        /**
+         * @param checked whether to throw an exception on an edge overlap
+         */
         public Builder(boolean checked) {
             this.turnsBuilder = new IntArrayList();
             this.currentInt = 0;
@@ -171,10 +181,18 @@ public final class HexSignature implements Iterable<HexAngle> {
             }
         }
 
+        /**
+         * Equivalent to {@code reset(true)}.
+         * @see #reset(boolean)
+         */
         public void reset() {
             this.reset(true);
         }
 
+        /**
+         * Returns this Builder to the initial state of an empty signature without releasing allocations
+         * @param checked whether to throw an exception on an edge overlap
+         */
         public void reset(boolean checked) {
             this.turnsBuilder.clear();
             this.currentInt = 0;
@@ -211,6 +229,9 @@ public final class HexSignature implements Iterable<HexAngle> {
             return ((long) fromI << Integer.SIZE) | ((long) toI & (long) 0xFFFF_FFFFL);
         }
 
+        /**
+         * @throws IllegalStateException if the builder is set to checked mode and the new segment overlaps a previous segment
+         */
         public Builder addAngle(HexAngle angle) {
             if(this.checked) {
                 HexCoord newCursor = this.cursor.plus(compass);
@@ -267,6 +288,10 @@ public final class HexSignature implements Iterable<HexAngle> {
             return this;
         }
 
+        /**
+         * @return a {@link HexSignature} using a copy of this builder's internal array
+         * @apiNote it is safe to call {@link build} and {@link #reset} multiple times to avoid allocation
+         */
         public HexSignature build() {
             if(this.currentInt != 0) this.turnsBuilder.add(this.currentInt);
 
