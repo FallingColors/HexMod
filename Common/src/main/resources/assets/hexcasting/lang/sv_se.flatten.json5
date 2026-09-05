@@ -1,0 +1,19 @@
+{
+  "item.hexcasting": {
+    book: "Hex-Anteckningsbok",
+    staff: {
+      oak: "Ekstav",
+      spruce: "Granstav",
+      birch: "Björkstav",
+      jungle: "Djungelstav",
+      acacia: "Akaciastav",
+      dark_oak: "Mörk Ekstav",
+      crimson: "Karmosinstav",
+      warped: "Förvrängd Stav",
+      mangrove: "Mangrovestav",
+      cherry: "Körsbärsstav",
+      bamboo: "Bambustav",
+      edified: "Upplyst Stav",
+    },
+  },
+}

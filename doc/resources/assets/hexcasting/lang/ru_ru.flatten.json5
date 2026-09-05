@@ -2,7 +2,7 @@
   hexdoc: {
     hexcasting: {
       title: "Hex Book",
-      description: "Всё о Hex - в одном месте",
+      description: "Всё о Hex - в одном месте.",
     },
     renderer: {
       renders: "Рендеры",

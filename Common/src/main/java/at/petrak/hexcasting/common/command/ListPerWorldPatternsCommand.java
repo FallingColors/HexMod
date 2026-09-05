@@ -74,6 +74,8 @@ public class ListPerWorldPatternsCommand {
         for (var key : listing) {
             var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(key, ow);
 
+            if (pat == null) continue;  // pattern doesn't appear to be a per-world pattern
+
             source.sendSuccess(() -> Component.literal(key.location().toString())
                 .append(": ")
                 .append(new PatternIota(pat).display()), false);
