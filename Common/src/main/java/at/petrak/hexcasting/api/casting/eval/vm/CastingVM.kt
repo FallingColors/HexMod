@@ -178,7 +178,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                     OperatorSideEffect.DoMishap(
                         MishapInternalException(exception),
                         Mishap.Context(
-                            (iota as? PatternIota)?.pattern ?: HexPattern(HexDir.WEST),
+                            (iota as? PatternIota)?.pattern,
                             null
                         )
                     )

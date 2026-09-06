@@ -54,7 +54,7 @@ public abstract class Iota {
             List.of(
                 new OperatorSideEffect.DoMishap(
                     new MishapUnescapedValue(this),
-                    new Mishap.Context(new HexPattern(HexDir.WEST, List.of()), null)
+                    new Mishap.Context(null, null)
                 )
             ),
             ResolvedPatternType.INVALID,

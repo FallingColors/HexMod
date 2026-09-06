@@ -63,9 +63,9 @@ internal class IotaEndofunctorsTests {
     @Test
     fun `a list of untouched iotas should be conserved`() {
         val iota = ListIota(listOf(
-            PatternIota(HexPattern.fromAnglesUnchecked("aqaaw", HexDir.SOUTH_EAST)),
-            PatternIota(HexPattern.fromAnglesUnchecked("aqaawa", HexDir.SOUTH_EAST)),
-            PatternIota(HexPattern.fromAnglesUnchecked("aqaawaw", HexDir.SOUTH_EAST)),
+            PatternIota(HexPattern.fromAngleString("aqaaw", HexDir.SOUTH_EAST, false)),
+            PatternIota(HexPattern.fromAngleString("aqaawa", HexDir.SOUTH_EAST, false)),
+            PatternIota(HexPattern.fromAngleString("aqaawaw", HexDir.SOUTH_EAST, false)),
         ))
         Assertions.assertSame(iota, iota.visit(::exampleWalker))
     }
