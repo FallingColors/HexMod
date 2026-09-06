@@ -16,14 +16,9 @@ For example:
 ## Setup
 
 ```sh
-python3.11 -m venv venv
-
-.\venv\Scripts\activate   # Windows
-. venv/bin/activate.fish  # fish
-source venv/bin/activate  # everything else
-
-# run from the repo root, not doc/
-pip install -e .[dev]
+uv sync
+# required to generate __gradle_version__.py
+uv pip install -e .
 ```
 
 ## Usage

@@ -14,8 +14,8 @@
         "editor.rulers": [120],
     },
     "ruff.organizeImports": true,
-    "ruff.lint.args": [
-        "--extend-ignore=I", // format on save is enabled, so don't show the squiggles
+    "ruff.lint.ignore": [
+        "I", // format on save is enabled, so don't show the squiggles
     ],
     "python.languageServer": "Pylance",
     "python.analysis.diagnosticMode": "workspace",

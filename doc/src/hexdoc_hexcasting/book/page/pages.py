@@ -3,12 +3,15 @@ from typing import Any, Self
 from hexdoc.minecraft import LocalizedStr
 from hexdoc.minecraft.recipe import CraftingRecipe
 from hexdoc.patchouli.page import PageWithText, PageWithTitle
-from hexdoc_hexcasting.metadata import HexContext
-from hexdoc_hexcasting.utils.pattern import PatternInfo, RawPatternInfo
 from pydantic import ValidationInfo, field_validator, model_validator
 
+from hexdoc_hexcasting.book.page.abstract_pages import (
+    PageWithOpPattern,
+    PageWithPattern,
+)
 from hexdoc_hexcasting.book.recipes import BrainsweepRecipe
-from hexdoc_hexcasting.book.page.abstract_pages import PageWithOpPattern, PageWithPattern
+from hexdoc_hexcasting.metadata import HexContext
+from hexdoc_hexcasting.utils.pattern import PatternInfo, RawPatternInfo
 
 
 class LookupPatternPage(PageWithOpPattern, type="hexcasting:pattern"):
@@ -21,7 +24,9 @@ class LookupPatternPage(PageWithOpPattern, type="hexcasting:pattern"):
         hex_ctx = HexContext.of(info)
         pattern = hex_ctx.patterns.get(self.op_id)
         if pattern is None:
-            raise ValueError(f"Unknown pattern ID (check your pattern stubs in hexdoc.toml): {self.op_id}")
+            raise ValueError(
+                f"Unknown pattern ID (check your pattern stubs in hexdoc.toml): {self.op_id}"
+            )
         self._patterns = [pattern]
         return self
 

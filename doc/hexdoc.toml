@@ -5,12 +5,12 @@ default_branch = "main"
 
 resource_dirs = [  # top takes priority
     "resources",
-    "{_common.src}/main/resources",
-    "{_common.src}/generated/resources",
-    "{_fabric.src}/main/resources",
-    "{_fabric.src}/generated/resources",
-    "{_forge.src}/main/resources",
-    "{_forge.src}/generated/resources",
+    "{$_common.src}/main/resources",
+    "{$_common.src}/generated/resources",
+    "{$_fabric.src}/main/resources",
+    "{$_fabric.src}/generated/resources",
+    "{$_neoforge.src}/main/resources",
+    "{$_neoforge.src}/generated/resources",
     { modid="minecraft" },
     { modid="hexdoc" },
 ]
@@ -18,10 +18,24 @@ export_dir = "src/hexdoc_hexcasting/_export/generated"
 
 [extra.hexcasting]
 # NOTE: "!Raw" means "don't apply variable interpolation to this value"
-_pattern_regex = { "!Raw"='make\(\s*"(?P<name>[a-zA-Z0-9_\/]+)",\s*(?:new )?(?:ActionRegistryEntry|OperationAction)\(\s*HexPattern\.fromAngles\(\s*"(?P<signature>[aqweds]+)",\s*HexDir.(?P<startdir>\w+)\)' }
+_pattern_regex."!Raw" = '''(?x)
+(?:make|registerHolder)\(
+    \s*
+    "(?P<name>[a-zA-Z0-9_\/]+)",
+    \s*
+    (?: \( \) \s -> \s*)?
+    (?:new\s)?(?:ActionRegistryEntry|OperationAction)\(
+        \s*
+        HexPattern\.fromAngles\(
+            \s*
+            "(?P<signature>[aqweds]+)",
+            \s*
+            HexDir.(?P<startdir>\w+)
+        \)
+'''
 
 [[extra.hexcasting.pattern_stubs]]
-path = "{^^^_common.package}/common/lib/hex/HexActions.java"
+path = "{$_common.package}/common/lib/hex/HexActions.java"
 regex = "{^_pattern_regex}"
 
 [textures]
@@ -52,6 +66,6 @@ package = "{src}/main/java/at/petrak/hexcasting"
 src = "../Fabric/src"
 package = "{src}/main/java/at/petrak/hexcasting/fabric"
 
-[_forge]
-src = "../Forge/src"
-package = "{src}/main/java/at/petrak/hexcasting/forge"
+[_neoforge]
+src = "../Neoforge/src"
+package = "{src}/main/java/at/petrak/hexcasting/neoforge"
