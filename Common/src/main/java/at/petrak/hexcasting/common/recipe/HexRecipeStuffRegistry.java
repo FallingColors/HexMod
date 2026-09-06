@@ -30,6 +30,10 @@ public class HexRecipeStuffRegistry {
         "seal_focus", () -> SealThingsRecipe.FOCUS_SERIALIZER);
     public static final Supplier<RecipeSerializer<SealThingsRecipe>> SEAL_SPELLBOOK = REGISTER_SERIALIZER.register(
         "seal_spellbook", () -> SealThingsRecipe.SPELLBOOK_SERIALIZER);
+    public static final Supplier<RecipeSerializer<CopySpellbookRecipe>> COPY_SPELLBOOK = REGISTER_SERIALIZER.register(
+        "copy_spellbook", () -> CopySpellbookRecipe.SERIALIZER);
+    public static final Supplier<RecipeSerializer<EraseSpellbookRecipe>> ERASE_SPELLBOOK = REGISTER_SERIALIZER.register(
+        "erase_spellbook", () -> EraseSpellbookRecipe.SERIALIZER);
 
     public static Supplier<RecipeType<BrainsweepRecipe>> BRAINSWEEP_TYPE = REGISTER_RECIPE_TYPE.register("brainsweep", () ->
             new RecipeType<BrainsweepRecipe>() {

@@ -12,6 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Simulate, which causes the next pattern drawn to be simulated (to check for mishaps) rather than executed ([#1194](https://github.com/FallingColors/HexMod/pull/1194)) @Robotgiggle
 - Added the `hex_unbreakable` tag for blocks that should be immune to Break Block regardless of the configured mining tier ([#1186](https://github.com/FallingColors/HexMod/pull/1186)) @Robotgiggle @slava110
 - Added a new Ancient Cypher hex that impulses nearby items towards the caster ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
+- Added a recipe to copy a spellbook's contents into another blank spellbook using dragon's breath ([#1231](https://github.com/FallingColors/HexMod/pull/1231)) @Robotgiggle
+- Added a recipe to fully erase a spellbook's contents using soul sand ([#1231](https://github.com/FallingColors/HexMod/pull/1231)) @Robotgiggle
 
 ### Changed
 
@@ -30,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - Fixed Entity Iota comparison to use `equals` on entity IDs instead of reference equality ([#1101](https://github.com/FallingColors/HexMod/pull/1101)) @IridescentVoid
 - Corrected field names of the codec for Pattern Iotas and add a graceful fallback for upgrading ([#1120](https://github.com/FallingColors/HexMod/pull/1120), [#1131](https://github.com/FallingColors/HexMod/pull/1131), [#1140](https://github.com/FallingColors/HexMod/pull/1140)) @Master-Bw3 @IridescentVoid
+- Fixed the iota-holder sealing recipe also consuming anything else placed into the crafting grid ([#1231](https://github.com/FallingColors/HexMod/pull/1231)) @Robotgiggle
 
 ### Internal
 
