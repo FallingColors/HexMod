@@ -87,7 +87,6 @@ public class ForgeHexClientInitializer {
             ClientTickCounter.clientTickEnd();
             Keybinds.clientTickEnd();
             ShiftScrollListener.clientTickEnd();
-            GuiSpellcasting.Companion.clientTickEnd(Minecraft.getInstance().screen);
             ClientLevel level = Minecraft.getInstance().level;
             if (level != null) {
                 for (Player player : level.players()) {

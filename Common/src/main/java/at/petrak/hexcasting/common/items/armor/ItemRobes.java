@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
@@ -23,6 +24,8 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -45,7 +48,7 @@ public class ItemRobes extends ArmorItem implements VariantItem {
 
     public static ItemAttributeModifiers TUNIC_MODIFIERS = ItemAttributeModifiers.builder()
         .add(HexAttributes.MEDIA_CONSUMPTION_MODIFIER, new AttributeModifier(
-            modLoc("robes_tunic_discount"), -0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE
+            modLoc("robes_tunic_discount"), -0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
         ), EquipmentSlotGroup.CHEST)
         .add(Attributes.ARMOR, new AttributeModifier(
             modLoc("robes_tunic_armor"), 7.0, AttributeModifier.Operation.ADD_VALUE
@@ -73,6 +76,14 @@ public class ItemRobes extends ArmorItem implements VariantItem {
     public ItemRobes(Type type, Properties properties) {
         super(HexArmorMaterials.ROBES, type, properties);
         this.type = type;
+    }
+
+    public static boolean isWearingFullSet(LivingEntity entity) {
+        for (var slot : List.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET)) {
+            if (!(entity.getItemBySlot(slot).getItem() instanceof ItemRobes))
+                return false;
+        }
+        return true;
     }
 
     public static HexRobesModel[] provideArmorModelsForSlot(EquipmentSlot slot) {

@@ -18,6 +18,7 @@ import at.petrak.hexcasting.client.ShiftScrollListener
 import at.petrak.hexcasting.client.ktxt.accumulatedScroll
 import at.petrak.hexcasting.client.render.*
 import at.petrak.hexcasting.client.sound.GridSoundInstance
+import at.petrak.hexcasting.common.items.armor.ItemRobes
 import at.petrak.hexcasting.common.lib.HexAttributes
 import at.petrak.hexcasting.common.lib.HexSounds
 import at.petrak.hexcasting.common.lib.hex.HexActions
@@ -29,6 +30,7 @@ import com.mojang.blaze3d.vertex.PoseStack
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiGraphics
 import net.minecraft.client.gui.screens.Screen
+import net.minecraft.client.player.LocalPlayer
 import net.minecraft.client.renderer.GameRenderer
 import net.minecraft.client.resources.sounds.SimpleSoundInstance
 import net.minecraft.client.resources.sounds.SoundInstance
@@ -55,7 +57,8 @@ class GuiSpellcasting constructor(
     private var drawState: PatternDrawState = PatternDrawState.BetweenPatterns
     private val usedSpots: MutableSet<HexCoord> = HashSet()
 
-    private var prevPanOffset = Vec2.ZERO
+    private var panningAllowed = false
+    private var prevPanOffset = panOffset
     private val bgLocation = HexAPI.modLoc("textures/gui/casting_bg.png")
 
     private var ambianceSoundInstance: GridSoundInstance? = null
@@ -77,6 +80,14 @@ class GuiSpellcasting constructor(
         if (panOffset != prevPanOffset || ClientTickCounter.ticksInGame % 10 == 0L) {
             IClientXplatAbstractions.INSTANCE.sendPacketToServer(MsgPannedGridC2S(panOffset))
             prevPanOffset = panOffset;
+        }
+    }
+
+    fun validatePanAbility(player: LocalPlayer) {
+        panningAllowed = ItemRobes.isWearingFullSet(player)
+        if (!panningAllowed && panOffset != Vec2.ZERO) {
+            panOffset = Vec2.ZERO
+            syncPanOffset()
         }
     }
 
@@ -145,6 +156,7 @@ class GuiSpellcasting constructor(
         if (player != null) {
             this.ambianceSoundInstance = GridSoundInstance(player)
             soundManager.play(this.ambianceSoundInstance!!)
+            this.validatePanAbility(player)
         }
 
         this.calculateIotaDisplays()
@@ -157,6 +169,10 @@ class GuiSpellcasting constructor(
             val heldItem = player.getItemInHand(handOpenedWith)
             if (heldItem.isEmpty || !heldItem.`is`(HexTags.Items.STAVES) || player.getAttributeValue(HexAttributes.FEEBLE_MIND) > 0)
                 closeForReal()
+            validatePanAbility(player)
+            if (this.panningAllowed) {
+                syncPanOffset()
+            }
         }
     }
 
@@ -213,7 +229,10 @@ class GuiSpellcasting constructor(
         }
         if (HexConfig.client().clickingTogglesDrawing())
             return false
-        if (pButton == HexConfig.client().gridPanMouseButton() && this.drawState is PatternDrawState.BetweenPatterns) {
+        if (pButton == HexConfig.client().gridPanMouseButton()
+        && this.drawState is PatternDrawState.BetweenPatterns
+        && this.panningAllowed
+        ) {
             return panGrid(pDragX, pDragY)
         }
         return drawMove(mxOut, myOut)
@@ -601,10 +620,6 @@ class GuiSpellcasting constructor(
             RenderSystem.enableBlend()
             renderQuad(ps, x, y, w, h, 0x50_303030)
             renderQuad(ps, x + leftMargin, y + 2.5f, w - leftMargin - 2.5f, h - 5f, 0x50_303030)
-        }
-
-        fun clientTickEnd(screen: Screen?) {
-            if (screen is GuiSpellcasting) screen.syncPanOffset()
         }
     }
 }

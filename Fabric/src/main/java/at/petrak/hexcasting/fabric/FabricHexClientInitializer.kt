@@ -43,7 +43,6 @@ object FabricHexClientInitializer : ClientModInitializer {
             ClientTickCounter.clientTickEnd()
             Keybinds.clientTickEnd()
             ShiftScrollListener.clientTickEnd()
-            GuiSpellcasting.clientTickEnd(ctx.screen)
         }
         TooltipComponentCallback.EVENT.register(PatternTooltipComponent::tryConvert)
         ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
