@@ -89,18 +89,19 @@ public final class HexPattern {
         return "HexPattern[" + orientation + ", " + signature.toAnglesString() + ']';
     }
 
-    // TODO: remove CODEC_1_20, make CODEC only the CODEC_1_21 definition, and fix representations in the DFU
-    private static final Codec<HexPattern> CODEC_1_20 = RecordCodecBuilder.create(instance -> instance.group(
+    // TODO: remove CODEC_DIR_ANGLES, make CODEC only the CODEC_ORI_SIG definition, and fix representations in the DFU
+    // CODEC_DIR_ANGLES is used for data encoded in 1.21 but before build 53, so it shouldn't be necessary for the final release
+    private static final Codec<HexPattern> CODEC_DIR_ANGLES = RecordCodecBuilder.create(instance -> instance.group(
             HexDir.CODEC.fieldOf("start_dir").forGetter(HexPattern::getOrientation),
             HexSignature.CODEC.fieldOf("angles").forGetter(HexPattern::getSignature)
     ).apply(instance, HexPattern::new));
 
-    private static final Codec<HexPattern> CODEC_1_21 = RecordCodecBuilder.create(instance -> instance.group(
+    private static final Codec<HexPattern> CODEC_ORI_SIG = RecordCodecBuilder.create(instance -> instance.group(
             HexDir.CODEC.fieldOf("orientation").forGetter(HexPattern::getOrientation),
             HexSignature.CODEC.fieldOf("signature").forGetter(HexPattern::getSignature)
     ).apply(instance, HexPattern::new));
 
-    public static final Codec<HexPattern> CODEC = Codec.withAlternative(CODEC_1_21, CODEC_1_20);
+    public static final Codec<HexPattern> CODEC = Codec.withAlternative(CODEC_ORI_SIG, CODEC_DIR_ANGLES);
 
     public static final StreamCodec<RegistryFriendlyByteBuf, HexPattern> STREAM_CODEC = StreamCodec.composite(
             HexDir.STREAM_CODEC, HexPattern::getOrientation,

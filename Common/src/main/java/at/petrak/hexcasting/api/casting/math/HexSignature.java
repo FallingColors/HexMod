@@ -99,15 +99,16 @@ public final class HexSignature implements Iterable<HexAngle> {
         return "HexSignature[" + this.toAnglesString() + ']';
     }
 
-    // TODO: remove CODEC_1_20, make CODEC only the CODEC_1_21 definition, and fix representations in the DFU
-    private static final Codec<HexSignature> CODEC_1_20 =
+    // TODO: remove CODEC_STRING, make CODEC only the CODEC_INTSTREAM definition, and fix representations in the DFU
+    // CODEC_STRING is used for data encoded in 1.21 but before build 53, so it shouldn't be necessary for the final release
+    private static final Codec<HexSignature> CODEC_STRING =
             Codec.STRING.xmap(HexSignature::fromAnglesStringUnchecked, HexSignature::toAnglesString);
 
-    private static final Codec<HexSignature> CODEC_1_21 = Codec.INT_STREAM
+    private static final Codec<HexSignature> CODEC_INTSTREAM = Codec.INT_STREAM
             .xmap(IntStream::toArray, Arrays::stream)
             .xmap(HexSignature::new, hs -> hs.packedTurns);
 
-    public static final Codec<HexSignature> CODEC = Codec.withAlternative(CODEC_1_21, CODEC_1_20);
+    public static final Codec<HexSignature> CODEC = Codec.withAlternative(CODEC_INTSTREAM, CODEC_STRING);
 
     public static final StreamCodec<ByteBuf, HexSignature> STREAM_CODEC = new StreamCodec<>() {
         @Override
