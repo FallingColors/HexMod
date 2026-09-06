@@ -134,7 +134,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
         }.flatXmap({
             val dir = HexDir.fromString(it.startDir)
             try {
-                return@flatXmap DataResult.success(fromAnglesUnchecked(it.anglesSignature, dir))
+                return@flatXmap DataResult.success(fromAnyAngles(it.anglesSignature, dir))
             } catch (exception: IllegalArgumentException) {
                 return@flatXmap DataResult.error { exception.message }
             }
@@ -144,7 +144,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, HexPattern> = StreamCodec.composite(
             ByteBufCodecs.STRING_UTF8, HexPattern::anglesSignature,
             HexDir.STREAM_CODEC, HexPattern::startDir,
-            HexPattern::fromAnglesUnchecked
+            HexPattern::fromAnyAngles
         )
 
         /**
@@ -154,7 +154,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
          */
         @JvmStatic
         @Throws(IllegalArgumentException::class, IllegalStateException::class)
-        fun fromAngles(signature: String, startDir: HexDir): HexPattern {
+        fun fromDrawableAngles(signature: String, startDir: HexDir): HexPattern {
             val out = HexPattern(startDir)
 
             var cursor = HexCoord.Origin
@@ -192,7 +192,7 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
          */
         @JvmStatic
         @Throws(IllegalArgumentException::class)
-        fun fromAnglesUnchecked(signature: String, startDir: HexDir): HexPattern {
+        fun fromAnyAngles(signature: String, startDir: HexDir): HexPattern {
             val out = HexPattern(startDir)
 
             for ((idx, c) in signature.withIndex()) {
