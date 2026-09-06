@@ -119,14 +119,30 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
         append("]")
     }
 
+    data class RawHexPatternLegacy(val angles: List<Byte>, val startDir: Byte)
     data class RawHexPattern(val anglesSignature: String, val startDir: String)
 
     companion object {
         const val TAG_START_DIR = "start_dir"
         const val TAG_ANGLES = "angles"
 
-        @JvmField
-        val CODEC: Codec<HexPattern> = RecordCodecBuilder.create { instance ->
+        val DIRECTIONS = arrayOf("NORTH_EAST", "EAST", "SOUTH_EAST", "SOUTH_WEST", "WEST", "NORTH_WEST")
+        val ANGLES = arrayOf("w", "e", "d", "s", "a", "q")
+        val CODEC_1_20: Codec<HexPattern> = RecordCodecBuilder.create { instance ->
+            instance.group(
+                Codec.list(Codec.BYTE).fieldOf("angles").forGetter(RawHexPatternLegacy::angles),
+                Codec.BYTE.fieldOf("start_dir").forGetter(RawHexPatternLegacy::startDir)
+            ).apply(instance, ::RawHexPatternLegacy)
+        }.flatXmap({
+            val dir = HexDir.fromString(DIRECTIONS[it.startDir.toInt()])
+            try {
+                return@flatXmap DataResult.success(fromAnglesUnchecked(it.angles.joinToString(separator = "") { a -> ANGLES[a.toInt()] }, dir))
+            } catch (exception: IllegalArgumentException) {
+                return@flatXmap DataResult.error { exception.message }
+            }
+        }, { DataResult.error { "Refusing to serialize pattern using legacy codec" } })
+
+        val CODEC_1_21: Codec<HexPattern> = RecordCodecBuilder.create { instance ->
             instance.group(
                 Codec.STRING.fieldOf(TAG_ANGLES).forGetter(RawHexPattern::anglesSignature),
                 Codec.STRING.fieldOf(TAG_START_DIR).forGetter(RawHexPattern::startDir)
@@ -139,6 +155,9 @@ data class HexPattern(val startDir: HexDir, val angles: MutableList<HexAngle> = 
                 return@flatXmap DataResult.error { exception.message }
             }
         }, { DataResult.success(RawHexPattern(it.anglesSignature(), it.startDir.name)) })
+
+        @JvmField
+        val CODEC: Codec<HexPattern> = Codec.withAlternative(CODEC_1_21, CODEC_1_20)
 
         @JvmField
         val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, HexPattern> = StreamCodec.composite(
