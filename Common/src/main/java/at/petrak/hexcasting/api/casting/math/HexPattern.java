@@ -89,10 +89,18 @@ public final class HexPattern {
         return "HexPattern[" + orientation + ", " + signature.toAnglesString() + ']';
     }
 
-    public static final Codec<HexPattern> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    // TODO: remove CODEC_1_20, make CODEC only the CODEC_1_21 definition, and fix representations in the DFU
+    private static final Codec<HexPattern> CODEC_1_20 = RecordCodecBuilder.create(instance -> instance.group(
+            HexDir.CODEC.fieldOf("start_dir").forGetter(HexPattern::getOrientation),
+            HexSignature.CODEC.fieldOf("angles").forGetter(HexPattern::getSignature)
+    ).apply(instance, HexPattern::new));
+
+    private static final Codec<HexPattern> CODEC_1_21 = RecordCodecBuilder.create(instance -> instance.group(
             HexDir.CODEC.fieldOf("orientation").forGetter(HexPattern::getOrientation),
             HexSignature.CODEC.fieldOf("signature").forGetter(HexPattern::getSignature)
     ).apply(instance, HexPattern::new));
+
+    public static final Codec<HexPattern> CODEC = Codec.withAlternative(CODEC_1_21, CODEC_1_20);
 
     public static final StreamCodec<RegistryFriendlyByteBuf, HexPattern> STREAM_CODEC = StreamCodec.composite(
             HexDir.STREAM_CODEC, HexPattern::getOrientation,

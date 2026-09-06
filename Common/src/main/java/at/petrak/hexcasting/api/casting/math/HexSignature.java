@@ -99,9 +99,15 @@ public final class HexSignature implements Iterable<HexAngle> {
         return "HexSignature[" + this.toAnglesString() + ']';
     }
 
-    public static final Codec<HexSignature> CODEC = Codec.INT_STREAM
+    // TODO: remove CODEC_1_20, make CODEC only the CODEC_1_21 definition, and fix representations in the DFU
+    private static final Codec<HexSignature> CODEC_1_20 =
+            Codec.STRING.xmap(HexSignature::fromAnglesStringUnchecked, HexSignature::toAnglesString);
+
+    private static final Codec<HexSignature> CODEC_1_21 = Codec.INT_STREAM
             .xmap(IntStream::toArray, Arrays::stream)
             .xmap(HexSignature::new, hs -> hs.packedTurns);
+
+    public static final Codec<HexSignature> CODEC = Codec.withAlternative(CODEC_1_21, CODEC_1_20);
 
     public static final StreamCodec<ByteBuf, HexSignature> STREAM_CODEC = new StreamCodec<>() {
         @Override
