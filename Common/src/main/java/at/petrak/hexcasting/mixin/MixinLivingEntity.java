@@ -1,14 +1,9 @@
 package at.petrak.hexcasting.mixin;
 
-import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexMobEffects;
-import at.petrak.hexcasting.common.misc.HexMobEffect;
 import at.petrak.hexcasting.common.effects.DissociationEffect;
-import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
