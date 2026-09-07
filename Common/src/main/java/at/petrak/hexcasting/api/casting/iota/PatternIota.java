@@ -106,7 +106,7 @@ public class PatternIota extends Iota {
                 }
 
                 var reqsEnlightenment = isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), key,
-                    HexTags.Actions.REQUIRES_ENLIGHTENMENT);
+                    inParens ? HexTags.Actions.REQUIRES_ENLIGHTENMENT_IN_PARENS : HexTags.Actions.REQUIRES_ENLIGHTENMENT);
 
                 castedName = () -> HexAPI.instance().getActionI18n(key, reqsEnlightenment);
                 action = Objects.requireNonNull(IXplatAbstractions.INSTANCE.getActionRegistry().get(key)).action();

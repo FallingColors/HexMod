@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## `0.11.5` - [UNRELEASED]
+
+### Added
+
+- Added the `requires_enlightenment_in_parens` tag for patterns that should mishap without enlightenment even while parenthesized ([#1290](https://github.com/FallingColors/HexMod/pull/1290)) @Robotgiggle
+
+### Fixed
+
+- Fixed Great Spells causing a mishap when drawn without enlightenment even while parenthesized ([#1290](https://github.com/FallingColors/HexMod/pull/1290)) @Robotgiggle
+
 ## `0.11.4` - 2026-08-26
 
 ### Added
