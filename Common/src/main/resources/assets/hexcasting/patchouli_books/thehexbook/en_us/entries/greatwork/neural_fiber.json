@@ -1,0 +1,24 @@
+{
+  "name": "hexcasting.entry.neural_fiber",
+  "category": "hexcasting:greatwork",
+  "icon": "hexcasting:charged_amethyst",
+  "advancement": "hexcasting:enlightenment",
+  "entry_color": "54398a",
+  "sortnum": 6,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.neural_fiber.1"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "hexcasting:neural_fiber",
+      "text": "hexcasting.page.neural_fiber.2"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:neural_mesh",
+      "text": "hexcasting.page.neural_fiber.mesh"
+    }
+  ]
+}
