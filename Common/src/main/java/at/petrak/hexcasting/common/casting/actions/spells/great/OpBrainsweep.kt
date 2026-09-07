@@ -61,7 +61,9 @@ object OpBrainsweep : SpellAction {
             throw MishapAlreadyBrainswept(sacrifice)
 
         // special behavior for crystallization
-        if (vecPos == sacrifice.eyePosition && sacrifice.hasEffect(HexMobEffects.ENLARGE_GRID) && sacrifice is AbstractVillager) {
+        if (vecPos.closerThan(sacrifice.eyePosition, 0.1)
+        && sacrifice.hasEffect(HexMobEffects.ENLARGE_GRID)
+        && sacrifice is AbstractVillager) {
             return SpellAction.Result(
                 AltSpell(sacrifice, pos),
                 MediaConstants.CRYSTAL_UNIT * 10,
