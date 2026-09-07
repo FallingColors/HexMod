@@ -11,9 +11,13 @@
       "text": "hexcasting.page.neural_fiber.1"
     },
     {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.neural_fiber.2"
+    },
+    {
       "type": "patchouli:spotlight",
       "item": "hexcasting:neural_fiber",
-      "text": "hexcasting.page.neural_fiber.2"
+      "text": "hexcasting.page.neural_fiber.3"
     },
     {
       "type": "patchouli:crafting",
