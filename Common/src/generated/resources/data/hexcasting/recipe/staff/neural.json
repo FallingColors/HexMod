@@ -5,17 +5,17 @@
     "A": {
       "item": "hexcasting:charged_amethyst"
     },
-    "B": {
-      "item": "minecraft:bone"
+    "S": {
+      "item": "minecraft:stick"
     },
-    "F": {
-      "item": "hexcasting:neural_fiber"
+    "W": {
+      "item": "hexcasting:neural_mesh"
     }
   },
   "pattern": [
-    " FA",
-    " BF",
-    "B  "
+    " SA",
+    " WS",
+    "S  "
   ],
   "result": {
     "count": 1,
