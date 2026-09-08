@@ -1,7 +1,7 @@
 {
   "ambientocclusion": false,
   "textures": {
-    "particle": "hexcasting:block/neural_mesh",
+    "particle": "hexcasting:block/slate",
     "neural_mesh": "hexcasting:block/neural_mesh"
   },
   "render_type": "cutout",
@@ -10,8 +10,28 @@
       "from": [ 0, 0, 0.1 ],
       "to": [ 16, 16, 0.1 ],
       "faces": {
-        "north": { "uv": [ 16, 0, 0, 16 ], "texture": "#neural_mesh" },
-        "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#neural_mesh" }
+        "north": { "uv": [ 8, 0, 0, 8 ], "texture": "#neural_mesh" },
+        "south": { "uv": [ 0, 0, 8, 8 ], "texture": "#neural_mesh" }
+      }
+    },
+    {
+      "from": [ 0, 0, 0.3 ],
+      "to": [ 16, 16, 0.3 ],
+      "faces": {
+        "north": { "uv": [ 16, 0, 8, 8 ], "texture": "#neural_mesh" },
+        "south": { "uv": [ 8, 0, 16, 8 ], "texture": "#neural_mesh" }
+      }
+    },
+    {
+      "from": [3, 3, 0],
+      "to": [13, 13, 1],
+      "faces": {
+        "north": {"uv": [1.5, 9.5, 6.5, 14.5], "texture": "#neural_mesh"},
+        "south": {"uv": [1.5, 9.5, 6.5, 14.5], "texture": "#neural_mesh"},
+        "east": {"uv": [6, 9.5, 6.5, 14.5], "texture": "#neural_mesh"},
+        "west": {"uv": [1.5, 9.5, 2, 14.5], "texture": "#neural_mesh"},
+        "up": {"uv": [1.5, 9.5, 6.5, 10], "texture": "#neural_mesh"},
+        "down": {"uv": [1.5, 14, 6.5, 14.5], "texture": "#neural_mesh"}
       }
     }
   ]

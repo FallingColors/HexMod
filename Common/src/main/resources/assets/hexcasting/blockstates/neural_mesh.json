@@ -24,7 +24,6 @@
     {
       "apply": {
         "model": "hexcasting:block/neural_mesh",
-        "uvlock": true,
         "y": 90
       },
       "when": {
@@ -34,7 +33,6 @@
     {
       "apply": {
         "model": "hexcasting:block/neural_mesh",
-        "uvlock": true,
         "y": 90
       },
       "when": {
@@ -49,7 +47,6 @@
     {
       "apply": {
         "model": "hexcasting:block/neural_mesh",
-        "uvlock": true,
         "y": 180
       },
       "when": {
@@ -59,7 +56,6 @@
     {
       "apply": {
         "model": "hexcasting:block/neural_mesh",
-        "uvlock": true,
         "y": 180
       },
       "when": {
@@ -74,7 +70,6 @@
     {
       "apply": {
         "model": "hexcasting:block/neural_mesh",
-        "uvlock": true,
         "y": 270
       },
       "when": {
@@ -84,7 +79,6 @@
     {
       "apply": {
         "model": "hexcasting:block/neural_mesh",
-        "uvlock": true,
         "y": 270
       },
       "when": {
@@ -99,7 +93,6 @@
     {
       "apply": {
         "model": "hexcasting:block/neural_mesh",
-        "uvlock": true,
         "x": 270
       },
       "when": {
@@ -109,7 +102,6 @@
     {
       "apply": {
         "model": "hexcasting:block/neural_mesh",
-        "uvlock": true,
         "x": 270
       },
       "when": {
@@ -124,7 +116,6 @@
     {
       "apply": {
         "model": "hexcasting:block/neural_mesh",
-        "uvlock": true,
         "x": 90
       },
       "when": {
@@ -134,7 +125,6 @@
     {
       "apply": {
         "model": "hexcasting:block/neural_mesh",
-        "uvlock": true,
         "x": 90
       },
       "when": {
