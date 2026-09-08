@@ -114,6 +114,7 @@ public class RegisterClientStuff {
         registerWandOverrides(HexItems.STAFF_EDIFIED.get());
         // purposely skip quenched
         registerWandOverrides(HexItems.STAFF_MINDSPLICE.get());
+        registerWandOverrides(HexItems.STAFF_NEURAL.get());
 
         registerGaslight4(HexItems.STAFF_QUENCHED.get());
         registerGaslight4(HexBlocks.QUENCHED_ALLAY.get().asItem());

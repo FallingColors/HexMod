@@ -40,7 +40,7 @@ public class HexItemTagProvider extends ItemTagsProvider {
             HexItems.STAFF_JUNGLE.get(), HexItems.STAFF_ACACIA.get(), HexItems.STAFF_DARK_OAK.get(),
             HexItems.STAFF_CRIMSON.get(), HexItems.STAFF_WARPED.get(), HexItems.STAFF_MANGROVE.get(),
             HexItems.STAFF_CHERRY.get(),HexItems.STAFF_BAMBOO.get(),
-            HexItems.STAFF_QUENCHED.get(), HexItems.STAFF_MINDSPLICE.get());
+            HexItems.STAFF_QUENCHED.get(), HexItems.STAFF_MINDSPLICE.get(), HexItems.STAFF_NEURAL.get());
 
         add(tag(HexTags.Items.PHIAL_BASE),
             Items.GLASS_BOTTLE);

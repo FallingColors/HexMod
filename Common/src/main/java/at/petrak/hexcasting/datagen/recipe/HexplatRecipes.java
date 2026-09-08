@@ -102,6 +102,15 @@ public class HexplatRecipes extends RecipeProvider {
         staffRecipe(recipes, HexItems.STAFF_EDIFIED.get(), HexBlocks.EDIFIED_PLANKS.get().asItem());
         staffRecipe(recipes, HexItems.STAFF_QUENCHED.get(), HexItems.QUENCHED_SHARD.get());
         staffRecipe(recipes, HexItems.STAFF_MINDSPLICE.get(), Ingredient.of(HexTags.Items.MINDFLAYED_CIRCLE_COMPONENTS));
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, HexItems.STAFF_NEURAL.get())
+            .define('F', HexItems.NEURAL_FIBER.get())
+            .define('B', Items.BONE)
+            .define('A', HexItems.CHARGED_AMETHYST.get())
+            .pattern(" FA")
+            .pattern(" BF")
+            .pattern("B  ")
+            .unlockedBy("has_item", hasItem(HexItems.CHARGED_AMETHYST.get()))
+            .save(recipes);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, HexItems.THOUGHT_KNOT.get())
             .requires(HexItems.AMETHYST_DUST.get())
