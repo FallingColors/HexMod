@@ -79,7 +79,7 @@ class GuiSpellcasting constructor(
     fun syncPanOffset() {
         if (panOffset != prevPanOffset || ClientTickCounter.ticksInGame % 10 == 0L) {
             IClientXplatAbstractions.INSTANCE.sendPacketToServer(MsgPannedGridC2S(panOffset))
-            prevPanOffset = panOffset;
+            prevPanOffset = panOffset
         }
     }
 

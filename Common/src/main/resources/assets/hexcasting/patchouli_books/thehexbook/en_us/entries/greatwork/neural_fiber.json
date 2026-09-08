@@ -17,7 +17,8 @@
     {
       "type": "patchouli:spotlight",
       "item": "hexcasting:neural_fiber",
-      "text": "hexcasting.page.neural_fiber.3"
+      "text": "hexcasting.page.neural_fiber.3",
+      "link_recipe": true
     },
     {
       "type": "patchouli:crafting",
