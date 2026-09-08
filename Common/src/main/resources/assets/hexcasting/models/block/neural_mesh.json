@@ -1,7 +1,7 @@
 {
   "ambientocclusion": false,
   "textures": {
-    "particle": "hexcasting:block/slate",
+    "particle": "hexcasting:item/neural_mesh",
     "neural_mesh": "hexcasting:block/neural_mesh"
   },
   "render_type": "cutout",

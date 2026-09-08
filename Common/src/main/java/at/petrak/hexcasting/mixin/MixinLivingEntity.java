@@ -35,11 +35,11 @@ public abstract class MixinLivingEntity {
     }
 
     @Inject(method = "increaseAirSupply", at = @At("HEAD"), cancellable = true)
-    private void forgetToBreathe(int i, CallbackInfoReturnable<Integer> cir) {
+    private void forgetToBreathe(int currentAir, CallbackInfoReturnable<Integer> cir) {
         var self = (LivingEntity) (Object) this;
         var inst = self.getEffect(HexMobEffects.DISSOCIATION);
         if (inst != null && DissociationEffect.shouldPreventBreathing(inst.getDuration(), inst.getAmplifier())) {
-            cir.setReturnValue(i);
+            cir.setReturnValue(currentAir);
         }
     }
 }

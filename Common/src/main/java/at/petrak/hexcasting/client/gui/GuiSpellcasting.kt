@@ -224,17 +224,16 @@ class GuiSpellcasting constructor(
     }
 
     override fun mouseDragged(mxOut: Double, myOut: Double, pButton: Int, pDragX: Double, pDragY: Double): Boolean {
-        if (super.mouseDragged(mxOut, myOut, pButton, pDragX, pDragY)) {
+        if (super.mouseDragged(mxOut, myOut, pButton, pDragX, pDragY))
             return true
-        }
-        if (HexConfig.client().clickingTogglesDrawing())
-            return false
         if (pButton == HexConfig.client().gridPanMouseButton()
         && this.drawState is PatternDrawState.BetweenPatterns
         && this.panningAllowed
         ) {
             return panGrid(pDragX, pDragY)
         }
+        if (HexConfig.client().clickingTogglesDrawing())
+            return false
         return drawMove(mxOut, myOut)
     }
 

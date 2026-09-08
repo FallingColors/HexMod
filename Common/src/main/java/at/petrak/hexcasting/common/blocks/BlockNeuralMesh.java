@@ -3,12 +3,10 @@ package at.petrak.hexcasting.common.blocks;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
 import com.mojang.serialization.MapCodec;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -20,7 +18,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 public class BlockNeuralMesh extends MultifaceBlock {
     public static final MapCodec<BlockNeuralMesh> CODEC = simpleCodec(BlockNeuralMesh::new);
-    private final MultifaceSpreader spreader = new MultifaceSpreader(this);
 
     public MapCodec<BlockNeuralMesh> codec() {
         return CODEC;
@@ -30,8 +27,9 @@ public class BlockNeuralMesh extends MultifaceBlock {
         super(arg);
     }
 
+    @Override
     public MultifaceSpreader getSpreader() {
-        return this.spreader;
+        throw new UnsupportedOperationException("Neural mesh is not capable of spreading");
     }
 
     @Override
