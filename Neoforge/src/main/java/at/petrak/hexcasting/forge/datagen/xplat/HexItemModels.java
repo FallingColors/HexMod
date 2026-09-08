@@ -80,6 +80,11 @@ public class HexItemModels extends PaucalItemModelProvider {
             .translation(-2.5f, 0f, -8f)
             .scale(0.4f);
 
+        buildRobes(HexItems.ROBES_HOOD.get(), "hood", HexItems.ROBES_HOOD.get().numVariants());
+        buildRobes(HexItems.ROBES_TUNIC.get(), "tunic", HexItems.ROBES_HOOD.get().numVariants());
+        buildRobes(HexItems.ROBES_LEGS.get(), "legs", HexItems.ROBES_HOOD.get().numVariants());
+        buildRobes(HexItems.ROBES_BOOTS.get(), "boots", HexItems.ROBES_HOOD.get().numVariants());
+
         singleTexture("old_staff", ResourceLocation.withDefaultNamespace("item/handheld_rod"),
             "layer0", modLoc("item/staff/old"));
         singleTexture("cherry_staff", ResourceLocation.withDefaultNamespace("item/handheld_rod"),
@@ -274,6 +279,19 @@ public class HexItemModels extends PaucalItemModelProvider {
             .predicate(ItemStaff.FUNNY_LEVEL_PREDICATE, 2)
             .model(new ModelFile.UncheckedModelFile(modLoc("item/cherry_staff")))
             .end();
+    }
+
+    private void buildRobes(Item item, String type, int numVariants) {
+        var name = "item/" + getPath(item);
+        var builder = getBuilder(name);
+        for (int i = 0; i < numVariants; i++) {
+            var parent_tag = "item/generated";
+            var model = i == 0 ? singleTexture(name, ResourceLocation.withDefaultNamespace(parent_tag),
+                "layer0", modLoc("item/robes/" + i + "_" + type))
+                : withExistingParent(name + "_" + i, ResourceLocation.withDefaultNamespace(parent_tag))
+                .texture("layer0", modLoc("item/robes/" + i + "_" + type));
+            builder.override().predicate(ItemFocus.VARIANT_PRED, i).model(model).end();
+        }
     }
 
     private void buildPackagedSpell(Item item, String stub, int numVariants) {

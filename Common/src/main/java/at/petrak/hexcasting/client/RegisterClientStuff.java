@@ -67,6 +67,10 @@ public class RegisterClientStuff {
         registerVariantOverrides(HexItems.CYPHER.get(), HexItems.CYPHER.get()::getVariant);
         registerVariantOverrides(HexItems.TRINKET.get(), HexItems.TRINKET.get()::getVariant);
         registerVariantOverrides(HexItems.ARTIFACT.get(), HexItems.ARTIFACT.get()::getVariant);
+        registerVariantOverrides(HexItems.ROBES_HOOD.get(), HexItems.ROBES_HOOD.get()::getVariant);
+        registerVariantOverrides(HexItems.ROBES_TUNIC.get(), HexItems.ROBES_TUNIC.get()::getVariant);
+        registerVariantOverrides(HexItems.ROBES_LEGS.get(), HexItems.ROBES_LEGS.get()::getVariant);
+        registerVariantOverrides(HexItems.ROBES_BOOTS.get(), HexItems.ROBES_BOOTS.get()::getVariant);
         IClientXplatAbstractions.INSTANCE.registerItemProperty(HexItems.THOUGHT_KNOT.get(), ItemThoughtKnot.WRITTEN_PRED,
             (stack, level, holder, holderID) -> {
                 if (stack.has(HexDataComponents.IOTA_HOLDER_IOTA.get())) {

@@ -9,6 +9,7 @@ import at.petrak.hexcasting.client.model.HexModelLayers
 import at.petrak.hexcasting.client.render.HexAdditionalRenderers
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest
 import at.petrak.hexcasting.common.lib.HexParticles
+import at.petrak.hexcasting.fabric.client.HexRobesRenderer
 import at.petrak.hexcasting.fabric.event.MouseScrollCallback
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
 import at.petrak.hexcasting.interop.HexInterop
@@ -56,7 +57,7 @@ object FabricHexClientInitializer : ClientModInitializer {
 
         RegisterClientStuff.init()
         HexModelLayers.init { loc, defn -> EntityModelLayerRegistry.registerModelLayer(loc, defn::get) }
-
+        HexRobesRenderer.init()
 
         HexParticles.FactoryHandler.registerFactories(object : HexParticles.FactoryHandler.Consumer {
             override fun <T : ParticleOptions?> register(type: ParticleType<T>, constructor: Function<SpriteSet, ParticleProvider<T>>) {

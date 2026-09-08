@@ -10,6 +10,8 @@ import at.petrak.hexcasting.client.model.HexModelLayers;
 import at.petrak.hexcasting.client.render.HexAdditionalRenderers;
 import at.petrak.hexcasting.client.render.shader.HexShaders;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
+import at.petrak.hexcasting.common.items.armor.ItemRobes;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexParticles;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import at.petrak.hexcasting.forge.lib.ForgeHexAttachments;
@@ -17,6 +19,7 @@ import at.petrak.hexcasting.interop.HexInterop;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleProvider;
@@ -25,10 +28,15 @@ import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
 import java.io.IOException;
@@ -145,6 +153,17 @@ public class ForgeHexClientInitializer {
 
             skin.addLayer(new AltioraLayer<>(skin, evt.getEntityModels()));
         });
+    }
+
+    @SubscribeEvent
+    public static void registerArmorRenderer(RegisterClientExtensionsEvent evt) {
+        evt.registerItem(new IClientItemExtensions() {
+            @Override
+            public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
+                ItemRobes armor = (ItemRobes) itemStack.getItem();
+                return armor.getArmorModels()[armor.getVariant(itemStack)];
+            }
+        }, HexItems.ROBES_HOOD.get(), HexItems.ROBES_TUNIC.get(), HexItems.ROBES_LEGS.get(), HexItems.ROBES_BOOTS.get());
     }
 
     @SubscribeEvent

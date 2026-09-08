@@ -8,6 +8,7 @@ import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.items.ItemLens;
 import at.petrak.hexcasting.common.items.ItemLoreFragment;
 import at.petrak.hexcasting.common.items.ItemStaff;
+import at.petrak.hexcasting.common.items.armor.ItemRobes;
 import at.petrak.hexcasting.common.items.magic.*;
 import at.petrak.hexcasting.common.items.pigment.*;
 import at.petrak.hexcasting.common.items.storage.*;
@@ -74,6 +75,11 @@ public class HexItems {
     public static final Supplier<ItemLens> SCRYING_LENS = make("lens", () -> new ItemLens(
             IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
                     .stacksTo(1).attributes(ItemLens.MODIFIERS)));
+
+    public static final Supplier<ItemRobes> ROBES_HOOD = make("robes/hood", () -> new ItemRobes(ArmorItem.Type.HELMET, unstackable()));
+    public static final Supplier<ItemRobes> ROBES_TUNIC = make("robes/tunic", () -> new ItemRobes(ArmorItem.Type.CHESTPLATE, unstackable()));
+    public static final Supplier<ItemRobes> ROBES_LEGS = make("robes/legs", () -> new ItemRobes(ArmorItem.Type.LEGGINGS, unstackable()));
+    public static final Supplier<ItemRobes> ROBES_BOOTS = make("robes/boots", () -> new ItemRobes(ArmorItem.Type.BOOTS, unstackable()));
 
     public static final Supplier<ItemAbacus> ABACUS = make("abacus", () -> new ItemAbacus(unstackable()));
     public static final Supplier<ItemThoughtKnot> THOUGHT_KNOT = make("thought_knot", () -> new ItemThoughtKnot(unstackable()));
