@@ -1,10 +1,7 @@
 package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
-import at.petrak.hexcasting.common.blocks.BlockConjured;
-import at.petrak.hexcasting.common.blocks.BlockConjuredLight;
-import at.petrak.hexcasting.common.blocks.BlockFlammable;
-import at.petrak.hexcasting.common.blocks.BlockQuenchedAllay;
+import at.petrak.hexcasting.common.blocks.*;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicLigature;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord;
@@ -195,6 +192,15 @@ public class HexBlocks {
     public static final Supplier<BlockQuenchedAllay> QUENCHED_ALLAY = blockItem("quenched_allay", () ->
         new BlockQuenchedAllay(quenched()), 
         HexItems.props().rarity(Rarity.UNCOMMON)
+    );
+
+    public static final Supplier<BlockNeuralMesh> NEURAL_MESH = blockItem("neural_mesh", () ->
+        new BlockNeuralMesh(BlockBehaviour.Properties.of()
+            .noCollission()
+            .strength(0.2F)
+            .sound(SoundType.GLOW_LICHEN)
+            .pushReaction(PushReaction.DESTROY)
+        )
     );
 
     // Decoration?!

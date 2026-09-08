@@ -129,6 +129,7 @@ public class RegisterClientStuff {
         x.setRenderLayer(HexBlocks.EDIFIED_TRAPDOOR.get(), RenderType.cutout());
         x.setRenderLayer(HexBlocks.AKASHIC_BOOKSHELF.get(), RenderType.cutout());
         x.setRenderLayer(HexBlocks.SCONCE.get(), RenderType.cutout());
+        x.setRenderLayer(HexBlocks.NEURAL_MESH.get(), RenderType.cutout());
 
         x.setRenderLayer(HexBlocks.AMETHYST_EDIFIED_LEAVES.get(), RenderType.cutoutMipped());
         x.setRenderLayer(HexBlocks.AVENTURINE_EDIFIED_LEAVES.get(), RenderType.cutoutMipped());

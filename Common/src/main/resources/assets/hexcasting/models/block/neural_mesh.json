@@ -1,0 +1,18 @@
+{
+  "ambientocclusion": false,
+  "textures": {
+    "particle": "hexcasting:block/neural_mesh",
+    "neural_mesh": "hexcasting:block/neural_mesh"
+  },
+  "render_type": "cutout",
+  "elements": [
+    {
+      "from": [ 0, 0, 0.1 ],
+      "to": [ 16, 16, 0.1 ],
+      "faces": {
+        "north": { "uv": [ 16, 0, 0, 16 ], "texture": "#neural_mesh" },
+        "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#neural_mesh" }
+      }
+    }
+  ]
+}
