@@ -1328,6 +1328,7 @@
       directrix: "Directrices",
       akashiclib: "Akashic Libraries",
       quenching_allays: "Quenching Allays",
+      neural_fiber: "Neural Inversion",
       fanciful_staves: "Fanciful Staves",
       
       // and the actions
@@ -1787,7 +1788,11 @@
         "4": "The product is fragile. Breaking it shatters it into pieces, with $(thing)Fortune/$ increasing the yield... if I wish the block itself I need a silken touch.$(br2)The produced shards are worth thrice an $(l:items/amethyst)$(item)Charged Amethyst Crystal/$ apiece. The block itself is worth four of the shards.",
         "5": "They are mercurial, they seem to twist and wink under my fingers, and by giving them a mentor in another form of _media they may be coerced into its shape, in an equivalent exchange of _media.",
       },
-      
+
+      neural_fiber: {
+        "1": "Mind and body-- I can bridge the gap! $(l:items/potions)Clarity/$ to ready the flesh, $(l:greatwork/brainsweeping)$(action)Flay Mind/$ subverted to pull not $(o)out/$ but $(o)in/$. The mind folded upon itself, crystallized in flesh and bone and nerve, until there is only ONE, mind-and-body superimposed.$(br2)The nerves... the nerves become conduits, skeins of thought reified in shimmering fiber. Free them from the flesh and they are $(o)mine/$.",
+        "2": "Any villager will do, though a more developed mind will provide a higher yield.$(br2)The process itself is simple: apply $(l:items/potions)Clarity/$ to render the body receptive, cast $(l:greatwork/brainsweeping)$(action)Flay Mind/$ with the $(l:patterns/basics#hexcasting:entity_pos/eye)$(action)subject’s own head/$ as the destination, then dissect to harvest the fiber. I wonder... does it understand, even excised? Does it feel?",
+      },
       
       "fanciful_staves.1": "It is only right as I shed the husk of ignorance I replace my tools, my palm-polished staves. These new constructions of mine have no additional properties -- but they are so glorious, oh so Glorious... They match the radiance winking at the corners of my sight.",
       
