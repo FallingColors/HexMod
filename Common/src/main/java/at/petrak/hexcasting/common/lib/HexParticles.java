@@ -21,7 +21,9 @@ public class HexParticles {
     }
 
     public static final Supplier<ConjureParticleOptions.Type> CONJURE_PARTICLE = REGISTER.register(
-        "conjure_particle", () -> new ConjureParticleOptions.Type(false));
+        "conjure_particle", () -> new ConjureParticleOptions.Type(false, false));
+    public static final Supplier<ConjureParticleOptions.Type> STATUS_PARTICLE = REGISTER.register(
+        "status_particle", () -> new ConjureParticleOptions.Type(false, true));
 
     public static class FactoryHandler {
         public interface Consumer {
@@ -31,6 +33,7 @@ public class HexParticles {
 
         public static void registerFactories(Consumer consumer) {
             consumer.register(CONJURE_PARTICLE.get(), ConjureParticle.Provider::new);
+            consumer.register(STATUS_PARTICLE.get(), ConjureParticle.StatusEffectProvider::new);
         }
     }
 }

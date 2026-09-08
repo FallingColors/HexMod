@@ -62,6 +62,7 @@
     abacus: "Abacus",
     jeweler_hammer: "Jeweler's Hammer",
     sub_sandwich: "Submarine Sandwich",
+    neural_fiber: "Neural Fiber",
 
     robes: {
       hood: "Grand Caster Hood",
@@ -71,7 +72,7 @@
       "legs.2": "Grand Caster Leggings",
       boots: "Grand Caster Boots",
     },
-    
+
     dye_colorizer_: {
       white: "White Pigment",
       orange: "Orange Pigment",
@@ -134,7 +135,7 @@
   "block.hexcasting": {
     conjured_light: "Conjured Light",
     conjured_block: "Conjured Block",
-    
+
     directrix: {
       empty: "Empty Directrix",
       redstone: "Mason Directrix",
@@ -228,6 +229,7 @@
   "effect.hexcasting": {
     enlarge_grid: "Clarity",
     shrink_grid: "Clouding",
+    crystallized: "Crystallized"
   },
   
   "item.minecraft.potion.effect": {
@@ -1326,6 +1328,7 @@
       directrix: "Directrices",
       akashiclib: "Akashic Libraries",
       quenching_allays: "Quenching Allays",
+      neural_fiber: "Neural Inversion",
       fanciful_staves: "Fanciful Staves",
       
       // and the actions
@@ -1785,7 +1788,12 @@
         "4": "The product is fragile. Breaking it shatters it into pieces, with $(thing)Fortune/$ increasing the yield... if I wish the block itself I need a silken touch.$(br2)The produced shards are worth thrice an $(l:items/amethyst)$(item)Charged Amethyst Crystal/$ apiece. The block itself is worth four of the shards.",
         "5": "They are mercurial, they seem to twist and wink under my fingers, and by giving them a mentor in another form of _media they may be coerced into its shape, in an equivalent exchange of _media.",
       },
-      
+
+      neural_fiber: {
+        "1": "Mind and body-- I can bridge the gap! $(l:greatwork/brainsweeping)$(action)Flay Mind/$ was built to sever but I understand it now, I can TWIST it, force the mind not $(o)out/$ but $(o)in/$, so long as the flesh is made ready to accept it -- $(l:items/potions)Clarity/$ should do the job. The mind can be folded into itself, crystallized in flesh and bone and nerve, until there is only ONE, mind-and-body superimposed in a single hybrid substrate.",
+        "2": "Viscera suffused with micro-fractal splinters of cognition, living and thinking and-- USELESS! Nothing but a mass of meat and _media, in the end.$(br2)But the nerves... the nerves become conduits, skeins of thought reified in shimmering fiber. These I can USE. Free them from the flesh and they are $(o)mine/$.$(br2)I could weave them into myself -- more $(o)space/$ to think in -- no. I am not being rational.",
+        "3": "The process itself is simple: apply $(l:items/potions)Clarity/$ to render the body receptive, cast $(l:greatwork/brainsweeping)$(action)Flay Mind/$ with the $(l:patterns/basics#hexcasting:entity_pos/eye)$(action)subject’s own head/$ as the destination, then dissect to harvest the fiber. Any villager will do, though a more developed mind will provide a higher yield.$(br2)I wonder... does it understand, even excised? Does it feel?",
+      },
       
       "fanciful_staves.1": "It is only right as I shed the husk of ignorance I replace my tools, my palm-polished staves. These new constructions of mine have no additional properties -- but they are so glorious, oh so Glorious... They match the radiance winking at the corners of my sight.",
       
