@@ -181,7 +181,7 @@ class GuiSpellcasting constructor(
         if (super.mouseClicked(mxOut, myOut, pButton)) {
             return true
         }
-        if (pButton == HexConfig.client().gridPanMouseButton())
+        if (pButton == HexConfig.client().gridPanMouseButton() && this.panningAllowed)
             return false
         if (HexConfig.client().clickingTogglesDrawing()) {
             return if (this.drawState is PatternDrawState.BetweenPatterns)
@@ -320,7 +320,7 @@ class GuiSpellcasting constructor(
         }
         if (HexConfig.client().clickingTogglesDrawing())
             return false
-        if (pButton == HexConfig.client().gridPanMouseButton())
+        if (pButton == HexConfig.client().gridPanMouseButton() && this.panningAllowed)
             return false
         return drawEnd()
     }
