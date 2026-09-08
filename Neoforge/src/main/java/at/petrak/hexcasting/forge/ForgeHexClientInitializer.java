@@ -158,16 +158,10 @@ public class ForgeHexClientInitializer {
     @SubscribeEvent
     public static void registerArmorRenderer(RegisterClientExtensionsEvent evt) {
         evt.registerItem(new IClientItemExtensions() {
-            //private final Map<EquipmentSlot, HumanoidModel<LivingEntity>[]> MODEL_SETS = new Object2ObjectArrayMap<>();
-
             @Override
             public HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack, EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
                 ItemRobes armor = (ItemRobes) itemStack.getItem();
                 return armor.getArmorModels()[armor.getVariant(itemStack)];
-
-//                var variant = itemStack.get(HexDataComponents.ITEM_VARIANT.get());
-//                var modelSet = MODEL_SETS.computeIfAbsent(equipmentSlot, ItemRobes::provideArmorModelsForSlot);
-//                return variant != null ? modelSet[variant] : modelSet[0];
             }
         }, HexItems.ROBES_HOOD.get(), HexItems.ROBES_TUNIC.get(), HexItems.ROBES_LEGS.get(), HexItems.ROBES_BOOTS.get());
     }

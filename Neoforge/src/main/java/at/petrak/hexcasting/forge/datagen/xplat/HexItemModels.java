@@ -282,9 +282,6 @@ public class HexItemModels extends PaucalItemModelProvider {
     }
 
     private void buildRobes(Item item, String type, int numVariants) {
-        // TODO: actually handle the variants
-//        singleTexture("item/" + getPath(item), ResourceLocation.withDefaultNamespace("item/generated"),
-//            "layer0", modLoc("item/robes/1_"+type));
         var name = "item/" + getPath(item);
         var builder = getBuilder(name);
         for (int i = 0; i < numVariants; i++) {
