@@ -1611,7 +1611,7 @@
         },
       },
       logic: {
-        bool_coerce: "引数を論理型に変換する。数値$(thing)0/$、$(thing)Null/$、False、空のリストはFalseになり、その他すべてはTrueになる。",
+        bool_coerce: "引数を論理型に変換する。数値$(thing)0/$、$(thing)Null/$、False、ベクトル(0, 0, 0)、空のリストはFalseになり、その他すべてはTrueになる。",
         bool_to_number: "論理型を数値に変換する。Trueは$(thing)1/$になり、Falseは$(thing)0/$になる。",
         not: "引数がTrueであればFalseを返し、FalseであればTrueを返す。",
         or: "少なくとも1つの引数がTrueであればTrueを返し、そうでなければFalseを返す。",

@@ -321,6 +321,43 @@
           "": "Alltid vis listekomma",
           "@Tooltip": "Om alle iotatyper skal være separert av komma når vist i lister (Originalt bruker ikke mønsteriotaer komma)",
         },
+        advancedTooltipsShowsIotaNBT: {
+          "": "Avanserte Verktøytips viser Iota NBT",
+          "@Tooltip": "Om all NBT informasjonen i Iotaer lagret I fokus og tryllebøker skal vises når Avanserte Verktøytips er påskrudd",
+        },
+        staticActiveSlates: {
+          "": "Statiske Aktive Tavler",
+          "@Tooltip": "Om mønster på aktiverte tavler ikke skal riste (Fører til bedre ytelse med mange aktiverte tavler)",
+        },
+      },
+      server: {
+        opBreakHarvestLevel: {
+          "": "Riv Blokk Samlenivå",
+          "@Tooltip": "Samlenivået til Riv Blokk trylleformelen\n0 = tre, 1 = stein, 2 = jern, 3 = diamant, 4 = Netheritt.",
+        },
+        maxOpCount: {
+          "": "Maks Antall Handlinger",
+          "@Tooltip": "Maksimumantallet handlinger som kan bli gjort i ett tick, sånn at serveren ikke skal fryse.",
+        },
+        maxSpellCircleLength: {
+          "": "Maks Manesirkelstørrelse",
+          "@Tooltip": "Maksimumantallet tavler én manesirkel kan bestå av",
+        },
+        actionDenyList: {
+          "": "Forbudte Handlinger",
+          "@Tooltip": "Ressursruten til forbudte handlinger. Disse handlingene vil føre til uhell hvis man prøver å bruke dem. For eksempel, hexcasting:get_caster vill forby Sinnets Refleksjon.",
+        },
+        circleActionDenyList: {
+          "": "Forbudte Sirkelhandlinger",
+          "@Tooltip": "Ressursruter til handlinger som er forbudt for manesirkler. Disse handlingene vil føre til uhell hvis man prøver å bruke dem. For eksempel, hexcasting:get_caster vill forby Sinnets Refleksjon.",
+        },
+        globalCostScaling: {
+          "": "Global Kostskaleringsfaktor",
+          "@Tooltip": "Alle mediekostnader, med unntak av handlinger merket med #hexcasting:cannot_modify_cost, vil bli ganget med dette tallet. Hvis du vil endre kostnaden på en handling med det merket, bruk den handlingsspesifikke kostnadskalalisten.",
+        },
+        costRescaleListRaw: {
+          "": "Handlingsspesifikke Kostnadskalafaktorer",
+        },
       },
     },
   },

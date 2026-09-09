@@ -959,6 +959,7 @@
       start_to_see: {
         "1": "Los textos no mentían. La naturaleza cobró lo suyo.",
         "3": "...Pero.$(br2)Pero por un instante fugaz, esa parte de mí... $(italic)vio/$... $(l:greatwork/the_work)$(thing)algo/$. ¿Un lugar, un diseño, tal vez? (Tales distinciones no parecían importar frente a... eso.)$(p)Y una... una membrana-barrera-piel-borde, separándome de un reino de pensamiento-flujo-luz-energía pura. Recuerdo... vi-pensé-recordé-sentí... la barrera difuminándose en sus bordes, apenas.$(p)Quería $(italic)atravesar./$",
+        "4": "No debería. $(italic)Sé/$ que no debería. Es peligroso. Es demasiado peligroso. La fuerza necesaria... Tendría que acercarme a un suspiro de la mismísima Muerte con un $(italic)único golpe/$.$(br2)Pero estoy... tan... $(italic)cerca/$.$(p)$(italic)Esto/$ es la culminación de mi arte. Esta es la $(#54398a)Iluminación/$ que he estado buscando. $(br2)Quiero más. Necesito verlo de nuevo. $(italic)Lo veré/$.$(p)¿Qué es mi mente mortal frente a la gloria inmortal?",
       },
       "101": {
         "4.header": "Un ejemplo",
@@ -981,6 +982,9 @@
         example: {
           "10.header": "Ejemplo 1",
         },
+      },
+      hexcasting: {
+        "crafting.desc": "$(italic)En nuestro campo tenemos un dicho: “La magia no es”. No es que funciona “sin más”, no es que responde a tus pensamientos, no es posible lanzar bolas de fuego o hacer brotar una cena rostizada a partir de la nada o convertir a un puñado de matones en ranas y caracoles./$",
       },
     },
     subtitles: {
