@@ -56,6 +56,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.material.Fluid
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition
+import net.minecraft.world.phys.Vec2
 import net.minecraft.world.phys.Vec3
 import java.util.function.BiFunction
 import java.util.function.Supplier
@@ -88,12 +89,14 @@ internal class DummyXplatAbstractions: IXplatAbstractions {
     override fun setAltiora(target: Player, altiora: AltioraAbility?) = error("Found use of DummyXplatAbstractions.")
     override fun setStaffcastImage(target: ServerPlayer, image: CastingImage?) = error("Found use of DummyXplatAbstractions.")
     override fun setPatterns(target: ServerPlayer, patterns: List<ResolvedPattern?>) = error("Found use of DummyXplatAbstractions.")
+    override fun setPanOffset(target: ServerPlayer, panOffset: Vec2) = error("Found use of DummyXplatAbstractions.")
     override fun getFlight(player: ServerPlayer): FlightAbility? = error("Found use of DummyXplatAbstractions.")
     override fun getAltiora(player: Player): AltioraAbility? = error("Found use of DummyXplatAbstractions.")
     override fun getPigment(player: Player): FrozenPigment = error("Found use of DummyXplatAbstractions.")
     override fun getSentinel(player: Player): Sentinel? = error("Found use of DummyXplatAbstractions.")
     override fun getStaffcastVM(player: ServerPlayer, hand: InteractionHand): CastingVM = error("Found use of DummyXplatAbstractions.")
     override fun getPatternsSavedInUi(player: ServerPlayer): List<ResolvedPattern> = error("Found use of DummyXplatAbstractions.")
+    override fun getPanOffset(player: ServerPlayer): Vec2? = error("Found use of DummyXplatAbstractions.")
     override fun clearCastingData(player: ServerPlayer) = error("Found use of DummyXplatAbstractions.")
     override fun findMediaHolder(stack: ItemStack): ADMediaHolder? = error("Found use of DummyXplatAbstractions.")
     override fun findDataHolder(stack: ItemStack): ADIotaHolder? = error("Found use of DummyXplatAbstractions.")

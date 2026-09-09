@@ -9,6 +9,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Updated to Minecraft 1.21.1 ([#985](https://github.com/FallingColors/HexMod/pull/985)) @SuperKnux @slava110
+- Added Neural Fiber, a new endgame material harvested from villagers using a modified mindflaying process ([#1296](https://github.com/FallingColors/HexMod/pull/1296)) @Robotgiggle @Falkory220
+- Added Grand Caster Robes, a hex-based armor set with a variety of abilities ([#1296](https://github.com/FallingColors/HexMod/pull/1296)) @Robotgiggle @Falkory220
+  - Provides defense values midway between iron and diamond
+  - Provides the scrying lens effect, increased ambit, and a casting cost discount
+  - Allows you to pan the hex grid to fit in significantly more patterns
 - Added Simulate, which causes the next pattern drawn to be simulated (to check for mishaps) rather than executed ([#1194](https://github.com/FallingColors/HexMod/pull/1194)) @Robotgiggle
 - Added the `hex_unbreakable` tag for blocks that should be immune to Break Block regardless of the configured mining tier ([#1186](https://github.com/FallingColors/HexMod/pull/1186)) @Robotgiggle @slava110
 - Added a new Ancient Cypher hex that impulses nearby items towards the caster ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid

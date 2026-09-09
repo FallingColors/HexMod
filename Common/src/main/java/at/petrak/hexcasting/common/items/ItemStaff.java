@@ -46,13 +46,14 @@ public class ItemStaff extends Item {
         if (!world.isClientSide() && player instanceof ServerPlayer serverPlayer) {
             var vm = IXplatAbstractions.INSTANCE.getStaffcastVM(serverPlayer, hand);
             var patterns = IXplatAbstractions.INSTANCE.getPatternsSavedInUi(serverPlayer);
+            var panOffset = IXplatAbstractions.INSTANCE.getPanOffset(serverPlayer);
 
             @Nullable Iota ravenmind = vm.getImage().ravenmind().orElse(null);
 
 
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(serverPlayer,
                 new MsgOpenSpellGuiS2C(hand, patterns, vm.getImage().getStack(), ravenmind,
-                    0)); // TODO: Fix!
+                    0, panOffset)); // TODO: Fix!
         }
 
         player.awardStat(Stats.ITEM_USED.get(this));

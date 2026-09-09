@@ -1,0 +1,33 @@
+{
+  "name": "hexcasting.entry.caster_robes",
+  "category": "hexcasting:greatwork",
+  "icon": "hexcasting:robes/hood",
+  "advancement": "hexcasting:enlightenment",
+  "entry_color": "54398a",
+  "sortnum": 7,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.caster_robes.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.caster_robes.2"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:robes/hood",
+      "recipe2": "hexcasting:robes/tunic"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:robes/legs",
+      "recipe2": "hexcasting:robes/boots"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.caster_robes.3.header",
+      "text": "hexcasting.page.caster_robes.3"
+    }
+  ]
+}

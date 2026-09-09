@@ -4,6 +4,7 @@ import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.client.Keybinds;
 import at.petrak.hexcasting.client.RegisterClientStuff;
 import at.petrak.hexcasting.client.ShiftScrollListener;
+import at.petrak.hexcasting.client.gui.GuiSpellcasting;
 import at.petrak.hexcasting.client.gui.PatternTooltipComponent;
 import at.petrak.hexcasting.client.model.AltioraLayer;
 import at.petrak.hexcasting.client.model.HexModelLayers;

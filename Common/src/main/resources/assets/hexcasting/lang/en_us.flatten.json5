@@ -229,7 +229,8 @@
   "effect.hexcasting": {
     enlarge_grid: "Clarity",
     shrink_grid: "Clouding",
-    crystallized: "Crystallized"
+    crystallized: "Crystallized",
+    dissociation: "Dissociation",
   },
   
   "item.minecraft.potion.effect": {
@@ -284,6 +285,7 @@
   "key.hexcasting": {
     "spellbook_prev": "Previous Spellbook Page",
     "spellbook_next": "Next Spellbook Page",
+    "grid_pan_override": "Grid Pan Override",
   },
   
   "tag.hexcasting": {
@@ -374,6 +376,10 @@
         clickingTogglesDrawing: {
           "": "Clicking Toggles Drawing",
           "@Tooltip": "Whether you click to start and stop drawing instead of clicking and dragging to draw",
+        },
+        gridPanMouseButton: {
+          "": "Grid Pan Mouse Button",
+          "@Tooltip": "Which mouse button is used to pan the hex grid (once that ability is unlocked)",
         },
         advancedTooltipsShowsIotaNBT: {
           "": "Advanced Tooltips Shows Iota NBT",
@@ -534,6 +540,10 @@
       "": "%s's mind was subsumed into energy",
       player: "%s's mind was subsumed into energy while fighting %s",
     },
+    forgot_to_breathe: {
+      "": "%s forgot to breathe",
+      player: "%s forgot to breathe while fighting %s",
+    }
   },
   
   "command.hexcasting": {
@@ -1329,6 +1339,7 @@
       akashiclib: "Akashic Libraries",
       quenching_allays: "Quenching Allays",
       neural_fiber: "Neural Inversion",
+      caster_robes: "Caster's Garments",
       fanciful_staves: "Fanciful Staves",
       
       // and the actions
@@ -1794,7 +1805,14 @@
         "2": "Viscera suffused with micro-fractal splinters of cognition, living and thinking and-- USELESS! Nothing but a mass of meat and _media, in the end.$(br2)But the nerves... the nerves become conduits, skeins of thought reified in shimmering fiber. These I can USE. Free them from the flesh and they are $(o)mine/$.$(br2)I could weave them into myself -- more $(o)space/$ to think in -- no. I am not being rational.",
         "3": "The process itself is simple: apply $(l:items/potions)Clarity/$ to render the body receptive, cast $(l:greatwork/brainsweeping)$(action)Flay Mind/$ with the $(l:patterns/basics#hexcasting:entity_pos/eye)$(action)subject’s own head/$ as the destination, then dissect to harvest the fiber. Any villager will do, though a more developed mind will provide a higher yield.$(br2)I wonder... does it understand, even excised? Does it feel?",
       },
-      
+
+      caster_robes: {
+        "1": "With $(l:greatwork/neural_fiber)Neural Fiber/$, I finally have the key to augmenting my own skill! Robes woven from the fibers streamline the _media around me -- I can cast further, cheaper, $(o)greater/$.$(br2)But I would not settle for that alone. With these robes I can think $(o)outside/$ myself, mind shared between thinking flesh and thinking fabric, threads woven as thoughts are woven as Nature is-- ENOUGH.",
+        "2": "So long as I wear the full set of robes, I gain the ability to $(o)pan/$ the hex grid with right-click. This vastly expands the number of patterns I can draw at once, though not without risks. Drifting further into this mental space pulls my awareness away from my body -- go too far, and I might even forget to breathe.$(br2)The nature of the robes also renders them receptive to $(l:patterns/spells/cyclevariant)$(action)Caster's Glamour/$, should I wish to style myself differently.",
+        "3": "Should I wish to pan the grid using something other than right-click, I can change which mouse button is required using the client config.$(br2)I can also hold $(k:hexcasting.grid_pan_override) to make $(o)all/$ mouse buttons work to pan the grid rather than drawing patterns.",
+        "3.header": "Alternate Controls",
+      },
+
       "fanciful_staves.1": "It is only right as I shed the husk of ignorance I replace my tools, my palm-polished staves. These new constructions of mine have no additional properties -- but they are so glorious, oh so Glorious... They match the radiance winking at the corners of my sight.",
       
       // Patterns

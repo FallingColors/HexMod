@@ -1,13 +1,9 @@
 package at.petrak.hexcasting.mixin;
 
-import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexMobEffects;
-import at.petrak.hexcasting.common.misc.HexMobEffect;
-import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import at.petrak.hexcasting.common.effects.DissociationEffect;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,6 +31,15 @@ public abstract class MixinLivingEntity {
             }
             self.spawnAtLocation(new ItemStack(HexItems.NEURAL_FIBER.get(), fibers + extra));
             self.spawnAtLocation(new ItemStack(HexItems.AMETHYST_DUST.get(), dust + extra));
+        }
+    }
+
+    @Inject(method = "increaseAirSupply", at = @At("HEAD"), cancellable = true)
+    private void forgetToBreathe(int i, CallbackInfoReturnable<Integer> cir) {
+        var self = (LivingEntity) (Object) this;
+        var inst = self.getEffect(HexMobEffects.DISSOCIATION);
+        if (inst != null && DissociationEffect.shouldPreventBreathing(inst.getDuration(), inst.getAmplifier())) {
+            cir.setReturnValue(i);
         }
     }
 }

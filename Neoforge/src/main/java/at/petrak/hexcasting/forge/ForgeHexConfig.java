@@ -86,6 +86,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ModConfigSpec.BooleanValue invertAbacusScrollDirection;
         private static ModConfigSpec.DoubleValue gridSnapThreshold;
         private static ModConfigSpec.BooleanValue clickingTogglesDrawing;
+        private static ModConfigSpec.IntValue gridPanMouseButton;
         private static ModConfigSpec.BooleanValue disableInworldScrolling;
         private static ModConfigSpec.BooleanValue advancedTooltipsShowsIotaNBT;
         private static ModConfigSpec.BooleanValue staticActiveSlates;
@@ -111,6 +112,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             clickingTogglesDrawing = builder.comment(
                     "Whether you click to start and stop drawing instead of clicking and dragging")
                 .define("clickingTogglesDrawing", DEFAULT_CLICKING_TOGGLES_DRAWING);
+            gridPanMouseButton = builder.comment(
+                    "Which mouse button is used to pan the hex grid (once that ability is unlocked)")
+                .defineInRange("gridPanMouseButton", DEFAULT_GRID_PAN_MOUSE_BUTTON, 1, Integer.MAX_VALUE);
             advancedTooltipsShowsIotaNBT = builder.comment(
                     "Whether enabling advanced tooltips (F3+H) should display the full NBT of iotas stored in items " +
                         "like foci and spellbooks")
@@ -149,6 +153,9 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         public boolean clickingTogglesDrawing() {
             return clickingTogglesDrawing.get();
         }
+
+        @Override
+        public int gridPanMouseButton() { return gridPanMouseButton.get(); }
 
         @Override
         public boolean advancedTooltipsShowsIotaNBT() { 
