@@ -28,7 +28,7 @@ import java.util.UUID;
 public class EntityIota extends Iota {
     private final UUID entityId;
     @Nullable
-    private final Component entityName;
+    private Component entityName;
     private boolean isPlayer;
 
     public EntityIota(@NotNull Entity e) {
@@ -115,6 +115,8 @@ public class EntityIota extends Iota {
             var entity = iota.getEntity(level);
             // update isPlayer so older non-player entity iotas are not protected
             iota.isPlayer = (entity instanceof Player);
+            if (iota.entityName == null)
+                iota.entityName = getEntityNameWithInline(entity);
             return entity != null;
         }
 

@@ -16,7 +16,8 @@
     "accessor.AccessorLivingEntity",
     "accessor.AccessorLootTable",
     "accessor.AccessorUseOnContext",
-    "accessor.AccessorVillager"
+    "accessor.AccessorVillager",
+    "datafixer.MixinItemStackComponentizationFix"
   ],
   "client": [
     "accessor.client.AccessorBlockEntityRenderDispatcher",
