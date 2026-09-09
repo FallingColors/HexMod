@@ -19,6 +19,11 @@
       "item": "hexcasting:neural_fiber",
       "text": "hexcasting.page.neural_fiber.3",
       "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "hexcasting:neural_mesh",
+      "text": "hexcasting.page.neural_fiber.mesh"
     }
   ]
 }

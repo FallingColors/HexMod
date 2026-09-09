@@ -1,10 +1,7 @@
 package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
-import at.petrak.hexcasting.common.blocks.BlockConjured;
-import at.petrak.hexcasting.common.blocks.BlockConjuredLight;
-import at.petrak.hexcasting.common.blocks.BlockFlammable;
-import at.petrak.hexcasting.common.blocks.BlockQuenchedAllay;
+import at.petrak.hexcasting.common.blocks.*;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicLigature;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord;
@@ -145,10 +142,20 @@ public class HexBlocks {
                 .isViewBlocking(HexBlocks::never)),
         new Item.Properties());
 
-    // "no" item because we add it manually
+    // "no" item because we add them manually in HexItems
+    // these must be registered before anything that references HexItems to avoid initializer errors
     public static final Supplier<BlockSlate> SLATE = blockNoItem("slate", () ->
         new BlockSlate(slateish()
             .pushReaction(PushReaction.DESTROY)));
+    public static final Supplier<BlockNeuralMesh> NEURAL_MESH = blockNoItem("neural_mesh", () ->
+        new BlockNeuralMesh(BlockBehaviour.Properties.of()
+            .noCollission()
+            .randomTicks()
+            .strength(0.2F)
+            .sound(SoundType.CANDLE)
+            .pushReaction(PushReaction.DESTROY)
+        )
+    );
 
     public static final Supplier<BlockEmptyImpetus> IMPETUS_EMPTY = blockItem("impetus/empty", () ->
         new BlockEmptyImpetus(slateish()
@@ -196,6 +203,7 @@ public class HexBlocks {
         new BlockQuenchedAllay(quenched()), 
         HexItems.props().rarity(Rarity.UNCOMMON)
     );
+
 
     // Decoration?!
     public static final Supplier<BlockQuenchedAllay> QUENCHED_ALLAY_TILES = blockItem("quenched_allay_tiles", () -> new BlockQuenchedAllay(quenched()));

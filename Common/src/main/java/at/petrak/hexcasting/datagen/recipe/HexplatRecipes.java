@@ -102,6 +102,7 @@ public class HexplatRecipes extends RecipeProvider {
         staffRecipe(recipes, HexItems.STAFF_EDIFIED.get(), HexBlocks.EDIFIED_PLANKS.get().asItem());
         staffRecipe(recipes, HexItems.STAFF_QUENCHED.get(), HexItems.QUENCHED_SHARD.get());
         staffRecipe(recipes, HexItems.STAFF_MINDSPLICE.get(), Ingredient.of(HexTags.Items.MINDFLAYED_CIRCLE_COMPONENTS));
+        staffRecipe(recipes, HexItems.STAFF_NEURAL.get(), HexItems.NEURAL_MESH.get());
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.TOOLS, HexItems.THOUGHT_KNOT.get())
             .requires(HexItems.AMETHYST_DUST.get())
@@ -260,6 +261,9 @@ public class HexplatRecipes extends RecipeProvider {
             .pattern(" S ")
             .pattern(" S ")
             .unlockedBy("has_item", hasItem(Items.AMETHYST_SHARD)).save(recipes);
+
+        ring(RecipeCategory.REDSTONE, HexItems.NEURAL_MESH.get(), 1, HexItems.NEURAL_FIBER.get(), Blocks.BONE_BLOCK)
+            .unlockedBy("has_item", hasItem(HexItems.NEURAL_FIBER.get())).save(recipes);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, HexItems.ROBES_HOOD.get())
             .define('F', HexItems.NEURAL_FIBER.get())

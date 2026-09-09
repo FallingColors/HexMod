@@ -72,6 +72,7 @@ public class HexItems {
     public static final Supplier<ItemStaff> STAFF_QUENCHED = make("staff/quenched", () -> new ItemStaff(unstackable().rarity(Rarity.UNCOMMON)));
     // mindsplice staffaratus
     public static final Supplier<ItemStaff> STAFF_MINDSPLICE = make("staff/mindsplice", () -> new ItemStaff(unstackable().rarity(Rarity.UNCOMMON)));
+    public static final Supplier<ItemStaff> STAFF_NEURAL = make("staff/neural", () -> new ItemStaff(unstackable().rarity(Rarity.UNCOMMON)));
 
     public static final Supplier<ItemLens> SCRYING_LENS = make("lens", () -> new ItemLens(
             IXplatAbstractions.INSTANCE.addEquipSlotFabric(EquipmentSlot.HEAD)
@@ -103,6 +104,12 @@ public class HexItems {
     );
 
     public static final Supplier<Item> NEURAL_FIBER = make("neural_fiber", () -> new Item(props().rarity(Rarity.UNCOMMON)));
+
+    public static final Supplier<BlockItem> NEURAL_MESH = make("neural_mesh", () ->
+        new BlockItem(HexBlocks.NEURAL_MESH.get(), props()
+            .rarity(Rarity.UNCOMMON)
+        )
+    );
 
     public static final Supplier<ItemRobes> ROBES_HOOD = make("robes/hood", () ->
         new ItemRobes(ArmorItem.Type.HELMET, unstackable()

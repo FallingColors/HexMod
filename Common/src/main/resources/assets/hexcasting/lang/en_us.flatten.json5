@@ -18,6 +18,7 @@
       edified: "Edified Staff",
       quenched: "Quenched Shard Staff",
       mindsplice: "Mindsplice Staff",
+      neural: "Neural Staff",
     },
     
     amethyst_dust: "Amethyst Dust",
@@ -63,6 +64,7 @@
     jeweler_hammer: "Jeweler's Hammer",
     sub_sandwich: "Submarine Sandwich",
     neural_fiber: "Neural Fiber",
+    neural_mesh: "Neural Mesh",
 
     robes: {
       hood: "Grand Caster Hood",
@@ -135,6 +137,8 @@
   "block.hexcasting": {
     conjured_light: "Conjured Light",
     conjured_block: "Conjured Block",
+
+    neural_mesh: "Neural Mesh",
 
     directrix: {
       empty: "Empty Directrix",
@@ -1804,6 +1808,7 @@
         "1": "Mind and body-- I can bridge the gap! $(l:greatwork/brainsweeping)$(action)Flay Mind/$ was built to sever but I understand it now, I can TWIST it, force the mind not $(o)out/$ but $(o)in/$, so long as the flesh is made ready to accept it -- $(l:items/potions)Clarity/$ should do the job. The mind can be folded into itself, crystallized in flesh and bone and nerve, until there is only ONE, mind-and-body superimposed in a single hybrid substrate.",
         "2": "Viscera suffused with micro-fractal splinters of cognition, living and thinking and-- USELESS! Nothing but a mass of meat and _media, in the end.$(br2)But the nerves... the nerves become conduits, skeins of thought reified in shimmering fiber. These I can USE. Free them from the flesh and they are $(o)mine/$.$(br2)I could weave them into myself -- more $(o)space/$ to think in -- no. I am not being rational.",
         "3": "The process itself is simple: apply $(l:items/potions)Clarity/$ to render the body receptive, cast $(l:greatwork/brainsweeping)$(action)Flay Mind/$ with the $(l:patterns/basics#hexcasting:entity_pos/eye)$(action)subject’s own head/$ as the destination, then dissect to harvest the fiber. Any villager will do, though a more developed mind will provide a higher yield.$(br2)I wonder... does it understand, even excised? Does it feel?",
+        mesh: "The fibers have a natural affinity for bone. Woven into such a frame, I can affix them to $(thing)Budding Amethyst/$ to provide additional paths for the flow of media, accelerating growth. However, covering too many faces seems to reduce overall production efficiency.",
       },
 
       caster_robes: {

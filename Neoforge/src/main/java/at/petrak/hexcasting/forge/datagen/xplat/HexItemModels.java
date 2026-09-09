@@ -81,6 +81,8 @@ public class HexItemModels extends PaucalItemModelProvider {
             .translation(-2.5f, 0f, -8f)
             .scale(0.4f);
 
+        simpleItem(HexItems.NEURAL_MESH.get());
+
         buildRobes(HexItems.ROBES_HOOD.get(), "hood", HexItems.ROBES_HOOD.get().numVariants());
         buildRobes(HexItems.ROBES_TUNIC.get(), "tunic", HexItems.ROBES_HOOD.get().numVariants());
         buildRobes(HexItems.ROBES_LEGS.get(), "legs", HexItems.ROBES_HOOD.get().numVariants());
@@ -104,6 +106,7 @@ public class HexItemModels extends PaucalItemModelProvider {
         buildStaff(HexItems.STAFF_BAMBOO.get(), "bamboo");
         buildStaff(HexItems.STAFF_EDIFIED.get(), "edified");
         buildStaff(HexItems.STAFF_MINDSPLICE.get(), "mindsplice");
+        buildStaff(HexItems.STAFF_NEURAL.get(), "neural");
 
         // again, doesn't like paths with slashes in them, so we do it manually
         buildFourVariantGaslight("item/staff/quenched", "item/staff/quenched", (name, path) ->
