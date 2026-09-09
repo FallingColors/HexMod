@@ -59,6 +59,7 @@ class GuiSpellcasting constructor(
     private val usedSpots: MutableSet<HexCoord> = HashSet()
 
     private var panningAllowed = false
+    private var forcePanning = false
     private var prevPanOffset = panOffset
     private val bgLocation = HexAPI.modLoc("textures/gui/casting_bg.png")
 
@@ -90,6 +91,10 @@ class GuiSpellcasting constructor(
             panOffset = Vec2.ZERO
             syncPanOffset()
         }
+    }
+
+    fun matchesPanInput(pButton: Int): Boolean {
+        return forcePanning || pButton == HexConfig.client().gridPanMouseButton()
     }
 
     fun recvServerUpdate(info: ExecutionClientView, index: Int) {
@@ -181,7 +186,7 @@ class GuiSpellcasting constructor(
         if (super.mouseClicked(mxOut, myOut, pButton)) {
             return true
         }
-        if (pButton == HexConfig.client().gridPanMouseButton() && this.panningAllowed)
+        if (matchesPanInput(pButton) && this.panningAllowed)
             return false
         if (HexConfig.client().clickingTogglesDrawing()) {
             return if (this.drawState is PatternDrawState.BetweenPatterns)
@@ -227,10 +232,8 @@ class GuiSpellcasting constructor(
     override fun mouseDragged(mxOut: Double, myOut: Double, pButton: Int, pDragX: Double, pDragY: Double): Boolean {
         if (super.mouseDragged(mxOut, myOut, pButton, pDragX, pDragY))
             return true
-        if (pButton == HexConfig.client().gridPanMouseButton()
-        && this.drawState is PatternDrawState.BetweenPatterns
-        && this.panningAllowed
-        ) {
+        if (matchesPanInput(pButton) && this.panningAllowed
+        && this.drawState is PatternDrawState.BetweenPatterns) {
             return panGrid(pDragX, pDragY)
         }
         if (HexConfig.client().clickingTogglesDrawing())
@@ -320,7 +323,7 @@ class GuiSpellcasting constructor(
         }
         if (HexConfig.client().clickingTogglesDrawing())
             return false
-        if (pButton == HexConfig.client().gridPanMouseButton() && this.panningAllowed)
+        if (matchesPanInput(pButton) && this.panningAllowed)
             return false
         return drawEnd()
     }
@@ -386,6 +389,18 @@ class GuiSpellcasting constructor(
             return true
         } else if (Keybinds.spellbookNext.matches(key, scancode)) {
             ShiftScrollListener.onScroll(-1.0, false, false)
+            return true
+        } else if (Keybinds.gridPanOverride.matches(key, scancode)) {
+            forcePanning = true
+            return true
+        }
+
+        return false
+    }
+
+    override fun keyReleased(key: Int, scancode: Int, modifiers: Int): Boolean {
+        if (Keybinds.gridPanOverride.matches(key, scancode)) {
+            forcePanning = false
             return true
         }
 

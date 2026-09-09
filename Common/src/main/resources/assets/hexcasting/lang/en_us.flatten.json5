@@ -285,6 +285,7 @@
   "key.hexcasting": {
     "spellbook_prev": "Previous Spellbook Page",
     "spellbook_next": "Next Spellbook Page",
+    "grid_pan_override": "Grid Pan Override",
   },
   
   "tag.hexcasting": {
@@ -1807,7 +1808,9 @@
 
       caster_robes: {
         "1": "With $(l:greatwork/neural_fiber)Neural Fiber/$, I finally have the key to augmenting my own skill! Robes woven from the fibers streamline the _media around me -- I can cast further, cheaper, $(o)greater/$.$(br2)But I would not settle for that alone. With these robes I can think $(o)outside/$ myself, mind shared between thinking flesh and thinking fabric, threads woven as thoughts are woven as Nature is-- ENOUGH.",
-        "2": "So long as I wear the full set of robes, I gain the ability to $(o)pan/$ the hex grid with right-click. This vastly expands the number of patterns I can draw at once, though not without risks. Drifting further into this mental space pulls my awareness away from my body -- go too far, and I might even forget to breathe.$(br2)The nature of the robes also renders them receptive to $(l:patterns/spells/cyclevariant)$(action)Caster's Glamour/$, should I wish to style myself differently.",//499
+        "2": "So long as I wear the full set of robes, I gain the ability to $(o)pan/$ the hex grid with right-click. This vastly expands the number of patterns I can draw at once, though not without risks. Drifting further into this mental space pulls my awareness away from my body -- go too far, and I might even forget to breathe.$(br2)The nature of the robes also renders them receptive to $(l:patterns/spells/cyclevariant)$(action)Caster's Glamour/$, should I wish to style myself differently.",
+        "3": "Should I wish to pan the grid using something other than right-click, I can change which mouse button is required using the client config.$(br2)I can also hold $(k:hexcasting.grid_pan_override) to make $(o)all/$ mouse buttons work to pan the grid rather than drawing patterns.",
+        "3.header": "Alternate Controls",
       },
 
       "fanciful_staves.1": "It is only right as I shed the husk of ignorance I replace my tools, my palm-polished staves. These new constructions of mine have no additional properties -- but they are so glorious, oh so Glorious... They match the radiance winking at the corners of my sight.",

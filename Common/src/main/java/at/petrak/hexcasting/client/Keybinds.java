@@ -20,7 +20,13 @@ public class Keybinds {
             CATEGORY
     );
 
-    public static List<KeyMapping> ALL_BINDS = List.of(spellbookPrev, spellbookNext);
+    public static KeyMapping gridPanOverride = new KeyMapping(
+            "key.hexcasting.grid_pan_override",
+            InputConstants.UNKNOWN.getValue(),
+            CATEGORY
+    );
+
+    public static List<KeyMapping> ALL_BINDS = List.of(spellbookPrev, spellbookNext, gridPanOverride);
 
     public static void clientTickEnd() {
         // because of how mouse scrolling works (scrolling upward moves the page down), a positive

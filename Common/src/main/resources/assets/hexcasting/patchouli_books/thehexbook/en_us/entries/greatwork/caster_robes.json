@@ -23,6 +23,11 @@
       "type": "patchouli:crafting",
       "recipe": "hexcasting:robes/legs",
       "recipe2": "hexcasting:robes/boots"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.caster_robes.3.header",
+      "text": "hexcasting.page.caster_robes.3"
     }
   ]
 }
