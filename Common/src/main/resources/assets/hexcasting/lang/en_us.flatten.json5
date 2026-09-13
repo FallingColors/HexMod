@@ -1065,7 +1065,7 @@
       
       wrong_dimension: "cannot see %s from %s",
       entity_too_far: "%s is out of range",
-      entity_not_found: "%s was not found, either dead or unloaded",
+      entity_not_found: "%s could not be found in the world",
       immune_entity: "cannot alter %s",
       eval_too_much: "Evaluated too many patterns",
       no_item: "needs %s but got nothing",
@@ -1556,7 +1556,7 @@
         true_name: "I attempted to $(l:patterns/readwrite#hexcasting:write)$(action)save a reference/$ to another player to a permanent medium.$(br2)Causes black sparks, and robs me of my sight for approximately one minute.",
 
         "entity_not_found.title": "Entity Not Found",
-        entity_not_found: "I attempted to affect an entity that doesn't exist. Two cases for this; one is if the entity is simply dead. The other, and more peculiar to me, is if it is unable to be \"observed\" from afar.$(br2)Causes brown sparks, and causes me to feel sick for a moment, as if I had stood up too fast.",
+        entity_not_found: "I attempted to affect an entity that doesn't exist. This can happen if the entity is simply dead, or if it is unable to be \"observed\" from afar.$(br2)Causes brown sparks, and causes me to feel sick for a moment, as if I had stood up too fast.",
 
         "disabled.title": "Disallowed Action",
         disabled: "I tried to cast an action that has been disallowed by a server administrator.$(br2)Causes black sparks.",
