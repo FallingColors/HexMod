@@ -10,6 +10,7 @@ import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.misc.PatternTooltip;
 import at.petrak.hexcasting.interop.inline.InlinePatternData;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -36,11 +37,11 @@ import java.util.Optional;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 /**
- * TAG_OP_ID and TAG_PATTERN: "Ancient Scroll of %s" (per-world pattern preloaded)
+ * ACTION and PATTERN components: "Ancient Scroll of %s" (per-world pattern preloaded)
  * <br>
- * TAG_OP_ID: "Ancient Scroll of %s" (per-world pattern loaded on inv tick)
+ * Only ACTION component: "Ancient Scroll of %s" (per-world pattern loaded on inv tick)
  * <br>
- * TAG_PATTERN: "Scroll" (custom)
+ * Only PATTERN component: "Scroll" (custom)
  * <br>
  * (none): "Empty Scroll"
  */
@@ -146,21 +147,21 @@ public class ItemScroll extends Item implements IotaHolderItem {
 
     @Override
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        // the needs_purchase tag is used so you can't see the pattern on scrolls sold by a wandering trader
-        // once you put the scroll into your inventory, this removes the tag to reveal the pattern
+        // the NEEDS_PURCHASE component is used so you can't see the pattern on scrolls sold by a wandering trader
+        // once you put the scroll into your inventory, this removes the component to reveal the pattern
         if(pStack.has(HexDataComponents.NEEDS_PURCHASE.get()))
             pStack.remove(HexDataComponents.NEEDS_PURCHASE.get());
-        // if op_id is set but there's no stored pattern, attempt to load the pattern on inv tick
+        // if ACTION is present but PATTERN is not present, attempt to load the pattern on inv tick
         if (pStack.has(HexDataComponents.ACTION.get()) && !pStack.has(HexDataComponents.PATTERN.get()) && pEntity.getServer() != null) {
             var action = pStack.get(HexDataComponents.ACTION.get());
-            if (action == null) {
-                // if the provided op_id is invalid, remove it so we don't keep trying every tick
+            if (!IXplatAbstractions.INSTANCE.getActionRegistry().containsKey(action)) {
+                // if the specified Action doesn't actually exist, remove the component so we don't keep trying every tick
                 pStack.remove(HexDataComponents.ACTION.get());
                 return;
             }
             var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(action, pEntity.getServer().overworld());
             if (pat == null) {
-                // if pat is null, the per-world order hasn't been registered; remove the op_id and warn the player
+                // if pat is null, the per-world order hasn't been registered; remove the ACTION component and warn the player
                 pStack.set(HexDataComponents.RECALC_WARNING.get(), action);
                 pStack.remove(HexDataComponents.ACTION.get());
                 return;
@@ -175,7 +176,7 @@ public class ItemScroll extends Item implements IotaHolderItem {
             var needsPurchase = Component.translatable("hexcasting.tooltip.scroll.needs_purchase");
             tooltipComponents.add(needsPurchase.withStyle(ChatFormatting.GRAY));
         } else if (stack.has(HexDataComponents.RECALC_WARNING.get())) {
-            var spellName = Component.translatable("hexcasting.action." + stack.get(HexDataComponents.RECALC_WARNING.get()));
+            var spellName = Component.translatable("hexcasting.action." + stack.get(HexDataComponents.RECALC_WARNING.get()).location());
             var line1 = Component.translatable("hexcasting.tooltip.scroll.recalc_warning.line1", spellName);
             var line2 = Component.translatable("hexcasting.tooltip.scroll.recalc_warning.line2");
             tooltipComponents.add(line1.withStyle(ChatFormatting.RED));

@@ -195,7 +195,7 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public @Nullable FrozenPigment setPigment(@Nullable FrozenPigment pigment) {
+    public FrozenPigment setPigment(FrozenPigment pigment) {
         var impetus = this.getImpetus();
         if (impetus == null)
             return null;

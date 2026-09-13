@@ -96,9 +96,6 @@ public class ItemCreativeUnlocker extends Item implements MediaHolderItem {
         return emphasized;
     }
 
-    public static final String TAG_EXTRACTIONS = "extractions";
-    public static final String TAG_INSERTIONS = "insertions";
-
     public ItemCreativeUnlocker(Properties properties) {
         super(properties);
     }
