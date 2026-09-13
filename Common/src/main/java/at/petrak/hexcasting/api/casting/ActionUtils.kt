@@ -4,6 +4,7 @@ package at.petrak.hexcasting.api.casting
 
 import at.petrak.hexcasting.api.casting.iota.*
 import at.petrak.hexcasting.api.casting.math.HexPattern
+import at.petrak.hexcasting.api.casting.mishaps.MishapEntityNotFound
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.utils.TreeList
@@ -38,7 +39,7 @@ fun List<Iota>.getDouble(idx: Int, argc: Int = 0): Double {
 fun List<Iota>.getEntity(level: ServerLevel, idx: Int, argc: Int = 0): Entity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        return x.getEntity(level)
+        return x.getEntity(level) ?: throw MishapEntityNotFound.of(x)
     } else {
         throw MishapInvalidIota.ofType(x, if (argc == 0) idx else argc - (idx + 1), "entity")
     }

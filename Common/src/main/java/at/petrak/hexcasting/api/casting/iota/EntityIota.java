@@ -113,12 +113,6 @@ public class EntityIota extends Iota {
                 );
 
         @Override
-        public boolean validate(EntityIota iota, ServerLevel level) {
-            var entity = iota.getEntity(level);
-            return entity != null;
-        }
-
-        @Override
         public MapCodec<EntityIota> codec() {
             return CODEC;
         }
