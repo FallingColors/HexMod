@@ -22,6 +22,7 @@ import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.storage.LevelResource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -53,6 +54,11 @@ public class EntityIota extends Iota {
 
     public @Nullable Component getEntityName() {
         return entityName;
+    }
+
+    public @Nullable String getRawName() {
+        if (entityName == null) return null;
+        return entityName.getString().split(":")[0];
     }
 
     public boolean uuidIsPlayer() {
@@ -102,7 +108,7 @@ public class EntityIota extends Iota {
         if (uuidStrings == null) return;
         for (String string : uuidStrings) {
             if (string.endsWith(".dat")) {
-                UUID playerId = UUID.fromString(string.substring(0, string.length() - 4));
+                UUID playerId = UUID.fromString(StringUtils.removeEnd(string, ".dat"));
                 playerUUIDs.add(playerId);
             }
         }
