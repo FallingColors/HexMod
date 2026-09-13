@@ -15,13 +15,17 @@ import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.component.ResolvableProfile;
+import net.minecraft.world.level.storage.LevelResource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,17 +33,15 @@ public class EntityIota extends Iota {
     private final UUID entityId;
     @Nullable
     private final Component entityName;
-    private boolean isPlayer;
 
     public EntityIota(@NotNull Entity e) {
-        this(e.getUUID(), getEntityNameWithInline(e), e instanceof Player);
+        this(e.getUUID(), getEntityNameWithInline(e));
     }
 
-    public EntityIota(UUID entityId, @Nullable Component entityName, boolean isPlayer) {
+    public EntityIota(UUID entityId, @Nullable Component entityName) {
         super(() -> HexIotaTypes.ENTITY.get());
         this.entityId = entityId;
         this.entityName = entityName;
-        this.isPlayer = isPlayer;
     }
 
     public UUID getEntityId() {
@@ -54,8 +56,10 @@ public class EntityIota extends Iota {
         return entityName;
     }
 
-    public boolean isPlayer() {
-        return isPlayer;
+    public boolean isPlayer(MinecraftServer server) {
+        Path playerDataDir = server.getWorldPath(LevelResource.PLAYER_DATA_DIR);
+        Path playerFile = playerDataDir.resolve(entityId.toString() + ".dat");
+        return Files.exists(playerFile);
     }
 
     @Override
@@ -99,22 +103,18 @@ public class EntityIota extends Iota {
         public static final MapCodec<EntityIota> CODEC = RecordCodecBuilder.mapCodec(inst ->
                 inst.group(
                         UUIDUtil.CODEC.fieldOf("entityId").forGetter(EntityIota::getEntityId),
-                        ComponentSerialization.CODEC.optionalFieldOf("entityName").forGetter(iota -> Optional.ofNullable(iota.getEntityName())),
-                        Codec.BOOL.fieldOf("isPlayer").orElse(true).forGetter(EntityIota::isPlayer)
-                ).apply(inst, (a, b, c) -> new EntityIota(a, b.orElse(null), c)));
+                        ComponentSerialization.CODEC.optionalFieldOf("entityName").forGetter(iota -> Optional.ofNullable(iota.getEntityName()))
+                ).apply(inst, (a, b) -> new EntityIota(a, b.orElse(null))));
         public static final StreamCodec<RegistryFriendlyByteBuf, EntityIota> STREAM_CODEC =
                 StreamCodec.composite(
                         UUIDUtil.STREAM_CODEC, EntityIota::getEntityId,
                         ByteBufCodecs.optional(ComponentSerialization.STREAM_CODEC), iota -> Optional.ofNullable(iota.getEntityName()),
-                        ByteBufCodecs.BOOL, EntityIota::isPlayer,
-                        (a, b, c) -> new EntityIota(a, b.orElse(null), c)
+                        (a, b) -> new EntityIota(a, b.orElse(null))
                 );
 
         @Override
         public boolean validate(EntityIota iota, ServerLevel level) {
             var entity = iota.getEntity(level);
-            // update isPlayer so older non-player entity iotas are not protected
-            iota.isPlayer = (entity instanceof Player);
             return entity != null;
         }
 

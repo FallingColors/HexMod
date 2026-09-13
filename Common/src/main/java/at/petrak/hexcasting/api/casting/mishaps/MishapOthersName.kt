@@ -46,7 +46,7 @@ class MishapOthersName(val confidant: Player?) : Mishap() {
 
                 if(datumToCheck is EntityIota) {
                     val ent = datumToCheck.getEntity(level)
-                    if (ent == null && datumToCheck.isPlayer)
+                    if (ent == null && datumToCheck.isPlayer(level.server))
                         return MishapOthersName(null)
                     if(ent is Player && ent != caster)
                         return MishapOthersName(ent)
