@@ -622,7 +622,7 @@ public abstract class CastingEnvironment {
 
     public abstract FrozenPigment getPigment();
 
-    public abstract @Nullable FrozenPigment setPigment(@Nullable FrozenPigment pigment);
+    public abstract FrozenPigment setPigment(FrozenPigment pigment);
 
     public abstract void produceParticles(ParticleSpray particles, FrozenPigment colorizer);
 

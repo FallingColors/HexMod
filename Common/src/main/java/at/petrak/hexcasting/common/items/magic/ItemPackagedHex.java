@@ -62,10 +62,9 @@ public abstract class ItemPackagedHex extends ItemMediaHolder implements HexHold
     }
 
     @Override
-    public void writeHex(ItemStack stack, List<Iota> program, @Nullable FrozenPigment pigment, long media) {
+    public void writeHex(ItemStack stack, List<Iota> program, FrozenPigment pigment, long media) {
         stack.set(HexDataComponents.HEX_HOLDER_PATTERNS.get(), program);
-        if (pigment != null)
-            stack.set(HexDataComponents.PIGMENT.get(), pigment);
+        stack.set(HexDataComponents.PIGMENT.get(), pigment);
 
         withMedia(stack, media, media);
     }
