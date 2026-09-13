@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.samsthenerd.inline.api.InlineAPI;
@@ -24,12 +23,12 @@ import net.minecraft.world.level.storage.LevelResource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 
 public class EntityIota extends Iota {
+    private static final HashSet<UUID> playerUUIDs = new HashSet<UUID>();
     private final UUID entityId;
     @Nullable
     private final Component entityName;
@@ -56,10 +55,8 @@ public class EntityIota extends Iota {
         return entityName;
     }
 
-    public boolean isPlayer(MinecraftServer server) {
-        Path playerDataDir = server.getWorldPath(LevelResource.PLAYER_DATA_DIR);
-        Path playerFile = playerDataDir.resolve(entityId.toString() + ".dat");
-        return Files.exists(playerFile);
+    public boolean uuidIsPlayer() {
+        return playerUUIDs.contains(entityId);
     }
 
     @Override
@@ -97,7 +94,23 @@ public class EntityIota extends Iota {
         return baseName.append(Component.literal(": ")).append(inlineEnt);
     }
 
+    // This finds anyone who has ever joined the server by reading the UUIDs from the playerdata folder
+    // We can't just use GameProfileCache because it only stores 1000 UUIDs and only keeps them for 30 days
+    public static void initPlayerUUIDs(MinecraftServer server) {
+        var playerDataDir = server.getWorldPath(LevelResource.PLAYER_DATA_DIR).toFile();
+        String[] uuidStrings = playerDataDir.list();
+        if (uuidStrings == null) return;
+        for (String string : uuidStrings) {
+            if (string.endsWith(".dat")) {
+                UUID playerId = UUID.fromString(string.substring(0, string.length() - 4));
+                playerUUIDs.add(playerId);
+            }
+        }
+    }
 
+    public static void addPlayerUUID(UUID newUUID) {
+        playerUUIDs.add(newUUID);
+    }
 
     public static IotaType<EntityIota> TYPE = new IotaType<>() {
         public static final MapCodec<EntityIota> CODEC = RecordCodecBuilder.mapCodec(inst ->
