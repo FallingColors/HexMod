@@ -86,7 +86,7 @@ fun List<Iota>.getBool(idx: Int, argc: Int = 0): Boolean {
 fun List<Iota>.getItemEntity(level: ServerLevel, idx: Int, argc: Int = 0): ItemEntity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = x.getEntity(level)
+        val e = x.getEntity(level) ?: throw MishapEntityNotFound.of(x)
         if (e is ItemEntity)
             return e
     }
@@ -96,7 +96,7 @@ fun List<Iota>.getItemEntity(level: ServerLevel, idx: Int, argc: Int = 0): ItemE
 fun List<Iota>.getPlayer(level: ServerLevel, idx: Int, argc: Int = 0): ServerPlayer {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = x.getEntity(level)
+        val e = x.getEntity(level) ?: throw MishapEntityNotFound.of(x)
         if (e is ServerPlayer)
             return e
     }
@@ -106,7 +106,7 @@ fun List<Iota>.getPlayer(level: ServerLevel, idx: Int, argc: Int = 0): ServerPla
 fun List<Iota>.getMob(level: ServerLevel, idx: Int, argc: Int = 0): Mob {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = x.getEntity(level)
+        val e = x.getEntity(level) ?: throw MishapEntityNotFound.of(x)
         if (e is Mob)
             return e
     }
@@ -116,7 +116,7 @@ fun List<Iota>.getMob(level: ServerLevel, idx: Int, argc: Int = 0): Mob {
 fun List<Iota>.getLivingEntityButNotArmorStand(level: ServerLevel, idx: Int, argc: Int = 0): LivingEntity {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
     if (x is EntityIota) {
-        val e = x.getEntity(level)
+        val e = x.getEntity(level) ?: throw MishapEntityNotFound.of(x)
         if (e is LivingEntity && e !is ArmorStand)
             return e
     }
