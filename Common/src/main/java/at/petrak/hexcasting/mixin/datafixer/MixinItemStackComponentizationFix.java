@@ -133,8 +133,8 @@ public class MixinItemStackComponentizationFix {
         List<String> angles = pattern.get("angles").asStream()
                 .map(a -> hexCasting$hexAngle[a.asByte((byte) 0)])
                 .toList();
-        patternComponent.put(pattern.createString(HexPattern.TAG_START_DIR), pattern.createString(hexCasting$hexDir[startDir]));
-        patternComponent.put(pattern.createString(HexPattern.TAG_ANGLES), pattern.createString(String.join("", angles)));
+        patternComponent.put(pattern.createString("start_dir"), pattern.createString(hexCasting$hexDir[startDir]));
+        patternComponent.put(pattern.createString("angles"), pattern.createString(String.join("", angles)));
         return pattern.createMap(patternComponent);
     }
 
