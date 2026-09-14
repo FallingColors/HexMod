@@ -210,12 +210,10 @@ public class MixinItemStackComponentizationFix {
 
     @Unique
     private static void hexCasting$fixPackagedHex(ItemStackData itemStackData, Dynamic<?> dynamic) {
+        itemStackData.moveTagToComponent("pigment", "hexcasting:pigment");
+
         Stream<Dynamic<?>> patterns = itemStackData.removeTag("patterns").asStream()
             .map(MixinItemStackComponentizationFix::hexCasting$mapIotaData);
-        Dynamic<?> pigment = itemStackData.removeTag("pigment").orElseEmptyMap();
-        Dynamic<?> hexHolder = dynamic.createMap(Map.of(
-            dynamic.createString("hex"), dynamic.createList(patterns),
-            dynamic.createString("pigment"), pigment));
-        itemStackData.setComponent("hexcasting:hex_holder", hexHolder);
+        itemStackData.setComponent("hexcasting:patterns", dynamic.createList(patterns));
     }
 }
