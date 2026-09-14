@@ -51,20 +51,18 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
     }*/
 
     public void setNewMapping(HexPattern pattern, Iota iota) {
-        var previouslyEmpty = this.pattern == null;
         this.pattern = pattern;
         this.iota = iota;
         //this.iotaTag = IotaType.TYPED_CODEC.encodeStart(NbtOps.INSTANCE, iota).getOrThrow();
 
-        if (previouslyEmpty) {
-            var oldBs = this.getBlockState();
-            int variant = RANDOM.nextInt(1,5);
-            var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, variant);
-            this.level.setBlock(this.getBlockPos(), newBs, 3);
-            this.level.sendBlockUpdated(this.getBlockPos(), oldBs, newBs, 3);
-        } else {
-            this.setChanged();
-        }
+        var oldBs = this.getBlockState();
+        int variant = RANDOM.nextInt(1,5);
+        // must always change variant when updating to make the tint update properly
+        while (variant == oldBs.getValue(BlockAkashicBookshelf.HAS_BOOKS))
+            variant = RANDOM.nextInt(1,5);
+        var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, variant);
+        this.level.setBlock(this.getBlockPos(), newBs, 3);
+        this.level.sendBlockUpdated(this.getBlockPos(), oldBs, newBs, 3);
     }
 
     public void clearIota() {

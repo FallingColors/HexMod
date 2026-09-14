@@ -17,28 +17,27 @@ public class BlockAkashicRecord extends Block {
     /**
      * @return the block position of the place it gets stored, or null if there was no room.
      * <p>
-     * Will never clobber anything.
+     * Will clobber an existing shelf if the pattern matches.
      */
     public @Nullable
     BlockPos addNewDatum(BlockPos herePos, Level level, HexPattern key, Iota datum) {
-        var clobbereePos = AkashicFloodfiller.floodFillFor(herePos, level,
+        // look for an existing shelf with the provided keypattern
+        var targetPos = AkashicFloodfiller.floodFillFor(herePos, level,
             (pos, bs, world) ->
                 world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
                     && tile.getPattern() != null && tile.getPattern().getSignature().equals(key.getSignature()));
-
-        if (clobbereePos != null) {
-            return null;
+        // if there's no existing shelf that matches, look for an empty shelf
+        if (targetPos == null) {
+            targetPos = AkashicFloodfiller.floodFillFor(herePos, level, 0.9f,
+                (pos, bs, world) ->
+                    world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
+                        && tile.getPattern() == null, 128);
         }
-
-        var openPos = AkashicFloodfiller.floodFillFor(herePos, level, 0.9f,
-            (pos, bs, world) ->
-                world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
-                    && tile.getPattern() == null, 128);
-        if (openPos != null) {
-            var tile = (BlockEntityAkashicBookshelf) level.getBlockEntity(openPos);
+        // overwrite whatever shelf was found (may clobber existing data!)
+        if (targetPos != null) {
+            var tile = (BlockEntityAkashicBookshelf) level.getBlockEntity(targetPos);
             tile.setNewMapping(key, datum);
-
-            return openPos;
+            return targetPos;
         } else {
             return null;
         }
