@@ -52,9 +52,7 @@ public class BlockAkashicBookshelf extends Block implements AkashicFloodfiller, 
             }
         }
 
-        return stack.isEmpty() && hand == InteractionHand.MAIN_HAND
-                ? ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION
-                : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override
