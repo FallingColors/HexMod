@@ -98,7 +98,7 @@
       mod_name: "Hexmaning",
     },
     lore_fragment: {
-      "": "Historie Fragment",
+      "": "Historiefragment",
       all: "Det virker som om at jeg har funnet alle historiene denne verden har å tilby.",
     },
   },
@@ -246,6 +246,7 @@
     directrices: "Direktiver",
     impeti: "Manemotorer",
     seal_materials: "Lukkematerialer",
+    grants_root_advancement: "Deler ut grunnfremskrittet",
   },
   "emi.category.hexcasting": {
     brainsweep: "Flå Sinn",
@@ -357,7 +358,315 @@
         },
         costRescaleListRaw: {
           "": "Handlingsspesifikke Kostnadskalafaktorer",
+          "@Tooltip": "Tildeler ressursposisjoner til skaleringsfaktor for den spesifikke handlingen's mediekostnad. For eksempel, hexcasting:add_motion 3 vil gjøre at Impuls koster 3x så mye medie.",
         },
+        greaterTeleportSplatsItems: {
+          "": "Forbedret Teleport Slipper Gjenstander",
+          "@Tooltip": "Om gjenstander flyr ut av spillerens inventar når hen bruker Forbedret Teleport på seg selv",
+        },
+        doesTrueNameHaveAmbit: {
+          "": "Om Ektenavn har omfang",
+          "@Tooltip": "Om ektenavn (Enhetsreferanser til en spiller) skal tillate handlinger målrettet mot den refererte spilleren selv utenfor normalt omfang",
+        },
+        tpDimDenylist: {
+          "": "Liste over Dimensjoner med Teleportforbud",
+          "@Tooltip": "Ressursposisjoner av dimensjoner der teleportering er forbudt",
+        },
+        villagersOffendedByMindMurder: {
+          "": "Bygdinger krenket av sinnsmord",
+          "@Tooltip": "Om bygdinger skal bli sinte på spilleren når andre bygdinger er sinnsflådd",
+        },
+        traderScrollChance: {
+          "": "Vandrehandler Rull Sjanse",
+          "@Tooltip": "Sjansen for at en Vandrehandler selger en Eldgammel Rull",
+        },
+        scrollInjectionsRaw: {
+          "": "Rull Injeksjonsvekter",
+          "@Tooltip": "Tildeler navnene til byttetabellene til mengdene per-verdenmønstre på rull skal være i dem. Det er omtrent en 50% sjanse for å få ruller i hverenkel kiste markert her, og hvis det møtes blir mellom 1 og så mange ruller generert.",
+        },
+        loreInjectionsRaw: {
+          "": "Historieinjeksjonsplasser",
+          "@Tooltip": "Lister byttetabellene som historefragmenter skal bli tillagt.",
+        },
+        loreChance: {
+          "": "Historefragmentsjanse",
+          "@Tooltip": "Sjansen for at historiefragmenter dukker opp i noen av de øvre byttetabellene.",
+        },
+        cypherInjectionsRaw: {
+          "": "Eldgamle Cypher injeksjonsplasser",
+          "@Tooltip": "Lister byttetabellene som eldgamle cypher skal bli tillagt.",
+        },
+        cypherChance: {
+          "": "Elgamle Cypher sjanse",
+          "@Tooltip": "Sjansen for at eldgamle cyphre dukker opp i noen av de øvre byttetabellene.",
+        },
+        amethystShardModification: {
+          "": "Ametystskår dropprate endring",
+          "@Tooltip": "Hvor mye mengden ametystskår sluppet fra klaser er økt/senket.",
+        },
+      },
+    },
+  },
+  "advancement.hexcasting:": {
+    root: {
+      "": "Hexmaning Forskning",
+      desc: "Finn og grave frem en konsentrert form for medie som gror dypt under jorda.",
+    },
+    creative_unlocker: {
+      "": "Spektralsteinen",
+      desc: "Fant den kreativmodusekslusive feilsøkingsgjenstanden.",
+    },
+    enlightenment: {
+      "": "Oppnå Opplysning",
+      desc: "Knus en barrikade ved å mane en hex med nesten all din livshelse.",
+    },
+    wasteful_cast: {
+      "": "Sløs ikke...",
+      desc: "Sløs en stør mengde medie når du maner en hex.",
+    },
+    big_cast: {
+      "": "... Mangler ikke",
+      desc: "Man en eneste formel som koster en virkelig enorm mengde medie.",
+    },
+    y_u_no_cast_angy: {
+      "": "Blind Avledning",
+      desc: "Prøv å mane en formel fra en rull, men feile.",
+    },
+    opened_eyes: {
+      "": "Åpnede Øyner",
+      desc: "La naturen ta en bit av sinnet ditt i betaling for en hex. Hva skjer, mon tro, hvis du lar den ha mer?",
+    },
+    lore: {
+      "": "Hexmaning Historie",
+      desc: "Les ett historiefragment",
+    },
+    "lore/": {
+      cardamom1: {
+        "": "Cardamom Steles #1",
+        desc: "Brev fra Cardamom Steles til Faren hennes, #1",
+      },
+      cardamom2: {
+        "": "Cardamom Steles #2",
+        desc: "Brev fra Cardamom Steles til Faren hennes, #2",
+      },
+      cardamom3: {
+        "": "Cardamom Steles #3",
+        desc: "Brev fra Cardamom Steles til Faren hennes, #3, 1/2",
+      },
+      cardamom4: {
+        "": "Cardamom Steles #3 Del 2",
+        desc: "Brev fra Cardamom Steles til Faren hennes, #3, 2/2",
+      },
+      cardamom5: {
+        "": "Cardamom Steles #4",
+        desc: "Brev fra Cardamom Steles til Faren hennes, #4",
+      },
+      experiment1: "Ulløye Instansnoter",
+      experiment2: "Ulløye Instanslogg",
+      inventory: "Restaurasjonslogg 72",
+    },
+  },
+  "stat.hexcasting": {
+    media_used: "Medie brukt (i støv)",
+    media_overcast: "Medie overmanet (i støv)",
+    patterns_drawn: "Mønstre Tegnet",
+    spells_cast: "Formler Manet",
+  },
+  "death.attack.hexcasting": {
+    overcast: {
+      "": "%s sitt sinn ble innlemmet inn i energi",
+      player: "%s sitt sinn ble innlemmet inn i energi under kamp med %s",
+    },
+  },
+  "command.hexcasting": {
+    recalc: "Gjenutregnet Mønstre",
+    pats: {
+      listing: "Mønstre i denne verden:",
+      all: "Ga alle %d ruller til %s",
+      "specific.success": "Ga %s med id %s til %s",
+    },
+    brainsweep: {
+      "": "Sinnsflådde %s",
+      "fail.badtype": "%s er ikke en mob",
+      "fail.already": "%s er allerede tom",
+    },
+  },
+  "matcher.hexcasting.pattern": {
+    title: "Hex Mønster",
+    "title.styled": "Hex Mønster <se,deaqq>",
+    description: "Visuelle Hexmaningsmønstre",
+    example: "<ne,qaq><e,aa><ne,qaq><e,wa><e,wqaawdd><e,aawaawaa>",
+  },
+  hexcasting: {
+    "pattern.unknown": "Ukjent mønsterressursposisjon %s",
+    debug: {
+      media_withdrawn: "%s - Medie tatt ut: %s",
+      "media_withdrawn.with_dust": "%s - Medie tatt ut: %s (%s i støv)",
+      media_inserted: "%s - Medie sendt inn: %s",
+      "media_inserted.with_dust": "%s - Medie sendt inn: %s (%s i støv)",
+      all_media: "Alt Innhold",
+      infinite_media: "Uendelig",
+    },
+    loot_hex: {
+      shatter: "Knus",
+      kindle: "Påtenn",
+      illuminate: "Opplys",
+      growth: "Gro",
+      lunge: "Svisj",
+      sidestep: "Sidesteg",
+      ascend: "Climb",
+      blink: "Blunk",
+      blastoff: "Oppskytning",
+      radar: "Radar",
+      beckon: "Dra",
+      detonate: "Detoner",
+      shockwave: "Jordskelv",
+      heat_wave: "Hetebølge",
+      wither_wave: "Witherbølge",
+      flight_zone: "Flysone",
+    },
+    message: {
+      cant_overcast: "Den Hexen trang mer medie enn jeg hadde... jeg burde dobbelskjekke matten min.",
+      cant_great_spell: "Trylleformelen gikk ikke, av en eller annen grunn... er jeg ikke flink nok?",
+    },
+    tooltip: {
+      spellbook: {
+        page: {
+          "": "Åpen Side &d/&d",
+          sealed: "Åpen Side &d/&d (%s)",
+        },
+        page_with_name: {
+          "": "Åpen Side &d/&d (\"%s\")",
+          sealed: "Åpen Side &d/&d (\"%s\") (%s)",
+        },
+        empty: {
+          "": "Blank",
+          sealed: "Blank (%s)",
+        },
+        sealed: "Forseglet",
+      },
+      scroll: {
+        needs_purchase: "Kjøp for å se mønsteret",
+        pattern_not_loaded: "Legg i inventar for å laste inn mønsteret",
+        "recalc_warning.line1": "Per-verdensmønsteret for %s er ikke utregnet enda!",
+        "recalc_warning.line2": "Vennligst kjør /hexcasting recalcPatterns, deretter skaff deg en ny rull.",
+      },
+      abacus: {
+        "": "%d",
+        reset: "Nullstill",
+        "reset.nice": "nice",
+      },
+      circle: {
+        no_exit: "Mediebølgen kunne ikke finne en utgang på %s",
+        many_exits: "Mediebølgen hadde for mange utganger på %s",
+        no_closure: "Mediebølgen kommer ikke til å finne veien tilbake til motoren på %s",
+      },
+      lens: {
+        "pattern.invalid": "Ugyldig Mønster",
+        bee: {
+          "": "%s bier",
+          single: "%s bie",
+        },
+        "impetus.redstone.bound": {
+          "": "Bundet til %s",
+          none: "Ubundet",
+        },
+        akashic: {
+          "bookshelf.location": "Rekord på %s",
+          "record.count": {
+            "": "%s iotaer lagret",
+            single: "%s iota lagret",
+          },
+        },
+      },
+      brainsweep: {
+        min_level: "Nivå %s eller høyere",
+        level: "Nivå %s",
+        product: "Sinnløs Kropp",
+      },
+      media: "%d støv",
+      media_amount: "Inneholder: %s (%s)",
+      "media_amount.advanced": "Inneholder: %s/%s (%s)",
+      stored_hex: "Hex: ",
+      list_contents: "[%s]",
+      null_iota: "Null",
+      jump_iota: "[Hopp]",
+      pattern_iota: "HexMønster(%s)",
+      boolean_true: "Sant",
+      boolean_false: "Usant",
+    },
+    spelldata: {
+      onitem: "Inneholder: %s",
+      anything: "Hva som helst",
+      unknown: "En ødelagt Iota",
+      "entity.whoknows": "En ukjent enhet",
+      "akashic.nopos": "Eierrekorden vet ikke om noen iotaer her (dette er en feil i modden)",
+    },
+    subtitles: {
+      casting: {
+        pattern: {
+          start: "Mønster startes",
+          add_segment: "Linje Tillegges",
+        },
+        cast: {
+          fail: "Uhell knaser",
+          normal: "Handling nynner",
+          spell: "Formel boinker",
+          hermes: "Hermes' twanger",
+          thoth: "Thoths twanger",
+        },
+      },
+      ambiance: "Hexrutenettet nynner",
+      "staff.reset": "Maning resettes",
+      abacus: {
+        "": "Abakus klikker",
+        shake: "Abakus ristes",
+      },
+      "spellcircle.add_pattern": "Manesirkel knitrer",
+      "spellcircle.fail": "Manesirkel vaskes ut",
+      "scroll.dust": "Rull dekkes med støv",
+      "scroll.scribble": "Rull blir påtegnet",
+      "impetus.fletcher.tick": "Pilmakermotor tikker",
+      "impetus.redstone.register": "Geistligmotor ringer",
+      "impetus.redstone.clear": "Geistligmotor tømmes",
+      "lore_fragment.read": "Historefragment leses",
+      "flight.ambience": "Spiller svever",
+      "flight.finish": "Spiller mister sveveevnen",
+    },
+    attributes: {
+      grid_zoom: "Manerutenettstørrelse",
+      media_consumption: "Mediebruk",
+      ambit_radius: "Spilleromfangsradius",
+      sentinel_radius: "Vaktomfangsradius",
+      scry_sight: "Spåsyn",
+      feeble_mind: "Svakt Sinn",
+    },
+    action: {
+      "hexcasting:": {
+        "const/": {
+          "null": "Anullert Refleksjon",
+          "true": "Sannhetens Refleksjon",
+          "false": "Falskhetens Refleksjon",
+          "vec/": {
+            px: "Vektor Refleksjon +X",
+            py: "Vektor Refleksjon +Y",
+            pz: "Vektor Refleksjon +Z",
+            nx: "Vektor Refleksjon -X",
+            ny: "Vektor Refleksjon -Y",
+            nz: "Vektor Refleksjon -Z",
+            "0": "Blank Vektor Refleksjon",
+          },
+          "double/": {
+            pi: "Buens Refleksjon",
+            tau: "Sirkelens Refleksjon",
+            e: "Eulers Refleksjon",
+            phi: "Harmoniens Refleksjon",
+          },
+        },
+        get_caster: "Sinnets Refleksjon",
+        "entity_pos/eye": "Kompassets Purifikasjon",
+        "entity_pos/foot": "Kompassets Purifikasjon II",
+        get_entity_look: "Alidadens Purifikasjon",
       },
     },
   },
