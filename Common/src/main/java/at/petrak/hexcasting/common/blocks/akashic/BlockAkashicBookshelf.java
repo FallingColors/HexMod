@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.blocks.akashic;
 
 import at.petrak.hexcasting.annotations.SoftImplement;
 import at.petrak.hexcasting.api.casting.iota.PatternIota;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.items.storage.ItemScroll;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.xplat.IForgeLikeBlock;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
@@ -32,12 +34,14 @@ import org.jetbrains.annotations.Nullable;
 public class BlockAkashicBookshelf extends Block implements AkashicFloodfiller, EntityBlock, IForgeLikeBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final IntegerProperty HAS_BOOKS = IntegerProperty.create("has_books", 0, 4);
+    public static final BooleanProperty SEALED = BooleanProperty.create("sealed");
 
     public BlockAkashicBookshelf(Properties p_49795_) {
         super(p_49795_);
         this.registerDefaultState(this.getStateDefinition().any()
             .setValue(FACING, Direction.NORTH)
-            .setValue(HAS_BOOKS, 0));
+            .setValue(HAS_BOOKS, 0)
+            .setValue(SEALED, false));
     }
 
     @Override
@@ -48,6 +52,14 @@ public class BlockAkashicBookshelf extends Block implements AkashicFloodfiller, 
                     scroll.writeDatum(stack, new PatternIota(shelf.getPattern()));
                 }
                 level.playSound(player, pos, HexSounds.SCROLL_SCRIBBLE.value(), SoundSource.BLOCKS, 1f, 1f);
+                return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            } else if (stack.is(HexTags.Items.SEAL_MATERIALS) && shelf.getIota() != null && !state.getValue(SEALED)) {
+                var newState = state.setValue(SEALED, true);
+                level.setBlock(pos, newState, 3);
+                level.sendBlockUpdated(pos, state, newState, 3);
+                level.levelEvent(player, 3003, pos, 0);
+                if (!player.isCreative())
+                    stack.shrink(1);
                 return ItemInteractionResult.sidedSuccess(level.isClientSide);
             }
         }
@@ -74,7 +86,7 @@ public class BlockAkashicBookshelf extends Block implements AkashicFloodfiller, 
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, HAS_BOOKS);
+        builder.add(FACING, HAS_BOOKS, SEALED);
     }
 
     @Override

@@ -13,27 +13,32 @@ public class BlockAkashicRecord extends Block {
         super(p_49795_);
     }
 
-
-    /**
-     * @return the block position of the place it gets stored, or null if there was no room.
-     * <p>
-     * Will clobber an existing shelf if the pattern matches.
-     */
     public @Nullable
-    BlockPos addNewDatum(BlockPos herePos, Level level, HexPattern key, Iota datum) {
-        // look for an existing shelf with the provided keypattern
-        var targetPos = AkashicFloodfiller.floodFillFor(herePos, level,
+    BlockPos findValidShelf(BlockPos herePos, Level level, HexPattern key) {
+        // look for an existing unsealed shelf with the provided keypattern
+        var shelfPos = AkashicFloodfiller.floodFillFor(herePos, level,
             (pos, bs, world) ->
                 world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
-                    && tile.getPattern() != null && tile.getPattern().getSignature().equals(key.getSignature()));
-        // if there's no existing shelf that matches, look for an empty shelf
-        if (targetPos == null) {
-            targetPos = AkashicFloodfiller.floodFillFor(herePos, level, 0.9f,
+                    && tile.getPattern() != null && tile.getPattern().getSignature().equals(key.getSignature())
+                    && !bs.getValue(BlockAkashicBookshelf.SEALED));
+        // if there's no valid existing shelf, look for an empty shelf
+        if (shelfPos == null) {
+            shelfPos = AkashicFloodfiller.floodFillFor(herePos, level, 0.9f,
                 (pos, bs, world) ->
                     world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
                         && tile.getPattern() == null, 128);
         }
-        // overwrite whatever shelf was found (may clobber existing data!)
+        return shelfPos;
+    }
+
+    /**
+     * @return the block position of the place it gets stored, or null if there was no room.
+     * <p>
+     * Will clobber an existing shelf if it's unsealed and the pattern matches.
+     */
+    public @Nullable
+    BlockPos addNewDatum(BlockPos herePos, Level level, HexPattern key, Iota datum) {
+        var targetPos = findValidShelf(herePos, level, key);
         if (targetPos != null) {
             var tile = (BlockEntityAkashicBookshelf) level.getBlockEntity(targetPos);
             tile.setNewMapping(key, datum);

@@ -73,9 +73,12 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
 
         if (!previouslyEmpty) {
             var oldBs = this.getBlockState();
-            var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, 0);
+            var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, 0)
+                             .setValue(BlockAkashicBookshelf.SEALED, false);
             this.level.setBlock(this.getBlockPos(), newBs, 3);
             this.level.sendBlockUpdated(this.getBlockPos(), oldBs, newBs, 3);
+            if (oldBs.getValue(BlockAkashicBookshelf.SEALED))
+                level.levelEvent(3004, this.getBlockPos(), 0);
         } else {
             this.setChanged();
         }
