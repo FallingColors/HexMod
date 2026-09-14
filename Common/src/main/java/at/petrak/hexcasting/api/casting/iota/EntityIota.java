@@ -108,8 +108,8 @@ public class EntityIota extends Iota {
         if (uuidStrings == null) return;
         for (String string : uuidStrings) {
             if (string.endsWith(".dat")) {
-                UUID playerId = UUID.fromString(StringUtils.removeEnd(string, ".dat"));
-                playerUUIDs.add(playerId);
+                try { playerUUIDs.add(UUID.fromString(StringUtils.removeEnd(string, ".dat"))); }
+                catch (IllegalArgumentException ignored) {}
             }
         }
     }
