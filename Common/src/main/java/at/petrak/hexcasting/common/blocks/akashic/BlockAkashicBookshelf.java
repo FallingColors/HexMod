@@ -24,20 +24,20 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockAkashicBookshelf extends Block implements AkashicFloodfiller, EntityBlock, IForgeLikeBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final BooleanProperty HAS_BOOKS = BooleanProperty.create("has_books");
+    public static final IntegerProperty HAS_BOOKS = IntegerProperty.create("has_books", 0, 4);
 
     public BlockAkashicBookshelf(Properties p_49795_) {
         super(p_49795_);
         this.registerDefaultState(this.getStateDefinition().any()
             .setValue(FACING, Direction.NORTH)
-            .setValue(HAS_BOOKS, false));
+            .setValue(HAS_BOOKS, 0));
     }
 
     @Override
@@ -101,7 +101,7 @@ public class BlockAkashicBookshelf extends Block implements AkashicFloodfiller, 
 
     @Override
     public int getAnalogOutputSignal(BlockState pState, Level pLevel, BlockPos pPos) {
-        return pState.getValue(HAS_BOOKS) ? 15 : 0; // TODO have an iota -> comparator value mapping?
+        return (pState.getValue(HAS_BOOKS) > 0) ? 15 : 0; // TODO have an iota -> comparator value mapping?
     }
 
     @Nullable

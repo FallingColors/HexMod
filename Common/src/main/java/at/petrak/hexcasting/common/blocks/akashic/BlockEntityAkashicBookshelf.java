@@ -13,10 +13,13 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Random;
+
 public class BlockEntityAkashicBookshelf extends HexBlockEntity {
     public static final String TAG_PATTERN = "pattern";
     public static final String TAG_IOTA = "iota";
     public static final String TAG_DUMMY = "dummy";
+    private static final Random RANDOM = new Random();
 
     // This is only not null if this stores any data.
     private HexPattern pattern = null;
@@ -55,7 +58,8 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
 
         if (previouslyEmpty) {
             var oldBs = this.getBlockState();
-            var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, true);
+            int variant = RANDOM.nextInt(1,5);
+            var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, variant);
             this.level.setBlock(this.getBlockPos(), newBs, 3);
             this.level.sendBlockUpdated(this.getBlockPos(), oldBs, newBs, 3);
         } else {
@@ -71,7 +75,7 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
 
         if (!previouslyEmpty) {
             var oldBs = this.getBlockState();
-            var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, false);
+            var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, 0);
             this.level.setBlock(this.getBlockPos(), newBs, 3);
             this.level.sendBlockUpdated(this.getBlockPos(), oldBs, newBs, 3);
         } else {
