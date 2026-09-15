@@ -873,6 +873,7 @@
         beep: "Make Note",
         explode: "Explosion",
         "explode/fire": "Fireball",
+        "explode/wind": "Wind Burst",
         add_motion: "Impulse",
         blink: "Blink",
         break_block: "Break Block",
@@ -2105,7 +2106,10 @@
         
         "explode.fire.1": "Remove a number and vector from the stack, then create a fiery explosion at the given location with the given power.",
         "explode.fire.2": "Costs one $(l:items/amethyst)$(item)Amethyst Dust/$, plus about 3 extra $(l:items/amethyst)$(item)Amethyst Dust/$s per point of explosion power. Otherwise, the same as $(l:patterns/spells/basic#hexcasting:explode)$(action)Explosion/$, except with fire.",
-        
+
+        "explode.wind.1": "Remove a number and vector from the stack, then create a non-damaging burst of wind at the given location with the given power.",
+        "explode.wind.2": "Costs a negligible amount at power 0, plus 1 extra $(l:items/amethyst)$(item)Amethyst Dust/$ per point of explosion power. The wind burst deals increased knockback compared to a regular explosion, and does not directly harm blocks or entities.$(br2)However, the wind burst $(o)does/$ have the ability to interact with certain unsecured objects: doors will be swung, levers will be flipped, and so on. I can probably find some interesting uses for this.",
+
         add_motion: "Remove an entity and direction from the stack, then give a shove to the given entity in the given direction. The strength of the impulse is determined by the length of the vector.$(br)Costs $(l:items/amethyst)$(item)Amethyst Dust/$ equal to twice the length of the vector.",
         blink: "Remove an entity and length from the stack, then teleport the given entity along its look vector by the given length.$(br)Costs about one $(l:items/amethyst)$(item)Amethyst Shard/$ per two blocks travelled.",
         
