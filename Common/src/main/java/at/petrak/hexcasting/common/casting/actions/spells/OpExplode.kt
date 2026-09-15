@@ -10,12 +10,22 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.common.casting.actions.selectors.OpGetEntitiesBy
 import net.minecraft.core.BlockPos
+import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.core.registries.BuiltInRegistries
+import net.minecraft.sounds.SoundEvents
+import net.minecraft.tags.BlockTags
 import net.minecraft.util.Mth
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.SimpleExplosionDamageCalculator
 import net.minecraft.world.phys.AABB
 import net.minecraft.world.phys.Vec3
+import java.util.Optional
 
-class OpExplode(val fire: Boolean) : SpellAction {
+
+/**
+ * Type 0 = normal explosion, type 1 = fire explosion, type 2 = wind burst
+ */
+class OpExplode(val type: Int) : SpellAction {
     override val argc: Int
         get() = 2
 
@@ -39,29 +49,49 @@ class OpExplode(val fire: Boolean) : SpellAction {
         }
 
         val clampedStrength = Mth.clamp(strength, 0.0, 10.0)
-        val cost = MediaConstants.DUST_UNIT * (3 * clampedStrength + if (fire) 1.0 else 0.125)
+        val cost = MediaConstants.DUST_UNIT * when (type) {
+            0 -> 3 * clampedStrength + 0.125
+            1 -> 3 * clampedStrength + 1
+            2 -> 2 * clampedStrength + 0.125
+            else -> 1.0 // should never happen
+        }
         return SpellAction.Result(
-            Spell(pos, strength, this.fire),
+            Spell(pos, strength, this.type),
             cost.toLong(),
             listOf(ParticleSpray.burst(pos, strength, 50))
         )
     }
 
-    private data class Spell(val pos: Vec3, val strength: Double, val fire: Boolean) : RenderedSpell {
+    private data class Spell(val pos: Vec3, val strength: Double, val type: Int) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
             // TODO: you can use this to explode things *outside* of the worldborder?
             if (!env.canEditBlockAt(BlockPos.containing(pos)))
                 return
 
-            env.world.explode(
-                env.castingEntity,
-                pos.x,
-                pos.y,
-                pos.z,
-                strength.toFloat(),
-                this.fire,
-                Level.ExplosionInteraction.TNT
-            )
+            if (type == 2) {
+                env.world.explode(
+                    env.castingEntity, null, WIND_BURST_CALCULATOR,
+                    pos.x, pos.y, pos.z, strength.toFloat(),
+                    false, Level.ExplosionInteraction.TRIGGER,
+                    ParticleTypes.GUST_EMITTER_SMALL,
+                    ParticleTypes.GUST_EMITTER_LARGE,
+                    SoundEvents.WIND_CHARGE_BURST
+                )
+            } else {
+                env.world.explode(
+                    env.castingEntity, pos.x, pos.y, pos.z,
+                    strength.toFloat(), this.type == 1,
+                    Level.ExplosionInteraction.TNT
+                )
+            }
         }
+    }
+
+    companion object {
+        // reimpl because it's private in WindCharge
+        val WIND_BURST_CALCULATOR = SimpleExplosionDamageCalculator(
+            true, false, Optional.of(1.22f),
+            BuiltInRegistries.BLOCK.getTag(BlockTags.BLOCKS_WIND_CHARGE_EXPLOSIONS).map{ it }
+        )
     }
 }
