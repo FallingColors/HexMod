@@ -74,7 +74,7 @@ public class EntityIota extends Iota {
 
     @Override
     public boolean isTruthy() {
-        return true;
+        throw new UnsupportedOperationException("To check truthiness, call getEntity() and see if it's non-null");
     }
 
     @Override
