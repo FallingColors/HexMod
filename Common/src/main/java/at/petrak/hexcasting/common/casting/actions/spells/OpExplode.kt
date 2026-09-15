@@ -22,10 +22,7 @@ import net.minecraft.world.phys.Vec3
 import java.util.Optional
 
 
-/**
- * Type 0 = normal explosion, type 1 = fire explosion, type 2 = wind burst
- */
-class OpExplode(val type: Int) : SpellAction {
+class OpExplode(val type: ExplosionType) : SpellAction {
     override val argc: Int
         get() = 2
 
@@ -50,10 +47,9 @@ class OpExplode(val type: Int) : SpellAction {
 
         val clampedStrength = Mth.clamp(strength, 0.0, 10.0)
         val cost = MediaConstants.DUST_UNIT * when (type) {
-            0 -> 3 * clampedStrength + 0.125
-            1 -> 3 * clampedStrength + 1
-            2 -> 2 * clampedStrength + 0.125
-            else -> 1.0 // should never happen
+            ExplosionType.NORMAL -> 3 * clampedStrength + 0.125
+            ExplosionType.FIRE -> 3 * clampedStrength + 1
+            ExplosionType.WIND -> clampedStrength + 0.125
         }
         return SpellAction.Result(
             Spell(pos, strength, this.type),
@@ -62,13 +58,13 @@ class OpExplode(val type: Int) : SpellAction {
         )
     }
 
-    private data class Spell(val pos: Vec3, val strength: Double, val type: Int) : RenderedSpell {
+    private data class Spell(val pos: Vec3, val strength: Double, val type: ExplosionType) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {
             // TODO: you can use this to explode things *outside* of the worldborder?
             if (!env.canEditBlockAt(BlockPos.containing(pos)))
                 return
 
-            if (type == 2) {
+            if (type == ExplosionType.WIND) {
                 env.world.explode(
                     env.castingEntity, null, WIND_BURST_CALCULATOR,
                     pos.x, pos.y, pos.z, strength.toFloat(),
@@ -80,12 +76,14 @@ class OpExplode(val type: Int) : SpellAction {
             } else {
                 env.world.explode(
                     env.castingEntity, pos.x, pos.y, pos.z,
-                    strength.toFloat(), this.type == 1,
+                    strength.toFloat(), this.type == ExplosionType.FIRE,
                     Level.ExplosionInteraction.TNT
                 )
             }
         }
     }
+
+    enum class ExplosionType { NORMAL, FIRE, WIND }
 
     companion object {
         // reimpl because it's private in WindCharge

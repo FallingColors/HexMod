@@ -240,11 +240,11 @@ public class HexActions {
     public static final Holder<ActionRegistryEntry> PRINT = REGISTER.registerHolder("print", () ->
         new ActionRegistryEntry(HexPattern.fromAngleString("de", HexDir.NORTH_EAST), OpPrint.INSTANCE));
     public static final Holder<ActionRegistryEntry> EXPLODE = REGISTER.registerHolder("explode", () ->
-        new ActionRegistryEntry(HexPattern.fromAngleString("aawaawaa", HexDir.EAST), new OpExplode(0)));
+        new ActionRegistryEntry(HexPattern.fromAngleString("aawaawaa", HexDir.EAST), new OpExplode(OpExplode.ExplosionType.NORMAL)));
     public static final Holder<ActionRegistryEntry> EXPLODE$FIRE = REGISTER.registerHolder("explode/fire", () ->
-        new ActionRegistryEntry(HexPattern.fromAngleString("ddwddwdd", HexDir.EAST), new OpExplode(1)));
+        new ActionRegistryEntry(HexPattern.fromAngleString("ddwddwdd", HexDir.EAST), new OpExplode(OpExplode.ExplosionType.FIRE)));
     public static final Holder<ActionRegistryEntry> EXPLODE$WIND = REGISTER.registerHolder("explode/wind", () ->
-        new ActionRegistryEntry(HexPattern.fromAngleString("aqqadaa", HexDir.EAST), new OpExplode(2)));
+        new ActionRegistryEntry(HexPattern.fromAngleString("aqqadaa", HexDir.EAST), new OpExplode(OpExplode.ExplosionType.WIND)));
     public static final Holder<ActionRegistryEntry> ADD_MOTION = REGISTER.registerHolder("add_motion", () ->
         new ActionRegistryEntry(HexPattern.fromAngleString("awqqqwaqw", HexDir.SOUTH_WEST), OpAddMotion.INSTANCE));
     public static final Holder<ActionRegistryEntry> BLINK = REGISTER.registerHolder("blink", () ->
