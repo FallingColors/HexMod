@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - The tail length determines how many extra iotas from the original stack are included in each iteration's stack
   - Iotas included via the above process are now popped from the original stack
 - Entity iotas no longer become Null if the referenced entity ceases to exist or becomes unloaded ([#1299](https://github.com/FallingColors/HexMod/pull/1299)) @Robotgiggle
+- Augur's Purification now returns false for nonexistent or unloaded entity iotas ([#1299](https://github.com/FallingColors/HexMod/pull/1299)) @Robotgiggle
 
 ### Changed
 
