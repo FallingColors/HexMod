@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api.casting.iota;
 
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -73,8 +74,8 @@ public class EntityIota extends Iota {
     }
 
     @Override
-    public boolean isTruthy() {
-        throw new UnsupportedOperationException("To check truthiness, call getEntity() and see if it's non-null");
+    public boolean isTruthy(CastingEnvironment env) {
+        return getEntity(env.getWorld()) != null;
     }
 
     @Override

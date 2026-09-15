@@ -10,8 +10,6 @@ object OpCoerceToBool : ConstMediaAction {
     override val argc = 1
 
     override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
-        if (args[0] is EntityIota)
-            return ((args[0] as EntityIota).getEntity(env.world) != null).asActionResult
-        return (args[0].isTruthy).asActionResult
+        return (args[0].isTruthy(env)).asActionResult
     }
 }
