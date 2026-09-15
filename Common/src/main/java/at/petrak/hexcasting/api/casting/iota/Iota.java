@@ -36,7 +36,7 @@ public abstract class Iota {
         return this.type.get();
     }
 
-    abstract public boolean isTruthy(CastingEnvironment env);
+    abstract public boolean isTruthy(@Nullable CastingEnvironment env);
 
     /**
      * Compare this to another object, within a tolerance.

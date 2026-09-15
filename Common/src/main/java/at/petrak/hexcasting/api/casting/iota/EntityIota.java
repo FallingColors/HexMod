@@ -75,6 +75,7 @@ public class EntityIota extends Iota {
 
     @Override
     public boolean isTruthy(CastingEnvironment env) {
+        if (env == null) return true;
         return getEntity(env.getWorld()) != null;
     }
 
