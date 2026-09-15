@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.iota.EntityIota;
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -71,11 +72,19 @@ public class BlockRedstoneImpetus extends BlockAbstractImpetus {
                     var stored = datumContainer.readIota();
                     if (stored instanceof EntityIota eieio) {
                         var entity = eieio.getEntity(sLevel);
+                        GameProfile profile = null;
                         if (entity instanceof Player iotaPlayer) {
+                            profile = iotaPlayer.getGameProfile();
+                        } else if (entity == null && eieio.uuidIsPlayer()) {
+                            var rawName = eieio.getRawName();
+                            if (rawName != null) {
+                                profile = new GameProfile(eieio.getEntityId(), rawName);
+                            }
+                        }
+                        if (profile != null) {
                             // phew, we got something
-                            tile.setPlayer(iotaPlayer.getGameProfile(), entity.getUUID());
+                            tile.setPlayer(profile, eieio.getEntityId());
                             tile.sync();
-
                             level.playSound(null, pos, HexSounds.IMPETUS_REDSTONE_DING.value(),
                                     SoundSource.BLOCKS, 1f, 1f);
                             return ItemInteractionResult.sidedSuccess(level.isClientSide);

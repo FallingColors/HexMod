@@ -49,7 +49,7 @@ public class PatternIota extends Iota {
     }
 
     @Override
-    public boolean isTruthy() {
+    public boolean isTruthy(CastingEnvironment env) {
         return true;
     }
 
