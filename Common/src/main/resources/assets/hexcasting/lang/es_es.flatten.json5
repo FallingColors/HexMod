@@ -94,7 +94,7 @@
     creative_unlocker: {
       "": "El Cubo de Medio",
       for_emphasis: "MEDIO INFINITO",
-      tooltip: "Consuma para descrubir todo conocimientos de %s.",
+      tooltip: "Consuma para desbloquear todo el conocimiento de %s.",
       mod_name: "Hexcasting",
     },
     lore_fragment: {
