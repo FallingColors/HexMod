@@ -299,6 +299,17 @@ fun evaluatable(datum: Iota, reverseIdx: Int): Either<Iota, SpellList> =
 
 fun Iota?.orNull() = this ?: NullIota()
 
+/**
+ * Converts to long while ensuring that the final result is always nonzero.
+ * Used when a spell's cost depends on an arbitrary multiplier provided by
+ * the player, so that an extremely small value doesn't make the spell free.
+ */
+fun Double.toLongNonzero(): Long {
+    val result = this.roundToLong()
+    if (result == 0L) return 1L
+    return result
+}
+
 // TODO do we make this work on lists
 // there should probably be some way to abstract function application over lists, vecs, and numbers,
 // and i bet it's fucking monads

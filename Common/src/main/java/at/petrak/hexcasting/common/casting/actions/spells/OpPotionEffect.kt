@@ -36,7 +36,7 @@ class OpPotionEffect(
         }
         return SpellAction.Result(
             Spell(effect, target, duration, potency),
-            cost.toLong(),
+            cost.toLongNonzero(),
             listOf(ParticleSpray.cloud(target.position().add(0.0, target.eyeHeight / 2.0, 0.0), 1.0))
         )
     }
@@ -44,7 +44,7 @@ class OpPotionEffect(
     private class Spell(val effect: MobEffect, val target: LivingEntity, val duration: Double, val potency: Double) :
         RenderedSpell {
         override fun cast(env: CastingEnvironment) {
-            if (duration > 1.0 / 20.0) {
+            if (duration >= 1.0 / 20.0) {
                 val effectInst = MobEffectInstance(effect, (duration * 20).toInt(), potency.toInt() - 1)
                 target.addEffect(effectInst)
             }
