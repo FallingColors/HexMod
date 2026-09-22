@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Fixed Great Spells causing a mishap when drawn without enlightenment even while parenthesized ([#1290](https://github.com/FallingColors/HexMod/pull/1290)) @Robotgiggle
+- Spells with a variable cost can no longer be made free by providing an extremely small input value ([#1308](https://github.com/FallingColors/HexMod/pull/1308)) @Robotgiggle
 
 ## `0.11.4` - 2026-08-26
 

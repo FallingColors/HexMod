@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.getEntity
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.toNonZeroLong
 import at.petrak.hexcasting.api.misc.MediaConstants
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.world.entity.Entity
@@ -40,7 +41,7 @@ object OpAddMotion : SpellAction {
 
         return SpellAction.Result(
             Spell(target, shrunkMotion),
-            (motionForCost * MediaConstants.DUST_UNIT).toLong(),
+            (motionForCost * MediaConstants.DUST_UNIT).toNonZeroLong(),
             listOf(
                 ParticleSpray(
                     target.position().add(0.0, target.eyeHeight / 2.0, 0.0),
