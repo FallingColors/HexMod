@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getPlayer
 import at.petrak.hexcasting.api.casting.getPositiveDouble
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.toLongNonzero
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.pigment.FrozenPigment
 import at.petrak.hexcasting.api.player.FlightAbility
@@ -37,7 +38,7 @@ class OpFlight(val type: Type) : SpellAction {
 
         // One block of radius, or one second of duration, costs 2 dust
         val costUnit = 2 * MediaConstants.DUST_UNIT
-        var cost = (theArg * costUnit).roundToLong()
+        var cost = (theArg * costUnit).toLongNonzero()
         // Cost for anchorite does not decrease below 1 meter
         if (type == Type.LimitRange) cost = max(cost, costUnit)
 
