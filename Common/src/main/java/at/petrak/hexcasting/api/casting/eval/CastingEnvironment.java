@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.api.casting.eval;
 
+import at.petrak.hexcasting.api.casting.OperatorUtils;
 import at.petrak.hexcasting.api.casting.ParticleSpray;
 import at.petrak.hexcasting.api.casting.PatternShapeMatch;
 import at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv;
@@ -269,7 +270,8 @@ public abstract class CastingEnvironment {
      * positive.
      */
     public long extractMedia(long cost, boolean simulate) {
-        cost = (long) (cost * costModifier);
+        if (cost == 0) return 0;
+        cost = OperatorUtils.toLongNonzero(cost * costModifier);
         for (var extractMediaComponent : preMediaExtract)
             cost = extractMediaComponent.onExtractMedia(cost, simulate);
         cost = extractMediaEnvironment(cost, simulate);
