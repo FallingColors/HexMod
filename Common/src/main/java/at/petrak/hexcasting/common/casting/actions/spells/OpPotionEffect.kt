@@ -36,7 +36,7 @@ class OpPotionEffect(
         }
         return SpellAction.Result(
             Spell(effect, target, duration, potency),
-            cost.toLongNonzero(),
+            cost.toNonZeroLong(),
             listOf(ParticleSpray.cloud(target.position().add(0.0, target.eyeHeight / 2.0, 0.0), 1.0))
         )
     }

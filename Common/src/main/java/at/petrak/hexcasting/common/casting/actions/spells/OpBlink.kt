@@ -10,7 +10,7 @@ import at.petrak.hexcasting.api.casting.getEntity
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.api.casting.mishaps.MishapImmuneEntity
-import at.petrak.hexcasting.api.casting.toLongNonzero
+import at.petrak.hexcasting.api.casting.toNonZeroLong
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
@@ -54,7 +54,7 @@ object OpBlink : SpellAction {
 
         return SpellAction.Result(
             Spell(target, dvec),
-            (MediaConstants.SHARD_UNIT * delta.absoluteValue * 0.5).toLongNonzero(),
+            (MediaConstants.SHARD_UNIT * delta.absoluteValue * 0.5).toNonZeroLong(),
             listOf(
                 ParticleSpray.cloud(targetMiddlePos, 2.0, 50),
                 ParticleSpray.burst(targetMiddlePos.add(dvec), 2.0, 100)
