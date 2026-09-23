@@ -110,8 +110,9 @@ object OpTeleport : SpellAction {
         if (!teleportee.type.`is`(HexTags.Entities.STICKY_TELEPORTERS)) 
             teleportee.passengers.forEach(Entity::stopRiding)
 
+        // we specify that this is relative movement so that it doesn't reset player velocity. :mojank:
+        // note that the coordinates here are still absolute, because vanilla relative teleports are weird
         teleportee.teleportTo(world, target.x, target.y, target.z,
-            RelativeMovement.ALL, // use relative movement since it makes it so the velocity doesn't vanish. :mojank:
-            teleportee.yRot, teleportee.xRot)
+            RelativeMovement.ALL, teleportee.yRot, teleportee.xRot)
     }
 }
