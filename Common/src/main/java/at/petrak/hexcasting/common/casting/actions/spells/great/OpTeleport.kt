@@ -12,14 +12,11 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapImmuneEntity
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
-import at.petrak.hexcasting.xplat.IXplatAbstractions
-import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.server.level.TicketType
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.RelativeMovement
 import net.minecraft.world.item.enchantment.EnchantmentHelper
-import net.minecraft.world.level.ChunkPos
 import net.minecraft.world.phys.Vec3
 
 // TODO while we're making breaking changes I *really* want to have the vector in the entity's local space
@@ -112,6 +109,10 @@ object OpTeleport : SpellAction {
         teleportee.stopRiding()
         if (!teleportee.type.`is`(HexTags.Entities.STICKY_TELEPORTERS)) 
             teleportee.passengers.forEach(Entity::stopRiding)
-        teleportee.teleportTo(target.x, target.y, target.z)
+
+        // we specify that this is relative movement so that it doesn't reset player velocity. :mojank:
+        // note that the coordinates here are still absolute, because vanilla relative teleports are weird
+        teleportee.teleportTo(world, target.x, target.y, target.z,
+            RelativeMovement.ALL, teleportee.yRot, teleportee.xRot)
     }
 }
