@@ -49,7 +49,7 @@ public class ListIota extends Iota {
     }
 
     @Override
-    public boolean isTruthy(CastingEnvironment env) {
+    public boolean isTruthy(@Nullable CastingEnvironment env) {
         return !this.getList().isEmpty();
     }
 

@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class ContinuationIota extends Iota {
     }
 
     @Override
-    public boolean isTruthy(CastingEnvironment env) {
+    public boolean isTruthy(@Nullable CastingEnvironment env) {
         return true;
     }
 

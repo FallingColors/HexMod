@@ -9,6 +9,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import org.jetbrains.annotations.Nullable;
 
 public class BooleanIota extends Iota {
     private boolean value;
@@ -22,7 +23,7 @@ public class BooleanIota extends Iota {
     }
 
     @Override
-    public boolean isTruthy(CastingEnvironment env) {
+    public boolean isTruthy(@Nullable CastingEnvironment env) {
         return this.getBool();
     }
 

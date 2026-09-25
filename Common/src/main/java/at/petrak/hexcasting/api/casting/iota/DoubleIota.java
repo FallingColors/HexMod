@@ -12,6 +12,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import org.jetbrains.annotations.Nullable;
 
 public class DoubleIota extends Iota {
     public static final double TOLERANCE = 0.0001;
@@ -27,7 +28,7 @@ public class DoubleIota extends Iota {
     }
 
     @Override
-    public boolean isTruthy(CastingEnvironment env) {
+    public boolean isTruthy(@Nullable CastingEnvironment env) {
         return this.getDouble() != 0.0;
     }
 

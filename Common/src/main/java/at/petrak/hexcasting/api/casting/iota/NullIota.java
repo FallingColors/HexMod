@@ -7,6 +7,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An iota with no data associated with it.
@@ -21,7 +22,7 @@ public class NullIota extends Iota {
     }
 
     @Override
-    public boolean isTruthy(CastingEnvironment env) {
+    public boolean isTruthy(@Nullable CastingEnvironment env) {
         return false;
     }
 
