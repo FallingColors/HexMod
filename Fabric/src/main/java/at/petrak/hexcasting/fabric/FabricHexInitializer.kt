@@ -34,7 +34,6 @@ import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
 import at.petrak.hexcasting.common.lib.HexBrainsweepeeIngredients
 import at.petrak.hexcasting.common.lib.HexStateIngredients
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents
-import at.petrak.hexcasting.fabric.cc.adimpl.*
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
 import at.petrak.hexcasting.fabric.loot.FabricHexLootModJankery
 import at.petrak.hexcasting.fabric.network.FabricPacketHandler
@@ -255,7 +254,7 @@ object FabricHexInitializer : ModInitializer {
             }
             if (item is IotaHolderItem) {
                 HexCardinalComponents.IOTA_HOLDER_LOOKUP.registerForItems({
-                    stack, _ -> CCItemIotaHolder.ItemBased(stack);
+                    stack, _ -> ADIotaHolder.Dynamic(item, stack);
                 }, item)
             }
             if (item is HexHolderItem) {
@@ -291,9 +290,7 @@ object FabricHexInitializer : ModInitializer {
         }, HexBlocks.QUENCHED_ALLAY.get().asItem())
 
         HexCardinalComponents.IOTA_HOLDER_LOOKUP.registerForItems({
-            stack, _ -> CCItemIotaHolder.Static(stack) {
-            return@Static DoubleIota(Math.PI)
-        }
+            stack, _ -> ADIotaHolder.Static({ s -> DoubleIota(Math.PI * s.count) }, stack)
         }, Items.PUMPKIN_PIE)
     }
 

@@ -10,7 +10,6 @@ import at.petrak.hexcasting.common.entities.HexEntities;
 import at.petrak.hexcasting.common.items.HexBaubleItem;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.forge.cap.adimpl.*;
 import at.petrak.hexcasting.forge.interop.curios.CuriosApiInterop;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -29,7 +28,7 @@ public class ForgeCapabilityHandler {
             if(item instanceof MediaHolderItem holder)
                 evt.registerItem(HexCapabilities.Item.MEDIA, (stack, ctx) -> new ADMediaHolder.Dynamic(holder, stack), item);
             if(item instanceof IotaHolderItem holder)
-                evt.registerItem(HexCapabilities.Item.IOTA, (stack, ctx) -> new CapItemIotaHolder(holder, stack), item);
+                evt.registerItem(HexCapabilities.Item.IOTA, (stack, ctx) -> new ADIotaHolder.Dynamic(holder, stack), item);
             if(item instanceof HexHolderItem holder)
                 evt.registerItem(HexCapabilities.Item.STORED_HEX, (stack, ctx) -> new ADHexHolder(holder, stack), item);
             if(item instanceof VariantItem holder)
@@ -69,7 +68,7 @@ public class ForgeCapabilityHandler {
         // haha yes
         evt.registerItem(
                 HexCapabilities.Item.IOTA,
-                (stack, ctx) -> new CapStaticIotaHolder((s) -> new DoubleIota(Math.PI * s.getCount()), stack),
+                (stack, ctx) -> new ADIotaHolder.Static((s) -> new DoubleIota(Math.PI * s.getCount()), stack),
                 Items.PUMPKIN_PIE
         );
 

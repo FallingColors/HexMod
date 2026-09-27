@@ -3,7 +3,6 @@ package at.petrak.hexcasting.fabric.cc;
 import at.petrak.hexcasting.api.addldata.*;
 import at.petrak.hexcasting.common.entities.EntityWallScroll;
 import at.petrak.hexcasting.common.lib.HexDataComponents;
-import at.petrak.hexcasting.fabric.cc.adimpl.*;
 import net.fabricmc.fabric.api.lookup.v1.item.ItemApiLookup;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -45,8 +44,8 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
     public static final ComponentKey<CCClientCastingStack> CLIENT_CASTING_STACK = ComponentRegistry.getOrCreate(modLoc("client_casting_stack"),
             CCClientCastingStack.class);
 
-    public static final ComponentKey<CCIotaHolder> IOTA_HOLDER = ComponentRegistry.getOrCreate(modLoc("iota_holder"),
-        CCIotaHolder.class);
+    public static final ComponentKey<CCEntityIotaHolder> IOTA_HOLDER = ComponentRegistry.getOrCreate(modLoc("iota_holder"),
+        CCEntityIotaHolder.class);
 
     // Item API lookups have nothing to do with Cardinal Components! They're just here for convenience
 
