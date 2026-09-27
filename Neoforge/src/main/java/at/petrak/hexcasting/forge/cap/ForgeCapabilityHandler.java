@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.forge.cap;
 
-import at.petrak.hexcasting.api.addldata.ADMediaHolder;
-import at.petrak.hexcasting.api.addldata.ItemDelegatingEntityIotaHolder;
+import at.petrak.hexcasting.api.addldata.*;
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.casting.iota.DoubleIota;
 import at.petrak.hexcasting.api.item.*;
@@ -28,42 +27,42 @@ public class ForgeCapabilityHandler {
     public static void registerCaps(RegisterCapabilitiesEvent evt) {
         for(Item item : BuiltInRegistries.ITEM) {
             if(item instanceof MediaHolderItem holder)
-                evt.registerItem(HexCapabilities.Item.MEDIA, (stack, ctx) -> new CapItemMediaHolder(holder, stack), item);
+                evt.registerItem(HexCapabilities.Item.MEDIA, (stack, ctx) -> new ADMediaHolder.Dynamic(holder, stack), item);
             if(item instanceof IotaHolderItem holder)
                 evt.registerItem(HexCapabilities.Item.IOTA, (stack, ctx) -> new CapItemIotaHolder(holder, stack), item);
             if(item instanceof HexHolderItem holder)
-                evt.registerItem(HexCapabilities.Item.STORED_HEX, (stack, ctx) -> new CapItemHexHolder(holder, stack), item);
+                evt.registerItem(HexCapabilities.Item.STORED_HEX, (stack, ctx) -> new ADHexHolder(holder, stack), item);
             if(item instanceof VariantItem holder)
-                evt.registerItem(HexCapabilities.Item.VARIANT_ITEM, (stack, ctx) -> new CapItemVariantItem(holder, stack), item);
+                evt.registerItem(HexCapabilities.Item.VARIANT_ITEM, (stack, ctx) -> new ADVariantItem(holder, stack), item);
             if(item instanceof PigmentItem holder)
-                evt.registerItem(HexCapabilities.Item.COLOR, (stack, ctx) -> new CapItemPigment(holder, stack), item);
+                evt.registerItem(HexCapabilities.Item.COLOR, (stack, ctx) -> new ADPigment(holder, stack), item);
             if(item instanceof HexBaubleItem && IXplatAbstractions.INSTANCE.isModPresent(HexInterop.Forge.CURIOS_API_ID))
                 CuriosApiInterop.registerCap(evt, item);
         }
 
         evt.registerItem(
                 HexCapabilities.Item.MEDIA,
-                (stack, ctx) -> new CapStaticMediaHolder(HexConfig.common()::dustMediaAmount, ADMediaHolder.AMETHYST_DUST_PRIORITY, stack),
+                (stack, ctx) -> new ADMediaHolder.Static(HexConfig.common()::dustMediaAmount, ADMediaHolder.AMETHYST_DUST_PRIORITY, stack),
                 HexItems.AMETHYST_DUST.get()
         );
         evt.registerItem(
                 HexCapabilities.Item.MEDIA,
-                (stack, ctx) -> new CapStaticMediaHolder(HexConfig.common()::shardMediaAmount, ADMediaHolder.AMETHYST_SHARD_PRIORITY, stack),
+                (stack, ctx) -> new ADMediaHolder.Static(HexConfig.common()::shardMediaAmount, ADMediaHolder.AMETHYST_SHARD_PRIORITY, stack),
                 Items.AMETHYST_SHARD
         );
         evt.registerItem(
                 HexCapabilities.Item.MEDIA,
-                (stack, ctx) -> new CapStaticMediaHolder(HexConfig.common()::chargedCrystalMediaAmount, ADMediaHolder.CHARGED_AMETHYST_PRIORITY, stack),
+                (stack, ctx) -> new ADMediaHolder.Static(HexConfig.common()::chargedCrystalMediaAmount, ADMediaHolder.CHARGED_AMETHYST_PRIORITY, stack),
                 HexItems.CHARGED_AMETHYST.get()
         );
         evt.registerItem(
                 HexCapabilities.Item.MEDIA,
-                (stack, ctx) -> new CapStaticMediaHolder(() -> MediaConstants.QUENCHED_SHARD_UNIT, ADMediaHolder.QUENCHED_SHARD_PRIORITY, stack),
+                (stack, ctx) -> new ADMediaHolder.Static(() -> MediaConstants.QUENCHED_SHARD_UNIT, ADMediaHolder.QUENCHED_SHARD_PRIORITY, stack),
                 HexItems.QUENCHED_SHARD.get()
         );
         evt.registerItem(
                 HexCapabilities.Item.MEDIA,
-                (stack, ctx) -> new CapStaticMediaHolder(() -> MediaConstants.QUENCHED_BLOCK_UNIT, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, stack),
+                (stack, ctx) -> new ADMediaHolder.Static(() -> MediaConstants.QUENCHED_BLOCK_UNIT, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, stack),
                 HexBlocks.QUENCHED_ALLAY.get().asItem()
         );
 

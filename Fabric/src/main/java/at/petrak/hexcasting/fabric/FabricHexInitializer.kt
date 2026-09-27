@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.fabric
 
 import at.petrak.hexcasting.api.HexAPI.modLoc
-import at.petrak.hexcasting.api.addldata.ADMediaHolder
+import at.petrak.hexcasting.api.addldata.*
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry
 import at.petrak.hexcasting.api.casting.iota.DoubleIota
@@ -23,7 +23,6 @@ import at.petrak.hexcasting.common.casting.actions.spells.great.OpAltiora
 import at.petrak.hexcasting.common.command.PatternResKeyArgument
 import at.petrak.hexcasting.common.entities.HexEntities
 import at.petrak.hexcasting.common.items.ItemJewelerHammer
-import at.petrak.hexcasting.common.items.magic.ItemMediaBattery
 import at.petrak.hexcasting.common.items.storage.ItemScroll
 import at.petrak.hexcasting.common.lib.*
 import at.petrak.hexcasting.common.lib.hex.*
@@ -246,49 +245,49 @@ object FabricHexInitializer : ModInitializer {
         for (item in BuiltInRegistries.ITEM) {
             if (item is PigmentItem) {
                 HexCardinalComponents.PIGMENT_ITEM_LOOKUP.registerForItems({
-                    item, _ -> CCPigment.ItemBased(item);
+                    stack, _ -> ADPigment(item, stack);
                 }, item)
             }
             if (item is MediaHolderItem) {
                 HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
-                        item, _ -> CCMediaHolder.ItemBased(item);
+                    stack, _ -> ADMediaHolder.Dynamic(item, stack);
                 }, item)
             }
             if (item is IotaHolderItem) {
                 HexCardinalComponents.IOTA_HOLDER_LOOKUP.registerForItems({
-                    item, _ -> CCItemIotaHolder.ItemBased(item);
+                    stack, _ -> CCItemIotaHolder.ItemBased(stack);
                 }, item)
             }
             if (item is HexHolderItem) {
                 HexCardinalComponents.HEX_HOLDER_LOOKUP.registerForItems({
-                    item, _ -> CCHexHolder.ItemBased(item);
+                    stack, _ -> ADHexHolder(item, stack);
                 }, item)
             }
             if (item is VariantItem) {
                 HexCardinalComponents.VARIANT_ITEM_LOOKUP.registerForItems({
-                    item, _ -> CCVariantItem.ItemBased(item);
+                    stack, _ -> ADVariantItem(item, stack);
                 }, item)
             }
         }
 
         HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
-         stack, _ -> CCMediaHolder.Static({ HexConfig.common().dustMediaAmount() }, ADMediaHolder.AMETHYST_DUST_PRIORITY, stack)
+         stack, _ -> ADMediaHolder.Static({ HexConfig.common().dustMediaAmount() }, ADMediaHolder.AMETHYST_DUST_PRIORITY, stack)
         }, HexItems.AMETHYST_DUST.get())
 
         HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
-            stack, _ -> CCMediaHolder.Static({ HexConfig.common().shardMediaAmount() }, ADMediaHolder.AMETHYST_SHARD_PRIORITY, stack)
+            stack, _ -> ADMediaHolder.Static({ HexConfig.common().shardMediaAmount() }, ADMediaHolder.AMETHYST_SHARD_PRIORITY, stack)
         }, Items.AMETHYST_SHARD)
 
         HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
-                stack, _ -> CCMediaHolder.Static({ HexConfig.common().chargedCrystalMediaAmount() }, ADMediaHolder.CHARGED_AMETHYST_PRIORITY, stack)
+                stack, _ -> ADMediaHolder.Static({ HexConfig.common().chargedCrystalMediaAmount() }, ADMediaHolder.CHARGED_AMETHYST_PRIORITY, stack)
         }, HexItems.CHARGED_AMETHYST.get())
 
         HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
-                stack, _ -> CCMediaHolder.Static({ MediaConstants.QUENCHED_SHARD_UNIT }, ADMediaHolder.QUENCHED_SHARD_PRIORITY, stack)
+                stack, _ -> ADMediaHolder.Static({ MediaConstants.QUENCHED_SHARD_UNIT }, ADMediaHolder.QUENCHED_SHARD_PRIORITY, stack)
         }, HexItems.QUENCHED_SHARD.get())
 
         HexCardinalComponents.MEDIA_HOLDER_LOOKUP.registerForItems({
-                stack, _ -> CCMediaHolder.Static({ MediaConstants.QUENCHED_BLOCK_UNIT }, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, stack)
+                stack, _ -> ADMediaHolder.Static({ MediaConstants.QUENCHED_BLOCK_UNIT }, ADMediaHolder.QUENCHED_ALLAY_PRIORITY, stack)
         }, HexBlocks.QUENCHED_ALLAY.get().asItem())
 
         HexCardinalComponents.IOTA_HOLDER_LOOKUP.registerForItems({

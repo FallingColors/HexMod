@@ -45,17 +45,10 @@ public class HexCardinalComponents implements EntityComponentInitializer, ItemCo
     public static final ComponentKey<CCClientCastingStack> CLIENT_CASTING_STACK = ComponentRegistry.getOrCreate(modLoc("client_casting_stack"),
             CCClientCastingStack.class);
 
-    public static final ComponentKey<CCPigment> PIGMENT = ComponentRegistry.getOrCreate(modLoc("pigment"),
-        CCPigment.class);
     public static final ComponentKey<CCIotaHolder> IOTA_HOLDER = ComponentRegistry.getOrCreate(modLoc("iota_holder"),
         CCIotaHolder.class);
-    public static final ComponentKey<CCMediaHolder> MEDIA_HOLDER = ComponentRegistry.getOrCreate(modLoc("media_holder"),
-        CCMediaHolder.class);
-    public static final ComponentKey<CCHexHolder> HEX_HOLDER = ComponentRegistry.getOrCreate(modLoc("hex_holder"),
-        CCHexHolder.class);
 
-    public static final ComponentKey<CCVariantItem> VARIANT_ITEM = ComponentRegistry.getOrCreate(modLoc("variant_item"),
-        CCVariantItem.class);
+    // Item API lookups have nothing to do with Cardinal Components! They're just here for convenience
 
     public static final ItemApiLookup<ADMediaHolder, Void> MEDIA_HOLDER_LOOKUP = ItemApiLookup.get(modLoc("media_holder_item"), ADMediaHolder.class, Void.class);
 
