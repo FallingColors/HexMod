@@ -1,0 +1,21 @@
+{
+  "name": "hexcasting.entry.whats_a_hex",
+  "category": "hexcasting:casting",
+  "icon": "hexcasting:focus",
+  "sortnum": 2,
+  "advancement": "hexcasting:root",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.whats_a_hex.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.whats_a_hex.2"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "hexcasting.page.whats_a_hex.3"
+    }
+  ]
+}

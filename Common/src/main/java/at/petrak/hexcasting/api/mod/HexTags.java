@@ -77,6 +77,11 @@ public class HexTags {
          */
         public static final TagKey<ActionRegistryEntry> REQUIRES_ENLIGHTENMENT = create("requires_enlightenment");
         /**
+         * Same as REQUIRES_ENLIGHTENMENT but applies to actions that take effect while parenthesized.
+         * The base mod does not have any actions meeting both criteria but future addons might.
+         */
+        public static final TagKey<ActionRegistryEntry> REQUIRES_ENLIGHTENMENT_IN_PARENS = create("requires_enlightenment_in_parens");
+        /**
          * Actions where the pattern is calculated per-world
          */
         public static final TagKey<ActionRegistryEntry> PER_WORLD_PATTERN = create("per_world_pattern");
@@ -87,7 +92,7 @@ public class HexTags {
         public static final TagKey<ActionRegistryEntry> CAN_START_ENLIGHTEN = create("can_start_enlighten");
 
         /**
-         * Actions that should not be affected by the media_consumption attribute
+         * Actions that should not be affected by the media_consumption attribute or the globalCostScaling config
          */
         public static final TagKey<ActionRegistryEntry> CANNOT_MODIFY_COST = create("cannot_modify_cost");
 

@@ -12,7 +12,7 @@ import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 
 object OpOpenParen : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val image2 = image.copy(
+        val image2 = image.withUsedOp().copy(
             parenCount = image.parenCount + 1
         )
         return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE)

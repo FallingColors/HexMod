@@ -11,7 +11,7 @@ import net.minecraft.world.item.DyeColor
 class MishapUnescapedValue(
     val perpetrator: Iota
 ) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.GRAY)
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
@@ -30,6 +30,6 @@ class MishapUnescapedValue(
          */
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context) =
         error("unescaped", perpetrator.display())
 }

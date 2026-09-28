@@ -61,11 +61,11 @@ object OpIgnite : SpellAction {
             }
         }
 
-        fun tryToClick(ctx: CastingEnvironment, pos: BlockPos, item: Item): Boolean {
-            return IXplatAbstractions.INSTANCE.isPlacingAllowed(ctx.world, pos, ItemStack(item), ctx.castingEntity as? ServerPlayer) &&
+        fun tryToClick(env: CastingEnvironment, pos: BlockPos, item: Item): Boolean {
+            return IXplatAbstractions.INSTANCE.isPlacingAllowed(env.world, pos, ItemStack(item), env.castingEntity as? ServerPlayer) &&
                 item.useOn(
                     UseOnContext(
-                        ctx.world,
+                        env.world,
                         null,
                         InteractionHand.MAIN_HAND,
                         ItemStack(item),

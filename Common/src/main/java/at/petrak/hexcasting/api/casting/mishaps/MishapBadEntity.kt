@@ -11,14 +11,14 @@ import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.DyeColor
 
 class MishapBadEntity(val entity: Entity, val wanted: Component) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BROWN)
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: MutableList<Iota>) {
         env.mishapEnvironment.yeetHeldItemsTowards(entity.position())
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context) =
         error("bad_entity", wanted, entity.displayName.plainCopy().aqua)
 
     companion object {

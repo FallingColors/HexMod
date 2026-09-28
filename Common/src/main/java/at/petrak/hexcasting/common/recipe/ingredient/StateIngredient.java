@@ -27,7 +27,7 @@ public interface StateIngredient extends Predicate<BlockState> {
     List<ItemStack> getDisplayedStacks();
 
     /**
-     * A description tooltip to display in areas like JEI recipes.
+     * A description tooltip to display in recipe viewers.
      */
     default List<Component> descriptionTooltip() {
         return Collections.emptyList();

@@ -30,7 +30,7 @@ object OpBrainsweep : SpellAction {
     override val argc = 2
 
     // this way you can hear the villager dying more : )
-    override fun hasCastingSound(ctx: CastingEnvironment) = false
+    override fun hasCastingSound(env: CastingEnvironment) = false
 
     override fun execute(
             args: List<Iota>,

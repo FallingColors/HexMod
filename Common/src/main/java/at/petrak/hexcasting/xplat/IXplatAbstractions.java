@@ -47,6 +47,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.UUID;
@@ -56,6 +57,7 @@ import java.util.stream.Collectors;
 /**
  * more like IHexplatAbstracts lmaooooooo
  */
+@ParametersAreNonnullByDefault
 public interface IXplatAbstractions {
     Platform platform();
 

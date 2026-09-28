@@ -29,14 +29,15 @@ object OpAddMotion : SpellAction {
         val motion = args.getVec3(1, argc)
         env.assertEntityInRange(target)
 
-        var motionForCost = motion.lengthSqr()
-        if (CastingImage.checkAndMarkGivenMotion(userData, target))
-            motionForCost++
-
         val shrunkMotion = if (motion.lengthSqr() > MAX_MOTION * MAX_MOTION)
             motion.normalize().scale(MAX_MOTION)
         else
             motion
+
+        var motionForCost = shrunkMotion.lengthSqr()
+        if (CastingImage.checkAndMarkGivenMotion(userData, target))
+            motionForCost++
+
         return SpellAction.Result(
             Spell(target, shrunkMotion),
             (motionForCost * MediaConstants.DUST_UNIT).toLong(),

@@ -17,9 +17,9 @@ import net.minecraft.nbt.CompoundTag
 interface SpellAction : Action {
     val argc: Int
 
-    fun hasCastingSound(ctx: CastingEnvironment): Boolean = true
+    fun hasCastingSound(env: CastingEnvironment): Boolean = true
 
-    fun awardsCastingStat(ctx: CastingEnvironment): Boolean = true
+    fun awardsCastingStat(env: CastingEnvironment): Boolean = true
 
     @Throws(Mishap::class)
     fun execute(
