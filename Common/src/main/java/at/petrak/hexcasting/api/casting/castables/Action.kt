@@ -39,6 +39,8 @@ interface Action {
      *
      * The userdata tag is copied for you, so you don't need to worry about mutation messing up things
      * behind the scenes.
+     *
+     * Note that `image.parenCount` will always be 0 here - if it's greater, [operateInParens] is used instead.
      */
     @Throws(Mishap::class)
     fun operate(
@@ -51,8 +53,8 @@ interface Action {
      * The behavior of this action when inside parentheses (meaning `image.parenCount` will always be greater than 0).
      * By default, this just adds the pattern to the parenthesized list without updating the op count or performing any of its effects.
      *
-     * Note that behavior defined here can throw mishaps as usual. However, mishapping here will not affect the paren count,
-     * so the caster will still be in list-building mode after the mishap resolves.
+     * Note that behavior defined here can throw mishaps as usual. However, mishapping here while staffcasting will not
+     * affect the paren count, so the caster will still be in list-building mode after the mishap resolves.
      */
     @Throws(Mishap::class)
     fun operateInParens(

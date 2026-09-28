@@ -10,10 +10,10 @@ import at.petrak.hexcasting.api.casting.mishaps.circle.MishapNoSpellCircle
 object OpImpetusPos : ConstMediaAction {
     override val argc = 0
 
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
-        if (ctx !is CircleCastEnv)
+    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+        if (env !is CircleCastEnv)
             throw MishapNoSpellCircle()
 
-        return ctx.circleState().impetusPos.asActionResult
+        return env.circleState().impetusPos.asActionResult
     }
 }

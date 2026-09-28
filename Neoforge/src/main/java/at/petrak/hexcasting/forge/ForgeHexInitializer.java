@@ -142,6 +142,7 @@ public class ForgeHexInitializer {
         HexEvalSounds.register();
         HexStateIngredients.register();
         HexBrainsweepeeIngredients.register();
+        HexItemHolderHandlers.init();
 
         ForgeHexArgumentTypeRegistry.ARGUMENT_TYPES.register(getModEventBus());
         ForgeHexLootMods.REGISTRY.register(getModEventBus());

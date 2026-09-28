@@ -1,7 +1,9 @@
 package at.petrak.hexcasting.datagen;
 
 import at.petrak.hexcasting.datagen.recipe.builders.FarmersDelightToolIngredient;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.EnumMap;
@@ -24,8 +26,6 @@ public interface IXplatIngredients {
     EnumMap<DyeColor, Ingredient> dyes();
 
     Ingredient stick();
-
-    Ingredient whenModIngredient(Ingredient defaultIngredient, String modid, Ingredient modIngredient);
 
     FarmersDelightToolIngredient axeStrip();
 

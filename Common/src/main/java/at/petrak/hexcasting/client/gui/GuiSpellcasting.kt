@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.math.HexAngle
 import at.petrak.hexcasting.api.casting.math.HexCoord
 import at.petrak.hexcasting.api.casting.math.HexDir
 import at.petrak.hexcasting.api.casting.math.HexPattern
+import at.petrak.hexcasting.api.casting.math.HexSignature
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.api.utils.asTranslatedComponent
@@ -71,11 +72,8 @@ class GuiSpellcasting constructor(
 
         // TODO this is the kinda hacky bit
         if (info.resolutionType == ResolvedPatternType.UNDONE) {
-            // find the last escaped pattern (or the opening paren if there's nothing else) and set it to UNDONE
-            this.patterns.reversed().drop(1).firstOrNull {
-                it.type == ResolvedPatternType.ESCAPED ||
-                (it.type == ResolvedPatternType.EVALUATED && it.pattern.angles == HexActions.OPEN_PAREN.value().prototype.angles)
-            }?.let { it.type = ResolvedPatternType.UNDONE }
+            // find the last undo-able pattern and set its coloring to UNDONE
+            this.patterns.reversed().drop(1).firstOrNull { canBeUndone(it) }?.let { it.type = ResolvedPatternType.UNDONE }
             // use the normal EVALUATED coloring for the Evanition that was just drawn
             this.patterns.getOrNull(index)?.let { it.type = ResolvedPatternType.EVALUATED }
         } else this.patterns.getOrNull(index)?.let {
@@ -85,6 +83,22 @@ class GuiSpellcasting constructor(
         this.cachedStack = info.stackDescs
         this.cachedRavenmind = info.ravenmind
         this.calculateIotaDisplays()
+    }
+
+    fun canBeUndone(resolvedPat: ResolvedPattern): Boolean {
+        return when (resolvedPat.type) {
+            // standard escaped patterns can always be undone
+            ResolvedPatternType.ESCAPED -> true
+            // everything else cannot be undone, with three exceptions:
+            // - unescaped Introspection and Meditation can be undone if there's nothing else left to undo
+            // - Interjection can always be undone (undoing its inserted iota) despite using the EVALUATED coloring
+            ResolvedPatternType.EVALUATED -> {
+                resolvedPat.pattern.signature == HexActions.OPEN_PAREN.value().prototype.signature ||
+                resolvedPat.pattern.signature == HexActions.OPEN_N_PARENS.value().prototype.signature ||
+                resolvedPat.pattern.signature == HexActions.READ_INTO_PARENS.value().prototype.signature
+            }
+            else -> false
+        }
     }
 
     fun calculateIotaDisplays() {
@@ -210,29 +224,22 @@ class GuiSpellcasting constructor(
                 var playSound = false
                 if (!this.usedSpots.contains(idealNextLoc)) {
                     if (this.drawState is PatternDrawState.JustStarted) {
-                        val pat = HexPattern(newdir)
-
-                        this.drawState = PatternDrawState.Drawing(anchorCoord, idealNextLoc, pat)
+                        this.drawState = (this.drawState as PatternDrawState.JustStarted).startDrawing(anchorCoord, newdir, idealNextLoc)
                         playSound = true
                     } else if (this.drawState is PatternDrawState.Drawing) {
                         // how anyone gets around without a borrowck is beyond me
                         val ds = (this.drawState as PatternDrawState.Drawing)
-                        val lastDir = ds.wipPattern.finalDir()
+                        val lastDir = ds.recentDirection()
                         if (newdir == lastDir.rotatedBy(HexAngle.BACK)) {
                             // We're diametrically opposite! Do a backtrack
-                            if (ds.wipPattern.angles.isEmpty()) {
+                            if (ds.wipPattern.size() == 0) {
                                 this.drawState = PatternDrawState.JustStarted(ds.current + newdir)
                             } else {
-                                ds.current += newdir
-                                ds.wipPattern.angles.removeLast()
+                                ds.undo()
                             }
                             playSound = true
                         } else {
-                            val success = ds.wipPattern.tryAppendDir(newdir)
-                            if (success) {
-                                ds.current = idealNextLoc
-                            }
-                            playSound = success
+                            playSound = ds.go(newdir)
                         }
                     }
                 }
@@ -275,7 +282,8 @@ class GuiSpellcasting constructor(
             }
 
             is PatternDrawState.Drawing -> {
-                val (start, _, pat) = this.drawState as PatternDrawState.Drawing
+                val (start, _, orientation, sig) = this.drawState as PatternDrawState.Drawing
+                val pat = HexPattern(orientation, sig.build())
                 this.drawState = PatternDrawState.BetweenPatterns
                 this.patterns.add(ResolvedPattern(pat, start, ResolvedPatternType.UNRESOLVED))
 
@@ -419,9 +427,9 @@ class GuiSpellcasting constructor(
                 points.add(this.coordToPx(ds.start))
             } else if (this.drawState is PatternDrawState.Drawing) {
                 val ds = this.drawState as PatternDrawState.Drawing
-                dupIndices = findDupIndices(ds.wipPattern.positions())
-                for (pos in ds.wipPattern.positions()) {
-                    val pix = this.coordToPx(pos + ds.start)
+                dupIndices = findDupIndices(ds.positions)
+                for (pos in ds.positions) {
+                    val pix = this.coordToPx(pos)
                     points.add(pix)
                 }
             }
@@ -532,10 +540,47 @@ class GuiSpellcasting constructor(
         object BetweenPatterns : PatternDrawState()
 
         /** We just started drawing and haven't drawn the first line yet. */
-        data class JustStarted(val start: HexCoord) : PatternDrawState()
+        data class JustStarted(val start: HexCoord) : PatternDrawState() {
+            fun startDrawing(anchorCoord: HexCoord, newDir: HexDir, idealNextLoc: HexCoord): Drawing =
+                Drawing(
+                    anchorCoord,
+                    idealNextLoc,
+                    newDir,
+                    HexSignature.Builder(),
+                    mutableListOf(anchorCoord, idealNextLoc)
+                )
+        }
 
         /** We've started drawing a pattern for real. */
-        data class Drawing(val start: HexCoord, var current: HexCoord, val wipPattern: HexPattern) : PatternDrawState()
+        data class Drawing(
+            val start: HexCoord,
+            var current: HexCoord,
+            val orientation: HexDir,
+            val wipPattern: HexSignature.Builder,
+            val positions: MutableList<HexCoord>
+        ) : PatternDrawState() {
+            fun go(direction: HexDir): Boolean {
+                val angle = direction.angleFrom(this.recentDirection())
+                try {
+                    wipPattern.addAngle(angle)
+                    current = current.plus(direction)
+                    positions.add(current)
+                    return true
+                } catch (ise: IllegalStateException) {
+                    return false
+                }
+            }
+
+            fun recentDirection(): HexDir {
+                return positions[positions.size - 2].immediateDelta(positions[positions.size - 1])!!
+            }
+
+            fun undo() {
+                positions.removeLast()
+                current = positions.last()
+                wipPattern.undoAngle()
+            }
+        }
     }
 
     companion object {

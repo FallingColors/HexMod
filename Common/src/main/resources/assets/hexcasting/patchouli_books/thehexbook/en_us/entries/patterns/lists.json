@@ -2,7 +2,7 @@
   "name": "hexcasting.entry.lists",
   "category": "hexcasting:patterns",
   "icon": "minecraft:oak_sign",
-  "sortnum": 7,
+  "sortnum": 8,
   "advancement": "hexcasting:root",
   "read_by_default": true,
   "pages": [

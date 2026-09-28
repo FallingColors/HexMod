@@ -286,8 +286,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public CastingVM getStaffcastVM(ServerPlayer player, InteractionHand hand) {
         // This is always from a staff because we don't need to load the VM when casting from item
-        var ctx = new StaffCastEnv(player, hand);
-        return new CastingVM(CastingImage.getCODEC().parse(NbtOps.INSTANCE, player.getPersistentData().getCompound(TAG_VM)).getOrThrow(), ctx);
+        var env = new StaffCastEnv(player, hand);
+        return new CastingVM(CastingImage.getCODEC().parse(NbtOps.INSTANCE, player.getPersistentData().getCompound(TAG_VM)).getOrThrow(), env);
     }
 
     @Override

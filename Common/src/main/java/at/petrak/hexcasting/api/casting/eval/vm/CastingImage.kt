@@ -71,10 +71,12 @@ data class CastingImage(
     fun withResetEscape() = this.copy(parenCount = 0, parenthesized = TreeList.empty(), escapeNext = false)
 
     /**
-     * Returns a copy of this with the provided iota added to the parenthesized list.
+     * Returns a copy of this with the provided iota added to the parenthesized list. `escaped` is used by
+     * [OpUndo][at.petrak.hexcasting.common.casting.actions.escaping.OpUndo] to determine whether undoing the
+     * parenthesized iota should adjust the paren count (escaped parens do not affect the count).
      */
-    fun withNewParenthesized(iota: Iota): CastingImage {
-        val newParens = this.parenthesized.appended(ParenthesizedIota(iota, false))
+    fun withNewParenthesized(iota: Iota, escaped: Boolean = false): CastingImage {
+        val newParens = this.parenthesized.appended(ParenthesizedIota(iota, escaped))
         return this.copy(parenthesized = newParens)
     }
 
@@ -117,17 +119,5 @@ data class CastingImage(
                         CastingImage(a, b, c, d, e, f, g)
                     }
         )
-
-        @JvmStatic
-        fun checkAndMarkGivenMotion(userData: CompoundTag, entity: Entity): Boolean {
-            val marked = userData.getOrCreateCompound(HexAPI.MARKED_MOVED_USERDATA)
-            return if (marked.contains(entity.stringUUID)) {
-                true
-            } else {
-                marked.putBoolean(entity.stringUUID, true)
-                userData.putCompound(HexAPI.MARKED_MOVED_USERDATA, marked)
-                false
-            }
-        }
     }
 }

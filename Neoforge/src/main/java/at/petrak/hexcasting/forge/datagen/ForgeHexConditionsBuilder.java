@@ -5,6 +5,7 @@ import net.minecraft.advancements.Criterion;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.conditions.IConditionBuilder;
@@ -31,6 +32,18 @@ public class ForgeHexConditionsBuilder implements IXplatConditionsBuilder, ICond
     @Override
     public IXplatConditionsBuilder whenModMissing(String modid) {
         conditions.add(not(modLoaded(modid)));
+        return this;
+    }
+
+    @Override
+    public IXplatConditionsBuilder whenTagEmpty(TagKey<Item> tag) {
+        conditions.add(tagEmpty(tag));
+        return this;
+    }
+
+    @Override
+    public IXplatConditionsBuilder whenTagPopulated(TagKey<Item> tag) {
+        conditions.add(not(tagEmpty(tag)));
         return this;
     }
 
