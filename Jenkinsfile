@@ -1,14 +1,29 @@
 #!/usr/bin/env groovy
 
+RELEASE_BRANCHES = ["main", "1.21"]
+
 pipeline {
     agent any
     tools {
-        jdk "jdk-17.0.1"
+        jdk "jdk-21"
+    }
+    parameters {
+        booleanParam(
+            name: "PUBLISH_CURSEFORGE_AND_MODRINTH",
+            description: "Publish to CurseForge and modrinth",
+            defaultValue: false,
+        )
+        booleanParam(
+            name: "FORMAL_RELEASE",
+            description: "decides if is a formal release (without -pre)",
+            defaultValue: false,
+        )
     }
     environment {
         discordWebhook = credentials('discordWebhook')
         CURSEFORGE_TOKEN = credentials('curseforgeApiKey')
         MODRINTH_TOKEN = credentials('modrinthApiKey')
+        FORMAL_RELEASE = "${params.FORMAL_RELEASE ? 'true' : 'false'}"
     }
     stages {
         stage('Clean') {
@@ -43,7 +58,7 @@ pipeline {
         stage('Publish') {
             when {
                 allOf {
-                    branch 'main'
+                    expression { env.BRANCH_NAME in RELEASE_BRANCHES }
                     not { changeRequest() }
                 }
             }
@@ -51,23 +66,26 @@ pipeline {
                 stage('Deploy Previews') {
                     steps {
                         echo 'Deploying previews to various places'
-                        sh './gradlew publish publishToDiscord'
+                        sh './gradlew publish announceDiscord'
                     }
                 }
                 stage('Deploy releases') {
+                    when {
+                        expression { params.CURSEFORGE_AND_MODRINTH}
+                    }
                     steps {
                         echo 'Maybe deploy releases'
                         sh './gradlew publishCurseforge publishModrinth'
                     }
-                }
-            }
+                }}
         }
     }
-    post {
-        always {
-            archiveArtifacts 'Common/build/libs/**.jar'
-            archiveArtifacts 'Forge/build/libs/**.jar'
-            archiveArtifacts 'Fabric/build/libs/**.jar'
-        }
+}
+post {
+    always {
+        archiveArtifacts 'Common/build/libs/**.jar'
+        archiveArtifacts 'Neoforge/build/libs/**.jar'
+        archiveArtifacts 'Fabric/build/libs/**.jar'
     }
+}
 }
