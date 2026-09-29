@@ -14,7 +14,6 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
-import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
@@ -24,7 +23,8 @@ import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredientType;
 import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredientType;
-import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
+import at.petrak.hexcasting.fabric.lib.HexCardinalComponents;
+import at.petrak.hexcasting.fabric.lib.HexItemApiLookups;
 import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsInterop;
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
@@ -33,7 +33,6 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatRegister;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
-import com.google.common.base.Suppliers;
 import com.mojang.serialization.Lifecycle;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.entity.FakePlayer;
@@ -69,7 +68,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -88,8 +86,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 public class FabricXplatImpl implements IXplatAbstractions {
     @Override
@@ -240,13 +236,13 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public @Nullable
     ADMediaHolder findMediaHolder(ItemStack stack) {
-        return HexCardinalComponents.MEDIA_HOLDER_LOOKUP.find(stack, null);
+        return HexItemApiLookups.MEDIA_HOLDER_LOOKUP.find(stack, null);
     }
 
     @Override
     public @Nullable
     ADIotaHolder findDataHolder(ItemStack stack) {
-        return HexCardinalComponents.IOTA_HOLDER_LOOKUP.find(stack, null);
+        return HexItemApiLookups.IOTA_HOLDER_LOOKUP.find(stack, null);
     }
 
     @Override
@@ -259,22 +255,22 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public @Nullable
     ADHexHolder findHexHolder(ItemStack stack) {
-        return HexCardinalComponents.HEX_HOLDER_LOOKUP.find(stack, null);
+        return HexItemApiLookups.HEX_HOLDER_LOOKUP.find(stack, null);
     }
 
     @Override
     public ADVariantItem findVariantHolder(ItemStack stack) {
-        return HexCardinalComponents.VARIANT_ITEM_LOOKUP.find(stack, null);
+        return HexItemApiLookups.VARIANT_ITEM_LOOKUP.find(stack, null);
     }
 
     @Override
     public boolean isPigment(ItemStack stack) {
-        return HexCardinalComponents.PIGMENT_ITEM_LOOKUP.find(stack, null) != null;
+        return HexItemApiLookups.PIGMENT_ITEM_LOOKUP.find(stack, null) != null;
     }
 
     @Override
     public ColorProvider getColorProvider(FrozenPigment pigment) {
-        var cc = Optional.ofNullable(HexCardinalComponents.PIGMENT_ITEM_LOOKUP.find(pigment.item(), null));
+        var cc = Optional.ofNullable(HexItemApiLookups.PIGMENT_ITEM_LOOKUP.find(pigment.item(), null));
         return cc.map(col -> col.provideColor(pigment.owner())).orElse(ColorProvider.MISSING);
     }
 
