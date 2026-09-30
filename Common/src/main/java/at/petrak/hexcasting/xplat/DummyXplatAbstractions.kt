@@ -12,6 +12,7 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM
 import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame
+import at.petrak.hexcasting.api.casting.eval.vm.components.ComponentType
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.pigment.ColorProvider
 import at.petrak.hexcasting.api.pigment.FrozenPigment
@@ -114,6 +115,7 @@ internal class DummyXplatAbstractions: IXplatAbstractions {
     override fun getSpecialHandlerRegistry(): Registry<SpecialHandler.Factory<*>?>? = error("Found use of DummyXplatAbstractions.")
     val makeTheRegistryOnce = MappedRegistry(HexRegistries.IOTA_TYPE, Lifecycle.stable())
     override fun getIotaTypeRegistry(): MappedRegistry<IotaType<*>> = makeTheRegistryOnce
+    override fun getImageComponentRegistry(): Registry<ComponentType<*>?>? = error("Found use of DummyXplatAbstractions.")
     override fun getArithmeticRegistry(): Registry<Arithmetic?>? = error("Found use of DummyXplatAbstractions.")
     override fun getContinuationTypeRegistry(): Registry<ContinuationFrame.Type<*>?>? = error("Found use of DummyXplatAbstractions.")
     override fun getEvalSoundRegistry(): Registry<EvalSound?>? = error("Found use of DummyXplatAbstractions.")

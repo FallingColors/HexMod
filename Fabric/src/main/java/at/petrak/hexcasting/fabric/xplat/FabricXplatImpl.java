@@ -13,8 +13,8 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame;
+import at.petrak.hexcasting.api.casting.eval.vm.components.ComponentType;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
-import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
@@ -33,7 +33,6 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import at.petrak.hexcasting.xplat.IXplatRegister;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
-import com.google.common.base.Suppliers;
 import com.mojang.serialization.Lifecycle;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.entity.FakePlayer;
@@ -69,7 +68,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -88,8 +86,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 public class FabricXplatImpl implements IXplatAbstractions {
     @Override
@@ -385,6 +381,10 @@ public class FabricXplatImpl implements IXplatAbstractions {
                 HexRegistries.IOTA_TYPE,
                 Lifecycle.stable(), false))
             .buildAndRegister();
+    private static final Registry<ComponentType<?>> IMAGE_COMPONENT_REGISTRY = FabricRegistryBuilder.from(new MappedRegistry<>(
+                    HexRegistries.IMAGE_COMPONENT,
+                    Lifecycle.stable(), false))
+            .buildAndRegister();
 
     private static final Registry<Arithmetic> ARITHMETIC_REGISTRY = FabricRegistryBuilder.from(new MappedRegistry<>(
                     HexRegistries.ARITHMETIC,
@@ -427,6 +427,9 @@ public class FabricXplatImpl implements IXplatAbstractions {
     public Registry<IotaType<?>> getIotaTypeRegistry() {
         return IOTA_TYPE_REGISTRY;
     }
+
+    @Override
+    public Registry<ComponentType<?>> getImageComponentRegistry() { return IMAGE_COMPONENT_REGISTRY; }
 
     @Override
     public Registry<Arithmetic> getArithmeticRegistry() {

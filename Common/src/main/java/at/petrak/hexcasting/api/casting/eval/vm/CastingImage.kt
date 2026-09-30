@@ -4,7 +4,7 @@ import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota.Companion.TAG_ESCAPED
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota.Companion.TAG_IOTAS
 import at.petrak.hexcasting.api.casting.eval.vm.components.CastingImageComponent
-import at.petrak.hexcasting.api.casting.eval.vm.components.CastingImageComponents
+import at.petrak.hexcasting.common.lib.hex.HexImageComponents
 import at.petrak.hexcasting.api.casting.eval.vm.components.ComponentType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
@@ -93,6 +93,13 @@ data class CastingImage(
         return this.copy(parenthesized = newParens)
     }
 
+    /**
+     * Returns the contents of this image's ravenmind if it exists, otherwise null.
+     */
+    fun ravenOrNull() : Iota? {
+        return getComponent(HexImageComponents.RAVENMIND.get())?.iota
+    }
+
     @Suppress("UNCHECKED_CAST")
     fun <T : CastingImageComponent> getComponent(type: ComponentType<T>): T? = this.components[type] as? T
     fun <T : CastingImageComponent> withComponent(type: ComponentType<T>, value: T): CastingImage = copy(components = this.components + (type to value))
@@ -114,17 +121,6 @@ data class CastingImage(
 //        }
 //        TAG_COMPONENTS %= componentsTag
 //    }
-
-    /**
-     * Returns this image's ravenmind in an Optional wrapper.
-     */
-    fun ravenmind() : Optional<Iota> {
-        val tag = userData.getCompound(HexAPI.RAVENMIND_USERDATA)
-
-        var result: Iota? = null
-        if (!tag.isEmpty) { result = IotaType.TYPED_CODEC.parse(NbtOps.INSTANCE, tag).getOrThrow() }
-        return Optional.ofNullable(result)
-    }
 
     companion object {
 //        const val TAG_STACK = "stack"

@@ -47,8 +47,7 @@ public class ItemStaff extends Item {
             var vm = IXplatAbstractions.INSTANCE.getStaffcastVM(serverPlayer, hand);
             var patterns = IXplatAbstractions.INSTANCE.getPatternsSavedInUi(serverPlayer);
 
-            @Nullable Iota ravenmind = vm.getImage().ravenmind().orElse(null);
-
+            @Nullable Iota ravenmind = vm.getImage().ravenOrNull();
 
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(serverPlayer,
                 new MsgOpenSpellGuiS2C(hand, patterns, vm.getImage().getStack(), ravenmind,
