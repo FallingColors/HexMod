@@ -12,7 +12,7 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM
 import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame
-import at.petrak.hexcasting.api.casting.eval.vm.components.ComponentType
+import at.petrak.hexcasting.api.casting.eval.vm.ImageComponentType
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.pigment.ColorProvider
 import at.petrak.hexcasting.api.pigment.FrozenPigment
@@ -21,7 +21,6 @@ import at.petrak.hexcasting.api.player.FlightAbility
 import at.petrak.hexcasting.api.player.Sentinel
 import at.petrak.hexcasting.common.lib.HexRegistries
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
-import at.petrak.hexcasting.common.msgs.IMessage
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredientType
 import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredientType
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop
@@ -32,7 +31,6 @@ import net.minecraft.core.Holder
 import net.minecraft.core.MappedRegistry
 import net.minecraft.core.RegistrationInfo
 import net.minecraft.core.Registry
-import net.minecraft.core.registries.Registries
 import net.minecraft.network.protocol.Packet
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.minecraft.network.protocol.game.ClientGamePacketListener
@@ -48,7 +46,6 @@ import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Tier
 import net.minecraft.world.item.crafting.Ingredient
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
@@ -115,7 +112,7 @@ internal class DummyXplatAbstractions: IXplatAbstractions {
     override fun getSpecialHandlerRegistry(): Registry<SpecialHandler.Factory<*>?>? = error("Found use of DummyXplatAbstractions.")
     val makeTheRegistryOnce = MappedRegistry(HexRegistries.IOTA_TYPE, Lifecycle.stable())
     override fun getIotaTypeRegistry(): MappedRegistry<IotaType<*>> = makeTheRegistryOnce
-    override fun getImageComponentRegistry(): Registry<ComponentType<*>?>? = error("Found use of DummyXplatAbstractions.")
+    override fun getImageComponentRegistry(): Registry<ImageComponentType<*>?>? = error("Found use of DummyXplatAbstractions.")
     override fun getArithmeticRegistry(): Registry<Arithmetic?>? = error("Found use of DummyXplatAbstractions.")
     override fun getContinuationTypeRegistry(): Registry<ContinuationFrame.Type<*>?>? = error("Found use of DummyXplatAbstractions.")
     override fun getEvalSoundRegistry(): Registry<EvalSound?>? = error("Found use of DummyXplatAbstractions.")

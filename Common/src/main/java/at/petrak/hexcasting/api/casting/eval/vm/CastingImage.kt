@@ -1,8 +1,5 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
-import at.petrak.hexcasting.api.casting.eval.vm.components.CastingImageComponent
-import at.petrak.hexcasting.common.lib.hex.HexImageComponents
-import at.petrak.hexcasting.api.casting.eval.vm.components.ComponentType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.utils.TreeList
@@ -24,7 +21,7 @@ data class CastingImage(
     val escapeNext: Boolean,
     val simulateNext: Boolean,
     val opsConsumed: Long,
-    val components: Map<ComponentType<*>, CastingImageComponent>
+    val components: Map<ImageComponentType<*>, Any>
 ) {
     constructor() : this(TreeList.empty(), 0, TreeList.empty(), false, false, 0, emptyMap())
 
@@ -78,17 +75,10 @@ data class CastingImage(
         return this.copy(parenthesized = newParens)
     }
 
-    /**
-     * Returns the contents of this image's ravenmind if it exists, otherwise null.
-     */
-    fun ravenOrNull() : Iota? {
-        return getComponent(HexImageComponents.RAVENMIND.get())?.iota
-    }
-
     @Suppress("UNCHECKED_CAST")
-    fun <T : CastingImageComponent> getComponent(type: ComponentType<T>): T? = this.components[type] as? T
-    fun <T : CastingImageComponent> withComponent(type: ComponentType<T>, value: T): CastingImage = copy(components = this.components + (type to value))
-    fun <T : CastingImageComponent> withoutComponent(type: ComponentType<T>): CastingImage = copy(components = this.components - type)
+    fun <T : Any> getComponent(type: ImageComponentType<T>): T? = this.components[type] as? T
+    fun <T : Any> withComponent(type: ImageComponentType<T>, value: T): CastingImage = copy(components = this.components + (type to value))
+    fun <T : Any> withoutComponent(type: ImageComponentType<T>): CastingImage = copy(components = this.components - type)
     fun removeTransientComponents(): CastingImage = copy(components = this.components.filterKeys { !it.transient })
 
     companion object {
@@ -101,7 +91,9 @@ data class CastingImage(
                 Codec.BOOL.fieldOf("escape_next").forGetter { it.escapeNext },
                 Codec.BOOL.fieldOf("simulate_next").forGetter { it.simulateNext },
                 Codec.LONG.fieldOf("ops_consumed").forGetter { it.opsConsumed },
-                Codec.dispatchedMap(ComponentType.CODEC, { type -> type.componentCodec().codec() }).fieldOf("components").forGetter{ it.components }
+                Codec.dispatchedMap(
+                    ImageComponentType.CODEC, ImageComponentType<*>::dataCodec
+                ).fieldOf("components").forGetter{ it.components }
             ).apply(inst) { a, b, c, d, e, f, g ->
                 CastingImage(a, b, c, d, e, f, g)
             }
@@ -114,7 +106,9 @@ data class CastingImage(
             ByteBufCodecs.BOOL, CastingImage::escapeNext,
             ByteBufCodecs.BOOL, CastingImage::simulateNext,
             ByteBufCodecs.VAR_LONG, CastingImage::opsConsumed,
-            streamCodecDispatchedMap(::HashMap, ComponentType.STREAM_CODEC, { type -> type.componentStreamCodec() }), {img -> img.components.toMutableMap()},
+            streamCodecDispatchedMap(::HashMap,
+                ImageComponentType.STREAM_CODEC, ImageComponentType<*>::dataStreamCodec
+            ), { img -> img.components.toMutableMap()},
             { a, b, c, d, e, f, g ->
                         CastingImage(a, b, c, d, e, f, g)
                     }

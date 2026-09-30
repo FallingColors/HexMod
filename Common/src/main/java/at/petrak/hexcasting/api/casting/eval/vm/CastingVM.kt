@@ -17,6 +17,7 @@ import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.api.utils.validateIota
 import at.petrak.hexcasting.api.utils.validateIotaList
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
+import at.petrak.hexcasting.common.lib.hex.HexImageComponents
 import net.minecraft.server.level.ServerLevel
 
 /**
@@ -98,7 +99,7 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
         }
 
         this.image = this.image.removeTransientComponents()
-        var ravenmind = this.image.ravenOrNull()
+        var ravenmind = this.image.getComponent(HexImageComponents.RAVENMIND.get())
 
         if (ravenmind != null) {
             ravenmind = validateIota(ravenmind, world)

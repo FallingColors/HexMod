@@ -6,7 +6,6 @@ import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.common.lib.hex.HexImageComponents
-import at.petrak.hexcasting.api.casting.eval.vm.components.GenericIotaComponent
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
@@ -22,7 +21,7 @@ object OpPushLocal : Action {
         val newImage = if (newLocal.type == HexIotaTypes.NULL.get())
             image.withoutComponent(HexImageComponents.RAVENMIND.get())
          else
-            image.withComponent(HexImageComponents.RAVENMIND.get(), GenericIotaComponent(newLocal))
+            image.withComponent(HexImageComponents.RAVENMIND.get(), newLocal)
 
         return OperationResult(
             newImage.withUsedOp().copy(stack = stack.init()),

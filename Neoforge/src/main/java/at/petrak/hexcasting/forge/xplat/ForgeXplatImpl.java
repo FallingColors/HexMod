@@ -14,7 +14,7 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame;
-import at.petrak.hexcasting.api.casting.eval.vm.components.ComponentType;
+import at.petrak.hexcasting.api.casting.eval.vm.ImageComponentType;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
@@ -445,7 +445,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             .sync(true)
             .defaultKey(modLoc("null"))
             .create();
-    private static final Registry<ComponentType<?>> IMAGE_COMPONENT_REGISTRY = new RegistryBuilder<>(HexRegistries.IMAGE_COMPONENT)
+    private static final Registry<ImageComponentType<?>> IMAGE_COMPONENT_REGISTRY = new RegistryBuilder<>(HexRegistries.IMAGE_COMPONENT)
             .sync(true)
             .defaultKey(modLoc("null"))
             .create();
@@ -487,7 +487,7 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public Registry<ComponentType<?>> getImageComponentRegistry() {
+    public Registry<ImageComponentType<?>> getImageComponentRegistry() {
         return IMAGE_COMPONENT_REGISTRY;
     }
 
