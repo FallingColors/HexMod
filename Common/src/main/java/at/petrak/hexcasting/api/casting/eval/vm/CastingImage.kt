@@ -1,32 +1,17 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
-import at.petrak.hexcasting.api.HexAPI
-import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota.Companion.TAG_ESCAPED
-import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota.Companion.TAG_IOTAS
 import at.petrak.hexcasting.api.casting.eval.vm.components.CastingImageComponent
 import at.petrak.hexcasting.common.lib.hex.HexImageComponents
 import at.petrak.hexcasting.api.casting.eval.vm.components.ComponentType
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.utils.TreeList
-import at.petrak.hexcasting.api.utils.asCompound
 import at.petrak.hexcasting.api.utils.compositeCodecSeven
-import at.petrak.hexcasting.api.utils.downcast
-import at.petrak.hexcasting.api.utils.getList
-import at.petrak.hexcasting.api.utils.getOrCreateCompound
-import at.petrak.hexcasting.api.utils.putCompound
-import at.petrak.hexcasting.api.utils.zipWithDefault
+import at.petrak.hexcasting.api.utils.streamCodecDispatchedMap
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.NbtOps
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.nbt.ListTag
-import net.minecraft.nbt.Tag
-import net.minecraft.resources.ResourceLocation
-import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.entity.Entity
 import java.util.*
 
 /**
@@ -106,70 +91,7 @@ data class CastingImage(
     fun <T : CastingImageComponent> withoutComponent(type: ComponentType<T>): CastingImage = copy(components = this.components - type)
     fun removeTransientComponents(): CastingImage = copy(components = this.components.filterKeys { !it.transient })
 
-//    fun serializeToNbt() = NBTBuilder {
-//        TAG_STACK %= stack.serializeToNBT()
-//
-//        TAG_PAREN_COUNT %= parenCount
-//        TAG_ESCAPE_NEXT %= escapeNext
-//        TAG_PARENTHESIZED %= parenthesized.serializeToNBT()
-//        TAG_OPS_CONSUMED %= opsConsumed
-//
-//        val componentsTag = CompoundTag()
-//        for ((type, component) in components) {
-//            val serialized = type.uncheckedSerialize(component)
-//            componentsTag.put(type.id.toString(), serialized)
-//        }
-//        TAG_COMPONENTS %= componentsTag
-//    }
-
     companion object {
-//        const val TAG_STACK = "stack"
-//        const val TAG_PAREN_COUNT = "open_parens"
-//        const val TAG_PARENTHESIZED = "parenthesized"
-//        const val TAG_ESCAPE_NEXT = "escape_next"
-//        const val TAG_OPS_CONSUMED = "ops_consumed"
-//        const val TAG_COMPONENTS = "components"
-//
-//        @JvmStatic
-//        fun loadFromNbt(tag: CompoundTag, world: ServerLevel): CastingImage {
-//            return try {
-//                val stack = mutableListOf<Iota>()
-//                val stackTag = tag.getList(TAG_STACK, Tag.TAG_COMPOUND)
-//                for (subtag in stackTag) {
-//                    val datum = IotaType.deserialize(subtag.asCompound, world)
-//                    stack.add(datum)
-//                }
-//
-//                val components = mutableMapOf<ComponentType<*>, CastingImageComponent>()
-//                if (tag.contains(TAG_COMPONENTS, Tag.TAG_COMPOUND.toInt())) {
-//                    val componentsTag = tag.getCompound(TAG_COMPONENTS)
-//                    for (id in componentsTag.allKeys) {
-//                        val type = CastingImageComponents.getById(ResourceLocation(id)) ?: continue
-//                        val value = type.safeDeserialize(componentsTag.getCompound(id), world) ?: continue
-//                        components[type] = value
-//                    }
-//                }
-//
-//                val parenthesized = mutableListOf<ParenthesizedIota>()
-//                val parenTag = tag.getCompound(TAG_PARENTHESIZED)
-//                val parenIotasTag = parenTag.getList(TAG_IOTAS, Tag.TAG_COMPOUND)
-//                val parenEscapedTag = parenTag.getByteArray(TAG_ESCAPED)
-//
-//                for ((subtag, isEscapedByte) in parenIotasTag.zipWithDefault(parenEscapedTag) { _ -> 0 }) {
-//                    parenthesized.add(ParenthesizedIota(IotaType.deserialize(subtag.downcast(CompoundTag.TYPE), world), isEscapedByte != 0.toByte()))
-//                }
-//
-//                val parenCount = tag.getInt(TAG_PAREN_COUNT)
-//                val escapeNext = tag.getBoolean(TAG_ESCAPE_NEXT)
-//                val opsUsed = tag.getLong(TAG_OPS_CONSUMED)
-//
-//                CastingImage(stack, parenCount, parenthesized, escapeNext, opsUsed, components)
-//            } catch (exn: Exception) {
-//                HexAPI.LOGGER.warn("error while loading a CastingImage", exn)
-//                CastingImage()
-//            }
-//        }
-
         @JvmStatic
         val CODEC = RecordCodecBuilder.create<CastingImage> { inst ->
             inst.group(
@@ -179,7 +101,7 @@ data class CastingImage(
                 Codec.BOOL.fieldOf("escape_next").forGetter { it.escapeNext },
                 Codec.BOOL.fieldOf("simulate_next").forGetter { it.simulateNext },
                 Codec.LONG.fieldOf("ops_consumed").forGetter { it.opsConsumed },
-                CompoundTag.CODEC.fieldOf("userData").forGetter { it.userData }
+                Codec.dispatchedMap(ComponentType.CODEC, { type -> type.componentCodec().codec() }).fieldOf("components").forGetter{ it.components }
             ).apply(inst) { a, b, c, d, e, f, g ->
                 CastingImage(a, b, c, d, e, f, g)
             }
@@ -192,7 +114,7 @@ data class CastingImage(
             ByteBufCodecs.BOOL, CastingImage::escapeNext,
             ByteBufCodecs.BOOL, CastingImage::simulateNext,
             ByteBufCodecs.VAR_LONG, CastingImage::opsConsumed,
-            ByteBufCodecs.COMPOUND_TAG, { it.userData },
+            streamCodecDispatchedMap(::HashMap, ComponentType.STREAM_CODEC, { type -> type.componentStreamCodec() }), {img -> img.components.toMutableMap()},
             { a, b, c, d, e, f, g ->
                         CastingImage(a, b, c, d, e, f, g)
                     }

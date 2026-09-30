@@ -9,7 +9,7 @@ import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.api.casting.math.HexCoord
 import at.petrak.hexcasting.api.casting.validateSubIotas
 import at.petrak.hexcasting.api.mod.HexTags
-import com.mojang.datafixers.util.Function6
+import io.netty.buffer.ByteBuf
 import net.minecraft.ChatFormatting
 import net.minecraft.core.HolderLookup
 import net.minecraft.core.Registry
@@ -17,6 +17,7 @@ import net.minecraft.nbt.*
 import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.MutableComponent
 import net.minecraft.network.chat.Style
+import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
@@ -31,6 +32,7 @@ import net.minecraft.world.phys.Vec3
 import java.lang.ref.WeakReference
 import java.util.*
 import java.util.function.Function
+import java.util.function.IntFunction
 import kotlin.math.absoluteValue
 import kotlin.math.max
 import kotlin.math.min
@@ -333,6 +335,47 @@ fun <T : Iota> validateIotaList(iotaList: TreeList<T>, serverLevel: ServerLevel)
     return iotaList.map { validateIota(it, serverLevel) }
 }
 
+/**
+ * Vanilla provides a Codec that works like this ([com.mojang.serialization.codecs.DispatchedMapCodec]),
+ * but there's no equivalent StreamCodec, so we implement our own based on the mechanics of that class
+ * plus the map-encoding system from [net.minecraft.network.codec.ByteBufCodecs.map].
+ */
+fun <B : ByteBuf, K, V, M : MutableMap<K, V>> streamCodecDispatchedMap(
+    mapCreator: IntFunction<M>, keyCodec: StreamCodec<B, K>,
+    valueCodecGetter: Function<K, StreamCodec<B, out V>>
+): StreamCodec<B, M> {
+    return object : StreamCodec<B, M> {
+        override fun decode(stream: B): M {
+            val i = ByteBufCodecs.readCount(stream, Int.MAX_VALUE)
+            val map: M = mapCreator.apply(min(i, 65536))
+
+            for (j in 0..<i) {
+                val key: K = keyCodec.decode(stream)
+                val valueCodec = valueCodecGetter.apply(key)
+                val value: V = valueCodec.decode(stream)
+                map[key] = value
+            }
+
+            return map
+        }
+
+        override fun encode(stream: B, map: M) {
+            ByteBufCodecs.writeCount(stream, map.size, Int.MAX_VALUE)
+            map.forEach { (key: K, value: V) ->
+                keyCodec.encode(stream, key)
+                val valueCodec = valueCodecGetter.apply(key)
+                // we can't just use .encode because valueCodec might actually be for a subclass of V
+                // so the value needs to be cast to that subclass before it can be properly encoded
+                encodeCasted(valueCodec, stream, value)
+            }
+        }
+
+        @SuppressWarnings("unchecked")
+        fun <V2 : V> encodeCasted(codec: StreamCodec<in B, V2>, stream: B, value: V) {
+            codec.encode(stream, value as V2)
+        }
+    }
+}
 
 // vanilla's StreamCodec.composite() only supports up to six fields in 1.21
 fun <B, C, T1, T2, T3, T4, T5, T6, T7> compositeCodecSeven(

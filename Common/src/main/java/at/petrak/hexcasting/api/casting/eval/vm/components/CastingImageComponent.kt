@@ -1,9 +1,14 @@
 package at.petrak.hexcasting.api.casting.eval.vm.components
 
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.server.level.ServerLevel
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
-import net.minecraft.resources.ResourceLocation
+import at.petrak.hexcasting.common.lib.HexRegistries
+import at.petrak.hexcasting.xplat.IXplatAbstractions
+import com.mojang.serialization.Codec
+import com.mojang.serialization.MapCodec
+import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.codec.ByteBufCodecs
+import net.minecraft.network.codec.StreamCodec
 
 /**
  * A single instance of component data attached to a [CastingImage].
@@ -19,19 +24,22 @@ interface CastingImageComponent
  * There may only be one component of a given type per [CastingImage].
  *
  * @param T The [CastingImageComponent] type this describes.
- * @param id The identifier for the type, e.g. `"hexcasting:ravenmind"`.
+ * @param id A name for the type, to distinguish it from other types with the same kind of [CastingImageComponent] (e.g. `"ravenmind"`).
  * @param transient If `true`, components of this type are stripped by [CastingImage.removeTransientComponents].
  *                  Use this for per-cast state that must not bleed across spell-circle slate jumps or separate staff patterns.
  *                  Currently used only for impulse cost accumulator.
  */
-abstract class ComponentType<T : CastingImageComponent>(val id: ResourceLocation) {
+abstract class ComponentType<T : CastingImageComponent>(val id: String) {
 	open val transient: Boolean = false
-	abstract fun serialize(value: T): CompoundTag
-	abstract fun deserialize(tag: CompoundTag, world: ServerLevel): T
 
-	@Suppress("UNCHECKED_CAST")
-	fun uncheckedSerialize(value: Any): CompoundTag = serialize(value as T)
-	fun safeDeserialize(tag: CompoundTag, world: ServerLevel): T? = runCatching { deserialize(tag, world) }.getOrNull()
+	abstract fun componentCodec(): MapCodec<T>
+	abstract fun componentStreamCodec(): StreamCodec<RegistryFriendlyByteBuf, T>
+
 	override fun equals(other: Any?) = other is ComponentType<*> && other.id == id
 	override fun hashCode() = id.hashCode()
+
+	companion object {
+		val CODEC: Codec<ComponentType<*>> = IXplatAbstractions.INSTANCE.imageComponentRegistry.byNameCodec()
+		val STREAM_CODEC: StreamCodec<RegistryFriendlyByteBuf, ComponentType<*>> = ByteBufCodecs.registry(HexRegistries.IMAGE_COMPONENT)
+	}
 }
