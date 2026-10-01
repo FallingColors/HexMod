@@ -30,11 +30,6 @@ class ImageComponentType<T : Any>(
 	val dataStreamCodec: StreamCodec<RegistryFriendlyByteBuf, T>,
 	val transient: Boolean = false
 ) {
-//	abstract fun dataCodec(): Codec<T>
-//	abstract fun dataStreamCodec(): StreamCodec<RegistryFriendlyByteBuf, T>
-
-	//override fun equals(other: Any?) = other is ComponentType<*> && other.id == id
-	//override fun hashCode() = id.hashCode()
 	override fun toString(): String = Util.getRegisteredName(HexImageComponents.REGISTRY, this)
 
 	companion object {

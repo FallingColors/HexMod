@@ -196,15 +196,6 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
         }
     }
 
-//    fun generateDescs(): Pair<List<CompoundTag>, CompoundTag?> {
-//        val stackDescs = this.image.stack.map { IotaType.serialize(it) }
-//        val ravenmindComponent = this.image.getComponent(CastingImageComponents.RAVENMIND)
-//        val ravenmind = if (ravenmindComponent != null) {
-//            IotaType.serialize(ravenmindComponent.iota)
-//        } else null
-//        return Pair(stackDescs, ravenmind)
-//    }
-
     data class TempControllerInfo(
         var earlyExit: Boolean,
     )
