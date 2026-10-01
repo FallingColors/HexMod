@@ -3,8 +3,7 @@ package at.petrak.hexcasting.api.casting.eval.vm
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.utils.TreeList
-import at.petrak.hexcasting.api.utils.compositeCodecSeven
-import at.petrak.hexcasting.api.utils.streamCodecDispatchedMap
+import at.petrak.hexcasting.api.utils.CodecUtils
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import net.minecraft.network.codec.ByteBufCodecs
@@ -99,19 +98,19 @@ data class CastingImage(
             }
         }.orElseGet(::CastingImage)
         @JvmStatic
-        val STREAM_CODEC = compositeCodecSeven(
+        val STREAM_CODEC = CodecUtils.compositeCodecSeven(
             IotaType.TYPED_STREAM_CODEC.apply(TreeList.streamCodecOp()), CastingImage::stack,
             ByteBufCodecs.VAR_INT, CastingImage::parenCount,
             ParenthesizedIota.STREAM_CODEC.apply(TreeList.streamCodecOp()), CastingImage::parenthesized,
             ByteBufCodecs.BOOL, CastingImage::escapeNext,
             ByteBufCodecs.BOOL, CastingImage::simulateNext,
             ByteBufCodecs.VAR_LONG, CastingImage::opsConsumed,
-            streamCodecDispatchedMap(::HashMap,
+            CodecUtils.streamCodecDispatchedMap(::HashMap,
                 ImageComponentType.STREAM_CODEC, ImageComponentType<*>::dataStreamCodec
-            ), { img -> img.components.toMutableMap()},
+            ), CastingImage::components,
             { a, b, c, d, e, f, g ->
-                        CastingImage(a, b, c, d, e, f, g)
-                    }
+                CastingImage(a, b, c, d, e, f, g)
+            }
         )
     }
 }

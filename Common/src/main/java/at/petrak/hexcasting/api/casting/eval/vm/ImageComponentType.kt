@@ -23,7 +23,7 @@ import net.minecraft.network.codec.StreamCodec
  * @param dataStreamCodec The [StreamCodec] used to encode the data stored in a component of this type.
  * @param transient If `true`, components of this type are stripped by [CastingImage.removeTransientComponents].
  *                  Use this for per-cast state that must not bleed across spell-circle slate jumps or separate staff patterns.
- *                  Currently unused, as the impulse cost accumulator from older versions has been removed.
+ *                  Currently unused in the base mod, as impulse cost no longer scales as of 1.21, but may be useful for addons.
  */
 class ImageComponentType<T : Any>(
 	val dataCodec: Codec<T>,

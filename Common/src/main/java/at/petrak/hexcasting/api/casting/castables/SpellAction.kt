@@ -27,8 +27,12 @@ interface SpellAction : Action {
         env: CastingEnvironment
     ): Result
 
+    /**
+     * Override this rather than [execute] if you need to read data from the [CastingImage] while setting up for your
+     * spell. Note that you cannot *update* the [CastingImage] with this - if you need to do that, pass the relevant
+     * data into your [RenderedSpell] implementation and use the [RenderedSpell.cast] overload that returns a new image.
+     */
     @Throws(Mishap::class)
-
     fun executeWithImage(
         args: List<Iota>, env: CastingEnvironment, image: CastingImage
     ): Result {
