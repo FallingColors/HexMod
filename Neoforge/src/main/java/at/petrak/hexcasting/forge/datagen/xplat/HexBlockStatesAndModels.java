@@ -98,33 +98,24 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
 
             var builder = ConfiguredModel.builder();
 
-            if (bs.getValue(BlockAkashicBookshelf.HAS_BOOKS)) {
-                for (int i = 1; i <= 4; i++) {
-                    var model = models().withExistingParent("akashic_bookshelf_" + i,
-                            modLoc("block/akashic_bookshelf"))
-                        .texture("overlay", modLoc("block/akashic_bookshelf_overlay_" + i));
-
-                    builder.modelFile(model)
-                        .rotationY(dir.getOpposite().get2DDataValue() * 90)
-                        .uvLock(true);
-                    if (i < 4) {
-                        builder = builder.nextModel();
-                    }
-                }
+            int bookVariant = bs.getValue(BlockAkashicBookshelf.HAS_BOOKS);
+            BlockModelBuilder model;
+            if (bookVariant > 0) {
+                model = models().withExistingParent("akashic_bookshelf_" + bookVariant,
+                        modLoc("block/akashic_bookshelf"))
+                    .texture("overlay", modLoc("block/akashic_bookshelf_overlay_" + bookVariant));
             } else {
-                var model = models().orientable("akashic_bookshelf_empty",
-                    modLoc("block/akashic_bookshelf_horiz"),
-                    modLoc("block/akashic_bookshelf"),
-                    modLoc("block/akashic_bookshelf_vert"));
-
+                model = models().orientable("akashic_bookshelf_empty",
+                        modLoc("block/akashic_bookshelf_horiz"),
+                        modLoc("block/akashic_bookshelf"),
+                        modLoc("block/akashic_bookshelf_vert"));
                 if (dir == Direction.NORTH) {
                     simpleBlockItem(HexBlocks.AKASHIC_BOOKSHELF.get(), model);
                 }
-
-                builder.modelFile(model)
-                    .rotationY(dir.getOpposite().get2DDataValue() * 90)
-                    .uvLock(true);
             }
+            builder.modelFile(model)
+                .rotationY(dir.getOpposite().get2DDataValue() * 90)
+                .uvLock(true);
 
             return builder.build();
         });

@@ -8,6 +8,7 @@ import at.petrak.hexcasting.api.casting.getPattern
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.MishapNoAkashicRecord
+import at.petrak.hexcasting.api.casting.mishaps.MishapNoShelfSpace
 import at.petrak.hexcasting.api.casting.mishaps.MishapOthersName
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord
@@ -37,6 +38,8 @@ object OpAkashicWrite : SpellAction {
         val trueNameMishap = MishapOthersName.getTrueNameMishapFromDatum(env.world, datum, env.castingEntity as? ServerPlayer)
         if (trueNameMishap != null)
             throw trueNameMishap
+
+        record.findValidShelf(pos, env.world, key) ?: throw MishapNoShelfSpace(pos)
 
         return SpellAction.Result(
             Spell(record, pos, key, datum),

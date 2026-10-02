@@ -27,6 +27,11 @@
     },
     {
       "type": "patchouli:text",
+      "title": "hexcasting.page.mishaps2.no_shelf_space.title",
+      "text": "hexcasting.page.mishaps2.no_shelf_space"
+    },
+    {
+      "type": "patchouli:text",
       "title": "hexcasting.page.mishaps2.bad_shepherd.title",
       "text": "hexcasting.page.mishaps2.bad_shepherd"
     }

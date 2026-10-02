@@ -158,7 +158,7 @@ public class RegisterClientStuff {
         itemColorRegistry.accept(makeIotaStorageColorizer(HexItems.THOUGHT_KNOT.get()::getColor), HexItems.THOUGHT_KNOT.get());
 
         blockColorRegistry.accept((bs, level, pos, idx) -> {
-            if (!bs.getValue(BlockAkashicBookshelf.HAS_BOOKS) || level == null || pos == null) {
+            if (bs.getValue(BlockAkashicBookshelf.HAS_BOOKS) == 0 || level == null || pos == null) {
                 return 0xff_ffffff;
             }
             var tile = level.getBlockEntity(pos);
