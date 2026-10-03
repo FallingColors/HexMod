@@ -1,19 +1,13 @@
 package at.petrak.hexcasting.api.casting.eval.vm
 
-import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.utils.TreeList
-import at.petrak.hexcasting.api.utils.compositeCodecSeven
-import at.petrak.hexcasting.api.utils.getOrCreateCompound
-import at.petrak.hexcasting.api.utils.putCompound
+import at.petrak.hexcasting.api.utils.CodecUtils
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.NbtOps
 import net.minecraft.network.codec.ByteBufCodecs
 import net.minecraft.network.codec.StreamCodec
-import net.minecraft.world.entity.Entity
 import java.util.*
 
 /**
@@ -26,9 +20,9 @@ data class CastingImage(
     val escapeNext: Boolean,
     val simulateNext: Boolean,
     val opsConsumed: Long,
-    val userData: CompoundTag
+    val components: Map<ImageComponentType<*>, Any>
 ) {
-    constructor() : this(TreeList.empty(), 0, TreeList.empty(), false, false, 0, CompoundTag())
+    constructor() : this(TreeList.empty(), 0, TreeList.empty(), false, false, 0, emptyMap())
 
     /**
      * `escaped` is used by [OpUndo][at.petrak.hexcasting.common.casting.actions.escaping.OpUndo] to determine whether the paren count
@@ -80,16 +74,11 @@ data class CastingImage(
         return this.copy(parenthesized = newParens)
     }
 
-    /**
-     * Returns this image's ravenmind in an Optional wrapper.
-     */
-    fun ravenmind() : Optional<Iota> {
-        val tag = userData.getCompound(HexAPI.RAVENMIND_USERDATA)
-
-        var result: Iota? = null
-        if (!tag.isEmpty) { result = IotaType.TYPED_CODEC.parse(NbtOps.INSTANCE, tag).getOrThrow() }
-        return Optional.ofNullable(result)
-    }
+    @Suppress("UNCHECKED_CAST")
+    fun <T : Any> getComponent(type: ImageComponentType<T>): T? = this.components[type] as? T
+    fun <T : Any> withComponent(type: ImageComponentType<T>, value: T): CastingImage = copy(components = this.components + (type to value))
+    fun <T : Any> withoutComponent(type: ImageComponentType<T>): CastingImage = copy(components = this.components - type)
+    fun removeTransientComponents(): CastingImage = copy(components = this.components.filterKeys { !it.transient })
 
     companion object {
         @JvmStatic
@@ -101,23 +90,27 @@ data class CastingImage(
                 Codec.BOOL.fieldOf("escape_next").forGetter { it.escapeNext },
                 Codec.BOOL.fieldOf("simulate_next").forGetter { it.simulateNext },
                 Codec.LONG.fieldOf("ops_consumed").forGetter { it.opsConsumed },
-                CompoundTag.CODEC.fieldOf("userData").forGetter { it.userData }
+                Codec.dispatchedMap(
+                    ImageComponentType.CODEC, ImageComponentType<*>::dataCodec
+                ).fieldOf("components").forGetter{ it.components }
             ).apply(inst) { a, b, c, d, e, f, g ->
                 CastingImage(a, b, c, d, e, f, g)
             }
         }.orElseGet(::CastingImage)
         @JvmStatic
-        val STREAM_CODEC = compositeCodecSeven(
+        val STREAM_CODEC = CodecUtils.compositeCodecSeven(
             IotaType.TYPED_STREAM_CODEC.apply(TreeList.streamCodecOp()), CastingImage::stack,
             ByteBufCodecs.VAR_INT, CastingImage::parenCount,
             ParenthesizedIota.STREAM_CODEC.apply(TreeList.streamCodecOp()), CastingImage::parenthesized,
             ByteBufCodecs.BOOL, CastingImage::escapeNext,
             ByteBufCodecs.BOOL, CastingImage::simulateNext,
             ByteBufCodecs.VAR_LONG, CastingImage::opsConsumed,
-            ByteBufCodecs.COMPOUND_TAG, { it.userData },
+            CodecUtils.streamCodecDispatchedMap(::HashMap,
+                ImageComponentType.STREAM_CODEC, ImageComponentType<*>::dataStreamCodec
+            ), CastingImage::components,
             { a, b, c, d, e, f, g ->
-                        CastingImage(a, b, c, d, e, f, g)
-                    }
+                CastingImage(a, b, c, d, e, f, g)
+            }
         )
     }
 }

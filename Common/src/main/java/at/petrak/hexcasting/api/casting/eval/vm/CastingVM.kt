@@ -5,13 +5,10 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.ExecutionClientView
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect
-import at.petrak.hexcasting.api.casting.eval.vm.CastingImage.ParenthesizedIota
 import at.petrak.hexcasting.api.casting.iota.BooleanIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.PatternIota
-import at.petrak.hexcasting.api.casting.math.HexDir
-import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.mishaps.Mishap
 import at.petrak.hexcasting.api.casting.mishaps.MishapEvalTooMuch
 import at.petrak.hexcasting.api.casting.mishaps.MishapInternalException
@@ -20,8 +17,8 @@ import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.api.utils.validateIota
 import at.petrak.hexcasting.api.utils.validateIotaList
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
+import at.petrak.hexcasting.common.lib.hex.HexImageComponents
 import net.minecraft.server.level.ServerLevel
-import kotlin.jvm.optionals.getOrNull
 
 /**
  * The virtual machine! This is the glue that determines the next iteration of a [CastingImage], using a
@@ -29,7 +26,7 @@ import kotlin.jvm.optionals.getOrNull
  */
 class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
     init {
-        env.triggerCreateEvent(image.userData)
+        env.triggerCreateEvent(image)
     }
 
     /**
@@ -101,7 +98,8 @@ class CastingVM(var image: CastingImage, val env: CastingEnvironment) {
                 if (lastResolutionType.success) ResolvedPatternType.EVALUATED else ResolvedPatternType.ERRORED
         }
 
-        var ravenmind: Iota? = image.ravenmind().getOrNull()
+        this.image = this.image.removeTransientComponents()
+        var ravenmind = this.image.getComponent(HexImageComponents.RAVENMIND.get())
 
         if (ravenmind != null) {
             ravenmind = validateIota(ravenmind, world)
