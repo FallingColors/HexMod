@@ -769,7 +769,7 @@
             set: "Modyfikuj Rozmiar",
           },
         },
-        slice: "Egzaltacja Wyborcy",
+        slice: "Egzaltacja Wyboru",
       },
       "book.hexcasting:": {
         get_entity_height: "Oczysz. Stadiometru",
@@ -1233,6 +1233,43 @@
       stack: {
         "1": "$(thing)Stos/$, sposób przechowywania informacji znany też jako LIFO, jest konceptem zapożyczonym z informatyki. W skrócie, to zbiór danych zaprojektowany tak, że możesz działać tylko na najwcześniej użytych danych.$(br2)Wyobraź sobie stos talerzy, na którego wierzchu są kładzione nowe talerze: jeśli chcesz zrobić coś z talerzem gdzieś w środku, musisz najpierw podnieść górne talerze.",
         "2": "Ze względu na prostotę stosu, sposoby na jego manipulację są ograniczone. Sprowadzają się one do: $(li)$(italic)Dodawania/$ wszelakich jot, nazywanego też wyrzucaniem,$(li)$(italic)Usuwania/$ elementu z wierzchu stosu, nazywanego także pękaniem,$(li)$(italic) Analizowania, lub modyfikowania/$ wierzchu stosu, nazwanego podglądaniem.$(br)Ostatnio dodany element nazywany jest \"wierzchem\" stosu, dodając do analogii z talerzami.$(p)Na przykład, jeśli wrzucimy na stos \"1\", a następnie \"2\", po czym pękniemy wierzch, jedynym elementem stosu zostanie \"1\".",
+        "3": "Działania (w większości) ograniczają się do interakcji ze stosem na te sposoby. Pękają parę jot dotyczących ich (zwane \"argumentami\" lub \"parametrami\"), przetwarzają je i wyrzucają jakąś ilość wyników.$(br2)Oczywiście, niektóre działania (np. $(l:patterns/basics#hexcasting:get_caster)$(action)Odbicie Umysłu/$) nie pękają żadnych argumentów, a inne (w szczególności zaklęcia) nie wyrzucają niczego na stos.",
+        "4": "Nawet te bardziej skomplikowane działania mogą być przedstawione jako wyrzucanie, pękanie i podglądanie. Przykładowo, $(l:patterns/stackmanip#hexcasting:swap)$(action)Gambit Błazna/$ zamienia miejscami dwie joty z wierzchu stosu. Można o tym myśleć jako pęknięcie dwóch jot i wyrzucenie ich w odwrotnej kolejności. Z kolei taki $(l:patterns/stackmanip#hexcasting:duplicate)$(action)Rozpad Bliźniąt/$ duplikuje wierzch stosu-- innymi słowy, podgląda wierzch stosu i wyrzuca jego kopię.",
+      },
+      naming: {
+        "1": "Nazwy nadane działaniom przez starożytnych są dość osobliwe, ale wydaje mi się, że jest w nich jakiś porządek.$(br2)Z czasem zauważam grupy działań współdzielące nazwy, zależne od ilości jot usuwanych i dodawanych do stosu.",
+        "2": "$(li)$(thing)Odbicie/$ nie usuwa żadnych jot i dodaje jedną.$(li)$(thing)Oczyszczenie/$ usuwa jedną i dodaje jedną.$(li)$(thing)Destylacja/$ usuwa dwie i dodaje jedną.$(li)$(thing)Egzaltacja/$ usuwa trzy, lub więcej i dodaje jedną.$(li)$(thing)Rozpad/$ usuwa jeden argument i dodaje dwa.$(li)$(thing)Dezintegracja/$ usuwa jeden i dodaje trzy, lub więcej.$(li)W końcu, $(thing)Gambit/$ usuwa lub dodaje jakąś inną ilość jot (lub przekłada joty na stosie w jakiś inny sposób).",
+        "3": "Zaklęcia są wyłączone z tego nazewnictwa i są raczej nazywane ze względu na ich efekty. W końcu po co coś nazywać $(action)Gambitem Demomana/$, skoro można po prostu powiedzieć $(l:patterns/spells/basic#hexcasting:explode)$(action)Eksplozja/$?",
+      },
+      mishaps2: {
+        "1": "Oto nowe i przerażające możliwości porażek. Nie mogę im ulegnąć.",
+        "bad_mindflay.title": "Bierne Oberżnięcie",
+        bad_mindflay: "Spróbowano oberżnąć umysł czegoś, co było już zużyte, lub czego umysł nie jest kompatybilny z tym blokiem.$(br2)Wywołuje ciemno-zielone iskry. Ofiary, których umysły były już oberżnięte od razu zginą, a te, których umysły nie są kompatybilne zostaną lekko zranione.",
+        "no_circle.title": "Brak Kręgu Zaklęć",
+        no_circle: "Spróbowano wykonać działanie wymagające kręgu zaklęć bez kręgu zaklęć. $(br2)Wywołuje jasno-niebieskie iskry i wyrzuca zawartość mojego ekwipunku na ziemię.",
+        "no_record.title": "Brak Kroniki Akaszy",
+        no_record: "Spróbowano uzyskać dostęp do $(l:greatwork/akashiclib)$(item)Kroniki Akaszy/$ w miejscu, gdzie jej nie ma. $(br2)Wywołuje fioletowe iskry i wykrada część mojego doświadczenia.",
+        "bad_shepherd.title": "Niepoprawne Pasterstwo",
+        bad_shepherd: "Spróbowano aktywować $(l:greatwork/directrix)$(item)Zwrotnicę Pasterza/$ bez joty logiki na wierzchu stosu.$(br2)Wywołuje biało-czerwone iskry i odrzuca tę zwrotnicę z kręgu. Na moje szczęście jej nie niszczy, ale lepiej szybko ją podnieść i położyć z powrotem na jej miejscu.",
+      },
+      amethyst: {
+        dust: "Po roztrzaskaniu kryształu w geodzie, ametyst może pojawić się w trzech postaciach. Najmniejszym nominałem wydają się drobne kupki lśniącego pyłu, warte względnie małą ilość $(media)przepływu/$.",
+        shard: "Drugą postacią są w miarę nienaruszone odłamki kryształu, znane nawet wśród nie-$(hex)czarowników/$. Mają w sobie mniej więcej tyle samo $(media)przepływu/$, co pięć typowych kupek $(l:items/amethyst)$(item)Ametystowego Pyłu/$.",
+        crystal: "W końcu, z rzadka znajdę większy kryształ aż trzeszczący od energii. Takowy posiada tyle $(media)przepływu/$, ile znajdę w dziesięciu jednostkach $(l:items/amethyst)$(item)Ametystowego Pyłu/$ (lub dwóch $(l:items/amethyst)$(item)Odłamkach Ametystu/$).",
+        lore: "$(italic)Starzec westchnął i uniósł swe dłonie ku płomieniowi. Udało mu się dotrzeć do części jego mózgu przechowującej wszystkie wspomnienia otaczających go gór. Zaciągnął z tych ziem moc, jak to uczył się w Teryzji z Drafną, Hurkyl, archimandrytą i resztą magów z Iglic Kości Słoniowej. Skupił swoją wolę, a płomienie zawirowały, unosząc się z kłód i wijąc, by w końcu utworzyć ciepły uśmiech./$",
+      },
+      staff: {
+        "1": "Potrzebuję $(l:items/staff)$(item)Kostura/$ zanim zacznę rzucać jakiekolwiek $(hex)czary/$, duże, czy małe. Trzymając go w dłoni i wciskając $(thing)$(k:use)/$ zaczynam $(hex)czarować/$; stąd mogę przeciągać wskaźnik i tkać glify.$(br2)Kostur dużo się nie różni od kawałka $(media)przepływu/$ na patyku. Niczego więcej i tak nie potrzebuję.",
+        "crafting.header": "Kostury",
+        "crafting.desc": "$(italic)Nie walcz z tym; pal, krześ; wznieć; płoń jaskrawo./$",
+      },
+      lens: {
+        "1": "$(media)Przepływ/$ ma osobliwe efekty na informację w jakiejkolwiek formie, w odpowiednich okolicznościach. Pokrycie szkła jego cienką warstwą da ci wgląd na wiele nowych faktów.$(br2)Trzymając w dłoni $(l:items/lens)$(item)Soczewkę Prawdy/$, niektóre bloki wyświetlą dodatkowe informacje, gdy na nie spojrzę.",
+        "2": "Na przykład, patrząc na kawałek $(item)Redstone/$, ujawni się jego siła sygnału. Podejrzewam, że odkryję inne bloki z dodatkowymi informacjami w miarę postępów w zgłębianiu tej sztuki.$(br2)Dodatkowo, trzymając go w trakcie czarowania, używając $(l:items/staff)$(item)Staff/$ skurczy odstępy między kropkami, pozwalając mi wcisnąć więcej znaków na siatce.$(br2)Także mogę go nosić na głowie jak lekko dziwny monokl.",
+        "crafting.desc": "$(italic)Musisz się nauczyć... zobaczyć to, na co patrzysz./$",
+      },
+      thought_knot: {
+        "1": "Zapominalscy często zawiązują kawałek sznurka na palcu, aby pomóc sobie zapamiętać coś ważnego. Wierzę, że ten pomysł mógłby być pożyteczny w mojej sztuce. Specjalnie splatany kawałek sznurka powinien być w stanie utrzymać pojedynczą jotę stabilnie, niezależnie od mojego stacku.$(br2) Nazwę ten wynalazek $(item)kłębkiem myśli/$.",
       },
     },
   },
