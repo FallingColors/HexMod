@@ -104,6 +104,7 @@ public class ForgeHexInitializer {
             ev.register(IXplatAbstractions.INSTANCE.getActionRegistry());
             ev.register(IXplatAbstractions.INSTANCE.getSpecialHandlerRegistry());
             ev.register(IXplatAbstractions.INSTANCE.getIotaTypeRegistry());
+            ev.register(IXplatAbstractions.INSTANCE.getImageComponentRegistry());
             ev.register(IXplatAbstractions.INSTANCE.getArithmeticRegistry());
             ev.register(IXplatAbstractions.INSTANCE.getContinuationTypeRegistry());
             ev.register(IXplatAbstractions.INSTANCE.getEvalSoundRegistry());
@@ -138,6 +139,7 @@ public class ForgeHexInitializer {
         HexActions.register();
         HexSpecialHandlers.register();
         HexArithmetics.register();
+        HexImageComponents.register();
         HexContinuationTypes.register();
         HexEvalSounds.register();
         HexStateIngredients.register();

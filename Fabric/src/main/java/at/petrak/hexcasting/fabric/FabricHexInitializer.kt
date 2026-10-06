@@ -6,11 +6,7 @@ import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry
 import at.petrak.hexcasting.api.casting.iota.DoubleIota
 import at.petrak.hexcasting.api.casting.iota.EntityIota
-import at.petrak.hexcasting.api.item.HexHolderItem
-import at.petrak.hexcasting.api.item.IotaHolderItem
-import at.petrak.hexcasting.api.item.MediaHolderItem
-import at.petrak.hexcasting.api.item.PigmentItem
-import at.petrak.hexcasting.api.item.VariantItem
+import at.petrak.hexcasting.api.item.*
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexStatistics
@@ -32,8 +28,6 @@ import at.petrak.hexcasting.common.misc.BrainsweepingEvents
 import at.petrak.hexcasting.common.misc.PlayerPositionRecorder
 import at.petrak.hexcasting.common.misc.RegisterMisc
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry
-import at.petrak.hexcasting.common.lib.HexBrainsweepeeIngredients
-import at.petrak.hexcasting.common.lib.HexStateIngredients
 import at.petrak.hexcasting.fabric.cc.HexCardinalComponents
 import at.petrak.hexcasting.fabric.cc.adimpl.*
 import at.petrak.hexcasting.fabric.event.VillagerConversionCallback
@@ -226,6 +220,7 @@ object FabricHexInitializer : ModInitializer {
         HexActions.register()
         HexSpecialHandlers.register()
         HexArithmetics.register()
+        HexImageComponents.register()
         HexContinuationTypes.register()
         HexEvalSounds.register()
         HexStateIngredients.register()

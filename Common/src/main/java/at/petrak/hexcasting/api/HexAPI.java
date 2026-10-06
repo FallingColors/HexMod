@@ -172,11 +172,6 @@ public interface HexAPI {
         return DUMMY_ARMOR_MATERIAL;
     }
 
-    /**
-     * Location in the userdata of the ravenmind
-     */
-    String RAVENMIND_USERDATA = modLoc("ravenmind").toString();
-
     static HexAPI instance() {
         return INSTANCE.get();
     }
