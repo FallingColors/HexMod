@@ -1619,7 +1619,6 @@
       thought_knot: {
         "1": "The forgetful often tie a piece of string about their finger to help them remember something important. I believe this idea might be of use in my art. A specially knotted piece of string should be able to hold a single iota stably, irregardless of my stack.$(br2)I will call my invention a $(item)Thought-Knot/$.",
         "2": "When I craft it, it stores no iota. Using $(l:patterns/readwrite#hexcasting:write)$(action)Scribe's Gambit/$ while holding a $(item)Thought-Knot/$ in my other hand will remove the top of the stack and save it into the $(item)Thought-Knot/$. Using $(l:patterns/readwrite#hexcasting:read)$(action)Scribe's Reflection/$ will copy whatever iota's in the $(item)Thought-Knot/$ and add it to the stack.$(br2)Once a $(item)Thought-Knot/$ has been written to, the string is indelibly tangled; the iota can be read any number of times, but there is no way to erase or overwrite it. Fortunately, they are not expensive.",
-        "3": "Also, if I store an entity in a $(item)Thought-Knot/$ and try to recall it after the referenced entity has died or otherwise disappeared, the $(l:patterns/readwrite#hexcasting:read)$(action)Scribe's Reflection/$ will add $(thing)Null/$ to the stack instead.",
         "crafting.desc": "$(italic)How would you feel if someone saw you wearing a sign that said, \"I am dashing and handsome?\"/$",
       },
       
