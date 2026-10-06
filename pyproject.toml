@@ -35,18 +35,13 @@ gradle-version-regex = "(.+?)(?:-devel)?"
 
 [tool.hatch.metadata.hooks.gradle-properties]
 dependencies = [
-    "hexdoc~=2.0rc1",
+    "hexdoc>=2.0rc1,<3",
     { package="hexdoc-minecraft", op="~=", py-version="2.0", key="minecraftVersion" },
 ]
 
 [dependency-groups]
 dev = [
     "ruff~=0.16.3",
-]
-
-[tool.uv]
-find-links = [
-    "./libs",
 ]
 
 # project structure
