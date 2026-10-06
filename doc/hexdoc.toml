@@ -26,7 +26,7 @@ _pattern_regex."!Raw" = '''(?x)
     (?: \( \) \s -> \s*)?
     (?:new\s)?(?:ActionRegistryEntry|OperationAction)\(
         \s*
-        HexPattern\.fromAngles\(
+        HexPattern\.fromAngleString\(
             \s*
             "(?P<signature>[aqweds]+)",
             \s*
