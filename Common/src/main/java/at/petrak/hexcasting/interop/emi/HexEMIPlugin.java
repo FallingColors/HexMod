@@ -1,9 +1,6 @@
 package at.petrak.hexcasting.interop.emi;
 
-import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexTags;
-import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
-import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;
@@ -15,13 +12,6 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
