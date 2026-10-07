@@ -5,11 +5,7 @@ import at.petrak.hexcasting.api.addldata.*
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry
 import at.petrak.hexcasting.api.casting.iota.DoubleIota
-import at.petrak.hexcasting.api.item.HexHolderItem
-import at.petrak.hexcasting.api.item.IotaHolderItem
-import at.petrak.hexcasting.api.item.MediaHolderItem
-import at.petrak.hexcasting.api.item.PigmentItem
-import at.petrak.hexcasting.api.item.VariantItem
+import at.petrak.hexcasting.api.item.*
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
 import at.petrak.hexcasting.api.mod.HexStatistics
@@ -220,6 +216,7 @@ object FabricHexInitializer : ModInitializer {
         HexActions.register()
         HexSpecialHandlers.register()
         HexArithmetics.register()
+        HexImageComponents.register()
         HexContinuationTypes.register()
         HexEvalSounds.register()
         HexStateIngredients.register()

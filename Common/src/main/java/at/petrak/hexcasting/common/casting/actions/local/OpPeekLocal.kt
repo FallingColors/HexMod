@@ -7,21 +7,15 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.iota.NullIota
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
+import at.petrak.hexcasting.common.lib.hex.HexImageComponents
 
 object OpPeekLocal : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
-        val ravenmind = image.ravenmind()
         val stack = image.stack
-
-        val rm = if (ravenmind.isPresent) {
-            ravenmind.get()
-        } else {
-            NullIota()
-        }
-        val newStack = stack.appended(rm)
-
-        // does not mutate userdata
-        val image2 = image.withUsedOp().copy(stack = newStack)
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get())
+        val newStack = stack.appended(image.getComponent(HexImageComponents.RAVENMIND.get()) ?: NullIota())
+        return OperationResult(
+            image.withUsedOp().copy(stack = newStack),
+            listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get()
+        )
     }
 }

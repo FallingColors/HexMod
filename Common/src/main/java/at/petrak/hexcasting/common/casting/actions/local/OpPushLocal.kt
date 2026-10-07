@@ -1,18 +1,14 @@
 package at.petrak.hexcasting.common.casting.actions.local
 
-import at.petrak.hexcasting.api.HexAPI
 import at.petrak.hexcasting.api.casting.castables.Action
 import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.eval.OperationResult
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
-import at.petrak.hexcasting.api.casting.iota.GarbageIota
-import at.petrak.hexcasting.api.casting.iota.IotaType
+import at.petrak.hexcasting.common.lib.hex.HexImageComponents
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes
-import net.minecraft.nbt.NbtOps
-import kotlin.jvm.optionals.getOrElse
 
 object OpPushLocal : Action {
     override fun operate(env: CastingEnvironment, image: CastingImage, continuation: SpellContinuation): OperationResult {
@@ -22,12 +18,14 @@ object OpPushLocal : Action {
             throw MishapNotEnoughArgs(1, 0)
 
         val newLocal = stack.last()
-        if (newLocal.type == HexIotaTypes.NULL.get())
-            image.userData.remove(HexAPI.RAVENMIND_USERDATA)
+        val newImage = if (newLocal.type == HexIotaTypes.NULL.get())
+            image.withoutComponent(HexImageComponents.RAVENMIND.get())
          else
-            image.userData.put(HexAPI.RAVENMIND_USERDATA, IotaType.TYPED_CODEC.encodeStart(NbtOps.INSTANCE, newLocal).orThrow)
+            image.withComponent(HexImageComponents.RAVENMIND.get(), newLocal)
 
-        val image2 = image.withUsedOp().copy(stack = stack.init())
-        return OperationResult(image2, listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get())
+        return OperationResult(
+            newImage.withUsedOp().copy(stack = stack.init()),
+            listOf(), continuation, HexEvalSounds.NORMAL_EXECUTE.get()
+        )
     }
 }

@@ -1,18 +1,17 @@
-from abc import ABC, abstractmethod
 from typing import Any, Literal, Self
 
-from hexdoc.core import IsVersion, ItemStack, ResourceLocation
-from hexdoc.minecraft.assets import ItemWithTexture, PNGTexture
-from hexdoc.minecraft.i18n import I18n, LocalizedStr
+from hexdoc.core import I18n, ItemStack, LocalizedStr, ResourceLocation
+from hexdoc.graphics import ImageField, ItemImage, TextureImage
 from hexdoc.minecraft.recipe import ItemIngredient, ItemIngredientList, Recipe
 from hexdoc.model import HexdocModel, TypeTaggedTemplate
-from hexdoc.utils import NoValue, classproperty
+from hexdoc.utils import classproperty
+from pydantic import Field, PrivateAttr, TypeAdapter, ValidationInfo, model_validator
+
 from hexdoc_hexcasting.utils.constants import (
     MEDIA_CRYSTAL_UNIT,
     MEDIA_DUST_UNIT,
     MEDIA_SHARD_UNIT,
 )
-from pydantic import Field, PrivateAttr, ValidationInfo, model_validator
 
 # ingredients
 
@@ -27,14 +26,14 @@ class BrainsweepeeIngredient(TypeTaggedTemplate, type=None):
 
 
 # lol, lmao
-class VillagerIngredient(BrainsweepeeIngredient, type="villager"):
+class VillagerIngredient(BrainsweepeeIngredient, type="hexcasting:villager"):
     min_level: int = Field(alias="minLevel")
     profession: ResourceLocation = ResourceLocation("minecraft", "none")
     biome: ResourceLocation | None = None
 
     _level_name: LocalizedStr = PrivateAttr()
     _profession_name: LocalizedStr = PrivateAttr()
-    _texture: PNGTexture = PrivateAttr()
+    _image: TextureImage = PrivateAttr()
 
     @property
     def level_name(self):
@@ -45,11 +44,11 @@ class VillagerIngredient(BrainsweepeeIngredient, type="villager"):
         return self._profession_name
 
     @property
-    def texture(self):
-        return self._texture
+    def image(self):
+        return self._image
 
     @model_validator(mode="after")
-    def _get_texture(self, info: ValidationInfo) -> Self:
+    def _get_image(self, info: ValidationInfo) -> Self:
         assert info.context is not None
         i18n = I18n.of(info)
 
@@ -57,62 +56,51 @@ class VillagerIngredient(BrainsweepeeIngredient, type="villager"):
 
         self._profession_name = i18n.localize_entity(self.profession, "villager")
 
-        self._texture = PNGTexture.load_id(
-            id="textures/entities/villagers" / self.profession + ".png",
+        self._image = TypeAdapter(ImageField[TextureImage]).validate_python(
+            "textures/entities/villagers" / self.profession + ".png",
             context=info.context,
         )
 
         return self
 
 
-@IsVersion("<1.20")
-class VillagerIngredient_0_10(
-    VillagerIngredient,
-    type=NoValue,
-    template_type="villager",
-):
-    pass
-
-
-@IsVersion(">=1.20")
-class EntityTypeIngredient(BrainsweepeeIngredient, type="entity_type"):
+class EntityTypeIngredient(BrainsweepeeIngredient, type="hexcasting:entity_type"):
     entity_type: ResourceLocation = Field(alias="entityType")
 
     _name: LocalizedStr = PrivateAttr()
-    _texture: PNGTexture = PrivateAttr()
+    _image: TextureImage = PrivateAttr()
 
     @property
     def name(self):
         return self._name
 
     @property
-    def texture(self):
-        return self._texture
+    def image(self):
+        return self._image
 
     @model_validator(mode="after")
-    def _get_texture(self, info: ValidationInfo) -> Self:
+    def _get_image(self, info: ValidationInfo) -> Self:
         assert info.context is not None
         i18n = I18n.of(info)
 
         self._name = i18n.localize_entity(self.entity_type)
 
-        self._texture = PNGTexture.load_id(
-            id="textures/entities" / self.entity_type + ".png",
+        self._image = TypeAdapter(ImageField[TextureImage]).validate_python(
+            "textures/entities" / self.entity_type + ".png",
             context=info.context,
         )
 
         return self
 
 
-@IsVersion(">=1.20")
-class EntityTagIngredient(BrainsweepeeIngredient, type="entity_tag"):
+class EntityTagIngredient(BrainsweepeeIngredient, type="hexcasting:entity_tag"):
     tag: ResourceLocation
 
 
 class BlockStateIngredient(HexdocModel):
     # TODO: tagged union
-    type: Literal["block"]
-    block: ItemWithTexture
+    type: Literal["hexcasting:block"]
+    block: ImageField[ItemImage]
 
 
 class ModConditionalIngredient(ItemIngredient, type="hexcasting:mod_conditional"):
@@ -125,29 +113,18 @@ class ModConditionalIngredient(ItemIngredient, type="hexcasting:mod_conditional"
 
 
 class BlockState(HexdocModel):
-    name: ItemWithTexture
-    properties: dict[str, Any] | None = None
+    Name: ImageField[ItemImage]
+    Properties: dict[str, Any] | None = None
 
 
 # recipes
 
 
-class BrainsweepRecipe(Recipe, ABC, type=None):
-    blockIn: BlockStateIngredient
+class BrainsweepRecipe(Recipe, type="hexcasting:brainsweep"):
+    block_in: BlockStateIngredient = Field(alias="blockIn")
+    entity_in: BrainsweepeeIngredient = Field(alias="entityIn")
+    cost: int
     result: BlockState
-
-    @property
-    @abstractmethod
-    def brainsweepee(self) -> Any:
-        """Returns the object representing this recipe's brainsweepee.
-
-        For example, `BrainsweepRecipe_0_11` returns `entityIn`.
-        """
-
-    @property
-    @abstractmethod
-    def cost(self) -> int:
-        """Returns the cost of this recipe in raw media units."""
 
     @property
     def cost_items(self) -> list[ItemStack]:
@@ -167,30 +144,3 @@ class BrainsweepRecipe(Recipe, ABC, type=None):
             # fallback if nothing divides evenly
             ItemStack("hexcasting", "amethyst_dust", self.cost // MEDIA_DUST_UNIT),
         ]
-
-
-@IsVersion(">=1.20")
-class BrainsweepRecipe_0_11(BrainsweepRecipe, type="hexcasting:brainsweep"):
-    cost_: int = Field(alias="cost")
-    entityIn: BrainsweepeeIngredient
-
-    @property
-    def brainsweepee(self):
-        return self.entityIn
-
-    @property
-    def cost(self):
-        return self.cost_
-
-
-@IsVersion("<1.20")
-class BrainsweepRecipe_0_10(BrainsweepRecipe, type="hexcasting:brainsweep"):
-    villagerIn: VillagerIngredient_0_10
-
-    @property
-    def brainsweepee(self):
-        return self.villagerIn
-
-    @property
-    def cost(self):
-        return 10 * MEDIA_CRYSTAL_UNIT
