@@ -17,6 +17,11 @@
       "type": "patchouli:crafting",
       "recipe": "hexcasting:spellbook",
       "text": "hexcasting.page.spellbook.crafting.desc"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "hexcasting.page.spellbook.3.title",
+      "text": "hexcasting.page.spellbook.3"
     }
   ]
 }

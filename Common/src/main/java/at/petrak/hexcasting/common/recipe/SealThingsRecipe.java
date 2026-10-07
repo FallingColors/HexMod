@@ -35,7 +35,7 @@ public class SealThingsRecipe extends CustomRecipe {
 
     @Override
     public boolean matches(CraftingInput container, Level level) {
-        boolean foundComb = false;
+        boolean foundSealant = false;
         boolean foundSealee = false;
 
         for (int i = 0; i < container.size(); i++) {
@@ -44,12 +44,14 @@ public class SealThingsRecipe extends CustomRecipe {
                 if (foundSealee) return false;
                 foundSealee = true;
             } else if (stack.is(HexTags.Items.SEAL_MATERIALS)) {
-                if (foundComb) return false;
-                foundComb = true;
+                if (foundSealant) return false;
+                foundSealant = true;
+            } else {
+                return false;
             }
         }
 
-        return foundComb && foundSealee;
+        return foundSealant && foundSealee;
     }
 
     @Override
