@@ -24,7 +24,6 @@
     "accessor.client.AccessorBlockEntityRenderDispatcher",
     "accessor.client.AccessorCompositeRenderType",
     "accessor.client.AccessorEmptyTextureStateShard",
-    "accessor.client.AccessorListEmiIngredient",
     "accessor.client.AccessorMouseHandler",
     "accessor.client.AccessorRenderStateShard",
     "accessor.client.AccessorRenderType",
