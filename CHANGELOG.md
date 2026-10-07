@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Added Simulate, which causes the next pattern drawn to be simulated (to check for mishaps) rather than executed ([#1194](https://github.com/FallingColors/HexMod/pull/1194)) @Robotgiggle
 - Added the `hex_unbreakable` tag for blocks that should be immune to Break Block regardless of the configured mining tier ([#1186](https://github.com/FallingColors/HexMod/pull/1186)) @Robotgiggle @slava110
 - Added a new Ancient Cypher hex that impulses nearby items towards the caster ([#1106](https://github.com/FallingColors/HexMod/pull/1106)) @IridescentVoid
+- Added a new mishap for trying to interact with a nonexistent or unloaded entity ([#1299](https://github.com/FallingColors/HexMod/pull/1299)) @slava110 @Robotgiggle
 
 ### Changed
 
@@ -21,6 +22,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - The pattern itself is now a special handler with a variable tail length
   - The tail length determines how many extra iotas from the original stack are included in each iteration's stack
   - Iotas included via the above process are now popped from the original stack
+- Entity iotas no longer become Null if the referenced entity ceases to exist or becomes unloaded ([#1299](https://github.com/FallingColors/HexMod/pull/1299)) @Robotgiggle
+- Augur's Purification now returns false for nonexistent or unloaded entity iotas ([#1299](https://github.com/FallingColors/HexMod/pull/1299)) @Robotgiggle
 
 ### Changed
 
