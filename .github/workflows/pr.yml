@@ -177,18 +177,3 @@ jobs:
         run: |
           git add --intent-to-add .
           git diff --name-only --exit-code -- ":!:*/src/generated/resources/.cache/*"
-
-  hexdoc:
-    # don't bother running the docs build when pushing to main - nothing necessary to cache here
-    if: github.event_name != 'push'
-    uses: hexdoc-dev/actions/.github/workflows/hexdoc.yml@v1
-    permissions:
-      contents: write
-      pages: read
-    secrets:
-      GH_TOKEN: ""
-    with:
-      python-version: "3.11"
-      release: false
-      deploy-pages: false
-      site-url: https://hexcasting.hexxy.media

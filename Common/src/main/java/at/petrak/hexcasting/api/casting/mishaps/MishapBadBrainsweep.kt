@@ -12,18 +12,18 @@ import net.minecraft.world.item.DyeColor
 import net.minecraft.world.phys.Vec3
 
 class MishapBadBrainsweep(val mob: Mob, val pos: BlockPos) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.GREEN)
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: TreeList<Iota>): TreeList<Iota> {
-        trulyHurt(mob, mob.damageSources().source(HexDamageTypes.OVERCAST, ctx.castingEntity), 1f)
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: TreeList<Iota>): TreeList<Iota> {
+        trulyHurt(mob, mob.damageSources().source(HexDamageTypes.OVERCAST, env.castingEntity), 1f)
         return stack
     }
 
-    override fun particleSpray(ctx: CastingEnvironment): ParticleSpray {
+    override fun particleSpray(env: CastingEnvironment): ParticleSpray {
         return ParticleSpray.burst(Vec3.atCenterOf(pos), 1.0)
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("bad_brainsweep", blockAtPos(ctx, this.pos))
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context) =
+        error("bad_brainsweep", blockAtPos(env, this.pos))
 }

@@ -46,7 +46,7 @@ object ListArithmetic : Arithmetic {
             UNAPPEND -> OperatorUnappend
             ADD -> make2 { list0, list1 -> list0 + list1 }
             ABS -> OperatorUnary(all(IotaPredicate.ofType(LIST.get()))) { iota: Iota -> DoubleIota(downcast(iota, LIST.get()).list.size.toDouble()) }
-            REV -> OperatorUnary(all(IotaPredicate.ofType(LIST.get()))) { iota: Iota -> ListIota(downcast(iota, LIST.get()).list.toList().asReversed()) }
+            REV -> OperatorUnary(all(IotaPredicate.ofType(LIST.get()))) { iota: Iota -> ListIota(downcast(iota, LIST.get()).list.reversed()) }
             INDEX_OF -> OperatorIndexOf
             REMOVE -> OperatorRemove
             REPLACE -> OperatorReplace
@@ -58,6 +58,6 @@ object ListArithmetic : Arithmetic {
 
     private fun make2(op: BinaryOperator<List<Iota>>): OperatorBinary = OperatorBinary(all(IotaPredicate.ofType(LIST.get())))
     { i: Iota, j: Iota -> ListIota(
-            op.apply(downcast(i, LIST.get()).list.toList(), downcast(j, LIST.get()).list.toList())
+            op.apply(downcast(i, LIST.get()).list, downcast(j, LIST.get()).list)
     ) }
 }

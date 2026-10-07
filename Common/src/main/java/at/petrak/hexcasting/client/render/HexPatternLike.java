@@ -34,7 +34,7 @@ public interface HexPatternLike {
         }
 
         public String getName(){
-            return pat.getStartDir() + "-" + pat.anglesSignature();
+            return pat.getOrientation() + "-" + pat.getSignature().toAnglesString();
         }
 
         public Set<Integer> getDups(){

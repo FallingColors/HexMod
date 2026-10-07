@@ -26,16 +26,17 @@ object OpUndo : Action {
         }
         var newParenCount = image.parenCount
         if (last == null) {
-            // if there was nothing in the parenthesized list, undo the initial open paren
-            newParenCount--
+            // If there was nothing in the parenthesized list, undo the initial open paren.
+            // This gets set to 0 rather than just decremented in case we started with open-n-parens.
+            newParenCount = 0
         } else if (last.iota is PatternIota && !last.escaped) {
             // adjust paren count if undoing a non-escaped open or close paren
-            when (last.iota.pattern.angles) {
-                HexActions.OPEN_PAREN.value().prototype.angles -> newParenCount--
-                HexActions.CLOSE_PAREN.value().prototype.angles -> newParenCount++
+            when (last.iota.pattern.signature) {
+                HexActions.OPEN_PAREN.value().prototype.signature -> newParenCount--
+                HexActions.CLOSE_PAREN.value().prototype.signature -> newParenCount++
             }
         }
-        val image2 = image.copy(
+        val image2 = image.withUsedOp().copy(
             parenthesized = newParens,
             parenCount = newParenCount
         )

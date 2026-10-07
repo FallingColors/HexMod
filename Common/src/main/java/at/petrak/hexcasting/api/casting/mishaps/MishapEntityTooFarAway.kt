@@ -9,7 +9,7 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.item.DyeColor
 
 class MishapEntityTooFarAway(val entity: Entity) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.PINK)
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: TreeList<Iota>): TreeList<Iota> {
@@ -17,6 +17,6 @@ class MishapEntityTooFarAway(val entity: Entity) : Mishap() {
         return stack
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component =
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context): Component =
         error("entity_too_far", (entity.displayName ?: entity.type.description).plainCopy())
 }

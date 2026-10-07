@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.castables.Action;
 import at.petrak.hexcasting.api.casting.eval.*;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
+import at.petrak.hexcasting.api.casting.eval.vm.FrameEvaluate;
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation;
 import at.petrak.hexcasting.api.casting.math.HexPattern;
 import at.petrak.hexcasting.api.casting.mishaps.Mishap;
@@ -56,7 +57,7 @@ public class PatternIota extends Iota {
     public boolean toleratesOther(Iota that) {
         return typesMatch(this, that)
             && that instanceof PatternIota piota
-            && this.getPattern().getAngles().equals(piota.getPattern().getAngles());
+            && this.getPattern().getSignature().equals(piota.getPattern().getSignature());
     }
 
     @Override
@@ -117,7 +118,7 @@ public class PatternIota extends Iota {
                     return new CastResult(
                         this,
                         continuation,
-                        vm.getImage().withNewParenthesized(this),
+                        vm.getImage().withNewParenthesized(this, false),
                         List.of(),
                         ResolvedPatternType.ESCAPED,
                         HexEvalSounds.NORMAL_EXECUTE.get());
@@ -161,10 +162,16 @@ public class PatternIota extends Iota {
                 result.getSound());
 
         } catch (Mishap mishap) {
+            // If a mishap happens mid-parens at the top level (ie when staffcasting), keep any in-progress parens.
+            // If a mishap happens mid-parens while metacasting, wipe the parens - if we didn't do this, any open paren
+            // levels would remain open even though the metacast itself has mishapped and thus been aborted.
+            boolean wipeParens = continuation instanceof SpellContinuation.NotDone cnd
+                              && cnd.getFrame() instanceof FrameEvaluate frameEval
+                              && frameEval.isMetacasting();
             return new CastResult(
                 this,
                 continuation,
-                null,
+                wipeParens ? vm.getImage().withResetEscape() : null,
                 List.of(new OperatorSideEffect.DoMishap(mishap, new Mishap.Context(this.getPattern(), castedName.get()))),
                 mishap.resolutionType(vm.getEnv()),
                 HexEvalSounds.MISHAP.get());
@@ -217,12 +224,12 @@ public class PatternIota extends Iota {
     // keep around just in case it's needed.
     public static Component displayNonInline(HexPattern pat){
         var bob = new StringBuilder();
-        bob.append(pat.getStartDir());
+        bob.append(pat.getOrientation());
 
-        var sig = pat.anglesSignature();
-        if (!sig.isEmpty()) {
+        var sig = pat.getSignature();
+        if (sig.sizeUpperBound() > 0) {
             bob.append(" ");
-            bob.append(sig);
+            bob.append(sig.toAnglesString());
         }
         return Component.translatable("hexcasting.tooltip.pattern_iota",
                         Component.literal(bob.toString()).withStyle(ChatFormatting.WHITE))
