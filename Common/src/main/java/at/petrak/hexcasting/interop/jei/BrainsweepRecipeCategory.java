@@ -2,6 +2,7 @@ package at.petrak.hexcasting.interop.jei;
 
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
+import at.petrak.hexcasting.interop.patchouli.PatchouliUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
@@ -96,6 +97,8 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
         @NotNull IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 12, 35)
             .addItemStacks(recipe.blockIn().getDisplayedStacks());
+        builder.addSlot(RecipeIngredientRole.INPUT, 12, 55)
+            .addItemStacks(PatchouliUtils.mediaItems(recipe.mediaCost(), true));
         builder.addSlot(RecipeIngredientRole.OUTPUT, 87, 35)
             .addItemStack(new ItemStack(recipe.result().getBlock()));
     }
