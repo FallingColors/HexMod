@@ -47,7 +47,12 @@ public class HexEMIPlugin implements EmiPlugin {
 		new PatternRendererEMI(EDIFY_ID, 16, 16).strokeOrder(false),
 		new EmiTexture(SIMPLIFIED_ICON_EDIFY, 0, 0, 16, 16, 16, 16, 16, 16));
 
-	public static List<ItemStack> mediaItems(long mediaCost, boolean includePhial){
+	/**
+	 * Returns a list of ItemStacks representing a media cost.
+	 * @param mediaCost The amount of media to represent
+	 * @param fallbackToPhial If true, and the amount of media does not cleanly divide into a multiple of dust, return a phial of that exact value instead. If false, rounds up to the nearest dust.
+	 */
+	public static List<ItemStack> mediaItems(long mediaCost, boolean fallbackToPhial){
 		record ItemCost(Item item, int cost) {
 			public boolean dividesEvenly (int dividend) {
 				return dividend % cost == 0;
@@ -60,19 +65,16 @@ public class HexEMIPlugin implements EmiPlugin {
 		};
 
 		// get evenly divisible ItemStacks
-		List<ItemStack> validItemStacks = new ArrayList<>(
-			Arrays.stream(costs)
-				.filter(itemCost -> itemCost.dividesEvenly((int)mediaCost))
-				.map(validItemCost -> new ItemStack(validItemCost.item, (int)mediaCost / validItemCost.cost))
-				.toList()
-		);
+		List<ItemStack> validItemStacks = Arrays.stream(costs)
+			.filter(itemCost -> itemCost.dividesEvenly((int)mediaCost))
+			.map(validItemCost -> new ItemStack(validItemCost.item, (int)mediaCost / validItemCost.cost))
+			.toList();
 
-		if(includePhial){
-			validItemStacks.add(ItemMediaBattery.withMedia(new ItemStack(HexItems.BATTERY), mediaCost, mediaCost));
-			return validItemStacks;
+		if(!validItemStacks.isEmpty()) return validItemStacks;
+
+		if(fallbackToPhial){
+			return List.of(ItemMediaBattery.withMedia(new ItemStack(HexItems.BATTERY), mediaCost, mediaCost));
 		}else{
-			if(!validItemStacks.isEmpty()) return validItemStacks;
-
 			// fallback: display in terms of dust, rounded up to the nearest dust
 			return List.of(new ItemStack(HexItems.AMETHYST_DUST, (int)Math.ceil((double)mediaCost / MediaConstants.DUST_UNIT)));
 		}
