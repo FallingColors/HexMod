@@ -35,7 +35,7 @@ public class ItemStaff extends Item {
         }
         if (player.isShiftKeyDown()) {
             if (world.isClientSide()) {
-                player.playSound(HexSounds.STAFF_RESET.value(), 1f, 1f);
+                this.playResetSound(player, hand);
             } else if (player instanceof ServerPlayer serverPlayer) {
                 IXplatAbstractions.INSTANCE.clearCastingData(serverPlayer);
                 var packet = new MsgClearSpiralPatternsS2C(player.getUUID());
@@ -59,6 +59,10 @@ public class ItemStaff extends Item {
 //        player.gameEvent(GameEvent.ITEM_INTERACT_START);
 
         return InteractionResultHolder.success(player.getItemInHand(hand));
+    }
+
+    public void playResetSound(Player player, InteractionHand hand){
+        player.playSound(HexSounds.STAFF_RESET.value(), 1f, 1f);
     }
 
 }
