@@ -7,13 +7,13 @@ import at.petrak.hexcasting.api.utils.TreeList
 import net.minecraft.world.item.DyeColor
 
 class MishapBadCaster: Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.RED)
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: TreeList<Iota>): TreeList<Iota> {
         return stack
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context) =
         error("bad_caster")
 }

@@ -16,11 +16,11 @@ class OpCircleBounds(val max: Boolean) : ConstMediaAction {
             throw MishapNoSpellCircle()
         val circle = env.impetus ?: throw MishapNoSpellCircle()
 
-        val aabb = circle.executionState!!.bounds // the circle should have an execution state since it's executing this.
+        val boundsBox = circle.executionState!!.bounds // the circle should have an execution state since it's executing this.
 
         return if (max)
-            aabb.aabb().maxPosition.asActionResult
+            boundsBox.max().asActionResult
         else
-            aabb.aabb().minPosition.asActionResult
+            boundsBox.min().asActionResult
     }
 }

@@ -17,9 +17,9 @@ import net.minecraft.nbt.CompoundTag
 interface SpellAction : Action {
     val argc: Int
 
-    fun hasCastingSound(ctx: CastingEnvironment): Boolean = true
+    fun hasCastingSound(env: CastingEnvironment): Boolean = true
 
-    fun awardsCastingStat(ctx: CastingEnvironment): Boolean = true
+    fun awardsCastingStat(env: CastingEnvironment): Boolean = true
 
     @Throws(Mishap::class)
     fun execute(
@@ -27,10 +27,14 @@ interface SpellAction : Action {
         env: CastingEnvironment
     ): Result
 
+    /**
+     * Override this rather than [execute] if you need to read data from the [CastingImage] while setting up for your
+     * spell. Note that you cannot *update* the [CastingImage] with this - if you need to do that, pass the relevant
+     * data into your [RenderedSpell] implementation and use the [RenderedSpell.cast] overload that returns a new image.
+     */
     @Throws(Mishap::class)
-
-    fun executeWithUserdata(
-        args: List<Iota>, env: CastingEnvironment, userData: CompoundTag
+    fun executeWithImage(
+        args: List<Iota>, env: CastingEnvironment, image: CastingImage
     ): Result {
         return this.execute(args, env)
     }
@@ -44,8 +48,7 @@ interface SpellAction : Action {
         val stackWithoutArgs = stack.dropRight(this.argc)
 
         // execute!
-        val userDataMut = image.userData.copy()
-        val result = this.executeWithUserdata(args, env, userDataMut)
+        val result = this.executeWithImage(args, env, image.copy(stack = stack))
 
         val sideEffects = mutableListOf<OperatorSideEffect>()
 
@@ -65,7 +68,7 @@ interface SpellAction : Action {
         for (spray in result.particles)
             sideEffects.add(OperatorSideEffect.Particles(spray))
 
-        val image2 = image.copy(stack = stackWithoutArgs, opsConsumed = image.opsConsumed + result.opCount, userData = userDataMut)
+        val image2 = image.copy(stack = stackWithoutArgs, opsConsumed = image.opsConsumed + result.opCount)
 
         val sound = if (this.hasCastingSound(env)) HexEvalSounds.SPELL.get() else HexEvalSounds.MUTE.get()
         return OperationResult(image2, sideEffects, continuation, sound)

@@ -8,11 +8,11 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 object OpGetCaster : ConstMediaAction {
     override val argc = 0
 
-    override fun execute(args: List<Iota>, ctx: CastingEnvironment): List<Iota> {
-        if (ctx.castingEntity == null)
+    override fun execute(args: List<Iota>, env: CastingEnvironment): List<Iota> {
+        if (env.castingEntity == null)
             return null.asActionResult
 
-        ctx.assertEntityInRange(ctx.castingEntity)
-        return ctx.castingEntity.asActionResult
+        env.assertEntityInRange(env.castingEntity)
+        return env.castingEntity.asActionResult
     }
 }

@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.iota.Iota;
 import at.petrak.hexcasting.common.lib.HexAttributes;
 import at.petrak.hexcasting.common.lib.HexSounds;
+import at.petrak.hexcasting.common.lib.hex.HexImageComponents;
 import at.petrak.hexcasting.common.msgs.MsgClearSpiralPatternsS2C;
 import at.petrak.hexcasting.common.msgs.MsgOpenSpellGuiS2C;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
@@ -34,7 +35,7 @@ public class ItemStaff extends Item {
         }
         if (player.isShiftKeyDown()) {
             if (world.isClientSide()) {
-                player.playSound(HexSounds.STAFF_RESET.value(), 1f, 1f);
+                this.playResetSound(player, hand);
             } else if (player instanceof ServerPlayer serverPlayer) {
                 IXplatAbstractions.INSTANCE.clearCastingData(serverPlayer);
                 var packet = new MsgClearSpiralPatternsS2C(player.getUUID());
@@ -47,8 +48,7 @@ public class ItemStaff extends Item {
             var vm = IXplatAbstractions.INSTANCE.getStaffcastVM(serverPlayer, hand);
             var patterns = IXplatAbstractions.INSTANCE.getPatternsSavedInUi(serverPlayer);
 
-            @Nullable Iota ravenmind = vm.getImage().ravenmind().orElse(null);
-
+            @Nullable Iota ravenmind = vm.getImage().getComponent(HexImageComponents.RAVENMIND.get());
 
             IXplatAbstractions.INSTANCE.sendPacketToPlayer(serverPlayer,
                 new MsgOpenSpellGuiS2C(hand, patterns, vm.getImage().getStack(), ravenmind,
@@ -59,6 +59,10 @@ public class ItemStaff extends Item {
 //        player.gameEvent(GameEvent.ITEM_INTERACT_START);
 
         return InteractionResultHolder.success(player.getItemInHand(hand));
+    }
+
+    public void playResetSound(Player player, InteractionHand hand){
+        player.playSound(HexSounds.STAFF_RESET.value(), 1f, 1f);
     }
 
 }

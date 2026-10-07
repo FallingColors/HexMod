@@ -23,7 +23,7 @@ object OpCloseParen : Action {
         val newParenCount = image.parenCount - 1
         if (newParenCount == 0) {
             val newStack = image.stack.appended(ListIota(image.parenthesized.map { it.iota }))
-            val image2 = image.copy(
+            val image2 = image.withUsedOp().copy(
                 stack = newStack,
                 parenCount = newParenCount,
                 parenthesized = TreeList.empty()

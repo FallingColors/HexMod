@@ -30,7 +30,7 @@ object OpBeep : SpellAction {
         )
     }
 
-    override fun hasCastingSound(ctx: CastingEnvironment) = false
+    override fun hasCastingSound(env: CastingEnvironment) = false
 
     private data class Spell(val target: Vec3, val note: Int, val instrument: NoteBlockInstrument) : RenderedSpell {
         override fun cast(env: CastingEnvironment) {

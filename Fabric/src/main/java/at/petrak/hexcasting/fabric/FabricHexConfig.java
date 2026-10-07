@@ -7,6 +7,8 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.GsonBuilder;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
@@ -202,6 +204,11 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private List<String> circleActionDenyList = List.of();
         @ConfigEntry.Gui.Tooltip
+        private List<String> costRescaleListRaw = List.of();
+        private transient Object2DoubleMap<ResourceLocation> costRescaleMap;
+        @ConfigEntry.Gui.Tooltip
+        private double globalCostScaling = DEFAULT_GLOBAL_COST_SCALING;
+        @ConfigEntry.Gui.Tooltip
         private boolean greaterTeleportSplatsItems = DEFAULT_GREATER_TELEPORT_SPLATS_ITEMS;
         @ConfigEntry.Gui.Tooltip
         private boolean villagersOffendedByMindMurder = DEFAULT_VILLAGERS_DISLIKE_MIND_MURDER;
@@ -246,9 +253,23 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
 
         @Override
         public void validatePostLoad() throws ValidationException {
+            this.opBreakHarvestLevel = Mth.clamp(this.opBreakHarvestLevel, 0, 4);
             this.maxOpCount = Math.max(this.maxOpCount, 0);
             this.maxSpellCircleLength = Math.max(this.maxSpellCircleLength, 4);
+            this.globalCostScaling = Math.max(this.globalCostScaling, 0);
             this.traderScrollChance = Mth.clamp(this.traderScrollChance, 0.0, 1.0);
+
+            this.costRescaleMap = new Object2DoubleOpenHashMap<>();
+            try {
+                for (var auugh : this.costRescaleListRaw) {
+                    String[] split = auugh.split(" ");
+                    ResourceLocation loc = ResourceLocation.parse(split[0]);
+                    double scale = Double.parseDouble(split[1]);
+                    this.costRescaleMap.put(loc, scale);
+                }
+            } catch (Exception e) {
+                throw new ValidationException("Bad parsing of action cost rescaling", e);
+            }
 
             this.scrollInjections = new Object2IntOpenHashMap<>();
             try {
@@ -258,7 +279,6 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
                     int count = Integer.parseInt(split[1]);
                     this.scrollInjections.put(loc, count);
                 }
-
             } catch (Exception e) {
                 throw new ValidationException("Bad parsing of scroll injects", e);
             }
@@ -312,6 +332,14 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         public boolean isActionAllowedInCircles(ResourceLocation actionID) {
             return noneMatch(circleActionDenyList, actionID);
         }
+
+        @Override
+        public double getActionCostScaling(ResourceLocation actionID) {
+            return this.costRescaleMap.getOrDefault(actionID, 1.0);
+        }
+
+        @Override
+        public double globalCostScaling() { return globalCostScaling; }
 
         @Override
         public boolean doesGreaterTeleportSplatItems() { return greaterTeleportSplatsItems; }

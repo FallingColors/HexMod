@@ -13,6 +13,7 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame;
+import at.petrak.hexcasting.api.casting.eval.vm.ImageComponentType;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
@@ -38,7 +39,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -50,6 +50,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.UUID;
@@ -59,7 +60,7 @@ import java.util.stream.Collectors;
 /**
  * more like IHexplatAbstracts lmaooooooo
  */
-
+@ParametersAreNonnullByDefault
 public interface IXplatAbstractions {
     Platform platform();
 
@@ -174,6 +175,8 @@ public interface IXplatAbstractions {
     Registry<SpecialHandler.Factory<?>> getSpecialHandlerRegistry();
 
     Registry<IotaType<?>> getIotaTypeRegistry();
+
+    Registry<ImageComponentType<?>> getImageComponentRegistry();
 
     Registry<Arithmetic> getArithmeticRegistry();
     Registry<ContinuationFrame.Type<?>> getContinuationTypeRegistry();

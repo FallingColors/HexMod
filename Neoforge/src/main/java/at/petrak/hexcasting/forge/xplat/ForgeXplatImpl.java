@@ -14,6 +14,7 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
 import at.petrak.hexcasting.api.casting.eval.vm.ContinuationFrame;
+import at.petrak.hexcasting.api.casting.eval.vm.ImageComponentType;
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
@@ -60,7 +61,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -286,8 +286,8 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public CastingVM getStaffcastVM(ServerPlayer player, InteractionHand hand) {
         // This is always from a staff because we don't need to load the VM when casting from item
-        var ctx = new StaffCastEnv(player, hand);
-        return new CastingVM(CastingImage.getCODEC().parse(NbtOps.INSTANCE, player.getPersistentData().getCompound(TAG_VM)).getOrThrow(), ctx);
+        var env = new StaffCastEnv(player, hand);
+        return new CastingVM(CastingImage.getCODEC().parse(NbtOps.INSTANCE, player.getPersistentData().getCompound(TAG_VM)).getOrThrow(), env);
     }
 
     @Override
@@ -445,6 +445,10 @@ public class ForgeXplatImpl implements IXplatAbstractions {
             .sync(true)
             .defaultKey(modLoc("null"))
             .create();
+    private static final Registry<ImageComponentType<?>> IMAGE_COMPONENT_REGISTRY = new RegistryBuilder<>(HexRegistries.IMAGE_COMPONENT)
+            .sync(true)
+            .defaultKey(modLoc("null"))
+            .create();
 
     private static final Registry<Arithmetic> ARITHMETIC_REGISTRY = new RegistryBuilder<>(HexRegistries.ARITHMETIC)
             .sync(true)
@@ -480,6 +484,11 @@ public class ForgeXplatImpl implements IXplatAbstractions {
     @Override
     public Registry<IotaType<?>> getIotaTypeRegistry() {
         return IOTA_TYPE_REGISTRY;
+    }
+
+    @Override
+    public Registry<ImageComponentType<?>> getImageComponentRegistry() {
+        return IMAGE_COMPONENT_REGISTRY;
     }
 
     @Override

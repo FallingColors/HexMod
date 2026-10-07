@@ -7,6 +7,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
@@ -25,6 +26,9 @@ public class HexItemTagProvider extends ItemTagsProvider {
 
     @Override
     protected void addTags(HolderLookup.Provider provider) {
+        add(tag(ItemTags.PICKAXES),
+                HexItems.JEWELER_HAMMER.get());
+
         add(tag(xtags.gems()),
             HexItems.CHARGED_AMETHYST.get());
         add(tag(xtags.amethystDust()),
@@ -49,6 +53,9 @@ public class HexItemTagProvider extends ItemTagsProvider {
             Items.DRAGON_BREATH);
         add(tag(HexTags.Items.SPELLBOOK_ERASE_MATERIALS),
             Items.SOUL_SAND);
+
+        add(tag(HexTags.Items.PANS),
+                ResourceLocation.fromNamespaceAndPath("farmersdelight", "skillet"));
 
         this.copy(HexTags.Blocks.EDIFIED_LOGS, HexTags.Items.EDIFIED_LOGS);
         this.copy(HexTags.Blocks.EDIFIED_PLANKS, HexTags.Items.EDIFIED_PLANKS);
@@ -77,6 +84,12 @@ public class HexItemTagProvider extends ItemTagsProvider {
     void add(TagAppender<Item> appender, Item... items) {
         for (Item item : items) {
             appender.add(BuiltInRegistries.ITEM.getResourceKey(item).orElseThrow());
+        }
+    }
+
+    void add(TagAppender<Item> appender, ResourceLocation... locations) {
+        for (ResourceLocation location : locations) {
+            appender.addOptional(location);
         }
     }
 }
