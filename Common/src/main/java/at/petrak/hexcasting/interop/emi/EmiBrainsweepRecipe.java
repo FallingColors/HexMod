@@ -55,7 +55,7 @@ public record EmiBrainsweepRecipe(EmiIngredient blockInput,
         widgets.addSlot(blockInput, 11, 34).drawBack(false).customBackground(null, 0, 0, 19, 19);
         widgets.addSlot(mediaCost, 11, 54).drawBack(false).customBackground(null, 0, 0, 19, 19);
 
-        widgets.add(new TheCoolerSlotWidget(villagerInput, 37, 19, 2.75f).useOffset(false).customShift(-8.5f, 2.485f))
+        widgets.add(new EntitySlotWidget(villagerInput, 37, 19, 2.75f).useOffset(false).customShift(-8.5f, 2.485f))
                 .drawBack(false).customBackground(null, 0, 0, 27, 49);
 
         widgets.addSlot(output, 86, 34).drawBack(false).large(true).recipeContext(this).customBackground(null, 0, 0, 19, 19);

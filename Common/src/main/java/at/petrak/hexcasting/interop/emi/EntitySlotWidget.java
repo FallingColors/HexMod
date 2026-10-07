@@ -9,11 +9,11 @@ import dev.emi.emi.api.widget.SlotWidget;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 
-public class TheCoolerSlotWidget extends SlotWidget {
+public class EntitySlotWidget extends SlotWidget {
 
     private final float renderScale;
 
-    public TheCoolerSlotWidget(EmiIngredient stack, int x, int y, float renderScale) {
+    public EntitySlotWidget(EmiIngredient stack, int x, int y, float renderScale) {
         super(stack, x, y);
         this.renderScale = renderScale;
     }
@@ -22,12 +22,12 @@ public class TheCoolerSlotWidget extends SlotWidget {
     private float xShift = 0;
     private float yShift = 0;
 
-    public TheCoolerSlotWidget useOffset(boolean offset) {
+    public EntitySlotWidget useOffset(boolean offset) {
         useOffset = offset;
         return this;
     }
 
-    public TheCoolerSlotWidget customShift(float xShift, float yShift) {
+    public EntitySlotWidget customShift(float xShift, float yShift) {
         this.xShift = xShift;
         this.yShift = yShift;
         return this;
