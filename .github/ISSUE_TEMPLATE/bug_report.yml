@@ -26,7 +26,7 @@ body:
   - type: input
     attributes:
       label: Hex Casting version
-      placeholder: eg. 0.11.3
+      placeholder: eg. 0.11.4
     validations:
       required: true
 

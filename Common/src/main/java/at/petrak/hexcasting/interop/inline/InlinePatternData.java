@@ -67,7 +67,7 @@ public class InlinePatternData implements InlineData<InlinePatternData>{
 
     @Override
     public Component asText(boolean withExtra) {
-        return Component.literal(pattern.toString()).withStyle(asStyle(withExtra));
+        return Component.literal(pattern.toChatString()).withStyle(asStyle(withExtra));
     }
 
     public static class InlinePatternDataType implements InlineDataType<InlinePatternData> {

@@ -24,7 +24,7 @@ public class BlockAkashicRecord extends Block {
         var clobbereePos = AkashicFloodfiller.floodFillFor(herePos, level,
             (pos, bs, world) ->
                 world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
-                    && tile.getPattern() != null && tile.getPattern().sigsEqual(key));
+                    && tile.getPattern() != null && tile.getPattern().getSignature().equals(key.getSignature()));
 
         if (clobbereePos != null) {
             return null;
@@ -48,7 +48,7 @@ public class BlockAkashicRecord extends Block {
         var foundPos = AkashicFloodfiller.floodFillFor(herePos, slevel,
             (pos, bs, world) ->
                 world.getBlockEntity(pos) instanceof BlockEntityAkashicBookshelf tile
-                    && tile.getPattern() != null && tile.getPattern().sigsEqual(key));
+                    && tile.getPattern() != null && tile.getPattern().getSignature().equals(key.getSignature()));
         if (foundPos == null) {
             return null;
         }

@@ -14,19 +14,19 @@ import net.minecraft.world.item.DyeColor
  * confidant == null means the player is offline.
  */
 class MishapOthersName(val confidant: Player?) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BLACK)
 
-    override fun execute(ctx: CastingEnvironment, errorCtx: Context, stack: TreeList<Iota>): TreeList<Iota> {
-        val seconds = if (this.confidant != null && this.confidant == ctx.castingEntity) 5 else 60
-        ctx.mishapEnvironment.blind(seconds * 20)
+    override fun execute(env: CastingEnvironment, errorCtx: Context, stack: TreeList<Iota>): TreeList<Iota> {
+        val seconds = if (this.confidant != null && this.confidant == env.castingEntity) 5 else 60
+        env.mishapEnvironment.blind(seconds * 20)
         return stack
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context) =
         when (this.confidant) {
             null -> error("others_name.offline")
-            ctx.castingEntity -> error("others_name.self")
+            env.castingEntity -> error("others_name.self")
             else -> error("others_name", confidant.name)
         }
 
