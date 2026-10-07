@@ -38,6 +38,9 @@ jobs:
   build:
     needs:
       - setup
+    permissions:
+      contents: read
+      pages: read
     uses: ./.github/workflows/build_docs.yml
     secrets: inherit
     with:
