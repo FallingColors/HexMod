@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.interop.emi;
 
+import at.petrak.hexcasting.interop.patchouli.PatchouliUtils;
 import dev.emi.emi.EmiPort;
 import dev.emi.emi.api.render.EmiRender;
 import dev.emi.emi.api.stack.EmiIngredient;
@@ -52,7 +53,7 @@ public class MediaEmiStack implements EmiIngredient{
     @Override
     public EmiIngredient setAmount(long amount){
         this.mediaCost = amount;
-        ingredients = HexEMIPlugin.mediaItems(amount, true).stream().map(EmiStack::of).toList();
+        ingredients = PatchouliUtils.mediaItems(amount, true).stream().map(EmiStack::of).toList();
         return this;
     }
 

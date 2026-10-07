@@ -1,23 +1,18 @@
 package at.petrak.hexcasting.interop.patchouli;
 
-import at.petrak.hexcasting.api.misc.MediaConstants;
-import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
-import at.petrak.hexcasting.interop.emi.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import vazkii.patchouli.api.IComponentProcessor;
 import vazkii.patchouli.api.IVariable;
 import vazkii.patchouli.api.IVariableProvider;
-import java.util.Arrays;
+
 import java.util.List;
 
 public class BrainsweepProcessor implements IComponentProcessor {
@@ -90,7 +85,7 @@ public class BrainsweepProcessor implements IComponentProcessor {
 					.toList());
 			}
 			case "mediaCost" -> {
-				List<ItemStack> stacks = HexEMIPlugin.mediaItems(this.recipe.mediaCost(), false);
+				List<ItemStack> stacks = PatchouliUtils.mediaItems(this.recipe.mediaCost(), false);
 				return IVariable.wrapList(stacks.stream().map(IVariable::from).toList());
 			}
 			default -> {
