@@ -37,9 +37,6 @@ interface Action {
      *
      * A particle effect at the cast site and various messages and advancements are done automagically.
      *
-     * The userdata tag is copied for you, so you don't need to worry about mutation messing up things
-     * behind the scenes.
-     *
      * Note that `image.parenCount` will always be 0 here - if it's greater, [operateInParens] is used instead.
      */
     @Throws(Mishap::class)

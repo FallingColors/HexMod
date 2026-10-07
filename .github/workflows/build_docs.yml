@@ -2,59 +2,51 @@ name: Build the web book
 
 on:
   push:
-    branches: main
+    # Keep in sync with on.push.branches in deploy_docs.yml
+    branches-ignore:
+      - main
+      - '1.21'
+  pull_request:
   workflow_dispatch:
     inputs:
-      release:
-        description: Release this version
+      hexdoc-release:
+        description: Build in release mode
         type: boolean
-        default: false
-      publish:
-        description: Package index to publish to
-        type: choice
-        options:
-          - none
-          - PyPI
-
-env:
-  PYPI_PACKAGE: hexdoc-hexcasting
-
-permissions:
-  contents: read
+  workflow_call:
+    inputs:
+      hexdoc-release:
+        type: boolean
+        required: true
+    outputs:
+      pages-url:
+        value: ${{ jobs.build-hexdoc.outputs.pages-url }}
 
 jobs:
-  hexdoc:
-    uses: hexdoc-dev/actions/.github/workflows/hexdoc.yml@v1
-    permissions:
-      contents: write
-      pages: read
-    secrets:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    with:
-      python-version: "3.11"
-      release: |-
-        ${{
-          github.event_name != 'push' && inputs.release
-          || github.event_name == 'push' && startsWith(github.event.head_commit.message, '[Release]')
-        }}
-
-  publish-pypi:
+  build-hexdoc:
     runs-on: ubuntu-latest
-    needs: hexdoc
-    if: |-
-      needs.hexdoc.outputs.release == 'true' &&
-      (github.event_name == 'push' || inputs.publish == 'PyPI')
-    environment:
-      name: pypi
-      url: https://pypi.org/p/${{ env.PYPI_PACKAGE }}
     permissions:
-      id-token: write
+      contents: read
+      pages: read
+    outputs:
+      pages-url: ${{ steps.build.outputs.pages-url }}
     steps:
-      - name: Download package artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: hexdoc-build
-          path: dist
+      - uses: actions/checkout@v6
 
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+      - uses: actions/setup-python@v6
+        with:
+          python-version-file: .python-version
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          activate-environment: true
+          enable-cache: true
+
+      - name: Sync dependencies
+        run: uv sync --locked --no-dev
+
+      - id: build
+        uses: hexdoc-dev/actions/build@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          release: ${{ inputs.hexdoc-release || 'false' }}
