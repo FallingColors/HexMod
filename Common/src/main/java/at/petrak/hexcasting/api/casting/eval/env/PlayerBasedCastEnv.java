@@ -197,7 +197,7 @@ public abstract class PlayerBasedCastEnv extends CastingEnvironment {
     }
 
     @Override
-    public @Nullable FrozenPigment setPigment(@Nullable FrozenPigment pigment) {
+    public FrozenPigment setPigment(FrozenPigment pigment) {
         return IXplatAbstractions.INSTANCE.setPigment(caster, pigment);
     }
 
