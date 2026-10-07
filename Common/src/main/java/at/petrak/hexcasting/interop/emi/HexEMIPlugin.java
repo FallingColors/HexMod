@@ -1,8 +1,8 @@
 package at.petrak.hexcasting.interop.emi;
 
-import at.petrak.hexcasting.api.misc.*;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.mod.HexTags;
-import at.petrak.hexcasting.common.lib.*;
+import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
 import at.petrak.hexcasting.interop.utils.PhialRecipeStackBuilder;
@@ -14,7 +14,12 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -40,6 +45,30 @@ public class HexEMIPlugin implements EmiPlugin {
 		new PatternRendererEMI(EDIFY_ID, 16, 16).strokeOrder(false),
 		new EmiTexture(SIMPLIFIED_ICON_EDIFY, 0, 0, 16, 16, 16, 16, 16, 16));
 
+	public static List<ItemStack> mediaItems(long mediaCost){
+		record ItemCost(Item item, int cost) {
+			public boolean dividesEvenly (int dividend) {
+				return dividend % cost == 0;
+			}
+		}
+		ItemCost[] costs  = {
+			new ItemCost(HexItems.AMETHYST_DUST, (int)MediaConstants.DUST_UNIT),
+			new ItemCost(Items.AMETHYST_SHARD, (int)MediaConstants.SHARD_UNIT),
+			new ItemCost(HexItems.CHARGED_AMETHYST, (int)MediaConstants.CRYSTAL_UNIT),
+		};
+
+		// get evenly divisible ItemStacks
+		List<ItemStack> validItemStacks = Arrays.stream(costs)
+			.filter(itemCost -> itemCost.dividesEvenly((int)mediaCost))
+			.map(validItemCost -> new ItemStack(validItemCost.item, (int)mediaCost / validItemCost.cost))
+			.toList();
+
+		if(!validItemStacks.isEmpty()) return validItemStacks;
+
+		// fallback: display in terms of dust, rounded up to the nearest dust
+		return List.of(new ItemStack(HexItems.AMETHYST_DUST, (int)Math.ceil((double)mediaCost / MediaConstants.DUST_UNIT)));
+	}
+
 	@Override
 	public void register(EmiRegistry registry) {
 		registry.addCategory(BRAINSWEEP);
@@ -54,7 +83,7 @@ public class HexEMIPlugin implements EmiPlugin {
 			var inputBlocks = EmiIngredient.of(recipe.blockIn().getDisplayedStacks().stream()
 				.map(EmiStack::of).toList());
 			var inputEntity = new BrainsweepeeEmiStack(recipe.entityIn());
-			var mediaCost = EmiStack.of(HexItems.AMETHYST_DUST, (long)Math.ceil(((double)recipe.mediaCost()) / MediaConstants.DUST_UNIT));
+			var mediaCost = EmiIngredient.of(mediaItems(recipe.mediaCost()).stream().map(EmiStack::of).toList());
 			var output = EmiStack.of(recipe.result().getBlock());
 			registry.addRecipe(new EmiBrainsweepRecipe(inputBlocks, inputEntity, mediaCost, output, recipe.getId()));
 		}

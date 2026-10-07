@@ -4,6 +4,7 @@ import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import at.petrak.hexcasting.common.recipe.HexRecipeStuffRegistry;
+import at.petrak.hexcasting.interop.emi.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -89,29 +90,8 @@ public class BrainsweepProcessor implements IComponentProcessor {
 					.toList());
 			}
 			case "mediaCost" -> {
-				record ItemCost(Item item, int cost) {
-					public boolean dividesEvenly (int dividend) {
-                        return dividend % cost == 0;
-                    }
-				}
-				ItemCost[] costs  = {
-						new ItemCost(HexItems.AMETHYST_DUST, (int)MediaConstants.DUST_UNIT),
-						new ItemCost(Items.AMETHYST_SHARD, (int)MediaConstants.SHARD_UNIT),
-						new ItemCost(HexItems.CHARGED_AMETHYST, (int)MediaConstants.CRYSTAL_UNIT),
-				};
-
-				// get evenly divisible ItemStacks
-				List<IVariable> validItemStacks = Arrays.stream(costs)
-						.filter(itemCost -> itemCost.dividesEvenly((int)this.recipe.mediaCost()))
-						.map(validItemCost -> new ItemStack(validItemCost.item, (int) this.recipe.mediaCost() / validItemCost.cost))
-						.map(IVariable::from)
-						.toList();
-
-				if (!validItemStacks.isEmpty()) {
-					return IVariable.wrapList(validItemStacks);
-				}
-				// fallback: display in terms of dust
-				return IVariable.from(new ItemStack(HexItems.AMETHYST_DUST, (int) (this.recipe.mediaCost() / MediaConstants.DUST_UNIT)));
+				List<ItemStack> stacks = HexEMIPlugin.mediaItems(this.recipe.mediaCost());
+				return IVariable.wrapList(stacks.stream().map(IVariable::from).toList());
 			}
 			default -> {
 				return null;
