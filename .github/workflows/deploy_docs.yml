@@ -32,8 +32,8 @@ jobs:
             HEXDOC_RELEASE="${{ startsWith(github.event.head_commit.message, '[Release]') }}"
             PYPI_RELEASE="$HEXDOC_RELEASE"
           fi
-          echo "hexdoc-release=$HEXDOC_RELEASE" | tee >> "$GITHUB_OUTPUT"
-          echo "pypi-release=$PYPI_RELEASE" | tee >> "$GITHUB_OUTPUT"
+          echo "hexdoc-release=$HEXDOC_RELEASE" | tee -a "$GITHUB_OUTPUT"
+          echo "pypi-release=$PYPI_RELEASE" | tee -a "$GITHUB_OUTPUT"
 
   build:
     needs:
