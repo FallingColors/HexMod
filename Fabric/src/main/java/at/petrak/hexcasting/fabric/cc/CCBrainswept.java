@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.fabric.cc;
 
+import at.petrak.hexcasting.fabric.lib.HexCardinalComponents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
