@@ -3,6 +3,7 @@ package at.petrak.hexcasting.client.render;
 import at.petrak.hexcasting.api.block.circle.BlockAbstractImpetus;
 import at.petrak.hexcasting.api.casting.circles.BlockEntityAbstractImpetus;
 import at.petrak.hexcasting.api.client.ScryingLensOverlayRegistry;
+import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
 import at.petrak.hexcasting.common.lib.HexBlocks;
 import com.mojang.datafixers.util.Pair;
@@ -64,6 +65,10 @@ public class ScryingLensOverlays {
                     if (iota != null) {
                         var display = iota.display();
                         lines.add(new Pair<>(new ItemStack(Items.BOOK), display));
+                    }
+                    if (state.getValue(BlockAkashicBookshelf.SEALED)) {
+                        var sealed = Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD);
+                        lines.add(new Pair<>(new ItemStack(Items.HONEYCOMB), sealed));
                     }
                 }
             });
