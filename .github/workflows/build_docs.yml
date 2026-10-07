@@ -2,37 +2,24 @@ name: Build the web book
 
 on:
   push:
-    branches:
+    # Keep in sync with on.push.branches in deploy_docs.yml
+    branches-ignore:
       - main
       - '1.21'
+  pull_request:
   workflow_dispatch:
     inputs:
-      release:
-        description: Release this version
+      hexdoc-release:
+        description: Build in release mode
         type: boolean
-        default: false
-      publish:
-        description: Package index to publish to
-        type: choice
-        options:
-          - none
-          - PyPI
-
-env:
-  PYPI_PACKAGE: hexdoc-hexcasting
-  DEPLOY: |
-    ${{
-      github.event_name != 'pull_request'
-      && contains(fromJson('["main","1.21"]'), github.ref_name)
-    }}
-  RELEASE: |
-    ${{
-      github.event_name != 'push' && inputs.release
-      || github.event_name == 'push' && startsWith(github.event.head_commit.message, '[Release]')
-    }}
-
-permissions:
-  contents: read
+  workflow_call:
+    inputs:
+      hexdoc-release:
+        type: boolean
+        required: true
+    outputs:
+      pages-url:
+        value: ${{ jobs.build-hexdoc.outputs.pages-url }}
 
 jobs:
   build-hexdoc:
@@ -42,8 +29,6 @@ jobs:
       pages: read
     outputs:
       pages-url: ${{ steps.build.outputs.pages-url }}
-      deploy: ${{ env.DEPLOY }}
-      release: ${{ env.RELEASE }}
     steps:
       - uses: actions/checkout@v6
 
@@ -64,64 +49,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          release: ${{ env.RELEASE }}
-
-  deploy-pages:
-    needs:
-      - build-hexdoc
-    if: needs.build-hexdoc.outputs.deploy == 'true'
-    runs-on: ubuntu-latest
-    concurrency:
-      group: hexdoc-deploy-pages
-      cancel-in-progress: false
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v6
-        with:
-          python-version-file: .python-version
-
-      - uses: astral-sh/setup-uv@v6
-        with:
-          activate-environment: true
-          enable-cache: true
-
-      - name: Sync dependencies
-        run: uv sync --locked --no-dev
-
-      - name: Merge new hexdoc build into existing book
-        uses: hexdoc-dev/actions/merge@v1
-        with:
-          release: ${{ env.RELEASE }}
-          site-url: ${{ needs.build-hexdoc.outputs.pages-url }}
-
-      - name: Deploy to Pages
-        uses: hexdoc-dev/actions/deploy-pages@v1
-        with:
-          merge: false
-          release: ${{ env.RELEASE }}
-
-  publish-pypi:
-    runs-on: ubuntu-latest
-    needs:
-      - build-hexdoc
-      - deploy-pages
-    if: |-
-      needs.build-hexdoc.outputs.release == 'true' &&
-      (github.event_name == 'push' || inputs.publish == 'PyPI')
-    environment:
-      name: pypi
-      url: https://pypi.org/p/${{ env.PYPI_PACKAGE }}
-    permissions:
-      id-token: write
-    steps:
-      - name: Download package artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: hexdoc-build
-          path: dist
-
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+          release: ${{ inputs.hexdoc-release || 'false' }}
