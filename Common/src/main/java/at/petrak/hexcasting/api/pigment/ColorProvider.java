@@ -2,6 +2,7 @@ package at.petrak.hexcasting.api.pigment;
 
 import at.petrak.hexcasting.api.addldata.ADPigment;
 import net.minecraft.util.FastColor;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.phys.Vec3;
 
 public abstract class ColorProvider {
@@ -39,6 +40,14 @@ public abstract class ColorProvider {
         }
 
         return 0xff_000000 | (r << 16) | (g << 8) | b;
+    }
+
+    public final int getRandomColor(RandomSource random) {
+        return getColor(
+                random.nextFloat() * 16384,
+                new Vec3(random.nextFloat(),random.nextFloat(),random.nextFloat())
+                    .scale((random.nextFloat() * 3))
+        );
     }
 
     public static final ColorProvider MISSING = new ColorProvider() {
