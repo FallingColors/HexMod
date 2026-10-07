@@ -90,7 +90,7 @@ public class BrainsweepProcessor implements IComponentProcessor {
 					.toList());
 			}
 			case "mediaCost" -> {
-				List<ItemStack> stacks = HexEMIPlugin.mediaItems(this.recipe.mediaCost());
+				List<ItemStack> stacks = HexEMIPlugin.mediaItems(this.recipe.mediaCost(), false);
 				return IVariable.wrapList(stacks.stream().map(IVariable::from).toList());
 			}
 			default -> {

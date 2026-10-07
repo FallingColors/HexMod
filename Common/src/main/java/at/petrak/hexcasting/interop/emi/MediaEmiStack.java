@@ -11,78 +11,68 @@ import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 
-// Almost identical copy of ListEmiIngredient because the fields are private so I can't just extend ListEmiIngredient
-// and the one line I need to change requires access to one of these.
-public class MediaEmiStack implements EmiIngredient {
-    private final List<? extends EmiIngredient> ingredients;
-    private final List<EmiStack> fullList;
-    private float chance = 1;
+public class MediaEmiStack implements EmiIngredient{
+    private List<EmiStack> ingredients;
+    private long mediaCost;
 
-    public MediaEmiStack(List<? extends EmiIngredient> ingredients) {
-        this.ingredients = ingredients;
-        this.fullList = ingredients.stream().flatMap(i -> i.getEmiStacks().stream()).toList();
-        if (fullList.isEmpty()) {
-            throw new IllegalArgumentException("ListEmiIngredient cannot be empty");
-        }
+    public MediaEmiStack(long mediaCost){
+        setAmount(mediaCost);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof MediaEmiStack other) {
-            return other.getEmiStacks().equals(this.getEmiStacks());
-        }
-        return false;
+    public boolean equals(Object obj){
+        return obj instanceof MediaEmiStack mes && this.mediaCost == mes.mediaCost;
     }
 
     @Override
-    public int hashCode() {
-        return fullList.hashCode();
+    public int hashCode(){
+        return ingredients.hashCode();
     }
 
     @Override
-    public EmiIngredient copy() {
-        EmiIngredient stack = new MediaEmiStack(ingredients);
-        stack.setChance(chance);
-        return stack;
+    public String toString(){
+        return mediaCost + " Media";
     }
 
     @Override
-    public String toString() {
-        return "Ingredient" + getEmiStacks();
+    public List<EmiStack> getEmiStacks(){
+        return ingredients;
     }
 
     @Override
-    public List<EmiStack> getEmiStacks() {
-        return fullList;
+    public EmiIngredient copy(){
+        return new MediaEmiStack(mediaCost);
     }
 
     @Override
-    public long getAmount() {
-        return 0;
+    public long getAmount(){
+        return mediaCost;
     }
 
     @Override
     public EmiIngredient setAmount(long amount){
+        this.mediaCost = amount;
+        ingredients = HexEMIPlugin.mediaItems(amount, true).stream().map(EmiStack::of).toList();
         return this;
     }
 
     @Override
     public float getChance(){
-        return chance;
+        return 1;
     }
 
     @Override
     public EmiIngredient setChance(float chance){
-        this.chance = chance;
         return this;
     }
 
+    // Taken from ListEmiIngredient
     @Override
-    public void render(GuiGraphics draw, int x, int y, float delta, int flags) {
+    public void render(GuiGraphics draw, int x, int y, float delta, int flags){
         int item = (int) (System.currentTimeMillis() / 1000 % ingredients.size());
         EmiIngredient current = ingredients.get(item);
         if ((flags & RENDER_ICON) != 0) {
-            current.render(draw, x, y, delta, -1 ^ RENDER_AMOUNT);
+            current.render(draw, x, y, delta, ~RENDER_AMOUNT);
         }
         if ((flags & RENDER_AMOUNT) != 0) {
             current.render(draw, x, y, delta, RENDER_AMOUNT);
@@ -92,8 +82,9 @@ public class MediaEmiStack implements EmiIngredient {
         }
     }
 
+    // Taken from ListEmiIngredient
     @Override
-    public List<ClientTooltipComponent> getTooltip() {
+    public List<ClientTooltipComponent> getTooltip(){
         List<ClientTooltipComponent> tooltip = Lists.newArrayList();
         tooltip.add(ClientTooltipComponent.create(EmiPort.ordered(EmiPort.translatable("tooltip.emi.accepts"))));
         tooltip.add(new IngredientTooltipComponent(ingredients));
