@@ -83,7 +83,7 @@ public class HexEMIPlugin implements EmiPlugin {
 			var inputBlocks = EmiIngredient.of(recipe.blockIn().getDisplayedStacks().stream()
 				.map(EmiStack::of).toList());
 			var inputEntity = new BrainsweepeeEmiStack(recipe.entityIn());
-			var mediaCost = EmiIngredient.of(mediaItems(recipe.mediaCost()).stream().map(EmiStack::of).toList());
+			var mediaCost = new MediaEmiStack(mediaItems(recipe.mediaCost()).stream().map(EmiStack::of).toList());
 			var output = EmiStack.of(recipe.result().getBlock());
 			registry.addRecipe(new EmiBrainsweepRecipe(inputBlocks, inputEntity, mediaCost, output, recipe.getId()));
 		}
