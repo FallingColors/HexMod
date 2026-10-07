@@ -210,12 +210,7 @@ public class HexplatRecipes extends RecipeProvider {
         gayRecipe(recipes, ItemPridePigment.Type.INTERSEX, Ingredient.of(Items.AZALEA));
         gayRecipe(recipes, ItemPridePigment.Type.LESBIAN, Ingredient.of(Items.HONEYCOMB));
         gayRecipe(recipes, ItemPridePigment.Type.NONBINARY, Ingredient.of(Items.MOSS_BLOCK));
-        // TODO port: This is neither an item value nor a tag value.
-        /*gayRecipe(recipes, ItemPridePigment.Type.PANSEXUAL, ingredients.whenModIngredient(
-            Ingredient.of(Items.CARROT),
-            "farmersdelight",
-            CompatIngredientValue.of("farmersdelight:skillet")
-        ));*/
+        gayRecipe(recipes, ItemPridePigment.Type.PANSEXUAL, HexTags.Items.PANS, Ingredient.of(Items.CARROT));
         gayRecipe(recipes, ItemPridePigment.Type.PLURAL, Ingredient.of(Items.REPEATER));
         gayRecipe(recipes, ItemPridePigment.Type.TRANSGENDER, Ingredient.of(Items.EGG));
 
@@ -611,6 +606,33 @@ public class HexplatRecipes extends RecipeProvider {
             .pattern(" D ")
             .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST.get()))
             .save(recipes);
+    }
+
+    private void gayRecipe(RecipeOutput recipes, ItemPridePigment.Type type, TagKey<Item> mainMaterial, Ingredient fallback) {
+        var colorizer = HexItems.PRIDE_PIGMENTS.get(type);
+        var defaultLocation = BuiltInRegistries.ITEM.getKey(colorizer.get());
+
+        ShapedRecipeBuilder mainRecipe = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, colorizer.get())
+                .define('D', HexItems.AMETHYST_DUST.get())
+                .define('C', mainMaterial)
+                .pattern(" D ")
+                .pattern("DCD")
+                .pattern(" D ")
+                .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST.get()));
+        conditions.apply(mainRecipe)
+                .whenTagPopulated(mainMaterial)
+                .save(recipes);
+
+        ShapedRecipeBuilder fallbackRecipe = ShapedRecipeBuilder.shaped(RecipeCategory.MISC, colorizer.get())
+                .define('D', HexItems.AMETHYST_DUST.get())
+                .define('C', fallback)
+                .pattern(" D ")
+                .pattern("DCD")
+                .pattern(" D ")
+                .unlockedBy("has_item", hasItem(HexItems.AMETHYST_DUST.get()));
+        conditions.apply(fallbackRecipe)
+                .whenTagEmpty(mainMaterial)
+                .save(recipes, defaultLocation.withPath(original -> original + "_fallback"));
     }
 
     private <T extends Recipe<?>> void specialRecipe(RecipeOutput consumer, RecipeSerializer<T> serializer, Function<CraftingBookCategory, T> recipeFunc) {

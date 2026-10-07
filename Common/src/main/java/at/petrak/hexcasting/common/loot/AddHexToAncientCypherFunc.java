@@ -50,7 +50,7 @@ public class AddHexToAncientCypherFunc extends LootItemConditionalFunction {
         stack.set(HexDataComponents.PIGMENT.get(), FrozenPigment.ANCIENT.get());
         stack.set(HexDataComponents.HEX_HOLDER_PATTERNS.get(), Arrays.stream(hexAndName.getSecond()).map(el -> {
             var pieces = el.split(" ");
-            return new PatternIota(HexPattern.fromAngles(pieces[1],HexDir.fromString(pieces[0])));
+            return new PatternIota(HexPattern.fromAngleString(pieces[1],HexDir.fromString(pieces[0])));
         }).collect(Collectors.toList()));
 
         return stack;

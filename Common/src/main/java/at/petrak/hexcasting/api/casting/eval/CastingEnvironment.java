@@ -9,9 +9,11 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
 import at.petrak.hexcasting.api.casting.mishaps.MishapEntityTooFarAway;
 import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.HexAttributes;
+import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -38,6 +40,7 @@ import java.util.function.Predicate;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 import static at.petrak.hexcasting.api.casting.eval.CastingEnvironmentComponent.*;
+import static at.petrak.hexcasting.api.utils.HexUtils.isOfTag;
 
 /**
  * Environment within which hexes are cast.
@@ -48,33 +51,21 @@ public abstract class CastingEnvironment {
     /**
      * Stores all listeners that should be notified whenever a CastingEnvironment is initialised.
      */
-    private static final List<BiConsumer<CastingEnvironment, CompoundTag>> createEventListeners = new ArrayList<>();
+    private static final List<BiConsumer<CastingEnvironment, CastingImage>> createEventListeners = new ArrayList<>();
 
     /**
      * Add a listener that will be called whenever a new CastingEnvironment is created.
      */
-    public static void addCreateEventListener(BiConsumer<CastingEnvironment, CompoundTag> listener) {
+    public static void addCreateEventListener(BiConsumer<CastingEnvironment, CastingImage> listener) {
         createEventListeners.add(listener);
-    }
-
-    /**
-     * Add a listener that will be called whenever a new CastingEnvironment is created (legacy).
-     *
-     * @deprecated replaced by {@link #addCreateEventListener(BiConsumer)}
-     */
-    @Deprecated(since = "0.11.0-pre-660")
-    public static void addCreateEventListener(Consumer<CastingEnvironment> listener) {
-        createEventListeners.add((env, data) -> {
-            listener.accept(env);
-        });
     }
 
     private boolean createEventTriggered = false;
 
-    public final void triggerCreateEvent(CompoundTag userData) {
+    public final void triggerCreateEvent(CastingImage image) {
         if (!createEventTriggered) {
             for (var listener : createEventListeners)
-                listener.accept(this, userData);
+                listener.accept(this, image);
             createEventTriggered = true;
         }
     }
@@ -105,24 +96,10 @@ public abstract class CastingEnvironment {
         return HexConfig.server().maxOpCount();
     }
 
-    /**
-     * Get the caster. Might be null!
-     * <p>
-     * Implementations should NOT rely on this in general, use the methods on this class instead.
-     * This is mostly for spells (flight, etc)
-     *
-     * @deprecated as of build 0.11.1-7-pre-619 you are recommended to use {@link #getCastingEntity}
-     */
-    @Deprecated(since = "0.11.1-7-pre-619")
-    @Nullable
-    public ServerPlayer getCaster() {
-        return getCastingEntity() instanceof ServerPlayer sp ? sp : null;
-    }
-
     ;
 
     /**
-     * Gets the caster. Can be null if {@link #getCaster()} is also null
+     * Gets the caster. Can be null if there is no casting entity (such as with an unbound cleric impetus)
      *
      * @return the entity casting
      */
@@ -180,9 +157,10 @@ public abstract class CastingEnvironment {
     }
 
     /**
-     * If something about this ARE itself is invalid, mishap.
-     * <p>
-     * This is used for stuff like requiring enlightenment and pattern denylists
+     * If something about this Action itself is invalid, mishap.
+     * This is used for stuff like requiring enlightenment and pattern denylists.<br>
+     * If the Action <i>is</i> valid, this sets the CastingEnvironment's {@code costModifier} based on the
+     * appropriate modifier for that action as returned by {@code getCostModifier()}.
      */
     public void precheckAction(PatternShapeMatch match) throws Mishap {
         // TODO: this doesn't let you select special handlers.
@@ -193,14 +171,19 @@ public abstract class CastingEnvironment {
             throw new MishapDisallowedSpell("disallowed", loc);
         }
 
-        costModifier = this.getCostModifier(match);
+        costModifier = (loc != null) ? this.getCostModifier(loc) : 1.0;
     }
 
     /**
-     * Casting env subclasses can override this to modify the cost for a given action
+     * Gets the cost modifier for a given action. By default, this is based on the cost scaling values
+     * in the config. Casting env subclasses can override this to modify the cost in other ways.
      */
-    protected double getCostModifier(PatternShapeMatch match) {
-        return 1.0;
+    protected double getCostModifier(@NotNull ResourceLocation loc) {
+        if (isOfTag(IXplatAbstractions.INSTANCE.getActionRegistry(), loc, HexTags.Actions.CANNOT_MODIFY_COST)) {
+            // blacklisted actions can still be manually scaled in the config, but the global scaling doesn't apply
+            return HexConfig.server().getActionCostScaling(loc);
+        }
+        return HexConfig.server().getActionCostScaling(loc) * HexConfig.server().globalCostScaling();
     }
 
     @Nullable

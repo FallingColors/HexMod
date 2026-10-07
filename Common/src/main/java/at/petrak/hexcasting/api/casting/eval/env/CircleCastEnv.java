@@ -43,11 +43,6 @@ public class CircleCastEnv extends CastingEnvironment {
         return this.execState.getCaster(this.world);
     }
 
-    @Override
-    public @Nullable ServerPlayer getCaster() {
-        return this.execState.getCaster(this.world);
-    }
-
     public @Nullable BlockEntityAbstractImpetus getImpetus() {
         var entity = this.world.getBlockEntity(execState.impetusPos);
 
@@ -170,24 +165,24 @@ public class CircleCastEnv extends CastingEnvironment {
     @Override
     // TODO: Could do something like get items in inventories adjacent to the circle?
     public List<ItemStack> getUsableStacks(StackDiscoveryMode mode) {
-        if (this.getCaster() != null)
-            return getUsableStacksForPlayer(mode, null, this.getCaster());
+        if (this.getCastingEntity() instanceof ServerPlayer caster)
+            return getUsableStacksForPlayer(mode, null, caster);
         return new ArrayList<>();
     }
 
     @Override
     // TODO: Adjacent inv!
     public List<HeldItemInfo> getPrimaryStacks() {
-        if (this.getCaster() != null)
-            return getPrimaryStacksForPlayer(InteractionHand.OFF_HAND, this.getCaster());
+        if (this.getCastingEntity() instanceof ServerPlayer caster)
+            return getPrimaryStacksForPlayer(InteractionHand.OFF_HAND, caster);
         return List.of();
     }
 
     @Override
     // TODO: Adjacent inv!
     public boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand) {
-        if (this.getCaster() != null)
-            return replaceItemForPlayer(stackOk, replaceWith, hand, this.getCaster());
+        if (this.getCastingEntity() instanceof ServerPlayer caster)
+            return replaceItemForPlayer(stackOk, replaceWith, hand, caster);
         return false;
     }
 

@@ -31,7 +31,7 @@ class OpMakePackagedSpell(val isValid: Predicate<ItemStack>, val expectedTypeDes
             env: CastingEnvironment
     ): SpellAction.Result {
         val entity = args.getItemEntity(env.world, 0, argc)
-        val patterns = args.getList(1, argc).toList()
+        val patterns = args.getList(1, argc)
 
         val (handStack) = env.getHeldItemToOperateOn {
             val hexHolder = IXplatAbstractions.INSTANCE.findHexHolder(it)
