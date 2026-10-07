@@ -40,6 +40,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Casting Image and Casting Frames now store iotas in a TreeList ([#1033](https://github.com/FallingColors/HexMod/pull/1033)) @s5bug
 - Changed resource registration to use the IXplatRegister system ([#1212](https://github.com/FallingColors/HexMod/pull/1212)) @Olfi01
 - Operations and actions now accept the old stack and produce the new stack through a TreeList ([#1038](https://github.com/FallingColors/HexMod/pull/1038)) @s5bug
+- Additional data attached to the CastingImage (ie the Ravenmind) now uses a typed component system ([#1012](https://github.com/FallingColors/HexMod/pull/1012)) @miyucomics @Robotgiggle
 
 ## `0.11.4` - 2026-08-26
 
