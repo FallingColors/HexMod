@@ -97,7 +97,7 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
         @NotNull IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 12, 35)
             .addItemStacks(recipe.blockIn().getDisplayedStacks());
-        builder.addSlot(RecipeIngredientRole.INPUT, 12, 55)
+        builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 12, 55)
             .addItemStacks(PatchouliUtils.mediaItems(recipe.mediaCost(), true));
         builder.addSlot(RecipeIngredientRole.OUTPUT, 87, 35)
             .addItemStack(new ItemStack(recipe.result().getBlock()));
