@@ -9,7 +9,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Added the `requires_enlightenment_in_parens` tag for patterns that should mishap without enlightenment even while parenthesized ([#1290](https://github.com/FallingColors/HexMod/pull/1290)) @Robotgiggle
-- Added flay mind media costs to the recipe displays in JEI and EMI ([#1323](https://github.com/FallingColors/HexMod/pull/1323)) @MEEPofFaith
+
+### Changed
+
+- Updated the Flay Mind recipe display in EMI and JEI to include the media cost, matching the guidebook ([#1323](https://github.com/FallingColors/HexMod/pull/1323)) @MEEPofFaith
 
 ### Fixed
 
