@@ -51,8 +51,9 @@ public class HexEMIPlugin implements EmiPlugin {
 			var inputBlocks = EmiIngredient.of(recipe.blockIn().getDisplayedStacks().stream()
 				.map(EmiStack::of).toList());
 			var inputEntity = new BrainsweepeeEmiStack(recipe.entityIn());
+			var mediaCost = new MediaEmiStack(recipe.mediaCost());
 			var output = EmiStack.of(recipe.result().getBlock());
-			registry.addRecipe(new EmiBrainsweepRecipe(inputBlocks, inputEntity, output, recipe.getId()));
+			registry.addRecipe(new EmiBrainsweepRecipe(inputBlocks, inputEntity, mediaCost, output, recipe.getId()));
 		}
 
 		if (PhialRecipeStackBuilder.shouldAddRecipe()) {
