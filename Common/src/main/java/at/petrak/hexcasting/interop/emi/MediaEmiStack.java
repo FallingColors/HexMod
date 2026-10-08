@@ -53,7 +53,7 @@ public class MediaEmiStack implements EmiIngredient{
     @Override
     public EmiIngredient setAmount(long amount){
         this.mediaCost = amount;
-        ingredients = PatchouliUtils.mediaItems(amount, true).stream().map(EmiStack::of).toList();
+        ingredients = PatchouliUtils.mediaItems(amount).stream().map(EmiStack::of).toList();
         return this;
     }
 

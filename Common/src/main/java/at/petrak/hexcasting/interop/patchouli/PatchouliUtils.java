@@ -80,11 +80,10 @@ public class PatchouliUtils {
     }
 
     /**
-     * Returns a list of ItemStacks representing a media cost.
-     * @param mediaCost       The amount of media to represent
-     * @param fallbackToPhial If true, and the amount of media does not cleanly divide into a multiple of dust, return a phial of that exact value instead. If false, rounds up to the nearest dust.
+     * @param mediaCost The amount of media to represent
+     * @return A list of ItemStacks in dust, shards, and charged that equal the given amount of media. If the amount cannot be represented in an integer multiple of dust, falls back to a phial.
      */
-    public static List<ItemStack> mediaItems(long mediaCost, boolean fallbackToPhial) {
+    public static List<ItemStack> mediaItems(long mediaCost) {
         record ItemCost(Item item, int cost) {
             public boolean dividesEvenly (int dividend) {
                 return dividend % cost == 0;
@@ -104,11 +103,6 @@ public class PatchouliUtils {
 
         if (!validItemStacks.isEmpty()) return validItemStacks;
 
-        if (fallbackToPhial) {
-            return List.of(ItemMediaBattery.withMedia(new ItemStack(HexItems.BATTERY), mediaCost, mediaCost));
-        } else {
-            // fallback: display in terms of dust, rounded up to the nearest dust
-            return List.of(new ItemStack(HexItems.AMETHYST_DUST, (int)Math.ceil((double)mediaCost / MediaConstants.DUST_UNIT)));
-        }
+        return List.of(ItemMediaBattery.withMedia(new ItemStack(HexItems.BATTERY), mediaCost, mediaCost));
     }
 }
