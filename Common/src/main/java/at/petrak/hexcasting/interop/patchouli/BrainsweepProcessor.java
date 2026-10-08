@@ -85,7 +85,7 @@ public class BrainsweepProcessor implements IComponentProcessor {
 					.toList());
 			}
 			case "mediaCost" -> {
-				List<ItemStack> stacks = PatchouliUtils.mediaItems(this.recipe.mediaCost(), false);
+				List<ItemStack> stacks = PatchouliUtils.mediaItems(this.recipe.mediaCost(), true);
 				return IVariable.wrapList(stacks.stream().map(IVariable::from).toList());
 			}
 			default -> {
