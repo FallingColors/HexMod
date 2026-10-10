@@ -60,6 +60,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -193,14 +194,6 @@ object FabricHexInitializer : ModInitializer {
 
         HexEntities.register()
         HexAttributes.register()
-        FabricDefaultAttributeRegistry.register(EntityType.PLAYER,
-            Player.createAttributes()
-                .add(HexAttributes.GRID_ZOOM)
-                .add(HexAttributes.SCRY_SIGHT)
-                .add(HexAttributes.FEEBLE_MIND)
-                .add(HexAttributes.AMBIT_RADIUS)
-                .add(HexAttributes.MEDIA_CONSUMPTION_MODIFIER)
-                .add(HexAttributes.SENTINEL_RADIUS))
         HexMobEffects.register()
         HexPotions.register()
         HexDataComponents.register()
