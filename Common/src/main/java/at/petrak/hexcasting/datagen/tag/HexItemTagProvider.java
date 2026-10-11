@@ -35,6 +35,10 @@ public class HexItemTagProvider extends PaucalItemTagProvider {
         add(tag(xtags.amethystDust()),
             HexItems.AMETHYST_DUST);
 
+        add(tag(HexTags.Items.SHIFT_SCROLLABLE),
+            HexItems.SPELLBOOK,
+            HexItems.ABACUS);
+
         add(tag(HexTags.Items.STAVES),
             HexItems.STAFF_EDIFIED,
             HexItems.STAFF_OAK, HexItems.STAFF_SPRUCE, HexItems.STAFF_BIRCH,

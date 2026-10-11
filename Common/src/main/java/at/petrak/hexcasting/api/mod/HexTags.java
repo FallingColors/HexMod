@@ -16,6 +16,8 @@ public class HexTags {
         public static final TagKey<Item> EDIFIED_LOGS = create("edified_logs");
         public static final TagKey<Item> EDIFIED_PLANKS = create("edified_planks");
         public static final TagKey<Item> STAVES = create("staves");
+        /** Items that shift-scroll. The spellbook and the abacus are included by default. */
+        public static final TagKey<Item> SHIFT_SCROLLABLE = create("shift_scrollable");
         public static final TagKey<Item> PHIAL_BASE = create("phial_base");
         public static final TagKey<Item> GRANTS_ROOT_ADVANCEMENT = create("grants_root_advancement");
         public static final TagKey<Item> SEAL_MATERIALS = create("seal_materials");
