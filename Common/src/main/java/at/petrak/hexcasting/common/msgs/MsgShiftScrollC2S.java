@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.msgs;
 
 import at.petrak.hexcasting.api.casting.iota.IotaType;
 import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.items.storage.ItemAbacus;
 import at.petrak.hexcasting.common.items.storage.ItemSpellbook;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -57,10 +58,10 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         if (delta != 0) {
             var stack = sender.getItemInHand(hand);
 
-            if (stack.getItem() instanceof ItemSpellbook) {
-                spellbook(sender, hand, stack, delta);
-            } else if (stack.getItem() == HexItems.ABACUS) {
+            if (stack.getItem() == HexItems.ABACUS) {
                 abacus(sender, hand, stack, delta);
+            } else if (stack.is(HexTags.Items.SHIFT_SCROLLABLE)) {
+                spellbook(sender, hand, stack, delta);
             }
         }
     }

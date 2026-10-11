@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.api.mod.HexConfig;
-import at.petrak.hexcasting.common.items.storage.ItemSpellbook;
+import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.msgs.MsgShiftScrollC2S;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
@@ -60,16 +60,16 @@ public class ShiftScrollListener {
     }
 
     private static boolean IsScrollableItem(Item item) {
-        return item instanceof ItemSpellbook || item == HexItems.ABACUS;
+        return item.builtInRegistryHolder().is(HexTags.Items.SHIFT_SCROLLABLE);
     }
 
     private static double getScrollModifier(Item item, boolean allowInverting) {
         if (!allowInverting) return 1;
 
-        if (item instanceof ItemSpellbook) {
-            return HexConfig.client().invertSpellbookScrollDirection() ? -1 : 1;
-        } else if (item == HexItems.ABACUS) {
+        if (item == HexItems.ABACUS) {
             return HexConfig.client().invertAbacusScrollDirection() ? -1 : 1;
+        } else if (item.builtInRegistryHolder().is(HexTags.Items.SHIFT_SCROLLABLE)) {
+            return HexConfig.client().invertSpellbookScrollDirection() ? -1 : 1;
         } else {
             return 1;
         }

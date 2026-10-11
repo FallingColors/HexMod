@@ -9,11 +9,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Added the `requires_enlightenment_in_parens` tag for patterns that should mishap without enlightenment even while parenthesized ([#1290](https://github.com/FallingColors/HexMod/pull/1290)) @Robotgiggle
+- Added the `hexcasting:shift_scrollable` item tag. Shift-scroll, the spellbook keybinds, and scrolling inside the casting grid accept every item in this tag. The spellbook and the abacus are both included by default @xm1221
 
 ### Changed
 
 - Updated the Flay Mind recipe display in EMI and JEI to include the media cost, matching the guidebook ([#1323](https://github.com/FallingColors/HexMod/pull/1323)) @MEEPofFaith
-- Spellbook page scrolling now applies to any item that extends `ItemSpellbook`, including shift-scroll, the spellbook keybinds, and scrolling inside the casting grid @xm1221
 
 ### Fixed
 
