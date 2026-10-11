@@ -167,8 +167,8 @@ public class ItemSpellbook extends Item implements IotaHolderItem, VariantItem {
 
     /**
      * Returns whether this stack has the NBT tags necessary to make the shift-scrolling mechanic work.
-     * This lets you make anything support shift-scrolling pages without having to extend ItemSpellbook.
-     * However, you will need to implement ways to actually *set* those NBT tags yourself.
+     * This you make any item support shift-scrolling without the need to mixin or implement a new scroll listener.
+     * However, you will need to implement ways to actually *set* the relevant NBT tags yourself.
      */
     public static boolean supportsPageScrolling(ItemStack stack) {
         return NBTHelper.hasNumber(stack, ItemSpellbook.TAG_SELECTED_PAGE)
