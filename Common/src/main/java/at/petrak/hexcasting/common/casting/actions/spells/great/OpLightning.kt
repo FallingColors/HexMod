@@ -9,6 +9,7 @@ import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadLocation
 import at.petrak.hexcasting.api.misc.MediaConstants
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.LightningBolt
 import net.minecraft.world.phys.Vec3
@@ -37,8 +38,9 @@ object OpLightning : SpellAction {
         override fun cast(env: CastingEnvironment) {
 
             val lightning = LightningBolt(EntityType.LIGHTNING_BOLT, env.world)
-            lightning.setPosRaw(target.x, target.y, target.z)
-            env.world.addWithUUID(lightning) // why the hell is it called this it doesnt even involve a uuid
+            lightning.setPos(target.x, target.y, target.z)
+            lightning.cause = env.castingEntity as? ServerPlayer
+            env.world.addFreshEntity(lightning)
         }
     }
 }
