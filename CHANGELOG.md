@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Updated the Flay Mind recipe display in EMI and JEI to include the media cost, matching the guidebook ([#1323](https://github.com/FallingColors/HexMod/pull/1323)) @MEEPofFaith
+- Spellbook page scrolling now applies to any item that extends `ItemSpellbook`, including shift-scroll, the spellbook keybinds, and scrolling inside the casting grid @xm1221
 
 ### Fixed
 

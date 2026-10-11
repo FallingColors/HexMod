@@ -57,7 +57,7 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         if (delta != 0) {
             var stack = sender.getItemInHand(hand);
 
-            if (stack.getItem() == HexItems.SPELLBOOK) {
+            if (stack.getItem() instanceof ItemSpellbook) {
                 spellbook(sender, hand, stack, delta);
             } else if (stack.getItem() == HexItems.ABACUS) {
                 abacus(sender, hand, stack, delta);
