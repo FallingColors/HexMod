@@ -1065,7 +1065,7 @@
       
       wrong_dimension: "cannot see %s from %s",
       entity_too_far: "%s is out of range",
-      entity_not_found: "%s could not be found in the world",
+      entity_not_found: "%s could not be found in this world",
       immune_entity: "cannot alter %s",
       eval_too_much: "Evaluated too many patterns",
       no_item: "needs %s but got nothing",

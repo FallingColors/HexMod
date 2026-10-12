@@ -21,7 +21,7 @@ class MishapEntityNotFound(val entityId: UUID, val entityName: Component?) : Mis
     }
 
     override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
-        error("entity_not_found", entityName?.plainCopy()?.aqua ?: Component.literal(entityId.toString()).withStyle(ChatFormatting.AQUA))
+        error("entity_not_found", (entityName?.plainCopy() ?: Component.literal(entityId.toString())).aqua)
 
     companion object {
         @JvmStatic
