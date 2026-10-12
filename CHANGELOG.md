@@ -19,8 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed Great Spells causing a mishap when drawn without enlightenment even while parenthesized ([#1290](https://github.com/FallingColors/HexMod/pull/1290)) @Robotgiggle
 - Fixed the bolt from Summon Lightning not being selectable as an entity and not being attributed to the caster ([#1304](https://github.com/FallingColors/HexMod/pull/1304)) @Robotgiggle
 - Fixed Blink and Greater Teleport cancelling all velocity when cast on a player ([#1310](https://github.com/FallingColors/HexMod/pull/1310)) @drtheodor
-- Fixed Other players not seeing Altiora wings and pigment @R0b0Li0n
-- Fixed Altiora wings, pigment and sentinel desyncing after changing dimension @R0b0Li0n
+- Fixed Other players not seeing Altiora wings and pigment ([#1331](https://github.com/FallingColors/HexMod/pull/1331)) @R0b0Li0n
+- Fixed Altiora wings, pigment and sentinel desyncing after changing dimension ([#1331](https://github.com/FallingColors/HexMod/pull/1331)) @R0b0Li0n
 
 ## `0.11.4` - 2026-08-26
 
