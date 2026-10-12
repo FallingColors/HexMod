@@ -65,6 +65,14 @@
     },
     {
       "type": "hexcasting:pattern",
+      "op_id": "hexcasting:null_coalesce",
+      "anchor": "hexcasting:null_coalesce",
+      "input": "any, any",
+      "output": "any",
+      "text": "hexcasting.page.logic.null_coalesce"
+    },
+    {
+      "type": "hexcasting:pattern",
       "op_id": "hexcasting:equals",
       "anchor": "hexcasting:equals",
       "input": "any, any",
