@@ -29,7 +29,7 @@ public record CapItemHexHolder(HexHolderItem holder,
     }
 
     @Override
-    public void writeHex(List<Iota> patterns, @Nullable FrozenPigment pigment, long media) {
+    public void writeHex(List<Iota> patterns, FrozenPigment pigment, long media) {
         holder.writeHex(stack, patterns, pigment, media);
     }
 
