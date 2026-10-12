@@ -9,8 +9,6 @@ import net.minecraft.world.item.TooltipFlag;
 import java.util.List;
 
 public class ItemAncientCypher extends ItemCypher {
-    public static final String TAG_HEX_NAME = "hex_name";
-
     public ItemAncientCypher(Properties pProperties) {
         super(pProperties);
     }
