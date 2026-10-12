@@ -188,7 +188,7 @@ public class HexBlocks {
     );
     public static final Supplier<BlockAkashicBookshelf> AKASHIC_BOOKSHELF = blockItem("akashic_bookshelf", () ->
         new BlockAkashicBookshelf(akashicWoodyHard()
-            .lightLevel(bs -> (bs.getValue(BlockAkashicBookshelf.HAS_BOOKS)) ? 4 : 0)));
+            .lightLevel(bs -> (bs.getValue(BlockAkashicBookshelf.HAS_BOOKS) > 0) ? 4 : 0)));
     public static final Supplier<BlockAkashicLigature> AKASHIC_LIGATURE = blockItem("akashic_ligature", () ->
         new BlockAkashicLigature(akashicWoodyHard().lightLevel(bs -> 4)));
 

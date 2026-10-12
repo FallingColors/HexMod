@@ -1100,6 +1100,7 @@
       },
       
       no_akashic_record: "No Akashic Record at %s",
+      no_shelf_space: "The Akashic Record at %s has no available shelves",
       disallowed: "%s has been disallowed by the server admins",
       disallowed_generic: "That pattern has been disallowed by the server admins",
       disallowed_circle: "%s has been disallowed in spell circles by the server admins",
@@ -1590,6 +1591,9 @@
         "no_record.title": "Lack Akashic Record",
         no_record: "Tried to access an $(l:greatwork/akashiclib)$(item)Akashic Record/$ at a location where there isn't one.$(br2)Causes purple sparks, and steals away some of my experience.",
 
+        "no_shelf_space.title": "Saturated Library",
+        no_shelf_space: "Tried to write an iota into an $(l:greatwork/akashiclib)$(item)Akashic Library/$ that has no $(l:greatwork/akashiclib)$(item)Akashic Bookshelves/$ capable of holding it.$(br2)Causes purple sparks, and steals away some of my experience.",
+
         "bad_shepherd.title": "Improper Shepherding",
         bad_shepherd: "Tried to activate a $(l:greatwork/directrix)$(item)Shepherd Directrix/$ without a boolean on the top of the stack.$(br2)Causes red and white sparks, and forcibly ejects the Shepherd Directrix from the circle. This doesn't destroy it, thankfully, but I should make sure to go pick it up and replace it where it belongs.",
       },
@@ -1766,7 +1770,7 @@
         "1": "I KNOW SO MUCH it is ONLY RIGHT to have a place to store it all. Information can be stored in books but it is oh so so so so $(italic)slow/$ to write by hand and read by eye. I demand BETTER. And so I shall MAKE better.$(br2)... I am getting worse ... do not know if I have time to write everything bursting through my head before expiring.",
         "2": "The library. Here. My plans.$(br2)Like how patterns are associated with actions, I can associate my own patterns with iotas in any way I choose. An $(l:greatwork/akashiclib)$(item)Akashic Record/$ controls the library, and each $(l:greatwork/akashiclib)$(item)Akashic Bookshelf/$ stores one pattern mapped to one iota. These must all be directly connected together, touching, within 128 blocks. An $(l:greatwork/akashiclib)$(item)Akashic Ligature/$ doesn't do anything but count as a connecting block, to extend the size of my library.",
         akashic_record: "Allocating and assigning patterns is simple but oh so boring. I have better things to do. I will need a mind well-used to its work for the extraction to stay sound.",
-        "3": "Then to operate the library is simple, the patterns are routed through the librarian and it looks them up and returns the iota to you. Two actions do the work. $(l:patterns/akashic_patterns)Notes here/$.$(br2)Using an empty $(l:items/scroll)$(item)scroll/$ on a bookshelf copies the pattern there onto the $(l:items/scroll)$(item)scroll/$. Sneaking and using an empty hand clears the datum in the shelf.",
+        "3": "Then to operate the library is simple, the patterns are routed through the librarian and it looks them up and returns the iota to you. Two actions do the work. $(l:patterns/akashic_patterns)Notes here/$.$(br2)Using an empty $(l:items/scroll)$(item)scroll/$ on a bookshelf copies the pattern there onto the $(l:items/scroll)$(item)scroll/$. Using $(item)Honeycomb/$ seals the shelf, just like a $(l:items/focus)$(item)Focus/$ or $(l:items/spellbook)$(item)Spellbook/$.$(br2)Sneaking and using an empty hand clears the datum in the shelf, removing the seal if present.",
       },
       
       quenching_allays: {

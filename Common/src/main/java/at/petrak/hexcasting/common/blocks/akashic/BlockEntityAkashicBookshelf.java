@@ -13,10 +13,13 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Random;
+
 public class BlockEntityAkashicBookshelf extends HexBlockEntity {
     public static final String TAG_PATTERN = "pattern";
     public static final String TAG_IOTA = "iota";
     public static final String TAG_DUMMY = "dummy";
+    private static final Random RANDOM = new Random();
 
     // This is only not null if this stores any data.
     private HexPattern pattern = null;
@@ -48,19 +51,18 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
     }*/
 
     public void setNewMapping(HexPattern pattern, Iota iota) {
-        var previouslyEmpty = this.pattern == null;
         this.pattern = pattern;
         this.iota = iota;
         //this.iotaTag = IotaType.TYPED_CODEC.encodeStart(NbtOps.INSTANCE, iota).getOrThrow();
 
-        if (previouslyEmpty) {
-            var oldBs = this.getBlockState();
-            var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, true);
-            this.level.setBlock(this.getBlockPos(), newBs, 3);
-            this.level.sendBlockUpdated(this.getBlockPos(), oldBs, newBs, 3);
-        } else {
-            this.setChanged();
-        }
+        var oldBs = this.getBlockState();
+        int variant = RANDOM.nextInt(1,5);
+        // must always change variant when updating to make the tint update properly
+        while (variant == oldBs.getValue(BlockAkashicBookshelf.HAS_BOOKS))
+            variant = RANDOM.nextInt(1,5);
+        var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, variant);
+        this.level.setBlock(this.getBlockPos(), newBs, 3);
+        this.level.sendBlockUpdated(this.getBlockPos(), oldBs, newBs, 3);
     }
 
     public void clearIota() {
@@ -71,9 +73,12 @@ public class BlockEntityAkashicBookshelf extends HexBlockEntity {
 
         if (!previouslyEmpty) {
             var oldBs = this.getBlockState();
-            var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, false);
+            var newBs = oldBs.setValue(BlockAkashicBookshelf.HAS_BOOKS, 0)
+                             .setValue(BlockAkashicBookshelf.SEALED, false);
             this.level.setBlock(this.getBlockPos(), newBs, 3);
             this.level.sendBlockUpdated(this.getBlockPos(), oldBs, newBs, 3);
+            if (oldBs.getValue(BlockAkashicBookshelf.SEALED))
+                level.levelEvent(3004, this.getBlockPos(), 0);
         } else {
             this.setChanged();
         }

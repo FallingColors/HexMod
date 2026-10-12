@@ -21,6 +21,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - The pattern itself is now a special handler with a variable tail length
   - The tail length determines how many extra iotas from the original stack are included in each iteration's stack
   - Iotas included via the above process are now popped from the original stack
+- Using Akasha's Gambit with a pattern that already exists in a library will now overwrite the associated shelf ([#1301](https://github.com/FallingColors/HexMod/pull/1301)) @Robotgiggle
+- Akashic Bookshelves can now be sealed with honeycomb to prevent overwriting ([#1301](https://github.com/FallingColors/HexMod/pull/1301)) @Robotgiggle
 
 ### Changed
 
