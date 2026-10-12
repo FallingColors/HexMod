@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.api.casting.eval.CastResult;
+import at.petrak.hexcasting.api.casting.eval.CastingEnvironment;
 import at.petrak.hexcasting.api.casting.eval.ResolvedPatternType;
 import at.petrak.hexcasting.api.casting.eval.sideeffects.OperatorSideEffect;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingVM;
@@ -35,7 +36,7 @@ public abstract class Iota {
         return this.type.get();
     }
 
-    abstract public boolean isTruthy();
+    abstract public boolean isTruthy(@Nullable CastingEnvironment env);
 
     /**
      * Compare this to another object, within a tolerance.

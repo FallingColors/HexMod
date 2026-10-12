@@ -63,12 +63,12 @@ public class BlockEntityRedstoneImpetus extends BlockEntityAbstractImpetus {
         this.storedPlayer = null;
     }
 
-    //TODO port: test player profiles
     public void updatePlayerProfile() {
         ServerPlayer player = getStoredPlayer();
         if (player != null) {
             GameProfile newProfile = player.getGameProfile();
-            if (!newProfile.equals(this.storedPlayerProfile)) {
+            // stringify since GameProfile::equals ignores the properties field (thanks mojang)
+            if (!newProfile.toString().equals(this.storedPlayerProfile.toString())) {
                 this.storedPlayerProfile = newProfile;
                 this.setChanged();
             }

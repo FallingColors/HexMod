@@ -64,7 +64,6 @@ public class HexDataComponents {
                     .persistent(Codec.unit(Unit.INSTANCE))
                     .networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
                     .build());
-    // TODO port: Data components are supposed to be immutable - is EntityIota.isPlayer a problem here?
     public static final Supplier<DataComponentType<Iota>> IOTA_HOLDER_IOTA = REGISTER.register("iota", () ->
             DataComponentType.<Iota>builder()
                     .persistent(IotaType.TYPED_CODEC)

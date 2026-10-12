@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.addldata.ADMediaHolder
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry
 import at.petrak.hexcasting.api.casting.iota.DoubleIota
+import at.petrak.hexcasting.api.casting.iota.EntityIota
 import at.petrak.hexcasting.api.item.*
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
@@ -43,6 +44,7 @@ import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.EntityElytraEvents
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
@@ -126,6 +128,7 @@ object FabricHexInitializer : ModInitializer {
 
 
         ServerLifecycleEvents.SERVER_STARTED.register { server ->
+            EntityIota.initPlayerUUIDs(server)
             if (!patternRegistryIsProcessed) {
                 PatternRegistryManifest.processRegistry(server.overworld())
                 patternRegistryIsProcessed = true
@@ -135,6 +138,8 @@ object FabricHexInitializer : ModInitializer {
         ServerTickEvents.END_WORLD_TICK.register(PlayerPositionRecorder::updateAllPlayers)
         ServerTickEvents.END_WORLD_TICK.register(OpFlight::tickAllPlayers)
         ServerTickEvents.END_WORLD_TICK.register(OpAltiora::checkAllPlayers)
+
+        ServerPlayerEvents.JOIN.register { player -> EntityIota.addPlayerUUID(player.uuid) }
 
         CommandRegistrationCallback.EVENT.register { dp, _, _ -> HexCommands.register(dp) }
 
