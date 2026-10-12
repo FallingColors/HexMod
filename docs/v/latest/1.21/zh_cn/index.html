@@ -77,7 +77,7 @@
       <ul class="nav navbar-nav navbar-right">
             <li>
     <a
-      href="https://github.com/FallingColors/HexMod/tree/d8ca88a86734a92a7e3d09b59e52f0a67bfb18e4"
+      href="https://github.com/FallingColors/HexMod/tree/49c33a82a4b4aa5b4961a37c78e8e857d928c3df"
         target="_blank"
       class="navbar-link"
       role="button"
@@ -1157,6 +1157,9 @@
 <br />
   <h4>实体免疫</h4>
     <p>该操作试图影响某不会受其影响的实体。</p><p>产生蓝色火花，我手中的物品将会掉落并飞向对应实体。</p>
+<br />
+  <h4>实体失踪</h4>
+    <p>试图影响已不存在的实体。有两种可能性，其一是实体已死。其二也是相对来说更奇怪的，是实体距离过远以至于无法被“观测”。</p><p>产生棕色火花，并让我反胃恶心一小会，就像久坐后快速起身一样。</p>
 <br />
   <h4>数学错误</h4>
     <p>该操作违背了数学规律，例如试图除以零。</p><p>产生红色火花，压入一个<span style="color: #8d6acc">垃圾</span>，并销蚀我的意识，扣去我当时生命力的一半。自然似乎对这种举动深感冒犯，而后便会报复性地惩罚<i>我</i>。</p>
@@ -2337,8 +2340,6 @@
     <p>健忘者常在手指上缠绕丝线以助记忆。我也坚信我的咒法技艺能活用这种做法。以特定方式绑出的绳结应该能稳定存储一个 iota，且能独立于栈存在。</p><p>我将其称为“<span style="color: #b0b">结念绳</span>”。</p>
 <br />
     <p>在初合成时，它的存储空间内没有 iota。在另一只手持有<span style="color: #b0b">结念绳</span>时，绘制<a href="#patterns/readwrite@hexcasting:write"><span style="color: #fc77be">书吏之策略</span></a>就会将栈顶 iota 移除并存入<span style="color: #b0b">结念绳</span>。绘制<a href="#patterns/readwrite@hexcasting:read"><span style="color: #fc77be">书吏之精思</span></a>则会将<span style="color: #b0b">结念绳</span>中 iota 复制出来并压入栈顶。</p><p>一旦将 iota 写入<span style="color: #b0b">结念绳</span>，绳结本身便不再能解开。其中 iota 可被随意读取，但不可被清除或覆写。不过还好，这些绳结十分易得。</p>
-<br />
-    <p>另外，如果我在<span style="color: #b0b">结念绳</span>中写入一个实体，然后在该实体死亡或消失后尝试复制，则<a href="#patterns/readwrite@hexcasting:read"><span style="color: #fc77be">书吏之精思</span></a>会压入一个 <span style="color: #8d6acc">Null</span>。</p>
 <br />
   <details class="details-collapsible recipe-details">
       <summary class="collapse-details">

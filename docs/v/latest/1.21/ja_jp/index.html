@@ -77,7 +77,7 @@
       <ul class="nav navbar-nav navbar-right">
             <li>
     <a
-      href="https://github.com/FallingColors/HexMod/tree/d8ca88a86734a92a7e3d09b59e52f0a67bfb18e4"
+      href="https://github.com/FallingColors/HexMod/tree/49c33a82a4b4aa5b4961a37c78e8e857d928c3df"
         target="_blank"
       class="navbar-link"
       role="button"
@@ -1157,6 +1157,9 @@
 <br />
   <h4>影響を受けないエンティティ</h4>
     <p>アクションが改変できないエンティティに影響を与えようとした。</p><p>青色の光が散り、手に持っているアイテムが問題のエンティティに向かって投げ出される。</p>
+<br />
+  <h4>存在しないエンティティ</h4>
+    <p>存在しないエンティティに影響を与えようとした。これには2つの状況がある。1つはエンティティが単に死亡している場合。もう1つは、より特殊だが、遠くから「観測」できない場合。</p><p>茶色の光が散り、急に立ち上がったときのように、少しの間気分が悪くなる。</p>
 <br />
   <h4>数学的エラー</h4>
     <p>アクションが0で割るなどの、数学の法則に反することをした。</p><p>赤色の光が散り、<span style="color: #8d6acc">ガベージ</span>がスタックに入り、精神が消耗し、残っている活力の半分が取られる。自然界はそのような演算に腹を立て、報復として<i>自分</i>を除算するようだ。</p>
@@ -2337,8 +2340,6 @@
     <p>忘れん坊はしばしば大事なことを覚えるために指に紐を結ぶ。この発想は術に利用できると思われる。特別な結び方をした紐はスタックと関係なく、単一のイオタを安定して保持できるはずだ。</p><p>この発明を<span style="color: #b0b">念いの結び目</span>と呼ぼう。</p>
 <br />
     <p>クラフトしたときには、イオタは保存されていない。<span style="color: #b0b">念いの結び目</span>を反対側の手に持ち、<a href="#patterns/readwrite@hexcasting:write"><span style="color: #fc77be">筆記者の仕掛</span></a>を使用すると、スタックの1番上が削除されて<span style="color: #b0b">念いの結び目</span>に保存される。<a href="#patterns/readwrite@hexcasting:read"><span style="color: #fc77be">筆記者の反射</span></a>を使用すると、<span style="color: #b0b">念いの結び目</span>内のイオタがコピーされ、スタックに追加される。</p><p><span style="color: #b0b">念いの結び目</span>は1度書き込まれると消えないほどもつれ、何度でもイオタを読み込めるが、消去や上書きをする方法はない。幸いなことに、それらは高価ではない。</p>
-<br />
-    <p>また、エンティティを<span style="color: #b0b">念いの結び目</span>に保存し、参照されたエンティティが死亡または消失した後にそれを呼び出そうとすると、<a href="#patterns/readwrite@hexcasting:read"><span style="color: #fc77be">筆記者の反射</span></a>は代わりに<span style="color: #8d6acc">Null</span>をスタックに追加する。</p>
 <br />
   <details class="details-collapsible recipe-details">
       <summary class="collapse-details">

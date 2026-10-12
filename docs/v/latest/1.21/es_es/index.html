@@ -77,7 +77,7 @@
       <ul class="nav navbar-nav navbar-right">
             <li>
     <a
-      href="https://github.com/FallingColors/HexMod/tree/d8ca88a86734a92a7e3d09b59e52f0a67bfb18e4"
+      href="https://github.com/FallingColors/HexMod/tree/49c33a82a4b4aa5b4961a37c78e8e857d928c3df"
         target="_blank"
       class="navbar-link"
       role="button"
@@ -1157,6 +1157,9 @@
 <br />
   <h4>Entity is Immune</h4>
     <p>The action tried to affect an entity that cannot be altered by it.</p><p>Causes blue sparks, and the items in my hands will be yanked out and flung towards the offending entity.</p>
+<br />
+  <h4>Entity Not Found</h4>
+    <p>I attempted to affect an entity that doesn&#39;t exist. This can happen if the entity is dead, or if it is unable to be &#34;observed&#34; from afar.</p><p>Causes brown sparks, and causes me to feel sick for a moment, as if I had stood up too fast.</p>
 <br />
   <h4>Mathematical Error</h4>
     <p>The action did something offensive to the laws of mathematics, such as dividing by zero.</p><p>Causes red sparks, pushes a <span style="color: #8d6acc">garbage</span> to my stack, and my mind will be ablated, stealing half the vigor I have remaining. It seems that Nature takes offense to such operations, and divides <i>me</i> in retaliation.</p>
@@ -2337,8 +2340,6 @@
     <p>The forgetful often tie a piece of string about their finger to help them remember something important. I believe this idea might be of use in my art. A specially knotted piece of string should be able to hold a single iota stably, irregardless of my stack.</p><p>I will call my invention a <span style="color: #b0b">Thought-Knot</span>.</p>
 <br />
     <p>When I craft it, it stores no iota. Using <a href="#patterns/readwrite@hexcasting:write"><span style="color: #fc77be">Scribe&#39;s Gambit</span></a> while holding a <span style="color: #b0b">Thought-Knot</span> in my other hand will remove the top of the stack and save it into the <span style="color: #b0b">Thought-Knot</span>. Using <a href="#patterns/readwrite@hexcasting:read"><span style="color: #fc77be">Scribe&#39;s Reflection</span></a> will copy whatever iota&#39;s in the <span style="color: #b0b">Thought-Knot</span> and add it to the stack.</p><p>Once a <span style="color: #b0b">Thought-Knot</span> has been written to, the string is indelibly tangled; the iota can be read any number of times, but there is no way to erase or overwrite it. Fortunately, they are not expensive.</p>
-<br />
-    <p>Also, if I store an entity in a <span style="color: #b0b">Thought-Knot</span> and try to recall it after the referenced entity has died or otherwise disappeared, the <a href="#patterns/readwrite@hexcasting:read"><span style="color: #fc77be">Scribe&#39;s Reflection</span></a> will add <span style="color: #8d6acc">Null</span> to the stack instead.</p>
 <br />
   <details class="details-collapsible recipe-details">
       <summary class="collapse-details">
@@ -12790,7 +12791,7 @@
         data-per-world="False"
       >Su navegador no admite la visualización de patrones. Código del patrón: aw</canvas>
   </details>
-      <p>Convert an argument to a boolean. The number <span style="color: #8d6acc">0</span>, <span style="color: #8d6acc">Null</span>, False, the vector (0, 0, 0), and the empty list become False; everything else becomes True.</p>
+      <p>Convert an argument to a boolean. The number 0, <span style="color: #8d6acc">Null</span>, False, the vector (0, 0, 0), the empty list, and any entity that cannot be found become False; everything else becomes True.</p>
   </div>
 <br />
   <div id="patterns/logic@hexcasting:abs" class="">
