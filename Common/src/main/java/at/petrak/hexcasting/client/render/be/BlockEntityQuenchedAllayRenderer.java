@@ -1,9 +1,9 @@
 package at.petrak.hexcasting.client.render.be;
 
 import at.petrak.hexcasting.client.RegisterClientStuff;
-import at.petrak.hexcasting.client.render.GaslightingTracker;
 import at.petrak.hexcasting.common.blocks.BlockQuenchedAllay;
 import at.petrak.hexcasting.common.blocks.entity.BlockEntityQuenchedAllay;
+import at.petrak.hexcasting.common.lib.hex.HexGaslighting;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.phys.AABB;
 
@@ -29,7 +28,7 @@ public class BlockEntityQuenchedAllayRenderer implements BlockEntityRenderer<Blo
         var buffer = bufSource.getBuffer(RenderType.translucent());
         var pose = ps.last();
 
-        var idx = Math.abs(GaslightingTracker.getGaslightingAmount() % BlockQuenchedAllay.VARIANTS);
+        var idx = Math.abs(HexGaslighting.QUENCHED_ALLAY_GASLIGHTING.getGaslightingAmount() % BlockQuenchedAllay.VARIANTS);
         var model = RegisterClientStuff.QUENCHED_ALLAY_VARIANTS.get(BuiltInRegistries.BLOCK.getKey(block)).get(idx);
 
         dispatcher.getModelRenderer().renderModel(pose, buffer, null, model, 1f, 1f, 1f, packedLight, packedOverlay);
