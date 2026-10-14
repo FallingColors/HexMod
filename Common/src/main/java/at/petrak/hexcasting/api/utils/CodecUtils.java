@@ -20,8 +20,8 @@ public class CodecUtils {
      * plus the map-encoding system from {@link net.minecraft.network.codec.ByteBufCodecs#map}.
      */
     public static <B extends ByteBuf, K, V> StreamCodec<B, Map<K, V>> streamCodecDispatchedMap(
-            IntFunction<Map<K, V>> mapCreator, StreamCodec<B, K> keyCodec,
-            Function<K, StreamCodec<B, ? extends V>> valueCodecGetter
+            IntFunction<Map<K, V>> mapCreator, StreamCodec<? super B, K> keyCodec,
+            Function<K, StreamCodec<? super B, ? extends V>> valueCodecGetter
     ) {
         return new StreamCodec<>() {
             public Map<K, V> decode(B stream) {
@@ -50,7 +50,7 @@ public class CodecUtils {
             }
 
             @SuppressWarnings("unchecked")
-            private <V2 extends V> void encodeCasted(StreamCodec<B, V2> codec, B stream, V value) {
+            private <V2 extends V> void encodeCasted(StreamCodec<? super B, V2> codec, B stream, V value) {
                 codec.encode(stream, (V2) value);
             }
         };

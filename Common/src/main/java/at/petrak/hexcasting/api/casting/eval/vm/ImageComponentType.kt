@@ -6,6 +6,7 @@ import at.petrak.hexcasting.common.lib.HexRegistries
 import at.petrak.hexcasting.common.lib.hex.HexImageComponents
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import com.mojang.serialization.Codec
+import io.netty.buffer.ByteBuf
 import net.minecraft.Util
 import net.minecraft.network.RegistryFriendlyByteBuf
 import net.minecraft.network.codec.ByteBufCodecs
@@ -27,7 +28,7 @@ import net.minecraft.network.codec.StreamCodec
  */
 class ImageComponentType<T : Any>(
 	val dataCodec: Codec<T>,
-	val dataStreamCodec: StreamCodec<RegistryFriendlyByteBuf, T>,
+	val dataStreamCodec: StreamCodec<out ByteBuf, T>,
 	val transient: Boolean = false
 ) {
 	override fun toString(): String = Util.getRegisteredName(HexImageComponents.REGISTRY, this)
