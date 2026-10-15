@@ -16,29 +16,41 @@ buildscript {
 plugins {
     id "java"
     id "maven-publish"
-
-    id "at.petra-k.pkpcpbp.PKSubprojPlugin"
 }
 
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
-pkSubproj {
-    pkPublish = true
-    curseforgeJar = jar.archiveFile
-    curseforgeDependencies([
-        "paucal",
-        "patchouli",
-        "caelus",
-        "inline",
-    ])
-    modrinthJar = jar.archiveFile
-    modrinthDependencies([
-        "paucal:HyBiJPtT", // 0.6.0-forge
-        "patchouli:1.20.1-80-forge",
-        "caelus:3.1.0+1.20",
-        "inline:1.20.1-1.2.2-forge",
-    ])
+publishMods {
+    file = jar.archiveFile
+    modLoaders.add("neoForge")
+    curseforge{
+        requires(
+                "paucal",
+                "patchouli",
+                "caelus",
+                "inline"
+        )
+    }
+    modrinth{
+        requires {
+            slug = "paucal"
+            version = "HyBiJPtT"
+            platform = "neoforge"
+        }
+        requires {
+            slug = "patchouli"
+            version = "1.20.1-80-forge"
+        }
+        requires {
+            slug = "caelus"
+            version = "3.1.0+1.20"
+        }
+        requires {
+            slug = "inline"
+            version = "1.20.1-1.2.2-forge"
+        }
+    }
 }
 
 repositories {
