@@ -1,6 +1,9 @@
 package at.petrak.hexcasting.common.msgs;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.casting.iota.IotaType;
+import at.petrak.hexcasting.api.utils.NBTHelper;
+import at.petrak.hexcasting.common.items.storage.ItemAbacus;
 import at.petrak.hexcasting.common.items.storage.ItemSpellbook;
 import at.petrak.hexcasting.common.lib.HexDataComponents;
 import at.petrak.hexcasting.common.lib.HexItems;
@@ -49,10 +52,10 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         if (delta != 0) {
             var stack = sender.getItemInHand(hand);
 
-            if (stack.getItem() == HexItems.SPELLBOOK.get()) {
-                spellbook(sender, hand, stack, delta);
-            } else if (stack.getItem() == HexItems.ABACUS.get()) {
+            if (stack.getItem() == HexItems.ABACUS) {
                 abacus(sender, hand, stack, delta);
+            } else if (ItemSpellbook.supportsPageScrolling(stack)) {
+                spellbook(sender, hand, stack, delta);
             }
         }
     }
@@ -98,6 +101,12 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
     }
 
     private void abacus(ServerPlayer sender, InteractionHand hand, ItemStack stack, double delta) {
+        if (ItemSpellbook.supportsPageScrolling(stack)) {
+            HexAPI.LOGGER.warn("Item stack has spellbook tags but is an abacus! The spellbook tags will be removed.");
+            stack.remove(HexDataComponents.SELECTED_SPELLBOOK_PAGE.get());
+            stack.remove(HexDataComponents.SPELLBOOK_PAGE_NAMES.get());
+        }
+
         var increase = delta < 0;
         Double num = stack.get(HexDataComponents.ABACUS_VALUE.get());
         if(num == null)

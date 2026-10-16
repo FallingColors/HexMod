@@ -1,1 +1,39 @@
-{}
+{
+  "block.hexcasting": {
+    slate: "Blank Skifferplatta",
+  },
+  hexdoc: {
+    hexcasting: {
+      title: "Hexbok",
+      description: "Hexboken, allt samlat på en plats.",
+    },
+    renderer: {
+      renders: "Ritare",
+      palettes: "Paletter",
+      animated: "animerad",
+      monocolor: "enfärgad",
+      gradient: "gradient",
+      segment: "segment",
+      "default": "default",
+      turbo: "turbo",
+      dark2: "mörk2",
+      tab10: "tab10",
+    },
+    pattern: {
+      show: "Klicka för att visa effektsymbol",
+      hide: "Klicka för att gömma effektsymbol",
+      multiplier: "${speedScale()}x",
+      paused: "Pausad",
+      not_supported: "Din webbläsare saknar stöd för att visa symboler. Symbolkod: {}",
+    },
+    villager_requirements: {
+      any: "Bybon måste vara en {level} eller högre",
+      professional: "Bybon måste vara en {level} {profession} eller högre",
+    },
+  },
+  "tag.item.c": {
+    brown_dye: "Bruna Färger",
+    glowstone_dusts: "Glödstensdamm",
+    wood_sticks: "Träpinnar",
+  },
+}

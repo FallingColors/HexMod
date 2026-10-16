@@ -1,10 +1,20 @@
 package at.petrak.hexcasting.interop.patchouli;
 
+import at.petrak.hexcasting.api.misc.MediaConstants;
+import at.petrak.hexcasting.common.items.magic.ItemMediaBattery;
+import at.petrak.hexcasting.common.lib.HexItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
 import vazkii.patchouli.api.IVariable;
 
 import java.util.ArrayList;
@@ -74,5 +84,32 @@ public class PatchouliUtils {
         return interweaveIngredients(ingredients,
             ingredients.stream().mapToInt(ingr -> ingr.getItems().length).max().orElse(1), registries
         );
+    }
+
+    /**
+     * @param mediaCost The amount of media to represent
+     * @return A list of ItemStacks in dust, shards, and charged that equal the given amount of media. If the amount cannot be represented in an integer multiple of dust, falls back to a phial.
+     */
+    public static List<ItemStack> mediaItems(long mediaCost) {
+        record ItemCost(Item item, int cost) {
+            public boolean dividesEvenly (int dividend) {
+                return dividend % cost == 0;
+            }
+        }
+        ItemCost[] costs = {
+            new ItemCost(HexItems.AMETHYST_DUST.get(), (int)MediaConstants.DUST_UNIT),
+            new ItemCost(Items.AMETHYST_SHARD, (int)MediaConstants.SHARD_UNIT),
+            new ItemCost(HexItems.CHARGED_AMETHYST.get(), (int)MediaConstants.CRYSTAL_UNIT),
+        };
+
+        // get evenly divisible ItemStacks
+        List<ItemStack> validItemStacks = Arrays.stream(costs)
+            .filter(itemCost -> itemCost.dividesEvenly((int)mediaCost))
+            .map(validItemCost -> new ItemStack(validItemCost.item, (int)mediaCost / validItemCost.cost))
+            .toList();
+
+        if (!validItemStacks.isEmpty()) return validItemStacks;
+
+        return List.of(ItemMediaBattery.withMedia(new ItemStack(HexItems.BATTERY.get()), mediaCost, mediaCost));
     }
 }
