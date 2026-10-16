@@ -85,7 +85,7 @@ public class ScrungledPatternsSave extends SavedData {
             var dir = HexDir.values()[rawDir];
             var key = ResourceKey.create(registryKey, new ResourceLocation(rawKey));
 
-            if (IXplatAbstractions.INSTANCE.getActionRegistry().get(key) != null)
+            if (IXplatAbstractions.INSTANCE.getActionRegistry().containsKey(key))
                 map.put(sig, new PerWorldEntry(key, dir));
         }
 
