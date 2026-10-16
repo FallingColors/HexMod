@@ -31,7 +31,7 @@
       "at.petrak.hexcasting.fabric.datagen.HexFabricDataGenerators"
     ],
     "cardinal-components": [
-      "at.petrak.hexcasting.fabric.cc.HexCardinalComponents"
+      "at.petrak.hexcasting.fabric.lib.HexCardinalComponents"
     ],
     "jei_mod_plugin": [
       "at.petrak.hexcasting.interop.jei.HexJEIPlugin"

@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.fabric.cc;
 
 import at.petrak.hexcasting.api.player.AltioraAbility;
+import at.petrak.hexcasting.fabric.lib.HexCardinalComponents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
