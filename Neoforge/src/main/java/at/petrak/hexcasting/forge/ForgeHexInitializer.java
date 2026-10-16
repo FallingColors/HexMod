@@ -2,6 +2,7 @@ package at.petrak.hexcasting.forge;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers;
+import at.petrak.hexcasting.api.casting.iota.EntityIota;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.mod.HexStatistics;
 import at.petrak.hexcasting.common.blocks.behavior.HexComposting;
@@ -230,9 +231,14 @@ public class ForgeHexInitializer {
         });
 
         evBus.addListener((ServerStartedEvent evt) -> {
+            EntityIota.initPlayerUUIDs(evt.getServer());
             if (patternRegistryIsProcessed) return;
             PatternRegistryManifest.processRegistry(evt.getServer().overworld());
             patternRegistryIsProcessed = true;
+        });
+
+        evBus.addListener((PlayerEvent.PlayerLoggedInEvent evt) -> {
+            EntityIota.addPlayerUUID(evt.getEntity().getUUID());
         });
 
         evBus.addListener((RegisterCommandsEvent evt) -> HexCommands.register(evt.getDispatcher()));

@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.addldata.*
 import at.petrak.hexcasting.api.advancements.HexAdvancementTriggers
 import at.petrak.hexcasting.api.casting.ActionRegistryEntry
 import at.petrak.hexcasting.api.casting.iota.DoubleIota
+import at.petrak.hexcasting.api.casting.iota.EntityIota
 import at.petrak.hexcasting.api.item.*
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.api.mod.HexConfig
@@ -44,6 +45,7 @@ import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.entity.event.v1.EntityElytraEvents
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
@@ -61,6 +63,7 @@ import net.minecraft.resources.ResourceKey
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.EntityType
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
@@ -127,6 +130,7 @@ object FabricHexInitializer : ModInitializer {
 
 
         ServerLifecycleEvents.SERVER_STARTED.register { server ->
+            EntityIota.initPlayerUUIDs(server)
             if (!patternRegistryIsProcessed) {
                 PatternRegistryManifest.processRegistry(server.overworld())
                 patternRegistryIsProcessed = true
@@ -136,6 +140,8 @@ object FabricHexInitializer : ModInitializer {
         ServerTickEvents.END_WORLD_TICK.register(PlayerPositionRecorder::updateAllPlayers)
         ServerTickEvents.END_WORLD_TICK.register(OpFlight::tickAllPlayers)
         ServerTickEvents.END_WORLD_TICK.register(OpAltiora::checkAllPlayers)
+
+        ServerPlayerEvents.JOIN.register { player -> EntityIota.addPlayerUUID(player.uuid) }
 
         CommandRegistrationCallback.EVENT.register { dp, _, _ -> HexCommands.register(dp) }
 
@@ -194,14 +200,6 @@ object FabricHexInitializer : ModInitializer {
 
         HexEntities.register()
         HexAttributes.register()
-        FabricDefaultAttributeRegistry.register(EntityType.PLAYER,
-            Player.createAttributes()
-                .add(HexAttributes.GRID_ZOOM)
-                .add(HexAttributes.SCRY_SIGHT)
-                .add(HexAttributes.FEEBLE_MIND)
-                .add(HexAttributes.AMBIT_RADIUS)
-                .add(HexAttributes.MEDIA_CONSUMPTION_MODIFIER)
-                .add(HexAttributes.SENTINEL_RADIUS))
         HexMobEffects.register()
         HexPotions.register()
         HexDataComponents.register()
