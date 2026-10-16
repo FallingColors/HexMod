@@ -23,6 +23,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed spells with a variable cost becoming free when cast with an extremely small input value ([#1308](https://github.com/FallingColors/HexMod/pull/1308)) @Robotgiggle
 - Fixed Blink and Greater Teleport cancelling all velocity when cast on a player ([#1310](https://github.com/FallingColors/HexMod/pull/1310)) @drtheodor
 - Fixed various incorrect version specifications for the Patchouli dependency ([#1319](https://github.com/FallingColors/HexMod/pull/1319)) @Robotgiggle
+- Fixed other players not seeing Altiora wings and pigment ([#1331](https://github.com/FallingColors/HexMod/pull/1331)) @R0b0Li0n
+- Fixed Altiora wings, pigment and sentinel desyncing after changing dimension ([#1331](https://github.com/FallingColors/HexMod/pull/1331)) @R0b0Li0n
 - Fixed an error when trying to cast a Great Spell that no longer exists, such as when an addon has been removed ([#1335](https://github.com/FallingColors/HexMod/pull/1335)) @Robotgiggle
 
 ## `0.11.4` - 2026-08-26
