@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed the bolt from Summon Lightning not being selectable as an entity and not being attributed to the caster ([#1304](https://github.com/FallingColors/HexMod/pull/1304)) @Robotgiggle
 - Fixed spells with a variable cost becoming free when cast with an extremely small input value ([#1308](https://github.com/FallingColors/HexMod/pull/1308)) @Robotgiggle
 - Fixed Blink and Greater Teleport cancelling all velocity when cast on a player ([#1310](https://github.com/FallingColors/HexMod/pull/1310)) @drtheodor
+- Fixed an error when trying to cast a Great Spell that no longer exists, such as when an addon has been removed ([#1335](https://github.com/FallingColors/HexMod/pull/1335)) @Robotgiggle
 
 ## `0.11.4` - 2026-08-26
 
