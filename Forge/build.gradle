@@ -35,9 +35,9 @@ pkSubproj {
     modrinthJar = jar.archiveFile
     modrinthDependencies([
         "paucal:HyBiJPtT", // 0.6.0-forge
-        "patchouli:1.20.1-80-forge",
-        "caelus:3.1.0+1.20",
-        "inline:1.20.1-1.2.2-forge",
+        "patchouli:$minecraftVersion-$patchouliVersion-forge",
+        "caelus:$caelusVersion",
+        "inline:$minecraftVersion-$inlineVersion-forge",
     ])
 }
 

@@ -13,14 +13,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Updated the Flay Mind recipe display in EMI and JEI to include the media cost, matching the guidebook ([#1323](https://github.com/FallingColors/HexMod/pull/1323)) @MEEPofFaith
+- Updated Patchouli dependency from version 83 to version 85 ([#1319](https://github.com/FallingColors/HexMod/pull/1319)) @Robotgiggle
+- Shift-scrolling and the spellbook keybinds now work on any item with the `page_idx` and `page_names` tags ([#1329](https://github.com/FallingColors/HexMod/pull/1329)) @Robotgiggle
 
 ### Fixed
 
 - Fixed Great Spells causing a mishap when drawn without enlightenment even while parenthesized ([#1290](https://github.com/FallingColors/HexMod/pull/1290)) @Robotgiggle
 - Fixed the bolt from Summon Lightning not being selectable as an entity and not being attributed to the caster ([#1304](https://github.com/FallingColors/HexMod/pull/1304)) @Robotgiggle
+- Fixed spells with a variable cost becoming free when cast with an extremely small input value ([#1308](https://github.com/FallingColors/HexMod/pull/1308)) @Robotgiggle
 - Fixed Blink and Greater Teleport cancelling all velocity when cast on a player ([#1310](https://github.com/FallingColors/HexMod/pull/1310)) @drtheodor
-- Fixed Other players not seeing Altiora wings and pigment ([#1331](https://github.com/FallingColors/HexMod/pull/1331)) @R0b0Li0n
+- Fixed various incorrect version specifications for the Patchouli dependency ([#1319](https://github.com/FallingColors/HexMod/pull/1319)) @Robotgiggle
+- Fixed other players not seeing Altiora wings and pigment ([#1331](https://github.com/FallingColors/HexMod/pull/1331)) @R0b0Li0n
 - Fixed Altiora wings, pigment and sentinel desyncing after changing dimension ([#1331](https://github.com/FallingColors/HexMod/pull/1331)) @R0b0Li0n
+- Fixed an error when trying to cast a Great Spell that no longer exists, such as when an addon has been removed ([#1335](https://github.com/FallingColors/HexMod/pull/1335)) @Robotgiggle
 
 ## `0.11.4` - 2026-08-26
 

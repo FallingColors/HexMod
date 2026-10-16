@@ -101,6 +101,7 @@
       "": "Historiefragment",
       all: "Det virker som om at jeg har funnet alle historiene denne verden har å tilby.",
     },
+    cypher: "Cypher",
   },
   "entity.hexcasting": {
     wall_scroll: "Hengende Rull",

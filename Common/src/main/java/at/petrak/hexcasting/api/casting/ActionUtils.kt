@@ -21,6 +21,7 @@ import java.util.function.DoubleUnaryOperator
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
+import kotlin.math.sign
 
 fun List<Iota>.getDouble(idx: Int, argc: Int = 0): Double {
     val x = this.getOrElse(idx) { throw MishapNotEnoughArgs(idx + 1, this.size) }
@@ -298,6 +299,18 @@ fun evaluatable(datum: Iota, reverseIdx: Int): Either<Iota, SpellList> =
     }
 
 fun Iota?.orNull() = this ?: NullIota()
+
+/**
+ * Converts to long while ensuring that the final result is always nonzero.
+ * Used when a spell's cost depends on an arbitrary multiplier provided by
+ * the player, so that an extremely small value doesn't make the spell free.
+ */
+fun Double.toNonZeroLong(): Long {
+    val result = this.roundToLong()
+    if (result == 0L)
+        return if (this >= 0) 1L else -1L
+    return result
+}
 
 // TODO do we make this work on lists
 // there should probably be some way to abstract function application over lists, vecs, and numbers,
