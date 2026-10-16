@@ -1,12 +1,13 @@
 package at.petrak.hexcasting.client;
 
 import at.petrak.hexcasting.api.mod.HexConfig;
+import at.petrak.hexcasting.common.items.storage.ItemSpellbook;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.msgs.MsgShiftScrollC2S;
 import at.petrak.hexcasting.xplat.IClientXplatAbstractions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 public class ShiftScrollListener {
     private static double mainHandDelta = 0;
@@ -36,11 +37,11 @@ public class ShiftScrollListener {
                 return false;
             }
 
-            if (IsScrollableItem(player.getMainHandItem().getItem())) {
-                mainHandDelta += delta * getScrollModifier(player.getMainHandItem().getItem(), allowInverting);
+            if (isScrollableStack(player.getMainHandItem())) {
+                mainHandDelta += delta * getScrollModifier(player.getMainHandItem(), allowInverting);
                 return true;
-            } else if (IsScrollableItem(player.getOffhandItem().getItem())) {
-                offHandDelta += delta * getScrollModifier(player.getOffhandItem().getItem(), allowInverting);
+            } else if (isScrollableStack(player.getOffhandItem())) {
+                offHandDelta += delta * getScrollModifier(player.getOffhandItem(), allowInverting);
                 return true;
             }
         }
@@ -58,17 +59,17 @@ public class ShiftScrollListener {
         }
     }
 
-    private static boolean IsScrollableItem(Item item) {
-        return item == HexItems.SPELLBOOK.get() || item == HexItems.ABACUS.get();
+    private static boolean isScrollableStack(ItemStack stack) {
+        return ItemSpellbook.supportsPageScrolling(stack) || stack.getItem() == HexItems.ABACUS;
     }
 
-    private static double getScrollModifier(Item item, boolean allowInverting) {
+    private static double getScrollModifier(ItemStack stack, boolean allowInverting) {
         if (!allowInverting) return 1;
 
-        if (item == HexItems.SPELLBOOK.get()) {
-            return HexConfig.client().invertSpellbookScrollDirection() ? -1 : 1;
-        } else if (item == HexItems.ABACUS.get()) {
+        if (stack.getItem() == HexItems.ABACUS) {
             return HexConfig.client().invertAbacusScrollDirection() ? -1 : 1;
+        } else if (ItemSpellbook.supportsPageScrolling(stack)) {
+            return HexConfig.client().invertSpellbookScrollDirection() ? -1 : 1;
         } else {
             return 1;
         }

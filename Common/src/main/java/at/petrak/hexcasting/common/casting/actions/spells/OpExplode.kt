@@ -7,6 +7,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.getPositiveDoubleUnderInclusive
 import at.petrak.hexcasting.api.casting.getVec3
 import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.toNonZeroLong
 import at.petrak.hexcasting.api.misc.MediaConstants
 import at.petrak.hexcasting.common.casting.actions.selectors.OpGetEntitiesBy
 import net.minecraft.core.BlockPos
@@ -42,7 +43,7 @@ class OpExplode(val fire: Boolean) : SpellAction {
         val cost = MediaConstants.DUST_UNIT * (3 * clampedStrength + if (fire) 1.0 else 0.125)
         return SpellAction.Result(
             Spell(pos, strength, this.fire),
-            cost.toLong(),
+            cost.toNonZeroLong(),
             listOf(ParticleSpray.burst(pos, strength, 50))
         )
     }
