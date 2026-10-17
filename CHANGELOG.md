@@ -12,7 +12,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
-- Updated the Flay Mind recipe display in EMI and JEI to include the media cost, matching the guidebook ([#1323](https://github.com/FallingColors/HexMod/pull/1323)) @MEEPofFaith
+- Updated the Flay Mind recipe display in EMI and JEI:
+ - Recipes now include the media cost, matching how they're shown in the guidebook ([#1323](https://github.com/FallingColors/HexMod/pull/1323)) @MEEPofFaith
+ - Recipes are now hidden until the player has become enlightened ([#____]()) @Robotgiggle
 - Updated Patchouli dependency from version 83 to version 85 ([#1319](https://github.com/FallingColors/HexMod/pull/1319)) @Robotgiggle
 - Shift-scrolling and the spellbook keybinds now work on any item with the `page_idx` and `page_names` tags ([#1329](https://github.com/FallingColors/HexMod/pull/1329)) @Robotgiggle
 

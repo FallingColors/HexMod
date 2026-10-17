@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.interop.jei;
 
+import at.petrak.hexcasting.api.client.ClientEnlightenment;
 import at.petrak.hexcasting.client.ClientTickCounter;
 import at.petrak.hexcasting.common.recipe.BrainsweepRecipe;
 import at.petrak.hexcasting.interop.patchouli.PatchouliUtils;
@@ -30,14 +31,17 @@ import static at.petrak.hexcasting.client.render.RenderLib.renderEntity;
 
 public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecipe> {
     public static final ResourceLocation UID = modLoc("brainsweep");
+    private static final Component RECIPE_HIDDEN = Component.translatable("hexcasting.tooltip.brainsweep.recipe_hidden");
 
-    private final IDrawableStatic background;
+    private final IDrawableStatic recipe_background;
+    private final IDrawableStatic hidden_background;
     private final IDrawable icon;
     private final Component localizedName;
 
     public BrainsweepRecipeCategory(IGuiHelper guiHelper) {
         ResourceLocation location = modLoc("textures/gui/brainsweep_recipe.png");
-        background = guiHelper.drawableBuilder(location, 0, 0, 118, 86).setTextureSize(128, 128).build();
+        recipe_background = guiHelper.drawableBuilder(location, 0, 0, 118, 86).setTextureSize(128, 128).build();
+        hidden_background = guiHelper.createBlankDrawable(Minecraft.getInstance().font.width(RECIPE_HIDDEN) + 8, 48);
         var brainsweep = modLoc("brainsweep");
         localizedName = Component.translatable("hexcasting.action." + brainsweep);
         icon = new PatternDrawable(brainsweep, 16, 16);
@@ -52,7 +56,7 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
     @Override
     public @NotNull
     IDrawable getBackground() {
-        return background;
+        return ClientEnlightenment.isEnlightened() ? recipe_background : hidden_background;
     }
 
     @Override
@@ -65,7 +69,7 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
     public @NotNull
     List<Component> getTooltipStrings(@NotNull BrainsweepRecipe recipe,
         @NotNull IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
-        if (37 <= mouseX && mouseX <= 37 + 26 && 19 <= mouseY && mouseY <= 19 + 48) {
+        if (ClientEnlightenment.isEnlightened() && 37 <= mouseX && mouseX <= 37 + 26 && 19 <= mouseY && mouseY <= 19 + 48) {
             Minecraft mc = Minecraft.getInstance();
             return recipe.entityIn().getTooltip(mc.options.advancedItemTooltips);
         }
@@ -76,7 +80,10 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
     @Override
     public void draw(@NotNull BrainsweepRecipe recipe, @NotNull IRecipeSlotsView recipeSlotsView, @NotNull GuiGraphics graphics, double mouseX, double mouseY) {
         ClientLevel level = Minecraft.getInstance().level;
-        if (level != null) {
+        if (!ClientEnlightenment.isEnlightened()) {
+            var font = Minecraft.getInstance().font;
+            graphics.drawString(font, RECIPE_HIDDEN, getWidth() / 2 - font.width(RECIPE_HIDDEN) / 2, getHeight() / 2 - 4, 0x3F3F3F, false);
+        } else if (level != null) {
             var examples = recipe.entityIn().exampleEntities(level);
             Entity example = null;
             if (!examples.isEmpty()) {
@@ -95,12 +102,14 @@ public class BrainsweepRecipeCategory implements IRecipeCategory<BrainsweepRecip
     @Override
     public void setRecipe(@NotNull IRecipeLayoutBuilder builder, @NotNull BrainsweepRecipe recipe,
         @NotNull IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 12, 35)
-            .addItemStacks(recipe.blockIn().getDisplayedStacks());
-        builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 12, 55)
-            .addItemStacks(PatchouliUtils.mediaItems(recipe.mediaCost()));
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 87, 35)
-            .addItemStack(new ItemStack(recipe.result().getBlock()));
+        if (ClientEnlightenment.isEnlightened()) {
+            builder.addSlot(RecipeIngredientRole.INPUT, 12, 35)
+                .addItemStacks(recipe.blockIn().getDisplayedStacks());
+            builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 12, 55)
+                .addItemStacks(PatchouliUtils.mediaItems(recipe.mediaCost()));
+            builder.addSlot(RecipeIngredientRole.OUTPUT, 87, 35)
+                .addItemStack(new ItemStack(recipe.result().getBlock()));
+        }
     }
 
     @Override
