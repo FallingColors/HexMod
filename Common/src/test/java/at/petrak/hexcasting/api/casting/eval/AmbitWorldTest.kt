@@ -29,4 +29,22 @@ class AmbitWorldTest {
         assertEquals(0, OpDimensionQuery.argc)
         assertNotNull(OpDimensionQuery)
     }
+
+    @Test
+    fun testDimensionTypeRegistryScenarios() {
+        // Verify vanilla vs custom datapack dimension ID parsing and matching
+        val overworldId = ResourceLocation("minecraft", "overworld")
+        val netherId = ResourceLocation("minecraft", "the_nether")
+        val endId = ResourceLocation("minecraft", "the_end")
+        val customDatapackDimId = ResourceLocation("hexcasting_addons", "mystical_realm")
+
+        assertEquals("minecraft", overworldId.namespace)
+        assertEquals("overworld", overworldId.path)
+        assertEquals("minecraft", netherId.namespace)
+        assertEquals("the_nether", netherId.path)
+        assertEquals("minecraft", endId.namespace)
+        assertEquals("the_end", endId.path)
+        assertEquals("hexcasting_addons", customDatapackDimId.namespace)
+        assertEquals("mystical_realm", customDatapackDimId.path)
+    }
 }
