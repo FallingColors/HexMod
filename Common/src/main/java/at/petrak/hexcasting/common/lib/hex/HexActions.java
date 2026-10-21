@@ -23,6 +23,9 @@ import at.petrak.hexcasting.common.casting.actions.lists.OpEmptyList;
 import at.petrak.hexcasting.common.casting.actions.lists.OpLastNToList;
 import at.petrak.hexcasting.common.casting.actions.lists.OpSingleton;
 import at.petrak.hexcasting.common.casting.actions.lists.OpSplat;
+import at.petrak.hexcasting.common.casting.actions.lists.OpListDedup;
+import at.petrak.hexcasting.common.casting.actions.lists.OpListFlatten;
+import at.petrak.hexcasting.common.casting.actions.lists.OpListZip;
 import at.petrak.hexcasting.common.casting.actions.local.OpPeekLocal;
 import at.petrak.hexcasting.common.casting.actions.local.OpPushLocal;
 import at.petrak.hexcasting.common.casting.actions.math.OpCoerceToAxial;
@@ -592,6 +595,12 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("ewdqdwe", HexDir.SOUTH_WEST), OpLastNToList.INSTANCE));
     public static final ActionRegistryEntry SPLAT = make("splat",
         new ActionRegistryEntry(HexPattern.fromAngles("qwaeawq", HexDir.NORTH_WEST), OpSplat.INSTANCE));
+    public static final ActionRegistryEntry LIST_ZIP = make("list_zip",
+        new ActionRegistryEntry(HexPattern.fromAngles("waqawqwa", HexDir.NORTH_EAST), OpListZip.INSTANCE));
+    public static final ActionRegistryEntry LIST_FLATTEN = make("list_flatten",
+        new ActionRegistryEntry(HexPattern.fromAngles("wdedwewd", HexDir.NORTH_WEST), OpListFlatten.INSTANCE));
+    public static final ActionRegistryEntry LIST_DEDUP = make("list_dedup",
+        new ActionRegistryEntry(HexPattern.fromAngles("eqqqqeaq", HexDir.EAST), OpListDedup.INSTANCE));
     public static final ActionRegistryEntry INDEX_OF = make("index_of",
         new OperationAction(HexPattern.fromAngles("dedqde", HexDir.EAST)));
     public static final ActionRegistryEntry REMOVE_FROM = make("remove_from",
