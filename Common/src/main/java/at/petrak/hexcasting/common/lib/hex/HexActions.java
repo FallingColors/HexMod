@@ -170,6 +170,10 @@ public class HexActions {
         new OperationAction(HexPattern.fromAngles("qeeeee", HexDir.EAST)));
     public static final ActionRegistryEntry COERCE_AXIAL = make("coerce_axial",
         new ActionRegistryEntry(HexPattern.fromAngles("qqqqqaww", HexDir.NORTH_WEST), OpCoerceToAxial.INSTANCE));
+    public static final ActionRegistryEntry VECTOR_PROJECT = make("vector_project",
+        new ActionRegistryEntry(HexPattern.fromAngles("waqwaw", HexDir.NORTH_EAST), OpVectorProject.INSTANCE));
+    public static final ActionRegistryEntry VECTOR_REFLECT = make("vector_reflect",
+        new ActionRegistryEntry(HexPattern.fromAngles("wdedwded", HexDir.NORTH_WEST), OpVectorReflect.INSTANCE));
 
     // == Logic ==
 
