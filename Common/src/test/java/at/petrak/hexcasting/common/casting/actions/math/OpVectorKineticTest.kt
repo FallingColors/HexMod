@@ -106,4 +106,20 @@ internal class OpVectorKineticTest {
         val res1 = OpVectorCatmullRom.execute(listOf(Vec3Iota(p0), Vec3Iota(p1), Vec3Iota(p2), Vec3Iota(p3), DoubleIota(1.0)), null!!)
         assertEquals(p2, (res1[0] as Vec3Iota).vec3)
     }
+
+    @Test
+    fun testVectorHermiteSpline() {
+        val p0 = Vec3(0.0, 0.0, 0.0)
+        val t0 = Vec3(1.0, 0.0, 0.0)
+        val p1 = Vec3(10.0, 0.0, 0.0)
+        val t1 = Vec3(1.0, 0.0, 0.0)
+
+        // at t = 0 -> p0
+        val res0 = OpVectorHermiteSpline.execute(listOf(Vec3Iota(p0), Vec3Iota(t0), Vec3Iota(p1), Vec3Iota(t1), DoubleIota(0.0)), null!!)
+        assertEquals(p0, (res0[0] as Vec3Iota).vec3)
+
+        // at t = 1 -> p1
+        val res1 = OpVectorHermiteSpline.execute(listOf(Vec3Iota(p0), Vec3Iota(t0), Vec3Iota(p1), Vec3Iota(t1), DoubleIota(1.0)), null!!)
+        assertEquals(p1, (res1[0] as Vec3Iota).vec3)
+    }
 }
