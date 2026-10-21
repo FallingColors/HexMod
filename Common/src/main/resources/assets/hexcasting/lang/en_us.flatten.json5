@@ -863,6 +863,8 @@
         vector_clamp_magnitude: "Vector Magnitude Clamp",
         vector_bezier: "Cubic Bézier Curve",
         smoothstep: "Smoothstep Interpolation",
+        vector_spring: "Vector Spring Simulation",
+        vector_reflect_normal: "Surface Normal Reflection",
         
         read: "Scribe's Reflection",
         "read/entity": "Chronicler's Purification",
@@ -1859,6 +1861,8 @@
         vector_clamp_magnitude: "Clamps the length of a vector to a maximum value without altering its direction.",
         vector_bezier: "Evaluates a cubic Bézier curve at parameter t given four control points and t.",
         smoothstep: "Evaluates Hermite smoothstep interpolation between edge0 and edge1 for x.",
+        vector_spring: "Simulates a harmonic spring step with position, velocity, target, stiffness, and dt.",
+        vector_reflect_normal: "Reflects a vector across a surface normal with given elasticity.",
         random: "Creates a random number between 0 and 1.",
       },
       

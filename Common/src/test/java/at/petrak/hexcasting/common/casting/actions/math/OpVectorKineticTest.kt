@@ -46,7 +46,6 @@ internal class OpVectorKineticTest {
         // at t = 0.5
         val resHalf = OpVectorBezier.execute(listOf(Vec3Iota(p0), Vec3Iota(p1), Vec3Iota(p2), Vec3Iota(p3), DoubleIota(0.5)), null!!)
         val halfVec = (resHalf[0] as Vec3Iota).vec3
-        // B(0.5) = 0.125*P0 + 0.375*P1 + 0.375*P2 + 0.125*P3 = (3.75, 7.5, 0.0)
         assertEquals(3.75, halfVec.x, 1e-5)
         assertEquals(7.5, halfVec.y, 1e-5)
         assertEquals(0.0, halfVec.z, 1e-5)
@@ -54,16 +53,43 @@ internal class OpVectorKineticTest {
 
     @Test
     fun testSmoothstep() {
-        // Below edge0 (0.0) -> 0.0
         val resLow = OpSmoothstep.execute(listOf(DoubleIota(0.0), DoubleIota(1.0), DoubleIota(-0.5)), null!!)
         assertEquals(0.0, (resLow[0] as DoubleIota).double, 1e-5)
 
-        // Above edge1 (1.0) -> 1.0
         val resHigh = OpSmoothstep.execute(listOf(DoubleIota(0.0), DoubleIota(1.0), DoubleIota(1.5)), null!!)
         assertEquals(1.0, (resHigh[0] as DoubleIota).double, 1e-5)
 
-        // At midpoint 0.5 -> 0.5
         val resMid = OpSmoothstep.execute(listOf(DoubleIota(0.0), DoubleIota(1.0), DoubleIota(0.5)), null!!)
         assertEquals(0.5, (resMid[0] as DoubleIota).double, 1e-5)
+    }
+
+    @Test
+    fun testVectorSpring() {
+        val pos = Vec3(0.0, 0.0, 0.0)
+        val vel = Vec3(1.0, 0.0, 0.0)
+        val target = Vec3(10.0, 0.0, 0.0)
+        val stiffness = 16.0
+        val dt = 0.1
+
+        val res = OpVectorSpring.execute(listOf(Vec3Iota(pos), Vec3Iota(vel), Vec3Iota(target), DoubleIota(stiffness), DoubleIota(dt)), null!!)
+        assertEquals(2, res.size)
+        val newPos = (res[0] as Vec3Iota).vec3
+        val newVel = (res[1] as Vec3Iota).vec3
+        // Position should have advanced towards target
+        assertEquals(true, newPos.x > 0.0)
+    }
+
+    @Test
+    fun testVectorReflectNormal() {
+        val v = Vec3(0.0, -1.0, 0.0)
+        val normal = Vec3(0.0, 1.0, 0.0)
+        val elasticity = 1.0
+
+        val res = OpVectorReflectNormal.execute(listOf(Vec3Iota(v), Vec3Iota(normal), DoubleIota(elasticity)), null!!)
+        assertEquals(1, res.size)
+        val reflected = (res[0] as Vec3Iota).vec3
+        assertEquals(0.0, reflected.x, 1e-5)
+        assertEquals(1.0, reflected.y, 1e-5)
+        assertEquals(0.0, reflected.z, 1e-5)
     }
 }
