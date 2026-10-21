@@ -19,7 +19,7 @@ import at.petrak.hexcasting.common.casting.actions.circles.OpImpetusPos;
 import at.petrak.hexcasting.common.casting.actions.environment.OpGetMedia;
 import at.petrak.hexcasting.common.casting.actions.escaping.*;
 import at.petrak.hexcasting.common.casting.actions.eval.*;
-import at.petrak.hexcasting.common.casting.actions.lists.OpEmptyList;
+import at.petrak.hexcasting.common.casting.actions.lists.*;
 import at.petrak.hexcasting.common.casting.actions.lists.OpLastNToList;
 import at.petrak.hexcasting.common.casting.actions.lists.OpSingleton;
 import at.petrak.hexcasting.common.casting.actions.lists.OpSplat;
@@ -601,6 +601,10 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("wdedwewd", HexDir.NORTH_WEST), OpListFlatten.INSTANCE));
     public static final ActionRegistryEntry LIST_DEDUP = make("list_dedup",
         new ActionRegistryEntry(HexPattern.fromAngles("eqqqqeaq", HexDir.EAST), OpListDedup.INSTANCE));
+    public static final ActionRegistryEntry LIST_PARTITION = make("list_partition",
+        new ActionRegistryEntry(HexPattern.fromAngles("waqawaqw", HexDir.NORTH_EAST), OpListPartition.INSTANCE));
+    public static final ActionRegistryEntry LIST_WINDOWS = make("list_windows",
+        new ActionRegistryEntry(HexPattern.fromAngles("wdedwede", HexDir.NORTH_WEST), OpListWindows.INSTANCE));
     public static final ActionRegistryEntry INDEX_OF = make("index_of",
         new OperationAction(HexPattern.fromAngles("dedqde", HexDir.EAST)));
     public static final ActionRegistryEntry REMOVE_FROM = make("remove_from",

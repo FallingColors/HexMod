@@ -1,5 +1,6 @@
 package at.petrak.hexcasting.common.casting.actions.lists
 
+import at.petrak.hexcasting.api.casting.iota.BooleanIota
 import at.petrak.hexcasting.api.casting.iota.DoubleIota
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.ListIota
@@ -78,5 +79,38 @@ class OpListCombinatorsTest {
         Assertions.assertEquals(2.0, (deduped[1] as DoubleIota).double)
         Assertions.assertEquals(3.0, (deduped[2] as DoubleIota).double)
         Assertions.assertEquals(1.0, (deduped[3] as DoubleIota).double)
+    }
+
+    @Test
+    fun testListPartition() {
+        // Partition list by boolean mask
+        val items = ListIota(listOf(DoubleIota(1.0), DoubleIota(2.0), DoubleIota(3.0), DoubleIota(4.0)))
+        val mask = ListIota(listOf(BooleanIota(true), BooleanIota(false), BooleanIota(true), BooleanIota(false)))
+        val res = OpListPartition.execute(listOf(items, mask), null!!)
+        val trueList = (res[0] as ListIota).list
+        val falseList = (res[1] as ListIota).list
+        Assertions.assertEquals(2, trueList.size)
+        Assertions.assertEquals(2, falseList.size)
+        Assertions.assertEquals(1.0, (trueList[0] as DoubleIota).double)
+        Assertions.assertEquals(3.0, (trueList[1] as DoubleIota).double)
+        Assertions.assertEquals(2.0, (falseList[0] as DoubleIota).double)
+        Assertions.assertEquals(4.0, (falseList[1] as DoubleIota).double)
+    }
+
+    @Test
+    fun testListWindows() {
+        // Sliding windows of length 2 over [1, 2, 3] -> [[1, 2], [2, 3]]
+        val list = ListIota(listOf(DoubleIota(1.0), DoubleIota(2.0), DoubleIota(3.0)))
+        val windowSize = DoubleIota(2.0)
+        val res = OpListWindows.execute(listOf(list, windowSize), null!!)
+        val windows = (res[0] as ListIota).list
+        Assertions.assertEquals(2, windows.size)
+        val w0 = (windows[0] as ListIota).list
+        val w1 = (windows[1] as ListIota).list
+        Assertions.assertEquals(2, w0.size)
+        Assertions.assertEquals(1.0, (w0[0] as DoubleIota).double)
+        Assertions.assertEquals(2.0, (w0[1] as DoubleIota).double)
+        Assertions.assertEquals(2.0, (w1[0] as DoubleIota).double)
+        Assertions.assertEquals(3.0, (w1[1] as DoubleIota).double)
     }
 }
