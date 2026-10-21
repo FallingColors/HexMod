@@ -74,8 +74,6 @@ internal class OpVectorKineticTest {
         val res = OpVectorSpring.execute(listOf(Vec3Iota(pos), Vec3Iota(vel), Vec3Iota(target), DoubleIota(stiffness), DoubleIota(dt)), null!!)
         assertEquals(2, res.size)
         val newPos = (res[0] as Vec3Iota).vec3
-        val newVel = (res[1] as Vec3Iota).vec3
-        // Position should have advanced towards target
         assertEquals(true, newPos.x > 0.0)
     }
 
@@ -91,5 +89,21 @@ internal class OpVectorKineticTest {
         assertEquals(0.0, reflected.x, 1e-5)
         assertEquals(1.0, reflected.y, 1e-5)
         assertEquals(0.0, reflected.z, 1e-5)
+    }
+
+    @Test
+    fun testVectorCatmullRom() {
+        val p0 = Vec3(0.0, 0.0, 0.0)
+        val p1 = Vec3(1.0, 1.0, 0.0)
+        val p2 = Vec3(2.0, 1.0, 0.0)
+        val p3 = Vec3(3.0, 0.0, 0.0)
+
+        // at t = 0 -> p1
+        val res0 = OpVectorCatmullRom.execute(listOf(Vec3Iota(p0), Vec3Iota(p1), Vec3Iota(p2), Vec3Iota(p3), DoubleIota(0.0)), null!!)
+        assertEquals(p1, (res0[0] as Vec3Iota).vec3)
+
+        // at t = 1 -> p2
+        val res1 = OpVectorCatmullRom.execute(listOf(Vec3Iota(p0), Vec3Iota(p1), Vec3Iota(p2), Vec3Iota(p3), DoubleIota(1.0)), null!!)
+        assertEquals(p2, (res1[0] as Vec3Iota).vec3)
     }
 }

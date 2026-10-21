@@ -865,6 +865,7 @@
         smoothstep: "Smoothstep Interpolation",
         vector_spring: "Vector Spring Simulation",
         vector_reflect_normal: "Surface Normal Reflection",
+        vector_catmull_rom: "Catmull-Rom Spline Interpolation",
         
         read: "Scribe's Reflection",
         "read/entity": "Chronicler's Purification",
@@ -1863,6 +1864,7 @@
         smoothstep: "Evaluates Hermite smoothstep interpolation between edge0 and edge1 for x.",
         vector_spring: "Simulates a harmonic spring step with position, velocity, target, stiffness, and dt.",
         vector_reflect_normal: "Reflects a vector across a surface normal with given elasticity.",
+        vector_catmull_rom: "Evaluates a Catmull-Rom spline interpolation at parameter t given four control points.",
         random: "Creates a random number between 0 and 1.",
       },
       
