@@ -860,6 +860,9 @@
         random: "Entropy Reflection",
         logarithm: "Logarithmic Distillation",
         coerce_axial: "Axial Purification",
+        vector_clamp_magnitude: "Vector Magnitude Clamp",
+        vector_bezier: "Cubic Bézier Curve",
+        smoothstep: "Smoothstep Interpolation",
         
         read: "Scribe's Reflection",
         "read/entity": "Chronicler's Purification",
@@ -1853,6 +1856,9 @@
         deconstruct_vec: "Split a vector into its X, Y, and Z components (bottom to top).",
         modulo: "Takes the modulus of two numbers. This is the amount $(italics)remaining/$ after division - for example, 5 %% 2 is 1, and 5 %% 3 is 2. When applied on vectors, performs the above operation elementwise.",
         coerce_axial: "For a vector, coerce it to its nearest axial direction, a unit vector. For a number, return the sign of the number; 1 if positive, -1 if negative. In both cases, zero is unaffected.",
+        vector_clamp_magnitude: "Clamps the length of a vector to a maximum value without altering its direction.",
+        vector_bezier: "Evaluates a cubic Bézier curve at parameter t given four control points and t.",
+        smoothstep: "Evaluates Hermite smoothstep interpolation between edge0 and edge1 for x.",
         random: "Creates a random number between 0 and 1.",
       },
       
