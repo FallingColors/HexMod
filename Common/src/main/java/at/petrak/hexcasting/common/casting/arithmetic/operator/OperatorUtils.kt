@@ -56,7 +56,7 @@ fun Iterator<IndexedValue<Iota>>.nextPositiveIntUnderInclusive(max: Int, argc: I
             return rounded
         }
     }
-    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.positive.less", max)
+    throw MishapInvalidIota.of(x, if (argc == 0) idx else argc - (idx + 1), "int.positive.less.equal", max)
 }
 
 /**
