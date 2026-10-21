@@ -605,6 +605,10 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("waqawaqw", HexDir.NORTH_EAST), OpListPartition.INSTANCE));
     public static final ActionRegistryEntry LIST_WINDOWS = make("list_windows",
         new ActionRegistryEntry(HexPattern.fromAngles("wdedwede", HexDir.NORTH_WEST), OpListWindows.INSTANCE));
+    public static final ActionRegistryEntry LIST_CHUNK = make("list_chunk",
+        new ActionRegistryEntry(HexPattern.fromAngles("waqawawa", HexDir.NORTH_EAST), OpListChunk.INSTANCE));
+    public static final ActionRegistryEntry LIST_ROTATE = make("list_rotate",
+        new ActionRegistryEntry(HexPattern.fromAngles("wdedwede", HexDir.SOUTH_WEST), OpListRotate.INSTANCE));
     public static final ActionRegistryEntry INDEX_OF = make("index_of",
         new OperationAction(HexPattern.fromAngles("dedqde", HexDir.EAST)));
     public static final ActionRegistryEntry REMOVE_FROM = make("remove_from",
