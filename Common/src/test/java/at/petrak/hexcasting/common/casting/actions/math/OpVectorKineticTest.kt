@@ -122,4 +122,19 @@ internal class OpVectorKineticTest {
         val res1 = OpVectorHermiteSpline.execute(listOf(Vec3Iota(p0), Vec3Iota(t0), Vec3Iota(p1), Vec3Iota(t1), DoubleIota(1.0)), null!!)
         assertEquals(p1, (res1[0] as Vec3Iota).vec3)
     }
+
+    @Test
+    fun testVectorBounce() {
+        val v = Vec3(1.0, -2.0, 0.0)
+        val normal = Vec3(0.0, 1.0, 0.0)
+        val restitution = 0.8
+        val friction = 0.1
+
+        val res = OpVectorBounce.execute(listOf(Vec3Iota(v), Vec3Iota(normal), DoubleIota(restitution), DoubleIota(friction)), null!!)
+        assertEquals(1, res.size)
+        val bounced = (res[0] as Vec3Iota).vec3
+        assertEquals(0.9, bounced.x, 1e-5) // 1.0 * (1 - 0.1)
+        assertEquals(1.6, bounced.y, 1e-5) // -(-2.0 * 0.8) = 1.6
+        assertEquals(0.0, bounced.z, 1e-5)
+    }
 }

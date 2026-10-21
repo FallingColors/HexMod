@@ -867,6 +867,7 @@
         vector_reflect_normal: "Surface Normal Reflection",
         vector_catmull_rom: "Catmull-Rom Spline Interpolation",
         vector_hermite_spline: "Cubic Hermite Spline Interpolation",
+        vector_bounce: "Elastic Collision Bounce",
         
         read: "Scribe's Reflection",
         "read/entity": "Chronicler's Purification",
@@ -1867,6 +1868,7 @@
         vector_reflect_normal: "Reflects a vector across a surface normal with given elasticity.",
         vector_catmull_rom: "Evaluates a Catmull-Rom spline interpolation at parameter t given four control points.",
         vector_hermite_spline: "Evaluates a cubic Hermite spline given start position P0, tangent T0, end position P1, tangent T1, and progress t.",
+        vector_bounce: "Simulates an elastic collision bounce with restitution and tangential friction.",
         random: "Creates a random number between 0 and 1.",
       },
       
