@@ -141,3 +141,17 @@ class OpListCombinatorsTest {
         Assertions.assertEquals(1.0, (rNeg1[3] as DoubleIota).double)
     }
 }
+    @Test
+    fun testListInterleave() {
+        val list1 = ListIota(listOf(DoubleIota(1.0), DoubleIota(2.0), DoubleIota(3.0)))
+        val list2 = ListIota(listOf(DoubleIota(10.0), DoubleIota(20.0)))
+        val res = OpListInterleave.execute(listOf(list1, list2), null!!)
+        val interleaved = (res[0] as ListIota).list
+        Assertions.assertEquals(5, interleaved.size)
+        Assertions.assertEquals(1.0, (interleaved[0] as DoubleIota).double)
+        Assertions.assertEquals(10.0, (interleaved[1] as DoubleIota).double)
+        Assertions.assertEquals(2.0, (interleaved[2] as DoubleIota).double)
+        Assertions.assertEquals(20.0, (interleaved[3] as DoubleIota).double)
+        Assertions.assertEquals(3.0, (interleaved[4] as DoubleIota).double)
+    }
+}
