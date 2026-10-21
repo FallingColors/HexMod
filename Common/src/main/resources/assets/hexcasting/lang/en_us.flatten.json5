@@ -869,6 +869,7 @@
         vector_hermite_spline: "Cubic Hermite Spline Interpolation",
         vector_bounce: "Elastic Collision Bounce",
         vector_reflect: "Specular Vector Reflection",
+        vector_dampen: "Exponential Drag Deceleration",
         
         read: "Scribe's Reflection",
         "read/entity": "Chronicler's Purification",
@@ -1871,6 +1872,7 @@
         vector_hermite_spline: "Evaluates a cubic Hermite spline given start position P0, tangent T0, end position P1, tangent T1, and progress t.",
         vector_bounce: "Simulates an elastic collision bounce with restitution and tangential friction.",
         vector_reflect: "Computes the specular reflection vector v - 2 * (v . n) * n given velocity v and surface normal n.",
+        vector_dampen: "Computes exponential drag deceleration v * exp(-k * dt) given velocity v, drag k, and dt.",
         random: "Creates a random number between 0 and 1.",
       },
       

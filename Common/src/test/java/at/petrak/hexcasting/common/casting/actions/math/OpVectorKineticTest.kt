@@ -142,7 +142,6 @@ internal class OpVectorKineticTest {
 
     @Test
     fun testVectorReflect() {
-        // Perpendicular reflection
         val v = Vec3(0.0, -5.0, 0.0)
         val normal = Vec3(0.0, 1.0, 0.0)
         val res = OpVectorReflect.execute(listOf(Vec3Iota(v), Vec3Iota(normal)), null!!)
@@ -151,15 +150,32 @@ internal class OpVectorKineticTest {
         assertEquals(5.0, reflected.y, 1e-5)
         assertEquals(0.0, reflected.z, 1e-5)
 
-        // Parallel grazing reflection
         val vGrazing = Vec3(3.0, 0.0, 0.0)
         val resGrazing = OpVectorReflect.execute(listOf(Vec3Iota(vGrazing), Vec3Iota(normal)), null!!)
         val reflectedGrazing = (resGrazing[0] as Vec3Iota).vec3
         assertEquals(vGrazing, reflectedGrazing)
 
-        // Zero normal exception handling
         assertThrows(MishapInvalidIota::class.java) {
             OpVectorReflect.execute(listOf(Vec3Iota(v), Vec3Iota(Vec3.ZERO)), null!!)
         }
+    }
+
+    @Test
+    fun testVectorDampen() {
+        val v = Vec3(10.0, 0.0, 0.0)
+        val drag = 0.5
+        val dt = 2.0
+
+        val res = OpVectorDampen.execute(listOf(Vec3Iota(v), DoubleIota(drag), DoubleIota(dt)), null!!)
+        assertEquals(1, res.size)
+        val dampened = (res[0] as Vec3Iota).vec3
+        // v * exp(-0.5 * 2.0) = v * exp(-1.0) ≈ 10.0 * 0.36787944 = 3.6787944
+        assertEquals(10.0 * kotlin.math.exp(-1.0), dampened.x, 1e-5)
+        assertEquals(0.0, dampened.y, 1e-5)
+        assertEquals(0.0, dampened.z, 1e-5)
+
+        // Zero dt -> energy preservation (identity)
+        val resZeroDt = OpVectorDampen.execute(listOf(Vec3Iota(v), DoubleIota(drag), DoubleIota(0.0)), null!!)
+        assertEquals(v, (resZeroDt[0] as Vec3Iota).vec3)
     }
 }
