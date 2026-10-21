@@ -2,8 +2,10 @@ package at.petrak.hexcasting.common.casting.actions.math
 
 import at.petrak.hexcasting.api.casting.iota.DoubleIota
 import at.petrak.hexcasting.api.casting.iota.Vec3Iota
+import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import net.minecraft.world.phys.Vec3
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 
 internal class OpVectorKineticTest {
@@ -133,8 +135,31 @@ internal class OpVectorKineticTest {
         val res = OpVectorBounce.execute(listOf(Vec3Iota(v), Vec3Iota(normal), DoubleIota(restitution), DoubleIota(friction)), null!!)
         assertEquals(1, res.size)
         val bounced = (res[0] as Vec3Iota).vec3
-        assertEquals(0.9, bounced.x, 1e-5) // 1.0 * (1 - 0.1)
-        assertEquals(1.6, bounced.y, 1e-5) // -(-2.0 * 0.8) = 1.6
+        assertEquals(0.9, bounced.x, 1e-5)
+        assertEquals(1.6, bounced.y, 1e-5)
         assertEquals(0.0, bounced.z, 1e-5)
+    }
+
+    @Test
+    fun testVectorReflect() {
+        // Perpendicular reflection
+        val v = Vec3(0.0, -5.0, 0.0)
+        val normal = Vec3(0.0, 1.0, 0.0)
+        val res = OpVectorReflect.execute(listOf(Vec3Iota(v), Vec3Iota(normal)), null!!)
+        val reflected = (res[0] as Vec3Iota).vec3
+        assertEquals(0.0, reflected.x, 1e-5)
+        assertEquals(5.0, reflected.y, 1e-5)
+        assertEquals(0.0, reflected.z, 1e-5)
+
+        // Parallel grazing reflection
+        val vGrazing = Vec3(3.0, 0.0, 0.0)
+        val resGrazing = OpVectorReflect.execute(listOf(Vec3Iota(vGrazing), Vec3Iota(normal)), null!!)
+        val reflectedGrazing = (resGrazing[0] as Vec3Iota).vec3
+        assertEquals(vGrazing, reflectedGrazing)
+
+        // Zero normal exception handling
+        assertThrows(MishapInvalidIota::class.java) {
+            OpVectorReflect.execute(listOf(Vec3Iota(v), Vec3Iota(Vec3.ZERO)), null!!)
+        }
     }
 }

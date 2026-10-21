@@ -35,6 +35,7 @@ import at.petrak.hexcasting.common.casting.actions.math.OpVectorReflectNormal;
 import at.petrak.hexcasting.common.casting.actions.math.OpVectorCatmullRom;
 import at.petrak.hexcasting.common.casting.actions.math.OpVectorHermiteSpline;
 import at.petrak.hexcasting.common.casting.actions.math.OpVectorBounce;
+import at.petrak.hexcasting.common.casting.actions.math.OpVectorReflect;
 import at.petrak.hexcasting.common.casting.actions.math.OpVectorClampMagnitude;
 import at.petrak.hexcasting.common.casting.actions.math.OpVectorBezier;
 import at.petrak.hexcasting.common.casting.actions.math.OpSmoothstep;
@@ -43,6 +44,7 @@ import at.petrak.hexcasting.common.casting.actions.math.OpVectorReflectNormal;
 import at.petrak.hexcasting.common.casting.actions.math.OpVectorCatmullRom;
 import at.petrak.hexcasting.common.casting.actions.math.OpVectorHermiteSpline;
 import at.petrak.hexcasting.common.casting.actions.math.OpVectorBounce;
+import at.petrak.hexcasting.common.casting.actions.math.OpVectorReflect;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpBoolIf;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpCoerceToBool;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpEquality;
@@ -202,6 +204,8 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("waqawde", HexDir.NORTH_EAST), OpVectorHermiteSpline.INSTANCE));
     public static final ActionRegistryEntry VECTOR_BOUNCE = make("vector_bounce",
         new ActionRegistryEntry(HexPattern.fromAngles("waqawq", HexDir.NORTH_EAST), OpVectorBounce.INSTANCE));
+    public static final ActionRegistryEntry VECTOR_REFLECT = make("vector_reflect",
+        new ActionRegistryEntry(HexPattern.fromAngles("wdedwddw", HexDir.NORTH_WEST), OpVectorReflect.INSTANCE));
     public static final ActionRegistryEntry VECTOR_CLAMP_MAGNITUDE = make("vector_clamp_magnitude",
         new ActionRegistryEntry(HexPattern.fromAngles("waqawqqq", HexDir.NORTH_EAST), OpVectorClampMagnitude.INSTANCE));
     public static final ActionRegistryEntry VECTOR_BEZIER = make("vector_bezier",
@@ -218,6 +222,8 @@ public class HexActions {
         new ActionRegistryEntry(HexPattern.fromAngles("waqawde", HexDir.NORTH_EAST), OpVectorHermiteSpline.INSTANCE));
     public static final ActionRegistryEntry VECTOR_BOUNCE = make("vector_bounce",
         new ActionRegistryEntry(HexPattern.fromAngles("waqawq", HexDir.NORTH_EAST), OpVectorBounce.INSTANCE));
+    public static final ActionRegistryEntry VECTOR_REFLECT = make("vector_reflect",
+        new ActionRegistryEntry(HexPattern.fromAngles("wdedwddw", HexDir.NORTH_WEST), OpVectorReflect.INSTANCE));
 
     // == Logic ==
 
