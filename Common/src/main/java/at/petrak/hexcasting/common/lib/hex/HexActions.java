@@ -26,6 +26,10 @@ import at.petrak.hexcasting.common.casting.actions.lists.OpSplat;
 import at.petrak.hexcasting.common.casting.actions.local.OpPeekLocal;
 import at.petrak.hexcasting.common.casting.actions.local.OpPushLocal;
 import at.petrak.hexcasting.common.casting.actions.math.OpCoerceToAxial;
+import at.petrak.hexcasting.common.casting.actions.math.OpVectorRotateAroundAxis;
+import at.petrak.hexcasting.common.casting.actions.math.OpVectorToSpherical;
+import at.petrak.hexcasting.common.casting.actions.math.OpSphericalToVector;
+import at.petrak.hexcasting.common.casting.actions.lists.OpListSlice;
 import at.petrak.hexcasting.common.casting.actions.math.OpRandom;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpBoolIf;
 import at.petrak.hexcasting.common.casting.actions.math.logic.OpCoerceToBool;
@@ -571,6 +575,15 @@ public class HexActions {
     public static final ActionRegistryEntry COMPARE_ITEM_STRICT = make("compare_item/strict", new ActionRegistryEntry(
         HexPattern.fromAngles("qaeaqewqedqde", HexDir.NORTH_WEST), new OpItemEquality(true)
     ));
+
+    public static final ActionRegistryEntry VECTOR_ROTATE = make("vector_rotate",
+        new ActionRegistryEntry(HexPattern.fromAngles("qawqe", HexDir.EAST), OpVectorRotateAroundAxis.INSTANCE));
+    public static final ActionRegistryEntry VECTOR_TO_SPHERICAL = make("vector_to_spherical",
+        new ActionRegistryEntry(HexPattern.fromAngles("dedwde", HexDir.WEST), OpVectorToSpherical.INSTANCE));
+    public static final ActionRegistryEntry SPHERICAL_TO_VECTOR = make("spherical_to_vector",
+        new ActionRegistryEntry(HexPattern.fromAngles("qaqwa", HexDir.EAST), OpSphericalToVector.INSTANCE));
+    public static final ActionRegistryEntry LIST_SLICE = make("list_slice",
+        new ActionRegistryEntry(HexPattern.fromAngles("dedqwde", HexDir.SOUTH_EAST), OpListSlice.INSTANCE));
 
     // == Lists ==
 
