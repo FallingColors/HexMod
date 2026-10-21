@@ -29,13 +29,13 @@ object OpWrite : SpellAction {
             ?: env.getHeldItemToOperateOn {
                 val dataHolder = IXplatAbstractions.INSTANCE.findDataHolder(it)
                 dataHolder != null
-        } ?: throw MishapBadOffhandItem.of(null, "iota.write")
+        } ?: throw MishapBadOffhandItem.of(null, "iota.offhand_empty")
 
         val datumHolder = IXplatAbstractions.INSTANCE.findDataHolder(handStack)
             ?: throw MishapBadOffhandItem.of(handStack, "iota.write")
 
         if (!datumHolder.writeIota(datum, true))
-            throw MishapBadOffhandItem.of(handStack, "iota.readonly", datum.display())
+            throw MishapBadOffhandItem.of(handStack, "iota.offhand_sealed", datum.display())
 
         val trueName = MishapOthersName.getTrueNameFromDatum(datum, env.castingEntity as? ServerPlayer)
         if (trueName != null)
