@@ -326,7 +326,7 @@ public abstract class CastingEnvironment {
     }
 
     public final boolean isVecInAmbit(Vec3 vec) {
-        return this.isVecInRange(vec) && this.isVecInWorld(vec);
+        return this.isVecInRange(vec);
     }
 
     public final boolean isEntityInRange(Entity e) {
@@ -335,7 +335,7 @@ public abstract class CastingEnvironment {
 
     public final boolean isEntityInRange(Entity e, boolean ignoreTruenameAmbit) {
         boolean truenameCheat = !ignoreTruenameAmbit && (e instanceof Player && HexConfig.server().trueNameHasAmbit());
-        return truenameCheat || (this.isVecInWorld(e.position()) && this.isVecInRange(e.position()));
+        return truenameCheat || this.isVecInRange(e.position());
     }
 
     /**
