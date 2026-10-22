@@ -73,7 +73,7 @@ data class FrameForEach(
                 .pushFrame(FrameForEach(data.cdr, code, stack, newAcc))
                 // and prep the Thoth'd code block for evaluation.
                 .pushFrame(FrameEvaluate(code, true))
-            Triple(data.car, harness.image.withUsedOp(), cont2)
+            Triple(data.car, harness.image, cont2)
         } else {
             // Else, dump our final list onto the stack.
             Triple(ListIota(newAcc), harness.image, continuation)
