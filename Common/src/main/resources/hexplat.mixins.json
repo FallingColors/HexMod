@@ -23,6 +23,7 @@
   "client": [
     "accessor.client.AccessorBlockEntityRenderDispatcher",
     "accessor.client.AccessorCompositeRenderType",
+    "accessor.client.AccessorClientAdvancements",
     "accessor.client.AccessorEmptyTextureStateShard",
     "accessor.client.AccessorMouseHandler",
     "accessor.client.AccessorRenderStateShard",
