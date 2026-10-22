@@ -1050,7 +1050,7 @@
         "": "Vector",
         desc: "a vector",
       },
-      continution: {
+      continuation: {
         "": "Continuation",
         desc: "a jump iota",
       },

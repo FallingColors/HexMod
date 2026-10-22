@@ -937,7 +937,7 @@
         "": "ベクトル",
         desc: "ベクトル",
       },
-      continution: {
+      continuation: {
         "": "継続",
         desc: "ジャンプイオタ",
       },
