@@ -915,7 +915,7 @@
         "": "벡터",
         desc: "벡터",
       },
-      continution: {
+      continuation: {
         "": "계속",
         desc: "점프 이오타",
       },

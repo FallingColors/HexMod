@@ -1122,7 +1122,7 @@
         "": "Vector",
         desc: "un vector",
       },
-      continution: {
+      continuation: {
         "": "Continuación",
         desc: "a salto iota",
       },
