@@ -6,14 +6,25 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant
 import net.minecraft.world.item.ItemStack
 
 @Suppress("UnstableApiUsage")
-class FabricImpetusStorage(val impetus: BlockEntityAbstractImpetus) : SingleSlotStorage<ItemVariant> {
+class FabricImpetusStorage private constructor(val impetus: BlockEntityAbstractImpetus) : SingleSlotStorage<ItemVariant> {
+    val snapshotter = object: SnapshotParticipant<Long>() {
+        override fun createSnapshot() = impetus.media
+        override fun readSnapshot(snapshot: Long) { impetus.media = snapshot }
+    }
+
     companion object {
         fun registerStorage() {
             ItemStorage.SIDED.registerForBlocks({ _, _, _, blockEntity, _ ->
-                (blockEntity as? BlockEntityAbstractImpetus)?.let(::FabricImpetusStorage)
+                (blockEntity as? BlockEntityAbstractImpetus)?.run {
+                    if (xplatField == null) {
+                        xplatField = FabricImpetusStorage(this)
+                    }
+                    xplatField as FabricImpetusStorage
+                }
             }, HexBlocks.IMPETUS_RIGHTCLICK, HexBlocks.IMPETUS_LOOK, HexBlocks.IMPETUS_REDSTONE)
         }
     }
@@ -21,36 +32,26 @@ class FabricImpetusStorage(val impetus: BlockEntityAbstractImpetus) : SingleSlot
     override fun insert(resource: ItemVariant, maxAmount: Long, transaction: TransactionContext): Long {
         val stackCount = maxAmount / 64
         val remainder = (maxAmount % 64).toInt()
-        var mediaToTake = impetus.remainingMediaCapacity()
         var itemsConsumed = 0L
 
-        fun insertStack(stack: ItemStack, transaction: TransactionContext) {
-            val copied = stack.copy()
+        snapshotter.updateSnapshots(transaction) // safe to call even if nothing happens
+
+        fun insertStack(stack: ItemStack) {
             val size = stack.count
-            val extractable = impetus.extractMediaFromInsertedItem(stack, false)
-            mediaToTake -= extractable
+            impetus.insertMedia(stack)
             val taken = size - stack.count
             itemsConsumed += taken.toLong()
-            copied.count = taken
-
-            if (taken > 0) {
-                transaction.addOuterCloseCallback {
-                    if (it.wasCommitted()) {
-                        impetus.insertMedia(copied)
-                    }
-                }
-            }
         }
         for (i in 0 until stackCount) {
             val stack = resource.toStack(64)
-            insertStack(stack, transaction)
-            if (mediaToTake <= 0) {
+            insertStack(stack)
+            if (impetus.remainingMediaCapacity() <= 0) {
                 return itemsConsumed
             }
         }
         if (remainder > 0) {
             val remainderStack = resource.toStack(remainder)
-            insertStack(remainderStack, transaction)
+            insertStack(remainderStack)
         }
         return itemsConsumed
     }
