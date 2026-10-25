@@ -3,11 +3,15 @@ package at.petrak.hexcasting.api.casting.circles;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughMedia;
+import at.petrak.hexcasting.api.casting.mishaps.MishapOthersName;
+import at.petrak.hexcasting.api.misc.MediaConstants;
 import at.petrak.hexcasting.api.misc.Result;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.api.utils.ChunkScanning;
 import at.petrak.hexcasting.api.utils.HexUtils;
+import at.petrak.hexcasting.common.lib.hex.HexImageComponents;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockBox;
@@ -19,7 +23,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -37,6 +40,7 @@ public class CircleExecutionState {
         TAG_IMAGE = "image",
         TAG_CASTER = "caster",
         TAG_PIGMENT = "pigment",
+        TAG_TRUENAME_HELD_TIME = "truename_held_time",
         TAG_REACHED_NUMBER = "reached_slate",
         TAG_POSITIVE_POS = "positive_pos",
         TAG_NEGATIVE_POS = "negative_pos";
@@ -50,6 +54,7 @@ public class CircleExecutionState {
     public CastingImage currentImage;
     public @Nullable UUID caster;
     public @Nullable FrozenPigment casterPigment;
+    public long trueNameHeldTime;
     public long reachedSlate;
 
     // Tracks the highest pos, and lowest pos of the AABB
@@ -61,7 +66,7 @@ public class CircleExecutionState {
 
     protected CircleExecutionState(BlockPos impetusPos, Direction impetusDir, HashSet<BlockPos> reachedPositions,
        BlockPos currentPos, Direction enteredFrom, CastingImage currentImage, @Nullable UUID caster,
-       @Nullable FrozenPigment casterPigment, Long reachedSlate, BlockPos greaterCorner, BlockPos lesserCorner) {
+       @Nullable FrozenPigment casterPigment, Long trueNameUpkeep, Long reachedSlate, BlockPos greaterCorner, BlockPos lesserCorner) {
         this.impetusPos = impetusPos;
         this.impetusDir = impetusDir;
         this.reachedPositions = reachedPositions;
@@ -70,6 +75,7 @@ public class CircleExecutionState {
         this.currentImage = currentImage;
         this.caster = caster;
         this.casterPigment = casterPigment;
+        this.trueNameHeldTime = trueNameUpkeep;
         this.reachedSlate = reachedSlate;
 
         this.greaterCorner = greaterCorner;
@@ -170,7 +176,7 @@ public class CircleExecutionState {
         return new Result.Ok<>(
             new CircleExecutionState(impetus.getBlockPos(), impetus.getStartDirection(),
                 reachedPositions, impetus.getBlockPos().offset(impetus.getStartDirection().getNormal()),
-                impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer, 0L,
+                impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer, 0L, 0L,
                 positiveBlock, negativeBlock));
     }
 
@@ -196,6 +202,7 @@ public class CircleExecutionState {
         if (this.casterPigment != null)
             out.put(TAG_PIGMENT, FrozenPigment.CODEC.encodeStart(NbtOps.INSTANCE, casterPigment).getOrThrow());
 
+        out.putLong(TAG_TRUENAME_HELD_TIME, this.trueNameHeldTime);
         out.putLong(TAG_REACHED_NUMBER, this.reachedSlate);
 
         out.put(TAG_POSITIVE_POS,NbtUtils.writeBlockPos(this.greaterCorner));
@@ -218,6 +225,7 @@ public class CircleExecutionState {
         var currentPos = NbtUtils.readBlockPos(nbt, TAG_CURRENT_POS).orElseThrow();
         var enteredFrom = Direction.values()[nbt.getByte(TAG_ENTERED_FROM)];
         var image = CastingImage.getCODEC().parse(NbtOps.INSTANCE, nbt.getCompound(TAG_IMAGE)).getOrThrow();
+        var trueNameUpkeep = nbt.getLong(TAG_TRUENAME_HELD_TIME);
 
         var reachedSlate = nbt.getLong(TAG_REACHED_NUMBER);
         var positivePos = NbtUtils.readBlockPos(nbt, TAG_POSITIVE_POS).orElseThrow();
@@ -232,7 +240,7 @@ public class CircleExecutionState {
             pigment = FrozenPigment.CODEC.parse(NbtOps.INSTANCE, nbt.getCompound(TAG_PIGMENT)).getOrThrow();
 
         return new CircleExecutionState(startPos, startDir, reachedPositions, currentPos,
-            enteredFrom, image, caster, pigment, reachedSlate, positivePos, negativePos);
+            enteredFrom, image, caster, pigment, trueNameUpkeep, reachedSlate, positivePos, negativePos);
     }
 
     private static Optional<BlockPos> readBlockPos(int[] aint) {
@@ -269,49 +277,63 @@ public class CircleExecutionState {
         var ctrl = executor.acceptControlFlow(this.currentImage, env, this.enteredFrom, this.currentPos,
             executorBlockState, world);
 
-        if (env.getImpetus() == null)
-            return false; //the impetus got removed during the cast and no longer exists in the world. stop casting
+        // If the impetus has been destroyed, or the component we just activated had an error, halt the circle
+        if (env.getImpetus() == null || ctrl instanceof ICircleComponent.ControlFlow.Stop)
+            return false;
 
-        if (ctrl instanceof ICircleComponent.ControlFlow.Stop) {
-            // acceptControlFlow should have already posted the error
-            halt = true;
-        } else if (ctrl instanceof ICircleComponent.ControlFlow.Continue cont) {
-            Pair<BlockPos, Direction> found = null;
+        // This cast is now safe because Continue is the only other possible subclass
+        var cont = (ICircleComponent.ControlFlow.Continue) ctrl;
 
-            for (var exit : cont.exits) {
-                var there = world.getBlockState(exit.getFirst());
-                if (there.getBlock() instanceof ICircleComponent cc
-                    && cc.canEnterFromDirection(exit.getSecond(), exit.getFirst(), there, world)) {
-                    if (found != null) {
-                        // oh no!
-                        impetus.postDisplay(
-                            Component.translatable("hexcasting.tooltip.circle.many_exits",
-                                Component.literal(this.currentPos.toShortString()).withStyle(ChatFormatting.RED)),
-                            new ItemStack(Items.COMPASS));
-                        ICircleComponent.sfx(this.currentPos, executorBlockState, world,
-                            Objects.requireNonNull(env.getImpetus()), false);
-                        halt = true;
-                        break;
-                    } else {
-                        found = exit;
-                    }
+        // Handle truename upkeep cost - if there's not enough media to pay, simulate a mishap and halt the circle
+        var raven = cont.update.getComponent(HexImageComponents.RAVENMIND.get());
+        var stackAndRaven = (raven != null)? cont.update.getStack().appended(raven) : cont.update.getStack();
+        if (MishapOthersName.getTrueNameMishapFromArgs(world, stackAndRaven, this.getCaster(world)) != null) {
+            long nameCost = this.trueNameHeldTime * MediaConstants.DUST_UNIT;
+            if (env.extractMedia(nameCost, false) > 0) {
+                executor.fakeThrowMishap(this.currentPos, executorBlockState, this.currentImage, env,
+                                        new MishapNotEnoughMedia(nameCost));
+                return false;
+            }
+            this.trueNameHeldTime++;
+        } else {
+            this.trueNameHeldTime = 0;
+        }
+
+        // Look for an adjacent component to the active one, to be activated next
+        Pair<BlockPos, Direction> found = null;
+        for (var exit : cont.exits) {
+            var there = world.getBlockState(exit.getFirst());
+            if (there.getBlock() instanceof ICircleComponent cc
+                && cc.canEnterFromDirection(exit.getSecond(), exit.getFirst(), there, world)) {
+                if (found != null) {
+                    // oh no!
+                    impetus.postDisplay(
+                        Component.translatable("hexcasting.tooltip.circle.many_exits",
+                            Component.literal(this.currentPos.toShortString()).withStyle(ChatFormatting.RED)),
+                        new ItemStack(Items.COMPASS));
+                    ICircleComponent.sfx(this.currentPos, executorBlockState, world,
+                        Objects.requireNonNull(env.getImpetus()), false);
+                    halt = true;
+                    break;
+                } else {
+                    found = exit;
                 }
             }
+        }
 
-            if (found == null) {
-                // will never enter here if there were too many because found will have been set
-                ICircleComponent.sfx(this.currentPos, executorBlockState, world,
-                    Objects.requireNonNull(env.getImpetus()), false);
-                impetus.postNoExits(this.currentPos);
-                halt = true;
-            } else {
-                // A single valid exit position has been found.
-                ICircleComponent.sfx(this.currentPos, executorBlockState, world,
-                    Objects.requireNonNull(env.getImpetus()), true);
-                currentPos = found.getFirst();
-                enteredFrom = found.getSecond();
-                currentImage = cont.update.withOverriddenUsedOps(0); // reset ops used after each slate finishes executing
-            }
+        if (found == null) {
+            // will never enter here if there were too many because found will have been set
+            ICircleComponent.sfx(this.currentPos, executorBlockState, world,
+                Objects.requireNonNull(env.getImpetus()), false);
+            impetus.postNoExits(this.currentPos);
+            halt = true;
+        } else {
+            // A single valid exit position has been found.
+            ICircleComponent.sfx(this.currentPos, executorBlockState, world,
+                Objects.requireNonNull(env.getImpetus()), true);
+            currentPos = found.getFirst();
+            enteredFrom = found.getSecond();
+            currentImage = cont.update.withOverriddenUsedOps(0); // reset ops used after each slate finishes executing
         }
 
         return !halt;
@@ -323,6 +345,8 @@ public class CircleExecutionState {
     protected int getTickSpeed() {
         return Math.max(2, (int) (10 - (this.reachedSlate - 1) / 3));
     }
+
+
 
     public void endExecution(BlockEntityAbstractImpetus impetus) {
         var world = (ServerLevel) impetus.getLevel();
