@@ -4,9 +4,8 @@ import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import at.petrak.hexcasting.api.casting.iota.BooleanIota;
-import at.petrak.hexcasting.api.casting.mishaps.circle.MishapBoolDirectrixEmptyStack;
-import at.petrak.hexcasting.api.casting.mishaps.circle.MishapBoolDirectrixNotBool;
-import at.petrak.hexcasting.api.utils.TreeList;
+import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota;
+import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -46,14 +45,16 @@ public class BlockBooleanDirectrix extends BlockCircleComponent {
         var stack = imageIn.getStack();
         if (stack.isEmpty()) {
             this.fakeThrowMishap(pos, bs, imageIn, env,
-                new MishapBoolDirectrixEmptyStack(pos));
+                new MishapNotEnoughArgs(1, 0));
+            world.destroyBlock(pos, true);
             return new ControlFlow.Stop();
         }
         var last = stack.last();
 
         if (!(last instanceof BooleanIota biota)) {
             this.fakeThrowMishap(pos, bs, imageIn, env,
-                new MishapBoolDirectrixNotBool(last, pos));
+                MishapInvalidIota.ofType(last, 0, "boolean"));
+            world.destroyBlock(pos, true);
             return new ControlFlow.Stop();
         }
 
