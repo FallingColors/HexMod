@@ -7,6 +7,8 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage
 import at.petrak.hexcasting.api.casting.eval.vm.FrameForEach
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.getList
+import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.utils.TreeList
 import at.petrak.hexcasting.common.lib.hex.HexEvalSounds
@@ -22,6 +24,19 @@ object OpForEach : Action {
         val datums = stack.getList(stack.lastIndex, stack.size)
         stack.removeLastOrNull()
         stack.removeLastOrNull()
+
+        // if the pattern list is empty, directly return the modified data list to avoid VM overhead
+        // note that we still need to prepend the rest of the stack before each iota
+        if (!instrs.nonEmpty) {
+            val outList = mutableListOf<Iota>()
+            for (datum in datums) {
+                outList.addAll(stack)
+                outList.add(datum)
+            }
+            stack.add(ListIota(outList))
+            val image2 = image.withUsedOp().copy(stack = stack)
+            return OperationResult(image2, listOf(), continuation, HexEvalSounds.THOTH)
+        }
 
         val frame = FrameForEach(datums, instrs, null, TreeList.empty())
         val image2 = image.withUsedOp().copy(stack = stack)
