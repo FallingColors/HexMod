@@ -200,6 +200,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private int maxSpellCircleLength = DEFAULT_MAX_SPELL_CIRCLE_LENGTH;
         @ConfigEntry.Gui.Tooltip
+        private int circleTrueNameHoldTime = DEFAULT_CIRCLE_TRUENAME_HOLD_TIME;
+        @ConfigEntry.Gui.Tooltip
         private List<String> actionDenyList = List.of();
         @ConfigEntry.Gui.Tooltip
         private List<String> circleActionDenyList = List.of();
@@ -256,6 +258,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
             this.opBreakHarvestLevel = Mth.clamp(this.opBreakHarvestLevel, 0, 4);
             this.maxOpCount = Math.max(this.maxOpCount, 0);
             this.maxSpellCircleLength = Math.max(this.maxSpellCircleLength, 4);
+            this.circleTrueNameHoldTime = Math.max(this.circleTrueNameHoldTime, -1);
             this.globalCostScaling = Math.max(this.globalCostScaling, 0);
             this.traderScrollChance = Mth.clamp(this.traderScrollChance, 0.0, 1.0);
 
@@ -321,6 +324,11 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @Override
         public int maxSpellCircleLength() {
             return maxSpellCircleLength;
+        }
+
+        @Override
+        public int circleTrueNameHoldTime() {
+            return circleTrueNameHoldTime;
         }
 
         @Override

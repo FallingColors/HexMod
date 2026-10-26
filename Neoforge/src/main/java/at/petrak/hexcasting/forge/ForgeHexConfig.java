@@ -165,6 +165,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         private static ModConfigSpec.IntValue opBreakHarvestLevel;
         private static ModConfigSpec.IntValue maxOpCount;
         private static ModConfigSpec.IntValue maxSpellCircleLength;
+        private static ModConfigSpec.IntValue circleTrueNameHoldTime;
         private static ModConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
         private static ModConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
         private static ModConfigSpec.ConfigValue<List<? extends String>> costRescaleList;
@@ -208,7 +209,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 .defineList("costRescaleList", List.of(), Server::validateAndStoreMapping);
 
             globalCostScaling = builder.comment(
-                    "All media costs, except for actions in the #hexcasting:cannot_modify_cost tag, will be multiplied by this value." +
+                    "All media costs, except for actions in the #hexcasting:cannot_modify_cost tag, will be multiplied by this value. " +
                         "If you want to modify the cost of an action in that tag, use the per-action list above.")
                 .defineInRange("globalCostScaling", DEFAULT_GLOBAL_COST_SCALING, 0.0, Double.MAX_VALUE);
             builder.pop();
@@ -217,9 +218,14 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             maxSpellCircleLength = builder.comment("The maximum number of slates in a spell circle")
                 .defineInRange("maxSpellCircleLength", DEFAULT_MAX_SPELL_CIRCLE_LENGTH, 4, Integer.MAX_VALUE);
 
+            circleTrueNameHoldTime = builder.comment(
+                    "The amount of time (in activated slates) that a player reference can remain on a spell circle's stack " +
+                        "before incurring a stacking upkeep cost. Set to -1 to disable the upkeep cost entirely.")
+                .defineInRange("circleTrueNameHoldTime", DEFAULT_CIRCLE_TRUENAME_HOLD_TIME, -1, Integer.MAX_VALUE);
+
             circleActionDenyList = builder.comment(
-                    "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle" +
-                        " will result in a mishap. For example, hexcasting:get_caster will prevent Mind's Reflection.")
+                    "Resource locations of disallowed actions within circles. Trying to cast one of these in a circle " +
+                        "will result in a mishap. For example, hexcasting:get_caster will prevent Mind's Reflection.")
                 .defineList("circleActionDenyList", List.of(), Server::isValidReslocArg);
             builder.pop();
 
@@ -255,6 +261,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public int maxSpellCircleLength() {
             return maxSpellCircleLength.get();
+        }
+
+        @Override
+        public int circleTrueNameHoldTime() {
+            return circleTrueNameHoldTime.get();
         }
 
         @Override

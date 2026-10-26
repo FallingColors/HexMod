@@ -66,7 +66,7 @@ public class CircleExecutionState {
 
     protected CircleExecutionState(BlockPos impetusPos, Direction impetusDir, HashSet<BlockPos> reachedPositions,
        BlockPos currentPos, Direction enteredFrom, CastingImage currentImage, @Nullable UUID caster,
-       @Nullable FrozenPigment casterPigment, Long trueNameUpkeep, Long reachedSlate, BlockPos greaterCorner, BlockPos lesserCorner) {
+       @Nullable FrozenPigment casterPigment, Long trueNameHeldTime, Long reachedSlate, BlockPos greaterCorner, BlockPos lesserCorner) {
         this.impetusPos = impetusPos;
         this.impetusDir = impetusDir;
         this.reachedPositions = reachedPositions;
@@ -75,7 +75,7 @@ public class CircleExecutionState {
         this.currentImage = currentImage;
         this.caster = caster;
         this.casterPigment = casterPigment;
-        this.trueNameHeldTime = trueNameUpkeep;
+        this.trueNameHeldTime = trueNameHeldTime;
         this.reachedSlate = reachedSlate;
 
         this.greaterCorner = greaterCorner;
@@ -173,11 +173,14 @@ public class CircleExecutionState {
             colorizer = HexAPI.instance().getColorizer(caster);
             casterUUID = caster.getUUID();
         }
+
+        long initialHeldTime = -1 * HexConfig.server().circleTrueNameHoldTime();
+
         return new Result.Ok<>(
             new CircleExecutionState(impetus.getBlockPos(), impetus.getStartDirection(),
                 reachedPositions, impetus.getBlockPos().offset(impetus.getStartDirection().getNormal()),
-                impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer, 0L, 0L,
-                positiveBlock, negativeBlock));
+                impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer, initialHeldTime,
+                0L, positiveBlock, negativeBlock));
     }
 
     public CompoundTag save() {
@@ -285,18 +288,20 @@ public class CircleExecutionState {
         var cont = (ICircleComponent.ControlFlow.Continue) ctrl;
 
         // Handle truename upkeep cost - if there's not enough media to pay, simulate a mishap and halt the circle
-        var raven = cont.update.getComponent(HexImageComponents.RAVENMIND.get());
-        var stackAndRaven = (raven != null)? cont.update.getStack().appended(raven) : cont.update.getStack();
-        if (MishapOthersName.getTrueNameMishapFromArgs(world, stackAndRaven, this.getCaster(world)) != null) {
-            long nameCost = this.trueNameHeldTime * MediaConstants.DUST_UNIT;
-            if (env.extractMedia(nameCost, false) > 0) {
-                executor.fakeThrowMishap(this.currentPos, executorBlockState, this.currentImage, env,
-                                        new MishapNotEnoughMedia(nameCost));
-                return false;
+        if (HexConfig.server().circleTrueNameHoldTime() != -1) {
+            var raven = cont.update.getComponent(HexImageComponents.RAVENMIND.get());
+            var stackAndRaven = (raven != null)? cont.update.getStack().appended(raven) : cont.update.getStack();
+            if (MishapOthersName.getTrueNameMishapFromArgs(world, stackAndRaven, this.getCaster(world)) != null) {
+                long nameCost = Math.max(this.trueNameHeldTime, 0) * MediaConstants.DUST_UNIT;
+                if (env.extractMedia(nameCost, false) > 0) {
+                    executor.fakeThrowMishap(this.currentPos, executorBlockState, this.currentImage, env,
+                            new MishapNotEnoughMedia(nameCost));
+                    return false;
+                }
+                this.trueNameHeldTime++;
+            } else {
+                this.trueNameHeldTime = -1 * HexConfig.server().circleTrueNameHoldTime();
             }
-            this.trueNameHeldTime++;
-        } else {
-            this.trueNameHeldTime = 0;
         }
 
         // Look for an adjacent component to the active one, to be activated next

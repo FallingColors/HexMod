@@ -387,6 +387,10 @@
           "": "Max Spell Circle Length",
           "@Tooltip": "The maximum number of slates in a spell circle",
         },
+        circleTrueNameHoldTime: {
+          "": "Circle True-Name Hold Time",
+          "@Tooltip": "The amount of time (in activated slates) that a player reference can remain on a spell circle's stack before incurring a stacking upkeep cost. Set to -1 to disable the upkeep cost entirely."
+        },
         actionDenyList: {
           "": "Action Deny List",
           "@Tooltip": "Resource locations of disallowed actions. Trying to cast one of these will result in a mishap. For example, hexcasting:get_caster will prevent Mind's Reflection.",
