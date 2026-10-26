@@ -219,7 +219,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                 .defineInRange("maxSpellCircleLength", DEFAULT_MAX_SPELL_CIRCLE_LENGTH, 4, Integer.MAX_VALUE);
 
             circleTrueNameHoldTime = builder.comment(
-                    "The amount of time (in activated slates) that a player reference can remain on a spell circle's stack " +
+                    "The amount of time (in slate activations) that a player reference can remain on a spell circle's stack " +
                         "before incurring a stacking upkeep cost. Set to -1 to disable the upkeep cost entirely.")
                 .defineInRange("circleTrueNameHoldTime", DEFAULT_CIRCLE_TRUENAME_HOLD_TIME, -1, Integer.MAX_VALUE);
 

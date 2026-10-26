@@ -388,8 +388,8 @@
           "@Tooltip": "The maximum number of slates in a spell circle",
         },
         circleTrueNameHoldTime: {
-          "": "Circle True-Name Hold Time",
-          "@Tooltip": "The amount of time (in activated slates) that a player reference can remain on a spell circle's stack before incurring a stacking upkeep cost. Set to -1 to disable the upkeep cost entirely."
+          "": "Circle True Name Hold Time",
+          "@Tooltip": "The amount of time (in slate activations) that a player reference can remain on a spell circle's stack before incurring a stacking upkeep cost. Set to -1 to disable the upkeep cost entirely."
         },
         actionDenyList: {
           "": "Action Deny List",
@@ -1733,8 +1733,8 @@
         "2": "To start the ritual I need an $(l:greatwork/impetus)$(item)Impetus/$ to create a self-sustaining wave of _media. That wave travels along a track of $(l:items/slate)$(item)slates/$ or other suitable blocks, casting any patterns it finds.$(br2)If there is no way for the wave to return to the $(l:greatwork/impetus)$(item)Impetus/$, the casting will fail immediately. Also, the direction the wave exits any given block MUST be unambiguous, or the casting will fail at the block with too many neighbors.",
         "3": "As a result, the outline of the spell \"circle\" may be any closed shape, concave or convex, and it may face any direction. In fact, with the application of certain other blocks it is possible to make a spell circle that spans all three dimensions. I doubt such an oddity has very much use, but I must allocate myself a bit of vapid levity to encourage my crude mind to continue my work.",
         "4": "Miracle of miracles, the circle will withdraw _media neither from my inventory nor my mind. Instead, crystallized shards of _media must be provided to the $(l:greatwork/impetus)$(item)Impetus/$ via hopper, or other such artifice.$(br2)The application of a $(l:items/lens)$(item)Scrying Lens/$ will show how much _media is inside an $(l:greatwork/impetus)$(item)Impetus/$, in units of dust.",
-        "5": "However, a spell cast from a circle does have one major limitation: it is unable to affect anything outside of the circle's bounds. That is, it cannot interact with anything outside of the cuboid of minimum size which encloses every block composing it (so a concave spell circle can still affect things in the concavity).",
-        "6": "There is also a limit on the number of blocks the wave can travel through before it disintegrates, but it is large enough I doubt I will have any trouble.$(br2)Conversely, there are some actions that can only be cast from a circle. Fortunately, none of them are spells; they all seem to deal with components of the circle itself. My notes on the subject are $(l:patterns/circle)here/$.",
+        "5": "However, a spell cast from a circle does have one major limitation: it is unable to affect anything outside of the circle's bounds. \"Bounds\" here refers to the cuboid of minimum size enclosing every block of the circle (so a concave spell circle can still affect things in the concavity).$(br2)There is also a limit on the number of blocks the wave can travel through before it dissipates, but it is large enough I doubt I will have any trouble.",
+        "6": "It seems that references to players other than myself resist being held on the stack of an active spell circle. Retaining such a reference for an extended period of time will eventually incur a steadily increasing _media cost.$(br2)There are some actions that can $(o)only/$ be cast from a circle. Fortunately, none of them are spells; they all seem to deal with components of the circle itself. My notes on the subject are $(l:patterns/circle)here/$.",
         "7": "I also found a sketch of a spell circle used by the ancients buried in my notes. Facing this page is my (admittedly poor) copy of it.$(br2)The patterns there would have been executed counter-clockwise, starting with $(l:patterns/basics#hexcasting:get_caster)$(action)Mind's Reflection/$ and ending with $(l:patterns/great_spells/teleport#hexcasting:teleport/great)$(action)Greater Teleport/$.",
         "teleport_circle.title": "Teleportation Circle",
       },
