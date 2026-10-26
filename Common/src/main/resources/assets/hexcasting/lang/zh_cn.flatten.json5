@@ -937,7 +937,7 @@
         "": "向量",
         desc: "一个向量",
       },
-      continution: {
+      continuation: {
         "": "续体",
         desc: "一个跳转iota",
       },

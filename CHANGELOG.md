@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed other players not seeing Altiora wings and pigment ([#1331](https://github.com/FallingColors/HexMod/pull/1331)) @R0b0Li0n
 - Fixed Altiora wings, pigment and sentinel desyncing after changing dimension ([#1331](https://github.com/FallingColors/HexMod/pull/1331)) @R0b0Li0n
 - Fixed an error when trying to cast a Great Spell that no longer exists, such as when an addon has been removed ([#1335](https://github.com/FallingColors/HexMod/pull/1335)) @Robotgiggle
+- Fixed a broken translation key when referring to a jump iota in a mishap message ([#1350](https://github.com/FallingColors/HexMod/pull/1350)) @hauveli
 - Fixed Thoth's Gambit counting one extra pattern towards the pattern limit every iteration ([#1352](https://github.com/FallingColors/HexMod/pull/1352)) @Robotgiggle
 
 ## `0.11.4` - 2026-08-26
