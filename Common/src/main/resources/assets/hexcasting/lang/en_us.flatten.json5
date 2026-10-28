@@ -649,6 +649,7 @@
         min_level: "Level %s or higher",
         level: "Level %s",
         product: "Mindless Body",
+        recipe_hidden: "Not yet comprehensible...",
       },
       
       media: "%d dust",
