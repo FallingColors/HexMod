@@ -27,11 +27,10 @@ public class BlockChestLocus extends BlockSlate {
     public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos,
         BlockState bs, ServerLevel world) {
 
-        // TODO: make it actually do something!
+        env.circleState().inventoryPos = pos;
 
         var exitDirsSet = this.possibleExitDirections(pos, bs, world);
         exitDirsSet.remove(enterDir.getOpposite());
-
         var exitDirs = exitDirsSet.stream().map((dir) -> this.exitPositionFromDirection(pos, dir));
 
         return new ControlFlow.Continue(imageIn, exitDirs.toList());
