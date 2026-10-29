@@ -29,6 +29,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - The media cost of Impulse now scales linearly rather than quadratically ([#1145](https://github.com/FallingColors/HexMod/pull/1145)) @Robotgiggle
+- Erase Item is now free for most items ([#tbd](tbd)) @beholderface
 
 ### Fixed
 
