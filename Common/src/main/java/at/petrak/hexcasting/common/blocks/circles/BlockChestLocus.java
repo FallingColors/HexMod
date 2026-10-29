@@ -5,6 +5,7 @@ import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -47,5 +48,11 @@ public class BlockChestLocus extends BlockSlate {
         }
 
         return InteractionResult.CONSUME;
+    }
+
+    @Override
+    protected void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
+        Containers.dropContentsOnDestroy(blockState, blockState2, level, blockPos);
+        super.onRemove(blockState, level, blockPos, blockState2, bl);
     }
 }

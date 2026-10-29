@@ -2,8 +2,11 @@ package at.petrak.hexcasting.common.blocks.circles;
 
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
@@ -20,7 +23,7 @@ public class BlockEntityChestLocus extends RandomizableContainerBlockEntity {
 
     @Override
     public int getContainerSize() {
-        return 9;
+        return 27;
     }
 
     @Override
@@ -29,7 +32,7 @@ public class BlockEntityChestLocus extends RandomizableContainerBlockEntity {
     }
 
     @Override
-    protected NonNullList<ItemStack> getItems() {
+    public NonNullList<ItemStack> getItems() {
         return this.items;
     }
 
@@ -40,6 +43,23 @@ public class BlockEntityChestLocus extends RandomizableContainerBlockEntity {
 
     @Override
     protected AbstractContainerMenu createMenu(int i, Inventory inventory) {
-        return ChestMenu.threeRows(i, inventory);
+        return ChestMenu.threeRows(i, inventory, this);
+    }
+
+    @Override
+    protected void loadAdditional(CompoundTag compoundTag, Provider provider) {
+        super.loadAdditional(compoundTag, provider);
+        this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        if (!this.tryLoadLootTable(compoundTag)) {
+            ContainerHelper.loadAllItems(compoundTag, this.items, provider);
+        }
+    }
+
+    @Override
+    protected void saveAdditional(CompoundTag compoundTag, Provider provider) {
+        super.saveAdditional(compoundTag, provider);
+        if (!this.trySaveLootTable(compoundTag)) {
+            ContainerHelper.saveAllItems(compoundTag, this.items, provider);
+        }
     }
 }
