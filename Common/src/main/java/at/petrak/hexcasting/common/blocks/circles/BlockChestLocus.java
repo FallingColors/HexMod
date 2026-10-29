@@ -9,13 +9,25 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class BlockChestLocus extends BlockSlate {
+    public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
+
     public BlockChestLocus(Properties properties) {
         super(properties);
+        this.registerDefaultState(
+            this.stateDefinition.any()
+                .setValue(OPEN, false)
+                .setValue(ENERGIZED, false)
+                .setValue(FACING, Direction.NORTH)
+                .setValue(WATERLOGGED, false));
     }
 
     @Override
@@ -53,5 +65,11 @@ public class BlockChestLocus extends BlockSlate {
     protected void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
         Containers.dropContentsOnDestroy(blockState, blockState2, level, blockPos);
         super.onRemove(blockState, level, blockPos, blockState2, bl);
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        builder.add(OPEN);
     }
 }

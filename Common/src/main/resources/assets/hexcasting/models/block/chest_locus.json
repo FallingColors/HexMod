@@ -2,6 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "hexcasting:block/slate",
+    "1": "hexcasting:block/circle/locus/chest_side",
+    "2": "hexcasting:block/circle/locus/chest_closed",
     "particle": "hexcasting:block/slate"
   },
   "elements": [
@@ -20,15 +22,14 @@
     },
     {
       "name": "chest",
-      "from": [3, 0, 3],
-      "to": [13, 5, 13],
+      "from": [1, 1, 1],
+      "to": [15, 9, 15],
       "faces": {
-        "north": {"uv": [0, 0, 16, 1], "texture": "#0"},
-        "east": {"uv": [15, 0, 16, 16], "rotation": 90, "texture": "#0"},
-        "south": {"uv": [0, 15, 16, 16], "texture": "#0"},
-        "west": {"uv": [0, 0, 1, 16], "rotation": 270, "texture": "#0"},
-        "up": {"uv": [0, 0, 16, 16], "texture": "#0"},
-        "down": {"uv": [0, 0, 16, 16], "texture": "#0"}
+        "north": {"uv": [1, 8, 15, 16], "texture": "#1"},
+        "east": {"uv": [1, 8, 15, 16], "texture": "#1"},
+        "south": {"uv": [1, 8, 15, 16], "texture": "#1"},
+        "west": {"uv": [1, 8, 15, 16], "texture": "#1"},
+        "up": {"uv": [1, 1, 15, 15], "texture": "#2"}
       }
     }
   ],

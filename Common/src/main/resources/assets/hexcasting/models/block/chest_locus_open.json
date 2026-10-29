@@ -1,0 +1,9 @@
+{
+  "parent": "hexcasting:block/chest_locus",
+  "textures": {
+    "0": "hexcasting:block/slate",
+    "1": "hexcasting:block/circle/locus/chest_side",
+    "2": "hexcasting:block/circle/locus/chest_open",
+    "particle": "hexcasting:block/slate"
+  }
+}

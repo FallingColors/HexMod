@@ -12,11 +12,15 @@ import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelBuilder;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+
+import java.util.function.Function;
 
 import static net.neoforged.neoforge.client.model.generators.ModelProvider.BLOCK_FOLDER;
 
@@ -52,9 +56,14 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                 .build();
         }, BlockSlate.WATERLOGGED);
 
-        var chestLocusModel = models().getExistingFile(modLoc("chest_locus"));
-        horizontalFaceBlock(HexBlocks.CHEST_LOCUS.get(), chestLocusModel);
-        simpleBlockItem(HexBlocks.CHEST_LOCUS.get(), chestLocusModel);
+        var chestLocusClosed = models().getExistingFile(modLoc("chest_locus"));
+        var chestLocusOpen = models().getExistingFile(modLoc("chest_locus_open"));
+        Function<BlockState, ModelFile> openPred = (BlockState state) -> {
+            if (state.getValue(BlockStateProperties.OPEN)) return chestLocusOpen;
+            else return chestLocusClosed;
+        };
+        horizontalFaceBlock(HexBlocks.CHEST_LOCUS.get(), openPred);
+        simpleBlockItem(HexBlocks.CHEST_LOCUS.get(), chestLocusClosed);
 
         impetus(HexBlocks.IMPETUS_EMPTY.get(), "impetus/empty", "empty", false);
         impetus(HexBlocks.IMPETUS_RIGHTCLICK.get(), "impetus/rightclick", "rightclick", true);
