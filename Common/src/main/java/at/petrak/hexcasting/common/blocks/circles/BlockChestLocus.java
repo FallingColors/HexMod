@@ -2,12 +2,14 @@ package at.petrak.hexcasting.common.blocks.circles;
 
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import at.petrak.hexcasting.common.blocks.circles.BlockSlate.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -16,9 +18,19 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class BlockChestLocus extends BlockSlate {
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
+
+    private static final VoxelShape BOX_FLOOR = Shapes.or(AABB_FLOOR, Block.box(1, 1, 1, 15, 9, 15));
+    private static final VoxelShape BOX_CEILING = Shapes.or(AABB_CEILING, Block.box(1, 7, 1, 15, 15, 15));
+    private static final VoxelShape BOX_EAST = Shapes.or(AABB_EAST_WALL, Block.box(1, 1, 1, 9, 15, 15));
+    private static final VoxelShape BOX_WEST = Shapes.or(AABB_WEST_WALL, Block.box(7, 1, 1, 15, 15, 15));
+    private static final VoxelShape BOX_SOUTH = Shapes.or(AABB_SOUTH_WALL, Block.box(1, 1, 1, 15, 15, 9));
+    private static final VoxelShape BOX_NORTH = Shapes.or(AABB_NORTH_WALL, Block.box(1, 1, 7, 15, 15, 15));
 
     public BlockChestLocus(Properties properties) {
         super(properties);
@@ -65,6 +77,20 @@ public class BlockChestLocus extends BlockSlate {
     protected void onRemove(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
         Containers.dropContentsOnDestroy(blockState, blockState2, level, blockPos);
         super.onRemove(blockState, level, blockPos, blockState2, bl);
+    }
+
+    @Override
+    public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
+        return switch (pState.getValue(ATTACH_FACE)) {
+            case FLOOR -> BOX_FLOOR;
+            case CEILING -> BOX_CEILING;
+            case WALL -> switch (pState.getValue(FACING)) {
+                case NORTH -> BOX_NORTH;
+                case EAST -> BOX_EAST;
+                case SOUTH -> BOX_SOUTH;
+                default -> BOX_WEST;
+            };
+        };
     }
 
     @Override

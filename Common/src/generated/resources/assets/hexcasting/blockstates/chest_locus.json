@@ -1,425 +1,107 @@
 {
   "variants": {
-    "energized=false,face=ceiling,facing=east,open=false,waterlogged=false": {
+    "face=ceiling,facing=east,open=false": {
       "model": "hexcasting:block/chest_locus",
       "x": 180,
       "y": 270
     },
-    "energized=false,face=ceiling,facing=east,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 180,
-      "y": 270
-    },
-    "energized=false,face=ceiling,facing=east,open=true,waterlogged=false": {
+    "face=ceiling,facing=east,open=true": {
       "model": "hexcasting:block/chest_locus_open",
       "x": 180,
       "y": 270
     },
-    "energized=false,face=ceiling,facing=east,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 180,
-      "y": 270
-    },
-    "energized=false,face=ceiling,facing=north,open=false,waterlogged=false": {
+    "face=ceiling,facing=north,open=false": {
       "model": "hexcasting:block/chest_locus",
       "x": 180,
       "y": 180
     },
-    "energized=false,face=ceiling,facing=north,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 180,
-      "y": 180
-    },
-    "energized=false,face=ceiling,facing=north,open=true,waterlogged=false": {
+    "face=ceiling,facing=north,open=true": {
       "model": "hexcasting:block/chest_locus_open",
       "x": 180,
       "y": 180
     },
-    "energized=false,face=ceiling,facing=north,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 180,
-      "y": 180
-    },
-    "energized=false,face=ceiling,facing=south,open=false,waterlogged=false": {
+    "face=ceiling,facing=south,open=false": {
       "model": "hexcasting:block/chest_locus",
       "x": 180
     },
-    "energized=false,face=ceiling,facing=south,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 180
-    },
-    "energized=false,face=ceiling,facing=south,open=true,waterlogged=false": {
+    "face=ceiling,facing=south,open=true": {
       "model": "hexcasting:block/chest_locus_open",
       "x": 180
     },
-    "energized=false,face=ceiling,facing=south,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 180
-    },
-    "energized=false,face=ceiling,facing=west,open=false,waterlogged=false": {
+    "face=ceiling,facing=west,open=false": {
       "model": "hexcasting:block/chest_locus",
       "x": 180,
       "y": 90
     },
-    "energized=false,face=ceiling,facing=west,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 180,
-      "y": 90
-    },
-    "energized=false,face=ceiling,facing=west,open=true,waterlogged=false": {
+    "face=ceiling,facing=west,open=true": {
       "model": "hexcasting:block/chest_locus_open",
       "x": 180,
       "y": 90
     },
-    "energized=false,face=ceiling,facing=west,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 180,
-      "y": 90
-    },
-    "energized=false,face=floor,facing=east,open=false,waterlogged=false": {
+    "face=floor,facing=east,open=false": {
       "model": "hexcasting:block/chest_locus",
       "y": 90
     },
-    "energized=false,face=floor,facing=east,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "y": 90
-    },
-    "energized=false,face=floor,facing=east,open=true,waterlogged=false": {
+    "face=floor,facing=east,open=true": {
       "model": "hexcasting:block/chest_locus_open",
       "y": 90
     },
-    "energized=false,face=floor,facing=east,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "y": 90
-    },
-    "energized=false,face=floor,facing=north,open=false,waterlogged=false": {
+    "face=floor,facing=north,open=false": {
       "model": "hexcasting:block/chest_locus"
     },
-    "energized=false,face=floor,facing=north,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus"
-    },
-    "energized=false,face=floor,facing=north,open=true,waterlogged=false": {
+    "face=floor,facing=north,open=true": {
       "model": "hexcasting:block/chest_locus_open"
     },
-    "energized=false,face=floor,facing=north,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open"
-    },
-    "energized=false,face=floor,facing=south,open=false,waterlogged=false": {
+    "face=floor,facing=south,open=false": {
       "model": "hexcasting:block/chest_locus",
       "y": 180
     },
-    "energized=false,face=floor,facing=south,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "y": 180
-    },
-    "energized=false,face=floor,facing=south,open=true,waterlogged=false": {
+    "face=floor,facing=south,open=true": {
       "model": "hexcasting:block/chest_locus_open",
       "y": 180
     },
-    "energized=false,face=floor,facing=south,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "y": 180
-    },
-    "energized=false,face=floor,facing=west,open=false,waterlogged=false": {
+    "face=floor,facing=west,open=false": {
       "model": "hexcasting:block/chest_locus",
       "y": 270
     },
-    "energized=false,face=floor,facing=west,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "y": 270
-    },
-    "energized=false,face=floor,facing=west,open=true,waterlogged=false": {
+    "face=floor,facing=west,open=true": {
       "model": "hexcasting:block/chest_locus_open",
       "y": 270
     },
-    "energized=false,face=floor,facing=west,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "y": 270
-    },
-    "energized=false,face=wall,facing=east,open=false,waterlogged=false": {
+    "face=wall,facing=east,open=false": {
       "model": "hexcasting:block/chest_locus",
       "x": 90,
       "y": 90
     },
-    "energized=false,face=wall,facing=east,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 90,
-      "y": 90
-    },
-    "energized=false,face=wall,facing=east,open=true,waterlogged=false": {
+    "face=wall,facing=east,open=true": {
       "model": "hexcasting:block/chest_locus_open",
       "x": 90,
       "y": 90
     },
-    "energized=false,face=wall,facing=east,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 90,
-      "y": 90
-    },
-    "energized=false,face=wall,facing=north,open=false,waterlogged=false": {
+    "face=wall,facing=north,open=false": {
       "model": "hexcasting:block/chest_locus",
       "x": 90
     },
-    "energized=false,face=wall,facing=north,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 90
-    },
-    "energized=false,face=wall,facing=north,open=true,waterlogged=false": {
+    "face=wall,facing=north,open=true": {
       "model": "hexcasting:block/chest_locus_open",
       "x": 90
     },
-    "energized=false,face=wall,facing=north,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 90
-    },
-    "energized=false,face=wall,facing=south,open=false,waterlogged=false": {
+    "face=wall,facing=south,open=false": {
       "model": "hexcasting:block/chest_locus",
       "x": 90,
       "y": 180
     },
-    "energized=false,face=wall,facing=south,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 90,
-      "y": 180
-    },
-    "energized=false,face=wall,facing=south,open=true,waterlogged=false": {
+    "face=wall,facing=south,open=true": {
       "model": "hexcasting:block/chest_locus_open",
       "x": 90,
       "y": 180
     },
-    "energized=false,face=wall,facing=south,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 90,
-      "y": 180
-    },
-    "energized=false,face=wall,facing=west,open=false,waterlogged=false": {
+    "face=wall,facing=west,open=false": {
       "model": "hexcasting:block/chest_locus",
       "x": 90,
       "y": 270
     },
-    "energized=false,face=wall,facing=west,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 90,
-      "y": 270
-    },
-    "energized=false,face=wall,facing=west,open=true,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 90,
-      "y": 270
-    },
-    "energized=false,face=wall,facing=west,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 90,
-      "y": 270
-    },
-    "energized=true,face=ceiling,facing=east,open=false,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 180,
-      "y": 270
-    },
-    "energized=true,face=ceiling,facing=east,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 180,
-      "y": 270
-    },
-    "energized=true,face=ceiling,facing=east,open=true,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 180,
-      "y": 270
-    },
-    "energized=true,face=ceiling,facing=east,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 180,
-      "y": 270
-    },
-    "energized=true,face=ceiling,facing=north,open=false,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 180,
-      "y": 180
-    },
-    "energized=true,face=ceiling,facing=north,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 180,
-      "y": 180
-    },
-    "energized=true,face=ceiling,facing=north,open=true,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 180,
-      "y": 180
-    },
-    "energized=true,face=ceiling,facing=north,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 180,
-      "y": 180
-    },
-    "energized=true,face=ceiling,facing=south,open=false,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 180
-    },
-    "energized=true,face=ceiling,facing=south,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 180
-    },
-    "energized=true,face=ceiling,facing=south,open=true,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 180
-    },
-    "energized=true,face=ceiling,facing=south,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 180
-    },
-    "energized=true,face=ceiling,facing=west,open=false,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 180,
-      "y": 90
-    },
-    "energized=true,face=ceiling,facing=west,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 180,
-      "y": 90
-    },
-    "energized=true,face=ceiling,facing=west,open=true,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 180,
-      "y": 90
-    },
-    "energized=true,face=ceiling,facing=west,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 180,
-      "y": 90
-    },
-    "energized=true,face=floor,facing=east,open=false,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus",
-      "y": 90
-    },
-    "energized=true,face=floor,facing=east,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "y": 90
-    },
-    "energized=true,face=floor,facing=east,open=true,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus_open",
-      "y": 90
-    },
-    "energized=true,face=floor,facing=east,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "y": 90
-    },
-    "energized=true,face=floor,facing=north,open=false,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus"
-    },
-    "energized=true,face=floor,facing=north,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus"
-    },
-    "energized=true,face=floor,facing=north,open=true,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus_open"
-    },
-    "energized=true,face=floor,facing=north,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open"
-    },
-    "energized=true,face=floor,facing=south,open=false,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus",
-      "y": 180
-    },
-    "energized=true,face=floor,facing=south,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "y": 180
-    },
-    "energized=true,face=floor,facing=south,open=true,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus_open",
-      "y": 180
-    },
-    "energized=true,face=floor,facing=south,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "y": 180
-    },
-    "energized=true,face=floor,facing=west,open=false,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus",
-      "y": 270
-    },
-    "energized=true,face=floor,facing=west,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "y": 270
-    },
-    "energized=true,face=floor,facing=west,open=true,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus_open",
-      "y": 270
-    },
-    "energized=true,face=floor,facing=west,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "y": 270
-    },
-    "energized=true,face=wall,facing=east,open=false,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 90,
-      "y": 90
-    },
-    "energized=true,face=wall,facing=east,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 90,
-      "y": 90
-    },
-    "energized=true,face=wall,facing=east,open=true,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 90,
-      "y": 90
-    },
-    "energized=true,face=wall,facing=east,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 90,
-      "y": 90
-    },
-    "energized=true,face=wall,facing=north,open=false,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 90
-    },
-    "energized=true,face=wall,facing=north,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 90
-    },
-    "energized=true,face=wall,facing=north,open=true,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 90
-    },
-    "energized=true,face=wall,facing=north,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 90
-    },
-    "energized=true,face=wall,facing=south,open=false,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 90,
-      "y": 180
-    },
-    "energized=true,face=wall,facing=south,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 90,
-      "y": 180
-    },
-    "energized=true,face=wall,facing=south,open=true,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 90,
-      "y": 180
-    },
-    "energized=true,face=wall,facing=south,open=true,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 90,
-      "y": 180
-    },
-    "energized=true,face=wall,facing=west,open=false,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 90,
-      "y": 270
-    },
-    "energized=true,face=wall,facing=west,open=false,waterlogged=true": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 90,
-      "y": 270
-    },
-    "energized=true,face=wall,facing=west,open=true,waterlogged=false": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 90,
-      "y": 270
-    },
-    "energized=true,face=wall,facing=west,open=true,waterlogged=true": {
+    "face=wall,facing=west,open=true": {
       "model": "hexcasting:block/chest_locus_open",
       "x": 90,
       "y": 270

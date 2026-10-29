@@ -3,6 +3,7 @@ package at.petrak.hexcasting.forge.datagen.xplat;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
+import at.petrak.hexcasting.common.blocks.circles.BlockChestLocus;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockBooleanDirectrix;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockRedstoneDirectrix;
@@ -13,6 +14,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
@@ -58,11 +60,11 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
 
         var chestLocusClosed = models().getExistingFile(modLoc("chest_locus"));
         var chestLocusOpen = models().getExistingFile(modLoc("chest_locus_open"));
-        Function<BlockState, ModelFile> openPred = (BlockState state) -> {
-            if (state.getValue(BlockStateProperties.OPEN)) return chestLocusOpen;
-            else return chestLocusClosed;
-        };
-        horizontalFaceBlock(HexBlocks.CHEST_LOCUS.get(), openPred);
+        getVariantBuilder(HexBlocks.CHEST_LOCUS.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
+            .modelFile(state.getValue(BlockStateProperties.OPEN) ? chestLocusOpen : chestLocusClosed)
+            .rotationX(state.getValue(BlockStateProperties.ATTACH_FACE).ordinal() * 90)
+            .rotationY((((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) + (state.getValue(BlockStateProperties.ATTACH_FACE) == AttachFace.CEILING ? 180 : 0)) % 360)
+            .build(), BlockChestLocus.WATERLOGGED, BlockChestLocus.ENERGIZED);
         simpleBlockItem(HexBlocks.CHEST_LOCUS.get(), chestLocusClosed);
 
         impetus(HexBlocks.IMPETUS_EMPTY.get(), "impetus/empty", "empty", false);
