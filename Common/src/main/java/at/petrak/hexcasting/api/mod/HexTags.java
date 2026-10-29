@@ -20,6 +20,8 @@ public class HexTags {
         public static final TagKey<Item> GRANTS_ROOT_ADVANCEMENT = create("grants_root_advancement");
         public static final TagKey<Item> SEAL_MATERIALS = create("seal_materials");
 
+        public static final TagKey<Item> COSTLY_TO_ERASE = create("costly_to_erase");
+
         public static final TagKey<Item> IMPETI = create("impeti");
         public static final TagKey<Item> DIRECTRICES = create("directrices");
         public static final TagKey<Item> MINDFLAYED_CIRCLE_COMPONENTS = create("brainswept_circle_components");

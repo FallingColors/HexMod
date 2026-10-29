@@ -2147,7 +2147,7 @@
         "recharge.1": "Recharge a _media-containing item in my other hand. Costs about one $(l:items/amethyst)$(item)Amethyst Shard/$ per item.",
         "recharge.2": "This spell is cast in a similar method to the crafting spells; an entity representing a dropped stack of $(l:items/amethyst)$(item)Amethyst/$ is provided, and recharges the _media battery of the item in my other hand.$(br2)This spell $(italic)cannot/$ recharge the item farther than its original battery size.",
         
-        "erase.1": "Clears _Hex-containing or iota-containing items in my other hand. Costs about one $(l:items/amethyst)$(item)Amethyst Dust/$ per item.",
+        "erase.1": "Clears _Hex-containing or iota-containing items in my other hand. Costs about one-eighth of an $(l:items/amethyst)$(item)Amethyst Dust/$ for casting items, and is free for other items.",
         "erase.2": "The spell will also void all the _media stored inside the item, releasing it back to Nature and returning the item to a perfectly clean slate. This way, I can re-use $(l:items/hexcasting)$(item)Trinkets/$ I have put an erroneous spell into, for example.$(br2)This also works to clear a $(l:items/focus)$(item)Focus/$ or $(l:items/spellbook)$(item)Spellbook/$ page, unsealing them in the process.",
       },
       
