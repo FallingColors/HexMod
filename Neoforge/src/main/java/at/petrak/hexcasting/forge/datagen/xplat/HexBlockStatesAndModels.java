@@ -60,11 +60,14 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
 
         var chestLocusClosed = models().getExistingFile(modLoc("chest_locus"));
         var chestLocusOpen = models().getExistingFile(modLoc("chest_locus_open"));
-        getVariantBuilder(HexBlocks.CHEST_LOCUS.get()).forAllStatesExcept(state -> ConfiguredModel.builder()
-            .modelFile(state.getValue(BlockStateProperties.OPEN) ? chestLocusOpen : chestLocusClosed)
-            .rotationX(state.getValue(BlockStateProperties.ATTACH_FACE).ordinal() * 90)
-            .rotationY((((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) + (state.getValue(BlockStateProperties.ATTACH_FACE) == AttachFace.CEILING ? 180 : 0)) % 360)
-            .build(), BlockChestLocus.WATERLOGGED, BlockChestLocus.ENERGIZED);
+        getVariantBuilder(HexBlocks.CHEST_LOCUS.get()).forAllStatesExcept(state -> {
+            Direction dir = state.getValue(BlockStateProperties.FACING);
+            return ConfiguredModel.builder()
+                .modelFile(state.getValue(BlockStateProperties.OPEN) ? chestLocusOpen : chestLocusClosed)
+                .rotationX(dir == Direction.DOWN ? 180 : dir.getAxis().isHorizontal() ? 270 : 0)
+                .rotationY(dir.getAxis().isVertical() ? 0 : ((int) dir.toYRot()) % 360)
+                .build();
+        }, BlockChestLocus.WATERLOGGED, BlockChestLocus.ENERGIZED);
         simpleBlockItem(HexBlocks.CHEST_LOCUS.get(), chestLocusClosed);
 
         impetus(HexBlocks.IMPETUS_EMPTY.get(), "impetus/empty", "empty", false);

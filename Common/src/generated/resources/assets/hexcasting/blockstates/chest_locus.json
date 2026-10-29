@@ -1,110 +1,56 @@
 {
   "variants": {
-    "face=ceiling,facing=east,open=false": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 180,
-      "y": 270
-    },
-    "face=ceiling,facing=east,open=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 180,
-      "y": 270
-    },
-    "face=ceiling,facing=north,open=false": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 180,
-      "y": 180
-    },
-    "face=ceiling,facing=north,open=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 180,
-      "y": 180
-    },
-    "face=ceiling,facing=south,open=false": {
+    "facing=down,open=false": {
       "model": "hexcasting:block/chest_locus",
       "x": 180
     },
-    "face=ceiling,facing=south,open=true": {
+    "facing=down,open=true": {
       "model": "hexcasting:block/chest_locus_open",
       "x": 180
     },
-    "face=ceiling,facing=west,open=false": {
+    "facing=east,open=false": {
       "model": "hexcasting:block/chest_locus",
-      "x": 180,
-      "y": 90
+      "x": 270,
+      "y": 270
     },
-    "face=ceiling,facing=west,open=true": {
+    "facing=east,open=true": {
       "model": "hexcasting:block/chest_locus_open",
-      "x": 180,
-      "y": 90
+      "x": 270,
+      "y": 270
     },
-    "face=floor,facing=east,open=false": {
+    "facing=north,open=false": {
       "model": "hexcasting:block/chest_locus",
-      "y": 90
+      "x": 270,
+      "y": 180
     },
-    "face=floor,facing=east,open=true": {
+    "facing=north,open=true": {
       "model": "hexcasting:block/chest_locus_open",
-      "y": 90
+      "x": 270,
+      "y": 180
     },
-    "face=floor,facing=north,open=false": {
+    "facing=south,open=false": {
+      "model": "hexcasting:block/chest_locus",
+      "x": 270
+    },
+    "facing=south,open=true": {
+      "model": "hexcasting:block/chest_locus_open",
+      "x": 270
+    },
+    "facing=up,open=false": {
       "model": "hexcasting:block/chest_locus"
     },
-    "face=floor,facing=north,open=true": {
+    "facing=up,open=true": {
       "model": "hexcasting:block/chest_locus_open"
     },
-    "face=floor,facing=south,open=false": {
+    "facing=west,open=false": {
       "model": "hexcasting:block/chest_locus",
-      "y": 180
-    },
-    "face=floor,facing=south,open=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "y": 180
-    },
-    "face=floor,facing=west,open=false": {
-      "model": "hexcasting:block/chest_locus",
-      "y": 270
-    },
-    "face=floor,facing=west,open=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "y": 270
-    },
-    "face=wall,facing=east,open=false": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 90,
+      "x": 270,
       "y": 90
     },
-    "face=wall,facing=east,open=true": {
+    "facing=west,open=true": {
       "model": "hexcasting:block/chest_locus_open",
-      "x": 90,
+      "x": 270,
       "y": 90
-    },
-    "face=wall,facing=north,open=false": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 90
-    },
-    "face=wall,facing=north,open=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 90
-    },
-    "face=wall,facing=south,open=false": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 90,
-      "y": 180
-    },
-    "face=wall,facing=south,open=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 90,
-      "y": 180
-    },
-    "face=wall,facing=west,open=false": {
-      "model": "hexcasting:block/chest_locus",
-      "x": 90,
-      "y": 270
-    },
-    "face=wall,facing=west,open=true": {
-      "model": "hexcasting:block/chest_locus_open",
-      "x": 90,
-      "y": 270
     }
   }
 }

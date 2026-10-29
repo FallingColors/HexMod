@@ -1,28 +1,42 @@
 package at.petrak.hexcasting.common.blocks.circles;
 
+import at.petrak.hexcasting.api.block.circle.BlockCircleComponent;
 import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
 import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
-import at.petrak.hexcasting.common.blocks.circles.BlockSlate.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.FluidTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 
-public class BlockChestLocus extends BlockSlate {
+import java.util.EnumSet;
+
+import static at.petrak.hexcasting.common.blocks.circles.BlockSlate.*;
+
+public class BlockChestLocus extends BlockCircleComponent implements EntityBlock, SimpleWaterloggedBlock {
+    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    public static final DirectionProperty FACING = BlockStateProperties.FACING;
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 
     private static final VoxelShape BOX_FLOOR = Shapes.or(AABB_FLOOR, Block.box(1, 1, 1, 15, 9, 15));
@@ -60,6 +74,30 @@ public class BlockChestLocus extends BlockSlate {
         return new ControlFlow.Continue(imageIn, exitDirs.toList());
     }
 
+    @Override
+    public Direction normalDir(BlockPos pos, BlockState bs, Level world, int recursionLeft) {
+        return bs.getValue(FACING);
+    }
+
+    @Override
+    public float particleHeight(BlockPos pos, BlockState bs, Level world) {
+        return 0.5f - 7f / 16f;
+    }
+
+    @Override
+    public boolean canEnterFromDirection(Direction enterDir, BlockPos pos, BlockState bs, ServerLevel world) {
+        var thisNormal = this.normalDir(pos, bs, world);
+        return enterDir != thisNormal.getOpposite();
+    }
+
+    @Override
+    public EnumSet<Direction> possibleExitDirections(BlockPos pos, BlockState bs, Level world) {
+        var allDirs = EnumSet.allOf(Direction.class);
+        var normal = this.normalDir(pos, bs, world);
+        allDirs.remove(normal);
+        return allDirs;
+    }
+
     protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult) {
         if (level.isClientSide) {
             return InteractionResult.SUCCESS;
@@ -79,23 +117,37 @@ public class BlockChestLocus extends BlockSlate {
         super.onRemove(blockState, level, blockPos, blockState2, bl);
     }
 
+    protected void tick(BlockState blockState, ServerLevel serverLevel, BlockPos blockPos, RandomSource randomSource) {
+        BlockEntity blockEntity = serverLevel.getBlockEntity(blockPos);
+        if (blockEntity instanceof BlockEntityChestLocus) {
+            ((BlockEntityChestLocus)blockEntity).recheckOpen();
+        }
+    }
+
     @Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
-        return switch (pState.getValue(ATTACH_FACE)) {
-            case FLOOR -> BOX_FLOOR;
-            case CEILING -> BOX_CEILING;
-            case WALL -> switch (pState.getValue(FACING)) {
+        return switch (pState.getValue(FACING)) {
+                case UP -> BOX_FLOOR;
+                case DOWN -> BOX_CEILING;
                 case NORTH -> BOX_NORTH;
                 case EAST -> BOX_EAST;
                 case SOUTH -> BOX_SOUTH;
-                default -> BOX_WEST;
-            };
+                case WEST -> BOX_WEST;
         };
+    }
+
+    @Override
+    @Nullable
+    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
+        FluidState fluidState = pContext.getLevel().getFluidState(pContext.getClickedPos());
+        return this.defaultBlockState()
+            .setValue(FACING, pContext.getNearestLookingDirection().getOpposite())
+            .setValue(WATERLOGGED, fluidState.is(FluidTags.WATER) && fluidState.getAmount() == 8);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(OPEN);
+        builder.add(WATERLOGGED, FACING, OPEN);
     }
 }
