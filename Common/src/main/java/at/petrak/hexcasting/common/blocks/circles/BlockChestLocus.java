@@ -1,0 +1,51 @@
+package at.petrak.hexcasting.common.blocks.circles;
+
+import at.petrak.hexcasting.api.casting.eval.env.CircleCastEnv;
+import at.petrak.hexcasting.api.casting.eval.vm.CastingImage;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+
+public class BlockChestLocus extends BlockSlate {
+    public BlockChestLocus(Properties properties) {
+        super(properties);
+    }
+
+    @Override
+    public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
+        return new BlockEntityChestLocus(blockPos, blockState);
+    }
+
+    @Override
+    public ControlFlow acceptControlFlow(CastingImage imageIn, CircleCastEnv env, Direction enterDir, BlockPos pos,
+        BlockState bs, ServerLevel world) {
+
+        // TODO: make it actually do something!
+
+        var exitDirsSet = this.possibleExitDirections(pos, bs, world);
+        exitDirsSet.remove(enterDir.getOpposite());
+
+        var exitDirs = exitDirsSet.stream().map((dir) -> this.exitPositionFromDirection(pos, dir));
+
+        return new ControlFlow.Continue(imageIn, exitDirs.toList());
+    }
+
+    protected InteractionResult useWithoutItem(BlockState blockState, Level level, BlockPos blockPos, Player player, BlockHitResult blockHitResult) {
+        if (level.isClientSide) {
+            return InteractionResult.SUCCESS;
+        }
+
+        BlockEntity blockEntity = level.getBlockEntity(blockPos);
+        if (blockEntity instanceof BlockEntityChestLocus) {
+            player.openMenu((BlockEntityChestLocus)blockEntity);
+        }
+
+        return InteractionResult.CONSUME;
+    }
+}

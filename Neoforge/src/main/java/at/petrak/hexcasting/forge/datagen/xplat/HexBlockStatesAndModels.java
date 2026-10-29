@@ -52,6 +52,10 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                 .build();
         }, BlockSlate.WATERLOGGED);
 
+        var chestLocusModel = models().getExistingFile(modLoc("chest_locus"));
+        horizontalFaceBlock(HexBlocks.CHEST_LOCUS.get(), chestLocusModel);
+        simpleBlockItem(HexBlocks.CHEST_LOCUS.get(), chestLocusModel);
+
         impetus(HexBlocks.IMPETUS_EMPTY.get(), "impetus/empty", "empty", false);
         impetus(HexBlocks.IMPETUS_RIGHTCLICK.get(), "impetus/rightclick", "rightclick", true);
         impetus(HexBlocks.IMPETUS_LOOK.get(), "impetus/look", "look", true);

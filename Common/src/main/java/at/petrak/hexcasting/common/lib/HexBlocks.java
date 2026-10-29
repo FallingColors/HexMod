@@ -8,6 +8,7 @@ import at.petrak.hexcasting.common.blocks.BlockQuenchedAllay;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicBookshelf;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicLigature;
 import at.petrak.hexcasting.common.blocks.akashic.BlockAkashicRecord;
+import at.petrak.hexcasting.common.blocks.circles.BlockChestLocus;
 import at.petrak.hexcasting.common.blocks.circles.BlockEmptyImpetus;
 import at.petrak.hexcasting.common.blocks.circles.BlockSlate;
 import at.petrak.hexcasting.common.blocks.circles.directrix.BlockBooleanDirectrix;
@@ -148,6 +149,11 @@ public class HexBlocks {
     // "no" item because we add it manually
     public static final Supplier<BlockSlate> SLATE = blockNoItem("slate", () ->
         new BlockSlate(slateish()
+            .pushReaction(PushReaction.DESTROY)));
+
+    public static final Supplier<BlockChestLocus> CHEST_LOCUS = blockItem("chest_locus", () ->
+        new BlockChestLocus(slateish()
+            .noOcclusion()
             .pushReaction(PushReaction.DESTROY)));
 
     public static final Supplier<BlockEmptyImpetus> IMPETUS_EMPTY = blockItem("impetus/empty", () ->
