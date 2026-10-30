@@ -1322,6 +1322,7 @@
       spellcircles: "Spell Circles",
       impetus: "Impeti",
       directrix: "Directrices",
+      chest_locus: "Storage Locus",
       akashiclib: "Akashic Libraries",
       quenching_allays: "Quenching Allays",
       fanciful_staves: "Fanciful Staves",
@@ -1766,6 +1767,12 @@
         empty_directrix: "Firstly, a design for the cradle ... although, perhaps \"substrate\" would be more accurate a word. Without a mind guiding it, the output direction is determined by microscopic fluctuations in the _media wave and surroundings, making it effectively random.",
         directrix_redstone: "A $(l:greatwork/directrix)$(item)Mason Directrix/$ switches output side based on a redstone signal. Without a signal, the exit is the _media-color side; with a signal, the exit is the redstone-color side.",
         directrix_boolean: "A $(l:greatwork/directrix)$(item)Shepherd Directrix/$ switches output side based on a boolean popped from the stack. A $(thing)True/$ makes the wave exit from the back, a $(thing)False/$ from the front. Failing to provide a boolean at all will cause a mishap."
+      },
+
+      chest_locus: {
+        "1": "Even when cast from a spell circle, certain spells rely on the presence of items in my inventory or offhand. The $(l:greatwork/impetus)$(item)Impetus/$ is still tied to me, its mind echoing mine, reaching out to me--$(br2)--no. I must focus. The $(l:greatwork/chest_locus)$(item)Storage Locus/$ is the solution. A simple box of $(l:items/edified)$(item)edified wood/$ and all the problems are gone.",
+        "2": "The locus works like a chest, but it can be built directly into a spell circle. Once the _media wave passes over it, any subsequent spells cast by the circle will reach for its inventory rather than mine.$(br2)Activating a second $(l:greatwork/chest_locus)$(item)Storage Locus/$ within the same circle will cause spells to look there instead - only one can be active at a time. A cleverly built circle might be able to take advantage of this to swap between multiple \"hands\".",
+        "crafting.desc": "The upper row of slots in the inventory of the locus acts as the hotbar, for the purposes of $(l:patterns/spells/itempicking)item selection/$. The leftmost slot in that row acts as the offhand.",
       },
       
       akashiclib: {

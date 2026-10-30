@@ -4,7 +4,7 @@
   "icon": "hexcasting:akashic_record",
   "advancement": "hexcasting:enlightenment",
   "entry_color": "54398a",
-  "sortnum": 4,
+  "sortnum": 5,
   "pages": [
     {
       "type": "patchouli:text",

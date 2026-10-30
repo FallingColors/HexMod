@@ -4,7 +4,7 @@
   "icon": "hexcasting:quenched_allay",
   "advancement": "hexcasting:enlightenment",
   "entry_color": "54398a",
-  "sortnum": 5,
+  "sortnum": 6,
   "pages": [
     {
       "type": "patchouli:text",
