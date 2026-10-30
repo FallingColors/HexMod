@@ -151,10 +151,8 @@ public class HexBlocks {
         new BlockSlate(slateish()
             .pushReaction(PushReaction.DESTROY)));
 
-    public static final Supplier<BlockChestLocus> CHEST_LOCUS = blockItem("chest_locus", () ->
-        new BlockChestLocus(slateish()
-            .noOcclusion()
-            .pushReaction(PushReaction.DESTROY)));
+    public static final Supplier<BlockChestLocus> CHEST_LOCUS = blockItem("locus/chest", () ->
+        new BlockChestLocus(slateish()));
 
     public static final Supplier<BlockEmptyImpetus> IMPETUS_EMPTY = blockItem("impetus/empty", () ->
         new BlockEmptyImpetus(slateish()

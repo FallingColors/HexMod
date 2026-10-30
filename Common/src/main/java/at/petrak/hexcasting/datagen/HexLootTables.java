@@ -45,7 +45,7 @@ public class HexLootTables extends PaucalLootTableSubProvider {
     @Override
     protected void makeLootTables(Map<Block, LootTable.Builder> blockTables,
         Map<ResourceKey<LootTable>, LootTable.Builder> lootTables) {
-        dropSelf(blockTables, HexBlocks.IMPETUS_EMPTY.get(),
+        dropSelf(blockTables, HexBlocks.CHEST_LOCUS.get(), HexBlocks.IMPETUS_EMPTY.get(),
             HexBlocks.IMPETUS_RIGHTCLICK.get(), HexBlocks.IMPETUS_LOOK.get(), HexBlocks.IMPETUS_REDSTONE.get(),
             HexBlocks.EMPTY_DIRECTRIX.get(), HexBlocks.DIRECTRIX_REDSTONE.get(), HexBlocks.DIRECTRIX_BOOLEAN.get(),
             HexBlocks.AKASHIC_RECORD.get(), HexBlocks.AKASHIC_BOOKSHELF.get(), HexBlocks.AKASHIC_LIGATURE.get(),

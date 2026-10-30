@@ -138,6 +138,10 @@
       look: "Fletcher Impetus",
       redstone: "Cleric Impetus",
     },
+
+    locus: {
+      chest: "Storage Locus",
+    },
     
     akashic_: {
       record: "Akashic Record",
@@ -551,6 +555,8 @@
   
   hexcasting: {
     "pattern.unknown": "Unknown pattern resource location %s",
+
+    "container.chest_locus": "Storage Locus",
     
     debug: {
       media_withdrawn: "%s - Media withdrawn: %s",

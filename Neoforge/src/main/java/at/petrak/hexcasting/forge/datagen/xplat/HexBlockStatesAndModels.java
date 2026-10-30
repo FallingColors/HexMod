@@ -68,7 +68,8 @@ public class HexBlockStatesAndModels extends PaucalBlockStateAndModelProvider {
                 .rotationY(dir.getAxis().isVertical() ? 0 : ((int) dir.toYRot()) % 360)
                 .build();
         }, BlockChestLocus.WATERLOGGED, BlockChestLocus.ENERGIZED);
-        simpleBlockItem(HexBlocks.CHEST_LOCUS.get(), chestLocusClosed);
+        // simpleItemModel doesn't like slashes in the path, so we do it manually
+        itemModels().getBuilder("item/locus/chest").parent(chestLocusClosed);
 
         impetus(HexBlocks.IMPETUS_EMPTY.get(), "impetus/empty", "empty", false);
         impetus(HexBlocks.IMPETUS_RIGHTCLICK.get(), "impetus/rightclick", "rightclick", true);

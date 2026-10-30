@@ -416,6 +416,15 @@ public class HexplatRecipes extends RecipeProvider {
             .pattern("SSC")
             .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER.get(), enlightenment)).save(recipes);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, HexBlocks.CHEST_LOCUS.get())
+            .define('E', HexBlocks.EDIFIED_PLANKS.get())
+            .define('C', Blocks.CHEST)
+            .define('S', HexItems.SLATE.get())
+            .pattern(" E ")
+            .pattern("ECE")
+            .pattern(" S ")
+            .unlockedBy("enlightenment", new Criterion<>(HexAdvancementTriggers.OVERCAST_TRIGGER.get(), enlightenment)).save(recipes);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, HexBlocks.AKASHIC_BOOKSHELF.get())
             .define('L', HexTags.Items.EDIFIED_LOGS)
             .define('P', HexTags.Items.EDIFIED_PLANKS)
