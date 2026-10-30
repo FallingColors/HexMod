@@ -16,6 +16,7 @@ import net.minecraft.core.component.DataComponents
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.RelativeMovement
 import net.minecraft.world.item.enchantment.Enchantments
 import net.minecraft.world.phys.Vec3
 
@@ -109,6 +110,10 @@ object OpTeleport : SpellAction {
         teleportee.stopRiding()
         if (!teleportee.type.`is`(HexTags.Entities.STICKY_TELEPORTERS)) 
             teleportee.passengers.forEach(Entity::stopRiding)
-        teleportee.teleportTo(target.x, target.y, target.z)
+
+        // we specify that this is relative movement so that it doesn't reset player velocity. :mojank:
+        // note that the coordinates here are still absolute, because vanilla relative teleports are weird
+        teleportee.teleportTo(world, target.x, target.y, target.z,
+            RelativeMovement.ALL, teleportee.yRot, teleportee.xRot)
     }
 }
