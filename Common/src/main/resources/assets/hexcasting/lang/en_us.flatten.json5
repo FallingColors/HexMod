@@ -1770,7 +1770,7 @@
       },
 
       chest_locus: {
-        "1": "Even when cast from a spell circle, certain spells rely on the presence of items in my inventory or offhand. The $(l:greatwork/impetus)$(item)Impetus/$ is still tied to me, its mind echoing mine, reaching out to me--$(br2)--no. I must focus. The $(l:greatwork/chest_locus)$(item)Storage Locus/$ is the solution. A simple box of $(l:items/edified)$(item)edified wood/$ and all the problems are gone.",
+        "1": "Even when cast from a spell circle, certain spells rely on the presence of items in my inventory or offhand. Such a limitation is clearly not befitting of my grand design!$(br2)Consequently, I have developed a solution. By affixing an $(l:items/edified)$(item)edified/$ box to a $(l:items/slate)$(item)slate/$, I can create a surrogate inventory for the spell circle in which I install it. I call this device a $(l:greatwork/chest_locus)$(item)Storage Locus/$.",
         "2": "The locus works like a chest, but it can be built directly into a spell circle. Once the _media wave passes over it, any subsequent spells cast by the circle will reach for its inventory rather than mine.$(br2)Activating a second $(l:greatwork/chest_locus)$(item)Storage Locus/$ within the same circle will cause spells to look there instead - only one can be active at a time. A cleverly built circle might be able to take advantage of this to swap between multiple \"hands\".",
         "crafting.desc": "The upper row of slots in the inventory of the locus acts as the hotbar, for the purposes of $(l:patterns/spells/itempicking)item selection/$. The leftmost slot in that row acts as the offhand.",
       },
