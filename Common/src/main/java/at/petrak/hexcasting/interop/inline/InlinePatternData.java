@@ -45,7 +45,7 @@ public class InlinePatternData implements InlineData<InlinePatternData>{
         HexItems.SCROLL_MEDIUM.get().writeDatum(scrollStack, new PatternIota(pattern));
         scrollStack.set(DataComponents.ITEM_NAME, getPatternName(pattern).copy().withStyle(ChatFormatting.WHITE));
         HoverEvent he = new HoverEvent(HoverEvent.Action.SHOW_ITEM, new HoverEvent.ItemStackInfo(scrollStack));
-        ClickEvent ce = new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, pattern.toString());
+        ClickEvent ce = new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD, pattern.toChatString());
         return Style.EMPTY.withHoverEvent(he).withClickEvent(ce);
     }
 
