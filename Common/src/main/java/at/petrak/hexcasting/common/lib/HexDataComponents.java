@@ -124,6 +124,12 @@ public class HexDataComponents {
 
     // ==== SPELLBOOKS ====
 
+    /**
+     * The scroll listener checks this when attempting to scroll, so by using this component you can make
+     * any item support shift-scrolling without needing to mixin or implement a new scroll listener.
+     * Applying this component will enable shift-scrolling, though it won't do much without the other
+     * components and a way to read/write the iota.
+     */
     public static final Supplier<DataComponentType<Integer>> SELECTED_SPELLBOOK_PAGE = REGISTER.register("page_idx", () ->
             DataComponentType.<Integer>builder()
                     .persistent(Codec.INT)
