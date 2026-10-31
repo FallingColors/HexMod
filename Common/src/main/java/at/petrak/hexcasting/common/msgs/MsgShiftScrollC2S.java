@@ -49,10 +49,10 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         if (delta != 0) {
             var stack = sender.getItemInHand(hand);
 
-            if (stack.getItem() == HexItems.SPELLBOOK.get()) {
-                spellbook(sender, hand, stack, delta);
-            } else if (stack.getItem() == HexItems.ABACUS.get()) {
+            if (stack.getItem() == HexItems.ABACUS) {
                 abacus(sender, hand, stack, delta);
+            } else if (stack.has(HexDataComponents.SELECTED_SPELLBOOK_PAGE.get())) {
+                spellbook(sender, hand, stack, delta);
             }
         }
     }
@@ -68,29 +68,29 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         if (hand == InteractionHand.OFF_HAND && stack.has(DataComponents.CUSTOM_NAME)) {
             if (sealed) {
                 component = Component.translatable("hexcasting.tooltip.spellbook.page_with_name.sealed",
-                    Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
-                    Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-                    Component.literal("").withStyle(stack.getRarity().color()).withStyle(ChatFormatting.ITALIC)
-                        .append(stack.getHoverName()),
-                    Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
+                        Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
+                        Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
+                        Component.literal("").withStyle(stack.getRarity().color()).withStyle(ChatFormatting.ITALIC)
+                                .append(stack.getHoverName()),
+                        Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
             } else {
                 component = Component.translatable("hexcasting.tooltip.spellbook.page_with_name",
-                    Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
-                    Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-                    Component.literal("").withStyle(stack.getRarity().color()).withStyle(ChatFormatting.ITALIC)
-                        .append(stack.getHoverName()));
+                        Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
+                        Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
+                        Component.literal("").withStyle(stack.getRarity().color()).withStyle(ChatFormatting.ITALIC)
+                                .append(stack.getHoverName()));
             }
 
         } else {
             if (sealed) {
                 component = Component.translatable("hexcasting.tooltip.spellbook.page.sealed",
-                    Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
-                    Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
-                    Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
+                        Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
+                        Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE),
+                        Component.translatable("hexcasting.tooltip.spellbook.sealed").withStyle(ChatFormatting.GOLD));
             } else {
                 component = Component.translatable("hexcasting.tooltip.spellbook.page",
-                    Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
-                    Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE));
+                        Component.literal(String.valueOf(newIdx)).withStyle(ChatFormatting.WHITE),
+                        Component.literal(String.valueOf(len)).withStyle(ChatFormatting.WHITE));
             }
         }
 
@@ -98,6 +98,11 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
     }
 
     private void abacus(ServerPlayer sender, InteractionHand hand, ItemStack stack, double delta) {
+        if (stack.has(HexDataComponents.SELECTED_SPELLBOOK_PAGE.get())) {
+            HexAPI.LOGGER.warn("Item stack has spellbook component but is an abacus! The spellbook component will be removed.");
+            stack.remove(HexDataComponents.SELECTED_SPELLBOOK_PAGE.get());
+        }
+
         var increase = delta < 0;
         Double num = stack.get(HexDataComponents.ABACUS_VALUE.get());
         if(num == null)
@@ -121,13 +126,13 @@ public record MsgShiftScrollC2S(double mainHandDelta, double offHandDelta, boole
         pitch *= (increase ? 1.05f : 0.95f);
         pitch += (Math.random() - 0.5) * 0.1;
         sender.level().playSound(null, sender.getX(), sender.getY(), sender.getZ(),
-            HexSounds.ABACUS, SoundSource.PLAYERS, 0.5f, pitch);
+                HexSounds.ABACUS, SoundSource.PLAYERS, 0.5f, pitch);
 
         var datum = HexItems.ABACUS.get().readIota(stack);
         if (datum != null) {
             var popup = datum.display();
             sender.displayClientMessage(
-                Component.translatable("hexcasting.tooltip.abacus", popup).withStyle(ChatFormatting.GREEN), true);
+                    Component.translatable("hexcasting.tooltip.abacus", popup).withStyle(ChatFormatting.GREEN), true);
         }
     }
 }
