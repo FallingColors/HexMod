@@ -1,0 +1,13 @@
+{
+  "type": "hexcasting:freeze",
+  "blockIn": {
+    "type": "hexcasting:block",
+    "block": "minecraft:water_cauldron"
+  },
+  "result": {
+    "Name": "minecraft:powder_snow_cauldron",
+    "Properties": {
+      "level": "1"
+    }
+  }
+}
