@@ -345,15 +345,15 @@ export function load_palette(name) {
   }
 }
 const render_lang = {
-  "animated": "animated",
-  "monocolor": "monocolor",
+  "animerad": "animated",
+  "enfärgad": "monocolor",
   "gradient": "gradient",
   "segment": "segment",
 }
 const palette_lang = {
   "default": "default",
   "turbo": "turbo",
-  "dark2": "dark2",
+  "mörk2": "dark2",
   "tab10": "tab10",
 };
 //adds all of the options to the menus (renderer and palette menus)

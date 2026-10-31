@@ -77,7 +77,7 @@
       <ul class="nav navbar-nav navbar-right">
             <li>
     <a
-      href="https://github.com/FallingColors/HexMod/tree/7d5c1576c6bd1044bfe438ad8a8cc7e39529ccb4"
+      href="https://github.com/FallingColors/HexMod/tree/304780939bb9a57f8ff580440224e5c5d561e38f"
         target="_blank"
       class="navbar-link"
       role="button"
@@ -558,7 +558,7 @@
   src="../../../../v/latest/1.21/renders/minecraft/item/wooden_pickaxe.png"
   loading="lazy"
   class="item-texture texture pixelated "
-> Podstawowe Symbole</a></li>
+> Podstawowe Glify</a></li>
           <li><a href="#patterns/numbers" class="toc-elem "><img
   title="Stick"
   alt="Stick"
@@ -761,7 +761,7 @@
   src="../../../../v/latest/1.21/renders/minecraft/textures/mob_effect/conduit_power.png"
   loading="lazy"
   class="item-texture texture pixelated "
-> Arcyzaklęcia</a></summary>
+> Wyższe Zaklęcia</a></summary>
       <ul>
           <li><a href="#patterns/great_spells/create_lava" class="toc-elem "><img
   title="Lava Bucket"
@@ -1088,27 +1088,27 @@
     class="permalink small"
     title="Permalink"
   ><i class="bi bi-link-45deg"></i></a></h3>
-    <p>It seems I will need to be adroit with vectors if I am to get anywhere in my studies. A vector is a set of three numbers that can be used to represent a variety of things, usually either a position in the world, an offset from one position to another, or a direction in space. The following pages provide a basic summary of how vectors work and what I can do with them.</p>
+    <p>Wygląda na to, że aby moje badania były owocne, muszę dobrze poznać wektory. Wektor to ciąg trzech liczb będący w stanie reprezentować całą gamę rzeczy i idei, choć najczęściej są to: położenie w świecie, różnice między dwoma pozycjami lub kierunek w przestrzeni. Następne strony zawierają podstawowe informacje na temat wektorów oraz tego, co mogę z nimi zrobić.</p>
 <br />
-    <p>All the vectors I will be working with as a <span style="color: #b38ef3">Hexcaster</span> are three-dimensional, since the world I inhabit has three dimensions.</p><p>Each vector has an X component, a Y component, and a Z component in that order, corresponding to the three coordinate axes of the world: the X axis runs east and west, the Y axis runs up and down, and the Z axis runs north and south.</p>
+    <p>Wszystkie wektory, na których będę operować jako <span style="color: #b38ef3">Czarownik</span>, są trójwymiarowe, ponieważ żyję w trójwymiarowej przestrzeni.</p><p>Każdy wektor ma składowe X, Y oraz Z - w tej właśnie kolejności, odpowiadające trzem kierunkom świata: oś X to wschód-zachód, oś Y to góra-dół, a oś Z to północ-południe.</p>
 <br />
-    <p>The most basic way to use a vector is as a <i>position</i>, representing a fixed point in the world - it could be the location of a block, or an entity, or perhaps some empty space that I wish to target with a spell.</p><p>A position vector is effectively just a set of coordinates pinpointing the exact location to which it refers. However, not all vectors represent positions.</p>
+    <p>Najprostszym sposobem na użycie wektora jest określenie <i> położenia</i>, reprezentującego punkt w przestrzeni - może wskazywać na lokalizację bloku, bytu lub miejsca, w które chcę rzucić zaklęcie.</p><p>Wektor położenia jest w praktyce trzema współrzędnymi wskazującymi na dokładne położenie. Jednakże nie każdy wektor reprezentuje pozycję.</p>
 <br />
-    <p>If I have a vector for the position of a block, and I want to target the block above it, I need to increase the Y component of the vector by 1. I can do this by taking a second vector with the value (0, 1, 0) and adding it to the first one. Likewise, if I wanted to target something two blocks to the east, I could add a second vector with the value (2, 0, 0). Both of these new vectors represent <i>offsets</i> from one position to a new position.</p>
+    <p>Jeśli dla danego wektora położenia bloku chciałbym wskazać blok znajdujący się bezpośrednio nad nim, muszę zwiększyć składową Y tego wektora o 1. Da się to zrobić poprzez dodanie do niego drugiego wektora - (0, 1, 0). Analogicznie: jeśli interesuje mnie coś znajdującego się o dwa bloki na wschód, wystarczy, że dodam wektor (2, 0, 0). Oba te dodane wektory reprezentują <i>różnicę położeń</i> docelowego i pierwotnego.</p>
 <br />
-    <p>Note that while position vectors and offset vectors represent different things, there is no fundamental difference between them - all vectors are just groups of numbers. In fact, I could even consider all my vectors to be one type or the other if I so desired: positions are just offsets from the world origin to the specified coordinates, and offsets are just positions relative to an arbitrary starting point.</p>
+    <p>Zwróć uwagę, że choć wektor położenia oraz wektor różnicy położeń reprezentują różne rzeczy, zasadniczo są i tak tym samym - ciagiem liczb. Teoretycznie można by uznać wszystkie wektory za tylko jeden z tych rodzajów: wektor pozycji jest różnicą danego miejsca i środka świata - (0, 0, 0) - a wektor różnicy jest pozycją, tyle że względem dowolnie wybranego punktu odniesienia.</p>
 <br />
-    <p>Two important properties of vectors are <i>magnitude</i> (length) and <i>direction</i>. These may be easiest to imagine when thinking of vectors as offsets.</p><p>If I were to choose a starting point, and then move in a straight line based on an offset vector, the distance I travelled would be the length of the vector, and the direction I travelled would be its direction.</p>
+    <p>Wektory mają trzy istotne własności: <i>długość</i>, <i>kierunek</i> oraz <i>zwrot</i>. Najłatwiej jest je sobie wyobrazić, jeśli pomyśleć o wektorze jako o strzałce.</p><p>Jeśli wektor jest strzałką idącą od jakiegoś punktu zaczepienia, to długość wektora będzie długością strzałki (od punktu zaczepienia do grotu), kierunkiem będzie kierunek, który pokazuje ta strzałka, a zwrotem - kolejność punktów: zaczepienia i grotu (tj. który określamy jako początkowy - i jest to punkt zaczepienia).</p>
 <br />
-    <p>There many ways to manipulate vectors. As described earlier, I can add them together, which adds the corresponding X, Y, and Z components of each vector. The same applies with subtraction - conveniently, subtracting one position vector from another results in the offset from the first position to the second.</p><p>Multiplying and dividing two vectors is not so simple; I can find more information on that topic <a href="https://www.mathsisfun.com/algebra/vectors-dot-product.html" target="_blank">here</a> and <a href="https://www.mathsisfun.com/algebra/vectors-cross-product.html" target="_blank">here</a>.</p>
+    <p>Istnieje wiele sposobów działania na wektorach. Wcześniej była mowa o dodawaniu ich, co oznacza oddzielne dodawanie poszczególnych składowych każdego wektora (X1+X2, Y1+Y2, Z1+Z2). Analogicznie działa różnica wektorów - skutkuje różnicą ich odpowiednich współrzędnych.</p><p>Mnożenie i dzielenie dwóch wektorów nie jest już takie proste; więcej na ten temat można dowiedzieć się <a href="https://www.mathsisfun.com/algebra/vectors-dot-product.html" target="_blank">tutaj</a> oraz <a href="https://www.mathsisfun.com/algebra/vectors-cross-product.html" target="_blank">tu</a>.</p>
 <br />
-    <p>I can also multiply or divide a vector by a single number to <i>scale</i> it. This multiplies or divides all three components of the vector by that number.</p><p>So long as the number is positive, this will multiply or divide the length of the vector without affecting its direction. If the number is negative, the length will be multiplied or divided as usual, but the direction will be reversed.</p>
+    <p>Da się także mnożyć lub dzielić wektory przez pojedyncze liczby (<i>skalary</i>). Skutkuje to pomnożeniem lub podzieleniem każdej ze składowych tego wektora przez daną liczbę, np. (X, Y, Z)/5 = (X/5, Y/5, Z/5).</p><p> Jeśli ta liczba jest dodatnia, nie wpłynie to na zwrot wektora, a jedynie na jego długość. Jeśli natomiast jest ujemna, wektor zostanie normalnie pomnożony lub podzielony, jego kierunek pozostanie bez zmian, a zwrot zmieni się na przeciwny.</p>
 <br />
-    <p>Dividing a vector by its own length produces a unit vector, which has the same direction as the original but a length of exactly 1. These can be useful if the direction of the vector is all that matters. They are also useful in that I can multiply a unit vector by some number to get a new vector with exactly that length.</p><p>Many patterns that calculate a direction of some kind, such as <a href="#patterns/basics@hexcasting:get_entity_look">Alidade&#39;s Purification</a>, provide it as a unit vector.</p>
+    <p>Podzielenie wektora przez jego własną długość daje wektor jednostkowy, który zachowuje kierunek i zwrot, ale jego długość wynosi 1. Wektor jednostkowy przydaje się sytuacjach, w których znaczenie mają tylko kierunek i zwrot wektora. Dodatkowo łatwiej jest uzyskać wektor o żądanej długości, jeśli pomnożyć wektor jednostkowy przez tę właśnie długość. Przykładowo: mnożąc dany wektor jednostkowy przez 3, otrzymam wektor o identycznym kierunku i zwrocie, lecz długości wynoszącej właśnie 3.</p><p>Wiele glifów, które obliczają kierunek i zwrot, np. <a href="#patterns/basics@hexcasting:get_entity_look">Oczyszczenie Alidady</a>, zwracają kierunek i zwrot odpowiedniego wektora jednostkowego.</p>
 <br />
-    <p>All the operations described thus far, and many more, can be performed using patterns found in the <a href="#patterns/math">Mathematics</a> section.</p><p>I can create new vectors by gathering information from entities using <a href="#patterns/basics">Basic Patterns</a>, by using <a href="#patterns/consts">Constants</a> to create unit vectors for basic directions, or by directly combining three numbers with <a href="#patterns/math@hexcasting:construct_vec">Vector Exaltation</a>.</p>
+    <p>Wszystkie opisane dotychczas działania oraz wiele innych można wykonać przy użyciu glifów z rozdziału <a href="#patterns/math">Matematyka</a>.</p><p>Mogę skonstruować nowe wektory poprzez pozyskiwanie informacji od bytów, używając glifów z sekcji <a href="#patterns/basics">Podstawowe Glify</a>, poprzez używanie <a href="#patterns/consts">Stałych</a> do stworzenia wektorów jednostkowych dla podstawowych kierunków i zwrotów lub poprzez bezpośrednie łączenie trzech liczb przy użyciu <a href="#patterns/math@hexcasting:construct_vec">Egzaltacji Wektora</a>.</p>
 <br />
-      <p>To understand more advanced concepts related to vectors, I may want to do further research outside the bounds of this notebook. The video below may also serve as a useful reference.</p>
+      <p>Aby zrozumieć bardziej zaawansowane informacje związane z wektorami, należałoby wyjść spomiędzy okładek tej księgi i zagłębić się bardziej w ten temat. Przydatnym punktem zaczepienia może być film załączony poniżej.</p>
   <h4 class="linkout">
     <a href="https://www.youtube.com/watch?v=fNk_zzaMoSs" target="_blank">3blue1brown</a>
   </h4>
@@ -1131,59 +1131,59 @@
     class="permalink small"
     title="Permalink"
   ><i class="bi bi-link-45deg"></i></a></h3>
-    <p>Unfortunately, I am not (yet) a perfect being. I make mistakes from time to time in my study and casting of <span style="color: #b38ef3">Hexes</span>; for example, misdrawing a pattern, or trying to an invoke an action with the wrong iotas. And Nature usually doesn&#39;t look too kindly on my mistakes-- causing what is called a <i>mishap</i>.</p>
+    <p>Niestety, nie jestem (jeszcze) istotą idealną. Od czasu do czasu popełniam błędy podczas czarowania; na przykład mogę źle narysować glif, lub spróbować wykonać działanie bez odpowiednich jot. Gdy natura przyłapie mnie na takim błędzie, dochodzi do tzw. <i>zerwania</i>.</p>
 <br />
-    <p>A pattern that causes a mishap will glow red in my grid. Depending on the type of mistake, I can also expect a certain deleterious effect and a spray of red and colorful sparks as the mishandled <span style="color: #74b3f2">media</span> curdles into light of a given color.</p>
+    <p>Glif, który doprowadził do zerwania zostanie zabarwiony na czerwono na moim splocie. W zależności od samego błędu, mogę się także spodziewać wszelakich skutków ubocznych, wraz z jak kolorowymi iskrami wzburzonego przypływu.</p>
 <br />
-    <p>Fortunately, although the bad effects of mishaps are certainly <i>annoying</i>, none of them are especially destructive in the long term. Nothing better to do than dust myself off and try again ... but I should strive for better anyways.</p><p>Following is a list of mishaps I have compiled.</p>
+    <p>O ile efekty uboczne zerwań są z pewnością <i>irytujące</i>, na moje szczęście żadne z nich nie pozostawiają trwałych czy destruktywnych konsekwencji. Mogę się po prostu otrzepać i spróbować ponownie... choć i tak warto dążyć do poprawy.</p><p>Poniżej załączam listę wszystkich zerwań napotkanych podczas moich badań.</p>
 <br />
-  <h4>Invalid Pattern</h4>
-    <p>The pattern drawn is not associated with any action.</p><p>Causes yellow sparks, and a <span style="color: #8d6acc">garbage</span> will be pushed to the top of my stack.</p>
+  <h4>Niepoprawny Glif</h4>
+    <p>Utkany glif nie odpowiada żadnej akcji.</p><p>Wywołuje żółte iskry oraz wyrzuca <span style="color: #8d6acc">supeł</span> na wierzch stosu.</p>
 <br />
-  <h4>Not Enough Iotas</h4>
-    <p>The action required more iotas than were on the stack.</p><p>Causes light gray sparks, and as many <span style="color: #8d6acc">Garbages</span> as would be required to fill up the argument count will be pushed.</p>
+  <h4>Za Mało Jot</h4>
+    <p>Akcja wymagała więcej jot, niż znajdowało się na moim stosie.</p><p>Wywołuje jasno-szare iskry, oraz wyrzuca tyle <span style="color: #8d6acc">supłów</span> na stos, ile potrzebowałoby działanie, aby zadziałać.</p>
 <br />
-  <h4>Too Many Iotas</h4>
-    <p>I tried to cast a spell which exceeded the size limit of the stack.</p><p>Causes black sparks, and my entire stack will be replaced with a single <span style="color: #8d6acc">garbage</span>.</p>
+  <h4>Za Dużo Jot</h4>
+    <p>Zaklęcie wykroczyło poza ograniczenia rozmiaru stosu.</p><p>Wywołuje czarne iskry, a cały mój stos zastępuje jednym <span style="color: #8d6acc">supłem</span>.</p>
 <br />
-  <h4>Incorrect Iota</h4>
-    <p>The action that was executed expected an iota of a certain type for an argument, but it got something invalid. If multiple iotas are invalid, the error message will only tell me about the error deepest in the stack.</p><p>Causes dark gray sparks, and the invalid iota will be replaced with <span style="color: #8d6acc">garbage</span>.</p>
+  <h4>Nieodpowiednia Jota</h4>
+    <p>Działanie spodziewało się joty konkretnego typu, a otrzymało coś nieprawidłowego. Jeśli jest wiele nieprawidłowych jot, zerwanie poinformuje mnie tylko o tej najniżej na stosie.</p><p>Wywołuje ciemno-szare iskry oraz zastępuje nieprawidłową jotę <span style="color: #8d6acc">supłem</span>.</p>
 <br />
-  <h4>Vector Out of Ambit</h4>
-    <p>The action tried to affect the world at a point that was out of my range.</p><p>Causes magenta sparks, and the items in my hands will be yanked out and flung towards the offending location.</p>
+  <h4>Wektor Poza Zasięgiem</h4>
+    <p>Działanie próbowało wpłynąć na punkt, który był poza moim zasięgiem.</p><p>Wywołuje purpurowe iskry oraz wyrzuca przedmioty z moich rąk w kierunku tego miejsca.</p>
 <br />
-  <h4>Entity Out of Ambit</h4>
-    <p>The action tried to affect an entity that was out of my range.</p><p>Causes pink sparks, and the items in my hands will be yanked out and flung towards the offending entity.</p>
+  <h4>Byt Poza Zasięgiem</h4>
+    <p>Działanie próbowało wpłynąć na byt, który był poza moim zasięgiem.</p><p>Wywołuje różowe iskry i wyrzuca przedmioty z moich rąk w kierunku tego bytu.</p>
 <br />
-  <h4>Entity is Immune</h4>
-    <p>The action tried to affect an entity that cannot be altered by it.</p><p>Causes blue sparks, and the items in my hands will be yanked out and flung towards the offending entity.</p>
+  <h4>Byt Jest Odporny</h4>
+    <p>Działanie próbowało wpłynąć na byt, który jest na nie odporny.</p><p>Wywołuje błękitne iskry oraz wyrzuca przedmioty z moich rąk w kierunku tego bytu.</p>
 <br />
   <h4>Entity Not Found</h4>
     <p>I attempted to affect an entity that doesn&#39;t exist. This can happen if the entity is dead, or if it is unable to be &#34;observed&#34; from afar.</p><p>Causes brown sparks, and causes me to feel sick for a moment, as if I had stood up too fast.</p>
 <br />
-  <h4>Mathematical Error</h4>
-    <p>The action did something offensive to the laws of mathematics, such as dividing by zero.</p><p>Causes red sparks, pushes a <span style="color: #8d6acc">garbage</span> to my stack, and my mind will be ablated, stealing half the vigor I have remaining. It seems that Nature takes offense to such operations, and divides <i>me</i> in retaliation.</p>
+  <h4>Błąd Matematyczny</h4>
+    <p>Działanie zrobiło coś zabronionego przez prawa matematyki, jak dzielenie przez zero.</p><p>Wywołuje czerwone iskry, dodaje <span style="color: #8d6acc">supeł</span> do mojego stosu oraz wypala mój umysł, pozbywając się połowy mojej siły życiowej. Wygląda na to, że Natura bierze takie działania za potwarz i za karę dzieli <i>mnie</i>.</p>
 <br />
-  <h4>Incorrect Item</h4>
-    <p>The action requires some sort of item, but the item I supplied was not suitable.</p><p>Causes brown sparks. If the offending item was in my hand, it will be flung to the floor. If it was in entity form, it will be flung in the air.</p>
+  <h4>Nieprawidłowy Przedmiot</h4>
+    <p>Działanie wymaga jakiegoś przedmiotu, ale nie był on dostarczony.</p><p>Wywołuje brązowe iskry. Jeśli ten przedmiot był w moich dłoniach, zostanie wyrzucony na ziemię. Jeżeli był w postaci bytu, zamiast tego wyleci w powietrze.</p>
 <br />
-  <h4>Incorrect Block</h4>
-    <p>The action requires some sort of block at a target location, but the block supplied was not suitable.</p><p>Causes bright green sparks, and causes an ephemeral explosion at the given location. The explosion doesn&#39;t seem to harm me, the world, or anything else though; it&#39;s just startling.</p>
+  <h4>Nieprawidłowy Blok</h4>
+    <p>Działanie wymaga konkretnego typu bloku na pozycji docelowej, ale blok tam się znajdujący nie był odpowiedni.</p><p>Wywołuje jasno-zielone iskry i wywołuje ulotną eksplozję na podanej pozycji. Wybuch jest zupełnie nieszkodliwy, ale zawsze trochę mnie płoszy.</p>
 <br />
-  <h4>Absent Introspection</h4>
-    <p>I attempted to draw a pattern that only works while <a href="#patterns/patterns_as_iotas@hexcasting:open_paren"><span style="color: #fc77be">introspecting</span></a> without first drawing <a href="#patterns/patterns_as_iotas@hexcasting:open_paren"><span style="color: #fc77be">Introspection</span></a>.</p><p>Causes orange sparks, and pushes the pattern I tried to draw to the stack as an iota.</p>
+  <h4>Brak Introspekcji</h4>
+    <p>Pojawia się, gdy spróbuję utkać glif, który działa tylko wewnątrz <a href="#patterns/patterns_as_iotas@hexcasting:open_paren"><span style="color: #fc77be">introspekcji</span></a> poza nią.</p><p>Wywołuje pomarańczowe iskry i kładzie glif, który nie zadziałał na stos w formie joty.</p>
 <br />
-  <h4>Lost in Thought</h4>
-    <p>I attempted to evaluate too many patterns in one <span style="color: #b38ef3">Hex</span>. Often, this happens because I&#39;ve accidentally created an infinite loop.</p><p>Causes dark blue sparks, and chokes all the air out of me.</p>
+  <h4>Pogrążenie w Myślach</h4>
+    <p>Mój <span style="color: #b38ef3">Czar</span> próbował wykonać zbyt wielką liczbę glifów. Zdarza się to najczęściej, gdy przypadkowo tworzę nieskończoną pętlę.</p><p>Wywołuje granatowe iskry i pozbawia mnie tchu.</p>
 <br />
-  <h4>Transgress Other</h4>
-    <p>I attempted to <a href="#patterns/readwrite@hexcasting:write"><span style="color: #fc77be">save a reference</span></a> to another player to a permanent medium.</p><p>Causes black sparks, and robs me of my sight for approximately one minute.</p>
+  <h4>Naruszenie Duszy</h4>
+    <p>Powstrzymuje mnie przed <a href="#patterns/readwrite@hexcasting:write"><span style="color: #fc77be">zapisaniem joty</span></a> innego gracza na stałym nośniku</p><p>Wywołuje czarne iskry i oślepia mnie na około minutę.</p>
 <br />
-  <h4>Disallowed Action</h4>
-    <p>I tried to cast an action that has been disallowed by a server administrator.</p><p>Causes black sparks.</p>
+  <h4>Zabronione Działanie</h4>
+    <p>Pojawia się, gdy próbuję wykonać działanie zabronione przez właścicieli serwera.</p><p>Wywołuje czarne iskry.</p>
 <br />
-  <h4>Catastrophic Failure</h4>
-    <p>A bug in the mod caused an iota of an invalid type or otherwise caused the spell to crash. <a href="https://github.com/gamma-delta/HexMod/issues" target="_blank">Please open a bug report!</a></p><p>Causes black sparks.</p>
+  <h4>Fatalna Porażka</h4>
+    <p>Usterka w modzie wywołała obecność nieprawidłowej joty, lub w inny sposób wywołała awarię czaru.<a href="https://github.com/gamma-delta/HexMod/issues" target="_blank">Proszę zgłosić ten błąd!</a></p><p>Wywołuje czarne iskry.</p>
 <br />
 </div>
 <div id="casting/stack" class="entry">
@@ -1203,13 +1203,13 @@
     class="permalink small"
     title="Permalink"
   ><i class="bi bi-link-45deg"></i></a></h3>
-    <p>A <span style="color: #8d6acc">Stack</span>, also known as a &#34;LIFO&#34;, is a concept borrowed from computer science. In short, it&#39;s a collection of things designed so that you can only interact with the most recently used thing.</p><p>Think of a stack of plates, where new plates are added to the top: if you want to interact with a plate halfway down the stack, you have to remove the plates above it in order to get ahold of it.</p>
+    <p><span style="color: #8d6acc">Stos</span>, sposób przechowywania informacji znany też jako LIFO, jest konceptem zapożyczonym z informatyki. W skrócie, to zbiór danych zaprojektowany tak, że możesz działać tylko na najwcześniej użytych danych.</p><p>Wyobraź sobie stos talerzy, na którego wierzchu są kładzione nowe talerze: jeśli chcesz zrobić coś z talerzem gdzieś w środku, musisz najpierw podnieść górne talerze.</p>
 <br />
-    <p>Because a stack is so simple, there&#39;s only so many things you can do with it:</p><p class="fake-li " style="--level: 1;"><i>Adding something to it</i>, known formally as pushing,</p><p class="fake-li " style="--level: 1;"><i>Removing the last added element</i>, known as popping, or</p><p class="fake-li " style="--level: 1;"><i>Examining or modifying the last added element</i>, known as peeking.<br />We call the last-added element the &#34;top&#34; of the stack, in accordance with the dinner plate analogy.</p><p>As an example, if we push 1 to a stack, then push 2, then pop, the top of the stack is now 1.</p>
+    <p>Ze względu na prostotę stosu, sposoby na jego manipulację są ograniczone. Sprowadzają się one do: </p><p class="fake-li " style="--level: 1;"><i>Dodawania</i> wszelakich jot, nazywanego też wyrzucaniem,</p><p class="fake-li " style="--level: 1;"><i>Usuwania</i> elementu z wierzchu stosu, nazywanego także pękaniem,</p><p class="fake-li " style="--level: 1;"><i> Analizowania, lub modyfikowania</i> wierzchu stosu, nazwanego podglądaniem.<br />Ostatnio dodany element nazywany jest &#34;wierzchem&#34; stosu, dodając do analogii z talerzami.</p><p>Na przykład, jeśli wrzucimy na stos &#34;1&#34;, a następnie &#34;2&#34;, po czym pękniemy wierzch, jedynym elementem stosu zostanie &#34;1&#34;.</p>
 <br />
-    <p>Actions are (on the most part) restricted to interacting with the casting stack in these ways. They will pop some iotas they&#39;re interested in (known as &#34;arguments&#34; or &#34;parameters&#34;), process them, and push some number of results.</p><p>Of course, some actions (e.g. <a href="#patterns/basics@hexcasting:get_caster"><span style="color: #fc77be">Mind&#39;s Reflection</span></a>) might pop no arguments, and some actions (particularly spells) might push nothing afterwards.</p>
+    <p>Działania (w większości) ograniczają się do interakcji ze stosem na te sposoby. Pękają parę jot dotyczących ich (zwane &#34;argumentami&#34; lub &#34;parametrami&#34;), przetwarzają je i wyrzucają jakąś ilość wyników.</p><p>Oczywiście, niektóre działania (np. <a href="#patterns/basics@hexcasting:get_caster"><span style="color: #fc77be">Odbicie Umysłu</span></a>) nie pękają żadnych argumentów, a inne (w szczególności zaklęcia) nie wyrzucają niczego na stos.</p>
 <br />
-    <p>Even more complicated actions can be expressed in terms of pushing, popping, and peeking. For example, <a href="#patterns/stackmanip@hexcasting:swap"><span style="color: #fc77be">Jester&#39;s Gambit</span></a> swaps the top two items of the stack. This can be thought of as popping two items and pushing them in opposite order. For another, <a href="#patterns/stackmanip@hexcasting:duplicate"><span style="color: #fc77be">Gemini Decomposition</span></a> duplicates the top of the stack-- in other words, it peeks the stack and pushes a copy of what it finds.</p>
+    <p>Nawet te bardziej skomplikowane działania mogą być przedstawione jako wyrzucanie, pękanie i podglądanie. Przykładowo, <a href="#patterns/stackmanip@hexcasting:swap"><span style="color: #fc77be">Gambit Błazna</span></a> zamienia miejscami dwie joty z wierzchu stosu. Można o tym myśleć jako pęknięcie dwóch jot i wyrzucenie ich w odwrotnej kolejności. Z kolei taki <a href="#patterns/stackmanip@hexcasting:duplicate"><span style="color: #fc77be">Rozpad Bliźniąt</span></a> duplikuje wierzch stosu-- innymi słowy, podgląda wierzch stosu i wyrzuca jego kopię.</p>
 <br />
 </div>
 <div id="casting/naming" class="entry">
@@ -1229,11 +1229,11 @@
     class="permalink small"
     title="Permalink"
   ><i class="bi bi-link-45deg"></i></a></h3>
-    <p>The names given to actions by the ancients were certainly peculiar, but I think there&#39;s a certain kind of logic to them.</p><p>There seem to be certain groups of actions with common names, named for the number of iotas they remove from and add to the stack.</p>
+    <p>Nazwy nadane działaniom przez starożytnych są dość osobliwe, ale wydaje mi się, że jest w nich jakiś porządek.</p><p>Z czasem zauważam grupy działań współdzielące nazwy, zależne od ilości jot usuwanych i dodawanych do stosu.</p>
 <br />
-    <p></p><p class="fake-li " style="--level: 1;">A <span style="color: #8d6acc">Reflection</span> pops nothing and pushes one iota.</p><p class="fake-li " style="--level: 1;">A <span style="color: #8d6acc">Purification</span> pops one and pushes one.</p><p class="fake-li " style="--level: 1;">A <span style="color: #8d6acc">Distillation</span> pops two and pushes one.</p><p class="fake-li " style="--level: 1;">An <span style="color: #8d6acc">Exaltation</span> pops three or more and pushes one.</p><p class="fake-li " style="--level: 1;">A <span style="color: #8d6acc">Decomposition</span> pops one argument and pushes two.</p><p class="fake-li " style="--level: 1;">A <span style="color: #8d6acc">Disintegration</span> pops one and pushes three or more.</p><p class="fake-li " style="--level: 1;">Finally, a <span style="color: #8d6acc">Gambit</span> pushes or pops some other number (or rearranges the stack in some other manner).</p>
+    <p></p><p class="fake-li " style="--level: 1;"><span style="color: #8d6acc">Odbicie</span> nie usuwa żadnych jot i dodaje jedną.</p><p class="fake-li " style="--level: 1;"><span style="color: #8d6acc">Oczyszczenie</span> usuwa jedną i dodaje jedną.</p><p class="fake-li " style="--level: 1;"><span style="color: #8d6acc">Destylacja</span> usuwa dwie i dodaje jedną.</p><p class="fake-li " style="--level: 1;"><span style="color: #8d6acc">Egzaltacja</span> usuwa trzy, lub więcej i dodaje jedną.</p><p class="fake-li " style="--level: 1;"><span style="color: #8d6acc">Rozpad</span> usuwa jeden argument i dodaje dwa.</p><p class="fake-li " style="--level: 1;"><span style="color: #8d6acc">Dezintegracja</span> usuwa jeden i dodaje trzy, lub więcej.</p><p class="fake-li " style="--level: 1;">W końcu, <span style="color: #8d6acc">Gambit</span> usuwa lub dodaje jakąś inną ilość jot (lub przekłada joty na stosie w jakiś inny sposób).</p>
 <br />
-    <p>Spells seem to be exempt from this nomenclature and are more or less named after what they do-- after all, why call it a <span style="color: #fc77be">Demoman&#39;s Gambit</span> when you could just say <a href="#patterns/spells/basic@hexcasting:explode"><span style="color: #fc77be">Explosion</span></a>?</p>
+    <p>Zaklęcia są wyłączone z tego nazewnictwa i są raczej nazywane ze względu na ich efekty. W końcu po co coś nazywać <span style="color: #fc77be">Gambitem Demomana</span>, skoro można po prostu powiedzieć <a href="#patterns/spells/basic@hexcasting:explode"><span style="color: #fc77be">Eksplozja</span></a>?</p>
 <br />
 </div>
 <div id="casting/whats_a_hex" class="entry">
@@ -1278,19 +1278,19 @@
     class="permalink small"
     title="Permalink"
   ><i class="bi bi-link-45deg"></i></a></h3>
-    <p>I have discovered new and horrifying modes of failure. I must not succumb to them.</p>
+    <p>Oto nowe i przerażające możliwości porażek. Nie mogę im ulegnąć.</p>
 <br />
-  <h4>Inert Mindflay</h4>
-    <p>Attempted to flay the mind of something that I have either already used, or of a character not suitable for the target block.</p><p>Causes dark green sparks. Subjects I have already used will be killed outright, while those that are simply unsuitable will be slightly damaged.</p>
+  <h4>Bierne Oberżnięcie</h4>
+    <p>Spróbowano oberżnąć umysł czegoś, co było już zużyte, lub czego umysł nie jest kompatybilny z tym blokiem.</p><p>Wywołuje ciemno-zielone iskry. Ofiary, których umysły były już oberżnięte od razu zginą, a te, których umysły nie są kompatybilne zostaną lekko zranione.</p>
 <br />
-  <h4>Lack Spell Circle</h4>
-    <p>Tried to cast an action requiring a spell circle without a spell circle.</p><p>Causes light blue sparks, and upends my inventory onto the ground.</p>
+  <h4>Brak Kręgu Zaklęć</h4>
+    <p>Spróbowano wykonać działanie wymagające kręgu zaklęć bez kręgu zaklęć. </p><p>Wywołuje jasno-niebieskie iskry i wyrzuca zawartość mojego ekwipunku na ziemię.</p>
 <br />
-  <h4>Lack Akashic Record</h4>
-    <p>Tried to access an <a href="#greatwork/akashiclib"><span style="color: #b0b">Akashic Record</span></a> at a location where there isn&#39;t one.</p><p>Causes purple sparks, and steals away some of my experience.</p>
+  <h4>Brak Kroniki Akaszy</h4>
+    <p>Spróbowano uzyskać dostęp do <a href="#greatwork/akashiclib"><span style="color: #b0b">Kroniki Akaszy</span></a> w miejscu, gdzie jej nie ma. </p><p>Wywołuje fioletowe iskry i wykrada część mojego doświadczenia.</p>
 <br />
-  <h4>Improper Shepherding</h4>
-    <p>Tried to activate a <a href="#greatwork/directrix"><span style="color: #b0b">Shepherd Directrix</span></a> without a boolean on the top of the stack.</p><p>Causes red and white sparks, and forcibly ejects the Shepherd Directrix from the circle. This doesn&#39;t destroy it, thankfully, but I should make sure to go pick it up and replace it where it belongs.</p>
+  <h4>Niepoprawne Pasterstwo</h4>
+    <p>Spróbowano aktywować <a href="#greatwork/directrix"><span style="color: #b0b">Zwrotnicę Pasterza</span></a> bez joty logiki na wierzchu stosu.</p><p>Wywołuje biało-czerwone iskry i odrzuca tę zwrotnicę z kręgu. Na moje szczęście jej nie niszczy, ale lepiej szybko ją podnieść i położyć z powrotem na jej miejscu.</p>
 <br />
     </div>
 </div>
@@ -1349,7 +1349,7 @@
   class="item-texture texture pixelated "
 >
   </div>
-      <p>It seems that I&#39;ll find three different forms of amethyst when breaking a crystal inside a geode. The smallest denomination seems to be a small pile of shimmering dust, worth a relatively small amount of <span style="color: #74b3f2">media</span>.</p>
+      <p>Po roztrzaskaniu kryształu w geodzie, ametyst może pojawić się w trzech postaciach. Najmniejszym nominałem wydają się drobne kupki lśniącego pyłu, warte względnie małą ilość <span style="color: #74b3f2">przepływu</span>.</p>
   </div>
 <br />
   <div id="items/amethyst@shard" class="">
@@ -1371,7 +1371,7 @@
   class="item-texture texture pixelated "
 >
   </div>
-      <p>The second is a whole shard of amethyst, of the type non-<span style="color: #b38ef3">Hexcasters</span> might be used to. This has about as much <span style="color: #74b3f2">media</span> inside as five <a href="#items/amethyst"><span style="color: #b0b">Amethyst Dust</span></a>.</p>
+      <p>Drugą postacią są w miarę nienaruszone odłamki kryształu, znane nawet wśród nie-<span style="color: #b38ef3">czarowników</span>. Mają w sobie mniej więcej tyle samo <span style="color: #74b3f2">przepływu</span>, co pięć typowych kupek <a href="#items/amethyst"><span style="color: #b0b">Ametystowego Pyłu</span></a>.</p>
   </div>
 <br />
   <div id="items/amethyst@charged" class="">
@@ -1393,10 +1393,10 @@
   class="item-texture texture pixelated "
 >
   </div>
-      <p>Finally, I&#39;ll rarely find a large crystal crackling with energy. This has about as much <span style="color: #74b3f2">media</span> inside as ten units of <a href="#items/amethyst"><span style="color: #b0b">Amethyst Dust</span></a> (or two <a href="#items/amethyst"><span style="color: #b0b">Amethyst Shards</span></a>).</p>
+      <p>W końcu, z rzadka znajdę większy kryształ aż trzeszczący od energii. Takowy posiada tyle <span style="color: #74b3f2">przepływu</span>, ile znajdę w dziesięciu jednostkach <a href="#items/amethyst"><span style="color: #b0b">Ametystowego Pyłu</span></a> (lub dwóch <a href="#items/amethyst"><span style="color: #b0b">Odłamkach Ametystu</span></a>).</p>
   </div>
 <br />
-    <p><i>The old man sighed and raised a hand toward the fire. He unlocked a part of his brain that held the memories of the mountains around them. He pulled the energies from those lands, as he learned to do in Terisia City with Drafna, Hurkyl, the archimandrite, and the other mages of the Ivory Towers. He concentrated, and the flames writhed as they rose from the logs, twisting upon themselves until they finally formed a soft smile.</i></p>
+    <p><i>Starzec westchnął i uniósł swe dłonie ku płomieniowi. Udało mu się dotrzeć do części jego mózgu przechowującej wszystkie wspomnienia otaczających go gór. Zaciągnął z tych ziem moc, jak to uczył się w Teryzji z Drafną, Hurkyl, archimandrytą i resztą magów z Iglic Kości Słoniowej. Skupił swoją wolę, a płomienie zawirowały, unosząc się z kłód i wijąc, by w końcu utworzyć ciepły uśmiech.</i></p>
 <br />
 </div>
 <div id="items/staff" class="entry">
@@ -1416,9 +1416,9 @@
     class="permalink small"
     title="Permalink"
   ><i class="bi bi-link-45deg"></i></a></h3>
-    <p>A <a href="#items/staff"><span style="color: #b0b">Staff</span></a> is my entry point into casting all <span style="color: #b38ef3">Hexes</span>, large and small. By holding it and pressing <span style="color: #8d6acc">Use Item/Place Block</span>, I begin casting a <span style="color: #b38ef3">Hex</span>; then I can click and drag to draw patterns.</p><p>It&#39;s little more than a chunk of <span style="color: #74b3f2">media</span> on the end of a stick; that&#39;s all that&#39;s needed, after all.</p>
+    <p>Potrzebuję <a href="#items/staff"><span style="color: #b0b">Kostura</span></a> zanim zacznę rzucać jakiekolwiek <span style="color: #b38ef3">czary</span>, duże, czy małe. Trzymając go w dłoni i wciskając <span style="color: #8d6acc">Use Item/Place Block</span> zaczynam <span style="color: #b38ef3">czarować</span>; stąd mogę przeciągać wskaźnik i tkać glify.</p><p>Kostur dużo się nie różni od kawałka <span style="color: #74b3f2">przepływu</span> na patyku. Niczego więcej i tak nie potrzebuję.</p>
 <br />
-  <h4>Staves</h4>
+  <h4>Kostury</h4>
   <details class="details-collapsible recipe-details">
       <summary class="collapse-details">
     <span class="collapse-recipe-show">Click to show recipes</span>
@@ -2219,7 +2219,7 @@
     </div>
 </div>    </div>
   </details>
-      <p><i>Don&#39;t fight; flame, light; ignite; burn bright.</i></p>
+      <p><i>Nie walcz z tym; pal, krześ; wznieć; płoń jaskrawo.</i></p>
 <br />
 </div>
 <div id="items/lens" class="entry">
@@ -2239,9 +2239,9 @@
     class="permalink small"
     title="Permalink"
   ><i class="bi bi-link-45deg"></i></a></h3>
-    <p><span style="color: #74b3f2">Media</span> can have peculiar effects on any type of information, in specific circumstances. Coating a glass in a thin film of it can lead to ... elucidating insights.</p><p>By holding a <a href="#items/lens"><span style="color: #b0b">Scrying Lens</span></a> in my hand, certain blocks will display additional information when I look at them.</p>
+    <p><span style="color: #74b3f2">Przepływ</span> ma osobliwe efekty na informację w jakiejkolwiek formie, w odpowiednich okolicznościach. Pokrycie szkła jego cienką warstwą da ci wgląd na wiele nowych faktów.</p><p>Trzymając w dłoni <a href="#items/lens"><span style="color: #b0b">Soczewkę Prawdy</span></a>, niektóre bloki wyświetlą dodatkowe informacje, gdy na nie spojrzę.</p>
 <br />
-    <p>For example, looking at a piece of <span style="color: #b0b">Redstone</span> will display its signal strength. I suspect I will discover other blocks with additional insight as my studies into my art progress.</p><p>In addition, holding it while casting using a <a href="#items/staff"><span style="color: #b0b">Staff</span></a> will shrink the spacing between dots, allowing me to draw more on my grid.</p><p>I can also wear it on my head as a strange sort of monocle.</p>
+    <p>Na przykład, patrząc na kawałek <span style="color: #b0b">Redstone</span>, ujawni się jego siła sygnału. Podejrzewam, że odkryję inne bloki z dodatkowymi informacjami w miarę postępów w zgłębianiu tej sztuki.</p><p>Dodatkowo, trzymając go w trakcie czarowania, używając <a href="#items/staff"><span style="color: #b0b">Staff</span></a> skurczy odstępy między kropkami, pozwalając mi wcisnąć więcej znaków na siatce.</p><p>Także mogę go nosić na głowie jak lekko dziwny monokl.</p>
 <br />
   <details class="details-collapsible recipe-details">
       <summary class="collapse-details">
@@ -2317,7 +2317,7 @@
     </div>
 </div>    </div>
   </details>
-      <p><i>You must learn... to see what you are looking at.</i></p>
+      <p><i>Musisz się nauczyć... zobaczyć to, na co patrzysz.</i></p>
 <br />
 </div>
 <div id="items/thought_knot" class="entry">
@@ -2337,7 +2337,7 @@
     class="permalink small"
     title="Permalink"
   ><i class="bi bi-link-45deg"></i></a></h3>
-    <p>The forgetful often tie a piece of string about their finger to help them remember something important. I believe this idea might be of use in my art. A specially knotted piece of string should be able to hold a single iota stably, irregardless of my stack.</p><p>I will call my invention a <span style="color: #b0b">Thought-Knot</span>.</p>
+    <p>Zapominalscy często zawiązują kawałek sznurka na palcu, aby pomóc sobie zapamiętać coś ważnego. Wierzę, że ten pomysł mógłby być pożyteczny w mojej sztuce. Specjalnie splatany kawałek sznurka powinien być w stanie utrzymać pojedynczą jotę stabilnie, niezależnie od mojego stacku.</p><p> Nazwę ten wynalazek <span style="color: #b0b">kłębkiem myśli</span>.</p>
 <br />
     <p>When I craft it, it stores no iota. Using <a href="#patterns/readwrite@hexcasting:write"><span style="color: #fc77be">Scribe&#39;s Gambit</span></a> while holding a <span style="color: #b0b">Thought-Knot</span> in my other hand will remove the top of the stack and save it into the <span style="color: #b0b">Thought-Knot</span>. Using <a href="#patterns/readwrite@hexcasting:read"><span style="color: #fc77be">Scribe&#39;s Reflection</span></a> will copy whatever iota&#39;s in the <span style="color: #b0b">Thought-Knot</span> and add it to the stack.</p><p>Once a <span style="color: #b0b">Thought-Knot</span> has been written to, the string is indelibly tangled; the iota can be read any number of times, but there is no way to erase or overwrite it. Fortunately, they are not expensive.</p>
 <br />
@@ -9561,7 +9561,7 @@
   src="../../../../v/latest/1.21/renders/minecraft/item/wooden_pickaxe.png"
   loading="lazy"
   class="item-texture texture pixelated "
->Podstawowe Symbole<a
+>Podstawowe Glify<a
     href="#table-of-contents"
     class="permalink small"
     title="Jump to top"
@@ -14982,7 +14982,7 @@
   </div>
 <br />
   <div id="patterns/lists@hexcasting:slice" class="">
-<h4 class="pattern-title">Egzaltacja Wyborcy (list, num, num → list)<a
+<h4 class="pattern-title">Egzaltacja Wyboru (list, num, num → list)<a
     href="#patterns/lists@hexcasting:slice"
     class="permalink small"
     title="Permalink"
@@ -20371,7 +20371,7 @@
   src="../../../../v/latest/1.21/renders/minecraft/textures/mob_effect/conduit_power.png"
   loading="lazy"
   class="item-texture texture pixelated "
->Arcyzaklęcia<a
+>Wyższe Zaklęcia<a
     href="#table-of-contents"
     class="permalink small"
     title="Jump to top"
