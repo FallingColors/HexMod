@@ -343,11 +343,11 @@
         },
         actionDenyList: {
           "": "禁用操作列表",
-          "@Tooltip": "被禁用操作的资源位置；试图执行此类操作会导致事故。例如，“hexcasting:get_caster”会禁用意识之精思",
+          "@Tooltip": "被禁用操作的资源位置；试图执行此类操作会导致事故。例如，“hexcasting:get_caster”会禁用意识之精思。",
         },
         circleActionDenyList: {
           "": "法术环禁用操作列表",
-          "@Tooltip": "法术环中被禁用操作的资源位置；试图执行此类操作会导致事故。"
+          "@Tooltip": "法术环中被禁用操作的资源位置；试图执行此类操作会导致事故。例如，“hexcasting:get_caster”会禁用意识之精思。",
         },
         greaterTeleportSplatsItems: {
           "": "卓越传送散落物品",
@@ -392,6 +392,14 @@
         amethystShardModification: {
           "": "紫水晶碎片掉落率变化量",
           "@Tooltip": "采掘紫水晶簇时紫水晶碎片掉落数量相较原版的改变量。",
+        },
+        globalCostScaling: {
+          "": "全局消耗倍数",
+          "@Tooltip": "除去#hexcasting:cannot_modify_cost标签下的操作，其余操作的媒质消耗均会乘以该数。若希望调整该标签下操作的消耗，请使用“操作消耗倍数”配置。",
+        },
+        costRescaleListRaw: {
+          "": "操作消耗倍数",
+          "@Tooltip": "资源位置与对应操作媒质消耗倍数的映射。例如，“hexcasting:add_motion 3”会让驱动的消耗变为3倍。",
         },
       },
     },
@@ -513,6 +521,7 @@
       heat_wave: "热浪",
       wither_wave: "凋零波纹",
       flight_zone: "飞行区",
+      magnet: "磁铁",
     },
     message: {
       cant_overcast: "这个咒术需求的媒质量比我有的还多……我应该再算几遍。",
@@ -756,10 +765,6 @@
         write: "书吏之策略",
         "write/entity": "编年史家之策略",
         "write/local": "福金之策略",
-        readable: "审计员之精思",
-        "readable/entity": "审计员之纯化",
-        writable: "估价员之精思",
-        "writable/entity": "估价员之纯化",
         "akashic/read": "阿卡夏之馏化",
         "akashic/write": "阿卡夏之策略",
         print: "揭示",
@@ -848,6 +853,8 @@
         open_n_parens: "冥想",
         close_all_parens: "回想",
         read_into_parens: "插嵌",
+        simulate: "模拟",
+        null_coalesce: "聚结之馏化",
       },
       "book.hexcasting:": {
         get_entity_height: "测高仪之纯化",
@@ -891,6 +898,7 @@
     "special.hexcasting:": {
       number: "数字之精思：%s",
       mask: "簿记员之策略：%s",
+      for_each: "托特之策略：%s",
     },
     "iota.hexcasting:": {
       "null": {
@@ -937,10 +945,10 @@
       unescaped: "本应运行一个图案，而实际运行了%s",
       not_enough_args: "本应接受大于等于%s个参数，而实际栈高度为%s",
       no_args: "本应接受大于等于%s个参数，而实际为空栈",
-      needs_parens: "在绘制反思前未先绘制内省",
+      needs_parens: "未先绘制内省",
       wrong_dimension: "无法在%2$s中影响到%1$s",
       entity_too_far: "%s超出影响范围",
-      entity_not_found: "无法找到%s，可能是因其已死亡或未被加载",
+      entity_not_found: "无法在这个世界中找到%s",
       immune_entity: "无法影响到%s",
       eval_too_much: "运行了过多图案",
       no_item: "需要%s，而实际无对应物品",
@@ -1058,6 +1066,7 @@
         no_bool: "%s处的iota实际为%s，而非布尔值",
         empty_stack: "%s处的栈为空栈",
       },
+      "others_name.offline": "试图侵犯缺席玩家的灵魂的隐私",
     },
     circles: {
       no_exit: "%s处的媒质流无法找到出口",
@@ -1108,7 +1117,7 @@
       geodes: "晶洞",
       couldnt_cast: "挫折",
       start_to_see: "我看到了什么？",
-      "101": "咒术 101",
+      "101": "咒法学 101",
       vectors: "向量入门",
       mishaps: "事故",
       stack: "栈",
@@ -1182,6 +1191,7 @@
       whats_a_hex: "咒术是什么？",
       types: "类型",
       advanced_escaping: "高阶转义",
+      mishap_avoidance: "事故预防",
     },
     page: {
       creative_items: {
@@ -1212,7 +1222,7 @@
       start_to_see: {
         "1": "文献没有说错。自然出手了。",
         "2": "那……那是……$(p)……那是我所经历过的$(italic)最糟糕/$的事了。我向自然呈现了我的规划，得来的是一个坚定的笑容和一种被撕裂的感受——我的一部分破碎了，就好像雨中四散的紫水晶粉。$(p)只是$(italic)存活/$下来都是极大的幸事，更不用说有精力写下这些了。这件事该到此为止，我应该在施放$(hex)咒术/$时多算几遍，绝不能再犯这样的错误。",
-        "3": "……但是。$(br2)但是在那最为神圣的一刻，我破碎的那一部分……它$(italic)看见了/$……$(l:greatwork/the_work)$(thing)一些东西/$。一个地方——也许是一件作品？（这种定义对……那种事物来说不值一提）$(p)和一张……一个薄膜-屏障-薄层-界限，将我和单纯的思维-能流-光-能量的领域隔绝开来。我记得——我看见-想到-回忆起-感受到——那个屏障的边缘变得模糊了，略微模糊了。$(p)我想要$(italic)穿过它/$。",
+        "3": "……但是。$(br2)但是就在那一刻，我破碎的那一部分……它$(italic)看见了/$……$(l:greatwork/the_work)$(thing)一些东西/$。一个地方——也许是一件作品？（这种定义对……那种事物来说不值一提）$(p)和一张……一个薄膜-屏障-薄层-界限，将我和单纯的思维-能流-光-能量的领域隔绝开来。我记得——我看见-想到-回忆起-感受到——那个屏障的边缘变得模糊了，略微模糊了。$(p)我想要$(italic)穿过它/$。",
         "4": "但我不应该。我也$(italic)清楚/$我不应该。那很危险。非常非常危险。跨越屏障需要的力量……我必须仅凭$(italic)一次施法/$就让我自己濒临死亡。$(br2)但我，就是，$(italic)不甘心/$。$(p)$(italic)这/$就是我魔法的集大成之作。这就是我所追求的$(#54398a)启迪/$。$(br2)我还想知道更多。我要再看到那场景。我$(italic)必将/$再见。$(p)我脆弱的意识和永恒的荣耀相比，又算得上什么呢？",
       },
       casting: {
@@ -1300,7 +1310,7 @@
         "true_name.title": "违犯他人",
         true_name: "试图在某种永久性媒介中$(l:patterns/readwrite#hexcasting:write)$(action)存储/$代表另一位玩家的 iota。$(br2)产生黑色火花，并致盲大约一分钟。",
         "entity_not_found.title": "实体失踪",
-        entity_not_found: "试图影响已不存在的实体。有两种可能性，其一是实体已死。其二也是相对来说更奇怪的，是实体距离过远以至于无法被“观测”。$(br2)产生棕色火花，并让我反胃恶心一小会，就像久坐后快速起身一样。",
+        entity_not_found: "试图影响已不存在的实体。可能是是实体已死，也可能是实体距离过远以至于无法被“观测”。$(br2)产生棕色火花，并让我反胃恶心一小会，就像久坐后快速起身一样。",
         "disabled.title": "禁用操作",
         disabled: "试图执行被服务器管理员禁用的操作。$(br2)产生黑色火花。",
         "other.title": "灾难性故障",
@@ -1347,7 +1357,6 @@
       thought_knot: {
         "1": "健忘者常在手指上缠绕丝线以助记忆。我也坚信我的咒法技艺能活用这种做法。以特定方式绑出的绳结应该能稳定存储一个 iota，且能独立于栈存在。$(br2)我将其称为“$(item)结念绳/$”。",
         "2": "在初合成时，它的存储空间内没有 iota。在另一只手持有$(item)结念绳/$时，绘制$(l:patterns/readwrite#hexcasting:write)$(action)书吏之策略/$就会将栈顶 iota 移除并存入$(item)结念绳/$。绘制$(l:patterns/readwrite#hexcasting:read)$(action)书吏之精思/$则会将$(item)结念绳/$中 iota 复制出来并压入栈顶。$(br2)一旦将 iota 写入$(item)结念绳/$，绳结本身便不再能解开。其中 iota 可被随意读取，但不可被清除或覆写。不过还好，这些绳结十分易得。",
-        "3": "另外，如果我在$(item)结念绳/$中写入一个实体，然后在该实体死亡或消失后尝试复制，则$(l:patterns/readwrite#hexcasting:read)$(action)书吏之精思/$会压入一个 $(thing)Null/$。",
         "crafting.desc": "$(italic)别人要是看到你带着块牌子，上面写着“本人风度翩翩，品貌非凡”，你又会作何感想？/$",
       },
       focus: {
@@ -1409,7 +1418,7 @@
         special: "最后还有两种特殊的染色剂。$(item)灵魂闪光染色剂/$的颜色为我所独有，而$(item)空无染色剂/$则会重置为初始状态的紫水晶色。$(br2)$(italic)以及许多还没被研究出来的内在颜色。/$",
       },
       edified: {
-        "1": "用$(l:patterns/spells/blockworks#hexcasting:edify)$(action)启迪树苗/$就能将部分$(media)媒质/$注入树苗，从而造出$(l:items/edified)$(thing)启迪树/$。它们又高又尖，树皮上有特殊纹理。树叶则有三种不同颜色。",
+        "1": "用$(l:patterns/spells/blockworks#hexcasting:edify)$(action)启迪树苗/$就能将部分$(media)媒质/$注入树苗，从而造出$(l:items/edified)$(thing)启迪树/$。它们又高又尖，树皮上有奇怪的螺旋纹理。树叶则有三种不同颜色。",
         "2": "我觉得这种木材与$(hex)咒法学/$有着紧密的联系。但就算真有，我也完全找不到这联系在哪。它和普通木头如出一辙，不同只在于颜色不一样。$(br2)就现在而言，它们是很好的装饰用方块。$(br2)当然，也可用斧来去皮。",
         "crafting.desc": "$(italic)它们那周身洁白的巨大而光滑的树干，仅凭自己支撑起了茂密的树冠，投下绿荫与静谧。/$",
       },
@@ -1602,19 +1611,20 @@
         },
       },
       logic: {
-        bool_coerce: "将参数变换为布尔值。数 $(thing)0/$、$(thing)Null/$、False，以及空列表会变为 False。其余所有则变为 True。",
+        bool_coerce: "将参数变换为布尔值。数 0、$(thing)Null/$、False、向量 (0, 0, 0)、空列表会变为 False。其余所有变为 True。",
         bool_to_number: "将布尔值变换为数。True 变为 $(thing)1/$， False 变为 $(thing)0/$。",
         not: "如果参数是 True，返回 False；如果参数是 False，返回 True。",
         or: "如果至少有一个参数是 True，返回 True。否则返回 False。",
         and: "如果两个参数都是 True，返回 True。否则返回 False。",
         xor: "如果参数中仅一个是 True，返回 True。否则返回 False。",
-        "if": "如果第一个参数是 True，保留第二个参数并移除第三个。否则保留第三个参数并移除第二个。",
+        "if": "如果第一个参数是 True，返回第二个参数；否则返回第三个参数。",
         equals: "如果第一个参数等于第二个（在较小误差内），返回 True。否则返回 False。",
         not_equals: "如果第一个参数不等于第二个（超出较小误差），返回 True。否则返回 False。",
         greater: "如果第一个参数大于第二个，返回 True。否则返回 False。",
         less: "如果第一个参数小于第二个，返回 True。否则返回 False。",
         greater_eq: "如果第一个参数大于或等于第二个，返回 True。否则返回 False。",
         less_eq: "如果第一个参数小于或等于第二个，返回 True。否则返回 False。",
+        null_coalesce: "若第一个参数不是 $(l:casting/influences)$(thing)Null/$，原样返回。否则返回第二个参数。",
       },
       entities: {
         get_entity: "将栈顶位置向量变为该处实体（若无则返回 $(thing)Null/$）。",
@@ -1696,20 +1706,21 @@
       meta: {
         "eval.1": "移除栈顶的可运行 iota（通常是图案或$(l:casting/whats_a_hex)整条$(hex)咒术/$），然后就像我用$(l:items/staff)$(item)法杖/$绘制施法一样运行。",
         "eval.2": "若与$(l:items/focus)$(item)核心/$同时使用，它将提供极为强大的操控能力。据我找到的一张晦涩卷轴所称，它还将自然的咒法体系变为了一个“图灵完备”的系统。$(br2)需注意，此时$(hex)咒术/$中的非图案 iota 会招致事故，除非预先进行$(l:patterns/patterns_as_iotas)$(action)转义/$。此外，由于这些图案产生的能量缺乏我的引导，$(o)任何/$失误都会导致$(hex)咒术/$的后续操作立即瓦解。",
-        "for_each.1": "移除栈中的可运行 iota 和一个列表，然后对列表中的每个元素运行所给的可运行 iota。",
-        "for_each.2": "更确切地说，对于列表中的每个元素，它将：$(li)创建一个新栈，其中包括当前栈中的所有元素和后一列表中的一个元素。$(li)施放可运行 iota。$(li)将该栈中剩余的所有元素存进一个列表。$(br)在所有元素都运行一遍后，将该列表压入原本的栈中。$(br2)也难怪精通此操作的人都疯了。",
+        "for_each.1": "一系列能弹出可运行 iota、数据列表、栈顶 $(o)n/$ 个上下文 iota 的图案，具体由尾部长度决定。图案随后会在第一个列表的各元素上运行可运行 iota。",
+        "for_each.2": "从左上角开始顺时针方向的各例分别对应上下文大小为 0、1、2 个 iota 的图案。$(br2)具体地，对于每一个数据值，它会：$(li)创建一个子栈，用上下文 iota 的副本填充$(li)压入数据值$(li)施放可运行 iota$(li)将子栈中所有剩余的 iota 存入一个隐藏列表$(br2)最后，它将恢复原栈，并将隐藏栈压入栈顶。",
         "halt.1": "这个图案将强制停止$(hex)咒术/$的施放。它独自出现可能没什么用，我只要不绘制图案或是放下法杖就行了。",
         "halt.2": "但当与$(l:patterns/meta#hexcasting:eval)$(action)赫尔墨斯之策略/$或$(l:patterns/meta#hexcasting:for_each)$(action)托特之策略/$一起使用时，它就将发挥$(italic)大/$用。那些图案会碰到这个休止符，但$(hex)咒术/$本身不会停止，停止运行的是那些策略。它可以用来防止$(l:patterns/meta#hexcasting:for_each)$(action)托特之策略/$将每个 iota 都运行一遍。这便是逃离疯狂的秘道。",
         "eval/cc.1": "此图案和$(l:patterns/meta#hexcasting:eval)$(action)赫尔墨斯之策略/$类似，也能运行可运行 iota，但会在开始之前将一独特的“跳转” iota 压入栈中。 ",
         "eval/cc.2": "当执行至“跳转” iota 时，法术会直接跳至可运行 iota 的尾部，略过剩余的所有操作。$(p)当然因为已经有了$(l:patterns/meta#hexcasting:halt)$(action)卡戎之策略/$，这种性质难免显得有些冗余。不过它能以可控方式退出$(italic)多层嵌套/$调用的$(l:patterns/meta#hexcasting:eval)$(action)赫尔墨斯之策略/$，而卡戎之策略只能退出一层。$(p)“跳转”iota 甚至会在所有策略都执行完毕后还留在栈上……真是细思恐极。",
         "thanatos.1": "单个$(hex)咒术/$能运行的图案数量似乎存在上限。此图案可将仍可运行的图案数压入列表。",
+        "for_each.3": "例如，栈中有数 5、列表 [1, 2, 3]、$(l:patterns/math#hexcasting:add)$(action)加法之馏化/$的$(l:patterns/patterns_as_iotas)$(thing)图案 iota/$，可以绘制$(l:patterns/meta#hexcasting:for_each)$(action)托特之策略：1/$，结果会是列表 [6, 7, 8]，且栈中不会有其他 iota。$(br2)确实是有些难懂，但学会了肯定有不少好处。我已经能想到这个图案的许多用途了。",
       },
       circle_patterns: {
         disclaimer: "这些图案只能在$(l:greatwork/spellcircles)$(item)法术环/$上运行。尝试用$(l:items/staff)$(item)法杖/$绘制它们会招致可怖的事故。",
         "circle/impetus_pos": "返回该法术环的$(l:greatwork/impetus)$(item)促动石/$的位置。",
         "circle/impetus_dir": "以单位向量返回该法术环的$(l:greatwork/impetus)$(item)促动石/$的面朝方向。",
-        "circle/bounds/min": "返回该法术环影响范围的西北靠下转角的位置。",
-        "circle/bounds/max": "返回该法术环影响范围的东南靠上转角的位置。",
+        "circle/bounds/min": "返回该法术环影响范围的西北靠下转角处方块的位置。",
+        "circle/bounds/max": "返回该法术环影响范围的东南靠上转角处方块的位置。",
       },
       akashic_patterns: {
         "akashic/read": "在$(l:greatwork/akashiclib)$(item)阿卡夏记录/$处从$(l:greatwork/akashiclib)$(item)阿卡夏图书馆/$中读出所给图案对应的 iota。没有读取距离限制。消耗大约 1 个$(l:items/amethyst)$(item)紫水晶粉/$。",
@@ -1725,7 +1736,7 @@
         "explode.2": "强度为 3 的爆炸与苦力怕的爆炸相当，4 则与 TNT 的相当。自然倒是不让我产生强度大于 10 的爆炸。$(br2)奇怪的是，这种爆炸伤不到我。也许是因为这爆炸是$(italic)我/$引起的？$(br2)强度为 0 时消耗极少量媒质，每加一级强度多消耗 3 个$(l:items/amethyst)$(item)紫水晶粉/$。",
         "explode.fire.1": "移除栈顶的数和向量，并在所给位置产生一次强度为所给数的带火焰的爆炸。",
         "explode.fire.2": "消耗 1 个$(l:items/amethyst)$(item)紫水晶粉/$，每加一级强度多消耗 3 个$(l:items/amethyst)$(item)紫水晶粉/$。就和$(l:patterns/spells/basic#hexcasting:explode)$(action)爆炸/$一模一样，除了带点火。",
-        add_motion: "移除栈顶的实体和表示方向的向量，然后将所给实体沿所给方向推动出去。驱动力的强度由向量的模长决定。$(br)消耗向量模长的平方个$(l:items/amethyst)$(item)紫水晶粉/$。除对某实体第一次使用外，其他情况额外消耗 1 个。",
+        add_motion: "移除栈顶的实体和表示方向的向量，然后将所给实体沿所给方向推动出去。驱动力的强度由向量的模长决定。$(br)消耗两倍于向量的模长个$(l:items/amethyst)$(item)紫水晶粉/$。",
         blink: "移除栈顶的实体和表示长度的数，然后将所给实体沿其视线方向向前传送所给长度格。$(br)每传送两格消耗大约 1 个$(l:items/amethyst)$(item)紫水晶碎片/$。",
         "beep.1": "移除栈顶的一个向量和两个数。在指定位置以指定$(thing)乐器/$（由第一个数决定）弹奏$(thing)一个音/$（由第二个数决定）。消耗极少量$(media)媒质/$。",
         "beep.2": "共有 16 种$(thing)乐器/$和 25 种$(thing)音高/$。两者的下标均从 0 开始。$(br2)这些乐器似乎就是$(item)音符盒/$对应的各种乐器，尽管其具体对应关系不得而知。$(br2)不管怎么说，用$(l:items/lens)$(item)探知透镜/$观察$(item)音符盒/$就能得知其乐器对应的数字。",
@@ -1914,7 +1925,7 @@
         },
       },
       whats_a_hex: {
-        "1": "从概念上看，$(hex)咒术/$和$(l:casting/101)咒术 101/$ 里描述的完全一致：一系列操作，通常以在世界中产生特定效果为执行目的，并会通过法术实现这一需求。$(br2)对于随写随用的$(hex)咒术/$而言，这么想没有问题；但要是希望为后人留下记录和参考（或者只是方便我自己使用），或许就需要再具体一点的概念了。",
+        "1": "从概念上看，$(hex)咒术/$和$(l:casting/101)咒法学 101/$ 里描述的完全一致：一系列操作，通常以在世界中产生特定效果为执行目的，并会通过法术实现这一需求。$(br2)对于随写随用的$(hex)咒术/$而言，这么想没有问题；但要是希望为后人留下记录和参考（或者只是方便我自己使用），或许就需要再具体一点的概念了。",
         "2": "通常来说，$(hex)咒术/$是一个图案 iota 列表，和在$(l:patterns/patterns_as_iotas)图案转义/$中提及的一致。而将这种形式的$(hex)咒术/$入栈后，即可用$(l:patterns/meta#hexcasting:eval)赫尔墨斯之策略/$等元运行图案施放，或灌注到$(l:items/hexcasting)施法物品/$中以供后用。$(br2)这个列表和其他的列表 iota 没有本质区别——我可以操作列表本身，或将其保存到$(l:items/thought_knot)永久性/$$(l:items/focus)存储位置/$，甚至可以再嵌入到其他$(hex)咒术/$中去。",
         "3": "需注意，这类列表不需要全由图案组成。虽然直接插入非图案 iota 通常会导致$(hex)咒术/$无法正常运作，但也有$(l:patterns/patterns_as_iotas#iota_embedding)相应的操作/$能规避麻烦。而且，部分$(l:patterns/meta#hexcasting:eval/cc)特殊 iota/$ 可以直接和图案一样运行。$(br2)清楚这一点后，其实$(o)所有/$列表都可以是$(hex)咒术/$——唯一的要求就是能成功施放。",
       },
@@ -1939,6 +1950,10 @@
         read_into_parens: "只在$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$时可用。从我的副手读取 iota，将其插入正在运行的列表。非图案 iota 可能需要$(l:patterns/patterns_as_iotas#iota_embedding)$(action)特殊措施/$才能在执行列表时规避事故。",
         open_n_parens: "移除栈顶数，并视为绘制了该数个$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$。在$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$时和普通图案表现一致，在多层嵌套中绘制额外的$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$可能会需要一定的$(l:patterns/patterns_as_iotas#hexcasting:escape)$(action)技巧/$。",
         close_all_parens: "和$(l:patterns/patterns_as_iotas#hexcasting:close_paren)$(action)反思/$一致，但会一次性关闭$(italic)所有/$$(l:patterns/patterns_as_iotas#hexcasting:open_paren)$(action)内省/$。执行后会向栈中加入退出的总层数和编写的整个列表。",
+      },
+      mishap_avoidance: {
+        "1": "$(l:casting/mishaps)$(thing)事故/$可能会很烦人，好在我找到了缓和它们的方法。后续的图案可用于模拟其他任何图案，不用执行就可判断能否成功运行它们。$(br2)注意，模拟$(l:patterns/meta)$(action)赫尔墨斯之策略/$等图案时不会模拟相应的元运行，而只会模拟图案本身。",
+        simulate: "模拟而非执行绘制的下一个图案。模拟的图案不会修改栈；它只会返回代表它$(o)能否/$成功执行的布尔值，除此之外不会产生其他作用。",
       },
     },
   },
