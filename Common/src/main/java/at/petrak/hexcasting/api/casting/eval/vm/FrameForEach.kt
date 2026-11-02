@@ -53,7 +53,7 @@ data class FrameForEach(
                 .pushFrame(FrameForEach(data.tail(), code, contextStack, stashedStack, newAcc))
                 // and prep the Thoth'd code block for evaluation.
                 .pushFrame(FrameEvaluate(code, true))
-            Triple(stack, harness.image.withUsedOp(), cont2)
+            Triple(stack, harness.image, cont2)
         } else {
             // Else, restore the stashed stack, and dump our final list on top.
             val stack = stashedStack.appended(ListIota(newAcc))

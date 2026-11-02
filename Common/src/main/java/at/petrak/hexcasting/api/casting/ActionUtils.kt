@@ -8,7 +8,6 @@ import at.petrak.hexcasting.api.casting.mishaps.MishapEntityNotFound
 import at.petrak.hexcasting.api.casting.mishaps.MishapInvalidIota
 import at.petrak.hexcasting.api.casting.mishaps.MishapNotEnoughArgs
 import at.petrak.hexcasting.api.utils.TreeList
-import at.petrak.hexcasting.api.utils.asTranslatedComponent
 import at.petrak.hexcasting.api.utils.validateIota
 import com.mojang.datafixers.util.Either
 import net.minecraft.core.BlockPos
@@ -304,6 +303,18 @@ fun List<Iota>.getEvaluatable(idx: Int, argc: Int = 0): Either<Iota, TreeList<Io
 }
 
 fun Iota?.orNull() = this ?: NullIota()
+
+/**
+ * Converts to long while ensuring that the final result is always nonzero.
+ * Used when a spell's cost depends on an arbitrary multiplier provided by
+ * the player, so that an extremely small value doesn't make the spell free.
+ */
+fun Double.toNonZeroLong(): Long {
+    val result = this.roundToLong()
+    if (result == 0L)
+        return if (this >= 0) 1L else -1L
+    return result
+}
 
 // TODO do we make this work on lists
 // there should probably be some way to abstract function application over lists, vecs, and numbers,

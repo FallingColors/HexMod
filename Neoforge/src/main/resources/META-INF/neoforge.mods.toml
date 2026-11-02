@@ -39,7 +39,8 @@ side = "BOTH"
 
 [[dependencies.hexcasting]]
 modId = "patchouli"
-versionRange = "[1.21-80,)"
+mandatory = true
+versionRange = "[1.21.1-93,)"
 ordering = "NONE"
 side = "BOTH"
 
