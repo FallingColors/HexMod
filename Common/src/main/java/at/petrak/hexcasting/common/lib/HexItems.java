@@ -161,12 +161,8 @@ public class HexItems {
     }
 
     private static void generateScrollEntries() {
-        var keyList = new ArrayList<ResourceKey<ActionRegistryEntry>>();
-        Registry<ActionRegistryEntry> regi = IXplatAbstractions.INSTANCE.getActionRegistry();
-        for (var key : regi.registryKeySet())
-            if (HexUtils.isOfTag(regi, key, HexTags.Actions.PER_WORLD_PATTERN))
-                keyList.add(key);
-        keyList.sort( (a, b) -> a.location().compareTo(b.location()) );
+        var keyList = HexUtils.perWorldActionKeys();
+        keyList.sort(Comparator.comparing(ResourceKey::location));
         for (var key : keyList) {
             addToTab(() -> ItemScroll.withPerWorldPattern(
                 new ItemStack(HexItems.SCROLL_LARGE),

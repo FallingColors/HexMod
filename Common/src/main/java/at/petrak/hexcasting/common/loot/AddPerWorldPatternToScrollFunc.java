@@ -41,13 +41,7 @@ public class AddPerWorldPatternToScrollFunc extends LootItemConditionalFunction 
      * This doesn't actually have any params so extract behaviour out for the benefit of forge
      */
     public static ItemStack doStatic(ItemStack stack, RandomSource rand, ServerLevel overworld) {
-        var perWorldKeys = new ArrayList<ResourceKey<ActionRegistryEntry>>();
-        Registry<ActionRegistryEntry> regi = IXplatAbstractions.INSTANCE.getActionRegistry();
-        for (var key : regi.registryKeySet()) {
-            if (HexUtils.isOfTag(regi, key, HexTags.Actions.PER_WORLD_PATTERN)) {
-                perWorldKeys.add(key);
-            }
-        }
+        var perWorldKeys = HexUtils.perWorldActionKeys();
         var patternKey = perWorldKeys.get(rand.nextInt(perWorldKeys.size()));
         var patternID = patternKey.location().toString();
         var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(patternKey, overworld);
