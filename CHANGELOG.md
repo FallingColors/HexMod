@@ -28,6 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed an error when trying to cast a Great Spell that no longer exists, such as when an addon has been removed ([#1335](https://github.com/FallingColors/HexMod/pull/1335)) @Robotgiggle
 - Fixed a broken translation key when referring to a jump iota in a mishap message ([#1350](https://github.com/FallingColors/HexMod/pull/1350)) @hauveli
 - Fixed Thoth's Gambit counting one extra pattern towards the pattern limit every iteration ([#1352](https://github.com/FallingColors/HexMod/pull/1352)) @Robotgiggle
+- Fixed an exploit that let you read the pattern from a for-sale Ancient Scroll without buying it ([#1363](https://github.com/FallingColors/HexMod/pull/1363)) @Robotgiggle
 
 ## `0.11.4` - 2026-08-26
 
