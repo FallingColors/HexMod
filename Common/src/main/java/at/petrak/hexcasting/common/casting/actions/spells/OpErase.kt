@@ -6,6 +6,7 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.mod.HexTags
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.item.ItemStack
 
@@ -35,7 +36,7 @@ object OpErase : SpellAction {
 
         return SpellAction.Result(
             Spell(handStack),
-            MediaConstants.DUST_UNIT * handStack.getCount(),
+            if (handStack.`is`(HexTags.Items.COSTLY_TO_ERASE)) MediaConstants.DUST_UNIT / 8 else 0,
             listOf(),
         )
     }
