@@ -50,6 +50,9 @@ public class HexItemTagProvider extends ItemTagsProvider {
         add(tag(HexTags.Items.SEAL_MATERIALS),
             Items.HONEYCOMB);
 
+        add(tag(HexTags.Items.COSTLY_TO_ERASE),
+            HexItems.CYPHER.get(), HexItems.TRINKET.get(), HexItems.ARTIFACT.get());
+
         add(tag(HexTags.Items.PANS),
                 ResourceLocation.fromNamespaceAndPath("farmersdelight", "skillet"));
 
