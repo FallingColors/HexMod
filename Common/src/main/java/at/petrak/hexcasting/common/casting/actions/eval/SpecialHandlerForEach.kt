@@ -10,6 +10,8 @@ import at.petrak.hexcasting.api.casting.eval.vm.FrameForEach
 import at.petrak.hexcasting.api.casting.eval.vm.SpellContinuation
 import at.petrak.hexcasting.api.casting.getEvaluatable
 import at.petrak.hexcasting.api.casting.getList
+import at.petrak.hexcasting.api.casting.iota.Iota
+import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.math.HexAngle
 import at.petrak.hexcasting.api.casting.math.HexPattern
 import at.petrak.hexcasting.api.casting.math.HexSignature
@@ -48,6 +50,17 @@ class SpecialHandlerForEach(val n: Int) : SpecialHandler {
 
             val contextStack = stack.takeRight(n)
             val stashedStack = stack.dropRight(n)
+
+            // if the pattern list is empty, directly return the modified data list to avoid VM overhead
+            // note that we still need to include a copy of the context stack before each datum
+            if (instrList.isEmpty()) {
+                val outList = mutableListOf<Iota>()
+                for (datum in datums) {
+                    outList.addAll(contextStack.appended(datum))
+                }
+                val image2 = image.withUsedOp().copy(stack = stashedStack.appended(ListIota(outList)))
+                return OperationResult(image2, listOf(), continuation, HexEvalSounds.THOTH.get())
+            }
 
             val frame = FrameForEach(datums, instrList, contextStack, stashedStack, TreeList.empty())
             val image2 = image.withUsedOp().copy(stack = TreeList.empty())

@@ -21,9 +21,9 @@ pkSubproj {
     modrinthJar = jar.archiveFile
     modrinthDependencies([
         "paucal:HyBiJPtT", // 0.6.0-forge
-        "patchouli:1.20.1-80-forge",
-        "caelus:3.1.0+1.20",
-        "inline:1.20.1-1.0.1-forge",
+        "patchouli:$minecraftVersion-$patchouliVersion-forge",
+        "caelus:$caelusVersion",
+        "inline:$minecraftVersion-$inlineVersion-forge",
     ])
 }
 
@@ -66,10 +66,16 @@ repositories {
     // temporarily changed from https://maven.terraformersmc.com/releases/ due to intermittent errors
     maven { url = "https://maven.gnomecraft.net/releases" }
 
-    maven {
-        name = 'Kotlin for Forge'
-        url = 'https://thedarkcolour.github.io/KotlinForForge/'
-        content { includeGroup "thedarkcolour" }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = 'Kotlin for Forge'
+                url = 'https://thedarkcolour.github.io/KotlinForForge/'
+            }
+        }
+        filter {
+            includeGroup "thedarkcolour"
+        }
     }
 
     maven { url "https://maven.shedaniel.me/" }
@@ -92,7 +98,7 @@ dependencies {
     runtimeOnly("top.theillusivec4.curios:curios-neoforge:$curiosVersion+$minecraftVersion")
 
     modImplementation "at.petra-k:paucal:$paucalVersion+$minecraftVersion-neoforge"
-    modImplementation "vazkii.patchouli:Patchouli:1.21-$patchouliVersion-NEOFORGE-SNAPSHOT"
+    modImplementation "vazkii.patchouli:Patchouli:1.21.1-$patchouliVersion-NEOFORGE-SNAPSHOT"
     modImplementation "com.illusivesoulworks.caelus:caelus-neoforge:$caelusVersion"
     modImplementation "com.samsthenerd.inline:inline-neoforge:1.21.1-1.2.2-74"
     // needed for inline to run

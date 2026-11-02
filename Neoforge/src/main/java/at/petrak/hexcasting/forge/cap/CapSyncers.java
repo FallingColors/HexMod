@@ -55,18 +55,50 @@ public class CapSyncers {
         syncAltiora(player);
     }
 
+    @SubscribeEvent
+    public static void syncDataOnDimensionChange(PlayerEvent.PlayerChangedDimensionEvent evt) {
+        if (!(evt.getEntity() instanceof ServerPlayer player)) {
+            return;
+        }
+
+        syncSentinel(player);
+        syncPigment(player);
+        syncAltiora(player);
+    }
+
+    @SubscribeEvent
+    public static void syncDataOnTrack(PlayerEvent.StartTracking evt) {
+
+        if (evt.getTarget() instanceof ServerPlayer subject && evt.getEntity() instanceof ServerPlayer dest) {
+            syncPigmentTo(dest, subject);
+            syncAltioraTo(dest, subject);
+        }
+    }
+
     public static void syncSentinel(ServerPlayer player) {
         IXplatAbstractions.INSTANCE.sendPacketToPlayer(player,
             new MsgSentinelStatusUpdateAck(IXplatAbstractions.INSTANCE.getSentinel(player)));
     }
 
+    public static void syncPigmentTo(ServerPlayer dest, ServerPlayer subject) {
+        IXplatAbstractions.INSTANCE.sendPacketToPlayer(dest,
+                new MsgPigmentUpdateAck(subject.getId(), IXplatAbstractions.INSTANCE.getPigment(subject)));
+    }
+
     public static void syncPigment(ServerPlayer player) {
-        IXplatAbstractions.INSTANCE.sendPacketToPlayer(player,
-            new MsgPigmentUpdateAck(IXplatAbstractions.INSTANCE.getPigment(player)));
+        IXplatAbstractions.INSTANCE.sendPacketTracking(player,
+            new MsgPigmentUpdateAck(player.getId(), IXplatAbstractions.INSTANCE.getPigment(player)));
+        syncPigmentTo(player, player); // sendPacketTracking does not include sending it to self
+    }
+
+    public static void syncAltioraTo(ServerPlayer dest, ServerPlayer subject) {
+        IXplatAbstractions.INSTANCE.sendPacketToPlayer(dest,
+                new MsgAltioraUpdateAck(subject.getId(), IXplatAbstractions.INSTANCE.getAltiora(subject)));
     }
 
     public static void syncAltiora(ServerPlayer player) {
-        IXplatAbstractions.INSTANCE.sendPacketToPlayer(player,
-            new MsgAltioraUpdateAck(IXplatAbstractions.INSTANCE.getAltiora(player)));
+        IXplatAbstractions.INSTANCE.sendPacketTracking(player,
+            new MsgAltioraUpdateAck(player.getId(), IXplatAbstractions.INSTANCE.getAltiora(player)));
+        syncAltioraTo(player, player); // sendPacketTracking does not include sending it to self
     }
 }

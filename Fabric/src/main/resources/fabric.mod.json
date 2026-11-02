@@ -60,7 +60,7 @@
     "cardinal-components-block": "~6.1.3",
     "paucal": ">0.7.0",
     "cloth-config": "15.0.*",
-    "patchouli": ">=1.20.1-80",
+    "patchouli": ">=1.21.1-93",
     "inline": ">=1.21.1-1.2.2"
   },
   "suggests": {

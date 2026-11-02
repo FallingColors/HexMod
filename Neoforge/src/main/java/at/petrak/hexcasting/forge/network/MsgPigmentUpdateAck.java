@@ -5,16 +5,19 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.world.entity.player.Player;
 
 /**
  * Sent server->client to synchronize the status of the sentinel.
  */
-public record MsgPigmentUpdateAck(FrozenPigment update) implements CustomPacketPayload {
+public record MsgPigmentUpdateAck(int playerId, FrozenPigment update) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<MsgPigmentUpdateAck> TYPE = new CustomPacketPayload.Type<>(HexAPI.modLoc("color"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, MsgPigmentUpdateAck> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.INT, MsgPigmentUpdateAck::playerId,
             FrozenPigment.STREAM_CODEC, MsgPigmentUpdateAck::update,
             MsgPigmentUpdateAck::new
     );
@@ -32,10 +35,10 @@ public record MsgPigmentUpdateAck(FrozenPigment update) implements CustomPacketP
 
         public static void handle(MsgPigmentUpdateAck self) {
             Minecraft.getInstance().execute(() -> {
-                var player = Minecraft.getInstance().player;
-                if (player != null) {
-                    IXplatAbstractions.INSTANCE.setPigment(player, self.update());
-                }
+                if (Minecraft.getInstance().level == null) return;
+                var selfEntity = Minecraft.getInstance().level.getEntity(self.playerId);
+                if (!(selfEntity instanceof Player player)) return;
+                IXplatAbstractions.INSTANCE.setPigment(player, self.update);
             });
         }
     }
