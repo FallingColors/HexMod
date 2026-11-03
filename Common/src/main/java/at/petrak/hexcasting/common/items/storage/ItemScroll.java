@@ -166,8 +166,8 @@ public class ItemScroll extends Item implements IotaHolderItem {
 
     @Override
     public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        // the needs_purchase tag is used so you can't see the pattern on scrolls sold by a wandering trader
-        // once you put the scroll into your inventory, this removes the tag to reveal the pattern
+        // this tag applies the "purchase to show pattern" tooltip line to scrolls sold by wandering traders
+        // once you buy the scroll and put it in your inventory, the tag (and thus the tooltip) gets removed
         if (NBTHelper.getBoolean(pStack, TAG_NEEDS_PURCHASE)) {
             NBTHelper.remove(pStack, TAG_NEEDS_PURCHASE);
         }
@@ -212,7 +212,7 @@ public class ItemScroll extends Item implements IotaHolderItem {
     @Override
     public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
         var compound = NBTHelper.getCompound(stack, TAG_PATTERN);
-        if (compound != null && !NBTHelper.getBoolean(stack, TAG_NEEDS_PURCHASE)) {
+        if (compound != null) {
             var pattern = HexPattern.fromNBT(compound);
             return Optional.of(new PatternTooltip(
                 pattern,

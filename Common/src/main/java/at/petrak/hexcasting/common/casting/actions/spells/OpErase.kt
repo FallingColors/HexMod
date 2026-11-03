@@ -6,6 +6,9 @@ import at.petrak.hexcasting.api.casting.eval.CastingEnvironment
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.mishaps.MishapBadOffhandItem
 import at.petrak.hexcasting.api.misc.MediaConstants
+import at.petrak.hexcasting.api.utils.hasString
+import at.petrak.hexcasting.api.utils.remove
+import at.petrak.hexcasting.common.items.storage.ItemScroll
 import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.world.item.ItemStack
 
@@ -50,6 +53,9 @@ object OpErase : SpellAction {
 
             if (datumHolder != null && datumHolder.writeIota(null, true))
                 datumHolder.writeIota(null, false)
+
+            if (stack.hasString(ItemScroll.TAG_OP_ID))
+                stack.remove(ItemScroll.TAG_OP_ID)
         }
     }
 }
