@@ -2,6 +2,7 @@ package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.common.blocks.BlockQuenchedAllay;
 import at.petrak.hexcasting.common.blocks.akashic.BlockEntityAkashicBookshelf;
+import at.petrak.hexcasting.common.blocks.circles.BlockEntityChestLocus;
 import at.petrak.hexcasting.common.blocks.circles.BlockEntitySlate;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityLookingImpetus;
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityRedstoneImpetus;
@@ -30,6 +31,11 @@ public class HexBlockEntities {
         "akashic_bookshelf",
             () -> IXplatAbstractions.INSTANCE.createBlockEntityType(BlockEntityAkashicBookshelf::new,
                     HexBlocks.AKASHIC_BOOKSHELF.get()));
+
+    public static final Supplier<BlockEntityType<BlockEntityChestLocus>> CHEST_LOCUS_TILE = REGISTER.register(
+        "chest_locus",
+            () -> IXplatAbstractions.INSTANCE.createBlockEntityType(BlockEntityChestLocus::new,
+                    HexBlocks.CHEST_LOCUS.get()));
 
     public static final Supplier<BlockEntityType<BlockEntityRedstoneImpetus>> IMPETUS_REDSTONE_TILE = REGISTER.register(
         "impetus/redstone",

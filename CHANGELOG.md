@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Updated to Minecraft 1.21.1 ([#985](https://github.com/FallingColors/HexMod/pull/985)) @SuperKnux @slava110
+- Added the Storage Locus, a spell circle component that lets a circle stop depending on its caster's inventory ([#1364](https://github.com/FallingColors/HexMod/pull/1364)) @Robotgiggle
 - Added Simulate, which causes the next pattern drawn to be simulated (to check for mishaps) rather than executed ([#1194](https://github.com/FallingColors/HexMod/pull/1194)) @Robotgiggle
 - Added Coalescing Distillation, which performs the null-coalescing operation ([#1196](https://github.com/FallingColors/HexMod/pull/1196)) @Robotgiggle
 - Added the `hex_unbreakable` tag for blocks that should be immune to Break Block regardless of the configured mining tier ([#1186](https://github.com/FallingColors/HexMod/pull/1186)) @Robotgiggle @slava110
@@ -25,9 +26,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - Iotas included via the above process are now popped from the original stack
 - Entity iotas no longer become Null if the referenced entity ceases to exist or becomes unloaded ([#1299](https://github.com/FallingColors/HexMod/pull/1299)) @Robotgiggle
 - Augur's Purification now returns false for nonexistent or unloaded entity iotas ([#1299](https://github.com/FallingColors/HexMod/pull/1299)) @Robotgiggle
-
-### Changed
-
 - The media cost of Impulse now scales linearly rather than quadratically ([#1145](https://github.com/FallingColors/HexMod/pull/1145)) @Robotgiggle
 - Erase Item is now free for most items ([#1359](https://github.com/FallingColors/HexMod/pull/1359)) @beholderface
 

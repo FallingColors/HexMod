@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": {
+      "item": "minecraft:chest"
+    },
+    "E": {
+      "item": "hexcasting:edified_planks"
+    },
+    "S": {
+      "item": "hexcasting:slate"
+    }
+  },
+  "pattern": [
+    " E ",
+    "ECE",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "hexcasting:locus/chest"
+  }
+}
