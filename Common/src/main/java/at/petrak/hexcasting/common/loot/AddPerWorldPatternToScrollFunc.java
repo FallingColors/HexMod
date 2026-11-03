@@ -44,15 +44,16 @@ public class AddPerWorldPatternToScrollFunc extends LootItemConditionalFunction 
         var action = IXplatAbstractions.INSTANCE.getActionRegistry()
                 .getTag(HexTags.Actions.PER_WORLD_PATTERN).orElseThrow()
                 .getRandomElement(rand).orElseThrow().value();
-        var patternID = IXplatAbstractions.INSTANCE.getActionRegistry().getKey(action).toString();
-        var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(action, overworld);
+        var actionKey = IXplatAbstractions.INSTANCE.getActionRegistry().getResourceKey(action).orElseThrow();
+        var actionID = actionKey.location().toString();
+        var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(actionKey, overworld);
         if (pat == null) {
-            HexAPI.LOGGER.error("No per-world pattern found for action " + patternID + " while generating loot scroll! " +
+            HexAPI.LOGGER.error("No per-world pattern found for action " + actionID + " while generating loot scroll! " +
                                 "Try running '/hexcasting recalcPatterns' to generate the patterns for this world.");
-            NBTHelper.putString(stack, ItemScroll.TAG_RECALC_WARNING, patternID);
+            NBTHelper.putString(stack, ItemScroll.TAG_RECALC_WARNING, actionID);
             return stack;
         }
-        NBTHelper.putString(stack, ItemScroll.TAG_OP_ID, patternID);
+        NBTHelper.putString(stack, ItemScroll.TAG_OP_ID, actionID);
         NBTHelper.put(stack, ItemScroll.TAG_PATTERN, pat.serializeToNBT());
         return stack;
     }
