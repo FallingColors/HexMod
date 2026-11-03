@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - Iotas included via the above process are now popped from the original stack
 - Entity iotas no longer become Null if the referenced entity ceases to exist or becomes unloaded ([#1299](https://github.com/FallingColors/HexMod/pull/1299)) @Robotgiggle
 - Augur's Purification now returns false for nonexistent or unloaded entity iotas ([#1299](https://github.com/FallingColors/HexMod/pull/1299)) @Robotgiggle
+- Holding player references in an active spell circle for an extended period of time now incurs a stacking upkeep cost ([#1354](https://github.com/FallingColors/HexMod/pull/1354)) @Robotgiggle
 
 ### Changed
 

@@ -11,6 +11,7 @@ import at.petrak.hexcasting.api.pigment.FrozenPigment;
 import at.petrak.hexcasting.common.lib.HexItems;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -146,11 +147,20 @@ public interface ICircleComponent {
      * Helper function to "throw a mishap"
      */
     default void fakeThrowMishap(BlockPos pos, BlockState bs, CastingImage image, CircleCastEnv env, Mishap mishap) {
+        // perform any side effects
         Mishap.Context errorCtx = new Mishap.Context(null,
-            bs.getBlock().getName().append(" (").append(Component.literal(pos.toShortString())).append(")"));
+            bs.getBlock().getName()
+            .append(" (").append(Component.literal(pos.toShortString())).append(")")
+            .withStyle(ChatFormatting.LIGHT_PURPLE));
         var sideEffect = new OperatorSideEffect.DoMishap(mishap, errorCtx);
         var vm = new CastingVM(image, env);
         sideEffect.performEffect(vm);
+        // post the error message
+        var msg = mishap.errorMessageWithName(env, errorCtx);
+        var imp = env.getImpetus();
+        if (msg != null && imp != null) {
+            imp.postMishap(msg);
+        }
     }
 
     abstract sealed class ControlFlow {
