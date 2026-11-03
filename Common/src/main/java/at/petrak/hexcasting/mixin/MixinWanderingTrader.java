@@ -2,6 +2,7 @@ package at.petrak.hexcasting.mixin;
 
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
+import net.minecraft.core.Holder;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -28,10 +29,9 @@ public class MixinWanderingTrader {
             return;
         RandomSource rand = self.getRandom();
         if (rand.nextFloat() < HexConfig.server().traderScrollChance() && self.getServer() != null) {
-            var action = IXplatAbstractions.INSTANCE.getActionRegistry()
-                    .getTag(HexTags.Actions.PER_WORLD_PATTERN).orElseThrow()
-                    .getRandomElement(rand).orElseThrow().value();
-            var actionID = IXplatAbstractions.INSTANCE.getActionRegistry().getKey(action).toString();
+            var actionID = IXplatAbstractions.INSTANCE.getActionRegistry().getTag(HexTags.Actions.PER_WORLD_PATTERN)
+                    .flatMap(set -> set.getRandomElement(rand)).flatMap(Holder::unwrapKey)
+                    .map(key -> key.location().toString()).orElseThrow();
             ItemStack scroll = ItemScroll.withPerWorldPattern(new ItemStack(HexItems.SCROLL_LARGE), actionID);
             NBTHelper.putBoolean(scroll, ItemScroll.TAG_NEEDS_PURCHASE, true);
             offerList.set(5, new MerchantOffer(new ItemStack(Items.EMERALD, 12), scroll, 1, 1, 1));

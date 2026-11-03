@@ -10,6 +10,7 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
+import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -33,10 +34,8 @@ public class AddPerWorldPatternToScrollFunc extends LootItemConditionalFunction 
      * This doesn't actually have any params so extract behaviour out for the benefit of forge
      */
     public static ItemStack doStatic(ItemStack stack, RandomSource rand, ServerLevel overworld) {
-        var action = IXplatAbstractions.INSTANCE.getActionRegistry()
-                .getTag(HexTags.Actions.PER_WORLD_PATTERN).orElseThrow()
-                .getRandomElement(rand).orElseThrow().value();
-        var actionKey = IXplatAbstractions.INSTANCE.getActionRegistry().getResourceKey(action).orElseThrow();
+        var actionKey = IXplatAbstractions.INSTANCE.getActionRegistry().getTag(HexTags.Actions.PER_WORLD_PATTERN)
+                .flatMap(set -> set.getRandomElement(rand)).flatMap(Holder::unwrapKey).orElseThrow();
         var actionID = actionKey.location().toString();
         var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(actionKey, overworld);
         if (pat == null) {

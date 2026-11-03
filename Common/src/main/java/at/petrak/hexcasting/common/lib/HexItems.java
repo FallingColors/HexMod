@@ -21,7 +21,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
@@ -158,14 +157,12 @@ public class HexItems {
     }
 
     private static void generateScrollEntries() {
-        var regi = IXplatAbstractions.INSTANCE.getActionRegistry();
-        var resLocs = regi.getTag(HexTags.Actions.PER_WORLD_PATTERN).orElseThrow().stream()
-                .map(holder -> regi.getKey(holder.value()))
-                .filter(Objects::nonNull).sorted().toList();
-        for (var resLoc : resLocs) {
+        var actionIDs = IXplatAbstractions.INSTANCE.getActionRegistry().getTag(HexTags.Actions.PER_WORLD_PATTERN)
+                .orElseThrow().stream().map(holder -> holder.unwrapKey().orElseThrow().location().toString())
+                .sorted().toList();
+        for (var id : actionIDs) {
             addToTab(() -> ItemScroll.withPerWorldPattern(
-                new ItemStack(HexItems.SCROLL_LARGE),
-                resLoc.toString()
+                new ItemStack(HexItems.SCROLL_LARGE), id
             ),HexCreativeTabs.SCROLLS);
         }
     }
