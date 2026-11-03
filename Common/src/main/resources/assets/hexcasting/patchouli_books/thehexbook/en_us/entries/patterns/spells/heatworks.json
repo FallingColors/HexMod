@@ -1,0 +1,42 @@
+{
+  "name": "hexcasting.entry.heatworks",
+  "category": "hexcasting:patterns/spells",
+  "icon": "minecraft:magma_block",
+  "sortnum": 1,
+  "advancement": "hexcasting:root",
+  "read_by_default": true,
+  "pages": [
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:ignite",
+      "anchor": "hexcasting:ignite",
+      "input": "vector | entity",
+      "output": "",
+      "text": "hexcasting.page.heatworks.ignite"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:extinguish",
+      "anchor": "hexcasting:extinguish",
+      "input": "vector",
+      "output": "",
+      "text": "hexcasting.page.heatworks.extinguish"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:smelt",
+      "anchor": "hexcasting:smelt",
+      "input": "vector | entity",
+      "output": "",
+      "text": "hexcasting.page.heatworks.smelt"
+    },
+    {
+      "type": "hexcasting:pattern",
+      "op_id": "hexcasting:freeze",
+      "anchor": "hexcasting:freeze",
+      "input": "vector",
+      "output": "",
+      "text": "hexcasting.page.heatworks.freeze"
+    }
+  ]
+}
