@@ -1,7 +1,6 @@
 package at.petrak.hexcasting.mixin;
 
 import at.petrak.hexcasting.api.mod.HexTags;
-import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import net.minecraft.world.entity.npc.WanderingTrader;
 import net.minecraft.world.item.trading.MerchantOffers;
@@ -9,11 +8,9 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.util.RandomSource;
-import net.minecraft.server.MinecraftServer;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.lib.HexItems;
-import at.petrak.hexcasting.common.loot.AddPerWorldPatternToScrollFunc;
 import at.petrak.hexcasting.common.items.storage.ItemScroll;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
