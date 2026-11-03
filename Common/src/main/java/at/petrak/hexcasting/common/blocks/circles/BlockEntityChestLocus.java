@@ -1,17 +1,13 @@
 package at.petrak.hexcasting.common.blocks.circles;
 
 import at.petrak.hexcasting.common.lib.HexBlockEntities;
-import at.petrak.hexcasting.common.lib.HexBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -28,21 +24,22 @@ public class BlockEntityChestLocus extends RandomizableContainerBlockEntity {
     private final ContainerOpenersCounter openersCounter = new ContainerOpenersCounter() {
         @Override
         protected void onOpen(Level level, BlockPos blockPos, BlockState blockState) {
-            BlockEntityChestLocus.this.playSound(blockState, SoundEvents.BAMBOO_WOOD_TRAPDOOR_OPEN);
-            BlockEntityChestLocus.this.updateBlockState(blockState, true);
+            level.playSound(null, blockPos, SoundEvents.BAMBOO_WOOD_TRAPDOOR_OPEN, SoundSource.BLOCKS,
+                            0.8F, level.random.nextFloat() * 0.1F + 0.9F);
+            level.setBlock(blockPos, blockState.setValue(BlockChestLocus.OPEN, true), 3);
         }
         @Override
         protected void onClose(Level level, BlockPos blockPos, BlockState blockState) {
-            BlockEntityChestLocus.this.playSound(blockState, SoundEvents.BAMBOO_WOOD_TRAPDOOR_CLOSE);
-            BlockEntityChestLocus.this.updateBlockState(blockState, false);
+            level.playSound(null, blockPos, SoundEvents.BAMBOO_WOOD_TRAPDOOR_CLOSE, SoundSource.BLOCKS,
+                            0.8F, level.random.nextFloat() * 0.1F + 0.9F);
+            level.setBlock(blockPos, blockState.setValue(BlockChestLocus.OPEN, false), 3);
         }
         @Override
         protected void openerCountChanged(Level level, BlockPos blockPos, BlockState blockState, int i, int j) {}
         @Override
         protected boolean isOwnContainer(Player player) {
-            if (player.containerMenu instanceof ChestMenu) {
-                Container container = ((ChestMenu)player.containerMenu).getContainer();
-                return container == BlockEntityChestLocus.this;
+            if (player.containerMenu instanceof ChestMenu chestMenu) {
+                return chestMenu.getContainer() == BlockEntityChestLocus.this;
             }
             return false;
         }
@@ -85,8 +82,8 @@ public class BlockEntityChestLocus extends RandomizableContainerBlockEntity {
     }
 
     @Override
-    protected void setItems(NonNullList<ItemStack> nonNullList) {
-        this.items = nonNullList;
+    protected void setItems(NonNullList<ItemStack> itemList) {
+        this.items = itemList;
     }
 
     @Override
@@ -94,12 +91,14 @@ public class BlockEntityChestLocus extends RandomizableContainerBlockEntity {
         return ChestMenu.threeRows(i, inventory, this);
     }
 
+    @Override
     public void startOpen(Player player) {
         if (!this.remove && !player.isSpectator()) {
             this.openersCounter.incrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
         }
     }
 
+    @Override
     public void stopOpen(Player player) {
         if (!this.remove && !player.isSpectator()) {
             this.openersCounter.decrementOpeners(player, this.getLevel(), this.getBlockPos(), this.getBlockState());
@@ -110,17 +109,5 @@ public class BlockEntityChestLocus extends RandomizableContainerBlockEntity {
         if (!this.remove) {
             this.openersCounter.recheckOpeners(this.getLevel(), this.getBlockPos(), this.getBlockState());
         }
-    }
-
-    void updateBlockState(BlockState blockState, boolean bl) {
-        this.level.setBlock(this.getBlockPos(), blockState.setValue(BlockChestLocus.OPEN, bl), 3);
-    }
-
-    void playSound(BlockState blockState, SoundEvent soundEvent) {
-        Vec3i vec3i = (HexBlocks.CHEST_LOCUS.get().normalDir(null, blockState, null)).getNormal();
-        double d = this.worldPosition.getX() + 0.5 + vec3i.getX() / 2.0;
-        double e = this.worldPosition.getY() + 0.5 + vec3i.getY() / 2.0;
-        double f = this.worldPosition.getZ() + 0.5 + vec3i.getZ() / 2.0;
-        this.level.playSound(null, d, e, f, soundEvent, SoundSource.BLOCKS, 0.8F, this.level.random.nextFloat() * 0.1F + 0.9F);
     }
 }
