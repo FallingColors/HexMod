@@ -41,10 +41,11 @@ public class AddPerWorldPatternToScrollFunc extends LootItemConditionalFunction 
      * This doesn't actually have any params so extract behaviour out for the benefit of forge
      */
     public static ItemStack doStatic(ItemStack stack, RandomSource rand, ServerLevel overworld) {
-        var perWorldKeys = HexUtils.perWorldActionKeys();
-        var patternKey = perWorldKeys.get(rand.nextInt(perWorldKeys.size()));
-        var patternID = patternKey.location().toString();
-        var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(patternKey, overworld);
+        var action = IXplatAbstractions.INSTANCE.getActionRegistry()
+                .getTag(HexTags.Actions.PER_WORLD_PATTERN).orElseThrow()
+                .getRandomElement(rand).orElseThrow().value();
+        var patternID = IXplatAbstractions.INSTANCE.getActionRegistry().getKey(action).toString();
+        var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(action, overworld);
         if (pat == null) {
             HexAPI.LOGGER.error("No per-world pattern found for action " + patternID + " while generating loot scroll! " +
                                 "Try running '/hexcasting recalcPatterns' to generate the patterns for this world.");

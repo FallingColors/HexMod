@@ -2,13 +2,10 @@
 
 package at.petrak.hexcasting.api.utils
 
-import at.petrak.hexcasting.api.casting.ActionRegistryEntry
 import at.petrak.hexcasting.api.casting.iota.Iota
 import at.petrak.hexcasting.api.casting.iota.IotaType
 import at.petrak.hexcasting.api.casting.iota.ListIota
 import at.petrak.hexcasting.api.casting.math.HexCoord
-import at.petrak.hexcasting.api.mod.HexTags
-import at.petrak.hexcasting.xplat.IXplatAbstractions
 import net.minecraft.ChatFormatting
 import net.minecraft.core.Registry
 import net.minecraft.nbt.*
@@ -29,7 +26,6 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.reflect.KProperty
-
 
 const val TAU = Math.PI * 2.0
 const val SQRT_3 = 1.7320508f
@@ -316,19 +312,4 @@ fun <T> isOfTag(registry: Registry<T>, key: ResourceKey<T>, tag: TagKey<T>): Boo
 fun <T> isOfTag(registry: Registry<T>, loc: ResourceLocation, tag: TagKey<T>): Boolean {
     val key = ResourceKey.create(registry.key(), loc);
     return isOfTag(registry, key, tag)
-}
-
-/**
- * Returns a list of ResourceKeys for all the per-world patterns.
- * Used in a variety of places to help generate Ancient Scrolls.
- */
-fun perWorldActionKeys(): List<ResourceKey<ActionRegistryEntry>> {
-    val perWorldKeys = mutableListOf<ResourceKey<ActionRegistryEntry>>()
-    val regi = IXplatAbstractions.INSTANCE.getActionRegistry()
-    for (key in regi.registryKeySet()) {
-        if (isOfTag(regi, key, HexTags.Actions.PER_WORLD_PATTERN)) {
-            perWorldKeys.add(key)
-        }
-    }
-    return perWorldKeys
 }

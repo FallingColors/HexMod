@@ -127,6 +127,12 @@ public class PatternRegistryManifest {
     }
 
     @Nullable
+    public static HexPattern getCanonicalStrokesPerWorld(ActionRegistryEntry action, ServerLevel overworld) {
+        var maybeKey = IXplatAbstractions.INSTANCE.getActionRegistry().getResourceKey(action);
+        return maybeKey.map(key -> getCanonicalStrokesPerWorld(key, overworld)).orElse(null);
+    }
+
+    @Nullable
     public static HexPattern getCanonicalStrokesPerWorld(ResourceKey<ActionRegistryEntry> key, ServerLevel overworld) {
         var perWorldPatterns = ScrungledPatternsSave.open(overworld);
 
