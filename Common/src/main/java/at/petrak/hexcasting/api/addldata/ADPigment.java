@@ -1,16 +1,20 @@
 package at.petrak.hexcasting.api.addldata;
 
+import at.petrak.hexcasting.api.item.PigmentItem;
 import at.petrak.hexcasting.api.pigment.ColorProvider;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.UUID;
 
-public interface ADPigment {
-    ColorProvider provideColor(UUID owner);
+public record ADPigment(PigmentItem holder, ItemStack stack) {
+    public ColorProvider provideColor(UUID owner) {
+        return holder.provideColor(this.stack, owner);
+    }
 
-    static int morphBetweenColors(int[] colors, Vec3 gradientDir, float time, Vec3 position) {
+    public static int morphBetweenColors(int[] colors, Vec3 gradientDir, float time, Vec3 position) {
         float fIdx = Mth.positiveModulo(time + (float) gradientDir.dot(position), 1f) * colors.length;
 
         int baseIdx = Mth.floor(fIdx);

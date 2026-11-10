@@ -1,6 +1,10 @@
 package at.petrak.hexcasting.api.addldata;
 
+import at.petrak.hexcasting.api.item.MediaHolderItem;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.function.Supplier;
 
 public interface ADMediaHolder {
 
@@ -108,4 +112,107 @@ public interface ADMediaHolder {
     int AMETHYST_SHARD_PRIORITY = 2000;
     int AMETHYST_DUST_PRIORITY = 3000;
     int BATTERY_PRIORITY = 4000;
+
+    /**
+     * Things that read/write media amounts from an itemstack
+     */
+    record Dynamic(MediaHolderItem holder, ItemStack stack) implements ADMediaHolder {
+        public long getMedia() {
+            return holder.getMedia(stack);
+        }
+
+        @Override
+        public long getMaxMedia() {
+            return holder.getMaxMedia(stack);
+        }
+
+        @Override
+        public void setMedia(long media) {
+            holder.setMedia(stack, media);
+        }
+
+        @Override
+        public boolean canRecharge() {
+            return holder.canRecharge(stack);
+        }
+
+        @Override
+        public boolean canProvide() {
+            return holder.canProvideMedia(stack);
+        }
+
+        @Override
+        public int getConsumptionPriority() {
+            return holder.getConsumptionPriority(stack);
+        }
+
+        @Override
+        public boolean canConstructBattery() {
+            return false;
+        }
+
+        @Override
+        public long withdrawMedia(long cost, boolean simulate) {
+            return holder.withdrawMedia(stack, cost, simulate);
+        }
+
+        @Override
+        public long insertMedia(long amount, boolean simulate) {
+            return holder.insertMedia(stack, amount, simulate);
+        }
+    }
+
+    /**
+     * Things that always hold a constant amount of media, like amethyst
+     */
+    record Static(Supplier<Long> baseWorth, int consumptionPriority, ItemStack stack) implements ADMediaHolder {
+        @Override
+        public long getMedia() {
+            return baseWorth.get() * stack.getCount();
+        }
+
+        @Override
+        public long getMaxMedia() {
+            return getMedia();
+        }
+
+        @Override
+        public void setMedia(long media) {
+            // NO-OP
+        }
+
+        @Override
+        public boolean canRecharge() {
+            return false;
+        }
+
+        @Override
+        public boolean canProvide() {
+            return true;
+        }
+
+        @Override
+        public int getConsumptionPriority() {
+            return consumptionPriority;
+        }
+
+        @Override
+        public boolean canConstructBattery() {
+            return true;
+        }
+
+        @Override
+        public long withdrawMedia(long cost, boolean simulate) {
+            long worth = baseWorth.get();
+            if (cost < 0) {
+                cost = worth * stack.getCount();
+            }
+            double itemsRequired = cost / (double) worth;
+            int itemsUsed = Math.min((int) Math.ceil(itemsRequired), stack.getCount());
+            if (!simulate) {
+                stack.shrink(itemsUsed);
+            }
+            return itemsUsed * worth;
+        }
+    }
 }

@@ -24,7 +24,8 @@ import at.petrak.hexcasting.api.player.Sentinel;
 import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.BrainsweepeeIngredientType;
 import at.petrak.hexcasting.common.recipe.ingredient.state.StateIngredientType;
-import at.petrak.hexcasting.fabric.cc.HexCardinalComponents;
+import at.petrak.hexcasting.fabric.lib.HexCardinalComponents;
+import at.petrak.hexcasting.fabric.lib.HexItemApiLookups;
 import at.petrak.hexcasting.fabric.interop.trinkets.TrinketsInterop;
 import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
@@ -236,13 +237,13 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public @Nullable
     ADMediaHolder findMediaHolder(ItemStack stack) {
-        return HexCardinalComponents.MEDIA_HOLDER_LOOKUP.find(stack, null);
+        return HexItemApiLookups.MEDIA_HOLDER_LOOKUP.find(stack, null);
     }
 
     @Override
     public @Nullable
     ADIotaHolder findDataHolder(ItemStack stack) {
-        return HexCardinalComponents.IOTA_HOLDER_LOOKUP.find(stack, null);
+        return HexItemApiLookups.IOTA_HOLDER_LOOKUP.find(stack, null);
     }
 
     @Override
@@ -255,22 +256,22 @@ public class FabricXplatImpl implements IXplatAbstractions {
     @Override
     public @Nullable
     ADHexHolder findHexHolder(ItemStack stack) {
-        return HexCardinalComponents.HEX_HOLDER_LOOKUP.find(stack, null);
+        return HexItemApiLookups.HEX_HOLDER_LOOKUP.find(stack, null);
     }
 
     @Override
     public ADVariantItem findVariantHolder(ItemStack stack) {
-        return HexCardinalComponents.VARIANT_ITEM_LOOKUP.find(stack, null);
+        return HexItemApiLookups.VARIANT_ITEM_LOOKUP.find(stack, null);
     }
 
     @Override
     public boolean isPigment(ItemStack stack) {
-        return HexCardinalComponents.PIGMENT_ITEM_LOOKUP.find(stack, null) != null;
+        return HexItemApiLookups.PIGMENT_ITEM_LOOKUP.find(stack, null) != null;
     }
 
     @Override
     public ColorProvider getColorProvider(FrozenPigment pigment) {
-        var cc = Optional.ofNullable(HexCardinalComponents.PIGMENT_ITEM_LOOKUP.find(pigment.item(), null));
+        var cc = Optional.ofNullable(HexItemApiLookups.PIGMENT_ITEM_LOOKUP.find(pigment.item(), null));
         return cc.map(col -> col.provideColor(pigment.owner())).orElse(ColorProvider.MISSING);
     }
 
