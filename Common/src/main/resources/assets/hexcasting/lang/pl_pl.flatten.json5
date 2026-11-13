@@ -1271,6 +1271,10 @@
       thought_knot: {
         "1": "Zapominalscy często zawiązują kawałek sznurka na palcu, aby pomóc sobie zapamiętać coś ważnego. Wierzę, że ten pomysł mógłby być pożyteczny w mojej sztuce. Specjalnie splatany kawałek sznurka powinien być w stanie utrzymać pojedynczą jotę stabilnie, niezależnie od mojego stacku.$(br2) Nazwę ten wynalazek $(item)kłębkiem myśli/$.",
       },
+      scroll: {
+        "1": "$(l:items/scroll)$(item)Zwoje/$ służą do zapisywania glifów i dzielenia się nimi. Aby zapisać na nich glif, wystarczy wziąć jeden do ręki, a następnie użyć $(l:patterns/readwrite#hexcasting:write)$(action) Gambitu Skryby/$, z jotą glifu na wierzchu stosu.$(br2)Mogą także służyć jako dekoracja, jeśli zawieszę je na ścianie, podobnie do obrazów. Istnieją trzy rozmiary: mały (1x1), średni (2x2) i duży (3x3). Sprószenie powierzchni zwoju $(l:items/amethyst)$(item)ametystowym/$ pyłem powoduje, że zaczyna on pokazywać kolejność rysowania zapisanego na nim glifu.",
+        "2": "Dodatkowo, w niektórych strukturach mogę znaleźć tak zwane $(l:items/scroll)$(item) Starożytne Zwoje/$, na których zapisane są glify potężnych $(thing) Wyższych Zaklęć/$. Są to potężne zaklęcia, zapomniane wraz ze starymi mistrzami sztuk tajemnych. Niektórzy uważają, że taka potęga nie była przeznaczona dla śmiertelników... $(br2)Nie wiem czy ci \"śmiertelnicy\" zasługują żeby w ogóle je znać, jeśli nie mogą ich nawet rzucić.",
+      },
     },
   },
   "advancement.hexcasting:": {
