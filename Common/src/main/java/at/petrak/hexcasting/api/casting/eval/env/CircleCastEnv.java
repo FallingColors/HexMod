@@ -13,6 +13,7 @@ import at.petrak.hexcasting.api.casting.mishaps.Mishap;
 import at.petrak.hexcasting.api.casting.mishaps.MishapDisallowedSpell;
 import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.pigment.FrozenPigment;
+import at.petrak.hexcasting.common.blocks.circles.BlockEntityChestLocus;
 import at.petrak.hexcasting.common.lib.HexAttributes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -163,26 +164,52 @@ public class CircleCastEnv extends CastingEnvironment {
     }
 
     @Override
-    // TODO: Could do something like get items in inventories adjacent to the circle?
     public List<ItemStack> getUsableStacks(StackDiscoveryMode mode) {
-        if (this.getCastingEntity() instanceof ServerPlayer caster)
+        var invPos = this.execState.inventoryPos;
+        if (invPos != null && world.getBlockEntity(invPos) instanceof BlockEntityChestLocus chestLocus) {
+            return switch (mode) {
+                // top row of items is the "hotbar" for use in filtering
+                case QUERY -> chestLocus.getItems().subList(0,9);
+                // reverse order so non-hotbar items are prioritized for extraction
+                case EXTRACTION -> chestLocus.getItems().reversed();
+            };
+        } else if (this.getCastingEntity() instanceof ServerPlayer caster) {
             return getUsableStacksForPlayer(mode, null, caster);
+        }
         return new ArrayList<>();
     }
 
     @Override
-    // TODO: Adjacent inv!
     public List<HeldItemInfo> getPrimaryStacks() {
-        if (this.getCastingEntity() instanceof ServerPlayer caster)
+        var invPos = this.execState.inventoryPos;
+        if (invPos != null && world.getBlockEntity(invPos) instanceof BlockEntityChestLocus chestLocus) {
+            // slot 0 is treated as the "offhand"
+            return List.of(new HeldItemInfo(chestLocus.getItem(0), InteractionHand.OFF_HAND));
+        } else if (this.getCastingEntity() instanceof ServerPlayer caster) {
             return getPrimaryStacksForPlayer(InteractionHand.OFF_HAND, caster);
+        }
         return List.of();
     }
 
     @Override
-    // TODO: Adjacent inv!
     public boolean replaceItem(Predicate<ItemStack> stackOk, ItemStack replaceWith, @Nullable InteractionHand hand) {
-        if (this.getCastingEntity() instanceof ServerPlayer caster)
+        var invPos = this.execState.inventoryPos;
+        if (invPos != null && world.getBlockEntity(invPos) instanceof BlockEntityChestLocus chestLocus) {
+            if (hand != null && stackOk.test(chestLocus.getItem(0))) {
+                // slot 0 is treated as the "offhand"
+                chestLocus.setItem(0, replaceWith);
+                return true;
+            } else {
+                for (int i = 26; i >= 0; i--) {
+                    if (stackOk.test(chestLocus.getItem(i))) {
+                        chestLocus.setItem(0, replaceWith);
+                        return true;
+                    }
+                }
+            }
+        } else if (this.getCastingEntity() instanceof ServerPlayer caster) {
             return replaceItemForPlayer(stackOk, replaceWith, hand, caster);
+        }
         return false;
     }
 

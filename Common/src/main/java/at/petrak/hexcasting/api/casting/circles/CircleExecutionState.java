@@ -34,6 +34,7 @@ public class CircleExecutionState {
         TAG_REACHED_POSITIONS = "reached_positions",
         TAG_CURRENT_POS = "current_pos",
         TAG_ENTERED_FROM = "entered_from",
+        TAG_INVENTORY_POS = "inventory_pos",
         TAG_IMAGE = "image",
         TAG_CASTER = "caster",
         TAG_PIGMENT = "pigment",
@@ -47,6 +48,7 @@ public class CircleExecutionState {
     public final HashSet<BlockPos> reachedPositions;
     public BlockPos currentPos;
     public Direction enteredFrom;
+    public @Nullable BlockPos inventoryPos;
     public CastingImage currentImage;
     public @Nullable UUID caster;
     public @Nullable FrozenPigment casterPigment;
@@ -60,13 +62,14 @@ public class CircleExecutionState {
 
 
     protected CircleExecutionState(BlockPos impetusPos, Direction impetusDir, HashSet<BlockPos> reachedPositions,
-       BlockPos currentPos, Direction enteredFrom, CastingImage currentImage, @Nullable UUID caster,
+       BlockPos currentPos, Direction enteredFrom, BlockPos inventoryPos, CastingImage currentImage, @Nullable UUID caster,
        @Nullable FrozenPigment casterPigment, Long reachedSlate, BlockPos greaterCorner, BlockPos lesserCorner) {
         this.impetusPos = impetusPos;
         this.impetusDir = impetusDir;
         this.reachedPositions = reachedPositions;
         this.currentPos = currentPos;
         this.enteredFrom = enteredFrom;
+        this.inventoryPos = inventoryPos;
         this.currentImage = currentImage;
         this.caster = caster;
         this.casterPigment = casterPigment;
@@ -170,7 +173,7 @@ public class CircleExecutionState {
         return new Result.Ok<>(
             new CircleExecutionState(impetus.getBlockPos(), impetus.getStartDirection(),
                 reachedPositions, impetus.getBlockPos().offset(impetus.getStartDirection().getNormal()),
-                impetus.getStartDirection(), new CastingImage(), casterUUID, colorizer, 0L,
+                impetus.getStartDirection(), null, new CastingImage(), casterUUID, colorizer, 0L,
                 positiveBlock, negativeBlock));
     }
 
@@ -188,6 +191,8 @@ public class CircleExecutionState {
 
         out.put(TAG_CURRENT_POS, NbtUtils.writeBlockPos(this.currentPos));
         out.putByte(TAG_ENTERED_FROM, (byte) this.enteredFrom.ordinal());
+        if (this.inventoryPos != null)
+            out.put(TAG_INVENTORY_POS, NbtUtils.writeBlockPos(this.inventoryPos));
         out.put(TAG_IMAGE, CastingImage.getCODEC().encodeStart(NbtOps.INSTANCE, currentImage).getOrThrow());
 
         if (this.caster != null)
@@ -217,6 +222,7 @@ public class CircleExecutionState {
 
         var currentPos = NbtUtils.readBlockPos(nbt, TAG_CURRENT_POS).orElseThrow();
         var enteredFrom = Direction.values()[nbt.getByte(TAG_ENTERED_FROM)];
+        var inventoryPos = NbtUtils.readBlockPos(nbt, TAG_INVENTORY_POS).orElse(null);
         var image = CastingImage.getCODEC().parse(NbtOps.INSTANCE, nbt.getCompound(TAG_IMAGE)).getOrThrow();
 
         var reachedSlate = nbt.getLong(TAG_REACHED_NUMBER);
@@ -232,7 +238,7 @@ public class CircleExecutionState {
             pigment = FrozenPigment.CODEC.parse(NbtOps.INSTANCE, nbt.getCompound(TAG_PIGMENT)).getOrThrow();
 
         return new CircleExecutionState(startPos, startDir, reachedPositions, currentPos,
-            enteredFrom, image, caster, pigment, reachedSlate, positivePos, negativePos);
+            enteredFrom, inventoryPos, image, caster, pigment, reachedSlate, positivePos, negativePos);
     }
 
     private static Optional<BlockPos> readBlockPos(int[] aint) {
