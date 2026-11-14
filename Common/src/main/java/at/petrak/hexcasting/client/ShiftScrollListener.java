@@ -62,13 +62,13 @@ public class ShiftScrollListener {
     }
 
     private static boolean isScrollableStack(ItemStack stack) {
-        return stack.has(HexDataComponents.SELECTED_SPELLBOOK_PAGE.get()) || stack.getItem() == HexItems.ABACUS;
+        return stack.has(HexDataComponents.SELECTED_SPELLBOOK_PAGE.get()) || stack.getItem() == HexItems.ABACUS.get();
     }
 
     private static double getScrollModifier(ItemStack stack, boolean allowInverting) {
         if (!allowInverting) return 1;
 
-        if (stack.getItem() == HexItems.ABACUS) {
+        if (stack.getItem() == HexItems.ABACUS.get()) {
             return HexConfig.client().invertAbacusScrollDirection() ? -1 : 1;
         } else if (stack.has(HexDataComponents.SELECTED_SPELLBOOK_PAGE.get())) {
             return HexConfig.client().invertSpellbookScrollDirection() ? -1 : 1;
