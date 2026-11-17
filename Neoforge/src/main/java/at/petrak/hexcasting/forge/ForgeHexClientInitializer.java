@@ -69,9 +69,11 @@ public class ForgeHexClientInitializer {
             HexAdditionalRenderers.overlayGui(e.getGuiGraphics(), e.getPartialTick());
         });
 
-        //TODO port: maybe replace with DeltaTracker from Mojang?
+        // getGameTimeDeltaTicks() is the frame-to-frame delta, not the 0..1 partial tick within the
+        // current tick. ClientTickCounter is (ticks + partialTicks), so using it made everything driven
+        // by ClientTickCounter advance only once per tick and look like it ran at 20 fps.
         evBus.addListener((RenderFrameEvent.Pre e) -> {
-            ClientTickCounter.renderTickStart(e.getPartialTick().getGameTimeDeltaTicks());
+            ClientTickCounter.renderTickStart(e.getPartialTick().getGameTimeDeltaPartialTick(false));
         });
 
         evBus.addListener((ClientTickEvent.Post e) -> {
