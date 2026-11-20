@@ -1,9 +1,18 @@
 package at.petrak.hexcasting.api.addldata;
 
-public interface ADVariantItem {
-    int numVariants();
-    int getVariant();
+import at.petrak.hexcasting.api.item.VariantItem;
+import net.minecraft.world.item.ItemStack;
 
+public record ADVariantItem(VariantItem variantItem, ItemStack stack) {
+    public int numVariants() {
+        return variantItem.numVariants();
+    }
 
-    void setVariant(int variant);
+    public int getVariant() {
+        return variantItem.getVariant(stack);
+    }
+
+    public void setVariant(int variant) {
+        variantItem.setVariant(stack, variant);
+    }
 }
