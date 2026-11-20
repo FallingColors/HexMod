@@ -67,19 +67,6 @@ public record BrainsweepRecipe(
 		return ItemStack.EMPTY.copy();
 	}
 
-	// Because kotlin doesn't like doing raw, unchecked types
-	// Can't blame it, but that's what we need to do
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	public static BlockState copyProperties(BlockState original, BlockState copyTo) {
-		for (Property prop : original.getProperties()) {
-			if (copyTo.hasProperty(prop)) {
-				copyTo = copyTo.setValue(prop, original.getValue(prop));
-			}
-		}
-
-		return copyTo;
-	}
-
 	public static class Serializer extends RecipeSerializerBase<BrainsweepRecipe> {
 		public static MapCodec<BrainsweepRecipe> CODEC = RecordCodecBuilder.mapCodec(inst ->
 			inst.group(
