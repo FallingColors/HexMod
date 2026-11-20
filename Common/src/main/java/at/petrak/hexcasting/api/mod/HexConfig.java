@@ -72,6 +72,8 @@ public class HexConfig {
 
         int maxSpellCircleLength();
 
+        int circleTrueNameHoldTime();
+
         boolean isActionAllowed(ResourceLocation actionID);
 
         boolean isActionAllowedInCircles(ResourceLocation actionID);
@@ -93,6 +95,7 @@ public class HexConfig {
 
         int DEFAULT_MAX_OP_COUNT = 100_000;
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
+        int DEFAULT_CIRCLE_TRUENAME_HOLD_TIME = 10;
         int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;
 
         double DEFAULT_GLOBAL_COST_SCALING = 1.0;
