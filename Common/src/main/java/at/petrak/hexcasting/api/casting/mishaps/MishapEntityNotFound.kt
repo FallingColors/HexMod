@@ -12,7 +12,7 @@ import net.minecraft.world.item.DyeColor
 import java.util.*
 
 class MishapEntityNotFound(val entityId: UUID, val entityName: Component?) : Mishap() {
-    override fun accentColor(ctx: CastingEnvironment, errorCtx: Context): FrozenPigment =
+    override fun accentColor(env: CastingEnvironment, errorCtx: Context): FrozenPigment =
         dyeColor(DyeColor.BROWN)
 
     override fun execute(env: CastingEnvironment, errorCtx: Context, stack: TreeList<Iota>): TreeList<Iota> {
@@ -20,7 +20,7 @@ class MishapEntityNotFound(val entityId: UUID, val entityName: Component?) : Mis
         return stack
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context) =
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context) =
         error("entity_not_found", (entityName?.plainCopy() ?: Component.literal(entityId.toString())).aqua)
 
     companion object {
