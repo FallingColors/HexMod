@@ -33,10 +33,7 @@ import at.petrak.hexcasting.forge.network.MsgBrainsweepAck;
 import at.petrak.hexcasting.forge.recipe.ForgeUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
-import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
-import at.petrak.hexcasting.xplat.IXplatTags;
-import at.petrak.hexcasting.xplat.Platform;
+import at.petrak.hexcasting.xplat.*;
 import com.illusivesoulworks.caelus.api.CaelusApi;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -100,8 +97,8 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
-    public <B> IXplatRegister<B> createRegistrar(ResourceKey<Registry<B>> registryKey) {
-        return new ForgeRegister<>(DeferredRegister.create(registryKey, HexAPI.MOD_ID));
+    public <B> IXplatRegistrar<B> createRegistrar(ResourceKey<Registry<B>> registryKey) {
+        return new ForgeRegistrar<>(DeferredRegister.create(registryKey, HexAPI.MOD_ID));
     }
 
     @Override

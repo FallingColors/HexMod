@@ -1,22 +1,20 @@
 package at.petrak.hexcasting.fabric.xplat;
 
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Supplier;
 
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
-public class FabricRegister<B> implements IXplatRegister<B> {
+public class FabricRegistrar<B> implements IXplatRegistrar<B> {
     private final Registry<B> register;
 
     @SuppressWarnings("unchecked")
-    public FabricRegister(ResourceKey<Registry<B>> registryKey) {
+    public FabricRegistrar(ResourceKey<Registry<B>> registryKey) {
         this.register = (Registry<B>) BuiltInRegistries.REGISTRY.get(registryKey.location());
     }
 

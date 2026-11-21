@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.api.casting.eval.env.PlayerBasedCastEnv;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -11,7 +11,7 @@ import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import static at.petrak.hexcasting.api.HexAPI.MOD_ID;
 
 public class HexAttributes {
-    private static final IXplatRegister<Attribute> REGISTER = IXplatAbstractions.INSTANCE
+    private static final IXplatRegistrar<Attribute> REGISTER = IXplatAbstractions.INSTANCE
             .createRegistrar(Registries.ATTRIBUTE);
 
     public static void register() {

@@ -1,16 +1,16 @@
 package at.petrak.hexcasting.forge.xplat;
 
 import at.petrak.hexcasting.forge.ForgeHexInitializer;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import net.minecraft.core.Holder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
-public class ForgeRegister<B> implements IXplatRegister<B> {
+public class ForgeRegistrar<B> implements IXplatRegistrar<B> {
     private final DeferredRegister<B> register;
 
-    public ForgeRegister(DeferredRegister<B> register) {
+    public ForgeRegistrar(DeferredRegister<B> register) {
         this.register = register;
     }
 

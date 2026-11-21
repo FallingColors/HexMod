@@ -4,7 +4,7 @@ import at.petrak.hexcasting.common.loot.AddHexToAncientCypherFunc;
 import at.petrak.hexcasting.common.loot.AddPerWorldPatternToScrollFunc;
 import at.petrak.hexcasting.common.loot.AmethystReducerFunc;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import java.util.function.Supplier;
 
 public class HexLootFunctions {
-    private static final IXplatRegister<LootItemFunctionType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.LOOT_FUNCTION_TYPE);
+    private static final IXplatRegistrar<LootItemFunctionType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.LOOT_FUNCTION_TYPE);
 
     public static void register() {
         REGISTER.registerAll();

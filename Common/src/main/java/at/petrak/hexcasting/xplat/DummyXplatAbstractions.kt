@@ -119,7 +119,8 @@ internal class DummyXplatAbstractions: IXplatAbstractions {
     override fun isBreakingAllowed(world: ServerLevel, pos: BlockPos, state: BlockState, player: Player?): Boolean = error("Found use of DummyXplatAbstractions.")
     override fun isPlacingAllowed(world: ServerLevel, pos: BlockPos, blockStack: ItemStack, player: Player?): Boolean = error("Found use of DummyXplatAbstractions.")
     override fun getPehkuiApi(): PehkuiInterop.ApiAbstraction? = error("Found use of DummyXplatAbstractions.")
-    override fun <B : Any?> createRegistrar(registryKey: ResourceKey<Registry<B?>?>): IXplatRegister<B?>? = if(registryKey == HexRegistries.IOTA_TYPE) (object : IXplatRegister<IotaType<*>> {
+    override fun <B : Any?> createRegistrar(registryKey: ResourceKey<Registry<B?>?>): IXplatRegistrar<B?>? = if(registryKey == HexRegistries.IOTA_TYPE) (object :
+        IXplatRegistrar<IotaType<*>> {
         val inner = iotaTypeRegistry
 
         override fun <T : IotaType<*>> register(id: String?, provider: Supplier<T?>?): Supplier<T?> {
@@ -137,7 +138,7 @@ internal class DummyXplatAbstractions: IXplatAbstractions {
         override fun registerAll() {
             inner.freeze()
         }
-    }) as IXplatRegister<B?>? else error("Found use of DummyXplatAbstractions.")
+    }) as IXplatRegistrar<B?>? else error("Found use of DummyXplatAbstractions.")
     override fun getBrainsweepeeIngredientRegistry(): Registry<BrainsweepeeIngredientType<*>?>?  = error("Found use of DummyXplatAbstractions.")
     override fun getStateIngredientRegistry(): Registry<StateIngredientType<*>?>? = error("Found use of DummyXplatAbstractions.")
 }

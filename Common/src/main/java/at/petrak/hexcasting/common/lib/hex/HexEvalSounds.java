@@ -4,19 +4,13 @@ import at.petrak.hexcasting.api.casting.eval.sideeffects.EvalSound;
 import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.common.lib.HexSounds;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
-import net.minecraft.resources.ResourceLocation;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 // TODO: we REALLY need a cleanup of how sounds work. again.
 public class HexEvalSounds {
-    private static final IXplatRegister<EvalSound> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.EVAL_SOUND);
+    private static final IXplatRegistrar<EvalSound> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.EVAL_SOUND);
 
     public static void register() {
         REGISTER.registerAll();

@@ -18,7 +18,7 @@ import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRedstoneImpetus
 import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockRightClickImpetus;
 import at.petrak.hexcasting.common.blocks.decoration.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ColorRGBA;
@@ -40,8 +40,8 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class HexBlocks {
-    private static final IXplatRegister<Block> REGISTER_BLOCKS = IXplatAbstractions.INSTANCE.createRegistrar(Registries.BLOCK);
-    private static final IXplatRegister<Item> REGISTER_BLOCK_ITEMS = IXplatAbstractions.INSTANCE.createRegistrar(Registries.ITEM);
+    private static final IXplatRegistrar<Block> REGISTER_BLOCKS = IXplatAbstractions.INSTANCE.createRegistrar(Registries.BLOCK);
+    private static final IXplatRegistrar<Item> REGISTER_BLOCK_ITEMS = IXplatAbstractions.INSTANCE.createRegistrar(Registries.ITEM);
     private static final Map<ResourceKey<CreativeModeTab>, List<Supplier<Block>>> BLOCK_TABS = new LinkedHashMap<>();
 
     public static void register() {

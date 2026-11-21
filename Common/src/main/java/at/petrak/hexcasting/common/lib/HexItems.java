@@ -12,7 +12,7 @@ import at.petrak.hexcasting.common.items.magic.*;
 import at.petrak.hexcasting.common.items.pigment.*;
 import at.petrak.hexcasting.common.items.storage.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import com.google.common.base.Suppliers;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
@@ -34,7 +34,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 // https://github.com/VazkiiMods/Botania/blob/2c4f7fdf9ebf0c0afa1406dfe1322841133d75fa/Common/src/main/java/vazkii/botania/common/item/ModItems.java
 public class HexItems {
-    private static final IXplatRegister<Item> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.ITEM);
+    private static final IXplatRegistrar<Item> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.ITEM);
 
     public static void register() {
         REGISTER.registerAll();

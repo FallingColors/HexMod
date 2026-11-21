@@ -3,24 +3,18 @@ package at.petrak.hexcasting.common.lib.hex;
 import at.petrak.hexcasting.api.casting.iota.*;
 import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 /**
  * Stores the registry for iota types, some utility methods, and all the types Hexcasting itself defines.
  */
 @ParametersAreNonnullByDefault
 public class HexIotaTypes {
-    private static final IXplatRegister<IotaType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.IOTA_TYPE);
+    private static final IXplatRegistrar<IotaType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.IOTA_TYPE);
 
     public static final Registry<IotaType<?>> REGISTRY = IXplatAbstractions.INSTANCE.getIotaTypeRegistry();
     public static final int MAX_SERIALIZATION_DEPTH = 256;

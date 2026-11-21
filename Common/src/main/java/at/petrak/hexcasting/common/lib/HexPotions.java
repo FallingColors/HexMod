@@ -1,7 +1,7 @@
 package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -11,7 +11,7 @@ import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
 
 public class HexPotions {
-    private static final IXplatRegister<Potion> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.POTION);
+    private static final IXplatRegistrar<Potion> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.POTION);
 
     public static void register() {
         REGISTER.registerAll();

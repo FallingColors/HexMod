@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.common.recipe.ingredient.brainsweep.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class HexBrainsweepeeIngredients {
-    private static final IXplatRegister<BrainsweepeeIngredientType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.BRAINSWEEPEE_INGREDIENT);
+    private static final IXplatRegistrar<BrainsweepeeIngredientType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.BRAINSWEEPEE_INGREDIENT);
 
     public static void register() {
         REGISTER.registerAll();

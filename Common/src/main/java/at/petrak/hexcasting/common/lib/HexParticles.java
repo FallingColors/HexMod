@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.lib;
 import at.petrak.hexcasting.client.particles.ConjureParticle;
 import at.petrak.hexcasting.common.particles.ConjureParticleOptions;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.core.particles.ParticleOptions;
@@ -14,7 +14,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class HexParticles {
-    private static final IXplatRegister<ParticleType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.PARTICLE_TYPE);
+    private static final IXplatRegistrar<ParticleType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.PARTICLE_TYPE);
 
     public static void register() {
         REGISTER.registerAll();

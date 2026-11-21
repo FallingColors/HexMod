@@ -9,14 +9,14 @@ import at.petrak.hexcasting.common.blocks.circles.impetuses.BlockEntityRightClic
 import at.petrak.hexcasting.common.blocks.entity.BlockEntityConjured;
 import at.petrak.hexcasting.common.blocks.entity.BlockEntityQuenchedAllay;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import java.util.function.Supplier;
 
 public class HexBlockEntities {
-    private static final IXplatRegister<BlockEntityType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.BLOCK_ENTITY_TYPE);
+    private static final IXplatRegistrar<BlockEntityType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.BLOCK_ENTITY_TYPE);
 
     public static void register() {
         REGISTER.registerAll();

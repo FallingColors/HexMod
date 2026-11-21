@@ -7,24 +7,18 @@ import at.petrak.hexcasting.api.casting.eval.vm.FrameFinishEval;
 import at.petrak.hexcasting.api.casting.eval.vm.FrameForEach;
 import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
-
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 /**
  * Stores the registry for continuation frame types, some utility methods, and all the types Hexcasting itself defines.
  */
 @ParametersAreNonnullByDefault
 public class HexContinuationTypes {
-    private static final IXplatRegister<ContinuationFrame.Type<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.CONTINUATION_TYPE);
+    private static final IXplatRegistrar<ContinuationFrame.Type<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.CONTINUATION_TYPE);
 
     public static final Registry<ContinuationFrame.Type<?>> REGISTRY = IXplatAbstractions.INSTANCE.getContinuationTypeRegistry();
 

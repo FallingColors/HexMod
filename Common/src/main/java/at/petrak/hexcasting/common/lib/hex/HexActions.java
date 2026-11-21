@@ -53,7 +53,7 @@ import at.petrak.hexcasting.interop.pehkui.OpGetScale;
 import at.petrak.hexcasting.interop.pehkui.OpSetScale;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.world.effect.MobEffects;
@@ -65,7 +65,7 @@ import net.minecraft.world.phys.Vec3;
 
 @SuppressWarnings("unused")
 public class HexActions {
-    private static final IXplatRegister<ActionRegistryEntry> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.ACTION);
+    private static final IXplatRegistrar<ActionRegistryEntry> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.ACTION);
 
     public static final Registry<ActionRegistryEntry> REGISTRY = IXplatAbstractions.INSTANCE.getActionRegistry();
 

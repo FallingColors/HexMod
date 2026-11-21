@@ -6,18 +6,12 @@ import at.petrak.hexcasting.common.casting.actions.math.SpecialHandlerNumberLite
 import at.petrak.hexcasting.common.casting.actions.stack.SpecialHandlerMask;
 import at.petrak.hexcasting.common.lib.HexRegistries;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
-import net.minecraft.resources.ResourceLocation;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
-
 public class HexSpecialHandlers {
-    private static final IXplatRegister<SpecialHandler.Factory<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.SPECIAL_HANDLER);
+    private static final IXplatRegistrar<SpecialHandler.Factory<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.SPECIAL_HANDLER);
 
     public static void register() {
         REGISTER.registerAll();

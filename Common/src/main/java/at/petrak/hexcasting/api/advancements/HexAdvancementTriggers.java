@@ -1,20 +1,14 @@
 package at.petrak.hexcasting.api.advancements;
 
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
-
 public class HexAdvancementTriggers {
-    private static final IXplatRegister<CriterionTrigger<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.TRIGGER_TYPE);
+    private static final IXplatRegistrar<CriterionTrigger<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.TRIGGER_TYPE);
 
     public static void register() {
         REGISTER.registerAll();

@@ -2,7 +2,7 @@ package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.common.recipe.ingredient.state.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -18,7 +18,7 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 public class HexStateIngredients {
-    private static final IXplatRegister<StateIngredientType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.STATE_INGREDIENT);
+    private static final IXplatRegistrar<StateIngredientType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.STATE_INGREDIENT);
 
     public static void register() {
         REGISTER.registerAll();

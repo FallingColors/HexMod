@@ -2,23 +2,16 @@ package at.petrak.hexcasting.common.recipe;
 
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
-import static at.petrak.hexcasting.api.HexAPI.modLoc;
-
 public class HexRecipeStuffRegistry {
-    private static final IXplatRegister<RecipeSerializer<?>> REGISTER_SERIALIZER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.RECIPE_SERIALIZER);
-    private static final IXplatRegister<RecipeType<?>> REGISTER_RECIPE_TYPE = IXplatAbstractions.INSTANCE.createRegistrar(Registries.RECIPE_TYPE);
+    private static final IXplatRegistrar<RecipeSerializer<?>> REGISTER_SERIALIZER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.RECIPE_SERIALIZER);
+    private static final IXplatRegistrar<RecipeType<?>> REGISTER_RECIPE_TYPE = IXplatAbstractions.INSTANCE.createRegistrar(Registries.RECIPE_TYPE);
 
     public static void register() {
         REGISTER_SERIALIZER.registerAll();

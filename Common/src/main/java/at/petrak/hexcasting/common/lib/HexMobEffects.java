@@ -3,7 +3,7 @@ package at.petrak.hexcasting.common.lib;
 import at.petrak.hexcasting.api.HexAPI;
 import at.petrak.hexcasting.common.misc.HexMobEffect;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
@@ -12,7 +12,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 public class HexMobEffects {
 
-    private static final IXplatRegister<MobEffect> REGISTER = IXplatAbstractions.INSTANCE
+    private static final IXplatRegistrar<MobEffect> REGISTER = IXplatAbstractions.INSTANCE
             .createRegistrar(Registries.MOB_EFFECT);
 
     public static void register() {
