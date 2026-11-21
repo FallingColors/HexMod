@@ -199,7 +199,7 @@ public interface IXplatAbstractions {
      * @return {@code IXplatRegister<B>}
      * @param <B>
      */
-    <B> IXplatRegister<B> createRegistar(ResourceKey<Registry<B>> registryKey);
+    <B> IXplatRegistrar<B> createRegistrar(ResourceKey<Registry<B>> registryKey);
 
     // interop
 

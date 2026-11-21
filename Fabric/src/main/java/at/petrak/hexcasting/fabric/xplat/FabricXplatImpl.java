@@ -30,7 +30,7 @@ import at.petrak.hexcasting.fabric.recipe.FabricUnsealedIngredient;
 import at.petrak.hexcasting.interop.HexInterop;
 import at.petrak.hexcasting.interop.pehkui.PehkuiInterop;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import at.petrak.hexcasting.xplat.IXplatTags;
 import at.petrak.hexcasting.xplat.Platform;
 import com.mojang.serialization.Lifecycle;
@@ -476,8 +476,8 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public <B> IXplatRegister<B> createRegistar(ResourceKey<Registry<B>> registryKey) {
-        return new FabricRegister<>(registryKey);
+    public <B> IXplatRegistrar<B> createRegistrar(ResourceKey<Registry<B>> registryKey) {
+        return new FabricRegistrar<>(registryKey);
     }
 
     private static PehkuiInterop.ApiAbstraction PEHKUI_API = null;

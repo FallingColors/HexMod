@@ -21,7 +21,7 @@ class MishapInternalException(val exception: Exception) : Mishap() {
         return stack
     }
 
-    override fun errorMessage(ctx: CastingEnvironment, errorCtx: Context): Component {
+    override fun errorMessage(env: CastingEnvironment, errorCtx: Context): Component {
         var message = Component.literal("$exception")
 
         // dump stack trace

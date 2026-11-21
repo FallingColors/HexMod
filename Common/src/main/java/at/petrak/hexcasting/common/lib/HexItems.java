@@ -12,7 +12,7 @@ import at.petrak.hexcasting.common.items.magic.*;
 import at.petrak.hexcasting.common.items.pigment.*;
 import at.petrak.hexcasting.common.items.storage.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
-import at.petrak.hexcasting.xplat.IXplatRegister;
+import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import com.google.common.base.Suppliers;
 import net.minecraft.Util;
 import net.minecraft.core.Registry;
@@ -34,10 +34,10 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 // https://github.com/VazkiiMods/Botania/blob/2c4f7fdf9ebf0c0afa1406dfe1322841133d75fa/Common/src/main/java/vazkii/botania/common/item/ModItems.java
 public class HexItems {
-    private static final IXplatRegister<Item> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.ITEM);
+    private static final IXplatRegistrar<Item> REGISTRAR = IXplatAbstractions.INSTANCE.createRegistrar(Registries.ITEM);
 
     public static void register() {
-        REGISTER.registerAll();
+        REGISTRAR.registerAll();
     }
 
     public static void registerItemsForCreativeTab(ResourceKey<CreativeModeTab> tabKey, CreativeModeTab.Output r) {
@@ -191,7 +191,7 @@ public class HexItems {
     }
 
     private static <T extends Item> Supplier<T> make(String id, Supplier<T> itemSupplier, @Nullable ResourceKey<CreativeModeTab> tabKey) {
-        Supplier<T> supplier = REGISTER.register(id, itemSupplier);
+        Supplier<T> supplier = REGISTRAR.register(id, itemSupplier);
         if (tabKey != null) {
             ITEM_TABS.computeIfAbsent(tabKey, t -> new ArrayList<>()).add(new TabEntry.ItemEntry(supplier::get));
         }
