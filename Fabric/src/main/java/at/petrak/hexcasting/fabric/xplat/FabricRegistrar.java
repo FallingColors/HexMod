@@ -11,26 +11,26 @@ import java.util.function.Supplier;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class FabricRegistrar<B> implements IXplatRegistrar<B> {
-    private final Registry<B> register;
+    private final Registry<B> registry;
 
     @SuppressWarnings("unchecked")
     public FabricRegistrar(ResourceKey<Registry<B>> registryKey) {
-        this.register = (Registry<B>) BuiltInRegistries.REGISTRY.get(registryKey.location());
+        this.registry = (Registry<B>) BuiltInRegistries.REGISTRY.get(registryKey.location());
     }
 
 
     @Override
     public <T extends B> Supplier<T> register(String id, Supplier<T> provider) {
         T value = provider.get();
-        Registry.register(register, modLoc(id), value);
+        Registry.register(registry, modLoc(id), value);
         return () -> value;
     }
 
     @Override
     public <T extends B> Holder<B> registerHolder(String id, Supplier<T> provider) {
         T value = provider.get();
-        Registry.register(register, modLoc(id), value);
-        return register.wrapAsHolder(value);
+        Registry.register(registry, modLoc(id), value);
+        return registry.wrapAsHolder(value);
     }
 
     @Override

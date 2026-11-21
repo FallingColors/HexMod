@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 /**
  * A platform-agnostic registrar for type {B} <br>
- * FabricRegistrar registers directly while ForgeRegistrar uses deferred registry instead
+ * FabricRegistrar registers entries directly, while ForgeRegistrar uses a DeferredRegister instead
  * @param <B> The Type the IXplatRegistrar is registering
  */
 public interface IXplatRegistrar<B> {
