@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexEntities {
-    private static final IXplatRegister<EntityType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.ENTITY_TYPE);
+    private static final IXplatRegister<EntityType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.ENTITY_TYPE);
 
     public static void register() {
         REGISTER.registerAll();

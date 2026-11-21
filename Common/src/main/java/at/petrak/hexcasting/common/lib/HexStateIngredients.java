@@ -18,7 +18,7 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 public class HexStateIngredients {
-    private static final IXplatRegister<StateIngredientType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(HexRegistries.STATE_INGREDIENT);
+    private static final IXplatRegister<StateIngredientType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.STATE_INGREDIENT);
 
     public static void register() {
         REGISTER.registerAll();

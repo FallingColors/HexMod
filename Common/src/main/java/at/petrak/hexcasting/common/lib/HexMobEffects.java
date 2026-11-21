@@ -13,7 +13,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 public class HexMobEffects {
 
     private static final IXplatRegister<MobEffect> REGISTER = IXplatAbstractions.INSTANCE
-            .createRegistar(Registries.MOB_EFFECT);
+            .createRegistrar(Registries.MOB_EFFECT);
 
     public static void register() {
         REGISTER.registerAll();

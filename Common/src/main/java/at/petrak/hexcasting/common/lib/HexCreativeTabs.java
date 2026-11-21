@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexCreativeTabs {
-    private static final IXplatRegister<CreativeModeTab> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.CREATIVE_MODE_TAB);
+    private static final IXplatRegister<CreativeModeTab> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.CREATIVE_MODE_TAB);
 
     public static void register() {
         REGISTER.registerAll();

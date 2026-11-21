@@ -34,7 +34,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 // https://github.com/VazkiiMods/Botania/blob/2c4f7fdf9ebf0c0afa1406dfe1322841133d75fa/Common/src/main/java/vazkii/botania/common/item/ModItems.java
 public class HexItems {
-    private static final IXplatRegister<Item> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.ITEM);
+    private static final IXplatRegister<Item> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.ITEM);
 
     public static void register() {
         REGISTER.registerAll();

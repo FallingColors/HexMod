@@ -17,8 +17,8 @@ import java.util.function.Supplier;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexRecipeStuffRegistry {
-    private static final IXplatRegister<RecipeSerializer<?>> REGISTER_SERIALIZER = IXplatAbstractions.INSTANCE.createRegistar(Registries.RECIPE_SERIALIZER);
-    private static final IXplatRegister<RecipeType<?>> REGISTER_RECIPE_TYPE = IXplatAbstractions.INSTANCE.createRegistar(Registries.RECIPE_TYPE);
+    private static final IXplatRegister<RecipeSerializer<?>> REGISTER_SERIALIZER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.RECIPE_SERIALIZER);
+    private static final IXplatRegister<RecipeType<?>> REGISTER_RECIPE_TYPE = IXplatAbstractions.INSTANCE.createRegistrar(Registries.RECIPE_TYPE);
 
     public static void register() {
         REGISTER_SERIALIZER.registerAll();

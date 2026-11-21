@@ -9,7 +9,7 @@ import net.minecraft.sounds.SoundEvent;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexSounds {
-    private static final IXplatRegister<SoundEvent> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.SOUND_EVENT);
+    private static final IXplatRegister<SoundEvent> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.SOUND_EVENT);
 
     public static void register() {
         REGISTER.registerAll();

@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import java.util.function.Supplier;
 
 public class HexBlockEntities {
-    private static final IXplatRegister<BlockEntityType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.BLOCK_ENTITY_TYPE);
+    private static final IXplatRegister<BlockEntityType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.BLOCK_ENTITY_TYPE);
 
     public static void register() {
         REGISTER.registerAll();

@@ -40,8 +40,8 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class HexBlocks {
-    private static final IXplatRegister<Block> REGISTER_BLOCKS = IXplatAbstractions.INSTANCE.createRegistar(Registries.BLOCK);
-    private static final IXplatRegister<Item> REGISTER_BLOCK_ITEMS = IXplatAbstractions.INSTANCE.createRegistar(Registries.ITEM);
+    private static final IXplatRegister<Block> REGISTER_BLOCKS = IXplatAbstractions.INSTANCE.createRegistrar(Registries.BLOCK);
+    private static final IXplatRegister<Item> REGISTER_BLOCK_ITEMS = IXplatAbstractions.INSTANCE.createRegistrar(Registries.ITEM);
     private static final Map<ResourceKey<CreativeModeTab>, List<Supplier<Block>>> BLOCK_TABS = new LinkedHashMap<>();
 
     public static void register() {

@@ -12,7 +12,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import java.util.function.Supplier;
 
 public class HexLootFunctions {
-    private static final IXplatRegister<LootItemFunctionType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.LOOT_FUNCTION_TYPE);
+    private static final IXplatRegister<LootItemFunctionType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.LOOT_FUNCTION_TYPE);
 
     public static void register() {
         REGISTER.registerAll();

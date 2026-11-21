@@ -20,7 +20,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  */
 @ParametersAreNonnullByDefault
 public class HexIotaTypes {
-    private static final IXplatRegister<IotaType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(HexRegistries.IOTA_TYPE);
+    private static final IXplatRegister<IotaType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.IOTA_TYPE);
 
     public static final Registry<IotaType<?>> REGISTRY = IXplatAbstractions.INSTANCE.getIotaTypeRegistry();
     public static final int MAX_SERIALIZATION_DEPTH = 256;

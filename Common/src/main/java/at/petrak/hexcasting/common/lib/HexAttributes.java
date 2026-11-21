@@ -12,7 +12,7 @@ import static at.petrak.hexcasting.api.HexAPI.MOD_ID;
 
 public class HexAttributes {
     private static final IXplatRegister<Attribute> REGISTER = IXplatAbstractions.INSTANCE
-            .createRegistar(Registries.ATTRIBUTE);
+            .createRegistrar(Registries.ATTRIBUTE);
 
     public static void register() {
         REGISTER.registerAll();

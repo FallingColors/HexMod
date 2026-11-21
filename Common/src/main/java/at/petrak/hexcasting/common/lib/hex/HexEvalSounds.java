@@ -16,7 +16,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 // TODO: we REALLY need a cleanup of how sounds work. again.
 public class HexEvalSounds {
-    private static final IXplatRegister<EvalSound> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(HexRegistries.EVAL_SOUND);
+    private static final IXplatRegister<EvalSound> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.EVAL_SOUND);
 
     public static void register() {
         REGISTER.registerAll();

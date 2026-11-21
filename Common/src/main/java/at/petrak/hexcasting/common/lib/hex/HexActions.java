@@ -65,7 +65,7 @@ import net.minecraft.world.phys.Vec3;
 
 @SuppressWarnings("unused")
 public class HexActions {
-    private static final IXplatRegister<ActionRegistryEntry> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(HexRegistries.ACTION);
+    private static final IXplatRegister<ActionRegistryEntry> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.ACTION);
 
     public static final Registry<ActionRegistryEntry> REGISTRY = IXplatAbstractions.INSTANCE.getActionRegistry();
 

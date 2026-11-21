@@ -476,7 +476,7 @@ public class FabricXplatImpl implements IXplatAbstractions {
     }
 
     @Override
-    public <B> IXplatRegister<B> createRegistar(ResourceKey<Registry<B>> registryKey) {
+    public <B> IXplatRegister<B> createRegistrar(ResourceKey<Registry<B>> registryKey) {
         return new FabricRegister<>(registryKey);
     }
 

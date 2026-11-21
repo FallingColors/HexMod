@@ -100,7 +100,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
 public class ForgeXplatImpl implements IXplatAbstractions {
 
     @Override
-    public <B> IXplatRegister<B> createRegistar(ResourceKey<Registry<B>> registryKey) {
+    public <B> IXplatRegister<B> createRegistrar(ResourceKey<Registry<B>> registryKey) {
         return new ForgeRegister<>(DeferredRegister.create(registryKey, HexAPI.MOD_ID));
     }
 

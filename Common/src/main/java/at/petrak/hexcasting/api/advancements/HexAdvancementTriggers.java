@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexAdvancementTriggers {
-    private static final IXplatRegister<CriterionTrigger<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.TRIGGER_TYPE);
+    private static final IXplatRegister<CriterionTrigger<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.TRIGGER_TYPE);
 
     public static void register() {
         REGISTER.registerAll();

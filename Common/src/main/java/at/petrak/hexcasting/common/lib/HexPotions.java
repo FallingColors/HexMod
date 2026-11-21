@@ -11,7 +11,7 @@ import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.Potions;
 
 public class HexPotions {
-    private static final IXplatRegister<Potion> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.POTION);
+    private static final IXplatRegister<Potion> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.POTION);
 
     public static void register() {
         REGISTER.registerAll();

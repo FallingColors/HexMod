@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexArithmetics {
-    private static final IXplatRegister<Arithmetic> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(HexRegistries.ARITHMETIC);
+    private static final IXplatRegister<Arithmetic> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.ARITHMETIC);
 
     private static ArithmeticEngine ENGINE;
 

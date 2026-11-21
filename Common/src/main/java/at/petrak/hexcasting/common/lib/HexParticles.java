@@ -14,7 +14,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class HexParticles {
-    private static final IXplatRegister<ParticleType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.PARTICLE_TYPE);
+    private static final IXplatRegister<ParticleType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.PARTICLE_TYPE);
 
     public static void register() {
         REGISTER.registerAll();

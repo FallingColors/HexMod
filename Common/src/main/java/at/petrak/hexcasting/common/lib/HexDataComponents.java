@@ -21,7 +21,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 public class HexDataComponents {
-    private static final IXplatRegister<DataComponentType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(Registries.DATA_COMPONENT_TYPE);
+    private static final IXplatRegister<DataComponentType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.DATA_COMPONENT_TYPE);
 
     public static void register() {
         REGISTER.registerAll();

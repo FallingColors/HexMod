@@ -14,7 +14,7 @@ import java.util.function.Supplier;
  * Stores the registry for casting image components, and all the component types Hexcasting itself defines.
  */
 public class HexImageComponents {
-    private static final IXplatRegister<ImageComponentType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(HexRegistries.IMAGE_COMPONENT);
+    private static final IXplatRegister<ImageComponentType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.IMAGE_COMPONENT);
     public static final Registry<ImageComponentType<?>> REGISTRY = IXplatAbstractions.INSTANCE.getImageComponentRegistry();
 
     public static void register() {

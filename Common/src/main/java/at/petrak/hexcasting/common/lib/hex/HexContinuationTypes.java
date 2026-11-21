@@ -24,7 +24,7 @@ import static at.petrak.hexcasting.api.HexAPI.modLoc;
  */
 @ParametersAreNonnullByDefault
 public class HexContinuationTypes {
-    private static final IXplatRegister<ContinuationFrame.Type<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(HexRegistries.CONTINUATION_TYPE);
+    private static final IXplatRegister<ContinuationFrame.Type<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.CONTINUATION_TYPE);
 
     public static final Registry<ContinuationFrame.Type<?>> REGISTRY = IXplatAbstractions.INSTANCE.getContinuationTypeRegistry();
 

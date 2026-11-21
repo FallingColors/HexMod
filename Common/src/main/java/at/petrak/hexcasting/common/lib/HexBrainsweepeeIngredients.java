@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class HexBrainsweepeeIngredients {
-    private static final IXplatRegister<BrainsweepeeIngredientType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(HexRegistries.BRAINSWEEPEE_INGREDIENT);
+    private static final IXplatRegister<BrainsweepeeIngredientType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.BRAINSWEEPEE_INGREDIENT);
 
     public static void register() {
         REGISTER.registerAll();

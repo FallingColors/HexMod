@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexSpecialHandlers {
-    private static final IXplatRegister<SpecialHandler.Factory<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistar(HexRegistries.SPECIAL_HANDLER);
+    private static final IXplatRegister<SpecialHandler.Factory<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.SPECIAL_HANDLER);
 
     public static void register() {
         REGISTER.registerAll();
