@@ -12,16 +12,16 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import java.util.function.Supplier;
 
 public class HexLootFunctions {
-    private static final IXplatRegistrar<LootItemFunctionType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.LOOT_FUNCTION_TYPE);
+    private static final IXplatRegistrar<LootItemFunctionType<?>> REGISTRAR = IXplatAbstractions.INSTANCE.createRegistrar(Registries.LOOT_FUNCTION_TYPE);
 
     public static void register() {
-        REGISTER.registerAll();
+        REGISTRAR.registerAll();
     }
 
-    public static final Supplier<LootItemFunctionType<? extends LootItemConditionalFunction>> PATTERN_SCROLL = REGISTER.register("pattern_scroll",
+    public static final Supplier<LootItemFunctionType<? extends LootItemConditionalFunction>> PATTERN_SCROLL = REGISTRAR.register("pattern_scroll",
             () -> new LootItemFunctionType<>(AddPerWorldPatternToScrollFunc.CODEC));
-    public static final Supplier<LootItemFunctionType<? extends LootItemConditionalFunction>> HEX_CYPHER = REGISTER.register("hex_cypher",
+    public static final Supplier<LootItemFunctionType<? extends LootItemConditionalFunction>> HEX_CYPHER = REGISTRAR.register("hex_cypher",
             () -> new LootItemFunctionType<>(AddHexToAncientCypherFunc.CODEC));
-    public static final Supplier<LootItemFunctionType<? extends LootItemConditionalFunction>> AMETHYST_SHARD_REDUCER = REGISTER.register("amethyst_shard_reducer",
+    public static final Supplier<LootItemFunctionType<? extends LootItemConditionalFunction>> AMETHYST_SHARD_REDUCER = REGISTRAR.register("amethyst_shard_reducer",
             () -> new LootItemFunctionType<>(AmethystReducerFunc.CODEC));
 }

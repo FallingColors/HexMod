@@ -14,13 +14,13 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class HexParticles {
-    private static final IXplatRegistrar<ParticleType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.PARTICLE_TYPE);
+    private static final IXplatRegistrar<ParticleType<?>> REGISTRAR = IXplatAbstractions.INSTANCE.createRegistrar(Registries.PARTICLE_TYPE);
 
     public static void register() {
-        REGISTER.registerAll();
+        REGISTRAR.registerAll();
     }
 
-    public static final Supplier<ConjureParticleOptions.Type> CONJURE_PARTICLE = REGISTER.register(
+    public static final Supplier<ConjureParticleOptions.Type> CONJURE_PARTICLE = REGISTRAR.register(
         "conjure_particle", () -> new ConjureParticleOptions.Type(false));
 
     public static class FactoryHandler {

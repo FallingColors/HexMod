@@ -11,16 +11,16 @@ import at.petrak.hexcasting.xplat.IXplatRegistrar;
 import java.util.function.Supplier;
 
 public class HexSpecialHandlers {
-    private static final IXplatRegistrar<SpecialHandler.Factory<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.SPECIAL_HANDLER);
+    private static final IXplatRegistrar<SpecialHandler.Factory<?>> REGISTRAR = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.SPECIAL_HANDLER);
 
     public static void register() {
-        REGISTER.registerAll();
+        REGISTRAR.registerAll();
     }
 
-    public static final Supplier<SpecialHandler.Factory<SpecialHandlerNumberLiteral>> NUMBER = REGISTER.register("number",
+    public static final Supplier<SpecialHandler.Factory<SpecialHandlerNumberLiteral>> NUMBER = REGISTRAR.register("number",
         SpecialHandlerNumberLiteral.Factory::new);
-    public static final Supplier<SpecialHandler.Factory<SpecialHandlerMask>> MASK = REGISTER.register("mask",
+    public static final Supplier<SpecialHandler.Factory<SpecialHandlerMask>> MASK = REGISTRAR.register("mask",
         SpecialHandlerMask.Factory::new);
-    public static final Supplier<SpecialHandler.Factory<SpecialHandlerForEach>> FOR_EACH = REGISTER.register("for_each",
+    public static final Supplier<SpecialHandler.Factory<SpecialHandlerForEach>> FOR_EACH = REGISTRAR.register("for_each",
         SpecialHandlerForEach.Factory::new);
 }

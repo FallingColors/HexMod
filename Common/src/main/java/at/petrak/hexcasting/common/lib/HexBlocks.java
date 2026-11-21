@@ -40,13 +40,13 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class HexBlocks {
-    private static final IXplatRegistrar<Block> REGISTER_BLOCKS = IXplatAbstractions.INSTANCE.createRegistrar(Registries.BLOCK);
-    private static final IXplatRegistrar<Item> REGISTER_BLOCK_ITEMS = IXplatAbstractions.INSTANCE.createRegistrar(Registries.ITEM);
+    private static final IXplatRegistrar<Block> REGISTRAR_BLOCKS = IXplatAbstractions.INSTANCE.createRegistrar(Registries.BLOCK);
+    private static final IXplatRegistrar<Item> REGISTRAR_BLOCK_ITEMS = IXplatAbstractions.INSTANCE.createRegistrar(Registries.ITEM);
     private static final Map<ResourceKey<CreativeModeTab>, List<Supplier<Block>>> BLOCK_TABS = new LinkedHashMap<>();
 
     public static void register() {
-        REGISTER_BLOCKS.registerAll();
-        REGISTER_BLOCK_ITEMS.registerAll();
+        REGISTRAR_BLOCKS.registerAll();
+        REGISTRAR_BLOCK_ITEMS.registerAll();
     }
 
     public static void registerBlocksForCreativeTab(ResourceKey<CreativeModeTab> tabKey, CreativeModeTab.Output r) {
@@ -291,7 +291,7 @@ public class HexBlocks {
     }
 
     private static <T extends Block> Supplier<T> blockNoItem(String name, Supplier<T> blockSupplier) {
-        return REGISTER_BLOCKS.register(name, blockSupplier);
+        return REGISTRAR_BLOCKS.register(name, blockSupplier);
     }
     private static <T extends Block> Supplier<T> blockItem(String name, Supplier<T> blockSupplier) {
         return blockItem(name, blockSupplier, HexItems.props(), HexCreativeTabs.HEX_KEY);
@@ -306,7 +306,7 @@ public class HexBlocks {
 
     private static <T extends Block> Supplier<T> blockItem(String name, Supplier<T> blockSupplier, Item.Properties props, @Nullable ResourceKey<CreativeModeTab> tabKey) {
         Supplier<T> supplier = blockNoItem(name, blockSupplier);
-        REGISTER_BLOCK_ITEMS.register(name, () -> new BlockItem(supplier.get(), props));
+        REGISTRAR_BLOCK_ITEMS.register(name, () -> new BlockItem(supplier.get(), props));
         if (tabKey != null) {
             BLOCK_TABS.computeIfAbsent(tabKey, t -> new ArrayList<>()).add(supplier::get);
         }

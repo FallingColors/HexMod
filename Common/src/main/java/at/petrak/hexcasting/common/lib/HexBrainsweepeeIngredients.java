@@ -22,10 +22,10 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class HexBrainsweepeeIngredients {
-    private static final IXplatRegistrar<BrainsweepeeIngredientType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.BRAINSWEEPEE_INGREDIENT);
+    private static final IXplatRegistrar<BrainsweepeeIngredientType<?>> REGISTRAR = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.BRAINSWEEPEE_INGREDIENT);
 
     public static void register() {
-        REGISTER.registerAll();
+        REGISTRAR.registerAll();
     }
 
     public static final Codec<BrainsweepeeIngredient> TYPED_CODEC = Codec.lazyInitialized(() -> IXplatAbstractions.INSTANCE
@@ -36,11 +36,11 @@ public class HexBrainsweepeeIngredients {
             .registry(HexRegistries.BRAINSWEEPEE_INGREDIENT)
             .dispatch(BrainsweepeeIngredient::getType, BrainsweepeeIngredientType::streamCodec);
 
-    public static final Supplier<BrainsweepeeIngredientType<EntityTypeIngredient>> ENTITY_TYPE = REGISTER.register("entity_type", EntityTypeIngredient.Type::new);
-    public static final Supplier<BrainsweepeeIngredientType<EntityTagIngredient>> TAG = REGISTER.register("entity_tag", EntityTagIngredient.Type::new);
-    public static final Supplier<BrainsweepeeIngredientType<VillagerIngredient>> VILLAGER = REGISTER.register("villager", VillagerIngredient.Type::new);
+    public static final Supplier<BrainsweepeeIngredientType<EntityTypeIngredient>> ENTITY_TYPE = REGISTRAR.register("entity_type", EntityTypeIngredient.Type::new);
+    public static final Supplier<BrainsweepeeIngredientType<EntityTagIngredient>> TAG = REGISTRAR.register("entity_tag", EntityTagIngredient.Type::new);
+    public static final Supplier<BrainsweepeeIngredientType<VillagerIngredient>> VILLAGER = REGISTRAR.register("villager", VillagerIngredient.Type::new);
 
-    public static final Supplier<BrainsweepeeIngredientType<? extends BrainsweepeeIngredient>> NONE_TYPE = REGISTER.register("none", () -> new BrainsweepeeIngredientType<>() {
+    public static final Supplier<BrainsweepeeIngredientType<? extends BrainsweepeeIngredient>> NONE_TYPE = REGISTRAR.register("none", () -> new BrainsweepeeIngredientType<>() {
         @Override
         public MapCodec<BrainsweepeeIngredient> codec() {
             return MapCodec.unit(NONE);

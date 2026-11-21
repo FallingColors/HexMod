@@ -18,19 +18,19 @@ import java.util.function.Supplier;
  */
 @ParametersAreNonnullByDefault
 public class HexContinuationTypes {
-    private static final IXplatRegistrar<ContinuationFrame.Type<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.CONTINUATION_TYPE);
+    private static final IXplatRegistrar<ContinuationFrame.Type<?>> REGISTRAR = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.CONTINUATION_TYPE);
 
     public static final Registry<ContinuationFrame.Type<?>> REGISTRY = IXplatAbstractions.INSTANCE.getContinuationTypeRegistry();
 
     public static void register() {
-        REGISTER.registerAll();
+        REGISTRAR.registerAll();
     }
 
     public static final String
             KEY_TYPE = HexAPI.MOD_ID + ":type",
             KEY_DATA = HexAPI.MOD_ID + ":data";
 
-    public static final Supplier<ContinuationFrame.Type<FrameEvaluate>> EVALUATE = REGISTER.register("evaluate", () -> FrameEvaluate.TYPE);
-    public static final Supplier<ContinuationFrame.Type<FrameForEach>> FOREACH = REGISTER.register("foreach", () -> FrameForEach.TYPE);
-    public static final Supplier<ContinuationFrame.Type<FrameFinishEval>> END = REGISTER.register("end", () -> FrameFinishEval.TYPE);
+    public static final Supplier<ContinuationFrame.Type<FrameEvaluate>> EVALUATE = REGISTRAR.register("evaluate", () -> FrameEvaluate.TYPE);
+    public static final Supplier<ContinuationFrame.Type<FrameForEach>> FOREACH = REGISTRAR.register("foreach", () -> FrameForEach.TYPE);
+    public static final Supplier<ContinuationFrame.Type<FrameFinishEval>> END = REGISTRAR.register("end", () -> FrameFinishEval.TYPE);
 }

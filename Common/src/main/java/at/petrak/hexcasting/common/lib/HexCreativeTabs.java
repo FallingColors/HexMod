@@ -13,13 +13,13 @@ import net.minecraft.world.item.ItemStack;
 import static at.petrak.hexcasting.api.HexAPI.modLoc;
 
 public class HexCreativeTabs {
-    private static final IXplatRegistrar<CreativeModeTab> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.CREATIVE_MODE_TAB);
+    private static final IXplatRegistrar<CreativeModeTab> REGISTRAR = IXplatAbstractions.INSTANCE.createRegistrar(Registries.CREATIVE_MODE_TAB);
 
     public static void register() {
-        REGISTER.registerAll();
+        REGISTRAR.registerAll();
     }
 
-    public static final Holder<CreativeModeTab> HEX = REGISTER.registerHolder("hexcasting", () ->
+    public static final Holder<CreativeModeTab> HEX = REGISTRAR.registerHolder("hexcasting", () ->
             CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
                     .icon(() -> new ItemStack(HexItems.SPELLBOOK.get()))
                     .title(Component.translatable("itemGroup.hexcasting.hexcasting"))
@@ -27,7 +27,7 @@ public class HexCreativeTabs {
 
     public static final ResourceKey<CreativeModeTab> HEX_KEY = ResourceKey.create(BuiltInRegistries.CREATIVE_MODE_TAB.key(), modLoc("hexcasting"));
 
-    public static final Holder<CreativeModeTab> SCROLLS = REGISTER.registerHolder("scrolls", () ->
+    public static final Holder<CreativeModeTab> SCROLLS = REGISTRAR.registerHolder("scrolls", () ->
             CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
                     .icon(() -> new ItemStack(HexItems.SCROLL_LARGE.get()))
                     .title(Component.translatable("itemGroup.hexcasting.scrolls"))

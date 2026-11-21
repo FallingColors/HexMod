@@ -18,10 +18,10 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 public class HexStateIngredients {
-    private static final IXplatRegistrar<StateIngredientType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.STATE_INGREDIENT);
+    private static final IXplatRegistrar<StateIngredientType<?>> REGISTRAR = IXplatAbstractions.INSTANCE.createRegistrar(HexRegistries.STATE_INGREDIENT);
 
     public static void register() {
-        REGISTER.registerAll();
+        REGISTRAR.registerAll();
     }
 
     public static final Codec<StateIngredient> TYPED_CODEC = Codec.lazyInitialized(() -> IXplatAbstractions.INSTANCE
@@ -32,13 +32,13 @@ public class HexStateIngredients {
             .registry(HexRegistries.STATE_INGREDIENT)
             .dispatch(StateIngredient::getType, StateIngredientType::streamCodec);
 
-    public static final Supplier<StateIngredientType<StateIngredientBlock>> BLOCK_TYPE = REGISTER.register("block", StateIngredientBlock.Type::new);
-    public static final Supplier<StateIngredientType<StateIngredientBlockState>> BLOCK_STATE = REGISTER.register("state", StateIngredientBlockState.Type::new);
-    public static final Supplier<StateIngredientType<StateIngredientBlocks>> BLOCKS = REGISTER.register("blocks", StateIngredientBlocks.Type::new);
-    public static final Supplier<StateIngredientType<StateIngredientTag>> TAG = REGISTER.register("tag", StateIngredientTag.Type::new);
-    public static final Supplier<StateIngredientType<StateIngredientTagExcluding>> TAG_EXCLUDING = REGISTER.register("tag_excluding", StateIngredientTagExcluding.Type::new);
+    public static final Supplier<StateIngredientType<StateIngredientBlock>> BLOCK_TYPE = REGISTRAR.register("block", StateIngredientBlock.Type::new);
+    public static final Supplier<StateIngredientType<StateIngredientBlockState>> BLOCK_STATE = REGISTRAR.register("state", StateIngredientBlockState.Type::new);
+    public static final Supplier<StateIngredientType<StateIngredientBlocks>> BLOCKS = REGISTRAR.register("blocks", StateIngredientBlocks.Type::new);
+    public static final Supplier<StateIngredientType<StateIngredientTag>> TAG = REGISTRAR.register("tag", StateIngredientTag.Type::new);
+    public static final Supplier<StateIngredientType<StateIngredientTagExcluding>> TAG_EXCLUDING = REGISTRAR.register("tag_excluding", StateIngredientTagExcluding.Type::new);
 
-    public static final Supplier<StateIngredientType<? extends StateIngredient>> NONE_TYPE = REGISTER.register("none", () -> new StateIngredientType<>() {
+    public static final Supplier<StateIngredientType<? extends StateIngredient>> NONE_TYPE = REGISTRAR.register("none", () -> new StateIngredientType<>() {
         @Override
         public MapCodec<StateIngredient> codec() {
             return MapCodec.unit(NONE);

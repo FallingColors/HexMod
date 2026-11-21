@@ -21,37 +21,37 @@ import java.util.*;
 import java.util.function.Supplier;
 
 public class HexDataComponents {
-    private static final IXplatRegistrar<DataComponentType<?>> REGISTER = IXplatAbstractions.INSTANCE.createRegistrar(Registries.DATA_COMPONENT_TYPE);
+    private static final IXplatRegistrar<DataComponentType<?>> REGISTRAR = IXplatAbstractions.INSTANCE.createRegistrar(Registries.DATA_COMPONENT_TYPE);
 
     public static void register() {
-        REGISTER.registerAll();
+        REGISTRAR.registerAll();
     }
 
     // ==== SCROLLS ====
 
-    public static final Supplier<DataComponentType<HexPattern>> PATTERN = REGISTER.register("pattern", () ->
+    public static final Supplier<DataComponentType<HexPattern>> PATTERN = REGISTRAR.register("pattern", () ->
             DataComponentType.<HexPattern>builder()
                     .persistent(HexPattern.CODEC)
                     .networkSynchronized(HexPattern.STREAM_CODEC)
                     .build());
-    public static final Supplier<DataComponentType<ResourceKey<ActionRegistryEntry>>> ACTION = REGISTER.register("op_id", () ->
+    public static final Supplier<DataComponentType<ResourceKey<ActionRegistryEntry>>> ACTION = REGISTRAR.register("op_id", () ->
             DataComponentType.<ResourceKey<ActionRegistryEntry>>builder()
                     .persistent(ResourceKey.codec(HexRegistries.ACTION))
                     .networkSynchronized(ResourceKey.streamCodec(HexRegistries.ACTION))
                     .build());
-    public static final Supplier<DataComponentType<ResourceKey<ActionRegistryEntry>>> RECALC_WARNING = REGISTER.register("recalc_warning", () ->
+    public static final Supplier<DataComponentType<ResourceKey<ActionRegistryEntry>>> RECALC_WARNING = REGISTRAR.register("recalc_warning", () ->
             DataComponentType.<ResourceKey<ActionRegistryEntry>>builder()
                     .persistent(ResourceKey.codec(HexRegistries.ACTION))
                     .networkSynchronized(ResourceKey.streamCodec(HexRegistries.ACTION))
                     .build());
-    public static final Supplier<DataComponentType<Unit>> NEEDS_PURCHASE = REGISTER.register("needs_purchase", () ->
+    public static final Supplier<DataComponentType<Unit>> NEEDS_PURCHASE = REGISTRAR.register("needs_purchase", () ->
             DataComponentType.<Unit>builder()
                     .networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
                     .build());
 
     // ==== ANYTHING WITH TEXTURE VARIANTS ====
 
-    public static final Supplier<DataComponentType<Integer>> ITEM_VARIANT = REGISTER.register("variant", () ->
+    public static final Supplier<DataComponentType<Integer>> ITEM_VARIANT = REGISTRAR.register("variant", () ->
             DataComponentType.<Integer>builder()
                     .persistent(Codec.intRange(0, Integer.MAX_VALUE))
                     .networkSynchronized(ByteBufCodecs.VAR_INT)
@@ -59,12 +59,12 @@ public class HexDataComponents {
 
     // ==== IOTA HOLDERS ====
 
-    public static final Supplier<DataComponentType<Unit>> SEALED_IOTA_HOLDER = REGISTER.register("sealed", () ->
+    public static final Supplier<DataComponentType<Unit>> SEALED_IOTA_HOLDER = REGISTRAR.register("sealed", () ->
             DataComponentType.<Unit>builder()
                     .persistent(Codec.unit(Unit.INSTANCE))
                     .networkSynchronized(StreamCodec.unit(Unit.INSTANCE))
                     .build());
-    public static final Supplier<DataComponentType<Iota>> IOTA_HOLDER_IOTA = REGISTER.register("iota", () ->
+    public static final Supplier<DataComponentType<Iota>> IOTA_HOLDER_IOTA = REGISTRAR.register("iota", () ->
             DataComponentType.<Iota>builder()
                     .persistent(IotaType.TYPED_CODEC)
                     .networkSynchronized(IotaType.TYPED_STREAM_CODEC)
@@ -75,19 +75,19 @@ public class HexDataComponents {
      * <p>
      * This is not useful to the player at all.
      */
-    public static final Supplier<DataComponentType<Optional<IotaType<?>>>> VISUAL_OVERRIDE = REGISTER.register("visual_override", () ->
+    public static final Supplier<DataComponentType<Optional<IotaType<?>>>> VISUAL_OVERRIDE = REGISTRAR.register("visual_override", () ->
             DataComponentType.<Optional<IotaType<?>>>builder()
                     .networkSynchronized(ByteBufCodecs.optional(ByteBufCodecs.registry(HexRegistries.IOTA_TYPE)))
                     .build());
 
     // ==== MEDIA HOLDERS ====
 
-    public static final Supplier<DataComponentType<Long>> MEDIA = REGISTER.register("media", () ->
+    public static final Supplier<DataComponentType<Long>> MEDIA = REGISTRAR.register("media", () ->
             DataComponentType.<Long>builder()
                     .persistent(Codec.LONG)
                     .networkSynchronized(ByteBufCodecs.VAR_LONG)
                     .build());
-    public static final Supplier<DataComponentType<Long>> MEDIA_MAX = REGISTER.register("start_media", () ->
+    public static final Supplier<DataComponentType<Long>> MEDIA_MAX = REGISTRAR.register("start_media", () ->
             DataComponentType.<Long>builder()
                     .persistent(Codec.LONG)
                     .networkSynchronized(ByteBufCodecs.VAR_LONG)
@@ -95,12 +95,12 @@ public class HexDataComponents {
 
     // ==== CASTING ITEMS ====
 
-    public static final Supplier<DataComponentType<List<Iota>>> HEX_HOLDER_PATTERNS = REGISTER.register("patterns", () ->
+    public static final Supplier<DataComponentType<List<Iota>>> HEX_HOLDER_PATTERNS = REGISTRAR.register("patterns", () ->
             DataComponentType.<List<Iota>>builder()
                     .persistent(IotaType.TYPED_CODEC.listOf())
                     .networkSynchronized(IotaType.TYPED_STREAM_CODEC.apply(ByteBufCodecs.list()))
                     .build());
-    public static final Supplier<DataComponentType<FrozenPigment>> PIGMENT = REGISTER.register("pigment", () ->
+    public static final Supplier<DataComponentType<FrozenPigment>> PIGMENT = REGISTRAR.register("pigment", () ->
             DataComponentType.<FrozenPigment>builder()
                     .persistent(FrozenPigment.CODEC)
                     .networkSynchronized(FrozenPigment.STREAM_CODEC)
@@ -108,7 +108,7 @@ public class HexDataComponents {
 
     // ==== ANCIENT CYPHERS ====
 
-    public static final Supplier<DataComponentType<String>> HEX_NAME = REGISTER.register("hex_name", () ->
+    public static final Supplier<DataComponentType<String>> HEX_NAME = REGISTRAR.register("hex_name", () ->
             DataComponentType.<String>builder()
                     .persistent(Codec.STRING)
                     .networkSynchronized(ByteBufCodecs.STRING_UTF8)
@@ -116,7 +116,7 @@ public class HexDataComponents {
 
     // ==== ABACUS ====
 
-    public static final Supplier<DataComponentType<Double>> ABACUS_VALUE = REGISTER.register("abacus_value", () ->
+    public static final Supplier<DataComponentType<Double>> ABACUS_VALUE = REGISTRAR.register("abacus_value", () ->
             DataComponentType.<Double>builder()
                     .persistent(Codec.DOUBLE)
                     .networkSynchronized(ByteBufCodecs.DOUBLE)
@@ -130,12 +130,12 @@ public class HexDataComponents {
      * Applying this component will enable shift-scrolling, though it won't do much without the other
      * components and a way to read/write the iota.
      */
-    public static final Supplier<DataComponentType<Integer>> SELECTED_SPELLBOOK_PAGE = REGISTER.register("page_idx", () ->
+    public static final Supplier<DataComponentType<Integer>> SELECTED_SPELLBOOK_PAGE = REGISTRAR.register("page_idx", () ->
             DataComponentType.<Integer>builder()
                     .persistent(Codec.INT)
                     .networkSynchronized(ByteBufCodecs.INT)
                     .build());
-    public static final Supplier<DataComponentType<Map<String, Iota>>> SPELLBOOK_PAGES = REGISTER.register("pages", () ->
+    public static final Supplier<DataComponentType<Map<String, Iota>>> SPELLBOOK_PAGES = REGISTRAR.register("pages", () ->
             DataComponentType.<Map<String, Iota>>builder()
                     .persistent(Codec.unboundedMap(Codec.STRING, IotaType.TYPED_CODEC))
                     .networkSynchronized(ByteBufCodecs.map(
@@ -144,7 +144,7 @@ public class HexDataComponents {
                             IotaType.TYPED_STREAM_CODEC
                     ))
                     .build());
-    public static final Supplier<DataComponentType<Map<String, Component>>> SPELLBOOK_PAGE_NAMES = REGISTER.register("page_names", () ->
+    public static final Supplier<DataComponentType<Map<String, Component>>> SPELLBOOK_PAGE_NAMES = REGISTRAR.register("page_names", () ->
             DataComponentType.<Map<String, Component>>builder()
                     .persistent(Codec.unboundedMap(Codec.STRING, ComponentSerialization.CODEC))
                     .networkSynchronized(ByteBufCodecs.map(
@@ -153,7 +153,7 @@ public class HexDataComponents {
                             ComponentSerialization.STREAM_CODEC
                     ))
                     .build());
-    public static final Supplier<DataComponentType<Map<String, Boolean>>> SPELLBOOK_PAGE_SEALS = REGISTER.register("sealed_pages", () ->
+    public static final Supplier<DataComponentType<Map<String, Boolean>>> SPELLBOOK_PAGE_SEALS = REGISTRAR.register("sealed_pages", () ->
             DataComponentType.<Map<String, Boolean>>builder()
                     .persistent(Codec.unboundedMap(Codec.STRING, Codec.BOOL))
                     .networkSynchronized(ByteBufCodecs.map(
@@ -165,12 +165,12 @@ public class HexDataComponents {
 
     // ==== MEDIA CUBE ====
 
-    public static final Supplier<DataComponentType<List<Long>>> MEDIA_EXTRACTIONS = REGISTER.register("media_extractions", () ->
+    public static final Supplier<DataComponentType<List<Long>>> MEDIA_EXTRACTIONS = REGISTRAR.register("media_extractions", () ->
             DataComponentType.<List<Long>>builder()
                     .persistent(Codec.LONG.listOf())
                     .networkSynchronized(ByteBufCodecs.VAR_LONG.apply(ByteBufCodecs.list()))
                     .build());
-    public static final Supplier<DataComponentType<List<Long>>> MEDIA_INSERTIONS = REGISTER.register("media_insertions", () ->
+    public static final Supplier<DataComponentType<List<Long>>> MEDIA_INSERTIONS = REGISTRAR.register("media_insertions", () ->
             DataComponentType.<List<Long>>builder()
                     .persistent(Codec.LONG.listOf())
                     .networkSynchronized(ByteBufCodecs.VAR_LONG.apply(ByteBufCodecs.list()))

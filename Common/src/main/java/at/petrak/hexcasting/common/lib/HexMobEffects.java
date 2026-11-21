@@ -12,17 +12,17 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 
 public class HexMobEffects {
 
-    private static final IXplatRegistrar<MobEffect> REGISTER = IXplatAbstractions.INSTANCE
+    private static final IXplatRegistrar<MobEffect> REGISTRAR = IXplatAbstractions.INSTANCE
             .createRegistrar(Registries.MOB_EFFECT);
 
     public static void register() {
-        REGISTER.registerAll();
+        REGISTRAR.registerAll();
     }
 
-    public static final Holder<MobEffect> ENLARGE_GRID = REGISTER.registerHolder("enlarge_grid",
+    public static final Holder<MobEffect> ENLARGE_GRID = REGISTRAR.registerHolder("enlarge_grid",
             () ->  new HexMobEffect(MobEffectCategory.BENEFICIAL, 0xc875ff).addAttributeModifier(HexAttributes.GRID_ZOOM, HexAPI.modLoc("enlarge_grid"),
                     0.25, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-    public static final Holder<MobEffect> SHRINK_GRID = REGISTER.registerHolder("shrink_grid",
+    public static final Holder<MobEffect> SHRINK_GRID = REGISTRAR.registerHolder("shrink_grid",
             () -> new HexMobEffect(MobEffectCategory.HARMFUL, 0xc0e660).addAttributeModifier(HexAttributes.GRID_ZOOM, HexAPI.modLoc("shrink_grid"),
                 -0.2, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 }
