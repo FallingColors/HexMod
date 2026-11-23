@@ -193,7 +193,8 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
                     "hanging the server.")
                 .defineInRange("maxOpCount", DEFAULT_MAX_OP_COUNT, 0, Integer.MAX_VALUE);
 
-            maxStackSize = builder.comment("The maximum number of iotas that can exist on the stack at once.")
+            maxStackSize = builder.comment("The maximum number of iotas that can exist on the stack at once. " +
+                    "Note that list iotas count as all their contents plus one.")
                 .defineInRange("maxStackSize", DEFAULT_MAX_STACK_SIZE, 0, Integer.MAX_VALUE);
 
             opBreakHarvestLevel = builder.comment(

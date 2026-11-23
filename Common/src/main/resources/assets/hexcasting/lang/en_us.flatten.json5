@@ -389,7 +389,7 @@
         },
         maxStackSize: {
           "": "Max Stack Size",
-          "@Tooltip": "The maximum number of iotas that can exist on the stack at once.",
+          "@Tooltip": "The maximum number of iotas that can exist on the stack at once. Note that list iotas count as all their contents plus one.",
         },
         maxSpellCircleLength: {
           "": "Max Spell Circle Length",
