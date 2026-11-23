@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.ChatFormatting;
@@ -87,7 +88,7 @@ public abstract class IotaType<T extends Iota> {
                 return true;
             totalSize += iota.size();
         }
-        return totalSize > HexIotaTypes.MAX_SERIALIZATION_TOTAL;
+        return totalSize > HexConfig.server().maxStackSize();
     }
 
     /**
