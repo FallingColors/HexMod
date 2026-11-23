@@ -1018,10 +1018,10 @@
       },
       types: {
         "compare_item/": {
-          strict: "Similaire à la $(l:patterns/types#hexcasting:compare_item/lenient)$(action)Distillation Trieuse/$, mais pousse s'ils sont des objets identiques. Deux $(l:items/focus)$(item)Foci/$ ne seront considérés identiques que s'ils contiennent le même iota et ont $(l:patterns/spells/cyclevariant)$(thing)la même apparence/$.",
+          strict: "Similaire à la $(l:patterns/type_comparison#hexcasting:compare_item/lenient)$(action)Distillation Trieuse/$, mais pousse s'ils sont des objets identiques. Deux $(l:items/focus)$(item)Foci/$ ne seront considérés identiques que s'ils contiennent le même iota et ont $(l:patterns/spells/cyclevariant)$(thing)la même apparence/$.",
           "remarks.title": "Sur les Porte-Objets",
           lenient: "Compare les objets représentés ou tenu par l'Entité donnée et pousse s'ils sont le même type d'objet. Deux $(l:items/focus)$(item)Foci/$ seront toujours considérés comme égaux.",
-          remarks: "La façon dont Mère-Nature interprète l'entité fournie à la $(l:patterns/types#hexcasting:compare_item/lenient)$(action)Distillation Trieuse/$ ou la $(l:patterns/types#hexcasting:compare_item/strict)$(action)Distillation Empileuse/$ dépend de son type : $(li)Les entités \"objet\" sont traitées comme les objets qu'elles représentent$(li)Les cadres sont considérés en fonction de l'objet qu'ils contiennent et produisent un méchef s'ils sont vides$(li)Les joueurs sont traités en fonction de l'objet qu'ils tiennent actuellement, priorisant leur main principale",
+          remarks: "La façon dont Mère-Nature interprète l'entité fournie à la $(l:patterns/type_comparison#hexcasting:compare_item/lenient)$(action)Distillation Trieuse/$ ou la $(l:patterns/type_comparison#hexcasting:compare_item/strict)$(action)Distillation Empileuse/$ dépend de son type : $(li)Les entités \"objet\" sont traitées comme les objets qu'elles représentent$(li)Les cadres sont considérés en fonction de l'objet qu'ils contiennent et produisent un méchef s'ils sont vides$(li)Les joueurs sont traités en fonction de l'objet qu'ils tiennent actuellement, priorisant leur main principale",
         },
         "compare_block/": {
           lenient: "Récupère les blocs spécifiés par les vecteurs en anglais et pousse la comparaison entre leur type. Deux $(l:items/edified#hexcasting:cut_edified_plank_variants)$(item)escaliers en bois ensorcelé/$ seront toujours considérés comme identiques malgré leur forme ou s'ils contiennent de l'eau (waterlog).",

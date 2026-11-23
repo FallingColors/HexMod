@@ -1938,9 +1938,9 @@
         compare_entity: "比较所给实体，判断它们是否类型相同。",
         "compare_item/": {
           lenient: "比较所给实体代表或持有的物品，判断它们是否类型相同。两枚$(l:items/focus)$(item)核心/$必然相同。",
-          strict: "和$(l:patterns/types#hexcasting:compare_item/lenient)$(action)分拣员之馏化/$类似，但会判断物品是否完全一致。两枚$(l:items/focus)$(item)核心/$只会在其中 iota 相同且$(l:patterns/spells/cyclevariant)$(thing)外观相同/$时判断为一致。",
+          strict: "和$(l:patterns/type_comparison#hexcasting:compare_item/lenient)$(action)分拣员之馏化/$类似，但会判断物品是否完全一致。两枚$(l:items/focus)$(item)核心/$只会在其中 iota 相同且$(l:patterns/spells/cyclevariant)$(thing)外观相同/$时判断为一致。",
           "remarks.title": "论物品容器",
-          remarks: "自然在面对传入$(l:patterns/types#hexcasting:compare_item/lenient)$(action)分拣员之馏化/$和$(l:patterns/types#hexcasting:compare_item/strict)$(action)堆叠之馏化/$的实体时，会按实体的类型分类处理：$(li)物品实体视为它们对应的物品$(li)物品展示框视为放在框中的物品，为空则招致事故$(li)玩家视为其当前手持的物品，优先选取主手",
+          remarks: "自然在面对传入$(l:patterns/type_comparison#hexcasting:compare_item/lenient)$(action)分拣员之馏化/$和$(l:patterns/type_comparison#hexcasting:compare_item/strict)$(action)堆叠之馏化/$的实体时，会按实体的类型分类处理：$(li)物品实体视为它们对应的物品$(li)物品展示框视为放在框中的物品，为空则招致事故$(li)玩家视为其当前手持的物品，优先选取主手",
         },
       },
       advanced_escaping: {

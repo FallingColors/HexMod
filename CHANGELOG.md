@@ -12,9 +12,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- Renamed the "Types" guidebook entry to "Type Comparison" for clarity and to avoid conflicting with MoreIotas ([#1371](https://github.com/FallingColors/HexMod/pull/1371)) @Robotgiggle
 - Updated the Flay Mind recipe display in EMI and JEI to include the media cost, matching the guidebook ([#1323](https://github.com/FallingColors/HexMod/pull/1323)) @MEEPofFaith
-- Updated Patchouli dependency from version 83 to version 85 ([#1319](https://github.com/FallingColors/HexMod/pull/1319)) @Robotgiggle
 - Shift-scrolling and the spellbook keybinds now work on any item with the `page_idx` and `page_names` tags ([#1329](https://github.com/FallingColors/HexMod/pull/1329)) @Robotgiggle
+- Updated Patchouli dependency from version 83 to version 85 ([#1319](https://github.com/FallingColors/HexMod/pull/1319)) @Robotgiggle
 
 ### Fixed
 
