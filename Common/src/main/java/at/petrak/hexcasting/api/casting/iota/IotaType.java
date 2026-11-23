@@ -83,11 +83,11 @@ public abstract class IotaType<T extends Iota> {
     public static boolean isTooLargeToSerialize(Iterable<Iota> examinee) {
         int totalSize = 0;
         for (Iota iota : examinee) {
-            if (iota.depth() >= HexIotaTypes.MAX_SERIALIZATION_DEPTH)
+            if (iota.depth() > HexIotaTypes.MAX_SERIALIZATION_DEPTH)
                 return true;
             totalSize += iota.size();
         }
-        return totalSize >= HexIotaTypes.MAX_SERIALIZATION_TOTAL;
+        return totalSize > HexIotaTypes.MAX_SERIALIZATION_TOTAL;
     }
 
     /**
