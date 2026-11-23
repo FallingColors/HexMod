@@ -387,6 +387,10 @@
           "": "Max Action Count",
           "@Tooltip": "The maximum number of actions that can be executed in one tick, to avoid hanging the server.",
         },
+        maxStackSize: {
+          "": "Max Stack Size",
+          "@Tooltip": "The maximum number of iotas that can exist on the stack at once.",
+        },
         maxSpellCircleLength: {
           "": "Max Spell Circle Length",
           "@Tooltip": "The maximum number of slates in a spell circle",
