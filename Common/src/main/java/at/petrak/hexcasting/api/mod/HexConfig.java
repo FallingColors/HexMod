@@ -73,6 +73,8 @@ public class HexConfig {
 
         int maxOpCount();
 
+        int maxStackSize();
+
         int maxSpellCircleLength();
 
         boolean isActionAllowed(ResourceLocation actionID);
@@ -95,6 +97,7 @@ public class HexConfig {
         double traderScrollChance();
 
         int DEFAULT_MAX_OP_COUNT = 100_000;
+        int DEFAULT_MAX_STACK_SIZE = 1024;
         int DEFAULT_MAX_SPELL_CIRCLE_LENGTH = 1024;
         int DEFAULT_OP_BREAK_HARVEST_LEVEL = 3;
 

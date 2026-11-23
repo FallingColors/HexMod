@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - Added the `requires_enlightenment_in_parens` tag for patterns that should mishap without enlightenment even while parenthesized ([#1290](https://github.com/FallingColors/HexMod/pull/1290)) @Robotgiggle
+- Added a config option to control the maximum number of iotas that can fit on the stack at once ([#1372](https://github.com/FallingColors/HexMod/pull/1372)) @Robotgiggle
 
 ### Changed
 
@@ -29,6 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed an error when trying to cast a Great Spell that no longer exists, such as when an addon has been removed ([#1335](https://github.com/FallingColors/HexMod/pull/1335)) @Robotgiggle
 - Fixed a broken translation key when referring to a jump iota in a mishap message ([#1350](https://github.com/FallingColors/HexMod/pull/1350)) @hauveli
 - Fixed Thoth's Gambit counting one extra pattern towards the pattern limit every iteration ([#1352](https://github.com/FallingColors/HexMod/pull/1352)) @Robotgiggle
+- Fixed the maximum number of iotas that can fit on the stack being 1022 rather than the intended 1024 ([#1372](https://github.com/FallingColors/HexMod/pull/1372)) @Robotgiggle
 
 ## `0.11.4` - 2026-08-26
 

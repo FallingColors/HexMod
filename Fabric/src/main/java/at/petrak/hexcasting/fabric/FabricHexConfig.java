@@ -205,6 +205,8 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @ConfigEntry.Gui.Tooltip
         private int maxOpCount = DEFAULT_MAX_OP_COUNT;
         @ConfigEntry.Gui.Tooltip
+        private int maxStackSize = DEFAULT_MAX_STACK_SIZE;
+        @ConfigEntry.Gui.Tooltip
         private int maxSpellCircleLength = DEFAULT_MAX_SPELL_CIRCLE_LENGTH;
         @ConfigEntry.Gui.Tooltip
         private List<String> actionDenyList = List.of();
@@ -262,6 +264,7 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         public void validatePostLoad() throws ValidationException {
             this.opBreakHarvestLevel = Mth.clamp(this.opBreakHarvestLevel, 0, 4);
             this.maxOpCount = Math.max(this.maxOpCount, 0);
+            this.maxStackSize = Math.max(this.maxStackSize, 0);
             this.maxSpellCircleLength = Math.max(this.maxSpellCircleLength, 4);
             this.globalCostScaling = Math.max(this.globalCostScaling, 0);
             this.traderScrollChance = Mth.clamp(this.traderScrollChance, 0.0, 1.0);
@@ -323,6 +326,11 @@ public class FabricHexConfig extends PartitioningSerializer.GlobalData {
         @Override
         public int maxOpCount() {
             return maxOpCount;
+        }
+
+        @Override
+        public int maxStackSize() {
+            return maxStackSize;
         }
 
         @Override

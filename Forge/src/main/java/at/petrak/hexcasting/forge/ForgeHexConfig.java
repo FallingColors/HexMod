@@ -173,6 +173,7 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
     public static class Server implements HexConfig.ServerConfigAccess {
         private static ForgeConfigSpec.IntValue opBreakHarvestLevel;
         private static ForgeConfigSpec.IntValue maxOpCount;
+        private static ForgeConfigSpec.IntValue maxStackSize;
         private static ForgeConfigSpec.IntValue maxSpellCircleLength;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> actionDenyList;
         private static ForgeConfigSpec.ConfigValue<List<? extends String>> circleActionDenyList;
@@ -191,6 +192,10 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
             maxOpCount = builder.comment("The maximum number of actions that can be executed in one tick, to avoid " +
                     "hanging the server.")
                 .defineInRange("maxOpCount", DEFAULT_MAX_OP_COUNT, 0, Integer.MAX_VALUE);
+
+            maxStackSize = builder.comment("The maximum number of iotas that can exist on the stack at once. " +
+                    "Note that list iotas count as all their contents plus one.")
+                .defineInRange("maxStackSize", DEFAULT_MAX_STACK_SIZE, 0, Integer.MAX_VALUE);
 
             opBreakHarvestLevel = builder.comment(
                 "The harvest level of the Break Block spell.",
@@ -254,6 +259,11 @@ public class ForgeHexConfig implements HexConfig.CommonConfigAccess {
         @Override
         public int maxOpCount() {
             return maxOpCount.get();
+        }
+
+        @Override
+        public int maxStackSize() {
+            return maxStackSize.get();
         }
 
         @Override

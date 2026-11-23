@@ -1,6 +1,7 @@
 package at.petrak.hexcasting.api.casting.iota;
 
 import at.petrak.hexcasting.api.HexAPI;
+import at.petrak.hexcasting.api.mod.HexConfig;
 import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.common.lib.hex.HexIotaTypes;
 import net.minecraft.ChatFormatting;
@@ -69,7 +70,7 @@ public abstract class IotaType<T extends Iota> {
         }
 
         // We check if it's too big on serialization; if it is we just return a garbage.
-        if (isTooLargeToSerialize(List.of(iota), 0)) {
+        if (isTooLargeToSerialize(List.of(iota))) {
             // Garbage will never be too large so we just recurse
             return serialize(new GarbageIota());
         }
@@ -81,17 +82,13 @@ public abstract class IotaType<T extends Iota> {
     }
 
     public static boolean isTooLargeToSerialize(Iterable<Iota> examinee) {
-        return isTooLargeToSerialize(examinee, 1);
-    }
-
-    private static boolean isTooLargeToSerialize(Iterable<Iota> examinee, int startingCount) {
-        int totalSize = startingCount;
+        int totalSize = 0;
         for (Iota iota : examinee) {
-            if (iota.depth() >= HexIotaTypes.MAX_SERIALIZATION_DEPTH)
+            if (iota.depth() > HexIotaTypes.MAX_SERIALIZATION_DEPTH)
                 return true;
             totalSize += iota.size();
         }
-        return totalSize >= HexIotaTypes.MAX_SERIALIZATION_TOTAL;
+        return totalSize > HexConfig.server().maxStackSize();
     }
 
     /**
