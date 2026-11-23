@@ -1,8 +1,6 @@
 package at.petrak.hexcasting.common.lib;
 
 import at.petrak.hexcasting.api.misc.MediaConstants;
-import at.petrak.hexcasting.api.utils.HexUtils;
-import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.mod.HexTags;
 import at.petrak.hexcasting.common.items.ItemJewelerHammer;
 import at.petrak.hexcasting.common.items.ItemLens;
@@ -14,8 +12,6 @@ import at.petrak.hexcasting.common.items.storage.*;
 import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.common.base.Suppliers;
 import net.minecraft.Util;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodProperties;
@@ -161,16 +157,12 @@ public class HexItems {
     }
 
     private static void generateScrollEntries() {
-        var keyList = new ArrayList<ResourceKey<ActionRegistryEntry>>();
-        Registry<ActionRegistryEntry> regi = IXplatAbstractions.INSTANCE.getActionRegistry();
-        for (var key : regi.registryKeySet())
-            if (HexUtils.isOfTag(regi, key, HexTags.Actions.PER_WORLD_PATTERN))
-                keyList.add(key);
-        keyList.sort( (a, b) -> a.location().compareTo(b.location()) );
-        for (var key : keyList) {
+        var actionIDs = IXplatAbstractions.INSTANCE.getActionRegistry().getTag(HexTags.Actions.PER_WORLD_PATTERN)
+                .orElseThrow().stream().map(holder -> holder.unwrapKey().orElseThrow().location().toString())
+                .sorted().toList();
+        for (var id : actionIDs) {
             addToTab(() -> ItemScroll.withPerWorldPattern(
-                new ItemStack(HexItems.SCROLL_LARGE),
-                key.location().toString()
+                new ItemStack(HexItems.SCROLL_LARGE), id
             ),HexCreativeTabs.SCROLLS);
         }
     }

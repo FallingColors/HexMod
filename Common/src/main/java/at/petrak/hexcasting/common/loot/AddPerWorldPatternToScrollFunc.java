@@ -1,9 +1,7 @@
 package at.petrak.hexcasting.common.loot;
 
 import at.petrak.hexcasting.api.HexAPI;
-import at.petrak.hexcasting.api.casting.ActionRegistryEntry;
 import at.petrak.hexcasting.api.mod.HexTags;
-import at.petrak.hexcasting.api.utils.HexUtils;
 import at.petrak.hexcasting.api.utils.NBTHelper;
 import at.petrak.hexcasting.common.casting.PatternRegistryManifest;
 import at.petrak.hexcasting.common.items.storage.ItemScroll;
@@ -12,19 +10,14 @@ import at.petrak.hexcasting.xplat.IXplatAbstractions;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
+import net.minecraft.core.Holder;
 import net.minecraft.util.RandomSource;
-import net.minecraft.core.Registry;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-
-import java.util.ArrayList;
 
 /**
  * Slap a random per-world pattern on the scroll.
@@ -41,23 +34,17 @@ public class AddPerWorldPatternToScrollFunc extends LootItemConditionalFunction 
      * This doesn't actually have any params so extract behaviour out for the benefit of forge
      */
     public static ItemStack doStatic(ItemStack stack, RandomSource rand, ServerLevel overworld) {
-        var perWorldKeys = new ArrayList<ResourceKey<ActionRegistryEntry>>();
-        Registry<ActionRegistryEntry> regi = IXplatAbstractions.INSTANCE.getActionRegistry();
-        for (var key : regi.registryKeySet()) {
-            if (HexUtils.isOfTag(regi, key, HexTags.Actions.PER_WORLD_PATTERN)) {
-                perWorldKeys.add(key);
-            }
-        }
-        var patternKey = perWorldKeys.get(rand.nextInt(perWorldKeys.size()));
-        var patternID = patternKey.location().toString();
-        var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(patternKey, overworld);
+        var actionKey = IXplatAbstractions.INSTANCE.getActionRegistry().getTag(HexTags.Actions.PER_WORLD_PATTERN)
+                .flatMap(set -> set.getRandomElement(rand)).flatMap(Holder::unwrapKey).orElseThrow();
+        var actionID = actionKey.location().toString();
+        var pat = PatternRegistryManifest.getCanonicalStrokesPerWorld(actionKey, overworld);
         if (pat == null) {
-            HexAPI.LOGGER.error("No per-world pattern found for action " + patternID + " while generating loot scroll! " +
+            HexAPI.LOGGER.error("No per-world pattern found for action " + actionID + " while generating loot scroll! " +
                                 "Try running '/hexcasting recalcPatterns' to generate the patterns for this world.");
-            NBTHelper.putString(stack, ItemScroll.TAG_RECALC_WARNING, patternID);
+            NBTHelper.putString(stack, ItemScroll.TAG_RECALC_WARNING, actionID);
             return stack;
         }
-        NBTHelper.putString(stack, ItemScroll.TAG_OP_ID, patternID);
+        NBTHelper.putString(stack, ItemScroll.TAG_OP_ID, actionID);
         NBTHelper.put(stack, ItemScroll.TAG_PATTERN, pat.serializeToNBT());
         return stack;
     }

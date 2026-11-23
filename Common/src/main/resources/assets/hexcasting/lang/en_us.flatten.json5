@@ -26,13 +26,13 @@
     
     scroll_small: {
       "": "Small Scroll",
-      of: "How did you get this item of %s",
+      of: "Ancient Scroll of %s",
       empty: "Empty Small Scroll",
     },
     
     scroll_medium: {
       "": "Medium Scroll",
-      of: "How did you get this item of %s",
+      of: "Ancient Scroll of %s",
       empty: "Empty Medium Scroll",
     },
     
