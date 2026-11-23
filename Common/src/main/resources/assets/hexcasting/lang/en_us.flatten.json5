@@ -1333,7 +1333,7 @@
       stackmanip: "Stack Manipulation",
       logic: "Logical Operators",
       entities: "Entities",
-      types: "Types",
+      types: "Type Comparison",
       lists: "List Manipulation",
       patterns_as_iotas: "Escaping Patterns",
       advanced_escaping: "Advanced Escaping",
