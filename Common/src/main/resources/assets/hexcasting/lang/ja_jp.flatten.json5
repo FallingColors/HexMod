@@ -1938,9 +1938,9 @@
         compare_entity: "指定されたエンティティを比較して等しい種類であるかどうかをスタックに追加する。",
         "compare_item/": {
           lenient: "指定されたエンティティによって表現または保持されているアイテムを比較して等しい種類のアイテムであるかどうかをスタックに追加する。2つの$(l:items/focus)$(item)焦点具/$は常に等しいものとして比較される。",
-          strict: "$(l:patterns/types#hexcasting:compare_item/lenient)$(action)選別の蒸溜/$と似ているが、同一のアイテムであるかどうかをスタックに追加する。2つの$(l:items/focus)$(item)焦点具/$は同じイオタを保持して$(l:patterns/spells/cyclevariant)$(thing)同じ外観/$である場合にのみ等しいものとして比較される。",
+          strict: "$(l:patterns/type_comparison#hexcasting:compare_item/lenient)$(action)選別の蒸溜/$と似ているが、同一のアイテムであるかどうかをスタックに追加する。2つの$(l:items/focus)$(item)焦点具/$は同じイオタを保持して$(l:patterns/spells/cyclevariant)$(thing)同じ外観/$である場合にのみ等しいものとして比較される。",
           "remarks.title": "アイテムホルダーについて",
-          remarks: "自然界が$(l:patterns/types#hexcasting:compare_item/lenient)$(action)選別の蒸溜/$または$(l:patterns/types#hexcasting:compare_item/strict)$(action)積層の蒸溜/$で指定されたエンティティを解釈する方法は、その種類によって異なる:$(li)アイテムエンティティは、それが表すアイテムに解決される$(li)額縁は、それに含まれるアイテムに解決され、空の場合は変事が発生する$(li)プレイヤーは、彼らが現在手に持っているアイテムに解決され、メインハンドが優先される",
+          remarks: "自然界が$(l:patterns/type_comparison#hexcasting:compare_item/lenient)$(action)選別の蒸溜/$または$(l:patterns/type_comparison#hexcasting:compare_item/strict)$(action)積層の蒸溜/$で指定されたエンティティを解釈する方法は、その種類によって異なる:$(li)アイテムエンティティは、それが表すアイテムに解決される$(li)額縁は、それに含まれるアイテムに解決され、空の場合は変事が発生する$(li)プレイヤーは、彼らが現在手に持っているアイテムに解決され、メインハンドが優先される",
         },
       },
       advanced_escaping: {
