@@ -101,7 +101,7 @@
       "": "Fragmento de relato",
       all: "Parace que ya encontre todos los relatos que este mundo tiene que ofrecer.",
     },
-    book: "Cuardeno hex",
+    book: "Cuaderno hex",
   },
   "entity.hexcasting": {
     wall_scroll: "Pergamino colgante",
