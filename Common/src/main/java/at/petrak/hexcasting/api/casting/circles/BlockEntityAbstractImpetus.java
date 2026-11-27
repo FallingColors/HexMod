@@ -41,6 +41,8 @@ import java.util.List;
  * wanna do something wild and new
  */
 public abstract class BlockEntityAbstractImpetus extends HexBlockEntity implements WorldlyContainer {
+    /** Do not rely on from external code. */
+    public Object xplatField;
     private static final DecimalFormat DUST_AMOUNT = new DecimalFormat("###,###.##");
     private static final long MAX_CAPACITY = 9_000_000_000_000_000_000L;
 
